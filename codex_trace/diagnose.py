@@ -1,0 +1,195 @@
+from __future__ import annotations
+
+from collections import Counter
+
+from .schema import Diagnosis, Finding, Trace, TraceEvent
+
+
+VERIFY_KEYWORDS = (
+    "pytest",
+    "npm test",
+    "npm run test",
+    "pnpm test",
+    "yarn test",
+    "cargo test",
+    "go test",
+    "mvn test",
+    "gradle test",
+    "ruff",
+    "mypy",
+    "tsc",
+    "npm run build",
+    "pnpm build",
+)
+
+SEARCH_PREFIXES = ("rg ", "grep ", "find ", "ls", "sed ", "cat ", "git grep")
+SANDBOX_WORDS = ("sandbox", "permission", "approval", "denied", "not permitted", "requires approval")
+
+
+def diagnose(trace: Trace) -> Diagnosis:
+    findings: list[Finding] = []
+    metrics = _metrics(trace)
+
+    failed_commands = [event for event in trace.events if event.kind == "command" and event.exit_code not in (None, 0)]
+    unresolved_failed_commands = _unresolved_failed_commands(trace.events, failed_commands)
+    if unresolved_failed_commands:
+        findings.append(Finding(
+            code="command_failure_unhandled",
+            title="Command failures were not clearly handled",
+            severity="high",
+            evidence=[_event_label(event) for event in unresolved_failed_commands],
+            recommendation="After a failed command, add an explicit repair step and rerun the relevant verification command before ending the turn.",
+            event_ids=[event.id for event in unresolved_failed_commands],
+        ))
+
+    if metrics["file_change_events"] > 0 and metrics["post_edit_verification_commands"] == 0:
+        changed = [event.id for event in trace.events if event.kind == "file_change"]
+        findings.append(Finding(
+            code="verification_gap",
+            title="Files changed without a verification command",
+            severity="high",
+            evidence=[f"{metrics['file_change_events']} file-change event(s), 0 post-edit verification command(s)."],
+            recommendation="Add a post-edit validation step such as tests, type checks, or a focused smoke command.",
+            event_ids=changed,
+        ))
+
+    repeated = _repeated_searches(trace.events)
+    if repeated:
+        findings.append(Finding(
+            code="repeated_search_or_read",
+            title="Repeated search/read commands suggest inefficient exploration",
+            severity="medium",
+            evidence=[f"`{cmd}` repeated {count} times" for cmd, count in repeated],
+            recommendation="Summarize discovered facts after each exploration pass and switch from broad search to targeted file reads.",
+        ))
+
+    sandbox_events = _sandbox_events(trace.events)
+    if sandbox_events:
+        findings.append(Finding(
+            code="sandbox_or_permission_block",
+            title="Sandbox or permission friction blocked progress",
+            severity="medium",
+            evidence=[_event_label(event) for event in sandbox_events],
+            recommendation="Declare the needed permission up front, reduce the command scope, or redesign the workflow to keep privileged steps outside the agent loop.",
+            event_ids=[event.id for event in sandbox_events],
+        ))
+
+    if _long_context_no_progress(trace, metrics):
+        findings.append(Finding(
+            code="long_context_no_progress",
+            title="High context usage with weak implementation progress",
+            severity="medium",
+            evidence=[f"input_tokens={metrics['input_tokens']}, command_events={metrics['command_events']}, file_change_events={metrics['file_change_events']}"],
+            recommendation="Introduce a compact task state, explicit next action, and stop condition before adding more context.",
+        ))
+
+    if any(event.status == "failed" and event.kind == "turn" for event in trace.events):
+        findings.append(Finding(
+            code="turn_failed",
+            title="Codex turn failed",
+            severity="high",
+            evidence=[_event_label(event) for event in trace.events if event.status == "failed" and event.kind == "turn"],
+            recommendation="Inspect the last successful tool event before the failed turn and resume from that narrower state.",
+        ))
+
+    score = _score(findings, metrics)
+    outcome = "failed" if any(f.severity == "high" for f in findings) or score >= 70 else "warning" if findings else "healthy"
+    summary = _summary(outcome, findings, metrics)
+    return Diagnosis(outcome=outcome, failure_score=score, summary=summary, findings=findings, metrics=metrics)
+
+
+def _metrics(trace: Trace) -> dict[str, int]:
+    usage = trace.usage or {}
+    return {
+        "events": len(trace.events),
+        "command_events": sum(event.kind == "command" and event.status != "in_progress" for event in trace.events),
+        "failed_commands": sum(event.kind == "command" and event.exit_code not in (None, 0) for event in trace.events),
+        "file_change_events": sum(event.kind == "file_change" for event in trace.events),
+        "verification_commands": sum(event.kind == "command" and _is_verification(event.command or "") for event in trace.events),
+        "post_edit_verification_commands": _post_edit_verification_count(trace.events),
+        "search_commands": sum(event.kind == "command" and event.status != "in_progress" and _is_search(event.command or "") for event in trace.events),
+        "input_tokens": int(usage.get("input_tokens") or 0),
+        "output_tokens": int(usage.get("output_tokens") or 0),
+        "reasoning_output_tokens": int(usage.get("reasoning_output_tokens") or 0),
+    }
+
+
+def _unresolved_failed_commands(events: list[TraceEvent], failed: list[TraceEvent]) -> list[TraceEvent]:
+    unresolved = []
+    for failed_event in failed:
+        idx = events.index(failed_event)
+        later_commands = [event for event in events[idx + 1 :] if event.kind == "command"]
+        has_later_success = any(event.exit_code in (None, 0) and (_is_verification(event.command or "") or _similar_command(failed_event.command or "", event.command or "")) for event in later_commands)
+        if not has_later_success:
+            unresolved.append(failed_event)
+    return unresolved
+
+
+def _repeated_searches(events: list[TraceEvent]) -> list[tuple[str, int]]:
+    commands = [_normalize_command(event.command or "") for event in events if event.kind == "command" and _is_search(event.command or "")]
+    return [(cmd, count) for cmd, count in Counter(commands).items() if count >= 2]
+
+
+def _sandbox_events(events: list[TraceEvent]) -> list[TraceEvent]:
+    matches = []
+    for event in events:
+        if event.status not in {"failed", "blocked", "error"} and event.exit_code in (None, 0):
+            continue
+        haystack = f"{event.title}\n{event.detail}".lower()
+        if any(word in haystack for word in SANDBOX_WORDS):
+            matches.append(event)
+    return matches
+
+
+def _long_context_no_progress(trace: Trace, metrics: dict[str, int]) -> bool:
+    return metrics["input_tokens"] >= 20000 and metrics["file_change_events"] == 0 and metrics["verification_commands"] == 0 and metrics["command_events"] <= 3
+
+
+def _post_edit_verification_count(events: list[TraceEvent]) -> int:
+    last_change = None
+    for index, event in enumerate(events):
+        if event.kind == "file_change":
+            last_change = index
+    if last_change is None:
+        return 0
+    return sum(event.kind == "command" and _is_verification(event.command or "") for event in events[last_change + 1 :])
+
+
+def _score(findings: list[Finding], metrics: dict[str, int]) -> int:
+    score = 0
+    for finding in findings:
+        score += {"low": 10, "medium": 20, "high": 35}[finding.severity]
+    score += min(metrics["failed_commands"] * 5, 15)
+    return min(score, 100)
+
+
+def _summary(outcome: str, findings: list[Finding], metrics: dict[str, int]) -> str:
+    if not findings:
+        return "No obvious failure pattern was detected in this trace."
+    top = findings[0].title
+    return f"{outcome.title()} trace: {top}. {metrics['events']} events, {metrics['command_events']} commands, {metrics['failed_commands']} failed commands."
+
+
+def _is_verification(command: str) -> bool:
+    lowered = command.lower()
+    return any(keyword in lowered for keyword in VERIFY_KEYWORDS)
+
+
+def _is_search(command: str) -> bool:
+    stripped = command.strip().lower()
+    return any(stripped.startswith(prefix) for prefix in SEARCH_PREFIXES)
+
+
+def _normalize_command(command: str) -> str:
+    return " ".join(command.strip().split())
+
+
+def _similar_command(left: str, right: str) -> bool:
+    left_head = _normalize_command(left).split(" ")[:2]
+    right_head = _normalize_command(right).split(" ")[:2]
+    return bool(left_head and left_head == right_head)
+
+
+def _event_label(event: TraceEvent) -> str:
+    suffix = f" exit_code={event.exit_code}" if event.exit_code is not None else ""
+    return f"{event.id} {event.kind}: {event.title}{suffix}"

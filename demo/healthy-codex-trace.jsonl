@@ -1,0 +1,7 @@
+{"type":"thread.started","thread_id":"demo-thread-002"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_1","type":"command_execution","command":"rg \"calculate_total\" src tests","status":"completed","exit_code":0,"stdout":"src/cart.py:def calculate_total(items):"}}
+{"type":"item.completed","item":{"id":"item_2","type":"file_change","status":"completed","files":["src/cart.py"]}}
+{"type":"item.completed","item":{"id":"item_3","type":"command_execution","command":"pytest -q","status":"completed","exit_code":0,"stdout":"12 passed"}}
+{"type":"item.completed","item":{"id":"item_4","type":"agent_message","text":"Implemented the fix and verified it with pytest -q."}}
+{"type":"turn.completed","usage":{"input_tokens":8200,"cached_input_tokens":5000,"output_tokens":460,"reasoning_output_tokens":80}}

@@ -1,0 +1,25 @@
+[project]
+name = "codex-trace"
+version = "0.1.0"
+description = "A flight recorder and failure debugger for Codex exec JSONL traces."
+readme = "README.md"
+requires-python = ">=3.10"
+authors = [{ name = "Dengye Li" }]
+dependencies = []
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0"]
+
+[project.scripts]
+codex-trace = "codex_trace.cli:main"
+
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+
+[tool.setuptools.packages.find]
+include = ["codex_trace*"]
