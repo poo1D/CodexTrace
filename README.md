@@ -74,6 +74,37 @@ npm run dev
 
 For the full walkthrough, see `demo/README.md`.
 
+## Research Mode
+
+CodexTrace now includes a benchmark scaffold for:
+
+`When Coding Agents Get Lost: Trace-Based Diagnosis of Multi-Turn Tool-Use Failures`
+
+Key files:
+
+- `benchmark/tasks.jsonl`: 30 seed coding tasks
+- `benchmark/prompts/baseline.txt`: baseline prompt template
+- `benchmark/prompts/intervention.txt`: harness-intervention prompt template
+- `docs/experiment_protocol.md`: collection and labeling protocol
+- `docs/failure_taxonomy.md`: process-level failure labels
+- `docs/paper_outline.md`: paper outline and experiment plan
+
+Render prompts:
+
+```bash
+codex-trace research prompt CT-001 baseline
+codex-trace research prompt CT-001 intervention
+```
+
+Aggregate traces:
+
+```bash
+codex-trace research aggregate benchmark/runs.example.jsonl \
+  --json-output reports/example-aggregate.json \
+  --markdown-output reports/example-aggregate.md \
+  --csv-output reports/example-runs.csv
+```
+
 To run the Web UI:
 
 ```bash

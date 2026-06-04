@@ -1,0 +1,4 @@
+{"task_id":"CT-001","prompt_type":"baseline","trace_path":"../demo/failing-codex-trace.jsonl","outcome":"failure"}
+{"task_id":"CT-001","prompt_type":"intervention","trace_path":"../demo/healthy-codex-trace.jsonl","outcome":"success"}
+{"task_id":"CT-002","prompt_type":"baseline","trace_path":"../demo/failing-codex-trace.jsonl","outcome":"failure"}
+{"task_id":"CT-002","prompt_type":"intervention","trace_path":"../demo/real-codex-run.jsonl","outcome":"success"}
