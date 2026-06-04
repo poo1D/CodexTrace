@@ -50,6 +50,30 @@ codex-trace diagnose demo/failing-codex-trace.jsonl --format json -o demo/report
 pytest
 ```
 
+## Demo
+
+Run the offline demo:
+
+```bash
+./scripts/demo.sh
+```
+
+It generates:
+
+- `demo/demo-report.json`
+- `demo/demo-report.md`
+- `web/public/report.json` for the replay UI
+
+Then start the visual replay:
+
+```bash
+cd web
+npm install
+npm run dev
+```
+
+For the full walkthrough, see `demo/README.md`.
+
 To run the Web UI:
 
 ```bash

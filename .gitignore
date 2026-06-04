@@ -10,6 +10,8 @@ web/dist/
 web/.npm-cache/
 demo/report.json
 demo/report.md
+demo/demo-report.json
+demo/demo-report.md
 demo/real-normalized.json
 demo/real-report.md
 traces/
