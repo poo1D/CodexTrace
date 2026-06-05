@@ -27,9 +27,11 @@ codex exec --json "your coding task" > traces/run.jsonl
 ## Features
 
 - Normalize `codex exec --json` JSONL into a stable trace schema.
-- Detect five concrete failure or inefficiency modes:
+- Segment trace events into setup, inspect, edit, verify, recover, and complete phases.
+- Detect concrete failure or inefficiency modes:
   - command failure not clearly handled
   - file edits without post-edit verification
+  - premature completion without verification evidence
   - repeated search/read commands
   - sandbox or permission blocks
   - long context with weak progress
@@ -173,6 +175,16 @@ CodexTrace maps raw Codex events into:
 - `plan`
 - `error`
 - `unknown`
+
+Each event also carries an inferred `phase`:
+
+- `setup`
+- `inspect`
+- `edit`
+- `verify`
+- `recover`
+- `complete`
+- `other`
 
 This keeps the first version Codex-first while leaving room for future adapters
 for Claude Code, SWE-agent, OpenHands, or custom MCP agents.

@@ -85,12 +85,17 @@ Run-level metrics:
 - `verification_rate`
 - `unresolved_error`
 - `repeated_tool_call_count`
+- `retry_count`
 - `command_failure_count`
 - `token_usage`
 - `failure_score`
 - `turn_count`
 - `time_to_first_edit`
 - `time_to_first_test`
+- `phase_inspect_events`
+- `phase_edit_events`
+- `phase_verify_events`
+- `phase_recover_events`
 
 Group-level metrics:
 
@@ -98,7 +103,10 @@ Group-level metrics:
 - `verification_rate`
 - `unresolved_error_rate`
 - `avg_repeated_tool_calls`
+- `avg_retry_count`
 - `avg_command_failures`
+- `avg_recover_events`
+- `avg_verify_events`
 - `avg_token_usage`
 - `avg_failure_score`
 

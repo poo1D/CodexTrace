@@ -20,6 +20,7 @@
         "command": null,
         "exit_code": null,
         "files": [],
+        "phase": "setup",
         "metadata": {
           "type": "thread.started",
           "thread_id": "demo-thread-001"
@@ -36,6 +37,7 @@
         "command": null,
         "exit_code": null,
         "files": [],
+        "phase": "setup",
         "metadata": {
           "type": "turn.started"
         }
@@ -51,6 +53,7 @@
         "command": null,
         "exit_code": null,
         "files": [],
+        "phase": "setup",
         "metadata": {
           "type": "item.completed",
           "item": {
@@ -71,6 +74,7 @@
         "command": "rg \"calculate_total\"",
         "exit_code": 0,
         "files": [],
+        "phase": "inspect",
         "metadata": {
           "type": "item.completed",
           "item": {
@@ -94,6 +98,7 @@
         "command": "rg \"calculate_total\"",
         "exit_code": 0,
         "files": [],
+        "phase": "inspect",
         "metadata": {
           "type": "item.completed",
           "item": {
@@ -117,6 +122,7 @@
         "command": "pytest -q",
         "exit_code": 1,
         "files": [],
+        "phase": "verify",
         "metadata": {
           "type": "item.completed",
           "item": {
@@ -142,6 +148,7 @@
         "files": [
           "src/cart.py"
         ],
+        "phase": "edit",
         "metadata": {
           "type": "item.completed",
           "item": {
@@ -165,6 +172,7 @@
         "command": "npm install",
         "exit_code": 1,
         "files": [],
+        "phase": "recover",
         "metadata": {
           "type": "item.completed",
           "item": {
@@ -188,6 +196,7 @@
         "command": null,
         "exit_code": null,
         "files": [],
+        "phase": "complete",
         "metadata": {
           "type": "item.completed",
           "item": {
@@ -208,6 +217,7 @@
         "command": null,
         "exit_code": null,
         "files": [],
+        "phase": "complete",
         "metadata": {
           "type": "turn.completed",
           "usage": {
@@ -232,6 +242,13 @@
       "verification_commands": 1,
       "post_edit_verification_commands": 0,
       "search_commands": 2,
+      "phase_setup_events": 3,
+      "phase_inspect_events": 2,
+      "phase_edit_events": 1,
+      "phase_verify_events": 1,
+      "phase_recover_events": 1,
+      "phase_complete_events": 2,
+      "phase_other_events": 0,
       "input_tokens": 28600,
       "output_tokens": 900,
       "reasoning_output_tokens": 220
@@ -261,6 +278,18 @@
         "recommendation": "Add a post-edit validation step such as tests, type checks, or a focused smoke command.",
         "event_ids": [
           "e0006"
+        ]
+      },
+      {
+        "code": "premature_completion",
+        "title": "Agent claimed completion without verification evidence",
+        "severity": "high",
+        "evidence": [
+          "e0008 agent_message: I updated the implementation. The task is complete."
+        ],
+        "recommendation": "Require the final answer to cite a passing post-edit verification command before declaring the task complete.",
+        "event_ids": [
+          "e0008"
         ]
       },
       {

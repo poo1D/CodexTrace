@@ -4,6 +4,16 @@ from dataclasses import dataclass, field
 from typing import Any, Literal
 
 
+EventPhase = Literal[
+    "setup",
+    "inspect",
+    "edit",
+    "verify",
+    "recover",
+    "complete",
+    "other",
+]
+
 EventKind = Literal[
     "thread",
     "turn",
@@ -32,6 +42,7 @@ class TraceEvent:
     command: str | None = None
     exit_code: int | None = None
     files: list[str] = field(default_factory=list)
+    phase: EventPhase = "other"
     metadata: dict[str, Any] = field(default_factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -46,6 +57,7 @@ class TraceEvent:
             "command": self.command,
             "exit_code": self.exit_code,
             "files": self.files,
+            "phase": self.phase,
             "metadata": self.metadata,
         }
 

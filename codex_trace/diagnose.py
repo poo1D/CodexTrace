@@ -2,27 +2,10 @@ from __future__ import annotations
 
 from collections import Counter
 
+from .parser import is_search_command, is_verification_command
 from .schema import Diagnosis, Finding, Trace, TraceEvent
 
 
-VERIFY_KEYWORDS = (
-    "pytest",
-    "npm test",
-    "npm run test",
-    "pnpm test",
-    "yarn test",
-    "cargo test",
-    "go test",
-    "mvn test",
-    "gradle test",
-    "ruff",
-    "mypy",
-    "tsc",
-    "npm run build",
-    "pnpm build",
-)
-
-SEARCH_PREFIXES = ("rg ", "grep ", "find ", "ls", "sed ", "cat ", "git grep")
 SANDBOX_WORDS = ("sandbox", "permission", "approval", "denied", "not permitted", "requires approval")
 
 
@@ -111,6 +94,7 @@ def diagnose(trace: Trace) -> Diagnosis:
 
 def _metrics(trace: Trace) -> dict[str, int]:
     usage = trace.usage or {}
+    phase_counts = Counter(event.phase for event in trace.events)
     return {
         "events": len(trace.events),
         "command_events": sum(event.kind == "command" and event.status != "in_progress" for event in trace.events),
@@ -119,6 +103,13 @@ def _metrics(trace: Trace) -> dict[str, int]:
         "verification_commands": sum(event.kind == "command" and _is_verification(event.command or "") for event in trace.events),
         "post_edit_verification_commands": _post_edit_verification_count(trace.events),
         "search_commands": sum(event.kind == "command" and event.status != "in_progress" and _is_search(event.command or "") for event in trace.events),
+        "phase_setup_events": phase_counts["setup"],
+        "phase_inspect_events": phase_counts["inspect"],
+        "phase_edit_events": phase_counts["edit"],
+        "phase_verify_events": phase_counts["verify"],
+        "phase_recover_events": phase_counts["recover"],
+        "phase_complete_events": phase_counts["complete"],
+        "phase_other_events": phase_counts["other"],
         "input_tokens": int(usage.get("input_tokens") or 0),
         "output_tokens": int(usage.get("output_tokens") or 0),
         "reasoning_output_tokens": int(usage.get("reasoning_output_tokens") or 0),
@@ -194,13 +185,11 @@ def _summary(outcome: str, findings: list[Finding], metrics: dict[str, int]) -> 
 
 
 def _is_verification(command: str) -> bool:
-    lowered = command.lower()
-    return any(keyword in lowered for keyword in VERIFY_KEYWORDS)
+    return is_verification_command(command)
 
 
 def _is_search(command: str) -> bool:
-    stripped = command.strip().lower()
-    return any(stripped.startswith(prefix) for prefix in SEARCH_PREFIXES)
+    return is_search_command(command)
 
 
 def _normalize_command(command: str) -> str:

@@ -9,6 +9,7 @@ type TraceEvent = {
   status: string;
   title: string;
   detail: string;
+  phase?: string;
   command?: string | null;
   exit_code?: number | null;
   files: string[];
@@ -140,6 +141,7 @@ function App() {
                 <div className="event-meta">
                   <code>{event.id}</code>
                   <span>{event.kind}</span>
+                  <span>{event.phase ?? "other"}</span>
                   <span>{event.status}</span>
                 </div>
                 <h3>{event.title}</h3>

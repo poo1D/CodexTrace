@@ -4,7 +4,27 @@ import json
 from pathlib import Path
 from typing import Any, Iterable
 
-from .schema import Trace, TraceEvent
+from .schema import EventPhase, Trace, TraceEvent
+
+
+VERIFY_KEYWORDS = (
+    "pytest",
+    "npm test",
+    "npm run test",
+    "pnpm test",
+    "yarn test",
+    "cargo test",
+    "go test",
+    "mvn test",
+    "gradle test",
+    "ruff",
+    "mypy",
+    "tsc",
+    "npm run build",
+    "pnpm build",
+)
+SEARCH_PREFIXES = ("rg ", "grep ", "find ", "ls", "sed ", "cat ", "git grep")
+COMPLETION_WORDS = ("complete", "completed", "done", "fixed", "implemented", "updated")
 
 
 def parse_jsonl(path: str | Path) -> Trace:
@@ -29,7 +49,60 @@ def parse_lines(lines: Iterable[str], source: str | None = None) -> Trace:
         if event:
             trace.events.append(event)
             counter += 1
+    assign_phases(trace.events)
     return trace
+
+
+def assign_phases(events: list[TraceEvent]) -> None:
+    after_failure = False
+    current: EventPhase = "setup"
+    for event in events:
+        phase = _infer_event_phase(event, current, after_failure)
+        event.phase = phase
+
+        if event.kind == "command" and event.exit_code not in (None, 0):
+            after_failure = True
+        elif phase in {"verify", "complete"} and event.status != "failed":
+            after_failure = False
+        elif event.kind == "file_change":
+            after_failure = False
+
+        if phase not in {"setup", "other"}:
+            current = phase
+
+
+def _infer_event_phase(event: TraceEvent, current: EventPhase, after_failure: bool) -> EventPhase:
+    if event.kind == "thread":
+        return "setup"
+    if event.kind == "turn":
+        return "complete" if event.status == "completed" else "setup"
+    if event.kind == "file_change":
+        return "edit"
+    if event.kind == "web_search":
+        return "inspect"
+    if event.kind == "plan":
+        return current
+    if event.kind == "agent_message":
+        text = f"{event.title}\n{event.detail}".lower()
+        if any(word in text for word in COMPLETION_WORDS):
+            return "complete"
+        return "recover" if after_failure else current
+    if event.kind == "reasoning":
+        return "recover" if after_failure else current
+    if event.kind == "mcp_tool":
+        return "recover" if event.status in {"failed", "blocked", "error"} or after_failure else current
+    if event.kind == "command":
+        command = event.command or ""
+        if is_verification_command(command):
+            return "verify"
+        if event.exit_code not in (None, 0) or after_failure:
+            return "recover"
+        if is_search_command(command):
+            return "inspect"
+        return current if current != "setup" else "inspect"
+    if event.kind == "error":
+        return "recover"
+    return current if current != "setup" else "other"
 
 
 def _event_from_payload(payload: dict[str, Any], counter: int) -> TraceEvent | None:
@@ -99,6 +172,16 @@ def _status(payload: dict[str, Any]) -> str:
     if raw_type.endswith(".started"):
         return "in_progress"
     return str(payload.get("status") or "completed")
+
+
+def is_verification_command(command: str) -> bool:
+    lowered = command.lower()
+    return any(keyword in lowered for keyword in VERIFY_KEYWORDS)
+
+
+def is_search_command(command: str) -> bool:
+    stripped = command.strip().lower()
+    return any(stripped.startswith(prefix) for prefix in SEARCH_PREFIXES)
 
 
 def _extract_exit_code(item: dict[str, Any]) -> int | None:

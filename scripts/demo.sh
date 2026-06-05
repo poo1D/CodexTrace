@@ -10,9 +10,9 @@ REPORT_MD="demo/demo-report.md"
 WEB_REPORT="web/public/report.json"
 
 if [[ -x ".venv/bin/python" ]]; then
-  CODEX_TRACE=".venv/bin/python -m codex_trace.cli"
+  CODEX_TRACE=(".venv/bin/python" -m codex_trace.cli)
 else
-  CODEX_TRACE="PYTHONPATH=. python3 -m codex_trace.cli"
+  CODEX_TRACE=(python3 -m codex_trace.cli)
 fi
 
 echo "== CodexTrace demo =="
@@ -20,10 +20,10 @@ echo "Input trace: $TRACE"
 echo
 
 echo "1. Generate JSON diagnosis"
-PYTHONPATH=. $CODEX_TRACE diagnose "$TRACE" --format json -o "$REPORT_JSON"
+PYTHONPATH=. "${CODEX_TRACE[@]}" diagnose "$TRACE" --format json -o "$REPORT_JSON"
 
 echo "2. Generate Markdown diagnosis"
-PYTHONPATH=. $CODEX_TRACE diagnose "$TRACE" --format markdown -o "$REPORT_MD"
+PYTHONPATH=. "${CODEX_TRACE[@]}" diagnose "$TRACE" --format markdown -o "$REPORT_MD"
 
 echo "3. Feed the Web UI"
 cp "$REPORT_JSON" "$WEB_REPORT"

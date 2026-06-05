@@ -69,6 +69,8 @@ JSONL event parser
         ↓
 normalized trace schema
         ↓
+phase segmentation
+        ↓
 failure pattern detector
         ↓
 diagnosis report
@@ -79,6 +81,7 @@ baseline vs intervention comparison
 Core modules:
 
 - parser: maps JSONL events to a stable schema
+- phase segmenter: assigns setup/inspect/edit/verify/recover/complete labels
 - detector: emits interpretable failure tags
 - aggregator: computes benchmark-level metrics
 - report: generates JSON/Markdown tables
@@ -135,6 +138,9 @@ Candidate signals:
 - no post-edit verification
 - failed command count
 - repeated search/read count
+- retry count
+- recover-phase event count
+- verify-phase event count
 - input token usage
 - time to first test
 - time to first edit

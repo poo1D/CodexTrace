@@ -32,6 +32,9 @@ def test_aggregate_runs_baseline_vs_intervention():
     assert result["summary"]["intervention"]["success_rate"] == 1
     assert result["summary"]["baseline"]["avg_failure_score"] > result["summary"]["intervention"]["avg_failure_score"]
     assert result["deltas"]["success_rate"] == 1
+    assert "avg_recover_events" in result["summary"]["baseline"]
+    assert "retry_count" in result["runs"][0]
+    assert "phase_verify_events" in result["runs"][0]
 
 
 def test_evaluate_detector_labels():

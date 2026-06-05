@@ -49,6 +49,6 @@ def render_markdown(trace: Trace, diagnosis: Diagnosis) -> str:
     lines.extend(["## Timeline", ""])
     for event in trace.events:
         detail = f" - {event.detail[:140]}" if event.detail else ""
-        lines.append(f"- `{event.id}` **{event.kind}** `{event.status}`: {event.title}{detail}")
+        lines.append(f"- `{event.id}` **{event.kind}** `{event.phase}` `{event.status}`: {event.title}{detail}")
 
     return "\n".join(lines).rstrip() + "\n"

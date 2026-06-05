@@ -5,6 +5,7 @@ import json
 import shutil
 import subprocess
 import os
+from collections import Counter
 from dataclasses import dataclass
 from pathlib import Path
 from statistics import mean
@@ -273,7 +274,10 @@ def render_aggregate_markdown(result: dict[str, Any]) -> str:
         "verification_rate",
         "unresolved_error_rate",
         "avg_repeated_tool_calls",
+        "avg_retry_count",
         "avg_command_failures",
+        "avg_recover_events",
+        "avg_verify_events",
         "avg_token_usage",
         "avg_failure_score",
     ):
@@ -300,12 +304,20 @@ def write_runs_csv(result: dict[str, Any], path: str | Path) -> None:
         "verification_rate",
         "unresolved_error",
         "repeated_tool_call_count",
+        "retry_count",
         "command_failure_count",
         "token_usage",
         "failure_score",
         "turn_count",
         "time_to_first_edit",
         "time_to_first_test",
+        "phase_setup_events",
+        "phase_inspect_events",
+        "phase_edit_events",
+        "phase_verify_events",
+        "phase_recover_events",
+        "phase_complete_events",
+        "phase_other_events",
         "finding_codes",
         "taxonomy_tags",
     ]
@@ -435,6 +447,7 @@ def _run_metrics(record: RunRecord, trace: Trace, diagnosis: Diagnosis) -> dict[
     metrics = diagnosis.metrics
     finding_codes = [finding.code for finding in diagnosis.findings]
     taxonomy_tags = [canonical_label(code) for code in finding_codes]
+    phase_counts = _phase_counts(trace)
     return {
         "task_id": record.task_id,
         "prompt_type": record.prompt_type,
@@ -444,12 +457,20 @@ def _run_metrics(record: RunRecord, trace: Trace, diagnosis: Diagnosis) -> dict[
         "verification_rate": 1 if metrics.get("post_edit_verification_commands", 0) > 0 else 0,
         "unresolved_error": 1 if "command_failure_unhandled" in finding_codes else 0,
         "repeated_tool_call_count": _repeated_tool_call_count(trace),
+        "retry_count": _retry_count(trace),
         "command_failure_count": metrics.get("failed_commands", 0),
         "token_usage": metrics.get("input_tokens", 0) + metrics.get("output_tokens", 0),
         "failure_score": diagnosis.failure_score,
         "turn_count": sum(event.kind == "turn" and event.status == "completed" for event in trace.events),
         "time_to_first_edit": _index_of_first(trace, "file_change"),
         "time_to_first_test": _index_of_first_verification(trace),
+        "phase_setup_events": phase_counts["setup"],
+        "phase_inspect_events": phase_counts["inspect"],
+        "phase_edit_events": phase_counts["edit"],
+        "phase_verify_events": phase_counts["verify"],
+        "phase_recover_events": phase_counts["recover"],
+        "phase_complete_events": phase_counts["complete"],
+        "phase_other_events": phase_counts["other"],
         "finding_codes": finding_codes,
         "taxonomy_tags": taxonomy_tags,
     }
@@ -511,10 +532,15 @@ def _summarize_group(rows: list[dict[str, Any]]) -> dict[str, Any]:
         "verification_rate": _mean(rows, "verification_rate"),
         "unresolved_error_rate": _mean(rows, "unresolved_error"),
         "avg_repeated_tool_calls": _mean(rows, "repeated_tool_call_count"),
+        "avg_retry_count": _mean(rows, "retry_count"),
         "avg_command_failures": _mean(rows, "command_failure_count"),
         "avg_token_usage": _mean(rows, "token_usage"),
         "avg_failure_score": _mean(rows, "failure_score"),
         "avg_turn_count": _mean(rows, "turn_count"),
+        "avg_inspect_events": _mean(rows, "phase_inspect_events"),
+        "avg_edit_events": _mean(rows, "phase_edit_events"),
+        "avg_verify_events": _mean(rows, "phase_verify_events"),
+        "avg_recover_events": _mean(rows, "phase_recover_events"),
     }
 
 
@@ -546,6 +572,29 @@ def _repeated_tool_call_count(trace: Trace) -> int:
         if counts[command] > 1:
             repeated += 1
     return repeated
+
+
+def _retry_count(trace: Trace) -> int:
+    failed_commands: set[str] = set()
+    retries = 0
+    for event in trace.events:
+        if event.kind != "command" or not event.command:
+            continue
+        command = " ".join(event.command.strip().split())
+        if command in failed_commands:
+            retries += 1
+        if event.exit_code not in (None, 0):
+            failed_commands.add(command)
+        elif command in failed_commands:
+            failed_commands.remove(command)
+    return retries
+
+
+def _phase_counts(trace: Trace) -> Counter[str]:
+    counts: Counter[str] = Counter(event.phase for event in trace.events)
+    for phase in ("setup", "inspect", "edit", "verify", "recover", "complete", "other"):
+        counts.setdefault(phase, 0)
+    return counts
 
 
 def _index_of_first(trace: Trace, kind: str) -> int | None:
