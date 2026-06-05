@@ -14,6 +14,8 @@ This directory is the starting point for the paper experiment:
   aggregation pipeline before collecting the full benchmark.
 - `labels.example.jsonl`: example manual failure tags for detector precision and
   recall evaluation.
+- `pilot/smoke-real`: 6 real `codex exec --json` pilot traces for the runnable
+  smoke tasks.
 
 ## Render a Prompt
 

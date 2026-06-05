@@ -12,7 +12,7 @@ from statistics import mean
 from typing import Any
 
 from .diagnose import diagnose
-from .parser import parse_jsonl
+from .parser import is_verification_command, parse_jsonl
 from .schema import Diagnosis, Trace
 
 
@@ -356,6 +356,7 @@ def build_paper_report(manifest_path: str | Path, labels_path: str | Path | None
         "aggregate": aggregate,
         "taxonomy_distribution": taxonomy,
         "detector_evaluation": label_evaluation,
+        "outcome_counts": outcome_counts(aggregate["runs"]),
         "signal_by_outcome": signal_summary_by_outcome(aggregate["runs"]),
     }
 
@@ -367,25 +368,31 @@ def render_paper_report_markdown(result: dict[str, Any]) -> str:
         "",
         "## RQ1 Failure Taxonomy Distribution",
         "",
-        "| Failure tag | Count | Percentage | Example task |",
-        "| --- | ---: | ---: | --- |",
     ]
-    for row in result["taxonomy_distribution"]:
-        lines.append(f"| {row['failure_tag']} | {row['count']} | {_fmt(row['percentage'])} | {row['example_task']} |")
+    if result["taxonomy_distribution"]:
+        lines.extend(["| Failure tag | Count | Percentage | Example task |", "| --- | ---: | ---: | --- |"])
+        for row in result["taxonomy_distribution"]:
+            lines.append(f"| {row['failure_tag']} | {row['count']} | {_fmt(row['percentage'])} | {row['example_task']} |")
+    else:
+        lines.append("No failure tags were observed in these runs.")
 
     if result.get("detector_evaluation"):
         evaluation = result["detector_evaluation"]
-        lines.extend(["", "## RQ2 Detector Agreement", "", "| Label | TP | FP | FN | Precision | Recall | F1 |", "| --- | ---: | ---: | ---: | ---: | ---: | ---: |"])
-        for label, scores in sorted(evaluation["labels"].items()):
-            lines.append(
-                f"| {label} | {scores['tp']} | {scores['fp']} | {scores['fn']} | "
-                f"{_fmt(scores['precision'])} | {_fmt(scores['recall'])} | {_fmt(scores['f1'])} |"
-            )
-        summary = evaluation["summary"]
-        lines.extend([
-            "",
-            f"Micro F1: {_fmt(summary['micro_f1'])}; Macro F1: {_fmt(summary['macro_f1'])}.",
-        ])
+        lines.extend(["", "## RQ2 Detector Agreement", ""])
+        if evaluation["labels"]:
+            lines.extend(["| Label | TP | FP | FN | Precision | Recall | F1 |", "| --- | ---: | ---: | ---: | ---: | ---: | ---: |"])
+            for label, scores in sorted(evaluation["labels"].items()):
+                lines.append(
+                    f"| {label} | {scores['tp']} | {scores['fp']} | {scores['fn']} | "
+                    f"{_fmt(scores['precision'])} | {_fmt(scores['recall'])} | {_fmt(scores['f1'])} |"
+                )
+            summary = evaluation["summary"]
+            lines.extend([
+                "",
+                f"Micro F1: {_fmt(summary['micro_f1'])}; Macro F1: {_fmt(summary['macro_f1'])}.",
+            ])
+        else:
+            lines.append("No detector labels were present to score.")
 
     lines.extend([
         "",
@@ -411,7 +418,16 @@ def render_paper_report_markdown(result: dict[str, Any]) -> str:
         delta = aggregate["deltas"].get(key, 0)
         lines.append(f"| {key} | {_fmt(baseline)} | {_fmt(intervention)} | {_fmt(delta)} |")
 
-    lines.extend(["", "## RQ4 Trace Signals By Outcome", "", "| Signal | Failure mean | Success mean | Delta success-failure |", "| --- | ---: | ---: | ---: |"])
+    counts = result.get("outcome_counts", {})
+    lines.extend([
+        "",
+        "## RQ4 Trace Signals By Outcome",
+        "",
+        f"Outcome counts: failure={counts.get('failure', 0)}, success={counts.get('success', 0)}, unknown={counts.get('unknown', 0)}.",
+        "",
+        "| Signal | Failure mean | Success mean | Delta success-failure |",
+        "| --- | ---: | ---: | ---: |",
+    ])
     for row in result["signal_by_outcome"]:
         lines.append(
             f"| {row['signal']} | {_fmt(row['failure_mean'])} | {_fmt(row['success_mean'])} | {_fmt(row['delta_success_minus_failure'])} |"
@@ -455,6 +471,13 @@ def taxonomy_distribution(run_rows: list[dict[str, Any]], labels: dict[tuple[str
         }
         for tag, count in sorted(counts.items(), key=lambda item: (-item[1], item[0]))
     ]
+
+
+def outcome_counts(run_rows: list[dict[str, Any]]) -> dict[str, int]:
+    counts: Counter[str] = Counter(str(row.get("outcome", "unknown")) for row in run_rows)
+    for outcome in ("success", "failure", "unknown"):
+        counts.setdefault(outcome, 0)
+    return dict(counts)
 
 
 def signal_summary_by_outcome(run_rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
@@ -747,10 +770,8 @@ def _index_of_first(trace: Trace, kind: str) -> int | None:
 
 
 def _index_of_first_verification(trace: Trace) -> int | None:
-    verification_words = ("pytest", "npm test", "npm run test", "ruff", "mypy", "tsc", "build")
     for index, event in enumerate(trace.events):
-        command = (event.command or "").lower()
-        if event.kind == "command" and any(word in command for word in verification_words):
+        if event.kind == "command" and is_verification_command(event.command or ""):
             return index
     return None
 

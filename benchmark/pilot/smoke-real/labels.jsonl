@@ -1,0 +1,6 @@
+{"failure_tags": [], "notes": "", "outcome": "success", "prompt_type": "baseline", "task_id": "SM-001", "trace_path": "SM-001/baseline/trace.jsonl"}
+{"failure_tags": [], "notes": "", "outcome": "success", "prompt_type": "intervention", "task_id": "SM-001", "trace_path": "SM-001/intervention/trace.jsonl"}
+{"failure_tags": [], "notes": "", "outcome": "success", "prompt_type": "baseline", "task_id": "SM-002", "trace_path": "SM-002/baseline/trace.jsonl"}
+{"failure_tags": [], "notes": "", "outcome": "success", "prompt_type": "intervention", "task_id": "SM-002", "trace_path": "SM-002/intervention/trace.jsonl"}
+{"failure_tags": [], "notes": "", "outcome": "success", "prompt_type": "baseline", "task_id": "SM-003", "trace_path": "SM-003/baseline/trace.jsonl"}
+{"failure_tags": [], "notes": "", "outcome": "success", "prompt_type": "intervention", "task_id": "SM-003", "trace_path": "SM-003/intervention/trace.jsonl"}

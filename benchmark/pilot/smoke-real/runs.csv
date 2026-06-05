@@ -1,0 +1,7 @@
+task_id,prompt_type,outcome,success,verification_rate,unresolved_error,repeated_tool_call_count,retry_count,command_failure_count,token_usage,failure_score,turn_count,time_to_first_edit,time_to_first_test,phase_setup_events,phase_inspect_events,phase_edit_events,phase_verify_events,phase_recover_events,phase_complete_events,phase_other_events,finding_codes,taxonomy_tags
+SM-001,baseline,success,1,1,0,6,0,0,93829,0,1,15,18,3,12,3,2,0,2,0,,
+SM-001,intervention,success,1,1,0,6,0,0,95100,0,1,15,5,3,2,3,12,0,2,0,,
+SM-002,baseline,success,1,1,0,7,0,0,94254,0,1,15,20,3,12,5,2,0,2,0,,
+SM-002,intervention,success,1,1,0,6,0,0,94696,0,1,15,18,3,12,3,2,0,2,0,,
+SM-003,baseline,success,1,1,0,6,0,0,94672,0,1,15,18,3,12,3,2,0,2,0,,
+SM-003,intervention,success,1,1,0,8,1,1,135590,5,1,15,18,3,12,6,4,1,2,0,,

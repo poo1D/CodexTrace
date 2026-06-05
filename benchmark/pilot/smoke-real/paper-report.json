@@ -1,0 +1,369 @@
+{
+  "aggregate": {
+    "runs": [
+      {
+        "task_id": "SM-001",
+        "prompt_type": "baseline",
+        "trace_path": "/private/tmp/codextrace-work/benchmark/pilot/smoke-real/SM-001/baseline/trace.jsonl",
+        "outcome": "success",
+        "success": 1,
+        "verification_rate": 1,
+        "unresolved_error": 0,
+        "repeated_tool_call_count": 6,
+        "retry_count": 0,
+        "command_failure_count": 0,
+        "token_usage": 93829,
+        "failure_score": 0,
+        "turn_count": 1,
+        "time_to_first_edit": 15,
+        "time_to_first_test": 18,
+        "phase_setup_events": 3,
+        "phase_inspect_events": 12,
+        "phase_edit_events": 3,
+        "phase_verify_events": 2,
+        "phase_recover_events": 0,
+        "phase_complete_events": 2,
+        "phase_other_events": 0,
+        "finding_codes": [],
+        "taxonomy_tags": []
+      },
+      {
+        "task_id": "SM-001",
+        "prompt_type": "intervention",
+        "trace_path": "/private/tmp/codextrace-work/benchmark/pilot/smoke-real/SM-001/intervention/trace.jsonl",
+        "outcome": "success",
+        "success": 1,
+        "verification_rate": 1,
+        "unresolved_error": 0,
+        "repeated_tool_call_count": 6,
+        "retry_count": 0,
+        "command_failure_count": 0,
+        "token_usage": 95100,
+        "failure_score": 0,
+        "turn_count": 1,
+        "time_to_first_edit": 15,
+        "time_to_first_test": 5,
+        "phase_setup_events": 3,
+        "phase_inspect_events": 2,
+        "phase_edit_events": 3,
+        "phase_verify_events": 12,
+        "phase_recover_events": 0,
+        "phase_complete_events": 2,
+        "phase_other_events": 0,
+        "finding_codes": [],
+        "taxonomy_tags": []
+      },
+      {
+        "task_id": "SM-002",
+        "prompt_type": "baseline",
+        "trace_path": "/private/tmp/codextrace-work/benchmark/pilot/smoke-real/SM-002/baseline/trace.jsonl",
+        "outcome": "success",
+        "success": 1,
+        "verification_rate": 1,
+        "unresolved_error": 0,
+        "repeated_tool_call_count": 7,
+        "retry_count": 0,
+        "command_failure_count": 0,
+        "token_usage": 94254,
+        "failure_score": 0,
+        "turn_count": 1,
+        "time_to_first_edit": 15,
+        "time_to_first_test": 20,
+        "phase_setup_events": 3,
+        "phase_inspect_events": 12,
+        "phase_edit_events": 5,
+        "phase_verify_events": 2,
+        "phase_recover_events": 0,
+        "phase_complete_events": 2,
+        "phase_other_events": 0,
+        "finding_codes": [],
+        "taxonomy_tags": []
+      },
+      {
+        "task_id": "SM-002",
+        "prompt_type": "intervention",
+        "trace_path": "/private/tmp/codextrace-work/benchmark/pilot/smoke-real/SM-002/intervention/trace.jsonl",
+        "outcome": "success",
+        "success": 1,
+        "verification_rate": 1,
+        "unresolved_error": 0,
+        "repeated_tool_call_count": 6,
+        "retry_count": 0,
+        "command_failure_count": 0,
+        "token_usage": 94696,
+        "failure_score": 0,
+        "turn_count": 1,
+        "time_to_first_edit": 15,
+        "time_to_first_test": 18,
+        "phase_setup_events": 3,
+        "phase_inspect_events": 12,
+        "phase_edit_events": 3,
+        "phase_verify_events": 2,
+        "phase_recover_events": 0,
+        "phase_complete_events": 2,
+        "phase_other_events": 0,
+        "finding_codes": [],
+        "taxonomy_tags": []
+      },
+      {
+        "task_id": "SM-003",
+        "prompt_type": "baseline",
+        "trace_path": "/private/tmp/codextrace-work/benchmark/pilot/smoke-real/SM-003/baseline/trace.jsonl",
+        "outcome": "success",
+        "success": 1,
+        "verification_rate": 1,
+        "unresolved_error": 0,
+        "repeated_tool_call_count": 6,
+        "retry_count": 0,
+        "command_failure_count": 0,
+        "token_usage": 94672,
+        "failure_score": 0,
+        "turn_count": 1,
+        "time_to_first_edit": 15,
+        "time_to_first_test": 18,
+        "phase_setup_events": 3,
+        "phase_inspect_events": 12,
+        "phase_edit_events": 3,
+        "phase_verify_events": 2,
+        "phase_recover_events": 0,
+        "phase_complete_events": 2,
+        "phase_other_events": 0,
+        "finding_codes": [],
+        "taxonomy_tags": []
+      },
+      {
+        "task_id": "SM-003",
+        "prompt_type": "intervention",
+        "trace_path": "/private/tmp/codextrace-work/benchmark/pilot/smoke-real/SM-003/intervention/trace.jsonl",
+        "outcome": "success",
+        "success": 1,
+        "verification_rate": 1,
+        "unresolved_error": 0,
+        "repeated_tool_call_count": 8,
+        "retry_count": 1,
+        "command_failure_count": 1,
+        "token_usage": 135590,
+        "failure_score": 5,
+        "turn_count": 1,
+        "time_to_first_edit": 15,
+        "time_to_first_test": 18,
+        "phase_setup_events": 3,
+        "phase_inspect_events": 12,
+        "phase_edit_events": 6,
+        "phase_verify_events": 4,
+        "phase_recover_events": 1,
+        "phase_complete_events": 2,
+        "phase_other_events": 0,
+        "finding_codes": [],
+        "taxonomy_tags": []
+      }
+    ],
+    "summary": {
+      "baseline": {
+        "n": 3,
+        "success_rate": 1.0,
+        "verification_rate": 1.0,
+        "unresolved_error_rate": 0.0,
+        "avg_repeated_tool_calls": 6.3333,
+        "avg_retry_count": 0.0,
+        "avg_command_failures": 0.0,
+        "avg_token_usage": 94251.6667,
+        "avg_failure_score": 0.0,
+        "avg_turn_count": 1.0,
+        "avg_inspect_events": 12.0,
+        "avg_edit_events": 3.6667,
+        "avg_verify_events": 2.0,
+        "avg_recover_events": 0.0
+      },
+      "intervention": {
+        "n": 3,
+        "success_rate": 1.0,
+        "verification_rate": 1.0,
+        "unresolved_error_rate": 0.0,
+        "avg_repeated_tool_calls": 6.6667,
+        "avg_retry_count": 0.3333,
+        "avg_command_failures": 0.3333,
+        "avg_token_usage": 108462.0,
+        "avg_failure_score": 1.6667,
+        "avg_turn_count": 1.0,
+        "avg_inspect_events": 8.6667,
+        "avg_edit_events": 4.0,
+        "avg_verify_events": 6.0,
+        "avg_recover_events": 0.3333
+      }
+    },
+    "deltas": {
+      "avg_command_failures": 0.3333,
+      "avg_inspect_events": -3.3332999999999995,
+      "avg_token_usage": 14210.333299999998,
+      "unresolved_error_rate": 0.0,
+      "avg_turn_count": 0.0,
+      "avg_edit_events": 0.33329999999999993,
+      "success_rate": 0.0,
+      "avg_verify_events": 4.0,
+      "avg_retry_count": 0.3333,
+      "verification_rate": 0.0,
+      "avg_failure_score": 1.6667,
+      "avg_recover_events": 0.3333,
+      "avg_repeated_tool_calls": 0.33339999999999925
+    }
+  },
+  "taxonomy_distribution": [],
+  "detector_evaluation": {
+    "runs": [
+      {
+        "task_id": "SM-001",
+        "prompt_type": "baseline",
+        "expected": [],
+        "predicted": [],
+        "true_positive": [],
+        "false_positive": [],
+        "false_negative": []
+      },
+      {
+        "task_id": "SM-001",
+        "prompt_type": "intervention",
+        "expected": [],
+        "predicted": [],
+        "true_positive": [],
+        "false_positive": [],
+        "false_negative": []
+      },
+      {
+        "task_id": "SM-002",
+        "prompt_type": "baseline",
+        "expected": [],
+        "predicted": [],
+        "true_positive": [],
+        "false_positive": [],
+        "false_negative": []
+      },
+      {
+        "task_id": "SM-002",
+        "prompt_type": "intervention",
+        "expected": [],
+        "predicted": [],
+        "true_positive": [],
+        "false_positive": [],
+        "false_negative": []
+      },
+      {
+        "task_id": "SM-003",
+        "prompt_type": "baseline",
+        "expected": [],
+        "predicted": [],
+        "true_positive": [],
+        "false_positive": [],
+        "false_negative": []
+      },
+      {
+        "task_id": "SM-003",
+        "prompt_type": "intervention",
+        "expected": [],
+        "predicted": [],
+        "true_positive": [],
+        "false_positive": [],
+        "false_negative": []
+      }
+    ],
+    "labels": {},
+    "summary": {
+      "labels": 0,
+      "micro_precision": 0,
+      "micro_recall": 0,
+      "micro_f1": 0,
+      "macro_f1": 0
+    }
+  },
+  "outcome_counts": {
+    "success": 6,
+    "failure": 0,
+    "unknown": 0
+  },
+  "signal_by_outcome": [
+    {
+      "signal": "verification_rate",
+      "failure_mean": 0,
+      "success_mean": 1.0,
+      "delta_success_minus_failure": 1.0
+    },
+    {
+      "signal": "unresolved_error",
+      "failure_mean": 0,
+      "success_mean": 0.0,
+      "delta_success_minus_failure": 0.0
+    },
+    {
+      "signal": "repeated_tool_call_count",
+      "failure_mean": 0,
+      "success_mean": 6.5,
+      "delta_success_minus_failure": 6.5
+    },
+    {
+      "signal": "retry_count",
+      "failure_mean": 0,
+      "success_mean": 0.1667,
+      "delta_success_minus_failure": 0.1667
+    },
+    {
+      "signal": "command_failure_count",
+      "failure_mean": 0,
+      "success_mean": 0.1667,
+      "delta_success_minus_failure": 0.1667
+    },
+    {
+      "signal": "token_usage",
+      "failure_mean": 0,
+      "success_mean": 101356.8333,
+      "delta_success_minus_failure": 101356.8333
+    },
+    {
+      "signal": "failure_score",
+      "failure_mean": 0,
+      "success_mean": 0.8333,
+      "delta_success_minus_failure": 0.8333
+    },
+    {
+      "signal": "turn_count",
+      "failure_mean": 0,
+      "success_mean": 1.0,
+      "delta_success_minus_failure": 1.0
+    },
+    {
+      "signal": "time_to_first_edit",
+      "failure_mean": 0,
+      "success_mean": 15.0,
+      "delta_success_minus_failure": 15.0
+    },
+    {
+      "signal": "time_to_first_test",
+      "failure_mean": 0,
+      "success_mean": 16.1667,
+      "delta_success_minus_failure": 16.1667
+    },
+    {
+      "signal": "phase_inspect_events",
+      "failure_mean": 0,
+      "success_mean": 10.3333,
+      "delta_success_minus_failure": 10.3333
+    },
+    {
+      "signal": "phase_edit_events",
+      "failure_mean": 0,
+      "success_mean": 3.8333,
+      "delta_success_minus_failure": 3.8333
+    },
+    {
+      "signal": "phase_verify_events",
+      "failure_mean": 0,
+      "success_mean": 4.0,
+      "delta_success_minus_failure": 4.0
+    },
+    {
+      "signal": "phase_recover_events",
+      "failure_mean": 0,
+      "success_mean": 0.1667,
+      "delta_success_minus_failure": 0.1667
+    }
+  ]
+}

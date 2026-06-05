@@ -20,6 +20,7 @@ VERIFY_KEYWORDS = (
     "ruff",
     "mypy",
     "tsc",
+    "unittest",
     "npm run build",
     "pnpm build",
 )
