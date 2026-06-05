@@ -62,3 +62,12 @@ codex-trace research evaluate-labels benchmark/runs.example.jsonl benchmark/labe
   --json-output reports/example-label-eval.json \
   --markdown-output reports/example-label-eval.md
 ```
+
+Generate paper-ready RQ tables:
+
+```bash
+codex-trace research paper-report benchmark/runs.example.jsonl \
+  --labels benchmark/labels.example.jsonl \
+  --json-output reports/example-paper-report.json \
+  --markdown-output reports/example-paper-report.md
+```

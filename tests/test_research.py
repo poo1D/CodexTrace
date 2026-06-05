@@ -1,9 +1,11 @@
 from codex_trace.research import (
     aggregate_runs,
+    build_paper_report,
     evaluate_detector_labels,
     generate_label_template,
     load_tasks,
     render_label_template_jsonl,
+    render_paper_report_markdown,
     render_prompt,
     run_benchmark,
     run_success_check,
@@ -56,6 +58,16 @@ def test_generate_label_template_with_predictions():
     assert baseline["failure_score"] == 100
     assert render_label_template_jsonl(rows).count("\n") == 4
 
+
+def test_build_paper_report_tables():
+    result = build_paper_report("benchmark/runs.example.jsonl", "benchmark/labels.example.jsonl")
+    markdown = render_paper_report_markdown(result)
+
+    assert result["aggregate"]["summary"]["baseline"]["success_rate"] == 0
+    assert result["detector_evaluation"]["summary"]["micro_f1"] == 1
+    assert result["taxonomy_distribution"][0]["count"] == 2
+    assert any(row["signal"] == "phase_recover_events" for row in result["signal_by_outcome"])
+    assert "## RQ4 Trace Signals By Outcome" in markdown
 
 
 def test_smoke_fixture_success_check_starts_failing():

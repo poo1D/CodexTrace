@@ -26,6 +26,22 @@ TAXONOMY_ALIASES = {
     "premature_completion": "premature_completion",
     "turn_failed": "turn_failed",
 }
+PAPER_SIGNAL_KEYS = (
+    "verification_rate",
+    "unresolved_error",
+    "repeated_tool_call_count",
+    "retry_count",
+    "command_failure_count",
+    "token_usage",
+    "failure_score",
+    "turn_count",
+    "time_to_first_edit",
+    "time_to_first_test",
+    "phase_inspect_events",
+    "phase_edit_events",
+    "phase_verify_events",
+    "phase_recover_events",
+)
 
 
 @dataclass
@@ -329,6 +345,132 @@ def write_runs_csv(result: dict[str, Any], path: str | Path) -> None:
             serialized["finding_codes"] = ";".join(row["finding_codes"])
             serialized["taxonomy_tags"] = ";".join(row["taxonomy_tags"])
             writer.writerow({key: serialized.get(key, "") for key in fieldnames})
+
+
+def build_paper_report(manifest_path: str | Path, labels_path: str | Path | None = None) -> dict[str, Any]:
+    aggregate = aggregate_runs(manifest_path)
+    labels = load_manual_labels(labels_path) if labels_path else {}
+    taxonomy = taxonomy_distribution(aggregate["runs"], labels)
+    label_evaluation = evaluate_detector_labels(manifest_path, labels_path) if labels_path else None
+    return {
+        "aggregate": aggregate,
+        "taxonomy_distribution": taxonomy,
+        "detector_evaluation": label_evaluation,
+        "signal_by_outcome": signal_summary_by_outcome(aggregate["runs"]),
+    }
+
+
+def render_paper_report_markdown(result: dict[str, Any]) -> str:
+    aggregate = result["aggregate"]
+    lines = [
+        "# CodexTrace Paper Tables",
+        "",
+        "## RQ1 Failure Taxonomy Distribution",
+        "",
+        "| Failure tag | Count | Percentage | Example task |",
+        "| --- | ---: | ---: | --- |",
+    ]
+    for row in result["taxonomy_distribution"]:
+        lines.append(f"| {row['failure_tag']} | {row['count']} | {_fmt(row['percentage'])} | {row['example_task']} |")
+
+    if result.get("detector_evaluation"):
+        evaluation = result["detector_evaluation"]
+        lines.extend(["", "## RQ2 Detector Agreement", "", "| Label | TP | FP | FN | Precision | Recall | F1 |", "| --- | ---: | ---: | ---: | ---: | ---: | ---: |"])
+        for label, scores in sorted(evaluation["labels"].items()):
+            lines.append(
+                f"| {label} | {scores['tp']} | {scores['fp']} | {scores['fn']} | "
+                f"{_fmt(scores['precision'])} | {_fmt(scores['recall'])} | {_fmt(scores['f1'])} |"
+            )
+        summary = evaluation["summary"]
+        lines.extend([
+            "",
+            f"Micro F1: {_fmt(summary['micro_f1'])}; Macro F1: {_fmt(summary['macro_f1'])}.",
+        ])
+
+    lines.extend([
+        "",
+        "## RQ3 Baseline vs Intervention",
+        "",
+        "| Metric | Baseline | Intervention | Delta |",
+        "| --- | ---: | ---: | ---: |",
+    ])
+    for key in (
+        "success_rate",
+        "verification_rate",
+        "unresolved_error_rate",
+        "avg_repeated_tool_calls",
+        "avg_retry_count",
+        "avg_command_failures",
+        "avg_token_usage",
+        "avg_failure_score",
+        "avg_recover_events",
+        "avg_verify_events",
+    ):
+        baseline = aggregate["summary"].get("baseline", {}).get(key, 0)
+        intervention = aggregate["summary"].get("intervention", {}).get(key, 0)
+        delta = aggregate["deltas"].get(key, 0)
+        lines.append(f"| {key} | {_fmt(baseline)} | {_fmt(intervention)} | {_fmt(delta)} |")
+
+    lines.extend(["", "## RQ4 Trace Signals By Outcome", "", "| Signal | Failure mean | Success mean | Delta success-failure |", "| --- | ---: | ---: | ---: |"])
+    for row in result["signal_by_outcome"]:
+        lines.append(
+            f"| {row['signal']} | {_fmt(row['failure_mean'])} | {_fmt(row['success_mean'])} | {_fmt(row['delta_success_minus_failure'])} |"
+        )
+
+    lines.extend(["", "## Per-Run Appendix", "", "| Task | Prompt | Outcome | Failure score | Tags |", "| --- | --- | --- | ---: | --- |"])
+    for row in aggregate["runs"]:
+        tags = ", ".join(row["taxonomy_tags"]) or "-"
+        lines.append(f"| {row['task_id']} | {row['prompt_type']} | {row['outcome']} | {row['failure_score']} | {tags} |")
+    return "\n".join(lines) + "\n"
+
+
+def write_paper_report_outputs(result: dict[str, Any], json_path: str | Path | None = None, markdown_path: str | Path | None = None) -> None:
+    if json_path:
+        path = Path(json_path)
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(json.dumps(result, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    if markdown_path:
+        path = Path(markdown_path)
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(render_paper_report_markdown(result), encoding="utf-8")
+
+
+def taxonomy_distribution(run_rows: list[dict[str, Any]], labels: dict[tuple[str, str], set[str]] | None = None) -> list[dict[str, Any]]:
+    counts: Counter[str] = Counter()
+    examples: dict[str, str] = {}
+    total = 0
+    for row in run_rows:
+        key = (str(row["task_id"]), str(row["prompt_type"]))
+        tags = sorted(labels.get(key, set())) if labels else row.get("taxonomy_tags", [])
+        for tag in tags:
+            counts[tag] += 1
+            total += 1
+            examples.setdefault(tag, f"{row['task_id']}/{row['prompt_type']}")
+    return [
+        {
+            "failure_tag": tag,
+            "count": count,
+            "percentage": round(100 * count / total, 2) if total else 0,
+            "example_task": examples.get(tag, "-"),
+        }
+        for tag, count in sorted(counts.items(), key=lambda item: (-item[1], item[0]))
+    ]
+
+
+def signal_summary_by_outcome(run_rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    failure_rows = [row for row in run_rows if row.get("outcome") == "failure"]
+    success_rows = [row for row in run_rows if row.get("outcome") == "success"]
+    rows = []
+    for key in PAPER_SIGNAL_KEYS:
+        failure_mean = _mean(failure_rows, key) if failure_rows else 0
+        success_mean = _mean(success_rows, key) if success_rows else 0
+        rows.append({
+            "signal": key,
+            "failure_mean": failure_mean,
+            "success_mean": success_mean,
+            "delta_success_minus_failure": round(success_mean - failure_mean, 4),
+        })
+    return rows
 
 
 def generate_label_template(manifest_path: str | Path, include_predictions: bool = False) -> list[dict[str, Any]]:
