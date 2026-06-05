@@ -102,6 +102,14 @@ Group-level metrics:
 - `avg_token_usage`
 - `avg_failure_score`
 
+Detector evaluation metrics:
+
+- per-label precision
+- per-label recall
+- per-label F1
+- micro F1
+- macro F1
+
 ## Aggregation
 
 ```bash
@@ -109,6 +117,14 @@ codex-trace research aggregate benchmark/runs.example.jsonl \
   --json-output reports/example-aggregate.json \
   --markdown-output reports/example-aggregate.md \
   --csv-output reports/example-runs.csv
+```
+
+Evaluate detector labels against manual annotations:
+
+```bash
+codex-trace research evaluate-labels benchmark/runs.example.jsonl benchmark/labels.example.jsonl \
+  --json-output reports/example-label-eval.json \
+  --markdown-output reports/example-label-eval.md
 ```
 
 ## Minimal Acceptance Bar For A Workshop-Style Draft

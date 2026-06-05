@@ -84,6 +84,7 @@ Key files:
 
 - `benchmark/tasks.jsonl`: 30 seed coding tasks
 - `benchmark/smoke/tasks.jsonl`: 3 runnable smoke tasks for validating the harness
+- `benchmark/labels.example.jsonl`: example manual failure labels for detector evaluation
 - `benchmark/prompts/baseline.txt`: baseline prompt template
 - `benchmark/prompts/intervention.txt`: harness-intervention prompt template
 - `docs/experiment_protocol.md`: collection and labeling protocol
@@ -113,6 +114,14 @@ codex-trace research run \
   --tasks benchmark/smoke/tasks.jsonl \
   --output-dir runs/smoke-dry \
   --dry-run
+```
+
+Evaluate detector labels against manual labels:
+
+```bash
+codex-trace research evaluate-labels benchmark/runs.example.jsonl benchmark/labels.example.jsonl \
+  --json-output reports/example-label-eval.json \
+  --markdown-output reports/example-label-eval.md
 ```
 
 To run the Web UI:

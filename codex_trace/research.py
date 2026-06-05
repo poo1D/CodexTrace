@@ -16,6 +16,15 @@ from .schema import Diagnosis, Trace
 
 
 PROMPT_TYPES = ("baseline", "intervention")
+TAXONOMY_ALIASES = {
+    "command_failure_unhandled": "unrecovered_tool_error",
+    "verification_gap": "verification_gap",
+    "repeated_search_or_read": "repetitive_exploration",
+    "sandbox_or_permission_block": "sandbox_permission_deadlock",
+    "long_context_no_progress": "context_drift",
+    "premature_completion": "premature_completion",
+    "turn_failed": "turn_failed",
+}
 
 
 @dataclass
@@ -293,6 +302,7 @@ def write_runs_csv(result: dict[str, Any], path: str | Path) -> None:
         "time_to_first_edit",
         "time_to_first_test",
         "finding_codes",
+        "taxonomy_tags",
     ]
     with output_path.open("w", encoding="utf-8", newline="") as handle:
         writer = csv.DictWriter(handle, fieldnames=fieldnames)
@@ -300,12 +310,96 @@ def write_runs_csv(result: dict[str, Any], path: str | Path) -> None:
         for row in result["runs"]:
             serialized = dict(row)
             serialized["finding_codes"] = ";".join(row["finding_codes"])
+            serialized["taxonomy_tags"] = ";".join(row["taxonomy_tags"])
             writer.writerow({key: serialized.get(key, "") for key in fieldnames})
+
+
+def evaluate_detector_labels(manifest_path: str | Path, labels_path: str | Path) -> dict[str, Any]:
+    records = load_run_manifest(manifest_path)
+    labels = load_manual_labels(labels_path)
+    rows = []
+    for record in records:
+        key = (record.task_id, record.prompt_type)
+        expected = set(labels.get(key, set()))
+        trace = parse_jsonl(record.trace_path)
+        diagnosis = diagnose(trace)
+        predicted = {canonical_label(finding.code) for finding in diagnosis.findings}
+        rows.append({
+            "task_id": record.task_id,
+            "prompt_type": record.prompt_type,
+            "expected": sorted(expected),
+            "predicted": sorted(predicted),
+            "true_positive": sorted(expected & predicted),
+            "false_positive": sorted(predicted - expected),
+            "false_negative": sorted(expected - predicted),
+        })
+    return {
+        "runs": rows,
+        "labels": _label_scores(rows),
+        "summary": _label_summary(_label_scores(rows)),
+    }
+
+
+def load_manual_labels(path: str | Path) -> dict[tuple[str, str], set[str]]:
+    label_path = Path(path)
+    labels: dict[tuple[str, str], set[str]] = {}
+    for line in label_path.read_text(encoding="utf-8").splitlines():
+        if not line.strip():
+            continue
+        item = json.loads(line)
+        key = (str(item["task_id"]), str(item["prompt_type"]))
+        tags = item.get("failure_tags", [])
+        labels[key] = {canonical_label(str(tag)) for tag in tags}
+    return labels
+
+
+def canonical_label(label: str) -> str:
+    return TAXONOMY_ALIASES.get(label, label)
+
+
+def render_label_evaluation_markdown(result: dict[str, Any]) -> str:
+    lines = [
+        "# Detector Label Evaluation",
+        "",
+        "## Summary",
+        "",
+        "| Metric | Value |",
+        "| --- | ---: |",
+    ]
+    for key, value in result["summary"].items():
+        lines.append(f"| {key} | {_fmt(value)} |")
+
+    lines.extend(["", "## Per-Label Scores", "", "| Label | TP | FP | FN | Precision | Recall | F1 |", "| --- | ---: | ---: | ---: | ---: | ---: | ---: |"])
+    for label, scores in sorted(result["labels"].items()):
+        lines.append(
+            f"| {label} | {scores['tp']} | {scores['fp']} | {scores['fn']} | "
+            f"{_fmt(scores['precision'])} | {_fmt(scores['recall'])} | {_fmt(scores['f1'])} |"
+        )
+
+    lines.extend(["", "## Runs", "", "| Task | Prompt | Expected | Predicted | FP | FN |", "| --- | --- | --- | --- | --- | --- |"])
+    for row in result["runs"]:
+        lines.append(
+            f"| {row['task_id']} | {row['prompt_type']} | {_join_labels(row['expected'])} | "
+            f"{_join_labels(row['predicted'])} | {_join_labels(row['false_positive'])} | {_join_labels(row['false_negative'])} |"
+        )
+    return "\n".join(lines) + "\n"
+
+
+def write_label_evaluation_outputs(result: dict[str, Any], json_path: str | Path | None = None, markdown_path: str | Path | None = None) -> None:
+    if json_path:
+        path = Path(json_path)
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(json.dumps(result, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    if markdown_path:
+        path = Path(markdown_path)
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(render_label_evaluation_markdown(result), encoding="utf-8")
 
 
 def _run_metrics(record: RunRecord, trace: Trace, diagnosis: Diagnosis) -> dict[str, Any]:
     metrics = diagnosis.metrics
     finding_codes = [finding.code for finding in diagnosis.findings]
+    taxonomy_tags = [canonical_label(code) for code in finding_codes]
     return {
         "task_id": record.task_id,
         "prompt_type": record.prompt_type,
@@ -322,7 +416,55 @@ def _run_metrics(record: RunRecord, trace: Trace, diagnosis: Diagnosis) -> dict[
         "time_to_first_edit": _index_of_first(trace, "file_change"),
         "time_to_first_test": _index_of_first_verification(trace),
         "finding_codes": finding_codes,
+        "taxonomy_tags": taxonomy_tags,
     }
+
+
+def _label_scores(rows: list[dict[str, Any]]) -> dict[str, dict[str, Any]]:
+    labels = sorted({label for row in rows for label in row["expected"] + row["predicted"]})
+    scores = {}
+    for label in labels:
+        tp = sum(label in row["true_positive"] for row in rows)
+        fp = sum(label in row["false_positive"] for row in rows)
+        fn = sum(label in row["false_negative"] for row in rows)
+        scores[label] = {
+            "tp": tp,
+            "fp": fp,
+            "fn": fn,
+            "precision": _safe_div(tp, tp + fp),
+            "recall": _safe_div(tp, tp + fn),
+            "f1": _safe_f1(tp, fp, fn),
+        }
+    return scores
+
+
+def _label_summary(scores: dict[str, dict[str, Any]]) -> dict[str, Any]:
+    if not scores:
+        return {"labels": 0, "micro_precision": 0, "micro_recall": 0, "micro_f1": 0, "macro_f1": 0}
+    tp = sum(score["tp"] for score in scores.values())
+    fp = sum(score["fp"] for score in scores.values())
+    fn = sum(score["fn"] for score in scores.values())
+    return {
+        "labels": len(scores),
+        "micro_precision": _safe_div(tp, tp + fp),
+        "micro_recall": _safe_div(tp, tp + fn),
+        "micro_f1": _safe_f1(tp, fp, fn),
+        "macro_f1": round(mean(score["f1"] for score in scores.values()), 4),
+    }
+
+
+def _safe_div(numerator: int, denominator: int) -> float:
+    return round(numerator / denominator, 4) if denominator else 0
+
+
+def _safe_f1(tp: int, fp: int, fn: int) -> float:
+    precision = tp / (tp + fp) if tp + fp else 0
+    recall = tp / (tp + fn) if tp + fn else 0
+    return round((2 * precision * recall / (precision + recall)), 4) if precision + recall else 0
+
+
+def _join_labels(labels: list[str]) -> str:
+    return ", ".join(labels) if labels else "-"
 
 
 def _summarize_group(rows: list[dict[str, Any]]) -> dict[str, Any]:

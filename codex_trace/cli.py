@@ -7,7 +7,7 @@ from pathlib import Path
 from .diagnose import diagnose
 from .parser import parse_jsonl
 from .report import render_json, render_markdown
-from .research import aggregate_runs, load_tasks, render_aggregate_markdown, render_prompt, run_benchmark, write_aggregate_outputs, write_run_manifest, write_runs_csv
+from .research import aggregate_runs, evaluate_detector_labels, load_tasks, render_aggregate_markdown, render_label_evaluation_markdown, render_prompt, run_benchmark, write_aggregate_outputs, write_label_evaluation_outputs, write_run_manifest, write_runs_csv
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -37,6 +37,12 @@ def main(argv: list[str] | None = None) -> int:
     aggregate_cmd.add_argument("--json-output", type=Path)
     aggregate_cmd.add_argument("--markdown-output", type=Path)
     aggregate_cmd.add_argument("--csv-output", type=Path)
+
+    eval_cmd = research_subparsers.add_parser("evaluate-labels", help="Evaluate detector tags against manual failure labels.")
+    eval_cmd.add_argument("manifest", type=Path)
+    eval_cmd.add_argument("labels", type=Path)
+    eval_cmd.add_argument("--json-output", type=Path)
+    eval_cmd.add_argument("--markdown-output", type=Path)
 
     run_cmd = research_subparsers.add_parser("run", help="Run or dry-run the benchmark collection harness.")
     run_cmd.add_argument("--tasks", type=Path, default=Path("benchmark/tasks.jsonl"))
@@ -79,6 +85,14 @@ def main(argv: list[str] | None = None) -> int:
             write_aggregate_outputs(result, args.json_output, args.markdown_output)
         else:
             print(render_aggregate_markdown(result), end="")
+        return 0
+
+    if args.command == "research" and args.research_command == "evaluate-labels":
+        result = evaluate_detector_labels(args.manifest, args.labels)
+        if args.json_output or args.markdown_output:
+            write_label_evaluation_outputs(result, args.json_output, args.markdown_output)
+        else:
+            print(render_label_evaluation_markdown(result), end="")
         return 0
 
     if args.command == "research" and args.research_command == "run":

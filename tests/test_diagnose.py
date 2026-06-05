@@ -11,6 +11,7 @@ def test_detects_required_failure_modes():
 
     assert "command_failure_unhandled" in codes
     assert "verification_gap" in codes
+    assert "premature_completion" in codes
     assert "repeated_search_or_read" in codes
     assert "sandbox_or_permission_block" in codes
 

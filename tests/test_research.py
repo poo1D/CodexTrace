@@ -1,4 +1,4 @@
-from codex_trace.research import aggregate_runs, load_tasks, render_prompt, run_benchmark, run_success_check, write_run_manifest
+from codex_trace.research import aggregate_runs, evaluate_detector_labels, load_tasks, render_prompt, run_benchmark, run_success_check, write_run_manifest
 
 
 def test_load_tasks_and_render_prompts():
@@ -22,6 +22,14 @@ def test_aggregate_runs_baseline_vs_intervention():
     assert result["summary"]["intervention"]["success_rate"] == 1
     assert result["summary"]["baseline"]["avg_failure_score"] > result["summary"]["intervention"]["avg_failure_score"]
     assert result["deltas"]["success_rate"] == 1
+
+
+def test_evaluate_detector_labels():
+    result = evaluate_detector_labels("benchmark/runs.example.jsonl", "benchmark/labels.example.jsonl")
+
+    assert result["summary"]["micro_f1"] == 1
+    assert result["labels"]["verification_gap"]["recall"] == 1
+    assert result["labels"]["premature_completion"]["precision"] == 1
 
 
 def test_smoke_fixture_success_check_starts_failing():

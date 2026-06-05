@@ -53,6 +53,17 @@ def diagnose(trace: Trace) -> Diagnosis:
             event_ids=changed,
         ))
 
+    premature_events = _premature_completion_events(trace.events, metrics)
+    if premature_events:
+        findings.append(Finding(
+            code="premature_completion",
+            title="Agent claimed completion without verification evidence",
+            severity="high",
+            evidence=[_event_label(event) for event in premature_events],
+            recommendation="Require the final answer to cite a passing post-edit verification command before declaring the task complete.",
+            event_ids=[event.id for event in premature_events],
+        ))
+
     repeated = _repeated_searches(trace.events)
     if repeated:
         findings.append(Finding(
@@ -153,6 +164,18 @@ def _post_edit_verification_count(events: list[TraceEvent]) -> int:
     if last_change is None:
         return 0
     return sum(event.kind == "command" and _is_verification(event.command or "") for event in events[last_change + 1 :])
+
+
+def _premature_completion_events(events: list[TraceEvent], metrics: dict[str, int]) -> list[TraceEvent]:
+    if metrics["file_change_events"] == 0 or metrics["post_edit_verification_commands"] > 0:
+        return []
+    completion_words = ("complete", "completed", "done", "fixed", "implemented", "updated")
+    candidates = [event for event in events if event.kind == "agent_message"]
+    if not candidates:
+        return []
+    final_message = candidates[-1]
+    text = f"{final_message.title}\n{final_message.detail}".lower()
+    return [final_message] if any(word in text for word in completion_words) else []
 
 
 def _score(findings: list[Finding], metrics: dict[str, int]) -> int:

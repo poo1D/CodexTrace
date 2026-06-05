@@ -12,6 +12,8 @@ This directory is the starting point for the paper experiment:
 - `prompts/intervention.txt`: the harness-constrained prompt template.
 - `runs.example.jsonl`: a tiny manifest that reuses demo traces to exercise the
   aggregation pipeline before collecting the full benchmark.
+- `labels.example.jsonl`: example manual failure tags for detector precision and
+  recall evaluation.
 
 ## Render a Prompt
 
@@ -43,4 +45,12 @@ codex-trace research aggregate benchmark/runs.example.jsonl \
   --json-output reports/example-aggregate.json \
   --markdown-output reports/example-aggregate.md \
   --csv-output reports/example-runs.csv
+```
+
+Evaluate detector labels:
+
+```bash
+codex-trace research evaluate-labels benchmark/runs.example.jsonl benchmark/labels.example.jsonl \
+  --json-output reports/example-label-eval.json \
+  --markdown-output reports/example-label-eval.md
 ```

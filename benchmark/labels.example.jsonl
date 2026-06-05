@@ -1,0 +1,4 @@
+{"task_id":"CT-001","prompt_type":"baseline","failure_tags":["unrecovered_tool_error","verification_gap","premature_completion","repetitive_exploration","sandbox_permission_deadlock"]}
+{"task_id":"CT-001","prompt_type":"intervention","failure_tags":[]}
+{"task_id":"CT-002","prompt_type":"baseline","failure_tags":["unrecovered_tool_error","verification_gap","premature_completion","repetitive_exploration","sandbox_permission_deadlock"]}
+{"task_id":"CT-002","prompt_type":"intervention","failure_tags":[]}
