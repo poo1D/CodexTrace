@@ -1,4 +1,4 @@
-.PHONY: test diagnose demo research-demo label-eval-demo smoke-dry-run web-build
+.PHONY: test diagnose demo research-demo label-template-demo label-eval-demo smoke-dry-run web-build
 
 PYTHON ?= python3
 CODEX_TRACE = PYTHONPATH=. $(PYTHON) -m codex_trace.cli
@@ -17,6 +17,11 @@ research-demo:
 		--json-output reports/example-aggregate.json \
 		--markdown-output reports/example-aggregate.md \
 		--csv-output reports/example-runs.csv
+
+label-template-demo:
+	$(CODEX_TRACE) research label-template benchmark/runs.example.jsonl \
+		--include-predictions \
+		--output reports/example-label-template.jsonl
 
 label-eval-demo:
 	$(CODEX_TRACE) research evaluate-labels benchmark/runs.example.jsonl benchmark/labels.example.jsonl \

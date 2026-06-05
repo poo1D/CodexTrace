@@ -1,4 +1,14 @@
-from codex_trace.research import aggregate_runs, evaluate_detector_labels, load_tasks, render_prompt, run_benchmark, run_success_check, write_run_manifest
+from codex_trace.research import (
+    aggregate_runs,
+    evaluate_detector_labels,
+    generate_label_template,
+    load_tasks,
+    render_label_template_jsonl,
+    render_prompt,
+    run_benchmark,
+    run_success_check,
+    write_run_manifest,
+)
 
 
 def test_load_tasks_and_render_prompts():
@@ -30,6 +40,19 @@ def test_evaluate_detector_labels():
     assert result["summary"]["micro_f1"] == 1
     assert result["labels"]["verification_gap"]["recall"] == 1
     assert result["labels"]["premature_completion"]["precision"] == 1
+
+
+def test_generate_label_template_with_predictions():
+    rows = generate_label_template("benchmark/runs.example.jsonl", include_predictions=True)
+    baseline = rows[0]
+
+    assert len(rows) == 4
+    assert baseline["task_id"] == "CT-001"
+    assert baseline["failure_tags"] == []
+    assert "unrecovered_tool_error" in baseline["suggested_tags"]
+    assert baseline["failure_score"] == 100
+    assert render_label_template_jsonl(rows).count("\n") == 4
+
 
 
 def test_smoke_fixture_success_check_starts_failing():

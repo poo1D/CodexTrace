@@ -64,19 +64,24 @@ def load_tasks(path: str | Path) -> list[BenchmarkTask]:
 
 
 def load_run_manifest(path: str | Path) -> list[RunRecord]:
+    return [record for record, _ in _load_run_manifest_items(path)]
+
+
+def _load_run_manifest_items(path: str | Path) -> list[tuple[RunRecord, str]]:
     manifest_path = Path(path)
-    records = []
+    items = []
     for line in manifest_path.read_text(encoding="utf-8").splitlines():
         if not line.strip():
             continue
         item = json.loads(line)
-        records.append(RunRecord(
+        raw_trace_path = str(item["trace_path"])
+        items.append((RunRecord(
             task_id=str(item["task_id"]),
             prompt_type=str(item["prompt_type"]),
-            trace_path=(manifest_path.parent / str(item["trace_path"])).resolve(),
+            trace_path=(manifest_path.parent / raw_trace_path).resolve(),
             outcome=str(item.get("outcome", "unknown")),
-        ))
-    return records
+        ), raw_trace_path))
+    return items
 
 
 def render_prompt(task: BenchmarkTask, prompt_type: str, prompt_dir: str | Path = "benchmark/prompts") -> str:
@@ -312,6 +317,36 @@ def write_runs_csv(result: dict[str, Any], path: str | Path) -> None:
             serialized["finding_codes"] = ";".join(row["finding_codes"])
             serialized["taxonomy_tags"] = ";".join(row["taxonomy_tags"])
             writer.writerow({key: serialized.get(key, "") for key in fieldnames})
+
+
+def generate_label_template(manifest_path: str | Path, include_predictions: bool = False) -> list[dict[str, Any]]:
+    rows = []
+    for record, raw_trace_path in _load_run_manifest_items(manifest_path):
+        row: dict[str, Any] = {
+            "task_id": record.task_id,
+            "prompt_type": record.prompt_type,
+            "trace_path": raw_trace_path,
+            "outcome": record.outcome,
+            "failure_tags": [],
+            "notes": "",
+        }
+        if include_predictions:
+            trace = parse_jsonl(record.trace_path)
+            diagnosis = diagnose(trace)
+            row["suggested_tags"] = sorted({canonical_label(finding.code) for finding in diagnosis.findings})
+            row["failure_score"] = diagnosis.failure_score
+        rows.append(row)
+    return rows
+
+
+def render_label_template_jsonl(rows: list[dict[str, Any]]) -> str:
+    return "".join(json.dumps(row, ensure_ascii=False, sort_keys=True) + "\n" for row in rows)
+
+
+def write_label_template(rows: list[dict[str, Any]], path: str | Path) -> None:
+    output_path = Path(path)
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    output_path.write_text(render_label_template_jsonl(rows), encoding="utf-8")
 
 
 def evaluate_detector_labels(manifest_path: str | Path, labels_path: str | Path) -> dict[str, Any]:

@@ -119,6 +119,14 @@ codex-trace research aggregate benchmark/runs.example.jsonl \
   --csv-output reports/example-runs.csv
 ```
 
+Generate a manual annotation template:
+
+```bash
+codex-trace research label-template benchmark/runs.example.jsonl \
+  --include-predictions \
+  --output reports/example-label-template.jsonl
+```
+
 Evaluate detector labels against manual annotations:
 
 ```bash

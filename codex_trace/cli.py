@@ -7,7 +7,22 @@ from pathlib import Path
 from .diagnose import diagnose
 from .parser import parse_jsonl
 from .report import render_json, render_markdown
-from .research import aggregate_runs, evaluate_detector_labels, load_tasks, render_aggregate_markdown, render_label_evaluation_markdown, render_prompt, run_benchmark, write_aggregate_outputs, write_label_evaluation_outputs, write_run_manifest, write_runs_csv
+from .research import (
+    aggregate_runs,
+    evaluate_detector_labels,
+    generate_label_template,
+    load_tasks,
+    render_aggregate_markdown,
+    render_label_evaluation_markdown,
+    render_label_template_jsonl,
+    render_prompt,
+    run_benchmark,
+    write_aggregate_outputs,
+    write_label_evaluation_outputs,
+    write_label_template,
+    write_run_manifest,
+    write_runs_csv,
+)
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -37,6 +52,11 @@ def main(argv: list[str] | None = None) -> int:
     aggregate_cmd.add_argument("--json-output", type=Path)
     aggregate_cmd.add_argument("--markdown-output", type=Path)
     aggregate_cmd.add_argument("--csv-output", type=Path)
+
+    label_template_cmd = research_subparsers.add_parser("label-template", help="Generate a manual-label JSONL template from a run manifest.")
+    label_template_cmd.add_argument("manifest", type=Path)
+    label_template_cmd.add_argument("--output", type=Path)
+    label_template_cmd.add_argument("--include-predictions", action="store_true")
 
     eval_cmd = research_subparsers.add_parser("evaluate-labels", help="Evaluate detector tags against manual failure labels.")
     eval_cmd.add_argument("manifest", type=Path)
@@ -83,8 +103,16 @@ def main(argv: list[str] | None = None) -> int:
             write_runs_csv(result, args.csv_output)
         if args.json_output or args.markdown_output:
             write_aggregate_outputs(result, args.json_output, args.markdown_output)
-        else:
+        if not (args.csv_output or args.json_output or args.markdown_output):
             print(render_aggregate_markdown(result), end="")
+        return 0
+
+    if args.command == "research" and args.research_command == "label-template":
+        rows = generate_label_template(args.manifest, include_predictions=args.include_predictions)
+        if args.output:
+            write_label_template(rows, args.output)
+        else:
+            print(render_label_template_jsonl(rows), end="")
         return 0
 
     if args.command == "research" and args.research_command == "evaluate-labels":

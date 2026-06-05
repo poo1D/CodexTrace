@@ -116,6 +116,14 @@ codex-trace research run \
   --dry-run
 ```
 
+Generate a manual-label template from collected runs:
+
+```bash
+codex-trace research label-template benchmark/runs.example.jsonl \
+  --include-predictions \
+  --output reports/example-label-template.jsonl
+```
+
 Evaluate detector labels against manual labels:
 
 ```bash
