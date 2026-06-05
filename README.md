@@ -83,6 +83,7 @@ CodexTrace now includes a benchmark scaffold for:
 Key files:
 
 - `benchmark/tasks.jsonl`: 30 seed coding tasks
+- `benchmark/smoke/tasks.jsonl`: 3 runnable smoke tasks for validating the harness
 - `benchmark/prompts/baseline.txt`: baseline prompt template
 - `benchmark/prompts/intervention.txt`: harness-intervention prompt template
 - `docs/experiment_protocol.md`: collection and labeling protocol
@@ -92,8 +93,8 @@ Key files:
 Render prompts:
 
 ```bash
-codex-trace research prompt CT-001 baseline
-codex-trace research prompt CT-001 intervention
+codex-trace research prompt --tasks benchmark/tasks.jsonl CT-001 baseline
+codex-trace research prompt --tasks benchmark/tasks.jsonl CT-001 intervention
 ```
 
 Aggregate traces:
@@ -103,6 +104,15 @@ codex-trace research aggregate benchmark/runs.example.jsonl \
   --json-output reports/example-aggregate.json \
   --markdown-output reports/example-aggregate.md \
   --csv-output reports/example-runs.csv
+```
+
+Dry-run the runnable smoke harness:
+
+```bash
+codex-trace research run \
+  --tasks benchmark/smoke/tasks.jsonl \
+  --output-dir runs/smoke-dry \
+  --dry-run
 ```
 
 To run the Web UI:

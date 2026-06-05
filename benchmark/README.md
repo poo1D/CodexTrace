@@ -16,8 +16,8 @@ This directory is the starting point for the paper experiment:
 ## Render a Prompt
 
 ```bash
-codex-trace research prompt CT-001 baseline
-codex-trace research prompt CT-001 intervention
+codex-trace research prompt --tasks benchmark/tasks.jsonl CT-001 baseline
+codex-trace research prompt --tasks benchmark/tasks.jsonl CT-001 intervention
 ```
 
 ## Full Collection Plan
@@ -25,8 +25,8 @@ codex-trace research prompt CT-001 intervention
 For each task:
 
 ```bash
-codex exec --json "$(codex-trace research prompt CT-001 baseline)" > runs/CT-001/baseline.jsonl
-codex exec --json "$(codex-trace research prompt CT-001 intervention)" > runs/CT-001/intervention.jsonl
+codex exec --json "$(codex-trace research prompt --tasks benchmark/tasks.jsonl CT-001 baseline)" > runs/CT-001/baseline.jsonl
+codex exec --json "$(codex-trace research prompt --tasks benchmark/tasks.jsonl CT-001 intervention)" > runs/CT-001/intervention.jsonl
 ```
 
 Record final task outcomes in the run manifest:

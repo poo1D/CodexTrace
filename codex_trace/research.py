@@ -2,6 +2,9 @@ from __future__ import annotations
 
 import csv
 import json
+import shutil
+import subprocess
+import os
 from dataclasses import dataclass
 from pathlib import Path
 from statistics import mean
@@ -22,6 +25,7 @@ class BenchmarkTask:
     instruction: str
     success_check: str
     repo_hint: str = ""
+    fixture_path: str = ""
 
 
 @dataclass
@@ -45,6 +49,7 @@ def load_tasks(path: str | Path) -> list[BenchmarkTask]:
             instruction=str(item["instruction"]),
             success_check=str(item["success_check"]),
             repo_hint=str(item.get("repo_hint", "")),
+            fixture_path=_resolve_optional_path(task_path.parent, item.get("fixture_path", "")),
         ))
     return tasks
 
@@ -76,6 +81,137 @@ def render_prompt(task: BenchmarkTask, prompt_type: str, prompt_dir: str | Path 
         success_check=task.success_check,
         repo_hint=task.repo_hint,
     )
+
+
+def run_benchmark(
+    tasks_path: str | Path,
+    output_dir: str | Path,
+    prompt_types: list[str] | None = None,
+    task_ids: list[str] | None = None,
+    prompt_dir: str | Path = "benchmark/prompts",
+    codex_bin: str = "codex",
+    sandbox: str = "workspace-write",
+    timeout_seconds: int = 300,
+    dry_run: bool = False,
+) -> list[dict[str, Any]]:
+    tasks = load_tasks(tasks_path)
+    selected_prompt_types = prompt_types or list(PROMPT_TYPES)
+    selected_ids = set(task_ids or [])
+    rows = []
+    for task in tasks:
+        if selected_ids and task.task_id not in selected_ids:
+            continue
+        for prompt_type in selected_prompt_types:
+            rows.append(run_single_task(
+                task=task,
+                prompt_type=prompt_type,
+                output_dir=output_dir,
+                prompt_dir=prompt_dir,
+                codex_bin=codex_bin,
+                sandbox=sandbox,
+                timeout_seconds=timeout_seconds,
+                dry_run=dry_run,
+            ))
+    return rows
+
+
+def run_single_task(
+    task: BenchmarkTask,
+    prompt_type: str,
+    output_dir: str | Path,
+    prompt_dir: str | Path = "benchmark/prompts",
+    codex_bin: str = "codex",
+    sandbox: str = "workspace-write",
+    timeout_seconds: int = 300,
+    dry_run: bool = False,
+) -> dict[str, Any]:
+    if prompt_type not in PROMPT_TYPES:
+        raise ValueError(f"prompt_type must be one of {PROMPT_TYPES}")
+    if not task.fixture_path:
+        raise ValueError(f"{task.task_id} does not define fixture_path")
+
+    output_root = Path(output_dir)
+    run_dir = output_root / task.task_id / prompt_type
+    repo_dir = run_dir / "repo"
+    trace_path = run_dir / "trace.jsonl"
+    prompt_path = run_dir / "prompt.md"
+    stderr_path = run_dir / "codex.stderr"
+    check_path = run_dir / "success_check.txt"
+
+    if run_dir.exists():
+        shutil.rmtree(run_dir)
+    run_dir.mkdir(parents=True, exist_ok=True)
+    shutil.copytree(task.fixture_path, repo_dir)
+    initialize_git_repo(repo_dir)
+
+    prompt = render_prompt(task, prompt_type, prompt_dir)
+    prompt_path.write_text(prompt, encoding="utf-8")
+
+    if dry_run:
+        outcome = "not_run"
+        codex_exit_code = None
+        check_exit_code = None
+    else:
+        with trace_path.open("w", encoding="utf-8") as trace_handle, stderr_path.open("w", encoding="utf-8") as stderr_handle:
+            codex_result = subprocess.run(
+                [codex_bin, "exec", "--json", "--sandbox", sandbox, prompt],
+                cwd=repo_dir,
+                env=_clean_git_env(),
+                text=True,
+                stdout=trace_handle,
+                stderr=stderr_handle,
+                timeout=timeout_seconds,
+                check=False,
+            )
+        codex_exit_code = codex_result.returncode
+        check_result = run_success_check(repo_dir, task.success_check, timeout_seconds)
+        check_exit_code = check_result.returncode
+        check_path.write_text((check_result.stdout or "") + (check_result.stderr or ""), encoding="utf-8")
+        outcome = "success" if check_exit_code == 0 else "failure"
+
+    return {
+        "task_id": task.task_id,
+        "prompt_type": prompt_type,
+        "trace_path": _relative_to(trace_path, output_root),
+        "outcome": outcome,
+        "workdir": _relative_to(repo_dir, output_root),
+        "prompt_path": _relative_to(prompt_path, output_root),
+        "codex_exit_code": codex_exit_code,
+        "success_check": task.success_check,
+        "success_check_exit_code": check_exit_code,
+    }
+
+
+def run_success_check(repo_dir: str | Path, success_check: str, timeout_seconds: int = 120) -> subprocess.CompletedProcess[str]:
+    return subprocess.run(
+        success_check,
+        cwd=repo_dir,
+        shell=True,
+        env=_clean_git_env(),
+        text=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.STDOUT,
+        timeout=timeout_seconds,
+        check=False,
+    )
+
+
+def initialize_git_repo(repo_dir: str | Path) -> None:
+    repo = Path(repo_dir)
+    env = _clean_git_env()
+    subprocess.run(["git", "init", "-q"], cwd=repo, env=env, check=True)
+    subprocess.run(["git", "config", "user.name", "CodexTrace Benchmark"], cwd=repo, env=env, check=True)
+    subprocess.run(["git", "config", "user.email", "benchmark@example.com"], cwd=repo, env=env, check=True)
+    subprocess.run(["git", "add", "."], cwd=repo, env=env, check=True)
+    subprocess.run(["git", "commit", "-q", "-m", "Initial fixture"], cwd=repo, env=env, check=True)
+
+
+def write_run_manifest(rows: list[dict[str, Any]], path: str | Path) -> None:
+    manifest_path = Path(path)
+    manifest_path.parent.mkdir(parents=True, exist_ok=True)
+    with manifest_path.open("w", encoding="utf-8") as handle:
+        for row in rows:
+            handle.write(json.dumps(row, ensure_ascii=False, sort_keys=True) + "\n")
 
 
 def aggregate_runs(manifest_path: str | Path) -> dict[str, Any]:
@@ -249,3 +385,26 @@ def _index_of_first_verification(trace: Trace) -> int | None:
         if event.kind == "command" and any(word in command for word in verification_words):
             return index
     return None
+
+
+def _resolve_optional_path(base_dir: Path, value: Any) -> str:
+    if not value:
+        return ""
+    path = Path(str(value))
+    if path.is_absolute():
+        return str(path)
+    return str((base_dir / path).resolve())
+
+
+def _relative_to(path: Path, root: Path) -> str:
+    try:
+        return str(path.relative_to(root))
+    except ValueError:
+        return str(path)
+
+
+def _clean_git_env() -> dict[str, str]:
+    env = dict(os.environ)
+    for key in ("GIT_DIR", "GIT_WORK_TREE", "GIT_INDEX_FILE"):
+        env.pop(key, None)
+    return env

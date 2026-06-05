@@ -7,7 +7,7 @@ from pathlib import Path
 from .diagnose import diagnose
 from .parser import parse_jsonl
 from .report import render_json, render_markdown
-from .research import aggregate_runs, load_tasks, render_aggregate_markdown, render_prompt, write_aggregate_outputs, write_runs_csv
+from .research import aggregate_runs, load_tasks, render_aggregate_markdown, render_prompt, run_benchmark, write_aggregate_outputs, write_run_manifest, write_runs_csv
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -37,6 +37,17 @@ def main(argv: list[str] | None = None) -> int:
     aggregate_cmd.add_argument("--json-output", type=Path)
     aggregate_cmd.add_argument("--markdown-output", type=Path)
     aggregate_cmd.add_argument("--csv-output", type=Path)
+
+    run_cmd = research_subparsers.add_parser("run", help="Run or dry-run the benchmark collection harness.")
+    run_cmd.add_argument("--tasks", type=Path, default=Path("benchmark/tasks.jsonl"))
+    run_cmd.add_argument("--output-dir", type=Path, required=True)
+    run_cmd.add_argument("--prompt-dir", type=Path, default=Path("benchmark/prompts"))
+    run_cmd.add_argument("--prompt-types", nargs="+", choices=["baseline", "intervention"], default=["baseline", "intervention"])
+    run_cmd.add_argument("--task-id", action="append", dest="task_ids")
+    run_cmd.add_argument("--codex-bin", default="codex")
+    run_cmd.add_argument("--sandbox", default="workspace-write")
+    run_cmd.add_argument("--timeout-seconds", type=int, default=300)
+    run_cmd.add_argument("--dry-run", action="store_true")
 
     args = parser.parse_args(argv)
 
@@ -68,6 +79,23 @@ def main(argv: list[str] | None = None) -> int:
             write_aggregate_outputs(result, args.json_output, args.markdown_output)
         else:
             print(render_aggregate_markdown(result), end="")
+        return 0
+
+    if args.command == "research" and args.research_command == "run":
+        rows = run_benchmark(
+            tasks_path=args.tasks,
+            output_dir=args.output_dir,
+            prompt_types=args.prompt_types,
+            task_ids=args.task_ids,
+            prompt_dir=args.prompt_dir,
+            codex_bin=args.codex_bin,
+            sandbox=args.sandbox,
+            timeout_seconds=args.timeout_seconds,
+            dry_run=args.dry_run,
+        )
+        manifest_path = args.output_dir / "runs.jsonl"
+        write_run_manifest(rows, manifest_path)
+        print(f"Wrote {len(rows)} run record(s) to {manifest_path}")
         return 0
 
     parser.print_help(sys.stderr)

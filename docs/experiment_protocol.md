@@ -25,6 +25,7 @@ Current seed:
 - `benchmark/tasks.jsonl` contains 30 tasks
 - `benchmark/prompts/baseline.txt`
 - `benchmark/prompts/intervention.txt`
+- `benchmark/smoke/tasks.jsonl` contains 3 runnable fixtures for harness validation
 
 ## Prompt Conditions
 
@@ -44,13 +45,22 @@ Intervention:
 
 ## Run Collection
 
+Validate the collection harness without spending model calls:
+
+```bash
+codex-trace research run \
+  --tasks benchmark/smoke/tasks.jsonl \
+  --output-dir runs/smoke-dry \
+  --dry-run
+```
+
 For each task and prompt condition:
 
 ```bash
-codex-trace research prompt CT-001 baseline > /tmp/prompt.txt
+codex-trace research prompt --tasks benchmark/tasks.jsonl CT-001 baseline > /tmp/prompt.txt
 codex exec --json "$(cat /tmp/prompt.txt)" > runs/CT-001/baseline.jsonl
 
-codex-trace research prompt CT-001 intervention > /tmp/prompt.txt
+codex-trace research prompt --tasks benchmark/tasks.jsonl CT-001 intervention > /tmp/prompt.txt
 codex exec --json "$(cat /tmp/prompt.txt)" > runs/CT-001/intervention.jsonl
 ```
 
