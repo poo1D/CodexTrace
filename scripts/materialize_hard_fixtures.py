@@ -553,6 +553,89 @@ TASK_DEFS = [
             assert.throws(() => parseTable('| A | B |\\n|---|---|\\n| only one |'), /ragged|column/i);
         """),
     },
+    {
+        "task_id": "HARD-011",
+        "category": "error_recovery",
+        "repo_hint": "python/json_patch",
+        "instruction": "Fix JSON Patch application so add, replace, remove, move, and copy handle JSON Pointer escaping and invalid paths correctly without mutating the input document.",
+        "public_success_check": "python3 -m unittest discover -s tests",
+        "success_check": "python3 ../grader/check.py",
+        "files": {
+            "src/json_patch.py": """
+                import copy
+
+
+                class PatchError(Exception):
+                    pass
+
+
+                def apply_patch(document, operations):
+                    result = copy.deepcopy(document)
+                    for operation in operations:
+                        op = operation["op"]
+                        path = operation["path"].strip("/").split("/") if operation["path"] else []
+                        target = result
+                        for part in path[:-1]:
+                            target = target[int(part)] if isinstance(target, list) else target[part]
+                        key = path[-1] if path else None
+                        if op in {"add", "replace"}:
+                            if key is None:
+                                result = operation["value"]
+                            elif isinstance(target, list):
+                                target[int(key)] = operation["value"]
+                            else:
+                                target[key] = operation["value"]
+                        elif op == "remove":
+                            if isinstance(target, list):
+                                target.pop(int(key))
+                            else:
+                                del target[key]
+                    return result
+            """,
+            "tests/test_json_patch.py": """
+                import sys
+                import unittest
+                from pathlib import Path
+
+                sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
+                from json_patch import apply_patch
+
+
+                class JsonPatchTest(unittest.TestCase):
+                    def test_add_replace_remove_without_mutating_input(self):
+                        document = {"name": "Ada", "tags": ["math"]}
+                        patched = apply_patch(document, [
+                            {"op": "add", "path": "/tags/1", "value": "code"},
+                            {"op": "replace", "path": "/name", "value": "Grace"},
+                            {"op": "remove", "path": "/tags/0"},
+                        ])
+                        self.assertEqual(patched, {"name": "Grace", "tags": ["code"]})
+                        self.assertEqual(document, {"name": "Ada", "tags": ["math"]})
+
+
+                if __name__ == "__main__":
+                    unittest.main()
+            """,
+        },
+        "grader": py_grader("""
+            run_visible_tests()
+            mod = importlib.import_module("json_patch")
+            document = {"a/b": {"~key": ["x", "y"]}, "target": {}}
+            patched = mod.apply_patch(document, [
+                {"op": "copy", "from": "/a~1b/~0key/1", "path": "/target/copied"},
+                {"op": "move", "from": "/a~1b/~0key/0", "path": "/target/moved"},
+                {"op": "add", "path": "/a~1b/~0key/-", "value": "z"},
+            ])
+            assert patched == {"a/b": {"~key": ["y", "z"]}, "target": {"copied": "y", "moved": "x"}}
+            assert document == {"a/b": {"~key": ["x", "y"]}, "target": {}}
+            try:
+                mod.apply_patch({"items": []}, [{"op": "remove", "path": "/items/0"}])
+            except mod.PatchError:
+                pass
+            else:
+                raise AssertionError("invalid remove path should raise PatchError")
+        """),
+    },
 ]
 
 
