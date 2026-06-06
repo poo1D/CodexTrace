@@ -557,6 +557,24 @@ def render_results_summary_markdown(result: dict[str, Any]) -> str:
         "",
         "Interpretation: the current deterministic process rules do not detect hidden semantic edge-case failures when the visible process trace looks clean.",
         "",
+        "## RQ4 Trace Signals By Outcome",
+        "",
+        "Hard10 outcome failures are hidden semantic edge cases, so most process signals do not separate failures from successes.",
+        "",
+        "| Signal | Failure mean | Success mean | Delta success-failure |",
+        "| --- | ---: | ---: | ---: |",
+    ])
+    for row in result["hard10_signal_by_outcome"]:
+        lines.append(
+            f"| {row['signal']} | {_fmt_signal_metric(row['signal'], row['failure_mean'])} | "
+            f"{_fmt_signal_metric(row['signal'], row['success_mean'])} | "
+            f"{_fmt_signal_metric(row['signal'], row['delta_success_minus_failure'])} |"
+        )
+
+    lines.extend([
+        "",
+        "Interpretation: `verification_rate`, `unresolved_error`, `command_failure_count`, and `failure_score` are identical across hard10 successes and failures. The visible traces look procedurally clean; hidden graders reveal the missed semantic edge cases.",
+        "",
         "## Claim-Evidence Shortlist",
         "",
         "| Claim | Generated evidence |",
@@ -564,6 +582,7 @@ def render_results_summary_markdown(result: dict[str, Any]) -> str:
         "| Intervention reduces process waste on full30. | `avg_repeated_tool_calls`, `avg_command_failures`, `avg_recover_events`, and `avg_token_usage` improve in the full30 table. |",
         "| Intervention improves success on hard10. | hard10 `success_rate` improves from baseline to intervention. |",
         "| Trace-only process rules have a semantic boundary. | hard10 label evaluation has 5 false negatives for `hidden_semantic_edge_case`. |",
+        "| RQ4 signal analysis explains the detector boundary. | hard10 `verification_rate`, `unresolved_error`, `command_failure_count`, and `failure_score` are equal for successful and failed runs. |",
         "| Strong task oracles remain necessary. | hard10 failures are only visible through hidden graders, not process-rule findings. |",
     ])
     return "\n".join(lines) + "\n"
@@ -830,6 +849,15 @@ def _fmt_result_metric(key: str, value: Any) -> str:
     if key == "avg_token_usage":
         return f"{numeric / 1000:.1f}k"
     if key.endswith("_rate"):
+        return f"{numeric:.2f}"
+    return _fmt(value)
+
+
+def _fmt_signal_metric(signal: str, value: Any) -> str:
+    numeric = float(value or 0)
+    if signal == "token_usage":
+        return f"{numeric / 1000:.1f}k"
+    if signal == "verification_rate":
         return f"{numeric:.2f}"
     return _fmt(value)
 

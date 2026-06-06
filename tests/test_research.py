@@ -86,6 +86,8 @@ def test_build_results_summary_from_stored_pilots():
     assert result["hard10"]["summary"]["baseline"]["success_rate"] == 0.7
     assert result["hard10_label_evaluation"]["labels"]["hidden_semantic_edge_case"]["fn"] == 5
     assert "## RQ3 Baseline vs Intervention" in markdown
+    assert "## RQ4 Trace Signals By Outcome" in markdown
+    assert "| failure_score | 0 | 0 | 0 |" in markdown
     assert "hidden_semantic_edge_case" in markdown
 
 

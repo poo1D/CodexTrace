@@ -59,7 +59,8 @@ semantic edge-case failures are missed by deterministic process rules
 strong task-level oracles.
 
 See `docs/results_summary.md` for the generated result summary and
-`docs/reproducibility_checklist.md` for claim-to-evidence mapping.
+RQ4 trace-signal analysis, and `docs/reproducibility_checklist.md` for
+claim-to-evidence mapping.
 
 ## Quickstart
 
@@ -115,7 +116,7 @@ Key files:
 - `docs/paper_draft.md`: result-driven workshop-style paper draft
 - `docs/paper_outline.md`: paper outline and experiment plan
 - `docs/reproducibility_checklist.md`: claim-evidence map and reproduction commands
-- `docs/results_summary.md`: generated full30 + hard10 result summary
+- `docs/results_summary.md`: generated full30 + hard10 result summary, including RQ4 trace-signal analysis
 - `docs/related_work.md`: compact bibliography and positioning notes
 - `benchmark/pilot/full30-real`: 30-task / 60-run real pilot
 - `benchmark/hard/pilot/hard10-real`: 10-task / 20-run hard-tier pilot with outcome failures

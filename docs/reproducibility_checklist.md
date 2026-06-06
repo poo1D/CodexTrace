@@ -21,7 +21,7 @@ The stored pilots can be inspected and aggregated without re-running Codex.
 | Artifact | Purpose |
 | --- | --- |
 | `docs/paper_draft.md` | Result-driven workshop-style draft. |
-| `docs/results_summary.md` | Generated full30 + hard10 result summary. |
+| `docs/results_summary.md` | Generated full30 + hard10 result summary, including RQ4 trace-signal analysis. |
 | `docs/failure_taxonomy.md` | Definitions for process-level failure labels. |
 | `docs/experiment_protocol.md` | Collection, labeling, and evaluation protocol. |
 | `docs/related_work.md` | Compact bibliography and positioning notes. |
@@ -90,6 +90,7 @@ PYTHONPATH=. python3 -m codex_trace.cli research summary \
 | Full30 intervention reduces process waste. | `benchmark/pilot/full30-real/aggregate.md` | Supported: repeated tool calls `10.43 -> 7.00`, token usage `218.7k -> 184.8k`. |
 | Hard10 intervention improves success and reduces waste. | `benchmark/hard/pilot/hard10-real/aggregate.md` | Supported: success `0.70 -> 0.80`, repeated tool calls `9.20 -> 6.20`, token usage `248.9k -> 187.5k`. |
 | Trace-only process rules miss hidden semantic edge failures. | `benchmark/hard/pilot/hard10-real/label-eval.md` | Supported as a boundary result: `TP=0`, `FP=0`, `FN=5` for `hidden_semantic_edge_case`. |
+| Hard10 process signals explain the detector boundary. | `docs/results_summary.md` RQ4 table | Supported: `verification_rate`, `unresolved_error`, `command_failure_count`, and `failure_score` are equal for success and failure outcomes. |
 | Current claims are pilot-scale, not broad SWE-bench-scale claims. | `docs/paper_draft.md`, `docs/experiment_protocol.md` | Stated explicitly in limitations. |
 
 ## Validation Commands
