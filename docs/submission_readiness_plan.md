@@ -33,7 +33,8 @@ The next submission-ready target should be:
 ## Workstream 1: Expand Hard-Tier Tasks
 
 Goal: move from `hard10` to a harder 30-50 task suite while preserving hidden
-grader isolation.
+grader isolation. The concrete HARD-011 to HARD-030 task candidates are listed
+in `docs/hard_tier_expansion_blueprint.md`.
 
 Tasks to add:
 

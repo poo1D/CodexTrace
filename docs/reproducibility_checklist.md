@@ -24,6 +24,7 @@ The stored pilots can be inspected and aggregated without re-running Codex.
 | `docs/paper_draft.md` | Result-driven workshop-style draft. |
 | `docs/results_summary.md` | Generated full30 + hard10 result summary, including RQ4 trace-signal analysis. |
 | `docs/failure_taxonomy.md` | Definitions for process-level failure labels. |
+| `docs/hard_tier_expansion_blueprint.md` | Candidate HARD-011 to HARD-030 task designs for expanding the hard tier. |
 | `docs/experiment_protocol.md` | Collection, labeling, and evaluation protocol. |
 | `docs/related_work.md` | Compact bibliography and positioning notes. |
 | `docs/submission_readiness_plan.md` | Workstreams and decision gate for a stronger paper submission. |
@@ -150,4 +151,5 @@ failed_initial ['HARD-001', 'HARD-002', 'HARD-003', 'HARD-004', 'HARD-005', 'HAR
   hard-tier boundary label.
 
 For a concrete expansion backlog and submission decision gate, see
-`docs/submission_readiness_plan.md`.
+`docs/submission_readiness_plan.md`. For concrete candidate tasks, see
+`docs/hard_tier_expansion_blueprint.md`.

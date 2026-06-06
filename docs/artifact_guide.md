@@ -127,4 +127,5 @@ success-rate estimate less fragile.
 
 See `docs/submission_readiness_plan.md` for the concrete workstreams and
 decision gate for moving from the current pilot artifact to a stronger paper
-submission.
+submission. See `docs/hard_tier_expansion_blueprint.md` for candidate
+HARD-011 to HARD-030 task designs.

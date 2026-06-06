@@ -115,6 +115,7 @@ Key files:
 - `docs/artifact_guide.md`: 15-minute reviewer/interviewer walkthrough
 - `docs/experiment_protocol.md`: collection and labeling protocol
 - `docs/failure_taxonomy.md`: process-level failure labels
+- `docs/hard_tier_expansion_blueprint.md`: candidate HARD-011 to HARD-030 task designs
 - `docs/paper_draft.md`: result-driven workshop-style paper draft
 - `docs/paper_outline.md`: paper outline and experiment plan
 - `docs/reproducibility_checklist.md`: claim-evidence map and reproduction commands
@@ -279,4 +280,4 @@ Findings:
 - Add optional LLM-as-judge scoring.
 - Add run-to-run diff for prompt and harness interventions.
 - Extend adapters to other coding-agent traces.
-- Expand the hard tier and manual labels following `docs/submission_readiness_plan.md`.
+- Expand the hard tier and manual labels following `docs/submission_readiness_plan.md` and `docs/hard_tier_expansion_blueprint.md`.
