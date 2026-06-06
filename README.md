@@ -58,8 +58,9 @@ semantic edge-case failures are missed by deterministic process rules
 (`TP=0`, `FP=0`, `FN=5`), showing why trace diagnosis should be paired with
 strong task-level oracles.
 
-See `docs/results_summary.md` for the generated result summary and
-RQ4 trace-signal analysis, and `docs/reproducibility_checklist.md` for
+See `docs/artifact_guide.md` for the reviewer-facing walkthrough,
+`docs/results_summary.md` for the generated result summary and RQ4
+trace-signal analysis, and `docs/reproducibility_checklist.md` for
 claim-to-evidence mapping.
 
 ## Quickstart
@@ -111,6 +112,7 @@ Key files:
 - `benchmark/labels.example.jsonl`: example manual failure labels for detector evaluation
 - `benchmark/prompts/baseline.txt`: baseline prompt template
 - `benchmark/prompts/intervention.txt`: harness-intervention prompt template
+- `docs/artifact_guide.md`: 15-minute reviewer/interviewer walkthrough
 - `docs/experiment_protocol.md`: collection and labeling protocol
 - `docs/failure_taxonomy.md`: process-level failure labels
 - `docs/paper_draft.md`: result-driven workshop-style paper draft

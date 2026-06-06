@@ -20,6 +20,7 @@ The stored pilots can be inspected and aggregated without re-running Codex.
 
 | Artifact | Purpose |
 | --- | --- |
+| `docs/artifact_guide.md` | Fifteen-minute reviewer/interviewer walkthrough. |
 | `docs/paper_draft.md` | Result-driven workshop-style draft. |
 | `docs/results_summary.md` | Generated full30 + hard10 result summary, including RQ4 trace-signal analysis. |
 | `docs/failure_taxonomy.md` | Definitions for process-level failure labels. |
