@@ -264,3 +264,6 @@ trace-based diagnosis with strong task-level oracles.
 The next step is to expand the hard tier from 10 tasks toward 30-50 tasks,
 include more observable process failures, and evaluate whether additional trace
 signals or lightweight semantic checks can recover hidden edge-case failures.
+
+For artifact review and reproduction commands, see
+`docs/reproducibility_checklist.md`.

@@ -93,6 +93,7 @@ Key files:
 - `docs/failure_taxonomy.md`: process-level failure labels
 - `docs/paper_draft.md`: result-driven workshop-style paper draft
 - `docs/paper_outline.md`: paper outline and experiment plan
+- `docs/reproducibility_checklist.md`: claim-evidence map and reproduction commands
 - `docs/related_work.md`: compact bibliography and positioning notes
 - `benchmark/pilot/full30-real`: 30-task / 60-run real pilot
 - `benchmark/hard/pilot/hard10-real`: 10-task / 20-run hard-tier pilot with outcome failures
