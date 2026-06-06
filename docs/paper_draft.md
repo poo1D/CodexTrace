@@ -218,9 +218,19 @@ rate 1.0, unresolved error 0, command failure count 0, and failure score 0.
 This supports the RQ2 boundary result: when visible tests are incomplete, a run
 can look procedurally sound while still failing a hidden oracle.
 
+| Signal | Failure mean | Success mean | Delta success-failure |
+| --- | ---: | ---: | ---: |
+| verification_rate | 1.00 | 1.00 | 0.00 |
+| unresolved_error | 0 | 0 | 0 |
+| repeated_tool_call_count | 8.00 | 7.60 | -0.40 |
+| command_failure_count | 0 | 0 | 0 |
+| token_usage | 225.6k | 215.7k | -9.9k |
+| failure_score | 0 | 0 | 0 |
+
 The strongest current evidence for intervention is therefore not failure-score
 separation on hard semantic failures; it is outcome improvement and reduced
-process waste under the intervention prompt.
+process waste under the intervention prompt. The generated full signal table is
+kept in `docs/results_summary.md`.
 
 ## 8. Analysis
 
@@ -265,5 +275,6 @@ The next step is to expand the hard tier from 10 tasks toward 30-50 tasks,
 include more observable process failures, and evaluate whether additional trace
 signals or lightweight semantic checks can recover hidden edge-case failures.
 
-For the generated result summary, see `docs/results_summary.md`. For artifact
-review and reproduction commands, see `docs/reproducibility_checklist.md`.
+For a reviewer-facing walkthrough, see `docs/artifact_guide.md`. For the
+generated result summary, see `docs/results_summary.md`. For claim-evidence
+mapping and reproduction commands, see `docs/reproducibility_checklist.md`.
