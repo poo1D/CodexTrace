@@ -40,6 +40,27 @@ codex exec --json "your coding task" > traces/run.jsonl
 - Run offline with demo traces; optional LLM judging can be added later.
 - Includes `demo/real-codex-run.jsonl`, a real `codex exec --json` fixture captured from this repository.
 
+## Research Snapshot
+
+CodexTrace is also a paper-oriented artifact for:
+
+`When Coding Agents Get Lost: Trace-Based Diagnosis of Multi-Turn Tool-Use Failures`
+
+Current stored pilots:
+
+| Pilot | Tasks | Runs | Failure outcomes | Main result |
+| --- | ---: | ---: | ---: | --- |
+| full30 | 30 | 60 | 0 | Intervention reduces repeated tool calls `10.43 -> 7.00` and token usage `218.7k -> 184.8k`. |
+| hard10 | 10 | 20 | 5 | Intervention improves success `70% -> 80%` and reduces token usage `248.9k -> 187.5k`. |
+
+The hard tier also exposes a trace-only detector boundary: all five hidden
+semantic edge-case failures are missed by deterministic process rules
+(`TP=0`, `FP=0`, `FN=5`), showing why trace diagnosis should be paired with
+strong task-level oracles.
+
+See `docs/results_summary.md` for the generated result summary and
+`docs/reproducibility_checklist.md` for claim-to-evidence mapping.
+
 ## Quickstart
 
 ```bash
@@ -234,9 +255,10 @@ Findings:
 
 ## CV Bullets
 
-- Built `CodexTrace`, an Agent Harness debugging tool that parses `codex exec --json` event streams into normalized traces and detects failure modes such as unhandled command errors, missing post-edit validation, repeated tool use, and sandbox blocks.
-- Developed a TypeScript trace replay dashboard and Python CLI that generate Markdown/JSON diagnosis reports, highlighting failed tool calls, token usage, file edits, and run-level inefficiencies for coding-agent workflows.
-- Packaged the project as a reproducible open-source repo with demo traces, pytest coverage, Docker support, and GitHub Actions CI, aligning with Agent evaluation, Tool Use, and developer-experience infrastructure.
+- Built `CodexTrace`, a GPU-free Agent Harness research tool that parses `codex exec --json` event streams into normalized traces and detects process failures such as missing verification, unrecovered command errors, repeated tool use, and sandbox blocks.
+- Designed and collected an 80-run Codex trace benchmark across a 30-task seed tier and 10-task hard tier, comparing baseline prompts with verification-focused harness interventions.
+- Measured intervention effects on real Codex runs: full30 repeated tool calls dropped `10.43 -> 7.00`, hard10 success improved `70% -> 80%`, and hard10 token usage dropped `248.9k -> 187.5k`.
+- Shipped a reproducible research artifact with hidden-grader fixtures, manual-label evaluation, generated paper tables, a TypeScript replay UI, Python CLI, and GitHub Actions CI.
 
 ## Non-goals
 
