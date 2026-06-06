@@ -10,6 +10,7 @@ from .report import render_json, render_markdown
 from .research import (
     aggregate_runs,
     build_paper_report,
+    build_results_summary,
     evaluate_detector_labels,
     generate_label_template,
     load_tasks,
@@ -17,12 +18,14 @@ from .research import (
     render_label_evaluation_markdown,
     render_label_template_jsonl,
     render_paper_report_markdown,
+    render_results_summary_markdown,
     render_prompt,
     run_benchmark,
     write_aggregate_outputs,
     write_label_evaluation_outputs,
     write_label_template,
     write_paper_report_outputs,
+    write_results_summary_outputs,
     write_run_manifest,
     write_runs_csv,
 )
@@ -72,6 +75,13 @@ def main(argv: list[str] | None = None) -> int:
     paper_cmd.add_argument("--labels", type=Path)
     paper_cmd.add_argument("--json-output", type=Path)
     paper_cmd.add_argument("--markdown-output", type=Path)
+
+    summary_cmd = research_subparsers.add_parser("summary", help="Generate a combined full30/hard10 paper result summary.")
+    summary_cmd.add_argument("--full-manifest", type=Path, default=Path("benchmark/pilot/full30-real/runs.jsonl"))
+    summary_cmd.add_argument("--hard-manifest", type=Path, default=Path("benchmark/hard/pilot/hard10-real/runs.jsonl"))
+    summary_cmd.add_argument("--hard-labels", type=Path, default=Path("benchmark/hard/pilot/hard10-real/manual-labels.jsonl"))
+    summary_cmd.add_argument("--json-output", type=Path)
+    summary_cmd.add_argument("--markdown-output", type=Path)
 
     run_cmd = research_subparsers.add_parser("run", help="Run or dry-run the benchmark collection harness.")
     run_cmd.add_argument("--tasks", type=Path, default=Path("benchmark/tasks.jsonl"))
@@ -138,6 +148,14 @@ def main(argv: list[str] | None = None) -> int:
             write_paper_report_outputs(result, args.json_output, args.markdown_output)
         else:
             print(render_paper_report_markdown(result), end="")
+        return 0
+
+    if args.command == "research" and args.research_command == "summary":
+        result = build_results_summary(args.full_manifest, args.hard_manifest, args.hard_labels)
+        if args.json_output or args.markdown_output:
+            write_results_summary_outputs(result, args.json_output, args.markdown_output)
+        else:
+            print(render_results_summary_markdown(result), end="")
         return 0
 
     if args.command == "research" and args.research_command == "run":

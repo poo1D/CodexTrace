@@ -1,11 +1,13 @@
 from codex_trace.research import (
     aggregate_runs,
     build_paper_report,
+    build_results_summary,
     evaluate_detector_labels,
     generate_label_template,
     load_tasks,
     render_label_template_jsonl,
     render_paper_report_markdown,
+    render_results_summary_markdown,
     render_prompt,
     run_benchmark,
     run_success_check,
@@ -70,6 +72,21 @@ def test_build_paper_report_tables():
     assert any(row["signal"] == "phase_recover_events" for row in result["signal_by_outcome"])
     assert "## RQ4 Trace Signals By Outcome" in markdown
     assert "Outcome counts: failure=2, success=2, unknown=0." in markdown
+
+
+def test_build_results_summary_from_stored_pilots():
+    result = build_results_summary(
+        "benchmark/pilot/full30-real/runs.jsonl",
+        "benchmark/hard/pilot/hard10-real/runs.jsonl",
+        "benchmark/hard/pilot/hard10-real/manual-labels.jsonl",
+    )
+    markdown = render_results_summary_markdown(result)
+
+    assert result["full30"]["summary"]["baseline"]["n"] == 30
+    assert result["hard10"]["summary"]["baseline"]["success_rate"] == 0.7
+    assert result["hard10_label_evaluation"]["labels"]["hidden_semantic_edge_case"]["fn"] == 5
+    assert "## RQ3 Baseline vs Intervention" in markdown
+    assert "hidden_semantic_edge_case" in markdown
 
 
 def test_smoke_fixture_success_check_starts_failing():

@@ -21,6 +21,7 @@ The stored pilots can be inspected and aggregated without re-running Codex.
 | Artifact | Purpose |
 | --- | --- |
 | `docs/paper_draft.md` | Result-driven workshop-style draft. |
+| `docs/results_summary.md` | Generated full30 + hard10 result summary. |
 | `docs/failure_taxonomy.md` | Definitions for process-level failure labels. |
 | `docs/experiment_protocol.md` | Collection, labeling, and evaluation protocol. |
 | `docs/related_work.md` | Compact bibliography and positioning notes. |
@@ -68,6 +69,14 @@ PYTHONPATH=. python3 -m codex_trace.cli research paper-report \
   --labels benchmark/hard/pilot/hard10-real/manual-labels.jsonl \
   --json-output /tmp/hard10-paper-report.json \
   --markdown-output /tmp/hard10-paper-report.md
+```
+
+Combined paper-facing summary:
+
+```bash
+PYTHONPATH=. python3 -m codex_trace.cli research summary \
+  --markdown-output /tmp/results-summary.md \
+  --json-output /tmp/results-summary.json
 ```
 
 ## Claim-Evidence Map

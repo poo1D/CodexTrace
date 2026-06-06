@@ -474,6 +474,112 @@ def write_paper_report_outputs(result: dict[str, Any], json_path: str | Path | N
         path.write_text(render_paper_report_markdown(result), encoding="utf-8")
 
 
+def build_results_summary(
+    full_manifest_path: str | Path,
+    hard_manifest_path: str | Path,
+    hard_labels_path: str | Path,
+) -> dict[str, Any]:
+    full = aggregate_runs(full_manifest_path)
+    hard = aggregate_runs(hard_manifest_path)
+    hard_label_eval = evaluate_detector_labels(hard_manifest_path, hard_labels_path)
+    hard_paper_report = build_paper_report(hard_manifest_path, labels_path=hard_labels_path)
+    return {
+        "full30": full,
+        "hard10": hard,
+        "hard10_label_evaluation": hard_label_eval,
+        "hard10_taxonomy_distribution": hard_paper_report["taxonomy_distribution"],
+        "hard10_outcome_counts": hard_paper_report["outcome_counts"],
+        "hard10_signal_by_outcome": hard_paper_report["signal_by_outcome"],
+    }
+
+
+def render_results_summary_markdown(result: dict[str, Any]) -> str:
+    full = result["full30"]
+    hard = result["hard10"]
+    hard_eval = result["hard10_label_evaluation"]
+    hard_counts = result["hard10_outcome_counts"]
+    hidden_scores = hard_eval["labels"].get("hidden_semantic_edge_case", {})
+
+    lines = [
+        "# CodexTrace Results Summary",
+        "",
+        "This generated summary consolidates the current paper-facing result tables.",
+        "",
+        "## Pilots",
+        "",
+        "| Pilot | Tasks | Runs | Failure outcomes | Main use |",
+        "| --- | ---: | ---: | ---: | --- |",
+        f"| full30 | {full['summary']['baseline']['n']} | {len(full['runs'])} | {sum(row['outcome'] == 'failure' for row in full['runs'])} | Process-waste analysis with saturated outcomes. |",
+        f"| hard10 | {hard['summary']['baseline']['n']} | {len(hard['runs'])} | {hard_counts.get('failure', 0)} | Outcome-failure and hidden-grader analysis. |",
+        "",
+        "## RQ3 Baseline vs Intervention",
+        "",
+        "### Full30 Seed Pilot",
+        "",
+        "| Metric | Baseline | Intervention | Delta |",
+        "| --- | ---: | ---: | ---: |",
+    ]
+    _append_metric_rows(lines, full, (
+        "success_rate",
+        "avg_repeated_tool_calls",
+        "avg_command_failures",
+        "avg_recover_events",
+        "avg_token_usage",
+        "avg_failure_score",
+    ))
+
+    lines.extend([
+        "",
+        "### Hard10 Pilot",
+        "",
+        "| Metric | Baseline | Intervention | Delta |",
+        "| --- | ---: | ---: | ---: |",
+    ])
+    _append_metric_rows(lines, hard, (
+        "success_rate",
+        "verification_rate",
+        "avg_repeated_tool_calls",
+        "avg_token_usage",
+        "avg_verify_events",
+    ))
+
+    lines.extend([
+        "",
+        "## RQ2 Detector Boundary Result",
+        "",
+        "| Label | TP | FP | FN | Precision | Recall | F1 |",
+        "| --- | ---: | ---: | ---: | ---: | ---: | ---: |",
+        (
+            "| hidden_semantic_edge_case | "
+            f"{hidden_scores.get('tp', 0)} | {hidden_scores.get('fp', 0)} | {hidden_scores.get('fn', 0)} | "
+            f"{_fmt(hidden_scores.get('precision', 0))} | {_fmt(hidden_scores.get('recall', 0))} | {_fmt(hidden_scores.get('f1', 0))} |"
+        ),
+        "",
+        "Interpretation: the current deterministic process rules do not detect hidden semantic edge-case failures when the visible process trace looks clean.",
+        "",
+        "## Claim-Evidence Shortlist",
+        "",
+        "| Claim | Generated evidence |",
+        "| --- | --- |",
+        "| Intervention reduces process waste on full30. | `avg_repeated_tool_calls`, `avg_command_failures`, `avg_recover_events`, and `avg_token_usage` improve in the full30 table. |",
+        "| Intervention improves success on hard10. | hard10 `success_rate` improves from baseline to intervention. |",
+        "| Trace-only process rules have a semantic boundary. | hard10 label evaluation has 5 false negatives for `hidden_semantic_edge_case`. |",
+        "| Strong task oracles remain necessary. | hard10 failures are only visible through hidden graders, not process-rule findings. |",
+    ])
+    return "\n".join(lines) + "\n"
+
+
+def write_results_summary_outputs(result: dict[str, Any], json_path: str | Path | None = None, markdown_path: str | Path | None = None) -> None:
+    if json_path:
+        path = Path(json_path)
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(json.dumps(result, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    if markdown_path:
+        path = Path(markdown_path)
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(render_results_summary_markdown(result), encoding="utf-8")
+
+
 def taxonomy_distribution(run_rows: list[dict[str, Any]], labels: dict[tuple[str, str], set[str]] | None = None) -> list[dict[str, Any]]:
     counts: Counter[str] = Counter()
     examples: dict[str, str] = {}
@@ -709,6 +815,23 @@ def _safe_f1(tp: int, fp: int, fn: int) -> float:
 
 def _join_labels(labels: list[str]) -> str:
     return ", ".join(labels) if labels else "-"
+
+
+def _append_metric_rows(lines: list[str], result: dict[str, Any], keys: tuple[str, ...]) -> None:
+    for key in keys:
+        baseline = result["summary"].get("baseline", {}).get(key, 0)
+        intervention = result["summary"].get("intervention", {}).get(key, 0)
+        delta = result["deltas"].get(key, 0)
+        lines.append(f"| {key} | {_fmt_result_metric(key, baseline)} | {_fmt_result_metric(key, intervention)} | {_fmt_result_metric(key, delta)} |")
+
+
+def _fmt_result_metric(key: str, value: Any) -> str:
+    numeric = float(value or 0)
+    if key == "avg_token_usage":
+        return f"{numeric / 1000:.1f}k"
+    if key.endswith("_rate"):
+        return f"{numeric:.2f}"
+    return _fmt(value)
 
 
 def _summarize_group(rows: list[dict[str, Any]]) -> dict[str, Any]:
