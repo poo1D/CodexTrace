@@ -91,7 +91,10 @@ Key files:
 - `benchmark/prompts/intervention.txt`: harness-intervention prompt template
 - `docs/experiment_protocol.md`: collection and labeling protocol
 - `docs/failure_taxonomy.md`: process-level failure labels
+- `docs/paper_draft.md`: result-driven workshop-style paper draft
 - `docs/paper_outline.md`: paper outline and experiment plan
+- `benchmark/pilot/full30-real`: 30-task / 60-run real pilot
+- `benchmark/hard/pilot/hard10-real`: 10-task / 20-run hard-tier pilot with outcome failures
 
 Render prompts:
 
@@ -142,6 +145,20 @@ codex-trace research paper-report benchmark/runs.example.jsonl \
   --json-output reports/example-paper-report.json \
   --markdown-output reports/example-paper-report.md
 ```
+
+Current paper artifacts:
+
+```bash
+codex-trace research aggregate benchmark/pilot/full30-real/runs.jsonl
+codex-trace research aggregate benchmark/hard/pilot/hard10-real/runs.jsonl
+codex-trace research paper-report benchmark/hard/pilot/hard10-real/runs.jsonl \
+  --labels benchmark/hard/pilot/hard10-real/manual-labels.jsonl
+```
+
+The current draft in `docs/paper_draft.md` reports two pilots: a 30-task seed
+benchmark where intervention reduces tool-call and token waste, and a 10-task
+hard tier where intervention improves success from 70% to 80% while exposing a
+trace-only detector limitation on hidden semantic edge cases.
 
 To run the Web UI:
 
