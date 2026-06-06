@@ -120,6 +120,7 @@ Key files:
 - `docs/reproducibility_checklist.md`: claim-evidence map and reproduction commands
 - `docs/results_summary.md`: generated full30 + hard10 result summary, including RQ4 trace-signal analysis
 - `docs/related_work.md`: compact bibliography and positioning notes
+- `docs/submission_readiness_plan.md`: concrete path from pilot artifact to stronger paper submission
 - `benchmark/pilot/full30-real`: 30-task / 60-run real pilot
 - `benchmark/hard/pilot/hard10-real`: 10-task / 20-run hard-tier pilot with outcome failures
 
@@ -278,3 +279,4 @@ Findings:
 - Add optional LLM-as-judge scoring.
 - Add run-to-run diff for prompt and harness interventions.
 - Extend adapters to other coding-agent traces.
+- Expand the hard tier and manual labels following `docs/submission_readiness_plan.md`.

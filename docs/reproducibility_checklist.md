@@ -26,6 +26,7 @@ The stored pilots can be inspected and aggregated without re-running Codex.
 | `docs/failure_taxonomy.md` | Definitions for process-level failure labels. |
 | `docs/experiment_protocol.md` | Collection, labeling, and evaluation protocol. |
 | `docs/related_work.md` | Compact bibliography and positioning notes. |
+| `docs/submission_readiness_plan.md` | Workstreams and decision gate for a stronger paper submission. |
 | `benchmark/pilot/full30-real` | 30-task / 60-run real seed pilot. |
 | `benchmark/hard/pilot/hard10-real` | 10-task / 20-run hard-tier pilot with outcome failures. |
 | `benchmark/hard/pilot/hard10-real/manual-labels.jsonl` | Manual hidden-failure labels for hard-tier RQ2 analysis. |
@@ -147,3 +148,6 @@ failed_initial ['HARD-001', 'HARD-002', 'HARD-003', 'HARD-004', 'HARD-005', 'HAR
 - Consider a lightweight semantic analysis layer for hidden edge-case failures.
 - Improve detector evaluation with richer manual labels beyond the current
   hard-tier boundary label.
+
+For a concrete expansion backlog and submission decision gate, see
+`docs/submission_readiness_plan.md`.

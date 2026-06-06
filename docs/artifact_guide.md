@@ -124,3 +124,7 @@ The strongest next step is to expand the hard tier from 10 tasks toward 30-50
 tasks while adding more observable process failures, not only hidden semantic
 edge cases. That would strengthen RQ1/RQ2 distribution claims and make the RQ3
 success-rate estimate less fragile.
+
+See `docs/submission_readiness_plan.md` for the concrete workstreams and
+decision gate for moving from the current pilot artifact to a stronger paper
+submission.
