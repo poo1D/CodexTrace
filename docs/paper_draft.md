@@ -50,7 +50,39 @@ We ask four research questions:
 - RQ3: Do simple harness interventions improve success or reduce waste?
 - RQ4: Which trace signals best explain whether a run will fail?
 
-## 2. Problem Definition
+## 2. Related Work
+
+Software-engineering benchmarks such as
+[SWE-bench](https://arxiv.org/abs/2310.06770) evaluate whether language models
+can resolve real GitHub issues by editing repositories and passing tests. This
+work is complementary: CodexTrace keeps task outcome labels, but treats the
+agent trace itself as a first-class evaluation object.
+
+Coding-agent systems and interfaces such as
+[SWE-agent](https://arxiv.org/abs/2405.15793),
+[OpenHands](https://arxiv.org/abs/2407.16741), and the
+[OpenAI Codex CLI](https://github.com/openai/codex) show that modern coding
+agents act through developer-like tools: shell commands, file edits, tests, and
+repository navigation. CodexTrace does not propose a new agent interface; it
+analyzes whether an existing harness produces observable process failures and
+whether a simple prompt-level intervention changes those traces.
+
+General agent-evaluation work such as
+[AgentBench](https://arxiv.org/abs/2308.03688) evaluates multi-turn agents in
+interactive environments. Program-repair agents such as
+[RepairAgent](https://arxiv.org/abs/2403.17134) further show that autonomous
+repair workflows can consume substantial token budgets. These lines motivate
+tracking tool-call waste, recovery behavior, and token usage rather than only
+final correctness.
+
+The closest diagnostic thread is trajectory-level agent failure analysis, such
+as [AgentRx](https://www.microsoft.com/en-us/research/publication/agentrx-diagnosing-ai-agent-failures-from-execution-trajectories/),
+which diagnoses failures from execution trajectories. CodexTrace is narrower
+and more structural: it focuses on coding-agent JSONL traces and uses
+deterministic process rules before considering LLM-as-judge or semantic
+diagnosis.
+
+## 3. Problem Definition
 
 We define a coding-agent run as:
 
@@ -67,7 +99,7 @@ We define a process-level failure as a detectable trace pattern that either
 reduces the probability of success or increases wasted effort before the final
 outcome is known.
 
-## 3. Failure Taxonomy
+## 4. Failure Taxonomy
 
 CodexTrace uses an interpretable taxonomy of observable tool-use failures:
 
@@ -84,7 +116,7 @@ The hard-tier pilot adds one manual label that is not a process-level detector:
 `hidden_semantic_edge_case`. This label marks runs whose visible trace looks
 procedurally clean but whose final code fails hidden edge-case tests.
 
-## 4. Method: CodexTrace
+## 5. Method: CodexTrace
 
 CodexTrace is a lightweight offline analysis pipeline:
 
@@ -109,7 +141,7 @@ check. For hard-tier tasks, the prompt exposes only a public success check such
 as `python3 -m unittest discover -s tests` or `npm test`; the hidden grader is
 copied into the run directory only after the Codex process exits.
 
-## 5. Benchmark
+## 6. Benchmark
 
 The current benchmark has two tiers.
 
@@ -125,7 +157,7 @@ changes. Each task is run with two prompt conditions:
 The hard tier contains 10 harder tasks with hidden edge-case graders. These
 tasks are designed to create outcome failures even when visible tests pass.
 
-## 6. Results
+## 7. Results
 
 ### RQ1: Failure Taxonomy Distribution
 
@@ -190,7 +222,7 @@ The strongest current evidence for intervention is therefore not failure-score
 separation on hard semantic failures; it is outcome improvement and reduced
 process waste under the intervention prompt.
 
-## 7. Analysis
+## 8. Analysis
 
 The two pilots show complementary behavior. The 30-task seed tier validates the
 collection harness and shows that process-level interventions can reduce waste
@@ -210,7 +242,7 @@ is useful for asking questions such as:
 Trace diagnosis is less suited for proving semantic correctness when the agent
 ran the visible tests cleanly but missed hidden edge cases.
 
-## 8. Threats To Validity
+## 9. Threats To Validity
 
 This study currently uses one agent interface, Codex CLI, and a small benchmark.
 The hard tier has only 10 tasks, so the 70% to 80% success-rate lift should be
@@ -220,7 +252,7 @@ for hidden semantic failures are based on hidden grader outcomes and qualitative
 inspection of failure messages. Larger repository tasks and repeated trials are
 needed before making broader claims.
 
-## 9. Conclusion
+## 10. Conclusion
 
 CodexTrace shows that coding-agent traces can be used as first-class evaluation
 objects, not merely logs. In real Codex runs, trace analysis exposes process
