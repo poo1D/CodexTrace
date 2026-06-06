@@ -186,6 +186,12 @@ Current pilot status:
   These traces supply the first outcome-failure examples, while also showing a
   limitation of trace-only rules: hidden semantic edge failures can receive
   `failure_score=0` when the visible process looks clean.
+- `benchmark/hard/pilot/hard10-real/manual-labels.jsonl` labels the 5 hard-tier
+  failures as `hidden_semantic_edge_case`. The current process-only detector has
+  `TP=0`, `FP=0`, `FN=5` for that label, giving micro/macro F1 of `0`. This is
+  an explicit RQ2 boundary result: trace rules can explain observable process
+  failures, but hidden semantic edge cases require stronger oracles or separate
+  semantic analysis.
 
 Required next dataset extension:
 

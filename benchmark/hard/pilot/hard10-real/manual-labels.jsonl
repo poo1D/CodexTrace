@@ -1,0 +1,20 @@
+{"failure_tags": ["hidden_semantic_edge_case"], "notes": "Hidden grader failed a half-open interval edge case: zero-length intervals should not raise ValueError.", "outcome": "failure", "prompt_type": "baseline", "task_id": "HARD-001"}
+{"failure_tags": [], "notes": "", "outcome": "success", "prompt_type": "intervention", "task_id": "HARD-001"}
+{"failure_tags": [], "notes": "", "outcome": "success", "prompt_type": "baseline", "task_id": "HARD-002"}
+{"failure_tags": [], "notes": "", "outcome": "success", "prompt_type": "intervention", "task_id": "HARD-002"}
+{"failure_tags": [], "notes": "", "outcome": "success", "prompt_type": "baseline", "task_id": "HARD-003"}
+{"failure_tags": [], "notes": "", "outcome": "success", "prompt_type": "intervention", "task_id": "HARD-003"}
+{"failure_tags": [], "notes": "", "outcome": "success", "prompt_type": "baseline", "task_id": "HARD-004"}
+{"failure_tags": [], "notes": "", "outcome": "success", "prompt_type": "intervention", "task_id": "HARD-004"}
+{"failure_tags": [], "notes": "", "outcome": "success", "prompt_type": "baseline", "task_id": "HARD-005"}
+{"failure_tags": [], "notes": "", "outcome": "success", "prompt_type": "intervention", "task_id": "HARD-005"}
+{"failure_tags": ["hidden_semantic_edge_case"], "notes": "Hidden grader failed retry delay scheduling: injected sleep received attempt numbers instead of configured delays.", "outcome": "failure", "prompt_type": "baseline", "task_id": "HARD-006"}
+{"failure_tags": ["hidden_semantic_edge_case"], "notes": "Hidden grader failed retry delay scheduling: injected sleep received attempt numbers instead of configured delays.", "outcome": "failure", "prompt_type": "intervention", "task_id": "HARD-006"}
+{"failure_tags": [], "notes": "", "outcome": "success", "prompt_type": "baseline", "task_id": "HARD-007"}
+{"failure_tags": [], "notes": "", "outcome": "success", "prompt_type": "intervention", "task_id": "HARD-007"}
+{"failure_tags": [], "notes": "", "outcome": "success", "prompt_type": "baseline", "task_id": "HARD-008"}
+{"failure_tags": [], "notes": "", "outcome": "success", "prompt_type": "intervention", "task_id": "HARD-008"}
+{"failure_tags": ["hidden_semantic_edge_case"], "notes": "Hidden grader failed end-exclusive blackout handling: booking on the blackout end date should be allowed.", "outcome": "failure", "prompt_type": "baseline", "task_id": "HARD-009"}
+{"failure_tags": ["hidden_semantic_edge_case"], "notes": "Hidden grader failed end-exclusive blackout handling: booking on the blackout end date should be allowed.", "outcome": "failure", "prompt_type": "intervention", "task_id": "HARD-009"}
+{"failure_tags": [], "notes": "", "outcome": "success", "prompt_type": "baseline", "task_id": "HARD-010"}
+{"failure_tags": [], "notes": "", "outcome": "success", "prompt_type": "intervention", "task_id": "HARD-010"}

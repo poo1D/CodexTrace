@@ -448,9 +448,17 @@ def render_paper_report_markdown(result: dict[str, Any]) -> str:
             f"| {row['signal']} | {_fmt(row['failure_mean'])} | {_fmt(row['success_mean'])} | {_fmt(row['delta_success_minus_failure'])} |"
         )
 
+    expected_tags = {}
+    if result.get("detector_evaluation"):
+        expected_tags = {
+            (row["task_id"], row["prompt_type"]): row["expected"]
+            for row in result["detector_evaluation"]["runs"]
+        }
+
     lines.extend(["", "## Per-Run Appendix", "", "| Task | Prompt | Outcome | Failure score | Tags |", "| --- | --- | --- | ---: | --- |"])
     for row in aggregate["runs"]:
-        tags = ", ".join(row["taxonomy_tags"]) or "-"
+        tags_for_row = expected_tags.get((row["task_id"], row["prompt_type"]), row["taxonomy_tags"])
+        tags = ", ".join(tags_for_row) or "-"
         lines.append(f"| {row['task_id']} | {row['prompt_type']} | {row['outcome']} | {row['failure_score']} | {tags} |")
     return "\n".join(lines) + "\n"
 

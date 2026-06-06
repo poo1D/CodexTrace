@@ -30,6 +30,18 @@ public verification commands and did not visibly deadlock. That is a useful
 limitation: trace-only detectors expose many process failures, but they cannot
 guarantee detection of semantic edge cases when the visible tests are incomplete.
 
+Manual labels mark all 5 outcome failures as `hidden_semantic_edge_case`.
+Detector agreement on that label is therefore intentionally low:
+
+- hidden semantic edge cases: `TP=0`, `FP=0`, `FN=5`
+- micro F1: `0`
+- macro F1: `0`
+
+This should be interpreted as a boundary result for RQ2, not as evidence that
+process-trace rules are useless. It shows that hidden semantic failures need
+either stronger task-level oracles, visible edge tests, or a separate semantic
+analysis layer beyond process-only trace rules.
+
 ## Leakage Control
 
 Hard tasks expose only a public success check in the prompt, such as
@@ -43,8 +55,12 @@ outcome.
 - `runs.jsonl`: combined run manifest referencing the two source batches
 - `aggregate.md` / `aggregate.json`: grouped metrics
 - `paper-report.md` / `paper-report.json`: RQ table scaffold
+- `paper-report-labeled.md` / `paper-report-labeled.json`: RQ tables with
+  manual hidden-failure labels
 - `runs.csv`: per-run metrics
 - `labels.jsonl`: manual-label template with detector suggestions
+- `manual-labels.jsonl`: curated labels for the hard-tier failures
+- `label-eval.md` / `label-eval.json`: detector-vs-manual label evaluation
 
 Trace files remain in the source batch directories to avoid duplicating raw
 events.
