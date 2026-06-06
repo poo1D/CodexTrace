@@ -20,6 +20,11 @@ This directory is the starting point for the paper experiment:
   smoke tasks.
 - `pilot/batch1-real`: 14 real non-smoke pilot traces across seven task
   categories, with aggregate and paper-report outputs.
+- `pilot/batch2-real`: 16 real non-smoke pilot traces for additional bug-fix
+  and feature tasks.
+- `pilot/batch3-real`: 30 real non-smoke pilot traces for test-writing,
+  refactor, CI, error-localization, and multi-turn tasks.
+- `pilot/full30-real`: combined 30-task / 60-run real benchmark pilot.
 
 ## Render a Prompt
 
@@ -79,3 +84,17 @@ codex-trace research paper-report benchmark/runs.example.jsonl \
   --json-output reports/example-paper-report.json \
   --markdown-output reports/example-paper-report.md
 ```
+
+## Current Full Pilot Result
+
+The current full pilot covers all 30 seed tasks with baseline and intervention
+conditions:
+
+```bash
+codex-trace research aggregate benchmark/pilot/full30-real/runs.jsonl
+```
+
+All 60 runs passed their external graders. This validates the harness and shows
+intervention-side process savings, but it does not yet provide outcome-failure
+examples. A harder task tier is required for final paper claims about failure
+prevalence, detector recall on true failures, and success-rate lift.

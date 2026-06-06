@@ -167,8 +167,20 @@ Current pilot status:
 
 - `benchmark/pilot/smoke-real`: 3 smoke tasks x 2 prompt conditions
 - `benchmark/pilot/batch1-real`: 7 non-smoke tasks x 2 prompt conditions
-- The first non-smoke pilot has 14/14 successful outcomes, so harder tasks or a
-  larger batch are still needed for outcome-failure analysis.
+- `benchmark/pilot/batch2-real`: 8 non-smoke tasks x 2 prompt conditions
+- `benchmark/pilot/batch3-real`: 15 non-smoke tasks x 2 prompt conditions
+- `benchmark/pilot/full30-real`: 30 non-smoke tasks x 2 prompt conditions
+- The full 30-task pilot has 60/60 successful outcomes. It validates collection
+  and process-metric analysis, but a harder tier is still needed for
+  outcome-failure analysis.
+
+Required next dataset extension:
+
+- 10-20 harder tasks with hidden multi-step requirements
+- include at least several expected baseline failures
+- keep external graders outside the agent worktree
+- target tasks where success requires preserving multiple invariants, diagnosing
+  misleading visible tests, or avoiding over-broad edits
 
 ## Threats To Validity
 
