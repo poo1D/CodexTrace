@@ -21,6 +21,8 @@ VERIFY_KEYWORDS = (
     "mypy",
     "tsc",
     "unittest",
+    "../grader",
+    "grader/check",
     "npm run build",
     "pnpm build",
 )

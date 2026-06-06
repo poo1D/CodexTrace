@@ -23,6 +23,7 @@ Target size:
 Current seed:
 
 - `benchmark/tasks.jsonl` contains 30 tasks
+- `benchmark/repos` contains runnable fixture repositories and external graders
 - `benchmark/prompts/baseline.txt`
 - `benchmark/prompts/intervention.txt`
 - `benchmark/smoke/tasks.jsonl` contains 3 runnable fixtures for harness validation
@@ -54,17 +55,18 @@ codex-trace research run \
   --dry-run
 ```
 
-For each task and prompt condition:
+For each task and prompt condition, use the collection runner:
 
 ```bash
-codex-trace research prompt --tasks benchmark/tasks.jsonl CT-001 baseline > /tmp/prompt.txt
-codex exec --json "$(cat /tmp/prompt.txt)" > runs/CT-001/baseline.jsonl
-
-codex-trace research prompt --tasks benchmark/tasks.jsonl CT-001 intervention > /tmp/prompt.txt
-codex exec --json "$(cat /tmp/prompt.txt)" > runs/CT-001/intervention.jsonl
+codex-trace research run \
+  --tasks benchmark/tasks.jsonl \
+  --output-dir runs/full \
+  --timeout-seconds 300
 ```
 
-Then label the outcome:
+The runner copies the fixture repo into an isolated run directory, initializes a
+fresh git repository, executes `codex exec --json`, then runs the task's external
+grader from outside the agent worktree. It writes a run manifest:
 
 ```jsonl
 {"task_id":"CT-001","prompt_type":"baseline","trace_path":"runs/CT-001/baseline.jsonl","outcome":"failure"}
@@ -160,6 +162,13 @@ codex-trace research paper-report benchmark/runs.example.jsonl \
 - taxonomy distribution table
 - baseline vs intervention table
 - qualitative examples for 3-4 failure modes
+
+Current pilot status:
+
+- `benchmark/pilot/smoke-real`: 3 smoke tasks x 2 prompt conditions
+- `benchmark/pilot/batch1-real`: 7 non-smoke tasks x 2 prompt conditions
+- The first non-smoke pilot has 14/14 successful outcomes, so harder tasks or a
+  larger batch are still needed for outcome-failure analysis.
 
 ## Threats To Validity
 

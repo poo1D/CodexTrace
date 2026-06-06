@@ -8,6 +8,8 @@ This directory is the starting point for the paper experiment:
 
 - `tasks.jsonl`: 30 seed coding tasks covering bug fixes, small features, tests,
   refactors, CI failures, error localization, and multi-turn changes.
+- `repos/`: runnable fixture repositories plus external grader directories for
+  the 30 seed tasks.
 - `prompts/baseline.txt`: the normal Codex prompt template.
 - `prompts/intervention.txt`: the harness-constrained prompt template.
 - `runs.example.jsonl`: a tiny manifest that reuses demo traces to exercise the
@@ -16,6 +18,8 @@ This directory is the starting point for the paper experiment:
   recall evaluation.
 - `pilot/smoke-real`: 6 real `codex exec --json` pilot traces for the runnable
   smoke tasks.
+- `pilot/batch1-real`: 14 real non-smoke pilot traces across seven task
+  categories, with aggregate and paper-report outputs.
 
 ## Render a Prompt
 
@@ -29,8 +33,10 @@ codex-trace research prompt --tasks benchmark/tasks.jsonl CT-001 intervention
 For each task:
 
 ```bash
-codex exec --json "$(codex-trace research prompt --tasks benchmark/tasks.jsonl CT-001 baseline)" > runs/CT-001/baseline.jsonl
-codex exec --json "$(codex-trace research prompt --tasks benchmark/tasks.jsonl CT-001 intervention)" > runs/CT-001/intervention.jsonl
+codex-trace research run \
+  --tasks benchmark/tasks.jsonl \
+  --output-dir runs/full \
+  --timeout-seconds 300
 ```
 
 Record final task outcomes in the run manifest:

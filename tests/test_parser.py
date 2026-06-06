@@ -3,6 +3,8 @@ from codex_trace.parser import is_verification_command, parse_jsonl
 
 def test_unittest_command_counts_as_verification():
     assert is_verification_command("python3 -m unittest discover -s tests")
+    assert is_verification_command("python3 ../grader/check.py")
+    assert is_verification_command("node ../grader/check.mjs")
 
 
 def test_parse_demo_trace():

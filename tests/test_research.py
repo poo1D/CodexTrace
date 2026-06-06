@@ -103,3 +103,30 @@ def test_dry_run_materializes_prompts_and_manifest(tmp_path):
     assert git_dir.exists()
     assert "Run a focused verification command after the edit" in prompt.read_text(encoding="utf-8")
     assert manifest.read_text(encoding="utf-8").count("\n") == 1
+
+
+def test_dry_run_materializes_external_grader(tmp_path):
+    repo = tmp_path / "repo"
+    grader = tmp_path / "grader"
+    repo.mkdir()
+    grader.mkdir()
+    (repo / "app.py").write_text("VALUE = 1\n", encoding="utf-8")
+    (grader / "check.py").write_text("print('ok')\n", encoding="utf-8")
+    tasks = tmp_path / "tasks.jsonl"
+    tasks.write_text(
+        '{"task_id":"T-001","category":"bug_fix","fixture_path":"repo","grader_path":"grader",'
+        '"repo_hint":"python/example","instruction":"Fix the value.","success_check":"python3 ../grader/check.py"}\n',
+        encoding="utf-8",
+    )
+
+    rows = run_benchmark(
+        tasks_path=tasks,
+        output_dir=tmp_path / "runs",
+        prompt_types=["baseline"],
+        dry_run=True,
+    )
+
+    copied_grader = tmp_path / "runs" / "T-001" / "baseline" / "grader" / "check.py"
+
+    assert rows[0]["grader_path"] == "T-001/baseline/grader"
+    assert copied_grader.exists()

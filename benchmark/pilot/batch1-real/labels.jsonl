@@ -1,0 +1,14 @@
+{"failure_score": 0, "failure_tags": [], "notes": "", "outcome": "success", "prompt_type": "baseline", "suggested_tags": [], "task_id": "CT-001", "trace_path": "CT-001/baseline/trace.jsonl"}
+{"failure_score": 0, "failure_tags": [], "notes": "", "outcome": "success", "prompt_type": "intervention", "suggested_tags": [], "task_id": "CT-001", "trace_path": "CT-001/intervention/trace.jsonl"}
+{"failure_score": 0, "failure_tags": [], "notes": "", "outcome": "success", "prompt_type": "baseline", "suggested_tags": [], "task_id": "CT-006", "trace_path": "CT-006/baseline/trace.jsonl"}
+{"failure_score": 0, "failure_tags": [], "notes": "", "outcome": "success", "prompt_type": "intervention", "suggested_tags": [], "task_id": "CT-006", "trace_path": "CT-006/intervention/trace.jsonl"}
+{"failure_score": 0, "failure_tags": [], "notes": "", "outcome": "success", "prompt_type": "baseline", "suggested_tags": [], "task_id": "CT-011", "trace_path": "CT-011/baseline/trace.jsonl"}
+{"failure_score": 0, "failure_tags": [], "notes": "", "outcome": "success", "prompt_type": "intervention", "suggested_tags": [], "task_id": "CT-011", "trace_path": "CT-011/intervention/trace.jsonl"}
+{"failure_score": 0, "failure_tags": [], "notes": "", "outcome": "success", "prompt_type": "baseline", "suggested_tags": [], "task_id": "CT-016", "trace_path": "CT-016/baseline/trace.jsonl"}
+{"failure_score": 0, "failure_tags": [], "notes": "", "outcome": "success", "prompt_type": "intervention", "suggested_tags": [], "task_id": "CT-016", "trace_path": "CT-016/intervention/trace.jsonl"}
+{"failure_score": 35, "failure_tags": [], "notes": "", "outcome": "success", "prompt_type": "baseline", "suggested_tags": ["sandbox_permission_deadlock"], "task_id": "CT-021", "trace_path": "CT-021/baseline/trace.jsonl"}
+{"failure_score": 0, "failure_tags": [], "notes": "", "outcome": "success", "prompt_type": "intervention", "suggested_tags": [], "task_id": "CT-021", "trace_path": "CT-021/intervention/trace.jsonl"}
+{"failure_score": 0, "failure_tags": [], "notes": "", "outcome": "success", "prompt_type": "baseline", "suggested_tags": [], "task_id": "CT-026", "trace_path": "CT-026/baseline/trace.jsonl"}
+{"failure_score": 10, "failure_tags": [], "notes": "", "outcome": "success", "prompt_type": "intervention", "suggested_tags": [], "task_id": "CT-026", "trace_path": "CT-026/intervention/trace.jsonl"}
+{"failure_score": 0, "failure_tags": [], "notes": "", "outcome": "success", "prompt_type": "baseline", "suggested_tags": [], "task_id": "CT-028", "trace_path": "CT-028/baseline/trace.jsonl"}
+{"failure_score": 0, "failure_tags": [], "notes": "", "outcome": "success", "prompt_type": "intervention", "suggested_tags": [], "task_id": "CT-028", "trace_path": "CT-028/intervention/trace.jsonl"}

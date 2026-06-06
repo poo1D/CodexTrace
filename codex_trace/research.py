@@ -52,6 +52,7 @@ class BenchmarkTask:
     success_check: str
     repo_hint: str = ""
     fixture_path: str = ""
+    grader_path: str = ""
 
 
 @dataclass
@@ -76,6 +77,7 @@ def load_tasks(path: str | Path) -> list[BenchmarkTask]:
             success_check=str(item["success_check"]),
             repo_hint=str(item.get("repo_hint", "")),
             fixture_path=_resolve_optional_path(task_path.parent, item.get("fixture_path", "")),
+            grader_path=_resolve_optional_path(task_path.parent, item.get("grader_path", "")),
         ))
     return tasks
 
@@ -164,6 +166,7 @@ def run_single_task(
     output_root = Path(output_dir)
     run_dir = output_root / task.task_id / prompt_type
     repo_dir = run_dir / "repo"
+    grader_dir = run_dir / "grader"
     trace_path = run_dir / "trace.jsonl"
     prompt_path = run_dir / "prompt.md"
     stderr_path = run_dir / "codex.stderr"
@@ -173,6 +176,8 @@ def run_single_task(
         shutil.rmtree(run_dir)
     run_dir.mkdir(parents=True, exist_ok=True)
     shutil.copytree(task.fixture_path, repo_dir)
+    if task.grader_path:
+        shutil.copytree(task.grader_path, grader_dir)
     initialize_git_repo(repo_dir)
 
     prompt = render_prompt(task, prompt_type, prompt_dir)
@@ -195,7 +200,7 @@ def run_single_task(
                 check=False,
             )
         codex_exit_code = codex_result.returncode
-        check_result = run_success_check(repo_dir, task.success_check, timeout_seconds)
+        check_result = run_success_check(repo_dir, task.success_check, timeout_seconds, grader_dir if task.grader_path else None)
         check_exit_code = check_result.returncode
         check_path.write_text((check_result.stdout or "") + (check_result.stderr or ""), encoding="utf-8")
         outcome = "success" if check_exit_code == 0 else "failure"
@@ -206,6 +211,7 @@ def run_single_task(
         "trace_path": _relative_to(trace_path, output_root),
         "outcome": outcome,
         "workdir": _relative_to(repo_dir, output_root),
+        "grader_path": _relative_to(grader_dir, output_root) if task.grader_path else "",
         "prompt_path": _relative_to(prompt_path, output_root),
         "codex_exit_code": codex_exit_code,
         "success_check": task.success_check,
@@ -213,12 +219,17 @@ def run_single_task(
     }
 
 
-def run_success_check(repo_dir: str | Path, success_check: str, timeout_seconds: int = 120) -> subprocess.CompletedProcess[str]:
+def run_success_check(
+    repo_dir: str | Path,
+    success_check: str,
+    timeout_seconds: int = 120,
+    grader_dir: str | Path | None = None,
+) -> subprocess.CompletedProcess[str]:
     return subprocess.run(
         success_check,
         cwd=repo_dir,
         shell=True,
-        env=_clean_git_env(),
+        env=_clean_git_env({"CODEXTRACE_GRADER_DIR": str(Path(grader_dir).resolve())} if grader_dir else None),
         text=True,
         stdout=subprocess.PIPE,
         stderr=subprocess.STDOUT,
@@ -792,8 +803,10 @@ def _relative_to(path: Path, root: Path) -> str:
         return str(path)
 
 
-def _clean_git_env() -> dict[str, str]:
+def _clean_git_env(extra: dict[str, str] | None = None) -> dict[str, str]:
     env = dict(os.environ)
     for key in ("GIT_DIR", "GIT_WORK_TREE", "GIT_INDEX_FILE"):
         env.pop(key, None)
+    if extra:
+        env.update(extra)
     return env
