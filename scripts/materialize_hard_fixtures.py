@@ -740,6 +740,90 @@ TASK_DEFS = [
                 raise AssertionError("exhausted retries should raise RetryError")
         """),
     },
+    {
+        "task_id": "HARD-013",
+        "category": "multi_turn_change",
+        "repo_hint": "typescript/filter_builder",
+        "instruction": "First add nested filter groups for and/or expressions; then add negation while preserving existing equality, range, and contains filters.",
+        "public_success_check": "npm test",
+        "success_check": "node ../grader/check.mjs",
+        "files": {
+            "package.json": node_package(),
+            "src/filterBuilder.mjs": """
+                export function buildFilter(input) {
+                  if (input.op === 'eq') {
+                    return `${input.field} = ${quote(input.value)}`;
+                  }
+                  if (input.op === 'range') {
+                    return `${input.field} BETWEEN ${quote(input.min)} AND ${quote(input.max)}`;
+                  }
+                  if (input.op === 'contains') {
+                    return `${input.field} CONTAINS ${quote(input.value)}`;
+                  }
+                  throw new Error(`unknown filter op: ${input.op}`);
+                }
+
+                function quote(value) {
+                  if (typeof value === 'number') return String(value);
+                  return `'${String(value).replaceAll(\"'\", \"''\")}'`;
+                }
+            """,
+            "tests/filter-builder.test.mjs": """
+                import assert from 'node:assert/strict';
+                import { test } from 'node:test';
+                import { buildFilter } from '../src/filterBuilder.mjs';
+
+                test('builds and/or groups while preserving leaf filters', () => {
+                  assert.equal(
+                    buildFilter({
+                      op: 'and',
+                      filters: [
+                        { op: 'eq', field: 'status', value: 'open' },
+                        { op: 'or', filters: [
+                          { op: 'range', field: 'age', min: 18, max: 30 },
+                          { op: 'contains', field: 'name', value: \"O'Neil\" },
+                        ] },
+                      ],
+                    }),
+                    \"(status = 'open' AND (age BETWEEN 18 AND 30 OR name CONTAINS 'O''Neil'))\"
+                  );
+                });
+            """,
+        },
+        "grader": node_grader("""
+            run('npm', ['test']);
+            const { buildFilter } = await loadModule('src/filterBuilder.mjs');
+            assert.equal(
+              buildFilter({ op: 'not', filter: { op: 'eq', field: 'archived', value: true } }),
+              \"NOT (archived = true)\"
+            );
+            assert.equal(
+              buildFilter({
+                op: 'not',
+                filter: {
+                  op: 'or',
+                  filters: [
+                    { op: 'eq', field: 'status', value: 'closed' },
+                    { op: 'contains', field: 'title', value: 'wip' },
+                  ],
+                },
+              }),
+              \"NOT ((status = 'closed' OR title CONTAINS 'wip'))\"
+            );
+            assert.equal(
+              buildFilter({
+                op: 'and',
+                filters: [
+                  { op: 'eq', field: 'priority', value: 'high' },
+                  { op: 'not', filter: { op: 'range', field: 'age', min: 0, max: 7 } },
+                ],
+              }),
+              \"(priority = 'high' AND NOT (age BETWEEN 0 AND 7))\"
+            );
+            assert.equal(buildFilter({ op: 'eq', field: 'active', value: false }), 'active = false');
+            assert.throws(() => buildFilter({ op: 'and', filters: [] }), /empty|filter/i);
+        """),
+    },
 ]
 
 
