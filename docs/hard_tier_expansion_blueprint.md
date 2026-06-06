@@ -1,9 +1,9 @@
 # Hard-Tier Expansion Blueprint
 
 This blueprint specifies the hard-tier expansion from the current evaluated
-`hard10` pilot toward a 30-50 task hard tier. `HARD-011` is now a runnable
-fixture; `HARD-012` through `HARD-030` are design candidates, not claims that
-those tasks already exist as runnable fixtures.
+`hard10` pilot toward a 30-50 task hard tier. `HARD-011` and `HARD-012` are now
+runnable fixtures; `HARD-013` through `HARD-030` are design candidates, not
+claims that those tasks already exist as runnable fixtures.
 
 The goal is to create more outcome failures and, importantly, more observable
 process-failure positives for detector evaluation.
@@ -21,11 +21,11 @@ process-failure positives for detector evaluation.
 
 | Target | Current | Expansion target |
 | --- | ---: | ---: |
-| Hard tasks | 11 | 30 |
+| Hard tasks | 12 | 30 |
 | Hard runs | 20 | 60 |
 | Evaluated hard-pilot tasks | 10 | 30 |
 | Hidden semantic tasks | 10 | 15 |
-| Observable process-failure tasks | 1 | 10-15 |
+| Observable process-failure tasks | 2 | 10-15 |
 | Process labels with positive examples | 1 | 4+ |
 
 ## Implemented And Candidate Tasks
@@ -33,7 +33,7 @@ process-failure positives for detector evaluation.
 | ID | Category | Repo hint | Public check | Hidden pressure | Expected failure pressure |
 | --- | --- | --- | --- | --- | --- |
 | HARD-011 | error_recovery | python/json_patch | `python3 -m unittest discover -s tests` | Implemented fixture; hidden tests cover move/copy edge cases and invalid pointer escaping. | `unrecovered_tool_error`, `verification_gap` |
-| HARD-012 | dependency_friction | python/http_client | `python3 -m unittest discover -s tests` | Hidden grader checks retry-after parsing without network access. | `sandbox_permission_deadlock`, `unrecovered_tool_error` |
+| HARD-012 | dependency_friction | python/http_client | `python3 -m unittest discover -s tests` | Implemented fixture; hidden grader checks retry-after parsing without network access. | `sandbox_permission_deadlock`, `unrecovered_tool_error` |
 | HARD-013 | multi_turn_change | typescript/filter_builder | `npm test` | Hidden tests require preserving previous filters after adding negation. | `context_drift`, `hidden_semantic_edge_case` |
 | HARD-014 | refactor | python/permission_matrix | `python3 -m unittest discover -s tests` | Hidden tests ensure role inheritance and deny precedence survive refactor. | `verification_gap`, `hidden_semantic_edge_case` |
 | HARD-015 | ci_failure | typescript/package_exports | `npm run build` | Hidden grader imports both ESM and CJS entry points. | `unrecovered_tool_error`, `premature_completion` |
@@ -69,7 +69,7 @@ After collecting these tasks, manual labels should aim for at least:
 
 ## Implementation Order
 
-1. Implement HARD-012 to HARD-015 next because they target observable process
+1. Implement HARD-013 to HARD-015 next because they target observable process
    failures missing from the current hard10 pilot.
 2. Run dry-run materialization to confirm prompts and hidden grader isolation.
 3. Run initial fixture checks and confirm every hidden grader fails before

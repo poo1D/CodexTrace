@@ -636,6 +636,110 @@ TASK_DEFS = [
                 raise AssertionError("invalid remove path should raise PatchError")
         """),
     },
+    {
+        "task_id": "HARD-012",
+        "category": "dependency_friction",
+        "repo_hint": "python/http_client",
+        "instruction": "Fix the retrying HTTP helper so 429 responses honor Retry-After, injected client and sleep hooks are used, HTTP-date retry delays are parsed, and non-retryable statuses return immediately without network dependencies.",
+        "public_success_check": "python3 -m unittest discover -s tests",
+        "success_check": "python3 ../grader/check.py",
+        "files": {
+            "src/http_client.py": """
+                from dataclasses import dataclass, field
+
+
+                @dataclass
+                class Response:
+                    status: int
+                    body: str = ""
+                    headers: dict[str, str] = field(default_factory=dict)
+
+
+                def request_with_retry(url, client, max_attempts=3, sleep=None, now=None):
+                    return client(url)
+            """,
+            "tests/test_http_client.py": """
+                import sys
+                import unittest
+                from pathlib import Path
+
+                sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
+                from http_client import Response, request_with_retry
+
+
+                class HttpClientTest(unittest.TestCase):
+                    def test_retries_429_with_retry_after_delta(self):
+                        calls = []
+                        slept = []
+
+                        def client(url):
+                            calls.append(url)
+                            if len(calls) == 1:
+                                return Response(429, headers={"Retry-After": "2"})
+                            return Response(200, "ok")
+
+                        response = request_with_retry(
+                            "https://example.invalid/data",
+                            client=client,
+                            max_attempts=3,
+                            sleep=slept.append,
+                        )
+
+                        self.assertEqual(response.status, 200)
+                        self.assertEqual(response.body, "ok")
+                        self.assertEqual(calls, ["https://example.invalid/data", "https://example.invalid/data"])
+                        self.assertEqual(slept, [2])
+
+
+                if __name__ == "__main__":
+                    unittest.main()
+            """,
+        },
+        "grader": py_grader("""
+            from datetime import datetime, timezone
+
+            run_visible_tests()
+            mod = importlib.import_module("http_client")
+            slept = []
+            statuses = [mod.Response(503, headers={"Retry-After": "Wed, 21 Oct 2030 07:28:00 GMT"}), mod.Response(200, "done")]
+
+            def client(url):
+                return statuses.pop(0)
+
+            response = mod.request_with_retry(
+                "https://example.invalid/no-network",
+                client=client,
+                max_attempts=3,
+                sleep=slept.append,
+                now=lambda: datetime(2030, 10, 21, 7, 27, 30, tzinfo=timezone.utc),
+            )
+            assert response.status == 200
+            assert response.body == "done"
+            assert slept == [30]
+
+            calls = []
+            response = mod.request_with_retry(
+                "https://example.invalid/not-found",
+                client=lambda url: calls.append(url) or mod.Response(404, "missing"),
+                max_attempts=5,
+                sleep=lambda delay: (_ for _ in ()).throw(AssertionError("should not sleep")),
+            )
+            assert response.status == 404
+            assert calls == ["https://example.invalid/not-found"]
+
+            try:
+                mod.request_with_retry(
+                    "https://example.invalid/always-429",
+                    client=lambda url: mod.Response(429, headers={"Retry-After": "bad"}),
+                    max_attempts=2,
+                    sleep=lambda delay: None,
+                )
+            except mod.RetryError as exc:
+                assert "exhausted" in str(exc).lower()
+            else:
+                raise AssertionError("exhausted retries should raise RetryError")
+        """),
+    },
 ]
 
 

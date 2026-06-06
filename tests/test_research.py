@@ -27,13 +27,16 @@ def test_load_tasks_and_render_prompts():
     assert "Run a focused verification command after the edit" in intervention
 
 
-def test_hard_task_manifest_includes_json_patch_expansion():
+def test_hard_task_manifest_includes_first_expansion_fixtures():
     tasks = {task.task_id: task for task in load_tasks("benchmark/hard/tasks.jsonl")}
 
-    assert len(tasks) == 11
+    assert len(tasks) == 12
     assert tasks["HARD-011"].repo_hint == "python/json_patch"
     assert tasks["HARD-011"].public_success_check == "python3 -m unittest discover -s tests"
     assert tasks["HARD-011"].success_check == "python3 ../grader/check.py"
+    assert tasks["HARD-012"].repo_hint == "python/http_client"
+    assert tasks["HARD-012"].public_success_check == "python3 -m unittest discover -s tests"
+    assert tasks["HARD-012"].success_check == "python3 ../grader/check.py"
 
 
 def test_aggregate_runs_baseline_vs_intervention():
