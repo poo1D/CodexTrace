@@ -77,6 +77,19 @@ def node_grader(body: str) -> str:
     return textwrap.dedent(preamble).lstrip() + "\n\n" + textwrap.dedent(body).strip() + "\n"
 
 
+def public_success_check(task: dict[str, object]) -> str:
+    if task.get("public_success_check"):
+        return str(task["public_success_check"])
+    task_id = str(task["task_id"])
+    if task_id == "CT-022":
+        return "npm run build"
+    if task_id == "CT-024":
+        return "npm run lint && npm test"
+    if str(task["success_check"]).startswith("node "):
+        return "npm test"
+    return "python3 -m unittest discover -s tests"
+
+
 TASK_DEFS = [
     {
         "task_id": "CT-001",
@@ -1406,6 +1419,7 @@ def materialize() -> None:
             "fixture_path": f"repos/{task_id}/repo",
             "grader_path": f"repos/{task_id}/grader",
             "instruction": task["instruction"],
+            "public_success_check": public_success_check(task),
             "success_check": task["success_check"],
         })
     TASKS.write_text("".join(json.dumps(row, ensure_ascii=False, sort_keys=True) + "\n" for row in rows), encoding="utf-8")

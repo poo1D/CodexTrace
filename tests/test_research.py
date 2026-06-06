@@ -115,7 +115,9 @@ def test_dry_run_materializes_external_grader(tmp_path):
     tasks = tmp_path / "tasks.jsonl"
     tasks.write_text(
         '{"task_id":"T-001","category":"bug_fix","fixture_path":"repo","grader_path":"grader",'
-        '"repo_hint":"python/example","instruction":"Fix the value.","success_check":"python3 ../grader/check.py"}\n',
+        '"repo_hint":"python/example","instruction":"Fix the value.",'
+        '"public_success_check":"python3 -m unittest discover -s tests",'
+        '"success_check":"python3 ../grader/check.py"}\n',
         encoding="utf-8",
     )
 
@@ -127,6 +129,9 @@ def test_dry_run_materializes_external_grader(tmp_path):
     )
 
     copied_grader = tmp_path / "runs" / "T-001" / "baseline" / "grader" / "check.py"
+    prompt = tmp_path / "runs" / "T-001" / "baseline" / "prompt.md"
 
     assert rows[0]["grader_path"] == "T-001/baseline/grader"
     assert copied_grader.exists()
+    assert "../grader" not in prompt.read_text(encoding="utf-8")
+    assert "python3 -m unittest discover -s tests" in prompt.read_text(encoding="utf-8")

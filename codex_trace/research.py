@@ -50,6 +50,7 @@ class BenchmarkTask:
     category: str
     instruction: str
     success_check: str
+    public_success_check: str = ""
     repo_hint: str = ""
     fixture_path: str = ""
     grader_path: str = ""
@@ -75,6 +76,7 @@ def load_tasks(path: str | Path) -> list[BenchmarkTask]:
             category=str(item["category"]),
             instruction=str(item["instruction"]),
             success_check=str(item["success_check"]),
+            public_success_check=str(item.get("public_success_check", item["success_check"])),
             repo_hint=str(item.get("repo_hint", "")),
             fixture_path=_resolve_optional_path(task_path.parent, item.get("fixture_path", "")),
             grader_path=_resolve_optional_path(task_path.parent, item.get("grader_path", "")),
@@ -111,7 +113,7 @@ def render_prompt(task: BenchmarkTask, prompt_type: str, prompt_dir: str | Path 
         task_id=task.task_id,
         category=task.category,
         instruction=task.instruction,
-        success_check=task.success_check,
+        success_check=task.public_success_check or task.success_check,
         repo_hint=task.repo_hint,
     )
 
@@ -176,14 +178,14 @@ def run_single_task(
         shutil.rmtree(run_dir)
     run_dir.mkdir(parents=True, exist_ok=True)
     shutil.copytree(task.fixture_path, repo_dir)
-    if task.grader_path:
-        shutil.copytree(task.grader_path, grader_dir)
     initialize_git_repo(repo_dir)
 
     prompt = render_prompt(task, prompt_type, prompt_dir)
     prompt_path.write_text(prompt, encoding="utf-8")
 
     if dry_run:
+        if task.grader_path:
+            shutil.copytree(task.grader_path, grader_dir)
         outcome = "not_run"
         codex_exit_code = None
         check_exit_code = None
@@ -200,6 +202,8 @@ def run_single_task(
                 check=False,
             )
         codex_exit_code = codex_result.returncode
+        if task.grader_path:
+            shutil.copytree(task.grader_path, grader_dir)
         check_result = run_success_check(repo_dir, task.success_check, timeout_seconds, grader_dir if task.grader_path else None)
         check_exit_code = check_result.returncode
         check_path.write_text((check_result.stdout or "") + (check_result.stderr or ""), encoding="utf-8")

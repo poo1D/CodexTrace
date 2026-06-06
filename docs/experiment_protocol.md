@@ -24,6 +24,10 @@ Current seed:
 
 - `benchmark/tasks.jsonl` contains 30 tasks
 - `benchmark/repos` contains runnable fixture repositories and external graders
+- `benchmark/hard/tasks.jsonl` contains 10 harder tasks with hidden edge-case
+  graders
+- `benchmark/hard/repos` contains runnable hard-tier fixture repositories and
+  hidden grader directories
 - `benchmark/prompts/baseline.txt`
 - `benchmark/prompts/intervention.txt`
 - `benchmark/smoke/tasks.jsonl` contains 3 runnable fixtures for harness validation
@@ -66,7 +70,9 @@ codex-trace research run \
 
 The runner copies the fixture repo into an isolated run directory, initializes a
 fresh git repository, executes `codex exec --json`, then runs the task's external
-grader from outside the agent worktree. It writes a run manifest:
+grader from outside the agent worktree. For hidden-grader tasks, the prompt
+contains only `public_success_check`; the hidden grader directory is copied into
+the run directory only after the Codex process exits. It writes a run manifest:
 
 ```jsonl
 {"task_id":"CT-001","prompt_type":"baseline","trace_path":"runs/CT-001/baseline.jsonl","outcome":"failure"}
@@ -170,15 +176,22 @@ Current pilot status:
 - `benchmark/pilot/batch2-real`: 8 non-smoke tasks x 2 prompt conditions
 - `benchmark/pilot/batch3-real`: 15 non-smoke tasks x 2 prompt conditions
 - `benchmark/pilot/full30-real`: 30 non-smoke tasks x 2 prompt conditions
+- `benchmark/hard/pilot/hard10-real`: 10 hard tasks x 2 prompt conditions
 - The full 30-task pilot has 60/60 successful outcomes. It validates collection
   and process-metric analysis, but a harder tier is still needed for
   outcome-failure analysis.
+- The hard 10-task pilot has 15/20 successful outcomes. Baseline success is
+  `0.7`, intervention success is `0.8`, repeated tool calls drop from
+  `9.2 -> 6.2`, and average token usage drops from about `248.9k -> 187.5k`.
+  These traces supply the first outcome-failure examples, while also showing a
+  limitation of trace-only rules: hidden semantic edge failures can receive
+  `failure_score=0` when the visible process looks clean.
 
 Required next dataset extension:
 
-- 10-20 harder tasks with hidden multi-step requirements
-- include at least several expected baseline failures
-- keep external graders outside the agent worktree
+- expand the hard tier beyond 10 tasks
+- include at least several additional expected baseline failures
+- keep hidden graders outside the agent worktree during Codex execution
 - target tasks where success requires preserving multiple invariants, diagnosing
   misleading visible tests, or avoiding over-broad edits
 

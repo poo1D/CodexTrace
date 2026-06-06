@@ -10,6 +10,10 @@ This directory is the starting point for the paper experiment:
   refactors, CI failures, error localization, and multi-turn changes.
 - `repos/`: runnable fixture repositories plus external grader directories for
   the 30 seed tasks.
+- `hard/tasks.jsonl`: 10 harder fixtures with hidden edge-case graders for
+  outcome-failure analysis.
+- `hard/repos/`: runnable hard-tier fixture repositories plus hidden grader
+  directories.
 - `prompts/baseline.txt`: the normal Codex prompt template.
 - `prompts/intervention.txt`: the harness-constrained prompt template.
 - `runs.example.jsonl`: a tiny manifest that reuses demo traces to exercise the
@@ -25,6 +29,8 @@ This directory is the starting point for the paper experiment:
 - `pilot/batch3-real`: 30 real non-smoke pilot traces for test-writing,
   refactor, CI, error-localization, and multi-turn tasks.
 - `pilot/full30-real`: combined 30-task / 60-run real benchmark pilot.
+- `hard/pilot/hard10-real`: combined 10-task / 20-run hard-tier real pilot with
+  genuine outcome failures.
 
 ## Render a Prompt
 
@@ -98,3 +104,21 @@ All 60 runs passed their external graders. This validates the harness and shows
 intervention-side process savings, but it does not yet provide outcome-failure
 examples. A harder task tier is required for final paper claims about failure
 prevalence, detector recall on true failures, and success-rate lift.
+
+## Current Hard Pilot Result
+
+The current hard pilot covers 10 harder tasks with baseline and intervention
+conditions:
+
+```bash
+codex-trace research aggregate benchmark/hard/pilot/hard10-real/runs.jsonl
+```
+
+This pilot has 20 runs: 15 successful outcomes and 5 failures. Baseline success
+is `0.7`, intervention success is `0.8`, repeated tool calls drop from
+`9.2 -> 6.2`, and average token usage drops from about `248.9k -> 187.5k`.
+
+Hard-tier prompts expose only public verification commands. Hidden graders are
+copied into the run directory only after the Codex process exits, then used to
+assign final outcomes. This prevents grader leakage while preserving a visible
+success check for realistic agent behavior.

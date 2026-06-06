@@ -1,0 +1,10 @@
+{"failure_score": 0, "failure_tags": [], "notes": "", "outcome": "failure", "prompt_type": "baseline", "suggested_tags": [], "task_id": "HARD-001", "trace_path": "HARD-001/baseline/trace.jsonl"}
+{"failure_score": 0, "failure_tags": [], "notes": "", "outcome": "success", "prompt_type": "intervention", "suggested_tags": [], "task_id": "HARD-001", "trace_path": "HARD-001/intervention/trace.jsonl"}
+{"failure_score": 0, "failure_tags": [], "notes": "", "outcome": "success", "prompt_type": "baseline", "suggested_tags": [], "task_id": "HARD-002", "trace_path": "HARD-002/baseline/trace.jsonl"}
+{"failure_score": 0, "failure_tags": [], "notes": "", "outcome": "success", "prompt_type": "intervention", "suggested_tags": [], "task_id": "HARD-002", "trace_path": "HARD-002/intervention/trace.jsonl"}
+{"failure_score": 0, "failure_tags": [], "notes": "", "outcome": "success", "prompt_type": "baseline", "suggested_tags": [], "task_id": "HARD-003", "trace_path": "HARD-003/baseline/trace.jsonl"}
+{"failure_score": 0, "failure_tags": [], "notes": "", "outcome": "success", "prompt_type": "intervention", "suggested_tags": [], "task_id": "HARD-003", "trace_path": "HARD-003/intervention/trace.jsonl"}
+{"failure_score": 0, "failure_tags": [], "notes": "", "outcome": "success", "prompt_type": "baseline", "suggested_tags": [], "task_id": "HARD-004", "trace_path": "HARD-004/baseline/trace.jsonl"}
+{"failure_score": 0, "failure_tags": [], "notes": "", "outcome": "success", "prompt_type": "intervention", "suggested_tags": [], "task_id": "HARD-004", "trace_path": "HARD-004/intervention/trace.jsonl"}
+{"failure_score": 0, "failure_tags": [], "notes": "", "outcome": "success", "prompt_type": "baseline", "suggested_tags": [], "task_id": "HARD-005", "trace_path": "HARD-005/baseline/trace.jsonl"}
+{"failure_score": 0, "failure_tags": [], "notes": "", "outcome": "success", "prompt_type": "intervention", "suggested_tags": [], "task_id": "HARD-005", "trace_path": "HARD-005/intervention/trace.jsonl"}

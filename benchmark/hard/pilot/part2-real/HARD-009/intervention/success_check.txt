@@ -1,0 +1,5 @@
+Traceback (most recent call last):
+  File "/private/tmp/codextrace-hard-pilot2-real/HARD-009/intervention/repo/../grader/check.py", line 30, in <module>
+    assert mod.can_book({"role": "member"}, "2026-07-10", 1, ranges), "ranges are end-exclusive"
+           ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ranges are end-exclusive
