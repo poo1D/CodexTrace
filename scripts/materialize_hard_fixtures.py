@@ -2314,6 +2314,171 @@ TASK_DEFS = [
             assert mod.normalize_path(r"\\\\server\\share\\..\\other") == "//server/share/other"
         """),
     },
+    {
+        "task_id": "HARD-029",
+        "category": "refactor",
+        "repo_hint": "typescript/validation_pipeline",
+        "instruction": "Refactor the registration validation pipeline so it accumulates every validation error in a stable field order instead of stopping at the first failure, while preserving the public validateRegistration(input) API, valid-user normalization, and input immutability.",
+        "public_success_check": "npm test",
+        "success_check": "node ../grader/check.mjs",
+        "files": {
+            "package.json": node_package(),
+            "README.md": """
+                # validation-pipeline
+
+                `validateRegistration(input)` returns `{ valid, errors, value }`.
+
+                Validation order is `email`, `password`, `roles`.
+
+                Rules:
+
+                - `email` is required and must contain `@`.
+                - `password` is required and must be at least 8 characters.
+                - `roles` must be a non-empty array.
+                - Valid output normalizes email by trimming and lowercasing it.
+                - Invalid output keeps `value` as `null` and reports all errors in validation order.
+            """,
+            "src/validationPipeline.mjs": """
+                export function validateRegistration(input) {
+                  const data = input ?? {};
+
+                  if (!data.email || !String(data.email).includes('@')) {
+                    return invalid('email', 'invalid_email', 'email must contain @');
+                  }
+
+                  if (!data.password || String(data.password).length < 8) {
+                    return invalid('password', 'weak_password', 'password must be at least 8 characters');
+                  }
+
+                  if (!Array.isArray(data.roles) || data.roles.length === 0) {
+                    return invalid('roles', 'missing_roles', 'at least one role is required');
+                  }
+
+                  return {
+                    valid: true,
+                    errors: [],
+                    value: {
+                      email: String(data.email).trim().toLowerCase(),
+                      password: data.password,
+                      roles: [...data.roles],
+                    },
+                  };
+                }
+
+                function invalid(field, code, message) {
+                  return {
+                    valid: false,
+                    errors: [{ field, code, message }],
+                    value: null,
+                  };
+                }
+            """,
+            "tests/validation-pipeline.test.mjs": """
+                import assert from 'node:assert/strict';
+                import { test } from 'node:test';
+                import { validateRegistration } from '../src/validationPipeline.mjs';
+
+                test('normalizes valid registrations', () => {
+                  const result = validateRegistration({
+                    email: '  ADA@EXAMPLE.COM  ',
+                    password: 'correct horse',
+                    roles: ['admin'],
+                  });
+
+                  assert.equal(result.valid, true);
+                  assert.deepEqual(result.errors, []);
+                  assert.deepEqual(result.value, {
+                    email: 'ada@example.com',
+                    password: 'correct horse',
+                    roles: ['admin'],
+                  });
+                });
+
+                test('reports an invalid email', () => {
+                  const result = validateRegistration({
+                    email: 'ada.example.com',
+                    password: 'correct horse',
+                    roles: ['admin'],
+                  });
+
+                  assert.equal(result.valid, false);
+                  assert.equal(result.errors[0].field, 'email');
+                  assert.equal(result.errors[0].code, 'invalid_email');
+                  assert.equal(result.value, null);
+                });
+
+                test('reports a weak password', () => {
+                  const result = validateRegistration({
+                    email: 'ada@example.com',
+                    password: 'short',
+                    roles: ['admin'],
+                  });
+
+                  assert.equal(result.valid, false);
+                  assert.equal(result.errors[0].field, 'password');
+                  assert.equal(result.errors[0].code, 'weak_password');
+                });
+            """,
+        },
+        "grader": node_grader("""
+            run('npm', ['test']);
+
+            const { validateRegistration } = await loadModule('src/validationPipeline.mjs');
+
+            const invalidAll = validateRegistration({
+              email: 'ada.example.com',
+              password: 'short',
+              roles: [],
+            });
+            assert.equal(invalidAll.valid, false);
+            assert.equal(invalidAll.value, null);
+            assert.deepEqual(
+              invalidAll.errors.map(error => [error.field, error.code]),
+              [
+                ['email', 'invalid_email'],
+                ['password', 'weak_password'],
+                ['roles', 'missing_roles'],
+              ],
+              'validation should accumulate every error in stable field order'
+            );
+
+            const missingAll = validateRegistration({});
+            assert.deepEqual(
+              missingAll.errors.map(error => error.field),
+              ['email', 'password', 'roles']
+            );
+
+            const source = Object.freeze({
+              email: '  GRACE@EXAMPLE.COM  ',
+              password: 'long-enough',
+              roles: Object.freeze(['editor']),
+            });
+            const valid = validateRegistration(source);
+            assert.equal(valid.valid, true);
+            assert.deepEqual(valid.value, {
+              email: 'grace@example.com',
+              password: 'long-enough',
+              roles: ['editor'],
+            });
+            assert.notStrictEqual(valid.value.roles, source.roles, 'roles should be copied');
+            assert.deepEqual(source, {
+              email: '  GRACE@EXAMPLE.COM  ',
+              password: 'long-enough',
+              roles: ['editor'],
+            });
+
+            const mixed = validateRegistration({
+              email: 'linus@example.com',
+              password: 'tiny',
+              roles: [],
+            });
+            assert.deepEqual(
+              mixed.errors.map(error => error.field),
+              ['password', 'roles'],
+              'later validators should still run when an earlier one passes'
+            );
+        """),
+    },
 ]
 
 

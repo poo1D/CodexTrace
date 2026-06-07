@@ -30,7 +30,7 @@ def test_load_tasks_and_render_prompts():
 def test_hard_task_manifest_includes_first_expansion_fixtures():
     tasks = {task.task_id: task for task in load_tasks("benchmark/hard/tasks.jsonl")}
 
-    assert len(tasks) == 28
+    assert len(tasks) == 29
     assert tasks["HARD-011"].repo_hint == "python/json_patch"
     assert tasks["HARD-011"].public_success_check == "python3 -m unittest discover -s tests"
     assert tasks["HARD-011"].success_check == "python3 ../grader/check.py"
@@ -85,6 +85,9 @@ def test_hard_task_manifest_includes_first_expansion_fixtures():
     assert tasks["HARD-028"].repo_hint == "python/path_normalizer"
     assert tasks["HARD-028"].public_success_check == "python3 -m unittest discover -s tests"
     assert tasks["HARD-028"].success_check == "python3 ../grader/check.py"
+    assert tasks["HARD-029"].repo_hint == "typescript/validation_pipeline"
+    assert tasks["HARD-029"].public_success_check == "npm test"
+    assert tasks["HARD-029"].success_check == "node ../grader/check.mjs"
 
 
 def test_aggregate_runs_baseline_vs_intervention():
