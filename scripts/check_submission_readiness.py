@@ -22,6 +22,15 @@ REQUIRED_HARD30_OUTPUTS = (
     "paper-report.json",
     "paper-report.md",
 )
+VALID_FAILURE_TAGS = {
+    "verification_gap",
+    "unrecovered_tool_error",
+    "repetitive_exploration",
+    "context_drift",
+    "premature_completion",
+    "sandbox_permission_deadlock",
+    "hidden_semantic_edge_case",
+}
 
 
 def check_exists(path: Path, description: str) -> dict[str, Any]:
@@ -81,12 +90,26 @@ def check_manual_labels(run_dir: Path) -> dict[str, Any]:
         for row in rows
         if row.get("outcome") == "failure" and not row.get("failure_tags")
     ]
+    missing_notes = [
+        f"{row.get('task_id')}/{row.get('prompt_type')}"
+        for row in rows
+        if row.get("outcome") == "failure" and not str(row.get("notes", "")).strip()
+    ]
+    unknown_tags = sorted({
+        str(tag)
+        for row in rows
+        for tag in row.get("failure_tags", [])
+        if tag not in VALID_FAILURE_TAGS
+    })
+    ok = not (unlabeled_failures or missing_notes or unknown_tags)
     return {
         "name": "hard30 manual labels",
-        "ok": not unlabeled_failures,
+        "ok": ok,
         "evidence": str(labels_path),
         "detail": f"{len(rows)} label row(s)",
         "unlabeled_failures": unlabeled_failures,
+        "missing_notes": missing_notes,
+        "unknown_tags": unknown_tags,
     }
 
 
@@ -172,6 +195,12 @@ def render_report(report: dict[str, Any]) -> str:
         detail = check.get("detail", "")
         if check.get("missing"):
             detail = "missing: " + ", ".join(check["missing"])
+        if check.get("unlabeled_failures"):
+            detail = "unlabeled failures: " + ", ".join(check["unlabeled_failures"])
+        if check.get("missing_notes"):
+            detail = "missing notes: " + ", ".join(check["missing_notes"])
+        if check.get("unknown_tags"):
+            detail = "unknown tags: " + ", ".join(check["unknown_tags"])
         lines.append(f"| {check['name']} | {status} | `{check['evidence']}` | {detail} |")
     if report["blocking"]:
         lines.extend(["", "## Blocking Items", ""])

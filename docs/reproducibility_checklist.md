@@ -188,6 +188,11 @@ PYTHONPATH=. PYTHONPYCACHEPREFIX=/tmp/codextrace-pycache \
 When the gate is not ready, the Markdown/JSON report includes ordered next
 actions for collection, merge, finalization, and labeling.
 
+Manual label rows for failed runs must include at least one known failure tag
+and a non-empty `notes` rationale. Known tags are the taxonomy labels in
+`docs/failure_taxonomy.md` plus the hard-tier boundary label
+`hidden_semantic_edge_case`.
+
 Check that all hard-tier initial fixtures fail their hidden graders before an
 agent edits them:
 

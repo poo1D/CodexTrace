@@ -483,6 +483,7 @@ def test_submission_readiness_accepts_complete_synthetic_artifact(tmp_path):
             "prompt_type": "baseline",
             "outcome": "failure",
             "failure_tags": ["hidden_semantic_edge_case"],
+            "notes": "Hidden semantic edge case captured by the synthetic label.",
         })
     run_dir.joinpath("runs.jsonl").write_text(
         "".join(json.dumps(row, sort_keys=True) + "\n" for row in runs),
@@ -503,6 +504,62 @@ def test_submission_readiness_accepts_complete_synthetic_artifact(tmp_path):
     assert report["next_actions"] == []
     assert "Ready: yes" in markdown
     assert "submission-ready hard30 artifact" in report["positioning"]
+
+
+def test_submission_readiness_rejects_low_quality_manual_labels(tmp_path):
+    root = Path.cwd()
+    selection_dir = tmp_path / "selection"
+    selection_dir.mkdir()
+    task_ids = [f"HARD-{index:03d}" for index in range(1, 31)]
+    selection_dir.joinpath("task_ids.txt").write_text("\n".join(task_ids) + "\n", encoding="utf-8")
+    selection_dir.joinpath("tasks.jsonl").write_text("{}\n", encoding="utf-8")
+    selection_dir.joinpath("manifest.json").write_text("{}\n", encoding="utf-8")
+    run_dir = tmp_path / "hard30-real"
+    run_dir.mkdir()
+    rows = []
+    labels = []
+    for task_id in task_ids:
+        rows.extend([
+            {
+                "task_id": task_id,
+                "prompt_type": "baseline",
+                "trace_path": str((root / "demo/failing-codex-trace.jsonl").resolve()),
+                "outcome": "failure",
+            },
+            {
+                "task_id": task_id,
+                "prompt_type": "intervention",
+                "trace_path": str((root / "demo/healthy-codex-trace.jsonl").resolve()),
+                "outcome": "success",
+            },
+        ])
+        labels.append({
+            "task_id": task_id,
+            "prompt_type": "baseline",
+            "outcome": "failure",
+            "failure_tags": ["not_a_taxonomy_tag"],
+            "notes": "",
+        })
+    run_dir.joinpath("runs.jsonl").write_text(
+        "".join(json.dumps(row, sort_keys=True) + "\n" for row in rows),
+        encoding="utf-8",
+    )
+    for name in ("aggregate.json", "aggregate.md", "runs.csv", "labels.jsonl", "paper-report.json", "paper-report.md"):
+        run_dir.joinpath(name).write_text("{}\n", encoding="utf-8")
+    run_dir.joinpath("manual-labels.jsonl").write_text(
+        "".join(json.dumps(row, sort_keys=True) + "\n" for row in labels),
+        encoding="utf-8",
+    )
+
+    report = build_report(selection_dir, run_dir)
+    label_check = next(check for check in report["checks"] if check["name"] == "hard30 manual labels")
+    markdown = render_report(report)
+
+    assert report["ready"] is False
+    assert label_check["unknown_tags"] == ["not_a_taxonomy_tag"]
+    assert len(label_check["missing_notes"]) == 30
+    assert "hard30 manual labels" in report["blocking"]
+    assert "unknown tags: not_a_taxonomy_tag" in markdown
 
 
 def test_aggregate_runs_baseline_vs_intervention():
