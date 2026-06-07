@@ -3810,6 +3810,236 @@ TASK_DEFS = [
             );
         """),
     },
+    {
+        "task_id": "HARD-039",
+        "category": "multi_turn_tool_debug",
+        "repo_hint": "python/cli_report_writer",
+        "instruction": "Fix the report CLI so --format json and --format text produce deterministic output from any current working directory, create parent directories for the output path, write atomically through a temporary sibling file, and leave existing output untouched when rendering fails. Preserve python3 -m report_writer.cli.",
+        "public_success_check": "python3 -m unittest discover -s tests",
+        "success_check": "python3 ../grader/check.py",
+        "files": {
+            "README.md": """
+                # cli-report-writer
+
+                The CLI reads a JSON report input and writes either JSON or text.
+
+                Usage:
+
+                ```bash
+                python3 -m report_writer.cli --input fixtures/report.json --output out/report.json --format json
+                python3 -m report_writer.cli --input fixtures/report.json --output out/report.txt --format text
+                ```
+
+                Requirements:
+
+                - Work from the repository root or any nested current directory.
+                - Resolve relative input paths against the repository root.
+                - Create parent directories for the output path.
+                - JSON output must use sorted keys and end with a newline.
+                - Text output must use the documented section order.
+                - Writes must be atomic: a rendering failure must leave existing
+                  output unchanged and remove temporary siblings.
+            """,
+            "fixtures/report.json": """
+                {
+                  "title": "Trace Summary",
+                  "metrics": {
+                    "verification_rate": 0.75,
+                    "token_usage": 15200
+                  },
+                  "sections": [
+                    {"name": "Overview", "body": "Agents completed most visible checks."},
+                    {"name": "Failures", "body": "Hidden graders still caught edge cases."}
+                  ]
+                }
+            """,
+            "src/report_writer/__init__.py": """
+                __all__ = ["render_json", "render_text"]
+
+                from .render import render_json, render_text
+            """,
+            "src/report_writer/render.py": """
+                import json
+
+
+                def render_json(report):
+                    return json.dumps(report) + "\\n"
+
+
+                def render_text(report):
+                    lines = [report["title"], ""]
+                    for section in report.get("sections", []):
+                        lines.append(section["name"])
+                        lines.append(section["body"])
+                        lines.append("")
+                    lines.append("Metrics")
+                    for key, value in report.get("metrics", {}).items():
+                        lines.append(f"{key}: {value}")
+                    return "\\n".join(lines) + "\\n"
+            """,
+            "src/report_writer/cli.py": """
+                import argparse
+                import json
+                import sys
+                from pathlib import Path
+
+                from .render import render_json, render_text
+
+
+                def main(argv=None):
+                    parser = argparse.ArgumentParser()
+                    parser.add_argument("--input", required=True)
+                    parser.add_argument("--output", required=True)
+                    parser.add_argument("--format", choices=["json", "text"], required=True)
+                    args = parser.parse_args(argv)
+
+                    input_path = Path(args.input)
+                    report = json.loads(input_path.read_text(encoding="utf-8"))
+                    if report.get("title") == "RAISE":
+                        raise RuntimeError("cannot render report")
+
+                    if args.format == "json":
+                        content = render_json(report)
+                    else:
+                        content = render_text(report)
+
+                    output_path = Path(args.output)
+                    output_path.write_text(content, encoding="utf-8")
+                    return 0
+
+
+                if __name__ == "__main__":
+                    raise SystemExit(main(sys.argv[1:]))
+            """,
+            "tests/test_public_cli.py": """
+                import json
+                import subprocess
+                import sys
+                import tempfile
+                import unittest
+                from pathlib import Path
+
+
+                ROOT = Path(__file__).resolve().parents[1]
+
+
+                class PublicCliTest(unittest.TestCase):
+                    def run_cli(self, *args):
+                        env = {"PYTHONPATH": str(ROOT / "src")}
+                        return subprocess.run(
+                            [sys.executable, "-m", "report_writer.cli", *args],
+                            cwd=ROOT,
+                            env=env,
+                            text=True,
+                            stdout=subprocess.PIPE,
+                            stderr=subprocess.PIPE,
+                            check=False,
+                        )
+
+                    def test_writes_json_report(self):
+                        with tempfile.TemporaryDirectory() as tmp:
+                            output = Path(tmp) / "report.json"
+                            result = self.run_cli(
+                                "--input", "fixtures/report.json",
+                                "--output", str(output),
+                                "--format", "json",
+                            )
+
+                            self.assertEqual(result.returncode, 0, result.stderr)
+                            self.assertEqual(json.loads(output.read_text()), json.loads((ROOT / "fixtures/report.json").read_text()))
+
+                    def test_writes_text_report(self):
+                        with tempfile.TemporaryDirectory() as tmp:
+                            output = Path(tmp) / "report.txt"
+                            result = self.run_cli(
+                                "--input", "fixtures/report.json",
+                                "--output", str(output),
+                                "--format", "text",
+                            )
+
+                            self.assertEqual(result.returncode, 0, result.stderr)
+                            self.assertIn("Trace Summary", output.read_text())
+                            self.assertIn("Metrics", output.read_text())
+
+
+                if __name__ == "__main__":
+                    unittest.main()
+            """,
+        },
+        "grader": py_grader("""
+            import json
+            import os
+            import subprocess
+            import sys
+            import tempfile
+            from pathlib import Path
+
+            run_visible_tests()
+
+            root = Path.cwd()
+            env = os.environ.copy()
+            env["PYTHONPATH"] = str(root / "src")
+
+            def run_cli(cwd, *args):
+                return subprocess.run(
+                    [sys.executable, "-m", "report_writer.cli", *args],
+                    cwd=cwd,
+                    env=env,
+                    text=True,
+                    stdout=subprocess.PIPE,
+                    stderr=subprocess.PIPE,
+                    check=False,
+                )
+
+            with tempfile.TemporaryDirectory() as tmp:
+                tmp_path = Path(tmp)
+                nested_output = tmp_path / "nested" / "reports" / "summary.json"
+                result = run_cli(
+                    root / "src",
+                    "--input", "fixtures/report.json",
+                    "--output", str(nested_output),
+                    "--format", "json",
+                )
+                assert result.returncode == 0, result.stderr
+                text = nested_output.read_text(encoding="utf-8")
+                assert text.endswith("\\n")
+                assert json.loads(text)["title"] == "Trace Summary"
+                assert text.index('"metrics"') < text.index('"sections"') < text.index('"title"')
+
+                text_output = tmp_path / "out" / "summary.txt"
+                result = run_cli(
+                    root / "fixtures",
+                    "--input", "fixtures/report.json",
+                    "--output", str(text_output),
+                    "--format", "text",
+                )
+                assert result.returncode == 0, result.stderr
+                rendered = text_output.read_text(encoding="utf-8").splitlines()
+                assert rendered[:5] == [
+                    "Trace Summary",
+                    "",
+                    "Overview",
+                    "Agents completed most visible checks.",
+                    "",
+                ]
+                assert rendered[-2:] == ["token_usage: 15200", "verification_rate: 0.75"]
+
+                bad_input = tmp_path / "bad.json"
+                bad_input.write_text('{"title": "RAISE"}', encoding="utf-8")
+                existing = tmp_path / "existing" / "report.txt"
+                existing.parent.mkdir()
+                existing.write_text("keep me\\n", encoding="utf-8")
+                result = run_cli(
+                    root,
+                    "--input", str(bad_input),
+                    "--output", str(existing),
+                    "--format", "text",
+                )
+                assert result.returncode != 0
+                assert existing.read_text(encoding="utf-8") == "keep me\\n"
+                assert not list(existing.parent.glob("*.tmp"))
+        """),
+    },
 ]
 
 

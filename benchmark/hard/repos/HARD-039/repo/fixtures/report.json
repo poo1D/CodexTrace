@@ -1,0 +1,11 @@
+{
+  "title": "Trace Summary",
+  "metrics": {
+    "verification_rate": 0.75,
+    "token_usage": 15200
+  },
+  "sections": [
+    {"name": "Overview", "body": "Agents completed most visible checks."},
+    {"name": "Failures", "body": "Hidden graders still caught edge cases."}
+  ]
+}

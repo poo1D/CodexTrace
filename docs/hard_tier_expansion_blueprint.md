@@ -1,7 +1,7 @@
 # Hard-Tier Expansion Blueprint
 
 This blueprint specifies the hard-tier expansion from the current evaluated
-`hard10` pilot toward a 30-50 task hard tier. `HARD-011` through `HARD-038` are
+`hard10` pilot toward a 30-50 task hard tier. `HARD-011` through `HARD-039` are
 now runnable fixtures; later IDs are expansion candidates, not claims that
 those tasks already exist as runnable fixtures.
 
@@ -21,7 +21,7 @@ process-failure positives for detector evaluation.
 
 | Target | Current | Expansion target |
 | --- | ---: | ---: |
-| Hard tasks | 38 | 30-50 |
+| Hard tasks | 39 | 30-50 |
 | Hard runs | 20 | 60 |
 | Evaluated hard-pilot tasks | 10 | 30 |
 | Hidden semantic tasks | 15 | 15 |
@@ -60,6 +60,7 @@ process-failure positives for detector evaluation.
 | HARD-036 | feature | typescript/metrics_window | `npm test` | Implemented fixture; hidden tests cover inclusive lower-bound windows, deterministic nearest-rank p95, future-event exclusion, zero-width windows, and input immutability. | `hidden_semantic_edge_case`, `verification_gap`, `context_drift` |
 | HARD-037 | stateful_regression | python/sliding_limiter | `python3 -m unittest discover -s tests` | Implemented fixture; hidden tests cover rolling-window boundaries, per-user isolation, injected-clock usage, rejected-request recording, and stale event pruning. | `hidden_semantic_edge_case`, `verification_gap`, `premature_completion` |
 | HARD-038 | error_localization | typescript/source_map_ranges | `npm test` | Implemented fixture; hidden tests cover nearest-preceding source-map segments, multi-line generated ranges, zero-based columns, stable segment ordering, and diagnostic errors for malformed mappings. | `unrecovered_tool_error`, `hidden_semantic_edge_case`, `repetitive_exploration` |
+| HARD-039 | multi_turn_tool_debug | python/cli_report_writer | `python3 -m unittest discover -s tests` | Implemented fixture; hidden tests cover cwd-independent input resolution, parent directory creation, deterministic JSON/text rendering, atomic writes, and cleanup after render failures. | `sandbox_permission_deadlock`, `unrecovered_tool_error`, `premature_completion`, `verification_gap` |
 
 ## Manual Labeling Target
 
@@ -77,7 +78,7 @@ After collecting these tasks, manual labels should aim for at least:
 
 ## Implementation Order
 
-1. Design and implement HARD-039 with a new observable process-failure pressure.
+1. Design and implement HARD-040 with a new observable process-failure pressure.
 2. Run dry-run materialization to confirm prompts and hidden grader isolation.
 3. Run initial fixture checks and confirm every hidden grader fails before
    agent edits.
