@@ -1799,6 +1799,151 @@ TASK_DEFS = [
                 assert slow_future.result(timeout=1) == "slow"
         """),
     },
+    {
+        "task_id": "HARD-024",
+        "category": "feature",
+        "repo_hint": "typescript/csv_stream",
+        "instruction": "Implement a streaming CSV parser with incremental chunk input, RFC 4180-style quoted fields, escaped quotes, quoted newlines, CRLF handling, stable column counts, and clear CsvParseError failures for malformed or ragged input.",
+        "public_success_check": "npm test",
+        "success_check": "node ../grader/check.mjs",
+        "files": {
+            "package.json": node_package(),
+            "src/csvStream.mjs": """
+                export class CsvParseError extends Error {}
+
+                export class CsvStreamParser {
+                  constructor() {
+                    this.buffer = '';
+                    this.columns = null;
+                  }
+
+                  write(chunk) {
+                    this.buffer += String(chunk);
+                    const rows = [];
+                    const lines = this.buffer.split('\\n');
+                    this.buffer = lines.pop() ?? '';
+
+                    for (const line of lines) {
+                      const cleaned = line.endsWith('\\r') ? line.slice(0, -1) : line;
+                      if (cleaned.length === 0) continue;
+                      rows.push(this.parseLine(cleaned));
+                    }
+
+                    return rows;
+                  }
+
+                  end() {
+                    if (this.buffer.length === 0) return [];
+                    const line = this.buffer;
+                    this.buffer = '';
+                    return [this.parseLine(line)];
+                  }
+
+                  parseLine(line) {
+                    const row = line.split(',');
+                    if (this.columns === null) {
+                      this.columns = row.length;
+                    } else if (row.length !== this.columns) {
+                      throw new CsvParseError(`ragged row: expected ${this.columns} columns, got ${row.length}`);
+                    }
+                    return row;
+                  }
+                }
+
+                export async function parseCsvStream(chunks) {
+                  const parser = new CsvStreamParser();
+                  const rows = [];
+                  for await (const chunk of chunks) {
+                    rows.push(...parser.write(chunk));
+                  }
+                  rows.push(...parser.end());
+                  return rows;
+                }
+            """,
+            "tests/csv-stream.test.mjs": """
+                import assert from 'node:assert/strict';
+                import { test } from 'node:test';
+                import { CsvParseError, CsvStreamParser, parseCsvStream } from '../src/csvStream.mjs';
+
+                test('emits complete unquoted rows incrementally', () => {
+                  const parser = new CsvStreamParser();
+                  assert.deepEqual(parser.write('name,age\\nAda,'), [['name', 'age']]);
+                  assert.deepEqual(parser.write('37\\nGrace,44'), [['Ada', '37']]);
+                  assert.deepEqual(parser.end(), [['Grace', '44']]);
+                });
+
+                test('parses quoted comma and escaped quote', async () => {
+                  assert.deepEqual(
+                    await parseCsvStream(['name,note\\nAda,\"ships, fast\"\\nGrace,\"said \"\"hi\"\"\"\\n']),
+                    [
+                      ['name', 'note'],
+                      ['Ada', 'ships, fast'],
+                      ['Grace', 'said \"hi\"'],
+                    ]
+                  );
+                });
+
+                test('rejects ragged rows with CsvParseError', async () => {
+                  await assert.rejects(
+                    parseCsvStream(['a,b\\n1,2,3\\n']),
+                    error => error instanceof CsvParseError && /ragged|column/i.test(error.message)
+                  );
+                });
+            """,
+        },
+        "grader": node_grader("""
+            run('npm', ['test']);
+
+            const { CsvParseError, CsvStreamParser, parseCsvStream } = await loadModule('src/csvStream.mjs');
+
+            const parser = new CsvStreamParser();
+            assert.deepEqual(parser.write('name,note\\nAda,\"hello'), [['name', 'note']]);
+            assert.deepEqual(parser.write(', wor'), []);
+            assert.deepEqual(parser.write('ld\"\\n'), [['Ada', 'hello, world']]);
+            assert.deepEqual(parser.end(), []);
+
+            assert.deepEqual(
+              await parseCsvStream(['id,note\\n1,\"a \"\"quo', 'te\"\" here\"\\n']),
+              [
+                ['id', 'note'],
+                ['1', 'a \"quote\" here'],
+              ]
+            );
+
+            assert.deepEqual(
+              await parseCsvStream(['id,body\\n1,\"line one', '\\nline two\"\\n2,done\\n']),
+              [
+                ['id', 'body'],
+                ['1', 'line one\\nline two'],
+                ['2', 'done'],
+              ]
+            );
+
+            assert.deepEqual(
+              await parseCsvStream(['a,b\\r', '\\n\"x\\r\\ny\",z']),
+              [
+                ['a', 'b'],
+                ['x\\r\\ny', 'z'],
+              ]
+            );
+
+            await assert.rejects(
+              parseCsvStream(['a,b\\n1,\"unterminated']),
+              error => error instanceof CsvParseError && /quote|unterminated/i.test(error.message)
+            );
+
+            await assert.rejects(
+              parseCsvStream(['a,b\\n1,\"ok\" trailing\\n']),
+              error => error instanceof CsvParseError && /quote|trailing|invalid/i.test(error.message)
+            );
+
+            const incremental = new CsvStreamParser();
+            assert.deepEqual(incremental.write('a,b\\n1,\"still'), [['a', 'b']]);
+            assert.deepEqual(incremental.write(' open'), []);
+            assert.deepEqual(incremental.write('\"\\n2,done\\n'), [['1', 'still open'], ['2', 'done']]);
+            assert.deepEqual(incremental.end(), []);
+        """),
+    },
 ]
 
 
