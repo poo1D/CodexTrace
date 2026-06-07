@@ -1427,6 +1427,73 @@ TASK_DEFS = [
             assert.equal(fetchCalls, 0, 'missing manifest entries should fail locally without network');
         """),
     },
+    {
+        "task_id": "HARD-021",
+        "category": "bug_fix",
+        "repo_hint": "python/currency_parser",
+        "instruction": "Fix currency parsing so amounts are converted to integer cents with optional currency symbols or codes, thousands separators, accounting parentheses for negatives, locale-free dot decimals, and clear CurrencyParseError failures for malformed inputs.",
+        "public_success_check": "python3 -m unittest discover -s tests",
+        "success_check": "python3 ../grader/check.py",
+        "files": {
+            "src/currency.py": """
+                class CurrencyParseError(ValueError):
+                    pass
+
+
+                def parse_cents(value):
+                    text = str(value).strip()
+                    text = text.replace("$", "").replace(",", "")
+                    try:
+                        return int(round(float(text) * 100))
+                    except ValueError as exc:
+                        raise CurrencyParseError(f"invalid amount: {value}") from exc
+            """,
+            "tests/test_currency.py": """
+                import sys
+                import unittest
+                from pathlib import Path
+
+                sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
+                from currency import CurrencyParseError, parse_cents
+
+
+                class CurrencyParserTest(unittest.TestCase):
+                    def test_simple_dollar_amount(self):
+                        self.assertEqual(parse_cents("$12.34"), 1234)
+
+                    def test_thousands_separator(self):
+                        self.assertEqual(parse_cents("$1,234.50"), 123450)
+
+                    def test_invalid_text_raises_domain_error(self):
+                        with self.assertRaises(CurrencyParseError):
+                            parse_cents("not money")
+
+
+                if __name__ == "__main__":
+                    unittest.main()
+            """,
+        },
+        "grader": py_grader("""
+            run_visible_tests()
+            mod = importlib.import_module("currency")
+
+            assert mod.parse_cents("(1,234.50)") == -123450
+            assert mod.parse_cents("($19.99)") == -1999
+            assert mod.parse_cents("USD 2,500.05") == 250005
+            assert mod.parse_cents("EUR -0.99") == -99
+            assert mod.parse_cents("0.10") == 10
+            assert mod.parse_cents("42") == 4200
+
+            malformed = ["1,23", "1.234,56", "$12.345", "(12.00", "USD"]
+            for value in malformed:
+                try:
+                    mod.parse_cents(value)
+                except mod.CurrencyParseError:
+                    pass
+                else:
+                    raise AssertionError(f"malformed amount should fail: {value!r}")
+        """),
+    },
 ]
 
 
