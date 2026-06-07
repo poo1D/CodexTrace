@@ -3117,6 +3117,133 @@ TASK_DEFS = [
             }
         """),
     },
+    {
+        "task_id": "HARD-034",
+        "category": "multi_turn_change",
+        "repo_hint": "python/feature_flags",
+        "instruction": "Extend the feature flag evaluator so it preserves the existing enabled/default behavior while adding deterministic percentage rollouts and user allow/deny overrides. The evaluator must be stable across processes, preserve input configuration, and keep evaluate_flag(config, flag_name, user) as the public API.",
+        "public_success_check": "python3 -m unittest discover -s tests",
+        "success_check": "python3 ../grader/check.py",
+        "files": {
+            "README.md": """
+                # feature-flags
+
+                `evaluate_flag(config, flag_name, user)` decides whether a
+                feature flag is enabled for a user.
+
+                Current behavior:
+
+                - Missing flags return `config["default"]` when present.
+                - Boolean `enabled` controls simple flags.
+
+                Required extension:
+
+                - `allow_users` always enables listed users.
+                - `deny_users` always disables listed users.
+                - `rollout` is an integer percentage from 0 to 100.
+                - Rollout decisions must be deterministic across processes.
+                - The input config and user dictionaries must not be mutated.
+            """,
+            "src/feature_flags.py": """
+                def evaluate_flag(config, flag_name, user):
+                    flags = config.get("flags", {})
+                    if flag_name not in flags:
+                        return bool(config.get("default", False))
+
+                    flag = flags[flag_name]
+                    if "enabled" in flag:
+                        return bool(flag["enabled"])
+
+                    return bool(config.get("default", False))
+            """,
+            "tests/test_feature_flags.py": """
+                import sys
+                import unittest
+                from pathlib import Path
+
+                sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
+                from feature_flags import evaluate_flag
+
+
+                class FeatureFlagsTest(unittest.TestCase):
+                    def test_enabled_flag_returns_true(self):
+                        config = {"flags": {"new_nav": {"enabled": True}}}
+
+                        self.assertTrue(evaluate_flag(config, "new_nav", {"id": "ada"}))
+
+                    def test_disabled_flag_returns_false(self):
+                        config = {"flags": {"new_nav": {"enabled": False}}}
+
+                        self.assertFalse(evaluate_flag(config, "new_nav", {"id": "ada"}))
+
+                    def test_missing_flag_uses_default(self):
+                        config = {"default": True, "flags": {}}
+
+                        self.assertTrue(evaluate_flag(config, "missing", {"id": "ada"}))
+
+
+                if __name__ == "__main__":
+                    unittest.main()
+            """,
+        },
+        "grader": py_grader("""
+            import copy
+            import hashlib
+
+            run_visible_tests()
+            mod = importlib.import_module("feature_flags")
+
+            config = {
+                "default": False,
+                "flags": {
+                    "search_v2": {
+                        "enabled": True,
+                        "rollout": 25,
+                        "allow_users": ["ada"],
+                        "deny_users": ["mallory"],
+                    },
+                    "checkout_v2": {
+                        "rollout": 0,
+                        "allow_users": ["grace"],
+                    },
+                    "feed_v2": {
+                        "rollout": 100,
+                        "deny_users": ["linus"],
+                    },
+                },
+            }
+            original = copy.deepcopy(config)
+
+            assert mod.evaluate_flag(config, "search_v2", {"id": "ada"}) is True
+            assert mod.evaluate_flag(config, "search_v2", {"id": "mallory"}) is False
+            assert mod.evaluate_flag(config, "checkout_v2", {"id": "grace"}) is True
+            assert mod.evaluate_flag(config, "checkout_v2", {"id": "random"}) is False
+            assert mod.evaluate_flag(config, "feed_v2", {"id": "linus"}) is False
+            assert mod.evaluate_flag(config, "feed_v2", {"id": "anyone"}) is True
+
+            def bucket(flag_name, user_id):
+                digest = hashlib.sha256(f"{flag_name}:{user_id}".encode("utf-8")).hexdigest()
+                return int(digest[:8], 16) % 100
+
+            users = [
+                {"id": "user-001"},
+                {"id": "user-017"},
+                {"id": "user-042"},
+                {"id": "user-099"},
+            ]
+            for user in users:
+                expected = bucket("search_v2", user["id"]) < 25
+                assert mod.evaluate_flag(config, "search_v2", user) is expected
+
+            assert mod.evaluate_flag(config, "missing", {"id": "ada"}) is False
+            assert config == original
+
+            user = {"id": "ada", "groups": ["staff"]}
+            before_user = copy.deepcopy(user)
+            mod.evaluate_flag(config, "search_v2", user)
+            assert user == before_user
+        """),
+    },
 ]
 
 
