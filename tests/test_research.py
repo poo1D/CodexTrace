@@ -3,7 +3,7 @@ from pathlib import Path
 
 from scripts.finalize_hard30_pilot import finalize
 from scripts.merge_hard30_shards import merge_shards, rewrite_shard_row
-from scripts.run_hard30_shards import build_shard_commands, filter_commands, inspect_shard
+from scripts.run_hard30_shards import build_shard_commands, filter_commands, inspect_shard, render_status, summarize_shards
 
 from codex_trace.research import (
     aggregate_runs,
@@ -227,6 +227,48 @@ def test_hard30_shard_skip_complete_filters_finished_manifests(tmp_path):
     assert inspect_shard(commands[1]).complete is False
     assert filter_commands(commands, skip_complete=True) == [commands[1]]
     assert filter_commands(commands, skip_complete=False) == commands
+
+
+def test_hard30_shard_status_summary_reports_readiness(tmp_path):
+    selection_dir = Path("benchmark/hard/pilot/hard30-selection")
+    commands = build_shard_commands(
+        ["HARD-001", "HARD-002", "HARD-003"],
+        selection_dir=selection_dir,
+        run_dir=tmp_path / "hard30-real",
+        dry_run=True,
+    )
+    complete_rows = [
+        {"task_id": "HARD-001", "prompt_type": "baseline", "trace_path": "a"},
+        {"task_id": "HARD-001", "prompt_type": "intervention", "trace_path": "b"},
+    ]
+    incomplete_rows = [
+        {"task_id": "HARD-002", "prompt_type": "baseline", "trace_path": "c"},
+    ]
+    commands[0].shard_dir.mkdir(parents=True)
+    commands[0].shard_dir.joinpath("runs.jsonl").write_text(
+        "".join(json.dumps(row, sort_keys=True) + "\n" for row in complete_rows),
+        encoding="utf-8",
+    )
+    commands[1].shard_dir.mkdir(parents=True)
+    commands[1].shard_dir.joinpath("runs.jsonl").write_text(
+        "".join(json.dumps(row, sort_keys=True) + "\n" for row in incomplete_rows),
+        encoding="utf-8",
+    )
+
+    summary = summarize_shards(commands)
+    rendered = render_status(summary)
+
+    assert summary["task_count"] == 3
+    assert summary["completed_count"] == 1
+    assert summary["incomplete"] == ["HARD-002"]
+    assert summary["missing"] == ["HARD-003"]
+    assert summary["record_count"] == 3
+    assert summary["expected_record_count"] == 6
+    assert summary["ready_to_merge"] is False
+    assert summary["shards"][0]["prompt_types"] == ["baseline", "intervention"]
+    assert "Ready to merge: no" in rendered
+    assert "Incomplete: HARD-002" in rendered
+    assert "Missing: HARD-003" in rendered
 
 
 def test_merge_hard30_shards_rewrites_relative_paths(tmp_path):

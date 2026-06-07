@@ -147,6 +147,24 @@ Expected current output:
 Wrote 60 run record(s) to /tmp/codextrace-hard30-sharded-dry/runs.jsonl
 ```
 
+Audit shard readiness without launching Codex:
+
+```bash
+PYTHONPATH=. PYTHONPYCACHEPREFIX=/tmp/codextrace-pycache \
+  python3 scripts/run_hard30_shards.py \
+  --run-dir /tmp/codextrace-hard30-sharded-dry \
+  --status \
+  --status-json /tmp/codextrace-hard30-sharded-dry/shard-status.json
+```
+
+Expected completed dry-run output includes:
+
+```text
+Completed shards: 30
+Run records: 60 / 60
+Ready to merge: yes
+```
+
 Check that all hard-tier initial fixtures fail their hidden graders before an
 agent edits them:
 

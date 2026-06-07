@@ -1,12 +1,14 @@
 from __future__ import annotations
 
 import argparse
+import json
 import os
 import subprocess
 import sys
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from dataclasses import dataclass
 from pathlib import Path
+from typing import Any
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -29,6 +31,7 @@ class ShardStatus:
     complete: bool
     record_count: int
     manifest_path: Path
+    prompt_types: tuple[str, ...] = ()
 
 
 def load_task_ids(selection_dir: Path = DEFAULT_SELECTION_DIR) -> list[str]:
@@ -85,8 +88,57 @@ def inspect_shard(command: ShardCommand, expected_records: int = 2) -> ShardStat
     manifest = command.shard_dir / "runs.jsonl"
     if not manifest.exists():
         return ShardStatus(command.task_id, False, 0, manifest)
-    record_count = sum(1 for line in manifest.read_text(encoding="utf-8").splitlines() if line.strip())
-    return ShardStatus(command.task_id, record_count == expected_records, record_count, manifest)
+    rows = [json.loads(line) for line in manifest.read_text(encoding="utf-8").splitlines() if line.strip()]
+    prompt_types = tuple(sorted(str(row.get("prompt_type", "")) for row in rows if row.get("prompt_type")))
+    return ShardStatus(command.task_id, len(rows) == expected_records, len(rows), manifest, prompt_types)
+
+
+def summarize_shards(commands: list[ShardCommand]) -> dict[str, Any]:
+    statuses = [inspect_shard(command) for command in commands]
+    completed = [status.task_id for status in statuses if status.complete]
+    incomplete = [status.task_id for status in statuses if status.record_count and not status.complete]
+    missing = [status.task_id for status in statuses if not status.record_count]
+    total_records = sum(status.record_count for status in statuses)
+    return {
+        "task_count": len(statuses),
+        "completed_count": len(completed),
+        "incomplete_count": len(incomplete),
+        "missing_count": len(missing),
+        "record_count": total_records,
+        "expected_record_count": len(statuses) * 2,
+        "ready_to_merge": len(statuses) > 0 and len(completed) == len(statuses),
+        "completed": completed,
+        "incomplete": incomplete,
+        "missing": missing,
+        "shards": [
+            {
+                "task_id": status.task_id,
+                "complete": status.complete,
+                "record_count": status.record_count,
+                "prompt_types": list(status.prompt_types),
+                "manifest_path": str(status.manifest_path),
+            }
+            for status in statuses
+        ],
+    }
+
+
+def render_status(summary: dict[str, Any]) -> str:
+    lines = [
+        "# Hard30 Shard Status",
+        "",
+        f"Tasks: {summary['task_count']}",
+        f"Completed shards: {summary['completed_count']}",
+        f"Incomplete shards: {summary['incomplete_count']}",
+        f"Missing shards: {summary['missing_count']}",
+        f"Run records: {summary['record_count']} / {summary['expected_record_count']}",
+        f"Ready to merge: {'yes' if summary['ready_to_merge'] else 'no'}",
+    ]
+    if summary["incomplete"]:
+        lines.extend(["", f"Incomplete: {', '.join(summary['incomplete'])}"])
+    if summary["missing"]:
+        lines.extend(["", f"Missing: {', '.join(summary['missing'])}"])
+    return "\n".join(lines) + "\n"
 
 
 def filter_commands(commands: list[ShardCommand], skip_complete: bool) -> list[ShardCommand]:
@@ -145,6 +197,8 @@ def main() -> int:
     parser.add_argument("--sandbox", default="workspace-write")
     parser.add_argument("--dry-run", action="store_true")
     parser.add_argument("--skip-complete", action="store_true", help="Do not rerun shards that already have two run records.")
+    parser.add_argument("--status", action="store_true", help="Print shard completion status without running Codex.")
+    parser.add_argument("--status-json", type=Path, help="Optionally write shard status as JSON.")
     args = parser.parse_args()
 
     selected_ids = args.task_ids or load_task_ids(args.selection_dir)
@@ -157,6 +211,14 @@ def main() -> int:
         sandbox=args.sandbox,
         dry_run=args.dry_run,
     )
+    if args.status:
+        summary = summarize_shards(commands)
+        print(render_status(summary), end="")
+        if args.status_json:
+            args.status_json.parent.mkdir(parents=True, exist_ok=True)
+            args.status_json.write_text(json.dumps(summary, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+        return 0 if summary["ready_to_merge"] else 1
+
     commands = filter_commands(commands, args.skip_complete)
     if not commands:
         print("No pending shard(s).")
