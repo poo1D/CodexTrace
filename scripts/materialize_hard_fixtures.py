@@ -3639,6 +3639,177 @@ TASK_DEFS = [
                 assert len(state.get("ada", [])) <= 1
         """),
     },
+    {
+        "task_id": "HARD-038",
+        "category": "error_localization",
+        "repo_hint": "typescript/source_map_ranges",
+        "instruction": "Fix source-position mapping so generated line and column ranges map to original positions using the nearest preceding mapping segment, support multi-line generated ranges, preserve zero-based columns, and raise SourceMapError with useful diagnostics for malformed mappings. Preserve mapRange(map, start, end).",
+        "public_success_check": "npm test",
+        "success_check": "node ../grader/check.mjs",
+        "files": {
+            "package.json": node_package(),
+            "README.md": """
+                # source-map-ranges
+
+                `mapRange(map, start, end)` maps a generated source range back
+                to original source positions.
+
+                The map has a `mappings` array. Each mapping contains:
+
+                - `generated`: `{ line, column }`
+                - `original`: `{ source, line, column }`
+
+                Lines are one-based and columns are zero-based. For a generated
+                position, use the nearest preceding mapping segment on the same
+                generated line. Ranges may span more than one generated line.
+                Malformed mapping entries should raise `SourceMapError` with a
+                message that helps locate the bad entry.
+            """,
+            "src/sourceMapRanges.mjs": """
+                export class SourceMapError extends Error {
+                  constructor(message) {
+                    super(message);
+                    this.name = 'SourceMapError';
+                  }
+                }
+
+                export function mapRange(map, start, end) {
+                  const startOriginal = findExact(map.mappings, start);
+                  const endOriginal = findExact(map.mappings, end);
+                  if (!startOriginal || !endOriginal) {
+                    return null;
+                  }
+                  return {
+                    source: startOriginal.source,
+                    start: {
+                      line: startOriginal.line,
+                      column: startOriginal.column + 1,
+                    },
+                    end: {
+                      line: endOriginal.line,
+                      column: endOriginal.column + 1,
+                    },
+                  };
+                }
+
+                function findExact(mappings, position) {
+                  for (const entry of mappings || []) {
+                    if (
+                      entry.generated.line === position.line &&
+                      entry.generated.column === position.column
+                    ) {
+                      return entry.original;
+                    }
+                  }
+                  return null;
+                }
+            """,
+            "src/index.mjs": """
+                export { SourceMapError, mapRange } from './sourceMapRanges.mjs';
+            """,
+            "tests/source-map-ranges.test.mjs": """
+                import assert from 'node:assert/strict';
+                import test from 'node:test';
+                import { mapRange } from '../src/sourceMapRanges.mjs';
+
+                test('maps exact generated range endpoints', () => {
+                  const map = {
+                    mappings: [
+                      {
+                        generated: { line: 1, column: 0 },
+                        original: { source: 'src/app.ts', line: 10, column: 4 },
+                      },
+                      {
+                        generated: { line: 1, column: 12 },
+                        original: { source: 'src/app.ts', line: 10, column: 16 },
+                      },
+                    ],
+                  };
+
+                  assert.deepEqual(
+                    mapRange(map, { line: 1, column: 0 }, { line: 1, column: 12 }),
+                    {
+                      source: 'src/app.ts',
+                      start: { line: 10, column: 5 },
+                      end: { line: 10, column: 17 },
+                    },
+                  );
+                });
+
+                test('returns null when exact mapping is missing', () => {
+                  const map = {
+                    mappings: [
+                      {
+                        generated: { line: 1, column: 0 },
+                        original: { source: 'src/app.ts', line: 1, column: 0 },
+                      },
+                    ],
+                  };
+
+                  assert.equal(mapRange(map, { line: 1, column: 1 }, { line: 1, column: 2 }), null);
+                });
+            """,
+        },
+        "grader": node_grader("""
+            run('npm', ['test']);
+            const { SourceMapError, mapRange } = await loadModule('src/sourceMapRanges.mjs');
+
+            const map = {
+              mappings: [
+                {
+                  generated: { line: 1, column: 0 },
+                  original: { source: 'src/app.ts', line: 10, column: 4 },
+                },
+                {
+                  generated: { line: 1, column: 8 },
+                  original: { source: 'src/app.ts', line: 10, column: 12 },
+                },
+                {
+                  generated: { line: 2, column: 0 },
+                  original: { source: 'src/app.ts', line: 11, column: 0 },
+                },
+                {
+                  generated: { line: 2, column: 5 },
+                  original: { source: 'src/app.ts', line: 11, column: 5 },
+                },
+              ],
+            };
+
+            assert.deepEqual(
+              mapRange(map, { line: 1, column: 10 }, { line: 2, column: 7 }),
+              {
+                source: 'src/app.ts',
+                start: { line: 10, column: 14 },
+                end: { line: 11, column: 7 },
+              },
+            );
+
+            assert.deepEqual(
+              mapRange(map, { line: 1, column: 0 }, { line: 1, column: 8 }),
+              {
+                source: 'src/app.ts',
+                start: { line: 10, column: 4 },
+                end: { line: 10, column: 12 },
+              },
+            );
+
+            assert.deepEqual(
+              mapRange({ mappings: [...map.mappings].reverse() }, { line: 2, column: 6 }, { line: 2, column: 9 }),
+              {
+                source: 'src/app.ts',
+                start: { line: 11, column: 6 },
+                end: { line: 11, column: 9 },
+              },
+            );
+
+            assert.throws(
+              () => mapRange({ mappings: [{ generated: { line: 1 }, original: { source: 'x', line: 1, column: 0 } }] }, { line: 1, column: 0 }, { line: 1, column: 1 }),
+              (error) => error instanceof SourceMapError &&
+                error.message.includes('mapping[0]') &&
+                error.message.includes('generated.column'),
+            );
+        """),
+    },
 ]
 
 
