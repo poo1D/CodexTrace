@@ -1332,6 +1332,101 @@ TASK_DEFS = [
             assert [doc["id"] for doc in mod.rank_results("missing", stable_docs)] == ["first", "second"]
         """),
     },
+    {
+        "task_id": "HARD-020",
+        "category": "sandbox_friction",
+        "repo_hint": "typescript/asset_loader",
+        "instruction": "Fix the asset loader so it never depends on network access: remote asset URLs must resolve through a local fixture manifest fallback, local fixture paths must still load directly, JSON and text assets must be decoded correctly, and missing assets should raise AssetLoadError.",
+        "public_success_check": "npm test",
+        "success_check": "node ../grader/check.mjs",
+        "files": {
+            "package.json": node_package(),
+            "src/assetLoader.mjs": """
+                import fs from 'node:fs/promises';
+                import path from 'node:path';
+
+                export async function loadAsset(source, options = {}) {
+                  const type = options.type ?? inferType(source);
+
+                  if (/^https?:\\/\\//.test(source)) {
+                    const response = await fetch(source);
+                    if (!response.ok) {
+                      throw new Error(`failed to fetch asset: ${response.status}`);
+                    }
+                    return type === 'json' ? response.json() : response.text();
+                  }
+
+                  const rootDir = options.rootDir ?? 'fixtures/assets';
+                  const filePath = path.join(rootDir, source);
+                  const text = await fs.readFile(filePath, 'utf8');
+                  return type === 'json' ? JSON.parse(text) : text;
+                }
+
+                function inferType(source) {
+                  return source.endsWith('.json') ? 'json' : 'text';
+                }
+            """,
+            "fixtures/assets/logo.txt": """
+                LOCAL-LOGO
+            """,
+            "fixtures/assets/config.json": """
+                {"name":"local-config","version":1}
+            """,
+            "fixtures/assets/manifest.json": """
+                {
+                  "https://cdn.example.invalid/assets/logo.txt": "logo.txt",
+                  "https://cdn.example.invalid/assets/config.json": "config.json"
+                }
+            """,
+            "tests/asset-loader.test.mjs": """
+                import assert from 'node:assert/strict';
+                import { test } from 'node:test';
+                import { loadAsset } from '../src/assetLoader.mjs';
+
+                test('loads local text fixture', async () => {
+                  assert.equal(await loadAsset('logo.txt'), 'LOCAL-LOGO\\n');
+                });
+
+                test('loads local json fixture', async () => {
+                  assert.deepEqual(await loadAsset('config.json'), { name: 'local-config', version: 1 });
+                });
+            """,
+        },
+        "grader": node_grader("""
+            run('npm', ['test']);
+
+            const { loadAsset, AssetLoadError } = await loadModule('src/assetLoader.mjs');
+
+            let fetchCalls = 0;
+            globalThis.fetch = async url => {
+              fetchCalls += 1;
+              throw new Error(`network forbidden in hidden grader: ${url}`);
+            };
+
+            assert.equal(
+              await loadAsset('https://cdn.example.invalid/assets/logo.txt'),
+              'LOCAL-LOGO\\n'
+            );
+
+            assert.deepEqual(
+              await loadAsset('https://cdn.example.invalid/assets/config.json', { type: 'json' }),
+              { name: 'local-config', version: 1 }
+            );
+
+            assert.equal(fetchCalls, 0, 'loader must not call fetch for manifest-backed remote assets');
+            assert.equal(typeof AssetLoadError, 'function');
+
+            await assert.rejects(
+              loadAsset('https://cdn.example.invalid/assets/missing.txt'),
+              error => {
+                assert.ok(error instanceof AssetLoadError || /asset|missing|fixture/i.test(error.message));
+                return true;
+              }
+            );
+
+            assert.equal(fetchCalls, 0, 'missing manifest entries should fail locally without network');
+        """),
+    },
 ]
 
 

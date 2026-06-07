@@ -1,0 +1,4 @@
+{
+  "https://cdn.example.invalid/assets/logo.txt": "logo.txt",
+  "https://cdn.example.invalid/assets/config.json": "config.json"
+}
