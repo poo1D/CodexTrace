@@ -372,6 +372,7 @@ def build_paper_report(manifest_path: str | Path, labels_path: str | Path | None
         "taxonomy_distribution": taxonomy,
         "detector_evaluation": label_evaluation,
         "outcome_counts": outcome_counts(aggregate["runs"]),
+        "paired_task_deltas": paired_task_deltas(aggregate["runs"]),
         "signal_by_outcome": signal_summary_by_outcome(aggregate["runs"]),
         "signal_by_label": signal_summary_by_label(aggregate["runs"], labels),
     }
@@ -433,6 +434,20 @@ def render_paper_report_markdown(result: dict[str, Any]) -> str:
         intervention = aggregate["summary"].get("intervention", {}).get(key, 0)
         delta = aggregate["deltas"].get(key, 0)
         lines.append(f"| {key} | {_fmt(baseline)} | {_fmt(intervention)} | {_fmt(delta)} |")
+
+    if result.get("paired_task_deltas"):
+        lines.extend([
+            "",
+            "### Paired Task Deltas",
+            "",
+            "| Task | Success delta | Verification delta | Repeated calls delta | Token delta | Failure score delta |",
+            "| --- | ---: | ---: | ---: | ---: | ---: |",
+        ])
+        for row in result["paired_task_deltas"]:
+            lines.append(
+                f"| {row['task_id']} | {_fmt(row['success_delta'])} | {_fmt(row['verification_delta'])} | "
+                f"{_fmt(row['repeated_tool_call_delta'])} | {_fmt(row['token_usage_delta'])} | {_fmt(row['failure_score_delta'])} |"
+            )
 
     counts = result.get("outcome_counts", {})
     lines.extend([
@@ -641,6 +656,30 @@ def outcome_counts(run_rows: list[dict[str, Any]]) -> dict[str, int]:
     for outcome in ("success", "failure", "unknown"):
         counts.setdefault(outcome, 0)
     return dict(counts)
+
+
+def paired_task_deltas(run_rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    by_task: dict[str, dict[str, dict[str, Any]]] = {}
+    for row in run_rows:
+        by_task.setdefault(str(row["task_id"]), {})[str(row["prompt_type"])] = row
+
+    rows = []
+    for task_id, prompts in sorted(by_task.items()):
+        baseline = prompts.get("baseline")
+        intervention = prompts.get("intervention")
+        if not baseline or not intervention:
+            continue
+        rows.append({
+            "task_id": task_id,
+            "baseline_outcome": baseline["outcome"],
+            "intervention_outcome": intervention["outcome"],
+            "success_delta": intervention["success"] - baseline["success"],
+            "verification_delta": intervention["verification_rate"] - baseline["verification_rate"],
+            "repeated_tool_call_delta": intervention["repeated_tool_call_count"] - baseline["repeated_tool_call_count"],
+            "token_usage_delta": intervention["token_usage"] - baseline["token_usage"],
+            "failure_score_delta": intervention["failure_score"] - baseline["failure_score"],
+        })
+    return rows
 
 
 def signal_summary_by_outcome(run_rows: list[dict[str, Any]]) -> list[dict[str, Any]]:

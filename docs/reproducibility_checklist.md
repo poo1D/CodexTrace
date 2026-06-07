@@ -82,6 +82,9 @@ PYTHONPATH=. python3 -m codex_trace.cli research paper-report \
 When labels are provided, the paper report includes both outcome-level RQ4
 trace signals and per-manual-label signal means. The latter is the table to use
 when explaining which trace features characterize each failure class.
+The same report also includes paired per-task baseline/intervention deltas for
+RQ3, so improvement claims can be inspected task by task rather than only as
+aggregate means.
 
 Combined paper-facing summary:
 

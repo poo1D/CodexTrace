@@ -154,6 +154,8 @@ Treat the project as submission-ready only when:
 - Detector evaluation includes both positive and negative examples for
   observable process failures.
 - RQ3 improvement is visible in either success rate, waste metrics, or both.
+- RQ3 paired task deltas identify which tasks improved, regressed, or stayed
+  unchanged under intervention.
 - RQ4 has at least one signal analysis result beyond the hidden-semantic
   boundary.
 - CI passes and all generated result tables can be reproduced from stored
