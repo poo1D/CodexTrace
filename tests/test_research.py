@@ -438,6 +438,16 @@ def test_submission_readiness_reports_blocking_missing_hard30_runs(tmp_path):
     assert "hard30 real runs" in report["blocking"]
     assert "hard30 finalized outputs" in report["blocking"]
     assert "hard30 manual labels" in report["blocking"]
+    assert [action["name"] for action in report["next_actions"]] == [
+        "collect hard30 real traces",
+        "merge completed hard30 shards",
+        "preflight hard30 manifest",
+        "finalize hard30 reports",
+        "label hard30 failures",
+        "evaluate hard30 labels",
+    ]
+    assert "run_hard30_shards.py" in report["next_actions"][0]["command"]
+    assert "## Next Actions" in markdown
     assert "Ready: no" in markdown
 
 
@@ -490,6 +500,7 @@ def test_submission_readiness_accepts_complete_synthetic_artifact(tmp_path):
 
     assert report["ready"] is True
     assert report["blocking"] == []
+    assert report["next_actions"] == []
     assert "Ready: yes" in markdown
     assert "submission-ready hard30 artifact" in report["positioning"]
 

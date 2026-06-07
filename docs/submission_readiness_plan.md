@@ -164,6 +164,9 @@ The current machine-readable gate is:
 PYTHONPATH=. python3 scripts/check_submission_readiness.py
 ```
 
+It returns a non-zero exit code until the hard30 traces, generated tables, and
+manual labels are present. Its report includes the next commands to run.
+
 Until then, the honest positioning is:
 
 > A reproducible pilot artifact showing that trace diagnosis can measure

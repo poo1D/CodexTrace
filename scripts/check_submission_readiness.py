@@ -100,16 +100,61 @@ def build_report(selection_dir: Path, run_dir: Path) -> dict[str, Any]:
         check_exists(Path("docs/reproducibility_checklist.md"), "reproducibility checklist"),
     ]
     blocking = [check for check in checks if not check["ok"]]
+    next_actions = build_next_actions(checks, run_dir)
     return {
         "ready": not blocking,
         "checks": checks,
         "blocking": [check["name"] for check in blocking],
+        "next_actions": next_actions,
         "positioning": (
             "submission-ready hard30 artifact"
             if not blocking
             else "pilot artifact; collect/finalize/label hard30 before stronger submission"
         ),
     }
+
+
+def build_next_actions(checks: list[dict[str, Any]], run_dir: Path) -> list[dict[str, str]]:
+    by_name = {check["name"]: check for check in checks}
+    actions = []
+    if not by_name["hard30 real runs"]["ok"]:
+        actions.append({
+            "name": "collect hard30 real traces",
+            "command": (
+                "PYTHONPATH=. python3 scripts/run_hard30_shards.py "
+                f"--run-dir {run_dir} --max-parallel 15 --timeout-seconds 600 --skip-complete"
+            ),
+        })
+        actions.append({
+            "name": "merge completed hard30 shards",
+            "command": f"PYTHONPATH=. python3 scripts/merge_hard30_shards.py --run-dir {run_dir}",
+        })
+    if not by_name["hard30 finalized outputs"]["ok"]:
+        actions.append({
+            "name": "preflight hard30 manifest",
+            "command": (
+                "PYTHONPATH=. python3 scripts/finalize_hard30_pilot.py "
+                f"--run-dir {run_dir} --preflight-only --preflight-json {run_dir / 'preflight.json'}"
+            ),
+        })
+        actions.append({
+            "name": "finalize hard30 reports",
+            "command": f"PYTHONPATH=. python3 scripts/finalize_hard30_pilot.py --run-dir {run_dir}",
+        })
+    if not by_name["hard30 manual labels"]["ok"]:
+        actions.append({
+            "name": "label hard30 failures",
+            "command": f"edit {run_dir / 'manual-labels.jsonl'} from {run_dir / 'labels.jsonl'}",
+        })
+        actions.append({
+            "name": "evaluate hard30 labels",
+            "command": (
+                "PYTHONPATH=. python3 -m codex_trace.cli research evaluate-labels "
+                f"{run_dir / 'runs.jsonl'} {run_dir / 'manual-labels.jsonl'} "
+                f"--json-output {run_dir / 'label-eval.json'} --markdown-output {run_dir / 'label-eval.md'}"
+            ),
+        })
+    return actions
 
 
 def render_report(report: dict[str, Any]) -> str:
@@ -131,6 +176,10 @@ def render_report(report: dict[str, Any]) -> str:
     if report["blocking"]:
         lines.extend(["", "## Blocking Items", ""])
         lines.extend(f"- {name}" for name in report["blocking"])
+    if report["next_actions"]:
+        lines.extend(["", "## Next Actions", ""])
+        for action in report["next_actions"]:
+            lines.extend([f"### {action['name']}", "", "```bash", action["command"], "```", ""])
     return "\n".join(lines) + "\n"
 
 

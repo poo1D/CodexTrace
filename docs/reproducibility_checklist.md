@@ -185,6 +185,9 @@ PYTHONPATH=. PYTHONPYCACHEPREFIX=/tmp/codextrace-pycache \
   --markdown-output /tmp/codextrace-readiness.md
 ```
 
+When the gate is not ready, the Markdown/JSON report includes ordered next
+actions for collection, merge, finalization, and labeling.
+
 Check that all hard-tier initial fixtures fail their hidden graders before an
 agent edits them:
 
