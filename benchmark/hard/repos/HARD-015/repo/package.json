@@ -1,0 +1,12 @@
+{
+  "name": "hard-015-package-exports",
+  "version": "0.0.0",
+  "type": "module",
+  "main": "./dist/index.js",
+  "exports": {
+    ".": "./dist/index.mjs"
+  },
+  "scripts": {
+    "build": "node scripts/build.mjs"
+  }
+}

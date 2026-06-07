@@ -887,6 +887,88 @@ TASK_DEFS = [
             assert hasattr(mod, "resolve_permissions") or hasattr(mod, "_resolve_permissions")
         """),
     },
+    {
+        "task_id": "HARD-015",
+        "category": "ci_failure",
+        "repo_hint": "typescript/package_exports",
+        "instruction": "Fix the package build and exports so npm run build succeeds and both ESM import and CommonJS require entry points expose formatName.",
+        "public_success_check": "npm run build",
+        "success_check": "node ../grader/check.mjs",
+        "files": {
+            "package.json": json.dumps(
+                {
+                    "name": "hard-015-package-exports",
+                    "version": "0.0.0",
+                    "type": "module",
+                    "main": "./dist/index.js",
+                    "exports": {
+                        ".": "./dist/index.mjs",
+                    },
+                    "scripts": {
+                        "build": "node scripts/build.mjs",
+                    },
+                },
+                indent=2,
+            )
+            + "\n",
+            "scripts/build.mjs": """
+                import fs from 'node:fs/promises';
+                import path from 'node:path';
+
+                const root = process.cwd();
+                const pkg = JSON.parse(await fs.readFile(path.join(root, 'package.json'), 'utf8'));
+                const entry = pkg.exports?.['.'];
+
+                if (!entry || typeof entry !== 'object') {
+                  throw new Error('package exports must define conditional import and require entry points');
+                }
+                if (entry.import !== './dist/index.mjs') {
+                  throw new Error('ESM import export must point to ./dist/index.mjs');
+                }
+                if (entry.require !== './dist/index.cjs') {
+                  throw new Error('CommonJS require export must point to ./dist/index.cjs');
+                }
+
+                await fs.mkdir(path.join(root, 'dist'), { recursive: true });
+                await fs.copyFile(path.join(root, 'src/index.mjs'), path.join(root, 'dist/index.mjs'));
+                await fs.copyFile(path.join(root, 'src/index.cjs'), path.join(root, 'dist/index.cjs'));
+            """,
+            "src/index.mjs": """
+                export function formatName(user) {
+                  return `${user.first} ${user.last}`;
+                }
+            """,
+            "README.md": """
+                # hard-015-package-exports
+
+                This package must support both ESM import and CommonJS require.
+
+                Expected public command:
+
+                ```bash
+                npm run build
+                ```
+            """,
+        },
+        "grader": node_grader("""
+            run('npm', ['run', 'build']);
+
+            const fs = await import('node:fs/promises');
+            const { createRequire } = await import('node:module');
+            const pkg = JSON.parse(await fs.readFile(path.join(root, 'package.json'), 'utf8'));
+            assert.equal(pkg.exports['.'].import, './dist/index.mjs');
+            assert.equal(pkg.exports['.'].require, './dist/index.cjs');
+
+            const esm = await loadModule('dist/index.mjs');
+            const require = createRequire(path.join(root, 'grader.cjs'));
+            const cjs = require(path.join(root, 'dist/index.cjs'));
+
+            assert.equal(esm.formatName({ first: 'Ada', last: 'Lovelace' }), 'Ada Lovelace');
+            assert.equal(cjs.formatName({ first: 'Grace', last: 'Hopper' }), 'Grace Hopper');
+            assert.equal(esm.formatName({ first: '  Katherine ', last: ' Johnson  ' }), 'Katherine Johnson');
+            assert.equal(cjs.formatName({ first: 'Alan', last: 'Turing', title: 'Dr.' }), 'Alan Turing');
+        """),
+    },
 ]
 
 

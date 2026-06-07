@@ -115,7 +115,7 @@ Key files:
 - `docs/artifact_guide.md`: 15-minute reviewer/interviewer walkthrough
 - `docs/experiment_protocol.md`: collection and labeling protocol
 - `docs/failure_taxonomy.md`: process-level failure labels
-- `docs/hard_tier_expansion_blueprint.md`: HARD-011 to HARD-014 fixtures and HARD-015 to HARD-030 task designs
+- `docs/hard_tier_expansion_blueprint.md`: HARD-011 to HARD-015 fixtures and HARD-016 to HARD-030 task designs
 - `docs/paper_draft.md`: result-driven workshop-style paper draft
 - `docs/paper_outline.md`: paper outline and experiment plan
 - `docs/reproducibility_checklist.md`: claim-evidence map and reproduction commands
