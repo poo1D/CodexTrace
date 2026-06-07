@@ -2782,6 +2782,220 @@ TASK_DEFS = [
             assert explicit_nested["API_URL"] == "https://shared.example.test"
         """),
     },
+    {
+        "task_id": "HARD-032",
+        "category": "stateful_regression",
+        "repo_hint": "typescript/undoable_queue",
+        "instruction": "Fix the undoable queue so undo() and redo() preserve item metadata and queue ordering across enqueue, dequeue, and clear operations. Do not change the public API or test runner configuration.",
+        "public_success_check": "npm test",
+        "success_check": "node ../grader/check.mjs",
+        "files": {
+            "package.json": node_package(),
+            "README.md": """
+                # undoable-queue
+
+                `UndoableQueue` is a FIFO queue with history.
+
+                Public API:
+
+                - `enqueue(item)`
+                - `dequeue()`
+                - `clear()`
+                - `undo()`
+                - `redo()`
+                - `peek()`
+                - `toArray()`
+                - `size`
+
+                Items are plain objects with at least an `id` field. Queue
+                history must preserve full item metadata, keep FIFO ordering,
+                and isolate snapshots from later mutations of returned values.
+            """,
+            "src/undoableQueue.mjs": """
+                export class UndoableQueue {
+                  constructor(items = []) {
+                    this.items = [...items];
+                    this.undoStack = [];
+                    this.redoStack = [];
+                  }
+
+                  get size() {
+                    return this.items.length;
+                  }
+
+                  enqueue(item) {
+                    this._save();
+                    this.items.push(item);
+                    this.redoStack = [];
+                    return this;
+                  }
+
+                  dequeue() {
+                    if (this.items.length === 0) {
+                      return undefined;
+                    }
+                    this._save();
+                    this.redoStack = [];
+                    return this.items.shift();
+                  }
+
+                  clear() {
+                    this._save();
+                    this.items = [];
+                    return this;
+                  }
+
+                  undo() {
+                    if (this.undoStack.length === 0) {
+                      return false;
+                    }
+                    this.redoStack.push([...this.items]);
+                    this.items = this.undoStack.pop();
+                    return true;
+                  }
+
+                  redo() {
+                    if (this.redoStack.length === 0) {
+                      return false;
+                    }
+                    this.undoStack.push([...this.items]);
+                    this.items = this.redoStack.pop();
+                    return true;
+                  }
+
+                  peek() {
+                    return this.items[0];
+                  }
+
+                  toArray() {
+                    return [...this.items];
+                  }
+
+                  _save() {
+                    this.undoStack.push([...this.items]);
+                  }
+                }
+            """,
+            "src/index.mjs": """
+                export { UndoableQueue } from './undoableQueue.mjs';
+            """,
+            "tests/undoable-queue.test.mjs": """
+                import assert from 'node:assert/strict';
+                import { test } from 'node:test';
+                import { UndoableQueue } from '../src/index.mjs';
+
+                function ids(queue) {
+                  return queue.toArray().map(item => item.id);
+                }
+
+                test('enqueues and dequeues in FIFO order', () => {
+                  const queue = new UndoableQueue();
+                  queue.enqueue({ id: 'a' }).enqueue({ id: 'b' });
+
+                  assert.deepEqual(ids(queue), ['a', 'b']);
+                  assert.equal(queue.dequeue().id, 'a');
+                  assert.deepEqual(ids(queue), ['b']);
+                });
+
+                test('undo restores queue ids after dequeue', () => {
+                  const queue = new UndoableQueue([{ id: 'a' }, { id: 'b' }]);
+
+                  assert.equal(queue.dequeue().id, 'a');
+                  assert.deepEqual(ids(queue), ['b']);
+                  assert.equal(queue.undo(), true);
+                  assert.deepEqual(ids(queue), ['a', 'b']);
+                });
+
+                test('redo reapplies an undone enqueue', () => {
+                  const queue = new UndoableQueue([{ id: 'a' }]);
+
+                  queue.enqueue({ id: 'b' });
+                  assert.deepEqual(ids(queue), ['a', 'b']);
+                  assert.equal(queue.undo(), true);
+                  assert.deepEqual(ids(queue), ['a']);
+                  assert.equal(queue.redo(), true);
+                  assert.deepEqual(ids(queue), ['a', 'b']);
+                });
+            """,
+        },
+        "grader": node_grader("""
+            run('npm', ['test']);
+
+            const { UndoableQueue } = await loadModule('src/index.mjs');
+
+            function snapshot(queue) {
+              return queue.toArray();
+            }
+
+            const itemA = {
+              id: 'a',
+              priority: 2,
+              source: 'api',
+              audit: { createdBy: 'Ada', tags: ['hot'] },
+            };
+            const itemB = {
+              id: 'b',
+              priority: 1,
+              source: 'worker',
+              audit: { createdBy: 'Grace', tags: ['cold'] },
+            };
+
+            const queue = new UndoableQueue([itemA, itemB]);
+            const removed = queue.dequeue();
+            removed.priority = 99;
+            removed.audit.tags.push('mutated');
+            assert.equal(queue.undo(), true);
+            assert.deepEqual(snapshot(queue), [
+              {
+                id: 'a',
+                priority: 2,
+                source: 'api',
+                audit: { createdBy: 'Ada', tags: ['hot'] },
+              },
+              {
+                id: 'b',
+                priority: 1,
+                source: 'worker',
+                audit: { createdBy: 'Grace', tags: ['cold'] },
+              },
+            ]);
+
+            const peeked = queue.peek();
+            peeked.audit.createdBy = 'mutated';
+            const listed = queue.toArray();
+            listed[1].audit.tags.push('leaked');
+            assert.deepEqual(snapshot(queue), [
+              {
+                id: 'a',
+                priority: 2,
+                source: 'api',
+                audit: { createdBy: 'Ada', tags: ['hot'] },
+              },
+              {
+                id: 'b',
+                priority: 1,
+                source: 'worker',
+                audit: { createdBy: 'Grace', tags: ['cold'] },
+              },
+            ]);
+
+            queue.clear();
+            assert.equal(queue.size, 0);
+            assert.equal(queue.undo(), true);
+            assert.deepEqual(snapshot(queue).map(item => item.id), ['a', 'b']);
+            assert.equal(queue.redo(), true);
+            assert.equal(queue.size, 0);
+
+            const ordered = new UndoableQueue();
+            ordered.enqueue({ id: 'first', meta: { n: 1 } });
+            ordered.enqueue({ id: 'second', meta: { n: 2 } });
+            ordered.enqueue({ id: 'third', meta: { n: 3 } });
+            assert.equal(ordered.dequeue().id, 'first');
+            ordered.undo();
+            ordered.redo();
+            assert.deepEqual(ordered.toArray().map(item => item.id), ['second', 'third']);
+        """),
+    },
 ]
 
 
