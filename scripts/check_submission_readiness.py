@@ -18,6 +18,7 @@ REQUIRED_HARD30_OUTPUTS = (
     "aggregate.json",
     "aggregate.md",
     "runs.csv",
+    "paired-task-deltas.csv",
     "labels.jsonl",
     "paper-report.json",
     "paper-report.md",

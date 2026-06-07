@@ -362,6 +362,26 @@ def write_runs_csv(result: dict[str, Any], path: str | Path) -> None:
             writer.writerow({key: serialized.get(key, "") for key in fieldnames})
 
 
+def write_paired_task_deltas_csv(result: dict[str, Any], path: str | Path) -> None:
+    output_path = Path(path)
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    fieldnames = [
+        "task_id",
+        "baseline_outcome",
+        "intervention_outcome",
+        "success_delta",
+        "verification_delta",
+        "repeated_tool_call_delta",
+        "token_usage_delta",
+        "failure_score_delta",
+    ]
+    with output_path.open("w", encoding="utf-8", newline="") as handle:
+        writer = csv.DictWriter(handle, fieldnames=fieldnames)
+        writer.writeheader()
+        for row in result.get("paired_task_deltas", []):
+            writer.writerow({key: row.get(key, "") for key in fieldnames})
+
+
 def build_paper_report(manifest_path: str | Path, labels_path: str | Path | None = None) -> dict[str, Any]:
     aggregate = aggregate_runs(manifest_path)
     labels = load_manual_labels(labels_path) if labels_path else {}

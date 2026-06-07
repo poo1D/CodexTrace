@@ -352,6 +352,7 @@ def test_finalize_hard30_pilot_writes_report_artifacts(tmp_path):
         "aggregate.json",
         "aggregate.md",
         "runs.csv",
+        "paired-task-deltas.csv",
         "labels.jsonl",
         "paper-report.json",
         "paper-report.md",
@@ -359,6 +360,9 @@ def test_finalize_hard30_pilot_writes_report_artifacts(tmp_path):
     assert {path.name for path in written} == expected
     assert all((tmp_path / name).exists() for name in expected)
     assert "suggested_tags" in (tmp_path / "labels.jsonl").read_text()
+    paired_csv = (tmp_path / "paired-task-deltas.csv").read_text(encoding="utf-8")
+    assert "task_id,baseline_outcome,intervention_outcome,success_delta" in paired_csv
+    assert "CT-001,failure,success,1" in paired_csv
 
 
 def test_hard30_preflight_accepts_complete_manifest(tmp_path):
@@ -489,7 +493,7 @@ def test_submission_readiness_accepts_complete_synthetic_artifact(tmp_path):
         "".join(json.dumps(row, sort_keys=True) + "\n" for row in runs),
         encoding="utf-8",
     )
-    for name in ("aggregate.json", "aggregate.md", "runs.csv", "labels.jsonl", "paper-report.json", "paper-report.md"):
+    for name in ("aggregate.json", "aggregate.md", "runs.csv", "paired-task-deltas.csv", "labels.jsonl", "paper-report.json", "paper-report.md"):
         run_dir.joinpath(name).write_text("{}\n", encoding="utf-8")
     run_dir.joinpath("manual-labels.jsonl").write_text(
         "".join(json.dumps(row, sort_keys=True) + "\n" for row in labels),
@@ -544,7 +548,7 @@ def test_submission_readiness_rejects_low_quality_manual_labels(tmp_path):
         "".join(json.dumps(row, sort_keys=True) + "\n" for row in rows),
         encoding="utf-8",
     )
-    for name in ("aggregate.json", "aggregate.md", "runs.csv", "labels.jsonl", "paper-report.json", "paper-report.md"):
+    for name in ("aggregate.json", "aggregate.md", "runs.csv", "paired-task-deltas.csv", "labels.jsonl", "paper-report.json", "paper-report.md"):
         run_dir.joinpath(name).write_text("{}\n", encoding="utf-8")
     run_dir.joinpath("manual-labels.jsonl").write_text(
         "".join(json.dumps(row, sort_keys=True) + "\n" for row in labels),

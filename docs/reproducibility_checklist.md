@@ -86,7 +86,8 @@ The same report also includes paired per-task baseline/intervention deltas for
 RQ3, so improvement claims can be inspected task by task rather than only as
 aggregate means.
 The paired summary counts improved/regressed/unchanged tasks for success,
-verification, repeated calls, token usage, and failure score.
+verification, repeated calls, token usage, and failure score. `finalize`
+also writes `paired-task-deltas.csv` for spreadsheet checks and plotting.
 
 Combined paper-facing summary:
 
