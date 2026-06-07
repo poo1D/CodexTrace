@@ -79,6 +79,10 @@ PYTHONPATH=. python3 -m codex_trace.cli research paper-report \
   --markdown-output /tmp/hard10-paper-report.md
 ```
 
+When labels are provided, the paper report includes both outcome-level RQ4
+trace signals and per-manual-label signal means. The latter is the table to use
+when explaining which trace features characterize each failure class.
+
 Combined paper-facing summary:
 
 ```bash

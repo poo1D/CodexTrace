@@ -114,7 +114,8 @@ the hidden-semantic boundary.
 Candidate additions:
 
 - Per-signal effect sizes between success and failure outcomes.
-- Per-label signal means for process-failure labels.
+- Per-label signal means for process-failure labels. The generated paper report
+  now includes this table when manual labels are supplied.
 - A simple threshold table for high-confidence warning signals.
 - Optional logistic-regression or decision-stump analysis, only if sample size
   becomes large enough.

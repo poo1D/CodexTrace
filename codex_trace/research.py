@@ -373,6 +373,7 @@ def build_paper_report(manifest_path: str | Path, labels_path: str | Path | None
         "detector_evaluation": label_evaluation,
         "outcome_counts": outcome_counts(aggregate["runs"]),
         "signal_by_outcome": signal_summary_by_outcome(aggregate["runs"]),
+        "signal_by_label": signal_summary_by_label(aggregate["runs"], labels),
     }
 
 
@@ -447,6 +448,20 @@ def render_paper_report_markdown(result: dict[str, Any]) -> str:
         lines.append(
             f"| {row['signal']} | {_fmt(row['failure_mean'])} | {_fmt(row['success_mean'])} | {_fmt(row['delta_success_minus_failure'])} |"
         )
+
+    if result.get("signal_by_label"):
+        lines.extend([
+            "",
+            "## RQ4 Trace Signals By Manual Label",
+            "",
+            "| Label | Runs | Signal | Mean | Overall mean | Delta label-overall |",
+            "| --- | ---: | --- | ---: | ---: | ---: |",
+        ])
+        for row in result["signal_by_label"]:
+            lines.append(
+                f"| {row['failure_tag']} | {row['n']} | {row['signal']} | "
+                f"{_fmt(row['label_mean'])} | {_fmt(row['overall_mean'])} | {_fmt(row['delta_label_minus_overall'])} |"
+            )
 
     expected_tags = {}
     if result.get("detector_evaluation"):
@@ -641,6 +656,35 @@ def signal_summary_by_outcome(run_rows: list[dict[str, Any]]) -> list[dict[str, 
             "success_mean": success_mean,
             "delta_success_minus_failure": round(success_mean - failure_mean, 4),
         })
+    return rows
+
+
+def signal_summary_by_label(run_rows: list[dict[str, Any]], labels: dict[tuple[str, str], set[str]]) -> list[dict[str, Any]]:
+    if not labels:
+        return []
+
+    rows = []
+    overall_rows = [row for row in run_rows if row.get("outcome") == "failure"]
+    if not overall_rows:
+        overall_rows = run_rows
+    for tag in sorted({tag for tags in labels.values() for tag in tags}):
+        tagged_rows = [
+            row for row in run_rows
+            if tag in labels.get((str(row["task_id"]), str(row["prompt_type"])), set())
+        ]
+        if not tagged_rows:
+            continue
+        for key in PAPER_SIGNAL_KEYS:
+            label_mean = _mean(tagged_rows, key)
+            overall_mean = _mean(overall_rows, key) if overall_rows else 0
+            rows.append({
+                "failure_tag": tag,
+                "n": len(tagged_rows),
+                "signal": key,
+                "label_mean": label_mean,
+                "overall_mean": overall_mean,
+                "delta_label_minus_overall": round(label_mean - overall_mean, 4),
+            })
     return rows
 
 
