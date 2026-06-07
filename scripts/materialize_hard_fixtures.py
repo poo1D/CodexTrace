@@ -1060,6 +1060,100 @@ TASK_DEFS = [
                 raise AssertionError("inverted windows should raise ValueError")
         """),
     },
+    {
+        "task_id": "HARD-017",
+        "category": "feature",
+        "repo_hint": "typescript/batch_queue",
+        "instruction": "Implement a sequential async batch queue: add push, cancel, size, and flush support; flush must preserve item order, wait for async handlers, isolate rejected items, and leave the queue reusable.",
+        "public_success_check": "npm test",
+        "success_check": "node ../grader/check.mjs",
+        "files": {
+            "package.json": node_package(),
+            "src/batchQueue.mjs": """
+                export class BatchQueue {
+                  constructor(handler) {
+                    this.handler = handler;
+                    this.items = [];
+                  }
+
+                  push(item) {
+                    this.items.push(item);
+                  }
+
+                  size() {
+                    return this.items.length;
+                  }
+
+                  flush() {
+                    const pending = this.items;
+                    this.items = [];
+                    const results = [];
+                    for (const item of pending) {
+                      results.push(this.handler(item));
+                    }
+                    return results;
+                  }
+                }
+            """,
+            "tests/batch-queue.test.mjs": """
+                import assert from 'node:assert/strict';
+                import { test } from 'node:test';
+                import { BatchQueue } from '../src/batchQueue.mjs';
+
+                test('flush waits for async handlers and preserves order', async () => {
+                  const queue = new BatchQueue(async item => {
+                    await Promise.resolve();
+                    return item * 2;
+                  });
+                  queue.push(1);
+                  queue.push(2);
+                  assert.equal(queue.size(), 2);
+                  assert.deepEqual(await queue.flush(), [
+                    { status: 'fulfilled', value: 2 },
+                    { status: 'fulfilled', value: 4 },
+                  ]);
+                  assert.equal(queue.size(), 0);
+                });
+            """,
+        },
+        "grader": node_grader("""
+            run('npm', ['test']);
+            const { BatchQueue } = await loadModule('src/batchQueue.mjs');
+
+            const events = [];
+            const queue = new BatchQueue(async item => {
+              events.push(`start:${item.id}`);
+              if (item.fail) {
+                throw new Error(`bad:${item.id}`);
+              }
+              await Promise.resolve();
+              events.push(`done:${item.id}`);
+              return item.id.toUpperCase();
+            });
+
+            queue.push({ id: 'a' });
+            queue.push({ id: 'b', fail: true });
+            queue.push({ id: 'c' });
+            assert.equal(queue.cancel(item => item.id === 'c'), 1);
+            assert.equal(queue.size(), 2);
+
+            const first = await queue.flush();
+            assert.deepEqual(first.map(result => result.status), ['fulfilled', 'rejected']);
+            assert.equal(first[0].value, 'A');
+            assert.match(first[1].reason.message, /bad:b/);
+            assert.deepEqual(events, ['start:a', 'done:a', 'start:b']);
+            assert.equal(queue.size(), 0);
+
+            queue.push({ id: 'd' });
+            queue.push({ id: 'e' });
+            assert.equal(queue.cancel(item => item.id === 'missing'), 0);
+            assert.deepEqual(await queue.flush(), [
+              { status: 'fulfilled', value: 'D' },
+              { status: 'fulfilled', value: 'E' },
+            ]);
+            assert.deepEqual(await queue.flush(), []);
+        """),
+    },
 ]
 
 

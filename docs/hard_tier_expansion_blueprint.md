@@ -1,8 +1,8 @@
 # Hard-Tier Expansion Blueprint
 
 This blueprint specifies the hard-tier expansion from the current evaluated
-`hard10` pilot toward a 30-50 task hard tier. `HARD-011` through `HARD-016` are
-now runnable fixtures; `HARD-017` through `HARD-030` are design candidates, not
+`hard10` pilot toward a 30-50 task hard tier. `HARD-011` through `HARD-017` are
+now runnable fixtures; `HARD-018` through `HARD-030` are design candidates, not
 claims that those tasks already exist as runnable fixtures.
 
 The goal is to create more outcome failures and, importantly, more observable
@@ -21,11 +21,11 @@ process-failure positives for detector evaluation.
 
 | Target | Current | Expansion target |
 | --- | ---: | ---: |
-| Hard tasks | 16 | 30 |
+| Hard tasks | 17 | 30 |
 | Hard runs | 20 | 60 |
 | Evaluated hard-pilot tasks | 10 | 30 |
-| Hidden semantic tasks | 11 | 15 |
-| Observable process-failure tasks | 5 | 10-15 |
+| Hidden semantic tasks | 12 | 15 |
+| Observable process-failure tasks | 6 | 10-15 |
 | Process labels with positive examples | 1 | 4+ |
 
 ## Implemented And Candidate Tasks
@@ -38,7 +38,7 @@ process-failure positives for detector evaluation.
 | HARD-014 | refactor | python/permission_matrix | `python3 -m unittest discover -s tests` | Implemented fixture; hidden tests ensure role inheritance and deny precedence survive refactor. | `verification_gap`, `hidden_semantic_edge_case` |
 | HARD-015 | ci_failure | typescript/package_exports | `npm run build` | Implemented fixture; hidden grader imports both ESM and CJS entry points. | `unrecovered_tool_error`, `premature_completion` |
 | HARD-016 | bug_fix | python/time_window | `python3 -m unittest discover -s tests` | Implemented fixture; hidden tests cover DST boundaries, half-open windows, and invalid windows. | `hidden_semantic_edge_case` |
-| HARD-017 | feature | typescript/batch_queue | `npm test` | Hidden tests cover cancellation, flush ordering, and rejected item isolation. | `repetitive_exploration`, `hidden_semantic_edge_case` |
+| HARD-017 | feature | typescript/batch_queue | `npm test` | Implemented fixture; hidden tests cover cancellation, flush ordering, and rejected item isolation. | `repetitive_exploration`, `hidden_semantic_edge_case` |
 | HARD-018 | error_localization | python/yaml_frontmatter | `python3 -m unittest discover -s tests` | Hidden tests cover malformed delimiters and empty documents. | `unrecovered_tool_error` |
 | HARD-019 | multi_turn_change | python/search_ranker | `python3 -m unittest discover -s tests` | Hidden tests require exact-match boost without breaking recency tie-breaks. | `context_drift`, `hidden_semantic_edge_case` |
 | HARD-020 | sandbox_friction | typescript/asset_loader | `npm test` | Hidden grader forbids network and expects local fixture fallback. | `sandbox_permission_deadlock` |
@@ -69,8 +69,8 @@ After collecting these tasks, manual labels should aim for at least:
 
 ## Implementation Order
 
-1. Implement HARD-017 next to add a multi-step TypeScript feature change after
-   the new Python hidden semantic fixture.
+1. Implement HARD-018 next to add an error-localization task with malformed
+   input diagnostics.
 2. Run dry-run materialization to confirm prompts and hidden grader isolation.
 3. Run initial fixture checks and confirm every hidden grader fails before
    agent edits.
