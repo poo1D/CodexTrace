@@ -103,6 +103,11 @@ PYTHONPATH=. python3 scripts/run_hard30_shards.py \
   --status-json benchmark/hard/pilot/hard30-real/shard-status.json
 ```
 
+Each shard writes `shard-run.json`, `shard-run.stdout`, and `shard-run.stderr`
+next to its `runs.jsonl`. The status JSON includes the shard return code and
+log paths so failed tasks can be retried or inspected without scanning every
+directory by hand.
+
 After all shards finish, merge their manifests into the single `runs.jsonl`
 expected by the reporting tools:
 

@@ -62,7 +62,8 @@ Acceptance criteria:
 - The selected hard30 `tasks.jsonl` dry-runs to 60 baseline/intervention
   records.
 - The selected hard30 shards dry-run and merge to 60 baseline/intervention
-  records with configurable `--max-parallel` concurrency.
+  records with configurable `--max-parallel` concurrency and per-shard
+  `shard-run.json` failure metadata.
 - Initial fixtures fail their hidden graders before agent edits.
 - Prompt materialization keeps hidden grader details out of agent prompts.
 - The selected tasks preserve category and expected failure-pressure coverage.

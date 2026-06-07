@@ -198,6 +198,7 @@ def test_hard30_shard_commands_run_one_task_per_shard(tmp_path):
 
     assert [command.task_id for command in commands] == ["HARD-001", "HARD-002"]
     assert commands[0].shard_dir == tmp_path / "hard30-real" / "shards" / "HARD-001"
+    assert commands[0].metadata_path == commands[0].shard_dir / "shard-run.json"
     assert commands[0].command.count("--task-id") == 1
     assert commands[0].command[commands[0].command.index("--task-id") + 1] == "HARD-001"
     assert "--dry-run" in commands[0].command
@@ -233,7 +234,7 @@ def test_hard30_shard_skip_complete_filters_finished_manifests(tmp_path):
 def test_hard30_shard_status_summary_reports_readiness(tmp_path):
     selection_dir = Path("benchmark/hard/pilot/hard30-selection")
     commands = build_shard_commands(
-        ["HARD-001", "HARD-002", "HARD-003"],
+        ["HARD-001", "HARD-002", "HARD-003", "HARD-004"],
         selection_dir=selection_dir,
         run_dir=tmp_path / "hard30-real",
         dry_run=True,
@@ -255,21 +256,29 @@ def test_hard30_shard_status_summary_reports_readiness(tmp_path):
         "".join(json.dumps(row, sort_keys=True) + "\n" for row in incomplete_rows),
         encoding="utf-8",
     )
+    commands[2].shard_dir.mkdir(parents=True)
+    commands[2].metadata_path.write_text(json.dumps({"returncode": 2}), encoding="utf-8")
 
     summary = summarize_shards(commands)
     rendered = render_status(summary)
 
-    assert summary["task_count"] == 3
+    assert summary["task_count"] == 4
     assert summary["completed_count"] == 1
+    assert summary["failed_count"] == 1
+    assert summary["failed"] == ["HARD-003"]
     assert summary["incomplete"] == ["HARD-002"]
-    assert summary["missing"] == ["HARD-003"]
+    assert summary["missing"] == ["HARD-003", "HARD-004"]
     assert summary["record_count"] == 3
-    assert summary["expected_record_count"] == 6
+    assert summary["expected_record_count"] == 8
     assert summary["ready_to_merge"] is False
     assert summary["shards"][0]["prompt_types"] == ["baseline", "intervention"]
+    assert summary["shards"][2]["returncode"] == 2
+    assert summary["shards"][2]["metadata_path"].endswith("shard-run.json")
     assert "Ready to merge: no" in rendered
+    assert "Failed shards: 1" in rendered
+    assert "Failed: HARD-003" in rendered
     assert "Incomplete: HARD-002" in rendered
-    assert "Missing: HARD-003" in rendered
+    assert "Missing: HARD-003, HARD-004" in rendered
 
 
 def test_merge_hard30_shards_rewrites_relative_paths(tmp_path):

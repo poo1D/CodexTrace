@@ -23,6 +23,7 @@ class ShardCommand:
     shard_dir: Path
     stdout_path: Path
     stderr_path: Path
+    metadata_path: Path
 
 
 @dataclass(frozen=True)
@@ -32,6 +33,7 @@ class ShardStatus:
     record_count: int
     manifest_path: Path
     prompt_types: tuple[str, ...] = ()
+    returncode: int | None = None
 
 
 def load_task_ids(selection_dir: Path = DEFAULT_SELECTION_DIR) -> list[str]:
@@ -80,34 +82,44 @@ def build_shard_commands(
             shard_dir=shard_dir,
             stdout_path=shard_dir / "shard-run.stdout",
             stderr_path=shard_dir / "shard-run.stderr",
+            metadata_path=shard_dir / "shard-run.json",
         ))
     return commands
 
 
 def inspect_shard(command: ShardCommand, expected_records: int = 2) -> ShardStatus:
+    returncode = None
+    if command.metadata_path.exists():
+        metadata = json.loads(command.metadata_path.read_text(encoding="utf-8"))
+        if metadata.get("returncode") is not None:
+            returncode = int(metadata["returncode"])
     manifest = command.shard_dir / "runs.jsonl"
     if not manifest.exists():
-        return ShardStatus(command.task_id, False, 0, manifest)
+        return ShardStatus(command.task_id, False, 0, manifest, returncode=returncode)
     rows = [json.loads(line) for line in manifest.read_text(encoding="utf-8").splitlines() if line.strip()]
     prompt_types = tuple(sorted(str(row.get("prompt_type", "")) for row in rows if row.get("prompt_type")))
-    return ShardStatus(command.task_id, len(rows) == expected_records, len(rows), manifest, prompt_types)
+    complete = len(rows) == expected_records and returncode in (None, 0)
+    return ShardStatus(command.task_id, complete, len(rows), manifest, prompt_types, returncode)
 
 
 def summarize_shards(commands: list[ShardCommand]) -> dict[str, Any]:
     statuses = [inspect_shard(command) for command in commands]
     completed = [status.task_id for status in statuses if status.complete]
+    failed = [status.task_id for status in statuses if status.returncode not in (None, 0)]
     incomplete = [status.task_id for status in statuses if status.record_count and not status.complete]
     missing = [status.task_id for status in statuses if not status.record_count]
     total_records = sum(status.record_count for status in statuses)
     return {
         "task_count": len(statuses),
         "completed_count": len(completed),
+        "failed_count": len(failed),
         "incomplete_count": len(incomplete),
         "missing_count": len(missing),
         "record_count": total_records,
         "expected_record_count": len(statuses) * 2,
         "ready_to_merge": len(statuses) > 0 and len(completed) == len(statuses),
         "completed": completed,
+        "failed": failed,
         "incomplete": incomplete,
         "missing": missing,
         "shards": [
@@ -116,9 +128,13 @@ def summarize_shards(commands: list[ShardCommand]) -> dict[str, Any]:
                 "complete": status.complete,
                 "record_count": status.record_count,
                 "prompt_types": list(status.prompt_types),
+                "returncode": status.returncode,
                 "manifest_path": str(status.manifest_path),
+                "stdout_path": str(commands[index].stdout_path),
+                "stderr_path": str(commands[index].stderr_path),
+                "metadata_path": str(commands[index].metadata_path),
             }
-            for status in statuses
+            for index, status in enumerate(statuses)
         ],
     }
 
@@ -129,11 +145,14 @@ def render_status(summary: dict[str, Any]) -> str:
         "",
         f"Tasks: {summary['task_count']}",
         f"Completed shards: {summary['completed_count']}",
+        f"Failed shards: {summary['failed_count']}",
         f"Incomplete shards: {summary['incomplete_count']}",
         f"Missing shards: {summary['missing_count']}",
         f"Run records: {summary['record_count']} / {summary['expected_record_count']}",
         f"Ready to merge: {'yes' if summary['ready_to_merge'] else 'no'}",
     ]
+    if summary["failed"]:
+        lines.extend(["", f"Failed: {', '.join(summary['failed'])}"])
     if summary["incomplete"]:
         lines.extend(["", f"Incomplete: {', '.join(summary['incomplete'])}"])
     if summary["missing"]:
@@ -159,7 +178,7 @@ def run_shard(command: ShardCommand) -> subprocess.CompletedProcess[str]:
     env = dict(os.environ)
     env["PYTHONPATH"] = str(ROOT)
     with command.stdout_path.open("w", encoding="utf-8") as stdout_handle, command.stderr_path.open("w", encoding="utf-8") as stderr_handle:
-        return subprocess.run(
+        result = subprocess.run(
             command.command,
             cwd=ROOT,
             env=env,
@@ -168,6 +187,21 @@ def run_shard(command: ShardCommand) -> subprocess.CompletedProcess[str]:
             stderr=stderr_handle,
             check=False,
         )
+    command.metadata_path.write_text(
+        json.dumps(
+            {
+                "task_id": command.task_id,
+                "returncode": result.returncode,
+                "command": command.command,
+                "stdout_path": str(command.stdout_path),
+                "stderr_path": str(command.stderr_path),
+            },
+            indent=2,
+            sort_keys=True,
+        ) + "\n",
+        encoding="utf-8",
+    )
+    return result
 
 
 def run_shards(commands: list[ShardCommand], max_parallel: int) -> list[tuple[ShardCommand, int]]:
