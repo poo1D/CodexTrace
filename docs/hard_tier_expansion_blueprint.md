@@ -1,8 +1,8 @@
 # Hard-Tier Expansion Blueprint
 
 This blueprint specifies the hard-tier expansion from the current evaluated
-`hard10` pilot toward a 30-50 task hard tier. `HARD-011` through `HARD-025` are
-now runnable fixtures; `HARD-026` through `HARD-030` are design candidates, not
+`hard10` pilot toward a 30-50 task hard tier. `HARD-011` through `HARD-026` are
+now runnable fixtures; `HARD-027` through `HARD-030` are design candidates, not
 claims that those tasks already exist as runnable fixtures.
 
 The goal is to create more outcome failures and, importantly, more observable
@@ -21,7 +21,7 @@ process-failure positives for detector evaluation.
 
 | Target | Current | Expansion target |
 | --- | ---: | ---: |
-| Hard tasks | 25 | 30 |
+| Hard tasks | 26 | 30 |
 | Hard runs | 20 | 60 |
 | Evaluated hard-pilot tasks | 10 | 30 |
 | Hidden semantic tasks | 15 | 15 |
@@ -47,7 +47,7 @@ process-failure positives for detector evaluation.
 | HARD-023 | error_recovery | python/cache_stampede | `python3 -m unittest discover -s tests` | Implemented fixture; hidden tests cover concurrent failures, stale fallback, failed cold-load retry, and different-key nonblocking behavior. | `unrecovered_tool_error`, `repetitive_exploration`, `verification_gap` |
 | HARD-024 | feature | typescript/csv_stream | `npm test` | Implemented fixture; hidden tests cover chunk boundaries inside quoted fields, escaped quotes, quoted newlines, CRLF, and malformed quote errors. | `hidden_semantic_edge_case`, `verification_gap` |
 | HARD-025 | ci_failure | python/typing_protocol | `python3 -m unittest discover -s tests` | Implemented fixture; hidden grader checks runtime-checkable Protocol conformance and foreign structural writers after visible CI failures. | `premature_completion`, `verification_gap`, `hidden_semantic_edge_case` |
-| HARD-026 | multi_turn_change | python/rules_engine | `python3 -m unittest discover -s tests` | Hidden tests require new priority rules while preserving legacy fallback. | `context_drift` |
+| HARD-026 | multi_turn_change | python/rules_engine | `python3 -m unittest discover -s tests` | Implemented fixture; hidden tests require priority tie stability, explicit zero/negative priorities, legacy fallback, defaults, and input preservation. | `context_drift`, `hidden_semantic_edge_case` |
 | HARD-027 | dependency_friction | typescript/date_formatter | `npm test` | Hidden grader checks implementation without installing extra date libraries. | `sandbox_permission_deadlock`, `repetitive_exploration` |
 | HARD-028 | bug_fix | python/path_normalizer | `python3 -m unittest discover -s tests` | Hidden tests cover Windows-style paths, dot segments, and root preservation. | `hidden_semantic_edge_case` |
 | HARD-029 | refactor | typescript/validation_pipeline | `npm test` | Hidden tests ensure all validation errors are accumulated after refactor. | `verification_gap`, `context_drift` |
@@ -69,7 +69,7 @@ After collecting these tasks, manual labels should aim for at least:
 
 ## Implementation Order
 
-1. Implement HARD-026 next to add a rules-engine multi-turn fixture with priority rules and legacy fallback preservation.
+1. Implement HARD-027 next to add a dependency-friction date formatter fixture without external libraries.
 2. Run dry-run materialization to confirm prompts and hidden grader isolation.
 3. Run initial fixture checks and confirm every hidden grader fails before
    agent edits.

@@ -2056,6 +2056,96 @@ TASK_DEFS = [
             assert "@runtime_checkable" in source
         """),
     },
+    {
+        "task_id": "HARD-026",
+        "category": "multi_turn_change",
+        "repo_hint": "python/rules_engine",
+        "instruction": "First add priority-based rule resolution; then preserve the legacy first-match fallback for rules that do not declare a priority.",
+        "public_success_check": "python3 -m unittest discover -s tests",
+        "success_check": "python3 ../grader/check.py",
+        "files": {
+            "src/rules_engine.py": """
+                def evaluate(record, rules, default=None):
+                    for rule in rules:
+                        conditions = rule.get("conditions", {})
+                        if all(record.get(key) == value for key, value in conditions.items()):
+                            return rule.get("result")
+                    return default
+            """,
+            "tests/test_rules_engine.py": """
+                import sys
+                import unittest
+                from pathlib import Path
+
+                sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
+                from rules_engine import evaluate
+
+
+                class RulesEngineTest(unittest.TestCase):
+                    def test_highest_priority_matching_rule_wins(self):
+                        rules = [
+                            {"conditions": {"country": "US"}, "result": "review", "priority": 1},
+                            {"conditions": {"country": "US", "amount": 5000}, "result": "block", "priority": 10},
+                        ]
+                        self.assertEqual(evaluate({"country": "US", "amount": 5000}, rules), "block")
+
+                    def test_legacy_rule_is_fallback_when_no_priority_rule_matches(self):
+                        rules = [
+                            {"conditions": {"country": "US"}, "result": "legacy-review"},
+                            {"conditions": {"country": "CA"}, "result": "priority-review", "priority": 5},
+                        ]
+                        self.assertEqual(evaluate({"country": "US"}, rules), "legacy-review")
+
+
+                if __name__ == "__main__":
+                    unittest.main()
+            """,
+        },
+        "grader": py_grader("""
+            run_visible_tests()
+            mod = importlib.import_module("rules_engine")
+
+            rules = [
+                {"name": "legacy-catchall", "conditions": {}, "result": "legacy-review"},
+                {"name": "low-risk", "conditions": {"type": "transfer"}, "result": "allow", "priority": 1},
+                {"name": "high-risk", "conditions": {"type": "transfer", "amount": 9000}, "result": "block", "priority": 50},
+            ]
+            assert mod.evaluate({"type": "transfer", "amount": 9000}, rules, default="manual") == "block"
+
+            tie_rules = [
+                {"conditions": {"segment": "vip"}, "result": "first", "priority": 7},
+                {"conditions": {"segment": "vip"}, "result": "second", "priority": 7},
+            ]
+            assert mod.evaluate({"segment": "vip"}, tie_rules) == "first"
+
+            zero_priority_rules = [
+                {"conditions": {"region": "EU"}, "result": "legacy-fallback"},
+                {"conditions": {"region": "EU"}, "result": "explicit-zero", "priority": 0},
+            ]
+            assert mod.evaluate({"region": "EU"}, zero_priority_rules) == "explicit-zero"
+
+            negative_priority_rules = [
+                {"conditions": {"kind": "login"}, "result": "legacy-login"},
+                {"conditions": {"kind": "login"}, "result": "priority-negative", "priority": -5},
+            ]
+            assert mod.evaluate({"kind": "login"}, negative_priority_rules) == "priority-negative"
+
+            fallback_rules = [
+                {"conditions": {"country": "US"}, "result": "legacy-us"},
+                {"conditions": {"country": "CA"}, "result": "priority-ca", "priority": 20},
+            ]
+            assert mod.evaluate({"country": "US"}, fallback_rules, default="manual") == "legacy-us"
+            assert mod.evaluate({"country": "MX"}, fallback_rules, default="manual") == "manual"
+
+            mutation_rules = [
+                {"conditions": {"status": "new"}, "result": "legacy-new"},
+                {"conditions": {"status": "new"}, "result": "priority-new", "priority": 3},
+            ]
+            snapshot = [dict(rule) for rule in mutation_rules]
+            assert mod.evaluate({"status": "new"}, mutation_rules) == "priority-new"
+            assert mutation_rules == snapshot
+        """),
+    },
 ]
 
 
