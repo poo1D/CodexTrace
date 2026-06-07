@@ -2,6 +2,8 @@ import json
 from pathlib import Path
 
 from scripts.finalize_hard30_pilot import finalize
+from scripts.merge_hard30_shards import merge_shards, rewrite_shard_row
+from scripts.run_hard30_shards import build_shard_commands
 
 from codex_trace.research import (
     aggregate_runs,
@@ -179,6 +181,83 @@ def test_hard30_selection_is_balanced_and_runnable():
         "multi_turn_change",
         "stateful_regression",
     }
+
+
+def test_hard30_shard_commands_run_one_task_per_shard(tmp_path):
+    selection_dir = Path("benchmark/hard/pilot/hard30-selection")
+    commands = build_shard_commands(
+        ["HARD-001", "HARD-002"],
+        selection_dir=selection_dir,
+        run_dir=tmp_path / "hard30-real",
+        timeout_seconds=900,
+        codex_bin="codex-test",
+        sandbox="danger-full-access",
+        dry_run=True,
+    )
+
+    assert [command.task_id for command in commands] == ["HARD-001", "HARD-002"]
+    assert commands[0].shard_dir == tmp_path / "hard30-real" / "shards" / "HARD-001"
+    assert commands[0].command.count("--task-id") == 1
+    assert commands[0].command[commands[0].command.index("--task-id") + 1] == "HARD-001"
+    assert "--dry-run" in commands[0].command
+    assert commands[0].command[commands[0].command.index("--timeout-seconds") + 1] == "900"
+    assert commands[0].command[commands[0].command.index("--codex-bin") + 1] == "codex-test"
+    assert commands[0].command[commands[0].command.index("--sandbox") + 1] == "danger-full-access"
+
+
+def test_merge_hard30_shards_rewrites_relative_paths(tmp_path):
+    selection_dir = tmp_path / "selection"
+    selection_dir.mkdir()
+    selection_dir.joinpath("task_ids.txt").write_text("HARD-001\nHARD-002\n", encoding="utf-8")
+    run_dir = tmp_path / "hard30-real"
+    for task_id in ("HARD-001", "HARD-002"):
+        shard_dir = run_dir / "shards" / task_id
+        shard_dir.mkdir(parents=True)
+        rows = [
+            {
+                "task_id": task_id,
+                "prompt_type": "baseline",
+                "trace_path": f"{task_id}/baseline/trace.jsonl",
+                "outcome": "failure",
+                "workdir": f"{task_id}/baseline/repo",
+                "grader_path": f"{task_id}/baseline/grader",
+                "prompt_path": f"{task_id}/baseline/prompt.md",
+            },
+            {
+                "task_id": task_id,
+                "prompt_type": "intervention",
+                "trace_path": f"{task_id}/intervention/trace.jsonl",
+                "outcome": "success",
+                "workdir": f"{task_id}/intervention/repo",
+                "grader_path": "",
+                "prompt_path": f"{task_id}/intervention/prompt.md",
+            },
+        ]
+        shard_dir.joinpath("runs.jsonl").write_text(
+            "".join(json.dumps(row, sort_keys=True) + "\n" for row in rows),
+            encoding="utf-8",
+        )
+
+    merged = merge_shards(run_dir=run_dir, selection_dir=selection_dir)
+    manifest_rows = [
+        json.loads(line)
+        for line in run_dir.joinpath("runs.jsonl").read_text(encoding="utf-8").splitlines()
+        if line.strip()
+    ]
+
+    assert len(merged) == 4
+    assert manifest_rows == merged
+    assert manifest_rows[0]["trace_path"] == "shards/HARD-001/HARD-001/baseline/trace.jsonl"
+    assert manifest_rows[0]["workdir"] == "shards/HARD-001/HARD-001/baseline/repo"
+    assert manifest_rows[0]["grader_path"] == "shards/HARD-001/HARD-001/baseline/grader"
+    assert manifest_rows[1]["grader_path"] == ""
+
+
+def test_rewrite_shard_row_leaves_empty_paths_empty():
+    row = rewrite_shard_row({"trace_path": "HARD-001/baseline/trace.jsonl", "grader_path": ""}, Path("shards/HARD-001"))
+
+    assert row["trace_path"] == "shards/HARD-001/HARD-001/baseline/trace.jsonl"
+    assert row["grader_path"] == ""
 
 
 def test_finalize_hard30_pilot_writes_report_artifacts(tmp_path):

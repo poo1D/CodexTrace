@@ -40,8 +40,11 @@ the selected hard30 pilot.
 The hard30 pilot selection is fixed in
 `benchmark/hard/pilot/hard30-selection`. It keeps the evaluated hard10 pilot as
 a prefix and adds 20 tasks selected for category and process-pressure coverage.
-After collection, `scripts/finalize_hard30_pilot.py` generates the aggregate
-tables, per-run CSV, manual-label template, and paper-report artifacts.
+Collection can run as one shard per task with `scripts/run_hard30_shards.py`;
+`scripts/merge_hard30_shards.py` then creates the single `runs.jsonl` consumed
+by the reporting tools. After collection, `scripts/finalize_hard30_pilot.py`
+generates the aggregate tables, per-run CSV, manual-label template, and
+paper-report artifacts.
 
 Hard30 collection plan:
 
@@ -57,6 +60,8 @@ Acceptance criteria:
 
 - The selected hard30 `tasks.jsonl` dry-runs to 60 baseline/intervention
   records.
+- The selected hard30 shards dry-run and merge to 60 baseline/intervention
+  records with configurable `--max-parallel` concurrency.
 - Initial fixtures fail their hidden graders before agent edits.
 - Prompt materialization keeps hidden grader details out of agent prompts.
 - The selected tasks preserve category and expected failure-pressure coverage.

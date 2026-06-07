@@ -72,6 +72,38 @@ PYTHONPATH=. python3 -m codex_trace.cli research run \
 
 ## Real Collection Command
 
+For a resumable run, collect one task per shard. The example below allows up to
+15 hard tasks to run concurrently, with each task still producing its baseline
+and intervention trace.
+
+```bash
+PYTHONPATH=. python3 scripts/run_hard30_shards.py \
+  --run-dir benchmark/hard/pilot/hard30-real \
+  --max-parallel 15 \
+  --timeout-seconds 600
+```
+
+For a safer local laptop run, lower `--max-parallel` to 2-4. For a smoke test
+that creates the shard directories without invoking Codex:
+
+```bash
+PYTHONPATH=. python3 scripts/run_hard30_shards.py \
+  --run-dir /tmp/codextrace-hard30-sharded-dry \
+  --max-parallel 15 \
+  --dry-run
+```
+
+After all shards finish, merge their manifests into the single `runs.jsonl`
+expected by the reporting tools:
+
+```bash
+PYTHONPATH=. python3 scripts/merge_hard30_shards.py \
+  --run-dir benchmark/hard/pilot/hard30-real
+```
+
+A non-sharded collection is still supported when a single long process is
+preferred:
+
 ```bash
 PYTHONPATH=. python3 -m codex_trace.cli research run \
   --tasks benchmark/hard/pilot/hard30-selection/tasks.jsonl \
@@ -81,8 +113,9 @@ PYTHONPATH=. python3 -m codex_trace.cli research run \
 
 ## Finalize Reports
 
-After the real run completes, generate aggregate tables, per-run CSV, label
-templates, and paper-report artifacts:
+After the real run completes and `benchmark/hard/pilot/hard30-real/runs.jsonl`
+exists, generate aggregate tables, per-run CSV, label templates, and
+paper-report artifacts:
 
 ```bash
 PYTHONPATH=. python3 scripts/finalize_hard30_pilot.py \

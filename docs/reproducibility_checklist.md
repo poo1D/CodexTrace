@@ -29,6 +29,8 @@ The stored pilots can be inspected and aggregated without re-running Codex.
 | `docs/related_work.md` | Compact bibliography and positioning notes. |
 | `docs/submission_readiness_plan.md` | Workstreams and decision gate for a stronger paper submission. |
 | `benchmark/hard/pilot/hard30-selection/` | Fixed 30-task hard-tier selection for the next 60-run baseline/intervention collection. |
+| `scripts/run_hard30_shards.py` | Resumable hard30 collection runner with configurable per-task concurrency. |
+| `scripts/merge_hard30_shards.py` | Merge per-task hard30 shard manifests into the reporting `runs.jsonl`. |
 | `scripts/finalize_hard30_pilot.py` | Post-processing entrypoint for hard30 aggregate tables, labels, CSV, and paper-report artifacts. |
 | `benchmark/pilot/full30-real` | 30-task / 60-run real seed pilot. |
 | `benchmark/hard/pilot/hard10-real` | 10-task / 20-run hard-tier pilot with outcome failures. |
@@ -92,6 +94,7 @@ PYTHONPATH=. python3 -m codex_trace.cli research summary \
 | The benchmark has a 30-task seed tier and two prompt conditions. | `benchmark/tasks.jsonl`, `benchmark/prompts/`, `benchmark/pilot/full30-real/runs.jsonl` | Implemented; 60 real stored runs. |
 | The benchmark has a hard tier with hidden graders. | `benchmark/hard/tasks.jsonl`, `benchmark/hard/repos/`, `benchmark/hard/pilot/hard10-real` | Implemented; 50 runnable hard tasks and 20 real stored hard10 runs. |
 | A balanced hard30 pilot has been selected for the next experiment pass. | `benchmark/hard/pilot/hard30-selection/tasks.jsonl`, `benchmark/hard/pilot/hard30-selection/manifest.json` | Implemented; 30 selected tasks, 60 expected baseline/intervention runs. |
+| Hard30 collection can run resumably with bounded concurrency. | `scripts/run_hard30_shards.py`, `scripts/merge_hard30_shards.py` | Implemented; one shard per hard30 task, configurable with `--max-parallel`. |
 | Hidden graders are not exposed during Codex execution. | `codex_trace/research.py`, `public_success_check` fields, hard-tier prompts | Implemented; hidden grader copied after Codex exits. |
 | Full30 intervention reduces process waste. | `benchmark/pilot/full30-real/aggregate.md` | Supported: repeated tool calls `10.43 -> 7.00`, token usage `218.7k -> 184.8k`. |
 | Hard10 intervention improves success and reduces waste. | `benchmark/hard/pilot/hard10-real/aggregate.md` | Supported: success `0.70 -> 0.80`, repeated tool calls `9.20 -> 6.20`, token usage `248.9k -> 187.5k`. |
@@ -117,6 +120,31 @@ PYTHONPATH=. python3 -m codex_trace.cli research run \
   --tasks benchmark/hard/tasks.jsonl \
   --output-dir /tmp/codextrace-hard-dry \
   --dry-run
+```
+
+Run the selected hard30 pilot as 30 resumable task shards without model calls,
+using the same 15-way concurrency intended for a larger machine:
+
+```bash
+PYTHONPATH=. PYTHONPYCACHEPREFIX=/tmp/codextrace-pycache \
+  python3 scripts/run_hard30_shards.py \
+  --run-dir /tmp/codextrace-hard30-sharded-dry \
+  --max-parallel 15 \
+  --dry-run
+```
+
+Merge the dry-run shard manifests into the single reporting manifest:
+
+```bash
+PYTHONPATH=. PYTHONPYCACHEPREFIX=/tmp/codextrace-pycache \
+  python3 scripts/merge_hard30_shards.py \
+  --run-dir /tmp/codextrace-hard30-sharded-dry
+```
+
+Expected current output:
+
+```text
+Wrote 60 run record(s) to /tmp/codextrace-hard30-sharded-dry/runs.jsonl
 ```
 
 Check that all hard-tier initial fixtures fail their hidden graders before an
