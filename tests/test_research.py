@@ -3,7 +3,7 @@ from pathlib import Path
 
 from scripts.finalize_hard30_pilot import finalize
 from scripts.merge_hard30_shards import merge_shards, rewrite_shard_row
-from scripts.run_hard30_shards import build_shard_commands
+from scripts.run_hard30_shards import build_shard_commands, filter_commands, inspect_shard
 
 from codex_trace.research import (
     aggregate_runs,
@@ -203,6 +203,30 @@ def test_hard30_shard_commands_run_one_task_per_shard(tmp_path):
     assert commands[0].command[commands[0].command.index("--timeout-seconds") + 1] == "900"
     assert commands[0].command[commands[0].command.index("--codex-bin") + 1] == "codex-test"
     assert commands[0].command[commands[0].command.index("--sandbox") + 1] == "danger-full-access"
+
+
+def test_hard30_shard_skip_complete_filters_finished_manifests(tmp_path):
+    selection_dir = Path("benchmark/hard/pilot/hard30-selection")
+    commands = build_shard_commands(
+        ["HARD-001", "HARD-002"],
+        selection_dir=selection_dir,
+        run_dir=tmp_path / "hard30-real",
+        dry_run=True,
+    )
+    completed = commands[0].shard_dir / "runs.jsonl"
+    completed.parent.mkdir(parents=True)
+    completed.write_text(
+        "\n".join([
+            json.dumps({"task_id": "HARD-001", "prompt_type": "baseline", "trace_path": "a"}),
+            json.dumps({"task_id": "HARD-001", "prompt_type": "intervention", "trace_path": "b"}),
+        ]) + "\n",
+        encoding="utf-8",
+    )
+
+    assert inspect_shard(commands[0]).complete is True
+    assert inspect_shard(commands[1]).complete is False
+    assert filter_commands(commands, skip_complete=True) == [commands[1]]
+    assert filter_commands(commands, skip_complete=False) == commands
 
 
 def test_merge_hard30_shards_rewrites_relative_paths(tmp_path):

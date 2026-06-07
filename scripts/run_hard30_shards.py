@@ -23,6 +23,14 @@ class ShardCommand:
     stderr_path: Path
 
 
+@dataclass(frozen=True)
+class ShardStatus:
+    task_id: str
+    complete: bool
+    record_count: int
+    manifest_path: Path
+
+
 def load_task_ids(selection_dir: Path = DEFAULT_SELECTION_DIR) -> list[str]:
     task_id_path = selection_dir / "task_ids.txt"
     return [line.strip() for line in task_id_path.read_text(encoding="utf-8").splitlines() if line.strip()]
@@ -73,6 +81,27 @@ def build_shard_commands(
     return commands
 
 
+def inspect_shard(command: ShardCommand, expected_records: int = 2) -> ShardStatus:
+    manifest = command.shard_dir / "runs.jsonl"
+    if not manifest.exists():
+        return ShardStatus(command.task_id, False, 0, manifest)
+    record_count = sum(1 for line in manifest.read_text(encoding="utf-8").splitlines() if line.strip())
+    return ShardStatus(command.task_id, record_count == expected_records, record_count, manifest)
+
+
+def filter_commands(commands: list[ShardCommand], skip_complete: bool) -> list[ShardCommand]:
+    if not skip_complete:
+        return commands
+    pending = []
+    for command in commands:
+        status = inspect_shard(command)
+        if status.complete:
+            print(f"{command.task_id}: skip complete ({status.record_count} records)")
+        else:
+            pending.append(command)
+    return pending
+
+
 def run_shard(command: ShardCommand) -> subprocess.CompletedProcess[str]:
     command.shard_dir.mkdir(parents=True, exist_ok=True)
     env = dict(os.environ)
@@ -115,6 +144,7 @@ def main() -> int:
     parser.add_argument("--codex-bin", default="codex")
     parser.add_argument("--sandbox", default="workspace-write")
     parser.add_argument("--dry-run", action="store_true")
+    parser.add_argument("--skip-complete", action="store_true", help="Do not rerun shards that already have two run records.")
     args = parser.parse_args()
 
     selected_ids = args.task_ids or load_task_ids(args.selection_dir)
@@ -127,6 +157,10 @@ def main() -> int:
         sandbox=args.sandbox,
         dry_run=args.dry_run,
     )
+    commands = filter_commands(commands, args.skip_complete)
+    if not commands:
+        print("No pending shard(s).")
+        return 0
     results = run_shards(commands, args.max_parallel)
     failures = [(command.task_id, returncode) for command, returncode in results if returncode != 0]
     if failures:

@@ -80,7 +80,8 @@ and intervention trace.
 PYTHONPATH=. python3 scripts/run_hard30_shards.py \
   --run-dir benchmark/hard/pilot/hard30-real \
   --max-parallel 15 \
-  --timeout-seconds 600
+  --timeout-seconds 600 \
+  --skip-complete
 ```
 
 For a safer local laptop run, lower `--max-parallel` to 2-4. For a smoke test
