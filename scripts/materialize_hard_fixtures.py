@@ -969,6 +969,97 @@ TASK_DEFS = [
             assert.equal(cjs.formatName({ first: 'Alan', last: 'Turing', title: 'Dr.' }), 'Alan Turing');
         """),
     },
+    {
+        "task_id": "HARD-016",
+        "category": "bug_fix",
+        "repo_hint": "python/time_window",
+        "instruction": "Fix time window overlap checks: windows are half-open [start, end), invalid or empty windows raise ValueError, and timezone-aware datetimes must be compared by absolute time across DST boundaries.",
+        "public_success_check": "python3 -m unittest discover -s tests",
+        "success_check": "python3 ../grader/check.py",
+        "files": {
+            "src/time_window.py": """
+                def overlaps(left, right):
+                    left_start, left_end = left
+                    right_start, right_end = right
+                    return left_start <= right_end and right_start <= left_end
+            """,
+            "tests/test_time_window.py": """
+                import sys
+                import unittest
+                from datetime import datetime
+                from pathlib import Path
+
+                sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
+                from time_window import overlaps
+
+
+                class TimeWindowTest(unittest.TestCase):
+                    def test_touching_half_open_windows_do_not_overlap(self):
+                        left = (datetime(2026, 1, 1, 9, 0), datetime(2026, 1, 1, 10, 0))
+                        right = (datetime(2026, 1, 1, 10, 0), datetime(2026, 1, 1, 11, 0))
+                        self.assertFalse(overlaps(left, right))
+
+                    def test_actual_overlap(self):
+                        left = (datetime(2026, 1, 1, 9, 0), datetime(2026, 1, 1, 10, 30))
+                        right = (datetime(2026, 1, 1, 10, 0), datetime(2026, 1, 1, 11, 0))
+                        self.assertTrue(overlaps(left, right))
+
+
+                if __name__ == "__main__":
+                    unittest.main()
+            """,
+        },
+        "grader": py_grader("""
+            from datetime import datetime, timezone
+            from zoneinfo import ZoneInfo
+
+            run_visible_tests()
+            mod = importlib.import_module("time_window")
+
+            ny = ZoneInfo("America/New_York")
+            utc = timezone.utc
+
+            before_fallback = (
+                datetime(2024, 11, 3, 1, 15, tzinfo=ny, fold=0),
+                datetime(2024, 11, 3, 1, 45, tzinfo=ny, fold=0),
+            )
+            after_fallback = (
+                datetime(2024, 11, 3, 1, 30, tzinfo=ny, fold=1),
+                datetime(2024, 11, 3, 2, 0, tzinfo=ny, fold=1),
+            )
+            assert not mod.overlaps(before_fallback, after_fallback), "folded DST windows must compare by absolute time"
+
+            same_instant_left = (
+                datetime(2026, 5, 1, 12, 0, tzinfo=utc),
+                datetime(2026, 5, 1, 13, 0, tzinfo=utc),
+            )
+            same_instant_right = (
+                datetime(2026, 5, 1, 8, 30, tzinfo=ZoneInfo("America/New_York")),
+                datetime(2026, 5, 1, 9, 30, tzinfo=ZoneInfo("America/New_York")),
+            )
+            assert mod.overlaps(same_instant_left, same_instant_right)
+
+            try:
+                mod.overlaps(
+                    (datetime(2026, 1, 1, 10, 0), datetime(2026, 1, 1, 10, 0)),
+                    (datetime(2026, 1, 1, 9, 0), datetime(2026, 1, 1, 11, 0)),
+                )
+            except ValueError:
+                pass
+            else:
+                raise AssertionError("empty windows should raise ValueError")
+
+            try:
+                mod.overlaps(
+                    (datetime(2026, 1, 1, 11, 0), datetime(2026, 1, 1, 10, 0)),
+                    (datetime(2026, 1, 1, 9, 0), datetime(2026, 1, 1, 12, 0)),
+                )
+            except ValueError:
+                pass
+            else:
+                raise AssertionError("inverted windows should raise ValueError")
+        """),
+    },
 ]
 
 
