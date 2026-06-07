@@ -2996,6 +2996,127 @@ TASK_DEFS = [
             assert.deepEqual(ordered.toArray().map(item => item.id), ['second', 'third']);
         """),
     },
+    {
+        "task_id": "HARD-033",
+        "category": "error_recovery",
+        "repo_hint": "python/log_redactor",
+        "instruction": "Fix the log redactor so it consistently redacts credentials from plain text and structured log events without mutating inputs. It must handle token, apiKey, password, and authorization values across key-value text, URL query strings, headers, and JSON-like dictionaries.",
+        "public_success_check": "python3 -m unittest discover -s tests",
+        "success_check": "python3 ../grader/check.py",
+        "files": {
+            "README.md": """
+                # log-redactor
+
+                Redact credentials before logs are persisted.
+
+                Public API:
+
+                - `redact_text(text)`
+                - `redact_event(event)`
+
+                Sensitive fields include `token`, `apiKey`, `password`, and
+                `authorization`, matched case-insensitively. Redaction should
+                replace credential values with `[REDACTED]` while preserving useful
+                non-sensitive context. `redact_event` must return a redacted copy
+                and must not mutate the input event.
+            """,
+            "src/log_redactor.py": """
+                import re
+
+
+                SECRET = "[REDACTED]"
+
+
+                def redact_text(text):
+                    return re.sub(r"(token=)[^\\s&]+", r"\\1" + SECRET, str(text))
+
+
+                def redact_event(event):
+                    redacted = dict(event)
+                    message = redacted.get("message")
+                    if isinstance(message, str):
+                        redacted["message"] = redact_text(message)
+                    return redacted
+            """,
+            "tests/test_log_redactor.py": """
+                import sys
+                import unittest
+                from pathlib import Path
+
+                sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
+                from log_redactor import SECRET, redact_event, redact_text
+
+
+                class LogRedactorTest(unittest.TestCase):
+                    def test_redacts_plain_token_value(self):
+                        self.assertEqual(
+                            redact_text("login token=abc123 user=ada"),
+                            f"login token={SECRET} user=ada",
+                        )
+
+                    def test_redacts_token_in_event_message(self):
+                        event = {"level": "info", "message": "token=abc123 accepted"}
+
+                        redacted = redact_event(event)
+
+                        self.assertEqual(redacted["message"], f"token={SECRET} accepted")
+                        self.assertEqual(event["message"], "token=abc123 accepted")
+
+
+                if __name__ == "__main__":
+                    unittest.main()
+            """,
+        },
+        "grader": py_grader("""
+            run_visible_tests()
+            mod = importlib.import_module("log_redactor")
+            replacement = mod.SECRET
+
+            assert mod.redact_text("password=hunter2 token=abc") == f"password={replacement} token={replacement}"
+            assert mod.redact_text("GET /v1?apiKey=key-123&query=ok") == f"GET /v1?apiKey={replacement}&query=ok"
+            assert mod.redact_text("Authorization: Bearer sk-live-123") == f"Authorization: Bearer {replacement}"
+            assert mod.redact_text("AUTHORIZATION=Basic abcdef") == f"AUTHORIZATION=Basic {replacement}"
+
+            original = {
+                "level": "info",
+                "message": "request password=hunter2",
+                "headers": {
+                    "Authorization": "Bearer sk-live-123",
+                    "X-Trace": "keep-me",
+                },
+                "context": {
+                    "apiKey": "key-123",
+                    "nested": [{"Password": "credential"}, {"safe": "value"}],
+                },
+            }
+            expected_original = {
+                "level": "info",
+                "message": "request password=hunter2",
+                "headers": {
+                    "Authorization": "Bearer sk-live-123",
+                    "X-Trace": "keep-me",
+                },
+                "context": {
+                    "apiKey": "key-123",
+                    "nested": [{"Password": "credential"}, {"safe": "value"}],
+                },
+            }
+
+            redacted = mod.redact_event(original)
+            assert redacted["message"] == f"request password={replacement}"
+            assert redacted["headers"]["Authorization"] == f"Bearer {replacement}"
+            assert redacted["headers"]["X-Trace"] == "keep-me"
+            assert redacted["context"]["apiKey"] == replacement
+            assert redacted["context"]["nested"][0]["Password"] == replacement
+            assert redacted["context"]["nested"][1]["safe"] == "value"
+            assert original == expected_original
+
+            assert mod.redact_event({"token": "abc", "user": "ada"}) == {
+                "token": replacement,
+                "user": "ada",
+            }
+        """),
+    },
 ]
 
 
