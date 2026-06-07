@@ -1494,6 +1494,146 @@ TASK_DEFS = [
                     raise AssertionError(f"malformed amount should fail: {value!r}")
         """),
     },
+    {
+        "task_id": "HARD-022",
+        "category": "refactor",
+        "repo_hint": "typescript/state_machine",
+        "instruction": "Refactor the order state machine into a reusable transition table or helper while preserving behavior: valid transitions should create a new state with a consistent history entry, cancel must be allowed from draft or submitted, invalid transitions must leave the state unchanged, and inputs must not be mutated.",
+        "public_success_check": "npm test",
+        "success_check": "node ../grader/check.mjs",
+        "files": {
+            "package.json": node_package(),
+            "src/stateMachine.mjs": """
+                export function transition(state, event, details = {}) {
+                  const status = state.status;
+
+                  if (status === 'draft' && event === 'submit') {
+                    return withHistory(state, 'submitted', event, details);
+                  }
+
+                  if (status === 'draft' && event === 'cancel') {
+                    return withHistory(state, 'canceled', event, details);
+                  }
+
+                  if (status === 'submitted' && event === 'cancel') {
+                    return withHistory(state, 'canceled', event, details);
+                  }
+
+                  if (status === 'submitted' && event === 'approve') {
+                    return withHistory(state, 'approved', event, details);
+                  }
+
+                  if (status === 'approved' && event === 'ship') {
+                    return withHistory(state, 'shipped', event, details);
+                  }
+
+                  if (status === 'shipped' && event === 'deliver') {
+                    return withHistory(state, 'delivered', event, details);
+                  }
+
+                  return { ...state };
+                }
+
+                function withHistory(state, nextStatus, event, details) {
+                  const entry = {
+                    from: state.status,
+                    to: nextStatus,
+                    event,
+                    by: details.by ?? 'system',
+                  };
+                  if (details.reason) {
+                    entry.reason = details.reason;
+                  }
+                  return {
+                    ...state,
+                    status: nextStatus,
+                    history: [...(state.history ?? []), entry],
+                  };
+                }
+            """,
+            "tests/state-machine.test.mjs": """
+                import assert from 'node:assert/strict';
+                import { test } from 'node:test';
+                import { transition } from '../src/stateMachine.mjs';
+
+                test('submits and records history', () => {
+                  const state = { status: 'draft', history: [] };
+                  assert.deepEqual(transition(state, 'submit', { by: 'Ada' }), {
+                    status: 'submitted',
+                    history: [{ from: 'draft', to: 'submitted', event: 'submit', by: 'Ada' }],
+                  });
+                });
+
+                test('approves submitted orders', () => {
+                  const state = { status: 'submitted', history: [] };
+                  assert.equal(transition(state, 'approve').status, 'approved');
+                });
+
+                test('cancels submitted orders with a reason', () => {
+                  const state = { status: 'submitted', history: [] };
+                  assert.deepEqual(transition(state, 'cancel', { by: 'Grace', reason: 'duplicate' }), {
+                    status: 'canceled',
+                    history: [{ from: 'submitted', to: 'canceled', event: 'cancel', by: 'Grace', reason: 'duplicate' }],
+                  });
+                });
+
+                test('invalid transitions preserve values', () => {
+                  const state = { status: 'draft', history: [] };
+                  assert.deepEqual(transition(state, 'ship'), state);
+                });
+            """,
+        },
+        "grader": node_grader("""
+            run('npm', ['test']);
+
+            const { transition } = await loadModule('src/stateMachine.mjs');
+
+            const draft = Object.freeze({ status: 'draft', history: Object.freeze([]) });
+            const submitted = transition(draft, 'submit', { by: 'Ada' });
+            assert.notStrictEqual(submitted, draft, 'valid transitions must create a new state');
+            assert.equal(submitted.status, 'submitted');
+            assert.deepEqual(draft, { status: 'draft', history: [] }, 'input state must not be mutated');
+
+            const approved = transition(submitted, 'approve', { by: 'Linus' });
+            const shipped = transition(approved, 'ship', { by: 'Grace' });
+            const delivered = transition(shipped, 'deliver', { by: 'Margaret' });
+            assert.equal(delivered.status, 'delivered');
+            assert.deepEqual(
+              delivered.history.map(entry => [entry.from, entry.to, entry.event]),
+              [
+                ['draft', 'submitted', 'submit'],
+                ['submitted', 'approved', 'approve'],
+                ['approved', 'shipped', 'ship'],
+                ['shipped', 'delivered', 'deliver'],
+              ]
+            );
+
+            const submittedForCancel = { status: 'submitted', history: [] };
+            const canceled = transition(submittedForCancel, 'cancel', { by: 'Ada', reason: 'duplicate' });
+            assert.equal(canceled.status, 'canceled');
+            assert.deepEqual(canceled.history[0], {
+              from: 'submitted',
+              to: 'canceled',
+              event: 'cancel',
+              by: 'Ada',
+              reason: 'duplicate',
+            });
+
+            const invalidDraft = { status: 'draft', history: [] };
+            assert.strictEqual(transition(invalidDraft, 'ship'), invalidDraft);
+            assert.strictEqual(transition(invalidDraft, 'unknown-event'), invalidDraft);
+
+            const deliveredState = { status: 'delivered', history: [] };
+            assert.strictEqual(transition(deliveredState, 'cancel'), deliveredState);
+
+            const source = await (await import('node:fs/promises')).readFile('src/stateMachine.mjs', 'utf8');
+            assert.match(
+              source,
+              /TRANSITIONS|transitionMap|allowedTransitions|createTransition|canTransition/,
+              'refactor should introduce a reusable transition table or helper'
+            );
+        """),
+    },
 ]
 
 

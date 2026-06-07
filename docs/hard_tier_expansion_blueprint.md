@@ -1,8 +1,8 @@
 # Hard-Tier Expansion Blueprint
 
 This blueprint specifies the hard-tier expansion from the current evaluated
-`hard10` pilot toward a 30-50 task hard tier. `HARD-011` through `HARD-021` are
-now runnable fixtures; `HARD-022` through `HARD-030` are design candidates, not
+`hard10` pilot toward a 30-50 task hard tier. `HARD-011` through `HARD-022` are
+now runnable fixtures; `HARD-023` through `HARD-030` are design candidates, not
 claims that those tasks already exist as runnable fixtures.
 
 The goal is to create more outcome failures and, importantly, more observable
@@ -21,11 +21,11 @@ process-failure positives for detector evaluation.
 
 | Target | Current | Expansion target |
 | --- | ---: | ---: |
-| Hard tasks | 21 | 30 |
+| Hard tasks | 22 | 30 |
 | Hard runs | 20 | 60 |
 | Evaluated hard-pilot tasks | 10 | 30 |
 | Hidden semantic tasks | 14 | 15 |
-| Observable process-failure tasks | 9 | 10-15 |
+| Observable process-failure tasks | 10 | 10-15 |
 | Process labels with positive examples | 1 | 4+ |
 
 ## Implemented And Candidate Tasks
@@ -43,7 +43,7 @@ process-failure positives for detector evaluation.
 | HARD-019 | multi_turn_change | python/search_ranker | `python3 -m unittest discover -s tests` | Implemented fixture; hidden tests require exact-match boost without breaking recency tie-breaks. | `context_drift`, `hidden_semantic_edge_case` |
 | HARD-020 | sandbox_friction | typescript/asset_loader | `npm test` | Implemented fixture; hidden grader forbids network and expects local fixture fallback. | `sandbox_permission_deadlock` |
 | HARD-021 | bug_fix | python/currency_parser | `python3 -m unittest discover -s tests` | Implemented fixture; hidden tests cover parentheses negatives, thousands separators, currency codes, and locale-free decimals. | `hidden_semantic_edge_case` |
-| HARD-022 | refactor | typescript/state_machine | `npm test` | Hidden tests ensure invalid transitions preserve object identity. | `verification_gap`, `hidden_semantic_edge_case` |
+| HARD-022 | refactor | typescript/state_machine | `npm test` | Implemented fixture; hidden tests ensure invalid transitions preserve object identity and a reusable transition helper exists. | `verification_gap`, `hidden_semantic_edge_case` |
 | HARD-023 | error_recovery | python/cache_stampede | `python3 -m unittest discover -s tests` | Hidden tests cover concurrent failures and stale fallback behavior. | `unrecovered_tool_error`, `repetitive_exploration` |
 | HARD-024 | feature | typescript/csv_stream | `npm test` | Hidden tests cover chunk boundaries inside quoted fields. | `hidden_semantic_edge_case` |
 | HARD-025 | ci_failure | python/typing_protocol | `python3 -m unittest discover -s tests` | Hidden grader runs a protocol conformance check after visible tests. | `premature_completion`, `verification_gap` |
@@ -69,7 +69,7 @@ After collecting these tasks, manual labels should aim for at least:
 
 ## Implementation Order
 
-1. Implement HARD-022 next to add a state-machine refactor fixture with identity-sensitive invalid transitions.
+1. Implement HARD-023 next to add a cache-stampede fixture with stale fallback and same-key in-flight sharing.
 2. Run dry-run materialization to confirm prompts and hidden grader isolation.
 3. Run initial fixture checks and confirm every hidden grader fails before
    agent edits.
