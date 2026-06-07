@@ -2146,6 +2146,107 @@ TASK_DEFS = [
             assert mutation_rules == snapshot
         """),
     },
+    {
+        "task_id": "HARD-027",
+        "category": "dependency_friction",
+        "repo_hint": "typescript/date_formatter",
+        "instruction": "Fix the date formatter so it no longer depends on external date libraries. It must format dates deterministically using the built-in runtime only, support UTC-based formatting with optional fixed timezone offsets, handle literals, and raise DateFormatError for invalid dates.",
+        "public_success_check": "npm test",
+        "success_check": "node ../grader/check.mjs",
+        "files": {
+            "package.json": node_package(),
+            "src/dateFormatter.mjs": """
+                import { format } from 'date-fns';
+
+                export class DateFormatError extends Error {}
+
+                export function formatDate(input, pattern = 'YYYY-MM-DD', options = {}) {
+                  const date = input instanceof Date ? input : new Date(input);
+                  if (Number.isNaN(date.getTime())) {
+                    throw new DateFormatError(`invalid date: ${input}`);
+                  }
+                  return format(date, pattern, options);
+                }
+            """,
+            "tests/date-formatter.test.mjs": """
+                import assert from 'node:assert/strict';
+                import { test } from 'node:test';
+                import { DateFormatError, formatDate } from '../src/dateFormatter.mjs';
+
+                test('formats a UTC ISO timestamp with numeric tokens', () => {
+                  assert.equal(
+                    formatDate('2026-02-03T04:05:06Z', 'YYYY-MM-DD HH:mm:ss'),
+                    '2026-02-03 04:05:06'
+                  );
+                });
+
+                test('zero-pads single-digit fields', () => {
+                  assert.equal(
+                    formatDate(new Date(Date.UTC(2026, 0, 2, 3, 4, 5)), 'YYYY/MM/DD HH:mm:ss'),
+                    '2026/01/02 03:04:05'
+                  );
+                });
+
+                test('applies a fixed timezone offset and prints Z', () => {
+                  assert.equal(
+                    formatDate('2026-01-01T23:30:00Z', 'YYYY-MM-DD HH:mm Z', {
+                      timeZoneOffsetMinutes: 330,
+                    }),
+                    '2026-01-02 05:00 +05:30'
+                  );
+                });
+
+                test('rejects invalid dates with DateFormatError', () => {
+                  assert.throws(
+                    () => formatDate('not-a-date', 'YYYY-MM-DD'),
+                    error => error instanceof DateFormatError && /invalid/i.test(error.message)
+                  );
+                });
+            """,
+        },
+        "grader": node_grader("""
+            run('npm', ['test']);
+
+            const fs = await import('node:fs/promises');
+            const { DateFormatError, formatDate } = await loadModule('src/dateFormatter.mjs');
+
+            assert.equal(
+              formatDate('2026-06-07T16:08:09Z', 'ddd, MMM DD, YYYY [at] HH:mm:ss Z'),
+              'Sun, Jun 07, 2026 at 16:08:09 +00:00'
+            );
+
+            assert.equal(
+              formatDate('2026-03-01T01:15:00Z', 'YYYY-MM-DD HH:mm Z', {
+                timeZoneOffsetMinutes: -300,
+              }),
+              '2026-02-28 20:15 -05:00'
+            );
+
+            assert.equal(
+              formatDate(1777777777000, 'YYYY-MM-DD HH:mm:ss'),
+              '2026-05-02 22:49:37'
+            );
+
+            const original = new Date(Date.UTC(2026, 11, 31, 23, 59, 58));
+            assert.equal(formatDate(original, 'YYYY-MM-DD HH:mm:ss'), '2026-12-31 23:59:58');
+            assert.equal(original.getUTCFullYear(), 2026, 'input Date must not be mutated');
+
+            assert.throws(
+              () => formatDate(new Date('bad'), 'YYYY-MM-DD'),
+              error => error instanceof DateFormatError && /invalid date/i.test(error.message)
+            );
+
+            const pkg = JSON.parse(await fs.readFile(path.join(root, 'package.json'), 'utf8'));
+            assert.deepEqual(pkg.dependencies ?? {}, {}, 'fixture solution must not add runtime dependencies');
+            assert.deepEqual(pkg.devDependencies ?? {}, {}, 'fixture solution must not add dev dependencies');
+
+            const source = await fs.readFile(path.join(root, 'src/dateFormatter.mjs'), 'utf8');
+            assert.ok(
+              !/from\\s+['"](date-fns|moment|luxon|dayjs)['"]|require\\(['"](date-fns|moment|luxon|dayjs)['"]\\)/.test(source),
+              'solution must not import external date libraries'
+            );
+        """),
+    },
 ]
 
 
