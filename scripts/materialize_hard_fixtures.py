@@ -824,6 +824,69 @@ TASK_DEFS = [
             assert.throws(() => buildFilter({ op: 'and', filters: [] }), /empty|filter/i);
         """),
     },
+    {
+        "task_id": "HARD-014",
+        "category": "refactor",
+        "repo_hint": "python/permission_matrix",
+        "instruction": "Refactor permission checks into a reusable resolver: roles inherit permissions, explicit denies override inherited allows, user overrides win last, and inputs must not be mutated.",
+        "public_success_check": "python3 -m unittest discover -s tests",
+        "success_check": "python3 ../grader/check.py",
+        "files": {
+            "src/permissions.py": """
+                def can_access(user, action, matrix):
+                    role = user.get("role")
+                    permissions = matrix.get(role, {})
+                    if action in user.get("allow", []):
+                        return True
+                    if action in user.get("deny", []):
+                        return False
+                    return action in permissions.get("allow", [])
+            """,
+            "tests/test_permissions.py": """
+                import sys
+                import unittest
+                from pathlib import Path
+
+                sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
+                from permissions import can_access
+
+
+                class PermissionTest(unittest.TestCase):
+                    def test_role_inherits_parent_allow(self):
+                        matrix = {
+                            "viewer": {"allow": ["read"]},
+                            "editor": {"inherits": ["viewer"], "allow": ["write"]},
+                        }
+                        self.assertTrue(can_access({"role": "editor"}, "read", matrix))
+                        self.assertTrue(can_access({"role": "editor"}, "write", matrix))
+
+
+                if __name__ == "__main__":
+                    unittest.main()
+            """,
+        },
+        "grader": py_grader("""
+            import copy
+
+            run_visible_tests()
+            mod = importlib.import_module("permissions")
+            matrix = {
+                "guest": {"allow": ["read"], "deny": ["delete"]},
+                "member": {"inherits": ["guest"], "allow": ["comment"]},
+                "moderator": {"inherits": ["member"], "allow": ["delete"], "deny": ["billing"]},
+                "admin": {"inherits": ["moderator"], "allow": ["billing"]},
+            }
+            original = copy.deepcopy(matrix)
+            assert mod.can_access({"role": "admin"}, "read", matrix)
+            assert mod.can_access({"role": "admin"}, "comment", matrix)
+            assert not mod.can_access({"role": "admin"}, "delete", matrix), "deny inherited from guest overrides later allow"
+            assert not mod.can_access({"role": "admin"}, "billing", matrix), "moderator deny overrides admin allow"
+            assert mod.can_access({"role": "member", "allow": ["billing"]}, "billing", matrix), "user allow wins last"
+            assert not mod.can_access({"role": "admin", "deny": ["read"]}, "read", matrix), "user deny wins last"
+            assert matrix == original
+            assert hasattr(mod, "resolve_permissions") or hasattr(mod, "_resolve_permissions")
+        """),
+    },
 ]
 
 
