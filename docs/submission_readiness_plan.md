@@ -44,7 +44,8 @@ Collection can run as one shard per task with `scripts/run_hard30_shards.py`;
 `scripts/merge_hard30_shards.py` then creates the single `runs.jsonl` consumed
 by the reporting tools. After collection, `scripts/finalize_hard30_pilot.py`
 generates the aggregate tables, per-run CSV, manual-label template, and
-paper-report artifacts, including `paired-task-deltas.csv` for RQ3 analysis.
+paper-report artifacts, including `paired-task-deltas.csv` and
+`paired-task-summary.csv` for RQ3 analysis.
 
 Hard30 collection plan:
 

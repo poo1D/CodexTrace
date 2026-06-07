@@ -19,6 +19,7 @@ from codex_trace.research import (
     write_label_template,
     write_paper_report_outputs,
     write_paired_task_deltas_csv,
+    write_paired_task_summary_csv,
     write_runs_csv,
 )
 
@@ -151,9 +152,11 @@ def finalize(run_dir: Path) -> list[Path]:
     paper_report_json = run_dir / "paper-report.json"
     paper_report_md = run_dir / "paper-report.md"
     paired_csv = run_dir / "paired-task-deltas.csv"
+    paired_summary_csv = run_dir / "paired-task-summary.csv"
     write_paper_report_outputs(paper_report, paper_report_json, paper_report_md)
     write_paired_task_deltas_csv(paper_report, paired_csv)
-    written.extend([paper_report_json, paper_report_md, paired_csv])
+    write_paired_task_summary_csv(paper_report, paired_summary_csv)
+    written.extend([paper_report_json, paper_report_md, paired_csv, paired_summary_csv])
 
     manual_labels = run_dir / "manual-labels.jsonl"
     if manual_labels.exists():

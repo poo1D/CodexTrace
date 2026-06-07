@@ -382,6 +382,24 @@ def write_paired_task_deltas_csv(result: dict[str, Any], path: str | Path) -> No
             writer.writerow({key: row.get(key, "") for key in fieldnames})
 
 
+def write_paired_task_summary_csv(result: dict[str, Any], path: str | Path) -> None:
+    output_path = Path(path)
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    fieldnames = ["metric", "n", "improved", "regressed", "unchanged", "avg_delta"]
+    with output_path.open("w", encoding="utf-8", newline="") as handle:
+        writer = csv.DictWriter(handle, fieldnames=fieldnames)
+        writer.writeheader()
+        for metric, row in sorted(result.get("paired_task_summary", {}).items()):
+            writer.writerow({
+                "metric": metric,
+                "n": row.get("n", 0),
+                "improved": row.get("improved", 0),
+                "regressed": row.get("regressed", 0),
+                "unchanged": row.get("unchanged", 0),
+                "avg_delta": row.get("avg_delta", 0),
+            })
+
+
 def build_paper_report(manifest_path: str | Path, labels_path: str | Path | None = None) -> dict[str, Any]:
     aggregate = aggregate_runs(manifest_path)
     labels = load_manual_labels(labels_path) if labels_path else {}

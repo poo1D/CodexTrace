@@ -135,7 +135,7 @@ PYTHONPATH=. python3 -m codex_trace.cli research run \
 
 After the real run completes and `benchmark/hard/pilot/hard30-real/runs.jsonl`
 exists and preflight passes, generate aggregate tables, per-run CSV,
-paired-task delta CSV, label templates, and paper-report artifacts:
+paired-task delta and summary CSVs, label templates, and paper-report artifacts:
 
 ```bash
 PYTHONPATH=. python3 scripts/finalize_hard30_pilot.py \
