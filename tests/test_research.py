@@ -2,6 +2,7 @@ import json
 from pathlib import Path
 
 from scripts.finalize_hard30_pilot import finalize, preflight, render_preflight
+from scripts.audit_manual_labels import audit_manual_labels, render_audit
 from scripts.merge_hard30_shards import merge_shards, rewrite_shard_row
 from scripts.run_hard30_shards import (
     build_shard_commands,
@@ -494,11 +495,13 @@ def test_submission_readiness_reports_blocking_missing_hard30_runs(tmp_path):
         "preflight hard30 manifest",
         "finalize hard30 reports",
         "label hard30 failures",
+        "audit hard30 manual labels",
         "evaluate hard30 labels",
     ]
     assert "run_hard30_shards.py" in report["next_actions"][0]["command"]
     assert "--limit 5" in report["next_actions"][0]["command"]
     assert "--max-parallel 15" in report["next_actions"][1]["command"]
+    assert "audit_manual_labels.py" in report["next_actions"][-2]["command"]
     assert "## Next Actions" in markdown
     assert "Ready: no" in markdown
 
@@ -612,6 +615,89 @@ def test_submission_readiness_rejects_low_quality_manual_labels(tmp_path):
     assert len(label_check["missing_notes"]) == 30
     assert "hard30 manual labels" in report["blocking"]
     assert "unknown tags: not_a_taxonomy_tag" in markdown
+
+
+def test_audit_manual_labels_reports_quality_and_coverage(tmp_path):
+    root = Path.cwd()
+    manifest = tmp_path / "runs.jsonl"
+    manifest.write_text(
+        "".join(json.dumps(row, sort_keys=True) + "\n" for row in [
+            {
+                "task_id": "HARD-001",
+                "prompt_type": "baseline",
+                "trace_path": str((root / "demo/failing-codex-trace.jsonl").resolve()),
+                "outcome": "failure",
+            },
+            {
+                "task_id": "HARD-001",
+                "prompt_type": "intervention",
+                "trace_path": str((root / "demo/healthy-codex-trace.jsonl").resolve()),
+                "outcome": "success",
+            },
+            {
+                "task_id": "HARD-002",
+                "prompt_type": "baseline",
+                "trace_path": str((root / "demo/failing-codex-trace.jsonl").resolve()),
+                "outcome": "failure",
+            },
+        ]),
+        encoding="utf-8",
+    )
+    labels = tmp_path / "manual-labels.jsonl"
+    labels.write_text(
+        "".join(json.dumps(row, sort_keys=True) + "\n" for row in [
+            {
+                "task_id": "HARD-001",
+                "prompt_type": "baseline",
+                "outcome": "failure",
+                "failure_tags": ["verification_gap"],
+                "notes": "No verification command after editing.",
+            },
+            {
+                "task_id": "HARD-002",
+                "prompt_type": "baseline",
+                "outcome": "failure",
+                "failure_tags": ["unknown_failure"],
+                "notes": "",
+            },
+        ]),
+        encoding="utf-8",
+    )
+
+    report = audit_manual_labels(manifest, labels)
+    markdown = render_audit(report)
+
+    assert report["ok"] is False
+    assert report["failure_count"] == 2
+    assert report["labeled_failure_count"] == 2
+    assert report["missing_notes"] == ["HARD-002/baseline"]
+    assert report["unknown_tags"] == ["unknown_failure"]
+    assert report["tag_counts"] == {"verification_gap": 1}
+    assert report["covered_process_tags"] == ["verification_gap"]
+    assert "Ready: no" in markdown
+    assert "| verification_gap | 1 |" in markdown
+
+
+def test_audit_manual_labels_reports_missing_failure_rows(tmp_path):
+    root = Path.cwd()
+    manifest = tmp_path / "runs.jsonl"
+    manifest.write_text(
+        json.dumps({
+            "task_id": "HARD-001",
+            "prompt_type": "baseline",
+            "trace_path": str((root / "demo/failing-codex-trace.jsonl").resolve()),
+            "outcome": "failure",
+        }) + "\n",
+        encoding="utf-8",
+    )
+    labels = tmp_path / "manual-labels.jsonl"
+    labels.write_text("", encoding="utf-8")
+
+    report = audit_manual_labels(manifest, labels)
+
+    assert report["ok"] is False
+    assert report["missing_rows"] == ["HARD-001/baseline"]
+    assert report["labeled_failure_count"] == 0
 
 
 def test_aggregate_runs_baseline_vs_intervention():

@@ -179,6 +179,10 @@ def build_next_actions(checks: list[dict[str, Any]], run_dir: Path) -> list[dict
             "command": f"edit {run_dir / 'manual-labels.jsonl'} from {run_dir / 'labels.jsonl'}",
         })
         actions.append({
+            "name": "audit hard30 manual labels",
+            "command": f"PYTHONPATH=. python3 scripts/audit_manual_labels.py --run-dir {run_dir}",
+        })
+        actions.append({
             "name": "evaluate hard30 labels",
             "command": (
                 "PYTHONPATH=. python3 -m codex_trace.cli research evaluate-labels "

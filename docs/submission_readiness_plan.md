@@ -174,6 +174,8 @@ It returns a non-zero exit code until the hard30 traces, generated tables, and
 manual labels are present. Its report includes the next commands to run.
 Failed-run manual labels must use known taxonomy tags and include non-empty
 notes so RQ1/RQ2 claims remain auditable.
+Use `scripts/audit_manual_labels.py` after editing `manual-labels.jsonl` to
+summarize missing rows, missing notes, unknown tags, and per-tag coverage.
 
 Until then, the honest positioning is:
 

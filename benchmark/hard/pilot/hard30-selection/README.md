@@ -157,3 +157,10 @@ paired-task delta and summary CSVs, label templates, and paper-report artifacts:
 PYTHONPATH=. python3 scripts/finalize_hard30_pilot.py \
   --run-dir benchmark/hard/pilot/hard30-real
 ```
+
+After filling `manual-labels.jsonl`, audit label coverage before re-finalizing:
+
+```bash
+PYTHONPATH=. python3 scripts/audit_manual_labels.py \
+  --run-dir benchmark/hard/pilot/hard30-real
+```
