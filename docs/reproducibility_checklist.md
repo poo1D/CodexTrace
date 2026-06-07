@@ -85,6 +85,8 @@ when explaining which trace features characterize each failure class.
 The same report also includes paired per-task baseline/intervention deltas for
 RQ3, so improvement claims can be inspected task by task rather than only as
 aggregate means.
+The paired summary counts improved/regressed/unchanged tasks for success,
+verification, repeated calls, token usage, and failure score.
 
 Combined paper-facing summary:
 

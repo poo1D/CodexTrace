@@ -606,10 +606,15 @@ def test_build_paper_report_tables():
     assert result["taxonomy_distribution"][0]["count"] == 2
     assert result["paired_task_deltas"][0]["task_id"] == "CT-001"
     assert result["paired_task_deltas"][0]["success_delta"] == 1
+    assert result["paired_task_summary"]["success_delta"]["improved"] == 2
+    assert result["paired_task_summary"]["token_usage_delta"]["improved"] == 1
+    assert result["paired_task_summary"]["token_usage_delta"]["regressed"] == 1
+    assert result["paired_task_summary"]["failure_score_delta"]["avg_delta"] == -100
     assert any(row["signal"] == "phase_recover_events" for row in result["signal_by_outcome"])
     assert any(row["failure_tag"] == "verification_gap" for row in result["signal_by_label"])
     assert any(row["signal"] == "failure_score" for row in result["signal_by_label"])
     assert "### Paired Task Deltas" in markdown
+    assert "### Paired Task Summary" in markdown
     assert "## RQ4 Trace Signals By Outcome" in markdown
     assert "## RQ4 Trace Signals By Manual Label" in markdown
     assert "Outcome counts: failure=2, success=2, unknown=0." in markdown

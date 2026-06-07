@@ -367,12 +367,14 @@ def build_paper_report(manifest_path: str | Path, labels_path: str | Path | None
     labels = load_manual_labels(labels_path) if labels_path else {}
     taxonomy = taxonomy_distribution(aggregate["runs"], labels)
     label_evaluation = evaluate_detector_labels(manifest_path, labels_path) if labels_path else None
+    paired_deltas = paired_task_deltas(aggregate["runs"])
     return {
         "aggregate": aggregate,
         "taxonomy_distribution": taxonomy,
         "detector_evaluation": label_evaluation,
         "outcome_counts": outcome_counts(aggregate["runs"]),
-        "paired_task_deltas": paired_task_deltas(aggregate["runs"]),
+        "paired_task_deltas": paired_deltas,
+        "paired_task_summary": paired_task_summary(paired_deltas),
         "signal_by_outcome": signal_summary_by_outcome(aggregate["runs"]),
         "signal_by_label": signal_summary_by_label(aggregate["runs"], labels),
     }
@@ -436,6 +438,26 @@ def render_paper_report_markdown(result: dict[str, Any]) -> str:
         lines.append(f"| {key} | {_fmt(baseline)} | {_fmt(intervention)} | {_fmt(delta)} |")
 
     if result.get("paired_task_deltas"):
+        paired_summary = result.get("paired_task_summary", {})
+        lines.extend([
+            "",
+            "### Paired Task Summary",
+            "",
+            "| Metric | Improved | Regressed | Unchanged | Average delta |",
+            "| --- | ---: | ---: | ---: | ---: |",
+        ])
+        for key, label in (
+            ("success_delta", "success"),
+            ("verification_delta", "verification"),
+            ("repeated_tool_call_delta", "repeated tool calls"),
+            ("token_usage_delta", "token usage"),
+            ("failure_score_delta", "failure score"),
+        ):
+            row = paired_summary.get(key, {})
+            lines.append(
+                f"| {label} | {row.get('improved', 0)} | {row.get('regressed', 0)} | "
+                f"{row.get('unchanged', 0)} | {_fmt(row.get('avg_delta', 0))} |"
+            )
         lines.extend([
             "",
             "### Paired Task Deltas",
@@ -680,6 +702,27 @@ def paired_task_deltas(run_rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
             "failure_score_delta": intervention["failure_score"] - baseline["failure_score"],
         })
     return rows
+
+
+def paired_task_summary(rows: list[dict[str, Any]]) -> dict[str, dict[str, Any]]:
+    directions = {
+        "success_delta": 1,
+        "verification_delta": 1,
+        "repeated_tool_call_delta": -1,
+        "token_usage_delta": -1,
+        "failure_score_delta": -1,
+    }
+    summary = {}
+    for key, direction in directions.items():
+        values = [float(row[key]) for row in rows]
+        summary[key] = {
+            "n": len(values),
+            "improved": sum(value * direction > 0 for value in values),
+            "regressed": sum(value * direction < 0 for value in values),
+            "unchanged": sum(value == 0 for value in values),
+            "avg_delta": round(mean(values), 4) if values else 0,
+        }
+    return summary
 
 
 def signal_summary_by_outcome(run_rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
