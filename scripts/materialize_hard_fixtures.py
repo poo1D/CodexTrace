@@ -1634,6 +1634,171 @@ TASK_DEFS = [
             );
         """),
     },
+    {
+        "task_id": "HARD-023",
+        "category": "error_recovery",
+        "repo_hint": "python/cache_stampede",
+        "instruction": "Fix the TTL cache so concurrent requests for the same expired or missing key share one in-flight loader call. Fresh values should be reused until TTL expiry. Loader failures must not be cached. When stale_if_error=True and an expired value exists, return the stale value if refresh fails. Different keys must not block each other. Preserve the public TTLCache API and use the injected now clock for deterministic tests.",
+        "public_success_check": "python3 -m unittest discover -s tests",
+        "success_check": "python3 ../grader/check.py",
+        "files": {
+            "src/cache_stampede.py": """
+                import time
+
+
+                class TTLCache:
+                    def __init__(self, now=None):
+                        self._now = now or time.monotonic
+                        self._values = {}
+
+                    def get_or_set(self, key, loader, ttl, stale_if_error=False):
+                        entry = self._values.get(key)
+                        now = self._now()
+                        if entry is not None and entry["expires_at"] > now:
+                            return entry["value"]
+
+                        value = loader()
+                        self._values[key] = {"value": value, "expires_at": self._now() + ttl}
+                        return value
+
+                    def clear(self):
+                        self._values.clear()
+            """,
+            "tests/test_cache_stampede.py": """
+                import sys
+                import threading
+                import time
+                import unittest
+                from concurrent.futures import ThreadPoolExecutor
+                from pathlib import Path
+
+                sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
+                from cache_stampede import TTLCache
+
+
+                class CacheStampedeTest(unittest.TestCase):
+                    def test_reuses_fresh_value_and_refreshes_after_ttl(self):
+                        now = [100.0]
+                        calls = []
+                        cache = TTLCache(now=lambda: now[0])
+
+                        self.assertEqual(cache.get_or_set("item", lambda: calls.append("a") or "first", ttl=5), "first")
+                        self.assertEqual(cache.get_or_set("item", lambda: calls.append("b") or "second", ttl=5), "first")
+
+                        now[0] = 106.0
+                        self.assertEqual(cache.get_or_set("item", lambda: calls.append("c") or "third", ttl=5), "third")
+                        self.assertEqual(calls, ["a", "c"])
+
+                    def test_concurrent_miss_uses_one_loader_call(self):
+                        cache = TTLCache(now=lambda: 10.0)
+                        entered = threading.Event()
+                        release = threading.Event()
+                        calls = []
+                        lock = threading.Lock()
+
+                        def loader():
+                            with lock:
+                                calls.append("load")
+                            entered.set()
+                            release.wait(timeout=2)
+                            return "shared"
+
+                        with ThreadPoolExecutor(max_workers=5) as pool:
+                            futures = [pool.submit(cache.get_or_set, "shared-key", loader, 30) for _ in range(5)]
+                            self.assertTrue(entered.wait(timeout=1))
+                            time.sleep(0.05)
+                            release.set()
+                            self.assertEqual([future.result(timeout=1) for future in futures], ["shared"] * 5)
+
+                        self.assertEqual(calls, ["load"])
+
+
+                if __name__ == "__main__":
+                    unittest.main()
+            """,
+        },
+        "grader": py_grader("""
+            import threading
+            import time
+            from concurrent.futures import ThreadPoolExecutor
+
+            run_visible_tests()
+            mod = importlib.import_module("cache_stampede")
+
+            now = [0.0]
+            cache = mod.TTLCache(now=lambda: now[0])
+            assert cache.get_or_set("profile", lambda: {"name": "Ada"}, ttl=5) == {"name": "Ada"}
+
+            now[0] = 10.0
+
+            def failing_refresh():
+                raise RuntimeError("origin unavailable")
+
+            assert cache.get_or_set("profile", failing_refresh, ttl=5, stale_if_error=True) == {"name": "Ada"}
+
+            cold_calls = []
+
+            def failing_cold():
+                cold_calls.append("fail")
+                raise ValueError("temporary")
+
+            try:
+                cache.get_or_set("cold", failing_cold, ttl=5, stale_if_error=True)
+            except ValueError:
+                pass
+            else:
+                raise AssertionError("cold load failure should propagate")
+
+            assert cache.get_or_set("cold", lambda: "recovered", ttl=5, stale_if_error=True) == "recovered"
+            assert cold_calls == ["fail"]
+
+            cache = mod.TTLCache(now=lambda: 50.0)
+            entered = threading.Event()
+            release = threading.Event()
+            calls = []
+            calls_lock = threading.Lock()
+
+            def failing_once():
+                with calls_lock:
+                    calls.append("load")
+                entered.set()
+                release.wait(timeout=2)
+                raise RuntimeError("boom")
+
+            with ThreadPoolExecutor(max_workers=4) as pool:
+                futures = [pool.submit(cache.get_or_set, "same", failing_once, 10) for _ in range(4)]
+                assert entered.wait(timeout=1)
+                time.sleep(0.05)
+                release.set()
+                for future in futures:
+                    try:
+                        future.result(timeout=1)
+                    except RuntimeError as exc:
+                        assert "boom" in str(exc)
+                    else:
+                        raise AssertionError("all waiters should observe the load failure")
+
+            assert calls == ["load"], "same-key concurrent failure should use one loader call"
+            assert cache.get_or_set("same", lambda: "ok", ttl=10) == "ok"
+
+            cache = mod.TTLCache(now=lambda: 100.0)
+            slow_started = threading.Event()
+            slow_release = threading.Event()
+
+            def slow_loader():
+                slow_started.set()
+                slow_release.wait(timeout=2)
+                return "slow"
+
+            with ThreadPoolExecutor(max_workers=2) as pool:
+                slow_future = pool.submit(cache.get_or_set, "slow", slow_loader, 10)
+                assert slow_started.wait(timeout=1)
+                fast_future = pool.submit(cache.get_or_set, "fast", lambda: "fast", 10)
+                assert fast_future.result(timeout=0.2) == "fast"
+                slow_release.set()
+                assert slow_future.result(timeout=1) == "slow"
+        """),
+    },
 ]
 
 
