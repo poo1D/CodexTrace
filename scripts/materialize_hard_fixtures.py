@@ -1154,6 +1154,79 @@ TASK_DEFS = [
             assert.deepEqual(await queue.flush(), []);
         """),
     },
+    {
+        "task_id": "HARD-018",
+        "category": "error_localization",
+        "repo_hint": "python/yaml_frontmatter",
+        "instruction": "Fix the frontmatter parser: parse simple YAML-like key/value metadata, preserve colons inside values, return plain documents unchanged, and raise FrontmatterError with useful diagnostics for malformed delimiters or metadata lines.",
+        "public_success_check": "python3 -m unittest discover -s tests",
+        "success_check": "python3 ../grader/check.py",
+        "files": {
+            "src/frontmatter.py": """
+                def parse_frontmatter(text):
+                    if not text.startswith("---\\n"):
+                        return {}, text
+                    end = text.index("\\n---\\n", 4)
+                    header = text[4:end].strip()
+                    body = text[end + 5:]
+                    metadata = {}
+                    for line in header.splitlines():
+                        key, value = line.split(":", 1)
+                        metadata[key.strip()] = value.strip()
+                    return metadata, body
+            """,
+            "tests/test_frontmatter.py": """
+                import sys
+                import unittest
+                from pathlib import Path
+
+                sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
+                import frontmatter
+
+
+                class FrontmatterTest(unittest.TestCase):
+                    def test_simple_frontmatter(self):
+                        metadata, body = frontmatter.parse_frontmatter("---\\ntitle: Hello\\n---\\nBody\\n")
+                        self.assertEqual(metadata, {"title": "Hello"})
+                        self.assertEqual(body, "Body\\n")
+
+                    def test_missing_closing_delimiter_raises_domain_error(self):
+                        with self.assertRaises(frontmatter.FrontmatterError) as ctx:
+                            frontmatter.parse_frontmatter("---\\ntitle: Hello\\nBody\\n")
+                        self.assertIn("closing", str(ctx.exception).lower())
+
+
+                if __name__ == "__main__":
+                    unittest.main()
+            """,
+        },
+        "grader": py_grader("""
+            run_visible_tests()
+            mod = importlib.import_module("frontmatter")
+
+            assert mod.parse_frontmatter("") == ({}, "")
+            assert mod.parse_frontmatter("plain body\\n") == ({}, "plain body\\n")
+
+            metadata, body = mod.parse_frontmatter("---\\ntitle: A: B\\ntags: one, two\\n---\\nBody")
+            assert metadata == {"title": "A: B", "tags": "one, two"}
+            assert body == "Body"
+
+            try:
+                mod.parse_frontmatter("---\\ntitle without colon\\n---\\n")
+            except mod.FrontmatterError as exc:
+                message = str(exc).lower()
+                assert "line 2" in message or "metadata" in message
+            else:
+                raise AssertionError("metadata lines without ':' should raise FrontmatterError")
+
+            try:
+                mod.parse_frontmatter("---\\ntitle: Hello\\n--\\nBody")
+            except mod.FrontmatterError as exc:
+                assert "closing" in str(exc).lower()
+            else:
+                raise AssertionError("malformed closing delimiter should raise FrontmatterError")
+        """),
+    },
 ]
 
 
