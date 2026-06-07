@@ -4853,6 +4853,145 @@ TASK_DEFS = [
             );
         """),
     },
+    {
+        "task_id": "HARD-045",
+        "category": "stateful_regression",
+        "repo_hint": "python/stream_window_join",
+        "instruction": "Fix the streaming window joiner so out-of-order left/right events join within a time tolerance, watermarks evict only safely expired buffered events, duplicate event ids are ignored, late events are counted but not emitted, and snapshot() returns an isolated copy. Preserve WindowJoiner(tolerance_ms) with add_left, add_right, advance_watermark, and snapshot.",
+        "public_success_check": "python3 -m unittest discover -s tests",
+        "success_check": "python3 ../grader/check.py",
+        "files": {
+            "README.md": """
+                # stream-window-join
+
+                `WindowJoiner(tolerance_ms)` joins left and right events when
+                their timestamps are within the tolerance.
+
+                Event shape:
+
+                ```python
+                {"id": "left-1", "time": 1000, "value": "L"}
+                ```
+
+                Public API:
+
+                - `add_left(event)` returns newly emitted join pairs.
+                - `add_right(event)` returns newly emitted join pairs.
+                - `advance_watermark(time_ms)` evicts safely expired buffered events.
+                - `snapshot()` returns buffered state and counters.
+
+                Duplicate event ids are ignored. Events older than the current
+                watermark are late: count them, but do not emit joins.
+            """,
+            "src/window_join.py": """
+                class WindowJoiner:
+                    def __init__(self, tolerance_ms):
+                        self.tolerance_ms = tolerance_ms
+                        self.left = []
+                        self.right = []
+                        self.watermark = None
+                        self.late_count = 0
+
+                    def add_left(self, event):
+                        if self.watermark is not None and event["time"] < self.watermark:
+                            self.late_count += 1
+                            return []
+                        emitted = []
+                        for right in self.right:
+                            if abs(event["time"] - right["time"]) <= self.tolerance_ms:
+                                emitted.append((event, right))
+                        self.left.append(event)
+                        return emitted
+
+                    def add_right(self, event):
+                        if self.watermark is not None and event["time"] < self.watermark:
+                            self.late_count += 1
+                            return []
+                        emitted = []
+                        for left in self.left:
+                            if abs(left["time"] - event["time"]) <= self.tolerance_ms:
+                                emitted.append((left, event))
+                        self.right.append(event)
+                        return emitted
+
+                    def advance_watermark(self, time_ms):
+                        self.watermark = time_ms
+                        self.left = [event for event in self.left if event["time"] >= time_ms]
+                        self.right = [event for event in self.right if event["time"] >= time_ms]
+                        return []
+
+                    def snapshot(self):
+                        return {
+                            "left": self.left,
+                            "right": self.right,
+                            "watermark": self.watermark,
+                            "late_count": self.late_count,
+                        }
+            """,
+            "tests/test_window_join.py": """
+                import sys
+                import unittest
+                from pathlib import Path
+
+                sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
+                from window_join import WindowJoiner
+
+
+                class WindowJoinerTest(unittest.TestCase):
+                    def test_left_then_right_join(self):
+                        joiner = WindowJoiner(tolerance_ms=10)
+                        self.assertEqual(joiner.add_left({"id": "l1", "time": 100, "value": "L"}), [])
+
+                        emitted = joiner.add_right({"id": "r1", "time": 105, "value": "R"})
+
+                        self.assertEqual(len(emitted), 1)
+                        self.assertEqual(emitted[0][0]["id"], "l1")
+                        self.assertEqual(emitted[0][1]["id"], "r1")
+
+                    def test_late_event_is_counted(self):
+                        joiner = WindowJoiner(tolerance_ms=10)
+                        joiner.advance_watermark(100)
+
+                        self.assertEqual(joiner.add_left({"id": "l1", "time": 90, "value": "L"}), [])
+                        self.assertEqual(joiner.snapshot()["late_count"], 1)
+
+
+                if __name__ == "__main__":
+                    unittest.main()
+            """,
+        },
+        "grader": py_grader("""
+            run_visible_tests()
+            mod = importlib.import_module("window_join")
+
+            joiner = mod.WindowJoiner(tolerance_ms=5)
+            assert joiner.add_right({"id": "r1", "time": 100, "value": "R"}) == []
+            emitted = joiner.add_left({"id": "l1", "time": 104, "value": "L"})
+            assert [(left["id"], right["id"]) for left, right in emitted] == [("l1", "r1")]
+
+            assert joiner.add_left({"id": "l1", "time": 104, "value": "L-duplicate"}) == []
+            assert joiner.add_right({"id": "r1", "time": 103, "value": "R-duplicate"}) == []
+
+            joiner = mod.WindowJoiner(tolerance_ms=10)
+            joiner.add_left({"id": "l-old", "time": 100, "value": "old"})
+            joiner.add_left({"id": "l-keep", "time": 111, "value": "keep"})
+            joiner.advance_watermark(105)
+            snap = joiner.snapshot()
+            assert [event["id"] for event in snap["left"]] == ["l-keep"]
+            assert joiner.add_right({"id": "r-keep", "time": 116, "value": "R"})
+            assert joiner.add_left({"id": "late", "time": 104, "value": "late"}) == []
+            assert joiner.snapshot()["late_count"] == 1
+
+            snapshot = joiner.snapshot()
+            snapshot["left"].append({"id": "mutated", "time": 999, "value": "x"})
+            assert all(event["id"] != "mutated" for event in joiner.snapshot()["left"])
+
+            joiner = mod.WindowJoiner(tolerance_ms=3)
+            assert joiner.add_left({"id": "l2", "time": 200, "value": "L"}) == []
+            assert joiner.add_right({"id": "r2", "time": 204, "value": "R"}) == []
+            assert joiner.add_right({"id": "r3", "time": 203, "value": "R3"})
+        """),
+    },
 ]
 
 
