@@ -40,6 +40,8 @@ the selected hard30 pilot.
 The hard30 pilot selection is fixed in
 `benchmark/hard/pilot/hard30-selection`. It keeps the evaluated hard10 pilot as
 a prefix and adds 20 tasks selected for category and process-pressure coverage.
+After collection, `scripts/finalize_hard30_pilot.py` generates the aggregate
+tables, per-run CSV, manual-label template, and paper-report artifacts.
 
 Hard30 collection plan:
 

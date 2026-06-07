@@ -69,3 +69,22 @@ PYTHONPATH=. python3 -m codex_trace.cli research run \
   --output-dir /tmp/codextrace-hard30-dry \
   --dry-run
 ```
+
+## Real Collection Command
+
+```bash
+PYTHONPATH=. python3 -m codex_trace.cli research run \
+  --tasks benchmark/hard/pilot/hard30-selection/tasks.jsonl \
+  --output-dir benchmark/hard/pilot/hard30-real \
+  --timeout-seconds 600
+```
+
+## Finalize Reports
+
+After the real run completes, generate aggregate tables, per-run CSV, label
+templates, and paper-report artifacts:
+
+```bash
+PYTHONPATH=. python3 scripts/finalize_hard30_pilot.py \
+  --run-dir benchmark/hard/pilot/hard30-real
+```

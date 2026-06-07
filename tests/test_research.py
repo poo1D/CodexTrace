@@ -1,6 +1,8 @@
 import json
 from pathlib import Path
 
+from scripts.finalize_hard30_pilot import finalize
+
 from codex_trace.research import (
     aggregate_runs,
     build_paper_report,
@@ -177,6 +179,40 @@ def test_hard30_selection_is_balanced_and_runnable():
         "multi_turn_change",
         "stateful_regression",
     }
+
+
+def test_finalize_hard30_pilot_writes_report_artifacts(tmp_path):
+    root = Path.cwd()
+    runs = [
+        {
+            "task_id": "CT-001",
+            "prompt_type": "baseline",
+            "trace_path": str((root / "demo/failing-codex-trace.jsonl").resolve()),
+            "outcome": "failure",
+        },
+        {
+            "task_id": "CT-001",
+            "prompt_type": "intervention",
+            "trace_path": str((root / "demo/healthy-codex-trace.jsonl").resolve()),
+            "outcome": "success",
+        },
+    ]
+    manifest = tmp_path / "runs.jsonl"
+    manifest.write_text("".join(json.dumps(row, sort_keys=True) + "\n" for row in runs), encoding="utf-8")
+
+    written = finalize(tmp_path)
+
+    expected = {
+        "aggregate.json",
+        "aggregate.md",
+        "runs.csv",
+        "labels.jsonl",
+        "paper-report.json",
+        "paper-report.md",
+    }
+    assert {path.name for path in written} == expected
+    assert all((tmp_path / name).exists() for name in expected)
+    assert "suggested_tags" in (tmp_path / "labels.jsonl").read_text()
 
 
 def test_aggregate_runs_baseline_vs_intervention():

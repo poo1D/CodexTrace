@@ -29,6 +29,7 @@ The stored pilots can be inspected and aggregated without re-running Codex.
 | `docs/related_work.md` | Compact bibliography and positioning notes. |
 | `docs/submission_readiness_plan.md` | Workstreams and decision gate for a stronger paper submission. |
 | `benchmark/hard/pilot/hard30-selection/` | Fixed 30-task hard-tier selection for the next 60-run baseline/intervention collection. |
+| `scripts/finalize_hard30_pilot.py` | Post-processing entrypoint for hard30 aggregate tables, labels, CSV, and paper-report artifacts. |
 | `benchmark/pilot/full30-real` | 30-task / 60-run real seed pilot. |
 | `benchmark/hard/pilot/hard10-real` | 10-task / 20-run hard-tier pilot with outcome failures. |
 | `benchmark/hard/pilot/hard10-real/manual-labels.jsonl` | Manual hidden-failure labels for hard-tier RQ2 analysis. |
