@@ -4226,6 +4226,132 @@ TASK_DEFS = [
                 raise AssertionError("expected LedgerError for unknown reversal")
         """),
     },
+    {
+        "task_id": "HARD-041",
+        "category": "feature",
+        "repo_hint": "typescript/range_set",
+        "instruction": "Implement an immutable integer range set with add, remove, contains, union, and toArray. Ranges are closed integer intervals, adjacent ranges must coalesce, removals may split ranges, invalid ranges throw RangeSetError, and all outputs must be sorted and normalized.",
+        "public_success_check": "npm test",
+        "success_check": "node ../grader/check.mjs",
+        "files": {
+            "package.json": node_package(),
+            "README.md": """
+                # range-set
+
+                `RangeSet` stores closed integer intervals.
+
+                Public API:
+
+                - `new RangeSet(ranges = [])`
+                - `add(start, end)`
+                - `remove(start, end)`
+                - `contains(value)`
+                - `union(other)`
+                - `toArray()`
+
+                Requirements:
+
+                - All operations return a new `RangeSet`; existing instances are
+                  immutable.
+                - Ranges are closed integer intervals.
+                - Overlapping and adjacent ranges coalesce.
+                - Removing a range can split an existing range.
+                - Invalid ranges throw `RangeSetError`.
+                - `toArray()` returns sorted normalized `[start, end]` pairs.
+            """,
+            "src/range-set.mjs": """
+                export class RangeSetError extends Error {
+                  constructor(message) {
+                    super(message);
+                    this.name = 'RangeSetError';
+                  }
+                }
+
+                export class RangeSet {
+                  constructor(ranges = []) {
+                    this.ranges = ranges;
+                  }
+
+                  add(start, end) {
+                    this.ranges.push([start, end]);
+                    return this;
+                  }
+
+                  remove(start, end) {
+                    this.ranges = this.ranges.filter(([rangeStart, rangeEnd]) => {
+                      return rangeEnd < start || rangeStart > end;
+                    });
+                    return this;
+                  }
+
+                  contains(value) {
+                    return this.ranges.some(([start, end]) => start <= value && value <= end);
+                  }
+
+                  union(other) {
+                    this.ranges.push(...other.toArray());
+                    return this;
+                  }
+
+                  toArray() {
+                    return this.ranges.slice();
+                  }
+                }
+            """,
+            "src/index.mjs": """
+                export { RangeSet, RangeSetError } from './range-set.mjs';
+            """,
+            "tests/range-set.test.mjs": """
+                import assert from 'node:assert/strict';
+                import test from 'node:test';
+                import { RangeSet } from '../src/range-set.mjs';
+
+                test('add stores a range and contains values inside it', () => {
+                  const ranges = new RangeSet().add(1, 3);
+
+                  assert.equal(ranges.contains(1), true);
+                  assert.equal(ranges.contains(2), true);
+                  assert.equal(ranges.contains(4), false);
+                  assert.deepEqual(ranges.toArray(), [[1, 3]]);
+                });
+
+                test('remove drops a fully covered range', () => {
+                  const ranges = new RangeSet([[1, 3], [10, 12]]).remove(1, 3);
+
+                  assert.deepEqual(ranges.toArray(), [[10, 12]]);
+                });
+            """,
+        },
+        "grader": node_grader("""
+            run('npm', ['test']);
+            const { RangeSet, RangeSetError } = await loadModule('src/range-set.mjs');
+
+            const base = new RangeSet([[1, 3]]);
+            const expanded = base.add(4, 6);
+            assert.deepEqual(base.toArray(), [[1, 3]]);
+            assert.deepEqual(expanded.toArray(), [[1, 6]]);
+            assert.equal(expanded.contains(5), true);
+            assert.equal(expanded.contains(7), false);
+
+            const split = expanded.remove(3, 4);
+            assert.deepEqual(expanded.toArray(), [[1, 6]]);
+            assert.deepEqual(split.toArray(), [[1, 2], [5, 6]]);
+
+            const negative = new RangeSet([[-5, -3], [0, 0]]).add(-2, -1);
+            assert.deepEqual(negative.toArray(), [[-5, -1], [0, 0]]);
+
+            const left = new RangeSet([[10, 12]]);
+            const right = new RangeSet([[1, 2], [3, 5]]);
+            const combined = left.union(right);
+            assert.deepEqual(left.toArray(), [[10, 12]]);
+            assert.deepEqual(right.toArray(), [[1, 5]]);
+            assert.deepEqual(combined.toArray(), [[1, 5], [10, 12]]);
+
+            assert.throws(() => new RangeSet([[3, 1]]), RangeSetError);
+            assert.throws(() => new RangeSet().add(1.5, 2), RangeSetError);
+            assert.throws(() => new RangeSet().remove(5, 4), RangeSetError);
+        """),
+    },
 ]
 
 
