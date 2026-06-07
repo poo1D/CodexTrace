@@ -154,8 +154,9 @@ changes. Each task is run with two prompt conditions:
   edits, post-edit verification, failed-command diagnosis, and evidence before
   completion.
 
-The hard tier contains 10 harder tasks with hidden edge-case graders. These
-tasks are designed to create outcome failures even when visible tests pass.
+The hard tier contains 46 runnable harder tasks with hidden graders; the
+evaluated hard10 pilot uses the first 10. These tasks are designed to create
+outcome failures even when visible tests pass.
 
 ## 7. Results
 

@@ -4992,6 +4992,234 @@ TASK_DEFS = [
             assert joiner.add_right({"id": "r3", "time": 203, "value": "R3"})
         """),
     },
+    {
+        "task_id": "HARD-046",
+        "category": "data_migration",
+        "repo_hint": "python/sqlite_migration_runner",
+        "instruction": "Fix the SQLite migration runner so numbered migrations apply once in numeric order, each migration runs atomically, applied migration name and checksum are recorded, changed applied migrations raise MigrationError, and dry_run=True reports pending migrations without changing the database. Preserve run_migrations(db_path, migrations_dir, dry_run=False). Use only the Python standard library.",
+        "public_success_check": "python3 -m unittest discover -s tests",
+        "success_check": "python3 ../grader/check.py",
+        "files": {
+            "README.md": """
+                # sqlite-migration-runner
+
+                `run_migrations(db_path, migrations_dir, dry_run=False)` applies
+                SQL migration files to a SQLite database.
+
+                Migration files are named with a numeric prefix, for example:
+
+                - `001_init.sql`
+                - `002_seed.sql`
+                - `010_add_status.sql`
+
+                Requirements:
+
+                - apply numbered migrations in numeric order
+                - apply each migration at most once
+                - store applied migration names and content checksums
+                - raise `MigrationError` if an applied migration file changes
+                - roll back a failed migration atomically
+                - make `dry_run=True` return pending migration names without
+                  creating or changing database state
+            """,
+            "migrations/001_init.sql": """
+                CREATE TABLE users (
+                    id INTEGER PRIMARY KEY,
+                    name TEXT NOT NULL
+                );
+            """,
+            "migrations/002_seed.sql": """
+                INSERT INTO users (id, name) VALUES (1, 'Ada');
+            """,
+            "migrations/010_add_status.sql": """
+                ALTER TABLE users ADD COLUMN status TEXT DEFAULT 'new';
+                UPDATE users SET status = 'active' WHERE name = 'Ada';
+            """,
+            "src/migrator.py": """
+                import sqlite3
+                from pathlib import Path
+
+
+                class MigrationError(Exception):
+                    pass
+
+
+                def run_migrations(db_path, migrations_dir, dry_run=False):
+                    files = sorted(Path(migrations_dir).glob("*.sql"))
+                    names = [path.name for path in files]
+                    if dry_run:
+                        return names
+
+                    conn = sqlite3.connect(db_path)
+                    try:
+                        conn.execute(
+                            "CREATE TABLE IF NOT EXISTS schema_migrations "
+                            "(name TEXT PRIMARY KEY)"
+                        )
+                        applied = {
+                            row[0]
+                            for row in conn.execute("SELECT name FROM schema_migrations")
+                        }
+                        for path in files:
+                            if path.name in applied:
+                                continue
+                            conn.executescript(path.read_text(encoding="utf-8"))
+                            conn.execute(
+                                "INSERT INTO schema_migrations(name) VALUES (?)",
+                                (path.name,),
+                            )
+                        conn.commit()
+                    finally:
+                        conn.close()
+                    return names
+            """,
+            "tests/test_migrator.py": """
+                import sqlite3
+                import sys
+                import tempfile
+                import unittest
+                from pathlib import Path
+
+                sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
+                from migrator import run_migrations
+
+
+                class MigratorTest(unittest.TestCase):
+                    def test_applies_fixture_migrations(self):
+                        root = Path(__file__).resolve().parents[1]
+                        with tempfile.TemporaryDirectory() as tmp:
+                            db_path = Path(tmp) / "app.db"
+
+                            applied = run_migrations(db_path, root / "migrations")
+
+                            self.assertIn("001_init.sql", applied)
+                            with sqlite3.connect(db_path) as conn:
+                                rows = conn.execute(
+                                    "SELECT id, name FROM users ORDER BY id"
+                                ).fetchall()
+                            self.assertEqual(rows, [(1, "Ada")])
+
+                    def test_dry_run_lists_migrations(self):
+                        root = Path(__file__).resolve().parents[1]
+                        with tempfile.TemporaryDirectory() as tmp:
+                            db_path = Path(tmp) / "app.db"
+
+                            pending = run_migrations(db_path, root / "migrations", dry_run=True)
+
+                            self.assertIn("001_init.sql", pending)
+                            self.assertIn("002_seed.sql", pending)
+
+
+                if __name__ == "__main__":
+                    unittest.main()
+            """,
+        },
+        "grader": py_grader("""
+            import shutil
+            import sqlite3
+            import tempfile
+            from pathlib import Path
+
+            run_visible_tests()
+            mod = importlib.import_module("migrator")
+
+            root = Path.cwd()
+            source_migrations = root / "migrations"
+
+            with tempfile.TemporaryDirectory() as tmp:
+                tmp_path = Path(tmp)
+                migrations = tmp_path / "migrations"
+                shutil.copytree(source_migrations, migrations)
+                db_path = tmp_path / "app.db"
+
+                applied = mod.run_migrations(db_path, migrations)
+                assert applied == ["001_init.sql", "002_seed.sql", "010_add_status.sql"]
+
+                with sqlite3.connect(db_path) as conn:
+                    rows = conn.execute(
+                        "SELECT id, name, status FROM users ORDER BY id"
+                    ).fetchall()
+                    migration_rows = conn.execute(
+                        "SELECT name, checksum FROM schema_migrations ORDER BY name"
+                    ).fetchall()
+                assert rows == [(1, "Ada", "active")]
+                assert [row[0] for row in migration_rows] == applied
+                assert all(row[1] for row in migration_rows)
+
+                again = mod.run_migrations(db_path, migrations)
+                assert again == []
+                with sqlite3.connect(db_path) as conn:
+                    count = conn.execute("SELECT COUNT(*) FROM users").fetchone()[0]
+                    migration_count = conn.execute(
+                        "SELECT COUNT(*) FROM schema_migrations"
+                    ).fetchone()[0]
+                assert count == 1
+                assert migration_count == 3
+
+                (migrations / "002_seed.sql").write_text(
+                    "INSERT INTO users (id, name) VALUES (2, 'Grace');\\n",
+                    encoding="utf-8",
+                )
+                try:
+                    mod.run_migrations(db_path, migrations)
+                except mod.MigrationError as error:
+                    assert "checksum" in str(error).lower()
+                else:
+                    raise AssertionError("changed applied migration did not fail")
+
+            with tempfile.TemporaryDirectory() as tmp:
+                tmp_path = Path(tmp)
+                migrations = tmp_path / "migrations"
+                migrations.mkdir()
+                (migrations / "001_init.sql").write_text(
+                    "CREATE TABLE ok_table (id INTEGER PRIMARY KEY);\\n",
+                    encoding="utf-8",
+                )
+                (migrations / "002_bad.sql").write_text(
+                    "CREATE TABLE partial_table (id INTEGER);\\n"
+                    "INSERT INTO partial_table VALUES (1);\\n"
+                    "INSERT INTO missing_table VALUES (1);\\n",
+                    encoding="utf-8",
+                )
+                db_path = tmp_path / "bad.db"
+
+                try:
+                    mod.run_migrations(db_path, migrations)
+                except Exception:
+                    pass
+                else:
+                    raise AssertionError("bad migration unexpectedly succeeded")
+
+                with sqlite3.connect(db_path) as conn:
+                    names = {
+                        row[0]
+                        for row in conn.execute(
+                            "SELECT name FROM sqlite_master WHERE type='table'"
+                        )
+                    }
+                    recorded = []
+                    if "schema_migrations" in names:
+                        recorded = conn.execute(
+                            "SELECT name FROM schema_migrations"
+                        ).fetchall()
+                assert "partial_table" not in names
+                assert ("002_bad.sql",) not in recorded
+
+            with tempfile.TemporaryDirectory() as tmp:
+                tmp_path = Path(tmp)
+                migrations = tmp_path / "migrations"
+                shutil.copytree(source_migrations, migrations)
+                db_path = tmp_path / "dry.db"
+
+                pending = mod.run_migrations(db_path, migrations, dry_run=True)
+                assert pending == ["001_init.sql", "002_seed.sql", "010_add_status.sql"]
+                with sqlite3.connect(db_path) as conn:
+                    tables = conn.execute(
+                        "SELECT name FROM sqlite_master WHERE type='table'"
+                    ).fetchall()
+                assert tables == []
+        """),
+    },
 ]
 
 
