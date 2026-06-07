@@ -5220,6 +5220,249 @@ TASK_DEFS = [
                 assert tables == []
         """),
     },
+    {
+        "task_id": "HARD-047",
+        "category": "stateful_regression",
+        "repo_hint": "python/webhook_replay_guard",
+        "instruction": "Fix the webhook replay guard so signed webhook envelopes are accepted only once per tenant within the replay window. Preserve verify_event(envelope, keys, store, now), verify HMAC-SHA256 signatures over the exact raw body text, enforce timestamp skew, support signing-key rotation, prune expired seen ids, and do not mutate the envelope or keys inputs. Use only the Python standard library.",
+        "public_success_check": "python3 -m unittest discover -s tests",
+        "success_check": "python3 ../grader/check.py",
+        "files": {
+            "README.md": """
+                # webhook-replay-guard
+
+                `verify_event(envelope, keys, store, now)` accepts a signed
+                webhook event or raises `WebhookError`.
+
+                Envelope fields:
+
+                - `tenant`: tenant id
+                - `event_id`: unique id from the webhook sender
+                - `timestamp`: integer Unix timestamp
+                - `body`: raw request body text
+                - `signature`: header text like `t=1700000000,v1=<hex>`
+
+                The `keys` mapping stores one active signing key per tenant, or
+                a list of active keys during rotation. The HMAC message is the
+                exact raw body text prefixed by the timestamp and a dot:
+
+                ```text
+                <timestamp>.<raw body text>
+                ```
+
+                Requirements:
+
+                - use HMAC-SHA256 and constant-time comparison
+                - reject timestamps outside `REPLAY_WINDOW_SECONDS`
+                - accept rotated keys
+                - reject replayed `(tenant, event_id)` pairs
+                - allow different tenants to reuse the same event id
+                - prune expired seen ids from the mutable `store`
+                - do not mutate `envelope` or `keys`
+            """,
+            "src/webhook_guard.py": """
+                import hashlib
+                import hmac
+                import json
+
+
+                REPLAY_WINDOW_SECONDS = 300
+
+
+                class WebhookError(Exception):
+                    pass
+
+
+                def _parse_signature(header):
+                    parts = {}
+                    for item in header.split(","):
+                        if "=" in item:
+                            key, value = item.split("=", 1)
+                            parts[key.strip()] = value.strip()
+                    return int(parts["t"]), parts["v1"]
+
+
+                def _canonical_body(body):
+                    parsed = json.loads(body)
+                    return json.dumps(parsed, sort_keys=True, separators=(",", ":"))
+
+
+                def verify_event(envelope, keys, store, now):
+                    tenant = envelope["tenant"]
+                    event_id = envelope["event_id"]
+                    timestamp = int(envelope["timestamp"])
+
+                    seen = store.setdefault("seen", set())
+                    if event_id in seen:
+                        raise WebhookError("replayed event")
+                    seen.add(event_id)
+
+                    if abs(now - timestamp) > REPLAY_WINDOW_SECONDS:
+                        raise WebhookError("timestamp outside replay window")
+
+                    header_timestamp, actual = _parse_signature(envelope["signature"])
+                    if header_timestamp != timestamp:
+                        raise WebhookError("timestamp mismatch")
+
+                    key = keys[tenant]
+                    body = _canonical_body(envelope["body"])
+                    message = f"{timestamp}.{body}".encode("utf-8")
+                    expected = hmac.new(
+                        key.encode("utf-8"),
+                        message,
+                        hashlib.sha256,
+                    ).hexdigest()
+
+                    if actual != expected:
+                        raise WebhookError("invalid signature")
+                    return True
+            """,
+            "tests/test_webhook_guard.py": """
+                import hashlib
+                import hmac
+                import sys
+                import unittest
+                from pathlib import Path
+
+                sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
+                from webhook_guard import WebhookError, verify_event
+
+
+                def sign(timestamp, body, key):
+                    message = f"{timestamp}.{body}".encode("utf-8")
+                    digest = hmac.new(
+                        key.encode("utf-8"),
+                        message,
+                        hashlib.sha256,
+                    ).hexdigest()
+                    return f"t={timestamp},v1={digest}"
+
+
+                def envelope(event_id="evt_1", timestamp=1000, body='{"amount":10}'):
+                    return {
+                        "tenant": "tenant-a",
+                        "event_id": event_id,
+                        "timestamp": timestamp,
+                        "body": body,
+                        "signature": sign(timestamp, body, "k1"),
+                    }
+
+
+                class WebhookGuardTest(unittest.TestCase):
+                    def test_accepts_valid_event(self):
+                        self.assertTrue(
+                            verify_event(envelope(), {"tenant-a": "k1"}, {}, 1000)
+                        )
+
+                    def test_rejects_replay(self):
+                        store = {}
+                        verify_event(envelope(), {"tenant-a": "k1"}, store, 1000)
+                        with self.assertRaises(WebhookError):
+                            verify_event(envelope(), {"tenant-a": "k1"}, store, 1000)
+
+                    def test_rejects_old_timestamp(self):
+                        with self.assertRaises(WebhookError):
+                            verify_event(envelope(timestamp=600), {"tenant-a": "k1"}, {}, 1000)
+
+                    def test_rejects_bad_signature(self):
+                        item = envelope()
+                        item["signature"] = "t=1000,v1=bad"
+                        with self.assertRaises(WebhookError):
+                            verify_event(item, {"tenant-a": "k1"}, {}, 1000)
+
+
+                if __name__ == "__main__":
+                    unittest.main()
+            """,
+        },
+        "grader": py_grader("""
+            import copy
+            import hashlib
+            import hmac
+
+            run_visible_tests()
+            mod = importlib.import_module("webhook_guard")
+
+
+            def sign(timestamp, body, key):
+                message = f"{timestamp}.{body}".encode("utf-8")
+                digest = hmac.new(
+                    key.encode("utf-8"),
+                    message,
+                    hashlib.sha256,
+                ).hexdigest()
+                return f"ignored=x, t={timestamp}, v1={digest}"
+
+
+            def make_event(tenant, event_id, timestamp, body, key):
+                return {
+                    "tenant": tenant,
+                    "event_id": event_id,
+                    "timestamp": timestamp,
+                    "body": body,
+                    "signature": sign(timestamp, body, key),
+                }
+
+
+            keys = {"tenant-a": "k1", "tenant-b": "k2"}
+            store = {}
+
+            raw_body = '{\\n  "amount": 10,\\n  "id": "evt_raw"\\n}'
+            event = make_event("tenant-a", "evt_raw", 1000, raw_body, "k1")
+            original_event = copy.deepcopy(event)
+            original_keys = copy.deepcopy(keys)
+            assert mod.verify_event(event, keys, store, 1000) is True
+            assert event == original_event
+            assert keys == original_keys
+
+            replay = make_event("tenant-a", "evt_raw", 1000, raw_body, "k1")
+            try:
+                mod.verify_event(replay, keys, store, 1000)
+            except mod.WebhookError as error:
+                assert "replay" in str(error).lower()
+            else:
+                raise AssertionError("same tenant replay was accepted")
+
+            other_tenant = make_event("tenant-b", "evt_raw", 1000, raw_body, "k2")
+            assert mod.verify_event(other_tenant, keys, store, 1000) is True
+
+            rotated_keys = {"tenant-a": ["old-key", "new-key"]}
+            rotated = make_event("tenant-a", "evt_rotated", 1000, '{"ok":true}', "new-key")
+            assert mod.verify_event(rotated, rotated_keys, store, 1000) is True
+
+            boundary = make_event("tenant-a", "evt_boundary", 700, '{"ok":true}', "k1")
+            assert mod.verify_event(boundary, keys, store, 1000) is True
+
+            bad = make_event("tenant-a", "evt_bad", 1000, '{"bad":true}', "k1")
+            bad["signature"] = "t=1000,v1=bad"
+            try:
+                mod.verify_event(bad, keys, store, 1000)
+            except mod.WebhookError:
+                pass
+            else:
+                raise AssertionError("bad signature was accepted")
+            fixed = make_event("tenant-a", "evt_bad", 1000, '{"bad":true}', "k1")
+            assert mod.verify_event(fixed, keys, store, 1000) is True
+
+            expired = make_event("tenant-a", "evt_expired", 1000, '{"old":true}', "k1")
+            assert mod.verify_event(expired, keys, store, 1000) is True
+            fresh = make_event("tenant-a", "evt_fresh", 1299, '{"fresh":true}', "k1")
+            assert mod.verify_event(fresh, keys, store, 1300) is True
+            later = make_event("tenant-a", "evt_later", 1600, '{"later":true}', "k1")
+            assert mod.verify_event(later, keys, store, 1600) is True
+            expired_again = make_event("tenant-a", "evt_expired", 1600, '{"old":true}', "k1")
+            assert mod.verify_event(expired_again, keys, store, 1600) is True
+
+            mismatch = make_event("tenant-a", "evt_mismatch", 1000, '{"x":1}', "k1")
+            mismatch["signature"] = sign(999, '{"x":1}', "k1")
+            try:
+                mod.verify_event(mismatch, keys, store, 1000)
+            except mod.WebhookError as error:
+                assert "timestamp" in str(error).lower()
+            else:
+                raise AssertionError("mismatched signature timestamp was accepted")
+        """),
+    },
 ]
 
 

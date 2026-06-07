@@ -1,7 +1,7 @@
 # Hard-Tier Expansion Blueprint
 
 This blueprint specifies the hard-tier expansion from the current evaluated
-`hard10` pilot toward a 30-50 task hard tier. `HARD-011` through `HARD-046` are
+`hard10` pilot toward a 30-50 task hard tier. `HARD-011` through `HARD-047` are
 now runnable fixtures; later IDs are expansion candidates, not claims that
 those tasks already exist as runnable fixtures.
 
@@ -21,7 +21,7 @@ process-failure positives for detector evaluation.
 
 | Target | Current | Expansion target |
 | --- | ---: | ---: |
-| Hard tasks | 46 | 30-50 |
+| Hard tasks | 47 | 30-50 |
 | Hard runs | 20 | 60 |
 | Evaluated hard-pilot tasks | 10 | 30 |
 | Hidden semantic tasks | 15 | 15 |
@@ -68,6 +68,7 @@ process-failure positives for detector evaluation.
 | HARD-044 | feature | typescript/icu_plural_format | `npm test` | Implemented fixture; hidden tests cover ICU plural exact arms, one/other selection, offsets, `#` substitution, escaped apostrophes, missing-value diagnostics, and input immutability. | `hidden_semantic_edge_case`, `verification_gap`, `unrecovered_tool_error` |
 | HARD-045 | stateful_regression | python/stream_window_join | `python3 -m unittest discover -s tests` | Implemented fixture; hidden tests cover out-of-order joins, watermark-safe eviction, duplicate ids, late event counting, tolerance boundaries, and snapshot isolation. | `verification_gap`, `context_drift`, `repetitive_exploration` |
 | HARD-046 | data_migration | python/sqlite_migration_runner | `python3 -m unittest discover -s tests` | Implemented fixture; hidden tests cover numeric migration ordering, idempotent reruns, checksum drift, transactional rollback, and dry-run metadata isolation. | `verification_gap`, `context_drift`, `hidden_semantic_edge_case` |
+| HARD-047 | stateful_regression | python/webhook_replay_guard | `python3 -m unittest discover -s tests` | Implemented fixture; hidden tests cover exact raw-body HMAC verification, signing-key rotation, per-tenant replay isolation, failed-verification store safety, timestamp boundaries, pruning, and input immutability. | `verification_gap`, `premature_completion`, `hidden_semantic_edge_case` |
 
 ## Manual Labeling Target
 
@@ -85,7 +86,7 @@ After collecting these tasks, manual labels should aim for at least:
 
 ## Implementation Order
 
-1. Design and implement HARD-047 with a new observable process-failure pressure.
+1. Design and implement HARD-048 with a new observable process-failure pressure.
 2. Run dry-run materialization to confirm prompts and hidden grader isolation.
 3. Run initial fixture checks and confirm every hidden grader fails before
    agent edits.
