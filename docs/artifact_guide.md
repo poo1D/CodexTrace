@@ -115,7 +115,7 @@ visible traces look clean; hidden graders reveal the missed edge cases.
 - The artifact studies Codex CLI traces, not all coding agents.
 - The evaluated hard10 pilot has 10 tasks, so success-rate changes are pilot
   evidence rather than broad population estimates. The hard task suite now has
-  49 runnable tasks after adding `HARD-011` through `HARD-049`.
+  50 runnable tasks after adding `HARD-011` through `HARD-050`.
 - The detectors are deterministic and interpretable, but incomplete.
 - Hidden semantic correctness still requires strong task-level oracles.
 
@@ -129,4 +129,4 @@ success-rate estimate less fragile.
 See `docs/submission_readiness_plan.md` for the concrete workstreams and
 decision gate for moving from the current pilot artifact to a stronger paper
 submission. See `docs/hard_tier_expansion_blueprint.md` for the implemented
-`HARD-011` through `HARD-049` fixtures and next hard-tier expansion candidates.
+`HARD-011` through `HARD-050` fixtures and hard30 pilot selection plan.

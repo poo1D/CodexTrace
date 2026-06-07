@@ -5814,6 +5814,170 @@ TASK_DEFS = [
                 raise AssertionError("duplicate ids were accepted")
         """),
     },
+    {
+        "task_id": "HARD-050",
+        "category": "multi_turn_change",
+        "repo_hint": "python/config_overlay_resolver",
+        "instruction": "Fix the config resolver so resolve_config(defaults, env=None, cli=None, schema=None) deep-merges defaults with environment and CLI overrides. Environment variables use APP_ plus double-underscore path separators, CLI keys use dotted paths, CLI overrides env, values are coerced using the schema, explicit false and zero overrides are preserved, unknown keys raise ConfigError, and inputs are not mutated. Use only the Python standard library.",
+        "public_success_check": "python3 -m unittest discover -s tests",
+        "success_check": "python3 ../grader/check.py",
+        "files": {
+            "README.md": """
+                # config-overlay-resolver
+
+                `resolve_config(defaults, env=None, cli=None, schema=None)`
+                builds an application config from default values plus runtime
+                overrides.
+
+                Requirements:
+
+                - deep-copy defaults before applying overrides
+                - environment variables start with `APP_`
+                - double underscores in env names map to nested paths:
+                  `APP_SERVER__PORT` -> `server.port`
+                - CLI keys use dotted paths: `server.port`
+                - CLI overrides environment values
+                - `schema` maps dotted paths to types such as `bool`, `int`,
+                  `float`, `str`, or `list`
+                - explicit false and zero values must override defaults
+                - unknown paths raise `ConfigError`
+                - inputs must not be mutated
+            """,
+            "src/config_resolver.py": """
+                class ConfigError(Exception):
+                    pass
+
+
+                def resolve_config(defaults, env=None, cli=None, schema=None):
+                    env = env or {}
+                    cli = cli or {}
+                    config = defaults.copy()
+
+                    for name, value in env.items():
+                        if not name.startswith("APP_"):
+                            continue
+                        key = name[4:].lower()
+                        config[key] = value
+
+                    for key, value in cli.items():
+                        if value:
+                            config[key] = value
+
+                    return config
+            """,
+            "tests/test_config_resolver.py": """
+                import sys
+                import unittest
+                from pathlib import Path
+
+                sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
+                from config_resolver import resolve_config
+
+
+                class ConfigResolverTest(unittest.TestCase):
+                    def test_returns_defaults_when_no_overrides(self):
+                        defaults = {"host": "localhost", "mode": "dev"}
+
+                        resolved = resolve_config(defaults)
+
+                        self.assertEqual(resolved, defaults)
+                        self.assertIsNot(resolved, defaults)
+
+                    def test_cli_overrides_top_level_value(self):
+                        defaults = {"host": "localhost", "mode": "dev"}
+
+                        resolved = resolve_config(defaults, cli={"host": "0.0.0.0"})
+
+                        self.assertEqual(resolved["host"], "0.0.0.0")
+                        self.assertEqual(resolved["mode"], "dev")
+
+                    def test_app_env_overrides_top_level_value(self):
+                        defaults = {"host": "localhost"}
+
+                        resolved = resolve_config(defaults, env={"APP_HOST": "example.test"})
+
+                        self.assertEqual(resolved["host"], "example.test")
+
+
+                if __name__ == "__main__":
+                    unittest.main()
+            """,
+        },
+        "grader": py_grader("""
+            import copy
+
+            run_visible_tests()
+            mod = importlib.import_module("config_resolver")
+
+            defaults = {
+                "server": {"host": "localhost", "port": 8000},
+                "features": {"search": True, "beta": False},
+                "limits": {"retries": 3, "ratio": 0.5},
+                "tags": ["base"],
+            }
+            schema = {
+                "server.host": str,
+                "server.port": int,
+                "features.search": bool,
+                "features.beta": bool,
+                "limits.retries": int,
+                "limits.ratio": float,
+                "tags": list,
+            }
+            env = {
+                "APP_SERVER__PORT": "9000",
+                "APP_FEATURES__SEARCH": "false",
+                "APP_LIMITS__RATIO": "0.75",
+                "IGNORED_VALUE": "x",
+            }
+            cli = {
+                "features.beta": "true",
+                "limits.retries": 0,
+                "tags": "api,worker",
+            }
+            before_defaults = copy.deepcopy(defaults)
+            before_env = copy.deepcopy(env)
+            before_cli = copy.deepcopy(cli)
+
+            resolved = mod.resolve_config(defaults, env=env, cli=cli, schema=schema)
+
+            assert resolved == {
+                "server": {"host": "localhost", "port": 9000},
+                "features": {"search": False, "beta": True},
+                "limits": {"retries": 0, "ratio": 0.75},
+                "tags": ["api", "worker"],
+            }
+            assert defaults == before_defaults
+            assert env == before_env
+            assert cli == before_cli
+
+            override_false = mod.resolve_config(
+                defaults,
+                cli={"features.search": False, "server.port": 0},
+                schema=schema,
+            )
+            assert override_false["features"]["search"] is False
+            assert override_false["server"]["port"] == 0
+
+            for bad_env, bad_cli in [
+                ({"APP_SERVER__UNKNOWN": "x"}, {}),
+                ({}, {"missing.path": "x"}),
+            ]:
+                try:
+                    mod.resolve_config(defaults, env=bad_env, cli=bad_cli, schema=schema)
+                except mod.ConfigError as error:
+                    assert "unknown" in str(error).lower()
+                else:
+                    raise AssertionError("unknown config path was accepted")
+
+            try:
+                mod.resolve_config(defaults, cli={"server.port": "not-int"}, schema=schema)
+            except mod.ConfigError as error:
+                assert "server.port" in str(error)
+            else:
+                raise AssertionError("invalid typed override was accepted")
+        """),
+    },
 ]
 
 

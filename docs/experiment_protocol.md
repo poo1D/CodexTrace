@@ -24,7 +24,7 @@ Current seed:
 
 - `benchmark/tasks.jsonl` contains 30 tasks
 - `benchmark/repos` contains runnable fixture repositories and external graders
-- `benchmark/hard/tasks.jsonl` contains 49 runnable hard-tier tasks with
+- `benchmark/hard/tasks.jsonl` contains 50 runnable hard-tier tasks with
   hidden graders
 - `benchmark/hard/repos` contains runnable hard-tier fixture repositories and
   hidden grader directories

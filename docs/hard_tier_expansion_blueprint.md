@@ -1,9 +1,9 @@
 # Hard-Tier Expansion Blueprint
 
 This blueprint specifies the hard-tier expansion from the current evaluated
-`hard10` pilot toward a 30-50 task hard tier. `HARD-011` through `HARD-049` are
-now runnable fixtures; later IDs are expansion candidates, not claims that
-those tasks already exist as runnable fixtures.
+`hard10` pilot toward a 30-50 task hard tier. `HARD-011` through `HARD-050` are
+now runnable fixtures; the next step is selecting a balanced hard30 pilot and
+collecting real baseline/intervention traces.
 
 The goal is to create more outcome failures and, importantly, more observable
 process-failure positives for detector evaluation.
@@ -21,7 +21,7 @@ process-failure positives for detector evaluation.
 
 | Target | Current | Expansion target |
 | --- | ---: | ---: |
-| Hard tasks | 49 | 30-50 |
+| Hard tasks | 50 | 30-50 |
 | Hard runs | 20 | 60 |
 | Evaluated hard-pilot tasks | 10 | 30 |
 | Hidden semantic tasks | 15 | 15 |
@@ -71,6 +71,7 @@ process-failure positives for detector evaluation.
 | HARD-047 | stateful_regression | python/webhook_replay_guard | `python3 -m unittest discover -s tests` | Implemented fixture; hidden tests cover exact raw-body HMAC verification, signing-key rotation, per-tenant replay isolation, failed-verification store safety, timestamp boundaries, pruning, and input immutability. | `verification_gap`, `premature_completion`, `hidden_semantic_edge_case` |
 | HARD-048 | multi_turn_change | python/cursor_pagination | `python3 -m unittest discover -s tests` | Implemented fixture; hidden tests cover stable keyset pagination, duplicate timestamp tie-breaks, insert-before-cursor drift, ascending order, cursor tamper rejection, limit clamps, and input immutability. | `verification_gap`, `context_drift`, `hidden_semantic_edge_case` |
 | HARD-049 | ci_failure | python/test_sharder | `python3 -m unittest discover -s tests` | Implemented fixture; hidden tests cover duration-balanced greedy sharding, deterministic tie-breaks, quarantine exclusion, empty shard preservation, duplicate id errors, and input immutability. | `verification_gap`, `premature_completion`, `hidden_semantic_edge_case` |
+| HARD-050 | multi_turn_change | python/config_overlay_resolver | `python3 -m unittest discover -s tests` | Implemented fixture; hidden tests cover nested env/CLI overlays, precedence, schema-based coercion, explicit false/zero overrides, unknown path errors, invalid type diagnostics, and input immutability. | `verification_gap`, `context_drift`, `hidden_semantic_edge_case` |
 
 ## Manual Labeling Target
 
@@ -88,7 +89,7 @@ After collecting these tasks, manual labels should aim for at least:
 
 ## Implementation Order
 
-1. Design and implement HARD-050 with a new observable process-failure pressure.
+1. Select a balanced hard30 pilot from the 50 runnable hard-tier tasks.
 2. Run dry-run materialization to confirm prompts and hidden grader isolation.
 3. Run initial fixture checks and confirm every hidden grader fails before
    agent edits.
