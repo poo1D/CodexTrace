@@ -4,6 +4,7 @@ from pathlib import Path
 from scripts.finalize_hard30_pilot import finalize, preflight, render_preflight
 from scripts.merge_hard30_shards import merge_shards, rewrite_shard_row
 from scripts.run_hard30_shards import build_shard_commands, filter_commands, inspect_shard, render_status, summarize_shards
+from scripts.check_submission_readiness import build_report, render_report
 
 from codex_trace.research import (
     aggregate_runs,
@@ -420,6 +421,77 @@ def test_hard30_preflight_rejects_missing_trace_and_prompt_pair(tmp_path):
     assert "Ready to finalize: no" in rendered
     assert "Missing prompt pairs: HARD-001/intervention" in rendered
     assert "Missing trace files: HARD-001/baseline -> missing/trace.jsonl" in rendered
+
+
+def test_submission_readiness_reports_blocking_missing_hard30_runs(tmp_path):
+    selection_dir = tmp_path / "selection"
+    selection_dir.mkdir()
+    task_ids = [f"HARD-{index:03d}" for index in range(1, 31)]
+    selection_dir.joinpath("task_ids.txt").write_text("\n".join(task_ids) + "\n", encoding="utf-8")
+    selection_dir.joinpath("tasks.jsonl").write_text("{}\n", encoding="utf-8")
+    selection_dir.joinpath("manifest.json").write_text("{}\n", encoding="utf-8")
+
+    report = build_report(selection_dir, tmp_path / "missing-run-dir")
+    markdown = render_report(report)
+
+    assert report["ready"] is False
+    assert "hard30 real runs" in report["blocking"]
+    assert "hard30 finalized outputs" in report["blocking"]
+    assert "hard30 manual labels" in report["blocking"]
+    assert "Ready: no" in markdown
+
+
+def test_submission_readiness_accepts_complete_synthetic_artifact(tmp_path):
+    root = Path.cwd()
+    selection_dir = tmp_path / "selection"
+    selection_dir.mkdir()
+    task_ids = [f"HARD-{index:03d}" for index in range(1, 31)]
+    selection_dir.joinpath("task_ids.txt").write_text("\n".join(task_ids) + "\n", encoding="utf-8")
+    selection_dir.joinpath("tasks.jsonl").write_text("{}\n", encoding="utf-8")
+    selection_dir.joinpath("manifest.json").write_text("{}\n", encoding="utf-8")
+    run_dir = tmp_path / "hard30-real"
+    run_dir.mkdir()
+    runs = []
+    labels = []
+    for task_id in task_ids:
+        runs.extend([
+            {
+                "task_id": task_id,
+                "prompt_type": "baseline",
+                "trace_path": str((root / "demo/failing-codex-trace.jsonl").resolve()),
+                "outcome": "failure",
+            },
+            {
+                "task_id": task_id,
+                "prompt_type": "intervention",
+                "trace_path": str((root / "demo/healthy-codex-trace.jsonl").resolve()),
+                "outcome": "success",
+            },
+        ])
+        labels.append({
+            "task_id": task_id,
+            "prompt_type": "baseline",
+            "outcome": "failure",
+            "failure_tags": ["hidden_semantic_edge_case"],
+        })
+    run_dir.joinpath("runs.jsonl").write_text(
+        "".join(json.dumps(row, sort_keys=True) + "\n" for row in runs),
+        encoding="utf-8",
+    )
+    for name in ("aggregate.json", "aggregate.md", "runs.csv", "labels.jsonl", "paper-report.json", "paper-report.md"):
+        run_dir.joinpath(name).write_text("{}\n", encoding="utf-8")
+    run_dir.joinpath("manual-labels.jsonl").write_text(
+        "".join(json.dumps(row, sort_keys=True) + "\n" for row in labels),
+        encoding="utf-8",
+    )
+
+    report = build_report(selection_dir, run_dir)
+    markdown = render_report(report)
+
+    assert report["ready"] is True
+    assert report["blocking"] == []
+    assert "Ready: yes" in markdown
+    assert "submission-ready hard30 artifact" in report["positioning"]
 
 
 def test_aggregate_runs_baseline_vs_intervention():

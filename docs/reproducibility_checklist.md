@@ -32,6 +32,7 @@ The stored pilots can be inspected and aggregated without re-running Codex.
 | `scripts/run_hard30_shards.py` | Resumable hard30 collection runner with configurable per-task concurrency. |
 | `scripts/merge_hard30_shards.py` | Merge per-task hard30 shard manifests into the reporting `runs.jsonl`. |
 | `scripts/finalize_hard30_pilot.py` | Post-processing entrypoint for hard30 aggregate tables, labels, CSV, and paper-report artifacts. |
+| `scripts/check_submission_readiness.py` | Machine-readable gate for hard30 collection, finalization, labeling, and paper artifact readiness. |
 | `benchmark/pilot/full30-real` | 30-task / 60-run real seed pilot. |
 | `benchmark/hard/pilot/hard10-real` | 10-task / 20-run hard-tier pilot with outcome failures. |
 | `benchmark/hard/pilot/hard10-real/manual-labels.jsonl` | Manual hidden-failure labels for hard-tier RQ2 analysis. |
@@ -173,6 +174,15 @@ PYTHONPATH=. PYTHONPYCACHEPREFIX=/tmp/codextrace-pycache \
   --run-dir benchmark/hard/pilot/hard30-real \
   --preflight-only \
   --preflight-json benchmark/hard/pilot/hard30-real/preflight.json
+```
+
+Run the submission readiness gate:
+
+```bash
+PYTHONPATH=. PYTHONPYCACHEPREFIX=/tmp/codextrace-pycache \
+  python3 scripts/check_submission_readiness.py \
+  --json-output /tmp/codextrace-readiness.json \
+  --markdown-output /tmp/codextrace-readiness.md
 ```
 
 Check that all hard-tier initial fixtures fail their hidden graders before an

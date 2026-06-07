@@ -158,6 +158,12 @@ Treat the project as submission-ready only when:
 - CI passes and all generated result tables can be reproduced from stored
   manifests.
 
+The current machine-readable gate is:
+
+```bash
+PYTHONPATH=. python3 scripts/check_submission_readiness.py
+```
+
 Until then, the honest positioning is:
 
 > A reproducible pilot artifact showing that trace diagnosis can measure
