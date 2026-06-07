@@ -1227,6 +1227,111 @@ TASK_DEFS = [
                 raise AssertionError("malformed closing delimiter should raise FrontmatterError")
         """),
     },
+    {
+        "task_id": "HARD-019",
+        "category": "multi_turn_change",
+        "repo_hint": "python/search_ranker",
+        "instruction": "Update the search ranker to boost exact query matches in titles and body text while preserving existing token relevance, stable ordering, and recency tie-break behavior.",
+        "public_success_check": "python3 -m unittest discover -s tests",
+        "success_check": "python3 ../grader/check.py",
+        "files": {
+            "src/search_ranker.py": """
+                from datetime import datetime, timezone
+
+
+                def rank_results(query, documents):
+                    terms = [term.casefold() for term in query.split() if term.strip()]
+
+                    def timestamp(document):
+                        value = document.get("updated_at")
+                        if isinstance(value, datetime):
+                            dt = value
+                        else:
+                            dt = datetime.fromisoformat(str(value).replace("Z", "+00:00"))
+                        if dt.tzinfo is None:
+                            dt = dt.replace(tzinfo=timezone.utc)
+                        return dt
+
+                    def score(document):
+                        haystack = f"{document.get('title', '')} {document.get('body', '')}".casefold()
+                        return sum(1 for term in terms if term in haystack)
+
+                    indexed = list(enumerate(documents))
+                    indexed.sort(
+                        key=lambda item: (
+                            score(item[1]),
+                            timestamp(item[1]),
+                            -item[0],
+                        ),
+                        reverse=True,
+                    )
+                    return [document for _, document in indexed]
+            """,
+            "tests/test_search_ranker.py": """
+                import sys
+                import unittest
+                from pathlib import Path
+
+                sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
+                from search_ranker import rank_results
+
+
+                class SearchRankerTest(unittest.TestCase):
+                    def test_more_term_matches_rank_first(self):
+                        docs = [
+                            {"id": "one", "title": "Billing", "body": "receipt", "updated_at": "2026-01-01T00:00:00Z"},
+                            {"id": "two", "title": "Billing invoice", "body": "refund", "updated_at": "2025-01-01T00:00:00Z"},
+                        ]
+                        self.assertEqual([doc["id"] for doc in rank_results("billing invoice", docs)], ["two", "one"])
+
+                    def test_recency_breaks_equal_relevance_ties(self):
+                        docs = [
+                            {"id": "old", "title": "Deploy notes", "body": "", "updated_at": "2025-01-01T00:00:00Z"},
+                            {"id": "new", "title": "Deploy notes", "body": "", "updated_at": "2026-01-01T00:00:00Z"},
+                        ]
+                        self.assertEqual([doc["id"] for doc in rank_results("deploy", docs)], ["new", "old"])
+
+
+                if __name__ == "__main__":
+                    unittest.main()
+            """,
+        },
+        "grader": py_grader("""
+            run_visible_tests()
+            mod = importlib.import_module("search_ranker")
+
+            docs = [
+                {"id": "new-loose", "title": "Search ranker", "body": "exact match tuning", "updated_at": "2026-06-01T00:00:00Z"},
+                {"id": "old-exact-title", "title": "Exact match", "body": "ranking notes", "updated_at": "2024-01-01T00:00:00Z"},
+                {"id": "new-one-term", "title": "Exact", "body": "unrelated", "updated_at": "2026-07-01T00:00:00Z"},
+            ]
+            assert [doc["id"] for doc in mod.rank_results("exact match", docs)][:2] == [
+                "old-exact-title",
+                "new-loose",
+            ]
+
+            phrase_docs = [
+                {"id": "recent-split", "title": "Match diagnostics", "body": "exact token appears elsewhere", "updated_at": "2026-05-01T00:00:00Z"},
+                {"id": "older-body-phrase", "title": "Diagnostics", "body": "Investigate exact match behavior", "updated_at": "2025-05-01T00:00:00Z"},
+            ]
+            assert mod.rank_results("exact match", phrase_docs)[0]["id"] == "older-body-phrase"
+
+            tie_docs = [
+                {"id": "older-exact", "title": "Exact match", "body": "", "updated_at": "2025-01-01T00:00:00Z"},
+                {"id": "newer-exact", "title": "Exact match", "body": "", "updated_at": "2026-01-01T00:00:00Z"},
+            ]
+            assert [doc["id"] for doc in mod.rank_results("exact match", tie_docs)] == [
+                "newer-exact",
+                "older-exact",
+            ]
+
+            stable_docs = [
+                {"id": "first", "title": "Nothing", "body": "", "updated_at": "2026-01-01T00:00:00Z"},
+                {"id": "second", "title": "Nothing", "body": "", "updated_at": "2026-01-01T00:00:00Z"},
+            ]
+            assert [doc["id"] for doc in mod.rank_results("missing", stable_docs)] == ["first", "second"]
+        """),
+    },
 ]
 
 
