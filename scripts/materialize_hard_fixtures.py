@@ -2479,6 +2479,107 @@ TASK_DEFS = [
             );
         """),
     },
+    {
+        "task_id": "HARD-030",
+        "category": "error_localization",
+        "repo_hint": "python/template_renderer",
+        "instruction": "Use the traceback and README contract to fix the template renderer. Preserve render_template(template, context), support documented placeholder rendering, and report template failures through TemplateRenderError with actionable diagnostics.",
+        "public_success_check": "python3 -m unittest discover -s tests",
+        "success_check": "python3 ../grader/check.py",
+        "files": {
+            "README.md": """
+                # template-renderer
+
+                `render_template(template, context)` renders placeholders using values from `context`.
+
+                Syntax:
+
+                - `{name}` inserts `str(context["name"])`.
+                - Placeholder names contain letters, digits, and underscores, and must not start with a digit.
+                - `{{` renders a literal `{`.
+                - `}}` renders a literal `}`.
+                - Missing variables raise `TemplateRenderError` with the missing variable name and its line/column location.
+            """,
+            "src/template_renderer.py": """
+                import re
+
+
+                class TemplateRenderError(Exception):
+                    pass
+
+
+                def render_template(template, context):
+                    def replace(match):
+                        name = match.group(1)
+                        try:
+                            return str(context[name])
+                        except KeyError as exc:
+                            raise TemplateRenderError(f"missing variable {name}") from exc
+
+                    return re.sub(r"{([A-Za-z_][A-Za-z0-9_]*)}", replace, template)
+            """,
+            "tests/test_template_renderer.py": """
+                import sys
+                import unittest
+                from pathlib import Path
+
+                sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
+                import template_renderer
+
+
+                class TemplateRendererTest(unittest.TestCase):
+                    def test_renders_simple_placeholders(self):
+                        result = template_renderer.render_template(
+                            "Hello {name}, you have {count} messages.",
+                            {"name": "Ada", "count": 3},
+                        )
+                        self.assertEqual(result, "Hello Ada, you have 3 messages.")
+
+                    def test_missing_variable_raises_template_error(self):
+                        with self.assertRaises(template_renderer.TemplateRenderError) as ctx:
+                            template_renderer.render_template("Hello {name}", {})
+                        self.assertIn("name", str(ctx.exception))
+
+
+                if __name__ == "__main__":
+                    unittest.main()
+            """,
+        },
+        "grader": py_grader("""
+            run_visible_tests()
+            mod = importlib.import_module("template_renderer")
+
+            assert mod.render_template(
+                "{{greeting}}, {name}!",
+                {"greeting": "HELLO", "name": "Ada"},
+            ) == "{greeting}, Ada!"
+
+            assert mod.render_template(
+                "Use {{ and }} around {word}.",
+                {"word": "tokens"},
+            ) == "Use { and } around tokens."
+
+            assert mod.render_template(
+                "{{{name}}}",
+                {"name": "Ada"},
+            ) == "{Ada}"
+
+            assert mod.render_template(
+                "{zero} {false} {none}",
+                {"zero": 0, "false": False, "none": None},
+            ) == "0 False None"
+
+            try:
+                mod.render_template("Line 1\\nHello {user}\\nBye", {})
+            except mod.TemplateRenderError as exc:
+                message = str(exc).lower()
+                assert "user" in message
+                assert "line 2" in message or "line: 2" in message
+                assert "column 7" in message or "col 7" in message or "column: 7" in message
+            else:
+                raise AssertionError("missing variables should raise TemplateRenderError")
+        """),
+    },
 ]
 
 

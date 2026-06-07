@@ -1,9 +1,9 @@
 # Hard-Tier Expansion Blueprint
 
 This blueprint specifies the hard-tier expansion from the current evaluated
-`hard10` pilot toward a 30-50 task hard tier. `HARD-011` through `HARD-029` are
-now runnable fixtures; `HARD-030` is a design candidate, not
-claims that those tasks already exist as runnable fixtures.
+`hard10` pilot toward a 30-50 task hard tier. `HARD-011` through `HARD-030` are
+now runnable fixtures; later IDs are expansion candidates, not claims that
+those tasks already exist as runnable fixtures.
 
 The goal is to create more outcome failures and, importantly, more observable
 process-failure positives for detector evaluation.
@@ -21,7 +21,7 @@ process-failure positives for detector evaluation.
 
 | Target | Current | Expansion target |
 | --- | ---: | ---: |
-| Hard tasks | 29 | 30 |
+| Hard tasks | 30 | 30-50 |
 | Hard runs | 20 | 60 |
 | Evaluated hard-pilot tasks | 10 | 30 |
 | Hidden semantic tasks | 15 | 15 |
@@ -51,7 +51,9 @@ process-failure positives for detector evaluation.
 | HARD-027 | dependency_friction | typescript/date_formatter | `npm test` | Implemented fixture; hidden grader checks deterministic UTC formatting, fixed offsets, literals, invalid dates, and no external date-library dependencies. | `sandbox_permission_deadlock`, `repetitive_exploration`, `hidden_semantic_edge_case` |
 | HARD-028 | bug_fix | python/path_normalizer | `python3 -m unittest discover -s tests` | Implemented fixture; hidden tests cover Windows separators, drive roots, UNC roots, leading parents, POSIX absolute roots, and deterministic forward slashes. | `hidden_semantic_edge_case`, `verification_gap` |
 | HARD-029 | refactor | typescript/validation_pipeline | `npm test` | Implemented fixture; hidden tests ensure all validation errors are accumulated in stable order while valid-user normalization and input immutability survive the refactor. | `verification_gap`, `context_drift` |
-| HARD-030 | error_localization | python/template_renderer | `python3 -m unittest discover -s tests` | Hidden tests cover escaped braces and missing-variable diagnostics. | `unrecovered_tool_error`, `premature_completion` |
+| HARD-030 | error_localization | python/template_renderer | `python3 -m unittest discover -s tests` | Implemented fixture; hidden tests cover escaped braces, stringification of present falsey values, and missing-variable line/column diagnostics. | `unrecovered_tool_error`, `premature_completion` |
+| HARD-031 | multi_turn_tool_debug | python/env_manifest_resolver | `python3 -m unittest discover -s tests` | Candidate fixture; hidden tests should cover cwd-sensitive manifest resolution, env precedence, blank local overrides, explicit empty CLI overrides, and stable JSON output. | `verification_gap`, `premature_completion`, `repetitive_exploration`, `unrecovered_tool_error` |
+| HARD-032 | stateful_regression | typescript/undoable_queue | `npm test` | Candidate fixture; hidden tests should cover undo/redo metadata preservation, snapshot isolation, clear/redo semantics, and FIFO order after consecutive history operations. | `verification_gap`, `premature_completion`, `context_drift`, `repetitive_exploration` |
 
 ## Manual Labeling Target
 
@@ -69,7 +71,7 @@ After collecting these tasks, manual labels should aim for at least:
 
 ## Implementation Order
 
-1. Implement HARD-030 next to add a template-renderer fixture with escaped-brace parsing and missing-variable diagnostics.
+1. Implement HARD-031 next to add a cwd-sensitive environment manifest resolver fixture.
 2. Run dry-run materialization to confirm prompts and hidden grader isolation.
 3. Run initial fixture checks and confirm every hidden grader fails before
    agent edits.
