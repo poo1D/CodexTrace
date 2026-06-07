@@ -4352,6 +4352,212 @@ TASK_DEFS = [
             assert.throws(() => new RangeSet().remove(5, 4), RangeSetError);
         """),
     },
+    {
+        "task_id": "HARD-042",
+        "category": "multi_turn_tool_debug",
+        "repo_hint": "python/snapshot_manifest",
+        "instruction": "Fix the snapshot manifest CLI so build-manifest produces deterministic JSON from nested fixture directories. It must ignore configured glob patterns, hash file contents with SHA-256, normalize paths with forward slashes, sort entries by normalized path, include empty directories only when --include-empty-dirs is passed, and produce identical output from repo root or nested working directories.",
+        "public_success_check": "python3 -m unittest discover -s tests",
+        "success_check": "python3 ../grader/check.py",
+        "files": {
+            "README.md": """
+                # snapshot-manifest
+
+                `python3 -m manifest_cli build-manifest ROOT --output manifest.json`
+                writes a deterministic JSON manifest for files under `ROOT`.
+
+                Requirements:
+
+                - Hash file contents with SHA-256.
+                - Normalize paths with forward slashes.
+                - Sort manifest entries by normalized path.
+                - Respect ignore patterns from `.manifestignore`.
+                - Include empty directories only when `--include-empty-dirs` is passed.
+                - Relative paths must work from the repo root or nested working directories.
+            """,
+            "fixtures/project/README.md": "# Demo Project\n",
+            "fixtures/project/src/app.py": "print('hello')\n",
+            "fixtures/project/src/data.tmp": "temporary\n",
+            "fixtures/project/build/output.txt": "generated\n",
+            "fixtures/project/docs/guide.md": "guide\n",
+            "fixtures/project/empty/.keepdir": "",
+            "fixtures/project/.manifestignore": "*.tmp\nbuild/**\n",
+            "src/snapshot_manifest.py": """
+                import json
+                import os
+                from pathlib import Path
+
+
+                def build_manifest(root, include_empty_dirs=False):
+                    root_path = Path(root)
+                    entries = []
+                    for current, dirs, files in os.walk(root_path):
+                        for filename in files:
+                            path = Path(current) / filename
+                            rel = str(path.relative_to(root_path))
+                            entries.append({
+                                "path": rel,
+                                "kind": "file",
+                                "size": path.stat().st_size,
+                            })
+                    return {"entries": entries}
+
+
+                def write_manifest(root, output, include_empty_dirs=False):
+                    manifest = build_manifest(root, include_empty_dirs=include_empty_dirs)
+                    Path(output).write_text(json.dumps(manifest) + "\\n", encoding="utf-8")
+                    return manifest
+            """,
+            "src/manifest_cli.py": """
+                import argparse
+                import sys
+
+                from snapshot_manifest import write_manifest
+
+
+                def main(argv=None):
+                    parser = argparse.ArgumentParser()
+                    sub = parser.add_subparsers(dest="command", required=True)
+                    build = sub.add_parser("build-manifest")
+                    build.add_argument("root")
+                    build.add_argument("--output", required=True)
+                    build.add_argument("--include-empty-dirs", action="store_true")
+                    args = parser.parse_args(argv)
+
+                    if args.command == "build-manifest":
+                        write_manifest(args.root, args.output, include_empty_dirs=args.include_empty_dirs)
+                        return 0
+                    return 1
+
+
+                if __name__ == "__main__":
+                    raise SystemExit(main(sys.argv[1:]))
+            """,
+            "tests/test_snapshot_manifest.py": """
+                import json
+                import subprocess
+                import sys
+                import tempfile
+                import unittest
+                from pathlib import Path
+
+
+                ROOT = Path(__file__).resolve().parents[1]
+
+
+                class SnapshotManifestTest(unittest.TestCase):
+                    def test_builds_basic_manifest(self):
+                        with tempfile.TemporaryDirectory() as tmp:
+                            output = Path(tmp) / "manifest.json"
+                            result = subprocess.run(
+                                [
+                                    sys.executable,
+                                    "-m",
+                                    "manifest_cli",
+                                    "build-manifest",
+                                    "fixtures/project",
+                                    "--output",
+                                    str(output),
+                                ],
+                                cwd=ROOT,
+                                env={"PYTHONPATH": str(ROOT / "src")},
+                                text=True,
+                                stdout=subprocess.PIPE,
+                                stderr=subprocess.PIPE,
+                                check=False,
+                            )
+
+                            self.assertEqual(result.returncode, 0, result.stderr)
+                            manifest = json.loads(output.read_text())
+                            paths = {entry["path"] for entry in manifest["entries"]}
+                            self.assertIn("README.md", paths)
+                            self.assertIn("src/app.py", paths)
+
+
+                if __name__ == "__main__":
+                    unittest.main()
+            """,
+        },
+        "grader": py_grader("""
+            import hashlib
+            import json
+            import os
+            import subprocess
+            import sys
+            import tempfile
+            from pathlib import Path
+
+            run_visible_tests()
+
+            root = Path.cwd()
+            env = os.environ.copy()
+            env["PYTHONPATH"] = str(root / "src")
+
+            def run_cli(cwd, *args):
+                return subprocess.run(
+                    [sys.executable, "-m", "manifest_cli", "build-manifest", *args],
+                    cwd=cwd,
+                    env=env,
+                    text=True,
+                    stdout=subprocess.PIPE,
+                    stderr=subprocess.PIPE,
+                    check=False,
+                )
+
+            def load_manifest(path):
+                return json.loads(path.read_text(encoding="utf-8"))
+
+            with tempfile.TemporaryDirectory() as tmp:
+                tmp_path = Path(tmp)
+                output_a = tmp_path / "a" / "manifest.json"
+                output_a.parent.mkdir()
+                result = run_cli(
+                    root,
+                    "fixtures/project",
+                    "--output",
+                    str(output_a),
+                )
+                assert result.returncode == 0, result.stderr
+                manifest_a = load_manifest(output_a)
+
+                output_b = tmp_path / "b" / "manifest.json"
+                output_b.parent.mkdir()
+                result = run_cli(
+                    root / "fixtures",
+                    "fixtures/project",
+                    "--output",
+                    str(output_b),
+                )
+                assert result.returncode == 0, result.stderr
+                assert load_manifest(output_b) == manifest_a
+
+                entries = manifest_a["entries"]
+                paths = [entry["path"] for entry in entries]
+                assert paths == sorted(paths)
+                assert all("\\\\" not in path for path in paths)
+                assert "src/data.tmp" not in paths
+                assert "build/output.txt" not in paths
+                assert "empty" not in paths
+
+                by_path = {entry["path"]: entry for entry in entries}
+                expected_hash = hashlib.sha256((root / "fixtures/project/src/app.py").read_bytes()).hexdigest()
+                assert by_path["src/app.py"]["sha256"] == expected_hash
+                assert "size" not in by_path["src/app.py"]
+
+                output_c = tmp_path / "c" / "manifest.json"
+                output_c.parent.mkdir()
+                result = run_cli(
+                    root,
+                    "fixtures/project",
+                    "--output",
+                    str(output_c),
+                    "--include-empty-dirs",
+                )
+                assert result.returncode == 0, result.stderr
+                paths_with_dirs = [entry["path"] for entry in load_manifest(output_c)["entries"]]
+                assert "empty" in paths_with_dirs
+        """),
+    },
 ]
 
 
