@@ -4040,6 +4040,192 @@ TASK_DEFS = [
                 assert not list(existing.parent.glob("*.tmp"))
         """),
     },
+    {
+        "task_id": "HARD-040",
+        "category": "stateful_regression",
+        "repo_hint": "python/ledger_reconciler",
+        "instruction": "Fix the ledger reconciler so posting batches are atomic, duplicate event ids are ignored, reversal events negate the original event exactly once, currency mismatches raise LedgerError, and input events/accounts are not mutated. Preserve apply_events(accounts, events).",
+        "public_success_check": "python3 -m unittest discover -s tests",
+        "success_check": "python3 ../grader/check.py",
+        "files": {
+            "README.md": """
+                # ledger-reconciler
+
+                `apply_events(accounts, events)` applies ledger events and
+                returns a new accounts dictionary.
+
+                Account shape:
+
+                ```python
+                {"cash": {"currency": "USD", "balance": 100}}
+                ```
+
+                Event shape:
+
+                ```python
+                {
+                    "id": "evt-1",
+                    "postings": [
+                        {"account": "cash", "amount": -10, "currency": "USD"},
+                        {"account": "revenue", "amount": 10, "currency": "USD"},
+                    ],
+                }
+                ```
+
+                Requirements:
+
+                - Apply a batch atomically: failed events leave all balances unchanged.
+                - Ignore duplicate event ids that were already applied.
+                - A reversal event has `reversal_of` and negates the original event once.
+                - Currency mismatches raise `LedgerError`.
+                - Inputs must not be mutated.
+            """,
+            "src/ledger.py": """
+                class LedgerError(Exception):
+                    pass
+
+
+                def apply_events(accounts, events):
+                    result = accounts.copy()
+                    for event in events:
+                        for posting in event.get("postings", []):
+                            account = posting["account"]
+                            amount = posting["amount"]
+                            currency = posting["currency"]
+                            if account not in result:
+                                result[account] = {"currency": currency, "balance": 0}
+                            result[account]["balance"] += amount
+                    return result
+            """,
+            "tests/test_ledger.py": """
+                import sys
+                import unittest
+                from pathlib import Path
+
+                sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
+                from ledger import apply_events
+
+
+                class LedgerTest(unittest.TestCase):
+                    def test_applies_balanced_event(self):
+                        accounts = {
+                            "cash": {"currency": "USD", "balance": 100},
+                            "revenue": {"currency": "USD", "balance": 0},
+                        }
+                        events = [
+                            {
+                                "id": "evt-1",
+                                "postings": [
+                                    {"account": "cash", "amount": -25, "currency": "USD"},
+                                    {"account": "revenue", "amount": 25, "currency": "USD"},
+                                ],
+                            }
+                        ]
+
+                        result = apply_events(accounts, events)
+
+                        self.assertEqual(result["cash"]["balance"], 75)
+                        self.assertEqual(result["revenue"]["balance"], 25)
+
+                    def test_creates_new_account(self):
+                        result = apply_events(
+                            {},
+                            [
+                                {
+                                    "id": "evt-1",
+                                    "postings": [
+                                        {"account": "cash", "amount": 5, "currency": "USD"},
+                                    ],
+                                }
+                            ],
+                        )
+
+                        self.assertEqual(result["cash"], {"currency": "USD", "balance": 5})
+
+
+                if __name__ == "__main__":
+                    unittest.main()
+            """,
+        },
+        "grader": py_grader("""
+            import copy
+
+            run_visible_tests()
+            mod = importlib.import_module("ledger")
+
+            accounts = {
+                "cash": {"currency": "USD", "balance": 100},
+                "revenue": {"currency": "USD", "balance": 0},
+                "_applied": {},
+            }
+            events = [
+                {
+                    "id": "sale-1",
+                    "postings": [
+                        {"account": "cash", "amount": 30, "currency": "USD"},
+                        {"account": "revenue", "amount": -30, "currency": "USD"},
+                    ],
+                }
+            ]
+            accounts_before = copy.deepcopy(accounts)
+            events_before = copy.deepcopy(events)
+            result = mod.apply_events(accounts, events)
+            assert accounts == accounts_before
+            assert events == events_before
+            assert result["cash"]["balance"] == 130
+            assert result["revenue"]["balance"] == -30
+
+            result2 = mod.apply_events(result, events)
+            assert result2["cash"]["balance"] == 130
+            assert result2["revenue"]["balance"] == -30
+
+            reversed_once = mod.apply_events(
+                result,
+                [{"id": "void-1", "reversal_of": "sale-1"}],
+            )
+            assert reversed_once["cash"]["balance"] == 100
+            assert reversed_once["revenue"]["balance"] == 0
+            assert "void-1" in reversed_once.get("_applied", {})
+
+            try:
+                mod.apply_events(reversed_once, [{"id": "void-2", "reversal_of": "sale-1"}])
+            except mod.LedgerError as error:
+                assert "already reversed" in str(error)
+            else:
+                raise AssertionError("expected LedgerError for duplicate reversal")
+
+            bad_accounts = {
+                "cash": {"currency": "USD", "balance": 100},
+                "revenue": {"currency": "USD", "balance": 0},
+            }
+            before_bad = copy.deepcopy(bad_accounts)
+            try:
+                mod.apply_events(
+                    bad_accounts,
+                    [
+                        {
+                            "id": "bad-1",
+                            "postings": [
+                                {"account": "cash", "amount": -10, "currency": "USD"},
+                                {"account": "revenue", "amount": 10, "currency": "EUR"},
+                            ],
+                        }
+                    ],
+                )
+            except mod.LedgerError as error:
+                assert "currency" in str(error).lower()
+            else:
+                raise AssertionError("expected LedgerError for currency mismatch")
+            assert bad_accounts == before_bad
+
+            try:
+                mod.apply_events({"cash": {"currency": "USD", "balance": 5}}, [{"id": "missing", "reversal_of": "nope"}])
+            except mod.LedgerError as error:
+                assert "unknown" in str(error).lower()
+            else:
+                raise AssertionError("expected LedgerError for unknown reversal")
+        """),
+    },
 ]
 
 
