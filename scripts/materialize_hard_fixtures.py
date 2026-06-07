@@ -2247,6 +2247,73 @@ TASK_DEFS = [
             );
         """),
     },
+    {
+        "task_id": "HARD-028",
+        "category": "bug_fix",
+        "repo_hint": "python/path_normalizer",
+        "instruction": "Fix path normalization so it handles POSIX and Windows-style separators, resolves dot segments lexically, preserves absolute roots and Windows drive or UNC roots, and returns deterministic forward-slash output without using platform-dependent behavior.",
+        "public_success_check": "python3 -m unittest discover -s tests",
+        "success_check": "python3 ../grader/check.py",
+        "files": {
+            "src/path_normalizer.py": """
+                def normalize_path(path):
+                    text = str(path)
+                    parts = []
+                    for part in text.split("/"):
+                        if part in ("", "."):
+                            continue
+                        if part == "..":
+                            if parts:
+                                parts.pop()
+                            continue
+                        parts.append(part)
+                    return "/".join(parts) or "."
+            """,
+            "tests/test_path_normalizer.py": """
+                import sys
+                import unittest
+                from pathlib import Path
+
+                sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
+                from path_normalizer import normalize_path
+
+
+                class PathNormalizerTest(unittest.TestCase):
+                    def test_collapses_posix_separators_and_current_dir(self):
+                        self.assertEqual(normalize_path("docs//./guide.md"), "docs/guide.md")
+
+                    def test_resolves_relative_parent(self):
+                        self.assertEqual(normalize_path("docs/api/../index.md"), "docs/index.md")
+
+                    def test_empty_path_is_current_directory(self):
+                        self.assertEqual(normalize_path(""), ".")
+
+
+                if __name__ == "__main__":
+                    unittest.main()
+            """,
+        },
+        "grader": py_grader(r"""
+            run_visible_tests()
+            mod = importlib.import_module("path_normalizer")
+
+            assert mod.normalize_path(r"logs\\2026\\..\\latest\\run.txt") == "logs/latest/run.txt"
+            assert mod.normalize_path(r"C:\\Users\\Ada\\..\\Grace\\file.txt") == "C:/Users/Grace/file.txt"
+            assert mod.normalize_path("C:/Users/./Ada/../Grace") == "C:/Users/Grace"
+
+            assert mod.normalize_path("../src/./../README.md") == "../README.md"
+            assert mod.normalize_path("a/../../b") == "../b"
+            assert mod.normalize_path("././") == "."
+
+            assert mod.normalize_path("/var//log/../tmp/") == "/var/tmp"
+            assert mod.normalize_path("/../etc") == "/etc"
+            assert mod.normalize_path("/") == "/"
+
+            assert mod.normalize_path(r"C:\\..\\Windows") == "C:/Windows"
+            assert mod.normalize_path(r"\\\\server\\share\\folder\\..\\file.txt") == "//server/share/file.txt"
+            assert mod.normalize_path(r"\\\\server\\share\\..\\other") == "//server/share/other"
+        """),
+    },
 ]
 
 

@@ -24,7 +24,7 @@ The stored pilots can be inspected and aggregated without re-running Codex.
 | `docs/paper_draft.md` | Result-driven workshop-style draft. |
 | `docs/results_summary.md` | Generated full30 + hard10 result summary, including RQ4 trace-signal analysis. |
 | `docs/failure_taxonomy.md` | Definitions for process-level failure labels. |
-| `docs/hard_tier_expansion_blueprint.md` | Implemented HARD-011 to HARD-027 fixtures and HARD-028 to HARD-030 task designs for expanding the hard tier. |
+| `docs/hard_tier_expansion_blueprint.md` | Implemented HARD-011 to HARD-028 fixtures and HARD-029 to HARD-030 task designs for expanding the hard tier. |
 | `docs/experiment_protocol.md` | Collection, labeling, and evaluation protocol. |
 | `docs/related_work.md` | Compact bibliography and positioning notes. |
 | `docs/submission_readiness_plan.md` | Workstreams and decision gate for a stronger paper submission. |
@@ -88,7 +88,7 @@ PYTHONPATH=. python3 -m codex_trace.cli research summary \
 | --- | --- | --- |
 | CodexTrace parses Codex JSONL traces and emits reports. | `codex_trace/parser.py`, `codex_trace/diagnose.py`, `demo/`, `tests/` | Implemented and CI-tested. |
 | The benchmark has a 30-task seed tier and two prompt conditions. | `benchmark/tasks.jsonl`, `benchmark/prompts/`, `benchmark/pilot/full30-real/runs.jsonl` | Implemented; 60 real stored runs. |
-| The benchmark has a hard tier with hidden graders. | `benchmark/hard/tasks.jsonl`, `benchmark/hard/repos/`, `benchmark/hard/pilot/hard10-real` | Implemented; 27 runnable hard tasks and 20 real stored hard10 runs. |
+| The benchmark has a hard tier with hidden graders. | `benchmark/hard/tasks.jsonl`, `benchmark/hard/repos/`, `benchmark/hard/pilot/hard10-real` | Implemented; 28 runnable hard tasks and 20 real stored hard10 runs. |
 | Hidden graders are not exposed during Codex execution. | `codex_trace/research.py`, `public_success_check` fields, hard-tier prompts | Implemented; hidden grader copied after Codex exits. |
 | Full30 intervention reduces process waste. | `benchmark/pilot/full30-real/aggregate.md` | Supported: repeated tool calls `10.43 -> 7.00`, token usage `218.7k -> 184.8k`. |
 | Hard10 intervention improves success and reduces waste. | `benchmark/hard/pilot/hard10-real/aggregate.md` | Supported: success `0.70 -> 0.80`, repeated tool calls `9.20 -> 6.20`, token usage `248.9k -> 187.5k`. |
@@ -137,8 +137,8 @@ Expected current output:
 
 ```text
 passed_initial []
-failed_initial_count 27
-failed_initial ['HARD-001', 'HARD-002', 'HARD-003', 'HARD-004', 'HARD-005', 'HARD-006', 'HARD-007', 'HARD-008', 'HARD-009', 'HARD-010', 'HARD-011', 'HARD-012', 'HARD-013', 'HARD-014', 'HARD-015', 'HARD-016', 'HARD-017', 'HARD-018', 'HARD-019', 'HARD-020', 'HARD-021', 'HARD-022', 'HARD-023', 'HARD-024', 'HARD-025', 'HARD-026', 'HARD-027']
+failed_initial_count 28
+failed_initial ['HARD-001', 'HARD-002', 'HARD-003', 'HARD-004', 'HARD-005', 'HARD-006', 'HARD-007', 'HARD-008', 'HARD-009', 'HARD-010', 'HARD-011', 'HARD-012', 'HARD-013', 'HARD-014', 'HARD-015', 'HARD-016', 'HARD-017', 'HARD-018', 'HARD-019', 'HARD-020', 'HARD-021', 'HARD-022', 'HARD-023', 'HARD-024', 'HARD-025', 'HARD-026', 'HARD-027', 'HARD-028']
 ```
 
 ## Current Gaps Before A Stronger Submission
@@ -151,6 +151,6 @@ failed_initial ['HARD-001', 'HARD-002', 'HARD-003', 'HARD-004', 'HARD-005', 'HAR
   hard-tier boundary label.
 
 For a concrete expansion backlog and submission decision gate, see
-`docs/submission_readiness_plan.md`. For the implemented HARD-011 to HARD-027
+`docs/submission_readiness_plan.md`. For the implemented HARD-011 to HARD-028
 fixtures and remaining candidate tasks, see
 `docs/hard_tier_expansion_blueprint.md`.
