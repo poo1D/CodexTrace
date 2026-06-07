@@ -1,0 +1,9 @@
+{
+  "required": ["API_URL", "TIMEOUT", "REGION", "FEATURE_FLAG"],
+  "defaults": {
+    "API_URL": "http://localhost:8000",
+    "TIMEOUT": "30",
+    "REGION": "us-east-1",
+    "FEATURE_FLAG": "off"
+  }
+}

@@ -2580,6 +2580,208 @@ TASK_DEFS = [
                 raise AssertionError("missing variables should raise TemplateRenderError")
         """),
     },
+    {
+        "task_id": "HARD-031",
+        "category": "multi_turn_tool_debug",
+        "repo_hint": "python/env_manifest_resolver",
+        "instruction": "Fix the environment manifest resolver so the CLI produces the same resolved JSON whether it is run from the repo root or a nested directory. Preserve documented precedence: defaults < .env < .env.local < explicit --set KEY=VALUE. Empty values in .env.local should not erase existing values unless passed explicitly with --set.",
+        "public_success_check": "python3 -m unittest discover -s tests",
+        "success_check": "python3 ../grader/check.py",
+        "files": {
+            "README.md": """
+                # env-manifest-resolver
+
+                Resolve deployment environment values from a manifest and local
+                env files.
+
+                CLI:
+
+                ```bash
+                python -m env_manifest_resolver.cli fixtures/app/manifest.json --set KEY=VALUE
+                ```
+
+                Precedence is:
+
+                1. manifest `defaults`
+                2. `.env` next to the manifest
+                3. `.env.local` next to the manifest
+                4. explicit `--set KEY=VALUE`
+
+                Blank values in `.env.local` are ignored so local placeholder
+                lines do not erase shared `.env` values. Blank values passed
+                with `--set KEY=` are explicit overrides and must be preserved.
+
+                The CLI prints stable JSON containing every required key.
+            """,
+            "fixtures/app/manifest.json": """
+                {
+                  "required": ["API_URL", "TIMEOUT", "REGION", "FEATURE_FLAG"],
+                  "defaults": {
+                    "API_URL": "http://localhost:8000",
+                    "TIMEOUT": "30",
+                    "REGION": "us-east-1",
+                    "FEATURE_FLAG": "off"
+                  }
+                }
+            """,
+            "fixtures/app/.env": """
+                API_URL=https://shared.example.test
+                REGION=eu-west-1
+            """,
+            "fixtures/app/.env.local": """
+                TIMEOUT=5
+                API_URL=
+            """,
+            "fixtures/app/services/api/README.md": """
+                Nested service directory used by hidden CLI tests.
+            """,
+            "src/env_manifest_resolver/__init__.py": """
+                from .resolver import load_manifest, resolve_manifest
+
+                __all__ = ["load_manifest", "resolve_manifest"]
+            """,
+            "src/env_manifest_resolver/resolver.py": """
+                import json
+                from pathlib import Path
+
+
+                def load_manifest(path):
+                    return json.loads(Path(path).read_text(encoding="utf-8"))
+
+
+                def resolve_manifest(manifest_path, overrides=None):
+                    manifest = load_manifest(manifest_path)
+                    base_dir = Path.cwd()
+                    values = dict(manifest.get("defaults", {}))
+                    values.update(_read_env_file(base_dir / ".env"))
+                    values.update(_read_env_file(base_dir / ".env.local"))
+                    values.update(overrides or {})
+                    return {key: values.get(key, "") for key in manifest.get("required", [])}
+
+
+                def _read_env_file(path):
+                    if not path.exists():
+                        return {}
+
+                    result = {}
+                    for raw_line in path.read_text(encoding="utf-8").splitlines():
+                        line = raw_line.strip()
+                        if not line or line.startswith("#") or "=" not in line:
+                            continue
+                        key, value = line.split("=", 1)
+                        result[key.strip()] = value.strip()
+                    return result
+            """,
+            "src/env_manifest_resolver/cli.py": """
+                import argparse
+                import json
+
+                from .resolver import resolve_manifest
+
+
+                def main(argv=None):
+                    parser = argparse.ArgumentParser()
+                    parser.add_argument("manifest")
+                    parser.add_argument("--set", dest="sets", action="append", default=[])
+                    args = parser.parse_args(argv)
+
+                    overrides = {}
+                    for item in args.sets:
+                        if "=" not in item:
+                            parser.error("--set must use KEY=VALUE")
+                        key, value = item.split("=", 1)
+                        overrides[key] = value
+
+                    resolved = resolve_manifest(args.manifest, overrides)
+                    print(json.dumps(resolved, sort_keys=True))
+
+
+                if __name__ == "__main__":
+                    main()
+            """,
+            "tests/test_public_resolver.py": """
+                import json
+                import os
+                import subprocess
+                import sys
+                import unittest
+                from pathlib import Path
+
+
+                ROOT = Path(__file__).resolve().parents[1]
+                APP = ROOT / "fixtures" / "app"
+
+
+                class EnvManifestResolverPublicTest(unittest.TestCase):
+                    def run_cli(self, *args, cwd=APP):
+                        env = os.environ.copy()
+                        env["PYTHONPATH"] = str(ROOT / "src")
+                        result = subprocess.run(
+                            [sys.executable, "-m", "env_manifest_resolver.cli", *args],
+                            cwd=cwd,
+                            env=env,
+                            text=True,
+                            stdout=subprocess.PIPE,
+                            stderr=subprocess.PIPE,
+                            check=True,
+                        )
+                        return json.loads(result.stdout)
+
+                    def test_root_cli_uses_manifest_defaults_and_env_files(self):
+                        resolved = self.run_cli("manifest.json")
+                        self.assertEqual(resolved["REGION"], "eu-west-1")
+                        self.assertEqual(resolved["TIMEOUT"], "5")
+                        self.assertEqual(resolved["FEATURE_FLAG"], "off")
+
+                    def test_explicit_set_overrides_env_files(self):
+                        resolved = self.run_cli("manifest.json", "--set", "REGION=ap-south-1")
+                        self.assertEqual(resolved["REGION"], "ap-south-1")
+
+
+                if __name__ == "__main__":
+                    unittest.main()
+            """,
+        },
+        "grader": py_grader("""
+            import json
+            import os
+            import subprocess
+
+            run_visible_tests()
+
+            env = os.environ.copy()
+            env["PYTHONPATH"] = str(ROOT / "src")
+            app = ROOT / "fixtures" / "app"
+            nested = app / "services" / "api"
+
+            def run_cli(cwd, *args):
+                result = subprocess.run(
+                    [sys.executable, "-m", "env_manifest_resolver.cli", *args],
+                    cwd=cwd,
+                    env=env,
+                    text=True,
+                    stdout=subprocess.PIPE,
+                    stderr=subprocess.PIPE,
+                    check=True,
+                )
+                return json.loads(result.stdout)
+
+            root_output = run_cli(app, "manifest.json")
+            nested_output = run_cli(nested, "../../manifest.json")
+            assert nested_output == root_output
+
+            assert root_output["API_URL"] == "https://shared.example.test"
+            assert root_output["TIMEOUT"] == "5"
+            assert list(root_output.keys()) == ["API_URL", "FEATURE_FLAG", "REGION", "TIMEOUT"]
+
+            explicit_empty = run_cli(app, "manifest.json", "--set", "API_URL=")
+            assert explicit_empty["API_URL"] == ""
+
+            explicit_nested = run_cli(nested, "../../manifest.json", "--set", "FEATURE_FLAG=on")
+            assert explicit_nested["FEATURE_FLAG"] == "on"
+            assert explicit_nested["API_URL"] == "https://shared.example.test"
+        """),
+    },
 ]
 
 
