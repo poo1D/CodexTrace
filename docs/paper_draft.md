@@ -272,9 +272,10 @@ pilot also gives an important limitation: hidden semantic edge failures can
 escape process-only rules. A practical evaluation stack should therefore combine
 trace-based diagnosis with strong task-level oracles.
 
-The next step is to expand the hard tier from 10 tasks toward 30-50 tasks,
-include more observable process failures, and evaluate whether additional trace
-signals or lightweight semantic checks can recover hidden edge-case failures.
+The next step is to run the selected hard30 pilot from the 50 runnable hard-tier
+tasks, collect 60 baseline/intervention traces, and evaluate whether additional
+trace signals or lightweight semantic checks can recover hidden edge-case
+failures.
 
 For a reviewer-facing walkthrough, see `docs/artifact_guide.md`. For the
 generated result summary, see `docs/results_summary.md`. For claim-evidence

@@ -1,3 +1,6 @@
+import json
+from pathlib import Path
+
 from codex_trace.research import (
     aggregate_runs,
     build_paper_report,
@@ -151,6 +154,29 @@ def test_hard_task_manifest_includes_first_expansion_fixtures():
     assert tasks["HARD-050"].repo_hint == "python/config_overlay_resolver"
     assert tasks["HARD-050"].public_success_check == "python3 -m unittest discover -s tests"
     assert tasks["HARD-050"].success_check == "python3 ../grader/check.py"
+
+
+def test_hard30_selection_is_balanced_and_runnable():
+    selection_dir = Path("benchmark/hard/pilot/hard30-selection")
+    task_ids = selection_dir.joinpath("task_ids.txt").read_text().splitlines()
+    tasks = {task.task_id: task for task in load_tasks(str(selection_dir / "tasks.jsonl"))}
+    manifest = json.loads(selection_dir.joinpath("manifest.json").read_text())
+
+    assert len(task_ids) == 30
+    assert len(set(task_ids)) == 30
+    assert task_ids[:10] == [f"HARD-{index:03d}" for index in range(1, 11)]
+    assert list(tasks) == task_ids
+    assert manifest["task_count"] == 30
+    assert manifest["expected_run_records"] == 60
+    assert set(manifest["category_counts"]) >= {
+        "bug_fix",
+        "ci_failure",
+        "dependency_friction",
+        "error_recovery",
+        "feature",
+        "multi_turn_change",
+        "stateful_regression",
+    }
 
 
 def test_aggregate_runs_baseline_vs_intervention():

@@ -28,6 +28,7 @@ The stored pilots can be inspected and aggregated without re-running Codex.
 | `docs/experiment_protocol.md` | Collection, labeling, and evaluation protocol. |
 | `docs/related_work.md` | Compact bibliography and positioning notes. |
 | `docs/submission_readiness_plan.md` | Workstreams and decision gate for a stronger paper submission. |
+| `benchmark/hard/pilot/hard30-selection/` | Fixed 30-task hard-tier selection for the next 60-run baseline/intervention collection. |
 | `benchmark/pilot/full30-real` | 30-task / 60-run real seed pilot. |
 | `benchmark/hard/pilot/hard10-real` | 10-task / 20-run hard-tier pilot with outcome failures. |
 | `benchmark/hard/pilot/hard10-real/manual-labels.jsonl` | Manual hidden-failure labels for hard-tier RQ2 analysis. |
@@ -89,6 +90,7 @@ PYTHONPATH=. python3 -m codex_trace.cli research summary \
 | CodexTrace parses Codex JSONL traces and emits reports. | `codex_trace/parser.py`, `codex_trace/diagnose.py`, `demo/`, `tests/` | Implemented and CI-tested. |
 | The benchmark has a 30-task seed tier and two prompt conditions. | `benchmark/tasks.jsonl`, `benchmark/prompts/`, `benchmark/pilot/full30-real/runs.jsonl` | Implemented; 60 real stored runs. |
 | The benchmark has a hard tier with hidden graders. | `benchmark/hard/tasks.jsonl`, `benchmark/hard/repos/`, `benchmark/hard/pilot/hard10-real` | Implemented; 50 runnable hard tasks and 20 real stored hard10 runs. |
+| A balanced hard30 pilot has been selected for the next experiment pass. | `benchmark/hard/pilot/hard30-selection/tasks.jsonl`, `benchmark/hard/pilot/hard30-selection/manifest.json` | Implemented; 30 selected tasks, 60 expected baseline/intervention runs. |
 | Hidden graders are not exposed during Codex execution. | `codex_trace/research.py`, `public_success_check` fields, hard-tier prompts | Implemented; hidden grader copied after Codex exits. |
 | Full30 intervention reduces process waste. | `benchmark/pilot/full30-real/aggregate.md` | Supported: repeated tool calls `10.43 -> 7.00`, token usage `218.7k -> 184.8k`. |
 | Hard10 intervention improves success and reduces waste. | `benchmark/hard/pilot/hard10-real/aggregate.md` | Supported: success `0.70 -> 0.80`, repeated tool calls `9.20 -> 6.20`, token usage `248.9k -> 187.5k`. |

@@ -1,0 +1,67 @@
+{
+  "category_counts": {
+    "bug_fix": 4,
+    "ci_failure": 2,
+    "data_migration": 1,
+    "dependency_friction": 3,
+    "error_localization": 2,
+    "error_recovery": 3,
+    "feature": 4,
+    "multi_turn_change": 3,
+    "multi_turn_tool_debug": 2,
+    "refactor": 1,
+    "sandbox_friction": 1,
+    "stateful_regression": 4
+  },
+  "expected_prompt_conditions": [
+    "baseline",
+    "intervention"
+  ],
+  "expected_run_records": 60,
+  "name": "hard30-selection",
+  "public_success_check_counts": {
+    "npm run build": 1,
+    "npm test": 10,
+    "python3 -m unittest discover -s tests": 19
+  },
+  "selected_task_ids": [
+    "HARD-001",
+    "HARD-002",
+    "HARD-003",
+    "HARD-004",
+    "HARD-005",
+    "HARD-006",
+    "HARD-007",
+    "HARD-008",
+    "HARD-009",
+    "HARD-010",
+    "HARD-011",
+    "HARD-012",
+    "HARD-013",
+    "HARD-015",
+    "HARD-020",
+    "HARD-023",
+    "HARD-024",
+    "HARD-025",
+    "HARD-027",
+    "HARD-031",
+    "HARD-032",
+    "HARD-033",
+    "HARD-035",
+    "HARD-038",
+    "HARD-039",
+    "HARD-040",
+    "HARD-043",
+    "HARD-045",
+    "HARD-047",
+    "HARD-050"
+  ],
+  "selection_policy": [
+    "Keep HARD-001 through HARD-010 so the existing hard10 pilot remains a prefix.",
+    "Add 20 tasks from HARD-011 through HARD-050 to cover all hard-tier categories.",
+    "Prefer tasks with observable process-failure pressure and hidden semantic oracles.",
+    "Keep Python/TypeScript and unittest/npm checks mixed for tool-use diversity."
+  ],
+  "source_tasks": "benchmark/hard/tasks.jsonl",
+  "task_count": 30
+}

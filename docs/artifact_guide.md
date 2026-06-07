@@ -121,10 +121,11 @@ visible traces look clean; hidden graders reveal the missed edge cases.
 
 ## Next Research Step
 
-The strongest next step is to expand the hard tier from 10 tasks toward 30-50
-tasks while adding more observable process failures, not only hidden semantic
-edge cases. That would strengthen RQ1/RQ2 distribution claims and make the RQ3
-success-rate estimate less fragile.
+The strongest next step is to run the selected hard30 pilot. The suite now has
+50 runnable tasks, and `benchmark/hard/pilot/hard30-selection` fixes the next
+30-task / 60-run collection target with category and process-pressure coverage.
+That would strengthen RQ1/RQ2 distribution claims and make the RQ3 success-rate
+estimate less fragile.
 
 See `docs/submission_readiness_plan.md` for the concrete workstreams and
 decision gate for moving from the current pilot artifact to a stronger paper

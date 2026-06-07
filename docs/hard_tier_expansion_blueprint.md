@@ -96,5 +96,10 @@ After collecting these tasks, manual labels should aim for at least:
 4. Collect baseline/intervention runs for the first five tasks.
 5. Label failures manually before adding the next batch.
 
-This staged approach avoids building 20 new tasks before learning whether the
-new task designs actually produce the failure diversity needed for RQ1/RQ2/RQ4.
+The selected hard30 pilot is materialized in
+`benchmark/hard/pilot/hard30-selection`. It keeps the evaluated hard10 pilot as
+a prefix and adds 20 tasks selected for category and process-pressure coverage.
+The expected next collection is 30 tasks x 2 prompt conditions = 60 real runs.
+
+This staged approach avoids running all 50 tasks before learning whether the
+selected designs actually produce the failure diversity needed for RQ1/RQ2/RQ4.

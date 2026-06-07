@@ -34,12 +34,16 @@ The next submission-ready target should be:
 
 Goal: move from the evaluated `hard10` pilot to a harder 30-50 task suite
 while preserving hidden grader isolation. `HARD-011` through `HARD-050` are now
-implemented; the next step is selecting a balanced hard30 pilot from
-`docs/hard_tier_expansion_blueprint.md`.
+implemented; the next step is collecting real baseline/intervention traces for
+the selected hard30 pilot.
 
-Tasks to add:
+The hard30 pilot selection is fixed in
+`benchmark/hard/pilot/hard30-selection`. It keeps the evaluated hard10 pilot as
+a prefix and adds 20 tasks selected for category and process-pressure coverage.
 
-| Category | Target count | Desired failure pressure |
+Hard30 collection plan:
+
+| Area | Target count | Desired failure pressure |
 | --- | ---: | --- |
 | hidden semantic edge cases | 10-15 | Visible tests pass but hidden grader catches edge behavior. |
 | multi-step feature changes | 5-10 | Agent must preserve earlier requirements while adding later ones. |
@@ -49,11 +53,11 @@ Tasks to add:
 
 Acceptance criteria:
 
-- Every new task has `public_success_check` and hidden `success_check` when
-  hidden behavior is required.
-- Initial fixture fails the hidden grader before agent edits.
-- The prompt never exposes hidden grader details.
-- Each task has a short category and expected failure-pressure note.
+- The selected hard30 `tasks.jsonl` dry-runs to 60 baseline/intervention
+  records.
+- Initial fixtures fail their hidden graders before agent edits.
+- Prompt materialization keeps hidden grader details out of agent prompts.
+- The selected tasks preserve category and expected failure-pressure coverage.
 
 ## Workstream 2: Improve Manual Labeling
 

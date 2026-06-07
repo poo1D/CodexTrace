@@ -124,6 +124,7 @@ Key files:
 - `docs/submission_readiness_plan.md`: concrete path from pilot artifact to stronger paper submission
 - `benchmark/pilot/full30-real`: 30-task / 60-run real pilot
 - `benchmark/hard/pilot/hard10-real`: 10-task / 20-run hard-tier pilot with outcome failures
+- `benchmark/hard/pilot/hard30-selection`: selected 30-task hard-tier pilot for the next 60-run collection
 
 Render prompts:
 
