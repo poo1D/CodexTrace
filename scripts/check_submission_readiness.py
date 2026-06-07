@@ -144,7 +144,14 @@ def build_next_actions(checks: list[dict[str, Any]], run_dir: Path) -> list[dict
     actions = []
     if not by_name["hard30 real runs"]["ok"]:
         actions.append({
-            "name": "collect hard30 real traces",
+            "name": "collect hard30 five-task ramp",
+            "command": (
+                "PYTHONPATH=. python3 scripts/run_hard30_shards.py "
+                f"--run-dir {run_dir} --limit 5 --max-parallel 5 --timeout-seconds 600 --skip-complete"
+            ),
+        })
+        actions.append({
+            "name": "collect remaining hard30 real traces",
             "command": (
                 "PYTHONPATH=. python3 scripts/run_hard30_shards.py "
                 f"--run-dir {run_dir} --max-parallel 15 --timeout-seconds 600 --skip-complete"

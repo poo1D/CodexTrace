@@ -41,6 +41,25 @@ def load_task_ids(selection_dir: Path = DEFAULT_SELECTION_DIR) -> list[str]:
     return [line.strip() for line in task_id_path.read_text(encoding="utf-8").splitlines() if line.strip()]
 
 
+def select_task_ids(
+    selection_dir: Path = DEFAULT_SELECTION_DIR,
+    explicit_task_ids: list[str] | None = None,
+    offset: int = 0,
+    limit: int | None = None,
+) -> list[str]:
+    if offset < 0:
+        raise ValueError("offset must be non-negative")
+    if limit is not None and limit < 1:
+        raise ValueError("limit must be at least 1")
+    task_ids = explicit_task_ids or load_task_ids(selection_dir)
+    if explicit_task_ids:
+        return task_ids
+    selected = task_ids[offset:]
+    if limit is not None:
+        selected = selected[:limit]
+    return selected
+
+
 def build_shard_commands(
     task_ids: list[str],
     selection_dir: Path = DEFAULT_SELECTION_DIR,
@@ -225,6 +244,8 @@ def main() -> int:
     parser.add_argument("--selection-dir", type=Path, default=DEFAULT_SELECTION_DIR)
     parser.add_argument("--run-dir", type=Path, default=DEFAULT_RUN_DIR)
     parser.add_argument("--task-id", action="append", dest="task_ids")
+    parser.add_argument("--offset", type=int, default=0, help="Skip this many selected task ids before building shards.")
+    parser.add_argument("--limit", type=int, help="Run or inspect at most this many selected task ids.")
     parser.add_argument("--max-parallel", type=int, default=4)
     parser.add_argument("--timeout-seconds", type=int, default=600)
     parser.add_argument("--codex-bin", default="codex")
@@ -235,7 +256,11 @@ def main() -> int:
     parser.add_argument("--status-json", type=Path, help="Optionally write shard status as JSON.")
     args = parser.parse_args()
 
-    selected_ids = args.task_ids or load_task_ids(args.selection_dir)
+    try:
+        selected_ids = select_task_ids(args.selection_dir, args.task_ids, args.offset, args.limit)
+    except ValueError as error:
+        print(error, file=sys.stderr)
+        return 2
     commands = build_shard_commands(
         selected_ids,
         selection_dir=args.selection_dir,

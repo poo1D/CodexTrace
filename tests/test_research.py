@@ -3,7 +3,14 @@ from pathlib import Path
 
 from scripts.finalize_hard30_pilot import finalize, preflight, render_preflight
 from scripts.merge_hard30_shards import merge_shards, rewrite_shard_row
-from scripts.run_hard30_shards import build_shard_commands, filter_commands, inspect_shard, render_status, summarize_shards
+from scripts.run_hard30_shards import (
+    build_shard_commands,
+    filter_commands,
+    inspect_shard,
+    render_status,
+    select_task_ids,
+    summarize_shards,
+)
 from scripts.check_submission_readiness import build_report, render_report
 
 from codex_trace.research import (
@@ -205,6 +212,31 @@ def test_hard30_shard_commands_run_one_task_per_shard(tmp_path):
     assert commands[0].command[commands[0].command.index("--timeout-seconds") + 1] == "900"
     assert commands[0].command[commands[0].command.index("--codex-bin") + 1] == "codex-test"
     assert commands[0].command[commands[0].command.index("--sandbox") + 1] == "danger-full-access"
+
+
+def test_hard30_shard_task_selection_supports_safe_slices():
+    selection_dir = Path("benchmark/hard/pilot/hard30-selection")
+
+    assert select_task_ids(selection_dir, offset=1, limit=3) == ["HARD-002", "HARD-003", "HARD-004"]
+    assert select_task_ids(selection_dir, explicit_task_ids=["HARD-010"], offset=5, limit=2) == ["HARD-010"]
+
+
+def test_hard30_shard_task_selection_rejects_invalid_slices():
+    selection_dir = Path("benchmark/hard/pilot/hard30-selection")
+
+    try:
+        select_task_ids(selection_dir, offset=-1)
+    except ValueError as error:
+        assert str(error) == "offset must be non-negative"
+    else:
+        raise AssertionError("negative offset should fail")
+
+    try:
+        select_task_ids(selection_dir, limit=0)
+    except ValueError as error:
+        assert str(error) == "limit must be at least 1"
+    else:
+        raise AssertionError("zero limit should fail")
 
 
 def test_hard30_shard_skip_complete_filters_finished_manifests(tmp_path):
@@ -456,7 +488,8 @@ def test_submission_readiness_reports_blocking_missing_hard30_runs(tmp_path):
     assert "hard30 finalized outputs" in report["blocking"]
     assert "hard30 manual labels" in report["blocking"]
     assert [action["name"] for action in report["next_actions"]] == [
-        "collect hard30 real traces",
+        "collect hard30 five-task ramp",
+        "collect remaining hard30 real traces",
         "merge completed hard30 shards",
         "preflight hard30 manifest",
         "finalize hard30 reports",
@@ -464,6 +497,8 @@ def test_submission_readiness_reports_blocking_missing_hard30_runs(tmp_path):
         "evaluate hard30 labels",
     ]
     assert "run_hard30_shards.py" in report["next_actions"][0]["command"]
+    assert "--limit 5" in report["next_actions"][0]["command"]
+    assert "--max-parallel 15" in report["next_actions"][1]["command"]
     assert "## Next Actions" in markdown
     assert "Ready: no" in markdown
 

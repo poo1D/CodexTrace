@@ -94,6 +94,17 @@ PYTHONPATH=. python3 scripts/run_hard30_shards.py \
   --dry-run
 ```
 
+For a low-risk real ramp-up, run a small slice before launching all 30 tasks:
+
+```bash
+PYTHONPATH=. python3 scripts/run_hard30_shards.py \
+  --run-dir benchmark/hard/pilot/hard30-real \
+  --limit 5 \
+  --max-parallel 5 \
+  --timeout-seconds 600 \
+  --skip-complete
+```
+
 Check shard completion without launching Codex:
 
 ```bash
