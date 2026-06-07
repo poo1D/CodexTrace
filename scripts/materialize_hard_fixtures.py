@@ -3512,6 +3512,133 @@ TASK_DEFS = [
             );
         """),
     },
+    {
+        "task_id": "HARD-037",
+        "category": "stateful_regression",
+        "repo_hint": "python/sliding_limiter",
+        "instruction": "Fix the sliding-window limiter so allow(user_id, now=None) enforces a rolling time window per user, prunes expired events, preserves independent user state, treats boundary timestamps as expired, and keeps using the injected clock when now is omitted. Rejected requests must not be recorded.",
+        "public_success_check": "python3 -m unittest discover -s tests",
+        "success_check": "python3 ../grader/check.py",
+        "files": {
+            "README.md": """
+                # sliding-limiter
+
+                `SlidingLimiter(limit, window_seconds, clock=None)` decides
+                whether a user may perform another action.
+
+                Public API:
+
+                - `allow(user_id, now=None)` returns `True` when the request is
+                  accepted and `False` when it is rate-limited.
+                - If `now` is omitted, the limiter must call the injected
+                  `clock` exactly once for that decision.
+                - The rolling window is per user.
+                - Events at exactly `now - window_seconds` are expired.
+                - Rejected requests must not be recorded.
+            """,
+            "src/sliding_limiter.py": """
+                import time
+
+
+                class SlidingLimiter:
+                    def __init__(self, limit, window_seconds, clock=None):
+                        self.limit = limit
+                        self.window_seconds = window_seconds
+                        self.clock = clock or time.time
+                        self._bucket = None
+                        self._count = 0
+
+                    def allow(self, user_id, now=None):
+                        if now is None:
+                            now = self.clock()
+                        bucket = int(now // self.window_seconds)
+                        if bucket != self._bucket:
+                            self._bucket = bucket
+                            self._count = 0
+                        if self._count >= self.limit:
+                            return False
+                        self._count += 1
+                        return True
+            """,
+            "tests/test_sliding_limiter.py": """
+                import sys
+                import unittest
+                from pathlib import Path
+
+                sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
+                from sliding_limiter import SlidingLimiter
+
+
+                class SlidingLimiterTest(unittest.TestCase):
+                    def test_allows_until_limit(self):
+                        limiter = SlidingLimiter(limit=2, window_seconds=10)
+
+                        self.assertTrue(limiter.allow("ada", now=100))
+                        self.assertTrue(limiter.allow("ada", now=101))
+                        self.assertFalse(limiter.allow("ada", now=102))
+
+                    def test_new_window_allows_again(self):
+                        limiter = SlidingLimiter(limit=1, window_seconds=10)
+
+                        self.assertTrue(limiter.allow("ada", now=100))
+                        self.assertFalse(limiter.allow("ada", now=101))
+                        self.assertTrue(limiter.allow("ada", now=110))
+
+                    def test_uses_clock_when_now_is_omitted(self):
+                        values = iter([200])
+                        limiter = SlidingLimiter(limit=1, window_seconds=10, clock=lambda: next(values))
+
+                        self.assertTrue(limiter.allow("ada"))
+
+
+                if __name__ == "__main__":
+                    unittest.main()
+            """,
+        },
+        "grader": py_grader("""
+            run_visible_tests()
+            mod = importlib.import_module("sliding_limiter")
+
+            limiter = mod.SlidingLimiter(limit=2, window_seconds=10)
+            assert limiter.allow("ada", now=100.0) is True
+            assert limiter.allow("ada", now=109.9) is True
+            assert limiter.allow("ada", now=110.0) is True
+            assert limiter.allow("ada", now=110.1) is False
+
+            limiter = mod.SlidingLimiter(limit=1, window_seconds=5)
+            assert limiter.allow("ada", now=10.0) is True
+            assert limiter.allow("grace", now=10.1) is True
+            assert limiter.allow("ada", now=10.2) is False
+            assert limiter.allow("grace", now=10.3) is False
+
+            limiter = mod.SlidingLimiter(limit=2, window_seconds=10)
+            assert limiter.allow("ada", now=50.0) is True
+            assert limiter.allow("ada", now=51.0) is True
+            assert limiter.allow("ada", now=51.5) is False
+            assert limiter.allow("ada", now=60.0) is True
+            assert limiter.allow("ada", now=60.1) is False
+
+            calls = []
+            times = iter([1.0, 2.0, 12.1])
+
+            def clock():
+                calls.append("tick")
+                return next(times)
+
+            limiter = mod.SlidingLimiter(limit=2, window_seconds=10, clock=clock)
+            assert limiter.allow("linus") is True
+            assert limiter.allow("linus") is True
+            assert limiter.allow("linus") is True
+            assert calls == ["tick", "tick", "tick"]
+
+            limiter = mod.SlidingLimiter(limit=1, window_seconds=1)
+            assert limiter.allow("ada", now=0.0) is True
+            assert limiter.allow("ada", now=1_000.0) is True
+            state = getattr(limiter, "_events", None)
+            if state is not None:
+                assert len(state.get("ada", [])) <= 1
+        """),
+    },
 ]
 
 
