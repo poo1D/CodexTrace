@@ -1,7 +1,7 @@
 import json
 from pathlib import Path
 
-from scripts.finalize_hard30_pilot import finalize
+from scripts.finalize_hard30_pilot import finalize, preflight, render_preflight
 from scripts.merge_hard30_shards import merge_shards, rewrite_shard_row
 from scripts.run_hard30_shards import build_shard_commands, filter_commands, inspect_shard, render_status, summarize_shards
 
@@ -358,6 +358,68 @@ def test_finalize_hard30_pilot_writes_report_artifacts(tmp_path):
     assert {path.name for path in written} == expected
     assert all((tmp_path / name).exists() for name in expected)
     assert "suggested_tags" in (tmp_path / "labels.jsonl").read_text()
+
+
+def test_hard30_preflight_accepts_complete_manifest(tmp_path):
+    root = Path.cwd()
+    selection_dir = tmp_path / "selection"
+    selection_dir.mkdir()
+    selection_dir.joinpath("task_ids.txt").write_text("HARD-001\n", encoding="utf-8")
+    rows = [
+        {
+            "task_id": "HARD-001",
+            "prompt_type": "baseline",
+            "trace_path": str((root / "demo/failing-codex-trace.jsonl").resolve()),
+            "outcome": "failure",
+        },
+        {
+            "task_id": "HARD-001",
+            "prompt_type": "intervention",
+            "trace_path": str((root / "demo/healthy-codex-trace.jsonl").resolve()),
+            "outcome": "success",
+        },
+    ]
+    tmp_path.joinpath("runs.jsonl").write_text(
+        "".join(json.dumps(row, sort_keys=True) + "\n" for row in rows),
+        encoding="utf-8",
+    )
+
+    summary = preflight(tmp_path, selection_dir)
+    rendered = render_preflight(summary)
+
+    assert summary["ok"] is True
+    assert summary["run_records"] == 2
+    assert summary["missing_prompt_pairs"] == []
+    assert summary["missing_trace_paths"] == []
+    assert "Ready to finalize: yes" in rendered
+
+
+def test_hard30_preflight_rejects_missing_trace_and_prompt_pair(tmp_path):
+    selection_dir = tmp_path / "selection"
+    selection_dir.mkdir()
+    selection_dir.joinpath("task_ids.txt").write_text("HARD-001\n", encoding="utf-8")
+    tmp_path.joinpath("runs.jsonl").write_text(
+        json.dumps({
+            "task_id": "HARD-001",
+            "prompt_type": "baseline",
+            "trace_path": "missing/trace.jsonl",
+            "outcome": "failure",
+        }) + "\n",
+        encoding="utf-8",
+    )
+
+    summary = preflight(tmp_path, selection_dir)
+    rendered = render_preflight(summary)
+
+    assert summary["ok"] is False
+    assert summary["run_records"] == 1
+    assert summary["missing_prompt_pairs"] == [{"task_id": "HARD-001", "prompt_type": "intervention"}]
+    assert summary["missing_trace_paths"] == [
+        {"task_id": "HARD-001", "prompt_type": "baseline", "trace_path": "missing/trace.jsonl"}
+    ]
+    assert "Ready to finalize: no" in rendered
+    assert "Missing prompt pairs: HARD-001/intervention" in rendered
+    assert "Missing trace files: HARD-001/baseline -> missing/trace.jsonl" in rendered
 
 
 def test_aggregate_runs_baseline_vs_intervention():

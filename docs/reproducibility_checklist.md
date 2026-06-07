@@ -165,6 +165,16 @@ Run records: 60 / 60
 Ready to merge: yes
 ```
 
+Run the hard30 finalization preflight after merging real traces:
+
+```bash
+PYTHONPATH=. PYTHONPYCACHEPREFIX=/tmp/codextrace-pycache \
+  python3 scripts/finalize_hard30_pilot.py \
+  --run-dir benchmark/hard/pilot/hard30-real \
+  --preflight-only \
+  --preflight-json benchmark/hard/pilot/hard30-real/preflight.json
+```
+
 Check that all hard-tier initial fixtures fail their hidden graders before an
 agent edits them:
 

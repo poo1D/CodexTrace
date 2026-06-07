@@ -111,6 +111,16 @@ PYTHONPATH=. python3 scripts/merge_hard30_shards.py \
   --run-dir benchmark/hard/pilot/hard30-real
 ```
 
+Before generating reports, run the final preflight. This verifies that all 60
+baseline/intervention records exist and that every merged `trace_path` resolves:
+
+```bash
+PYTHONPATH=. python3 scripts/finalize_hard30_pilot.py \
+  --run-dir benchmark/hard/pilot/hard30-real \
+  --preflight-only \
+  --preflight-json benchmark/hard/pilot/hard30-real/preflight.json
+```
+
 A non-sharded collection is still supported when a single long process is
 preferred:
 
@@ -124,8 +134,8 @@ PYTHONPATH=. python3 -m codex_trace.cli research run \
 ## Finalize Reports
 
 After the real run completes and `benchmark/hard/pilot/hard30-real/runs.jsonl`
-exists, generate aggregate tables, per-run CSV, label templates, and
-paper-report artifacts:
+exists and preflight passes, generate aggregate tables, per-run CSV, label
+templates, and paper-report artifacts:
 
 ```bash
 PYTHONPATH=. python3 scripts/finalize_hard30_pilot.py \
