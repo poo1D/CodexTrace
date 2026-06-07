@@ -5463,6 +5463,189 @@ TASK_DEFS = [
                 raise AssertionError("mismatched signature timestamp was accepted")
         """),
     },
+    {
+        "task_id": "HARD-048",
+        "category": "multi_turn_change",
+        "repo_hint": "python/cursor_pagination",
+        "instruction": "Fix cursor pagination so list_page(items, limit, cursor=None, *, order=\"desc\") uses stable keyset pagination. Results must sort by created_at then id, duplicate timestamps must page deterministically, the cursor item must be excluded from the next page, malformed cursors must raise CursorError, limits must be clamped to the documented range, and inputs must not be mutated. Preserve Page(items, next_cursor) and CursorError. Use only the Python standard library.",
+        "public_success_check": "python3 -m unittest discover -s tests",
+        "success_check": "python3 ../grader/check.py",
+        "files": {
+            "README.md": """
+                # cursor-pagination
+
+                `list_page(items, limit, cursor=None, *, order="desc")` returns
+                a `Page(items, next_cursor)` for API-style cursor pagination.
+
+                Item shape:
+
+                ```python
+                {"id": "item-id", "created_at": 1700000000, ...}
+                ```
+
+                Requirements:
+
+                - sort by `(created_at, id)` for deterministic keyset pages
+                - support `order="desc"` and `order="asc"`
+                - exclude the cursor item from the next page
+                - keep pagination stable when new records are inserted before
+                  the cursor between requests
+                - clamp limits into `1 <= limit <= MAX_LIMIT`
+                - raise `CursorError` for malformed or tampered cursors
+                - do not mutate the input list or item dictionaries
+            """,
+            "src/cursor_pagination.py": """
+                from __future__ import annotations
+
+                import base64
+                import json
+                from dataclasses import dataclass
+
+
+                MAX_LIMIT = 100
+
+
+                class CursorError(Exception):
+                    pass
+
+
+                @dataclass
+                class Page:
+                    items: list
+                    next_cursor: str | None
+
+
+                def _encode_cursor(offset):
+                    payload = json.dumps({"offset": offset}).encode("utf-8")
+                    return base64.urlsafe_b64encode(payload).decode("ascii")
+
+
+                def _decode_cursor(cursor):
+                    try:
+                        data = base64.urlsafe_b64decode(cursor.encode("ascii"))
+                        return json.loads(data.decode("utf-8"))["offset"]
+                    except Exception as exc:
+                        raise CursorError("malformed cursor") from exc
+
+
+                def list_page(items, limit, cursor=None, *, order="desc"):
+                    if order not in {"asc", "desc"}:
+                        raise ValueError("order must be asc or desc")
+
+                    start = _decode_cursor(cursor) if cursor else 0
+                    limit = max(1, min(int(limit), MAX_LIMIT))
+
+                    items.sort(
+                        key=lambda item: item["created_at"],
+                        reverse=(order == "desc"),
+                    )
+                    page_items = items[start:start + limit]
+                    next_offset = start + len(page_items)
+                    next_cursor = None
+                    if next_offset < len(items):
+                        next_cursor = _encode_cursor(next_offset)
+                    return Page(page_items, next_cursor)
+            """,
+            "tests/test_cursor_pagination.py": """
+                import sys
+                import unittest
+                from pathlib import Path
+
+                sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
+                from cursor_pagination import CursorError, list_page
+
+
+                class CursorPaginationTest(unittest.TestCase):
+                    def test_first_page_descending(self):
+                        items = [
+                            {"id": "a", "created_at": 10},
+                            {"id": "b", "created_at": 30},
+                            {"id": "c", "created_at": 20},
+                        ]
+
+                        page = list_page(items, 2)
+
+                        self.assertEqual([item["id"] for item in page.items], ["b", "c"])
+                        self.assertIsNotNone(page.next_cursor)
+
+                    def test_next_page_uses_cursor(self):
+                        items = [
+                            {"id": "a", "created_at": 10},
+                            {"id": "b", "created_at": 30},
+                            {"id": "c", "created_at": 20},
+                        ]
+
+                        first = list_page(items, 1)
+                        second = list_page(items, 2, first.next_cursor)
+
+                        self.assertEqual([item["id"] for item in second.items], ["c", "a"])
+                        self.assertIsNone(second.next_cursor)
+
+                    def test_bad_cursor_raises(self):
+                        with self.assertRaises(CursorError):
+                            list_page([], 10, "not-a-valid-cursor")
+
+
+                if __name__ == "__main__":
+                    unittest.main()
+            """,
+        },
+        "grader": py_grader("""
+            import base64
+            import copy
+            import json
+
+            run_visible_tests()
+            mod = importlib.import_module("cursor_pagination")
+
+            items = [
+                {"id": "b", "created_at": 100, "title": "B"},
+                {"id": "a", "created_at": 100, "title": "A"},
+                {"id": "c", "created_at": 90, "title": "C"},
+                {"id": "d", "created_at": 80, "title": "D"},
+            ]
+            before = copy.deepcopy(items)
+
+            page1 = mod.list_page(items, 2)
+            assert [item["id"] for item in page1.items] == ["b", "a"]
+            assert page1.next_cursor is not None
+            assert items == before
+
+            changed = [{"id": "z", "created_at": 200, "title": "Z"}, *items]
+            page2 = mod.list_page(changed, 2, page1.next_cursor)
+            assert [item["id"] for item in page2.items] == ["c", "d"]
+            assert page2.next_cursor is None
+
+            asc = mod.list_page(items, 3, order="asc")
+            assert [item["id"] for item in asc.items] == ["d", "c", "a"]
+            asc2 = mod.list_page(items, 3, asc.next_cursor, order="asc")
+            assert [item["id"] for item in asc2.items] == ["b"]
+
+            many = [{"id": str(i), "created_at": i} for i in range(150)]
+            capped = mod.list_page(many, 1000)
+            assert len(capped.items) == mod.MAX_LIMIT
+            minimum = mod.list_page(many, 0)
+            assert len(minimum.items) == 1
+
+            first = mod.list_page(items, 1)
+            second = mod.list_page(items, 1, first.next_cursor)
+            assert first.items[0]["id"] != second.items[0]["id"]
+
+            tampered_payloads = [
+                "abc",
+                base64.urlsafe_b64encode(json.dumps({"offset": 1}).encode("utf-8")).decode("ascii"),
+                base64.urlsafe_b64encode(json.dumps({"created_at": 100}).encode("utf-8")).decode("ascii"),
+                base64.urlsafe_b64encode(json.dumps({"created_at": 100, "id": "missing"}).encode("utf-8")).decode("ascii"),
+            ]
+            for bad in tampered_payloads:
+                try:
+                    mod.list_page(items, 2, bad)
+                except mod.CursorError:
+                    pass
+                else:
+                    raise AssertionError(f"bad cursor was accepted: {bad}")
+        """),
+    },
 ]
 
 
