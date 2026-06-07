@@ -5646,6 +5646,174 @@ TASK_DEFS = [
                     raise AssertionError(f"bad cursor was accepted: {bad}")
         """),
     },
+    {
+        "task_id": "HARD-049",
+        "category": "ci_failure",
+        "repo_hint": "python/test_sharder",
+        "instruction": "Fix the CI test sharder so plan_shards(tests, shard_count, *, quarantined=None) returns deterministic, duration-balanced shards. It must greedily balance by estimated_seconds, use stable id tie-breaks, exclude quarantined test ids by default, reject duplicate ids and invalid shard counts with ShardError, preserve the input data, and keep the public return shape as a list of shard dictionaries.",
+        "public_success_check": "python3 -m unittest discover -s tests",
+        "success_check": "python3 ../grader/check.py",
+        "files": {
+            "README.md": """
+                # test-sharder
+
+                `plan_shards(tests, shard_count, *, quarantined=None)` creates
+                deterministic CI test shards.
+
+                Test item shape:
+
+                ```python
+                {"id": "tests/test_api.py::test_create", "estimated_seconds": 12}
+                ```
+
+                Return shape:
+
+                ```python
+                [
+                    {"index": 0, "tests": ["test id"], "estimated_seconds": 12},
+                    ...
+                ]
+                ```
+
+                Requirements:
+
+                - reject `shard_count < 1` with `ShardError`
+                - reject duplicate test ids with `ShardError`
+                - exclude ids listed in `quarantined`
+                - greedily balance by `estimated_seconds`
+                - break ties deterministically by shard load, shard index, and test id
+                - keep every shard present, even if it receives no tests
+                - do not mutate `tests` or test dictionaries
+            """,
+            "src/sharder.py": """
+                class ShardError(Exception):
+                    pass
+
+
+                def plan_shards(tests, shard_count, *, quarantined=None):
+                    if shard_count < 1:
+                        raise ShardError("shard_count must be positive")
+
+                    shards = [
+                        {"index": index, "tests": [], "estimated_seconds": 0}
+                        for index in range(shard_count)
+                    ]
+
+                    for offset, test in enumerate(sorted(tests, key=lambda item: item["id"])):
+                        shard = shards[offset % shard_count]
+                        shard["tests"].append(test["id"])
+                        shard["estimated_seconds"] += int(test.get("estimated_seconds", 1))
+
+                    return shards
+            """,
+            "tests/test_sharder.py": """
+                import sys
+                import unittest
+                from pathlib import Path
+
+                sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
+                from sharder import ShardError, plan_shards
+
+
+                class SharderTest(unittest.TestCase):
+                    def test_returns_requested_shards(self):
+                        tests = [
+                            {"id": "test_a", "estimated_seconds": 1},
+                            {"id": "test_b", "estimated_seconds": 1},
+                            {"id": "test_c", "estimated_seconds": 1},
+                        ]
+
+                        shards = plan_shards(tests, 2)
+
+                        self.assertEqual([shard["index"] for shard in shards], [0, 1])
+                        assigned = [test_id for shard in shards for test_id in shard["tests"]]
+                        self.assertEqual(sorted(assigned), ["test_a", "test_b", "test_c"])
+
+                    def test_estimated_seconds_are_summed(self):
+                        tests = [
+                            {"id": "test_a", "estimated_seconds": 2},
+                            {"id": "test_b", "estimated_seconds": 3},
+                        ]
+
+                        shards = plan_shards(tests, 1)
+
+                        self.assertEqual(shards[0]["estimated_seconds"], 5)
+
+                    def test_invalid_shard_count_raises(self):
+                        with self.assertRaises(ShardError):
+                            plan_shards([], 0)
+
+
+                if __name__ == "__main__":
+                    unittest.main()
+            """,
+        },
+        "grader": py_grader("""
+            import copy
+
+            run_visible_tests()
+            mod = importlib.import_module("sharder")
+
+            tests = [
+                {"id": "test_checkout", "estimated_seconds": 8, "file": "checkout.py"},
+                {"id": "test_auth", "estimated_seconds": 7, "file": "auth.py"},
+                {"id": "test_billing", "estimated_seconds": 6, "file": "billing.py"},
+                {"id": "test_cart", "estimated_seconds": 5, "file": "cart.py"},
+            ]
+            before = copy.deepcopy(tests)
+
+            shards = mod.plan_shards(tests, 2)
+            assert tests == before
+            assert shards == [
+                {"index": 0, "tests": ["test_checkout", "test_cart"], "estimated_seconds": 13},
+                {"index": 1, "tests": ["test_auth", "test_billing"], "estimated_seconds": 13},
+            ]
+
+            tie_tests = [
+                {"id": "test_c", "estimated_seconds": 5},
+                {"id": "test_a", "estimated_seconds": 5},
+                {"id": "test_b", "estimated_seconds": 5},
+            ]
+            tie_shards = mod.plan_shards(tie_tests, 2)
+            assert tie_shards == [
+                {"index": 0, "tests": ["test_a", "test_c"], "estimated_seconds": 10},
+                {"index": 1, "tests": ["test_b"], "estimated_seconds": 5},
+            ]
+
+            quarantined = {"test_flaky"}
+            with_quarantine = [
+                {"id": "test_fast", "estimated_seconds": 1},
+                {"id": "test_flaky", "estimated_seconds": 100},
+                {"id": "test_slow", "estimated_seconds": 9},
+            ]
+            shards = mod.plan_shards(with_quarantine, 2, quarantined=quarantined)
+            assigned = [test_id for shard in shards for test_id in shard["tests"]]
+            assert assigned == ["test_slow", "test_fast"]
+            assert "test_flaky" not in assigned
+
+            empty = mod.plan_shards([{"id": "test_only", "estimated_seconds": 3}], 3)
+            assert len(empty) == 3
+            assert empty[2] == {"index": 2, "tests": [], "estimated_seconds": 0}
+
+            for bad_count in [0, -1]:
+                try:
+                    mod.plan_shards([], bad_count)
+                except mod.ShardError:
+                    pass
+                else:
+                    raise AssertionError("invalid shard count was accepted")
+
+            try:
+                mod.plan_shards([
+                    {"id": "test_dup", "estimated_seconds": 1},
+                    {"id": "test_dup", "estimated_seconds": 2},
+                ], 2)
+            except mod.ShardError as error:
+                assert "duplicate" in str(error).lower()
+            else:
+                raise AssertionError("duplicate ids were accepted")
+        """),
+    },
 ]
 
 

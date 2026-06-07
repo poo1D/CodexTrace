@@ -15,7 +15,7 @@ process failures, and repeatability.
 | --- | --- | --- |
 | System artifact | Parser, diagnosis engine, CLI, Web UI, benchmark runner, hidden-grader support. | Low. The system is implemented and CI-tested. |
 | Seed benchmark | 30 tasks, 60 real Codex runs, all outcomes pass. | Medium. Good for waste analysis, weak for failure-distribution claims. |
-| Hard benchmark | 48 runnable tasks; the evaluated hard10 pilot has 10 tasks, 20 real Codex runs, and 5 outcome failures. | Medium. Good pilot, small sample for success-rate claims. |
+| Hard benchmark | 49 runnable tasks; the evaluated hard10 pilot has 10 tasks, 20 real Codex runs, and 5 outcome failures. | Medium. Good pilot, small sample for success-rate claims. |
 | Detector evaluation | Manual labels expose `TP=0`, `FP=0`, `FN=5` for hidden semantic edge cases. | Medium. Strong boundary result, but not enough positive process-failure labels. |
 | RQ4 signal analysis | Hard10 signal table explains why clean traces can still fail hidden graders. | Medium. Needs more observable failures to identify predictive process signals. |
 
@@ -33,7 +33,7 @@ The next submission-ready target should be:
 ## Workstream 1: Expand Hard-Tier Tasks
 
 Goal: move from the evaluated `hard10` pilot to a harder 30-50 task suite
-while preserving hidden grader isolation. `HARD-011` through `HARD-048` are now
+while preserving hidden grader isolation. `HARD-011` through `HARD-049` are now
 implemented; the next candidates are tracked in
 `docs/hard_tier_expansion_blueprint.md`.
 
