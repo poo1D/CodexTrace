@@ -4744,6 +4744,115 @@ TASK_DEFS = [
                     raise AssertionError(f"expected {expected} error")
         """),
     },
+    {
+        "task_id": "HARD-044",
+        "category": "feature",
+        "repo_hint": "typescript/icu_plural_format",
+        "instruction": "Implement a small ICU-style plural message formatter. Support {name} interpolation, plural blocks with one, other, exact =n arms, optional offset:n, # substitution after offset, escaped apostrophes, missing-value FormatError diagnostics, and input immutability. Preserve formatMessage(message, values).",
+        "public_success_check": "npm test",
+        "success_check": "node ../grader/check.mjs",
+        "files": {
+            "package.json": node_package(),
+            "README.md": """
+                # icu-plural-format
+
+                `formatMessage(message, values)` formats a small subset of ICU
+                messages.
+
+                Supported syntax:
+
+                - `{name}` interpolation
+                - `{count, plural, one {...} other {...}}`
+                - Exact plural arms such as `=0 {...}`
+                - Optional plural offsets such as `offset:1`
+                - `#` substitution inside plural arms after applying offset
+                - Apostrophe escaping for literal braces and quotes
+
+                Missing interpolation or plural values must raise `FormatError`.
+                The `values` object must not be mutated.
+            """,
+            "src/formatMessage.mjs": """
+                export class FormatError extends Error {
+                  constructor(message) {
+                    super(message);
+                    this.name = 'FormatError';
+                  }
+                }
+
+                export function formatMessage(message, values = {}) {
+                  return message.replace(/\\{([a-zA-Z_][a-zA-Z0-9_]*)\\}/g, (match, name) => {
+                    if (!(name in values)) {
+                      throw new FormatError(`Missing value: ${name}`);
+                    }
+                    return String(values[name]);
+                  });
+                }
+            """,
+            "src/index.mjs": """
+                export { FormatError, formatMessage } from './formatMessage.mjs';
+            """,
+            "tests/formatMessage.test.mjs": """
+                import assert from 'node:assert/strict';
+                import test from 'node:test';
+                import { FormatError, formatMessage } from '../src/formatMessage.mjs';
+
+                test('interpolates named values', () => {
+                  assert.equal(
+                    formatMessage('Hello {name}, status {status}.', { name: 'Ada', status: 'ready' }),
+                    'Hello Ada, status ready.',
+                  );
+                });
+
+                test('throws FormatError for missing values', () => {
+                  assert.throws(
+                    () => formatMessage('Hello {name}.', {}),
+                    FormatError,
+                  );
+                });
+            """,
+        },
+        "grader": node_grader("""
+            run('npm', ['test']);
+            const { FormatError, formatMessage } = await loadModule('src/formatMessage.mjs');
+
+            const values = { name: 'Ada', count: 0 };
+            const before = JSON.stringify(values);
+            assert.equal(
+              formatMessage('{name} has {count, plural, =0 {no messages} one {one message} other {# messages}}.', values),
+              'Ada has no messages.',
+            );
+            assert.equal(JSON.stringify(values), before);
+
+            assert.equal(
+              formatMessage('{count, plural, one {One file} other {# files}}', { count: 1 }),
+              'One file',
+            );
+            assert.equal(
+              formatMessage('{count, plural, one {One file} other {# files}}', { count: 5 }),
+              '5 files',
+            );
+            assert.equal(
+              formatMessage('{count, plural, offset:1 =0 {Nobody came} one {{name} came alone} other {{name} and # others came}}', {
+                count: 4,
+                name: 'Grace',
+              }),
+              'Grace and 3 others came',
+            );
+            assert.equal(
+              formatMessage("Use '{'count'}' literally: {count, plural, one {'#'} other {#}}", { count: 2 }),
+              'Use {count} literally: 2',
+            );
+
+            assert.throws(
+              () => formatMessage('{count, plural, one {ok} other {ok}}', {}),
+              (error) => error instanceof FormatError && error.message.includes('count'),
+            );
+            assert.throws(
+              () => formatMessage('{name} {missing}', { name: 'Ada' }),
+              (error) => error instanceof FormatError && error.message.includes('missing'),
+            );
+        """),
+    },
 ]
 
 
