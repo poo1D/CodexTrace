@@ -3347,6 +3347,171 @@ TASK_DEFS = [
             ) == [30, 30]
         """),
     },
+    {
+        "task_id": "HARD-036",
+        "category": "feature",
+        "repo_hint": "typescript/metrics_window",
+        "instruction": "Fix the metrics window summarizer so it computes stable rolling statistics for a time window. Preserve summarizeWindow(events, now, windowMs), include events at the lower bound, handle unsorted input without mutating it, return zeroed empty-window stats, and compute p95 latency deterministically.",
+        "public_success_check": "npm test",
+        "success_check": "node ../grader/check.mjs",
+        "files": {
+            "package.json": node_package(),
+            "README.md": """
+                # metrics-window
+
+                `summarizeWindow(events, now, windowMs)` returns rolling
+                service metrics for events inside a time window.
+
+                Each event has:
+
+                - `timestamp`: epoch milliseconds
+                - `latencyMs`: request latency
+                - `ok`: whether the request succeeded
+
+                Required output:
+
+                - `count`: number of events in the window
+                - `averageLatency`: arithmetic mean latency
+                - `p95Latency`: nearest-rank 95th percentile latency
+                - `errorRate`: failed events divided by count
+
+                The window includes timestamps from `now - windowMs` through
+                `now`, inclusive. Future events are excluded. Empty windows
+                return zeroes.
+            """,
+            "src/metricsWindow.mjs": """
+                export function summarizeWindow(events, now, windowMs) {
+                  const recent = events.filter(
+                    (event) => event.timestamp > now - windowMs && event.timestamp <= now,
+                  );
+                  const count = recent.length;
+                  if (count === 0) {
+                    return {
+                      count: 0,
+                      averageLatency: 0,
+                      p95Latency: 0,
+                      errorRate: 0,
+                    };
+                  }
+
+                  const totalLatency = recent.reduce((sum, event) => sum + event.latencyMs, 0);
+                  const failures = recent.filter((event) => event.ok === false).length;
+
+                  return {
+                    count,
+                    averageLatency: totalLatency / count,
+                    p95Latency: Math.max(...recent.map((event) => event.latencyMs)),
+                    errorRate: failures / count,
+                  };
+                }
+            """,
+            "src/index.mjs": """
+                export { summarizeWindow } from './metricsWindow.mjs';
+            """,
+            "tests/metricsWindow.test.mjs": """
+                import assert from 'node:assert/strict';
+                import test from 'node:test';
+                import { summarizeWindow } from '../src/metricsWindow.mjs';
+
+                test('returns zeroes for an empty window', () => {
+                  assert.deepEqual(summarizeWindow([], 1_000, 100), {
+                    count: 0,
+                    averageLatency: 0,
+                    p95Latency: 0,
+                    errorRate: 0,
+                  });
+                });
+
+                test('summarizes recent events', () => {
+                  const events = [
+                    { timestamp: 920, latencyMs: 100, ok: true },
+                    { timestamp: 950, latencyMs: 200, ok: false },
+                    { timestamp: 990, latencyMs: 300, ok: true },
+                    { timestamp: 1_100, latencyMs: 900, ok: false },
+                    { timestamp: 500, latencyMs: 50, ok: true },
+                  ];
+
+                  assert.deepEqual(summarizeWindow(events, 1_000, 100), {
+                    count: 3,
+                    averageLatency: 200,
+                    p95Latency: 300,
+                    errorRate: 1 / 3,
+                  });
+                });
+
+                test('ignores future events', () => {
+                  const events = [
+                    { timestamp: 1_000, latencyMs: 125, ok: true },
+                    { timestamp: 1_001, latencyMs: 999, ok: false },
+                  ];
+
+                  assert.deepEqual(summarizeWindow(events, 1_000, 10), {
+                    count: 1,
+                    averageLatency: 125,
+                    p95Latency: 125,
+                    errorRate: 0,
+                  });
+                });
+            """,
+        },
+        "grader": node_grader("""
+            run('npm', ['test']);
+            const { summarizeWindow } = await loadModule('src/metricsWindow.mjs');
+
+            const now = 10_000;
+            const windowMs = 1_000;
+            const events = [
+              { timestamp: 9_500, latencyMs: 18, ok: true },
+              { timestamp: 9_000, latencyMs: 12, ok: false },
+              { timestamp: 9_100, latencyMs: 1, ok: true },
+              { timestamp: 9_200, latencyMs: 2, ok: true },
+              { timestamp: 9_300, latencyMs: 3, ok: true },
+              { timestamp: 9_400, latencyMs: 4, ok: true },
+              { timestamp: 9_600, latencyMs: 5, ok: true },
+              { timestamp: 9_700, latencyMs: 6, ok: false },
+              { timestamp: 9_800, latencyMs: 7, ok: true },
+              { timestamp: 9_900, latencyMs: 8, ok: true },
+              { timestamp: 10_000, latencyMs: 9, ok: true },
+              { timestamp: 9_050, latencyMs: 10, ok: true },
+              { timestamp: 9_150, latencyMs: 11, ok: true },
+              { timestamp: 9_250, latencyMs: 13, ok: true },
+              { timestamp: 9_350, latencyMs: 14, ok: true },
+              { timestamp: 9_450, latencyMs: 15, ok: true },
+              { timestamp: 9_550, latencyMs: 16, ok: true },
+              { timestamp: 9_650, latencyMs: 17, ok: false },
+              { timestamp: 9_750, latencyMs: 19, ok: true },
+              { timestamp: 9_850, latencyMs: 20, ok: true },
+              { timestamp: 10_001, latencyMs: 5_000, ok: false },
+              { timestamp: 8_999, latencyMs: 7_000, ok: false },
+            ];
+            const before = JSON.stringify(events);
+            const result = summarizeWindow(events, now, windowMs);
+            assert.equal(JSON.stringify(events), before);
+            assert.deepEqual(result, {
+              count: 20,
+              averageLatency: 10.5,
+              p95Latency: 19,
+              errorRate: 3 / 20,
+            });
+
+            assert.deepEqual(summarizeWindow(events, 20_000, 10), {
+              count: 0,
+              averageLatency: 0,
+              p95Latency: 0,
+              errorRate: 0,
+            });
+
+            assert.deepEqual(
+              summarizeWindow([{ timestamp: 100, latencyMs: 33, ok: false }], 100, 0),
+              {
+                count: 1,
+                averageLatency: 33,
+                p95Latency: 33,
+                errorRate: 1,
+              },
+            );
+        """),
+    },
 ]
 
 
