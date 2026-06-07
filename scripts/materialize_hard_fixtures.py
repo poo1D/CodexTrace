@@ -4558,6 +4558,192 @@ TASK_DEFS = [
                 assert "empty" in paths_with_dirs
         """),
     },
+    {
+        "task_id": "HARD-043",
+        "category": "data_migration",
+        "repo_hint": "python/migration_runner",
+        "instruction": "Fix the migration runner so it applies pending migrations in dependency order, skips already-applied migration ids, validates recorded checksums, rolls back all changes on failure, and preserves run_migrations(store, migrations). Raise MigrationError with useful diagnostics for missing dependencies, dependency cycles, and checksum drift.",
+        "public_success_check": "python3 -m unittest discover -s tests",
+        "success_check": "python3 ../grader/check.py",
+        "files": {
+            "README.md": """
+                # migration-runner
+
+                `run_migrations(store, migrations)` applies migration objects
+                to an in-memory store and returns the updated store.
+
+                Store shape:
+
+                ```python
+                {
+                    "data": {},
+                    "applied": {"001_init": "checksum"},
+                }
+                ```
+
+                Migration shape:
+
+                ```python
+                {
+                    "id": "002_add_users",
+                    "checksum": "sha",
+                    "depends_on": ["001_init"],
+                    "apply": callable,
+                }
+                ```
+
+                Requirements:
+
+                - Apply pending migrations in dependency order.
+                - Skip already-applied migration ids after validating checksums.
+                - Roll back all data and applied changes if any migration fails.
+                - Raise `MigrationError` for missing dependencies, cycles, and
+                  checksum drift.
+            """,
+            "src/migration_runner.py": """
+                class MigrationError(Exception):
+                    pass
+
+
+                def run_migrations(store, migrations):
+                    data = store.setdefault("data", {})
+                    applied = store.setdefault("applied", {})
+                    for migration in migrations:
+                        migration_id = migration["id"]
+                        if migration_id in applied:
+                            continue
+                        applied[migration_id] = migration.get("checksum", "")
+                        migration["apply"](data)
+                    return store
+            """,
+            "tests/test_migration_runner.py": """
+                import sys
+                import unittest
+                from pathlib import Path
+
+                sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
+                from migration_runner import run_migrations
+
+
+                class MigrationRunnerTest(unittest.TestCase):
+                    def test_applies_simple_migrations(self):
+                        store = {"data": {}, "applied": {}}
+                        migrations = [
+                            {
+                                "id": "001_init",
+                                "checksum": "a",
+                                "depends_on": [],
+                                "apply": lambda data: data.update({"users": []}),
+                            },
+                            {
+                                "id": "002_seed",
+                                "checksum": "b",
+                                "depends_on": ["001_init"],
+                                "apply": lambda data: data["users"].append("ada"),
+                            },
+                        ]
+
+                        result = run_migrations(store, migrations)
+
+                        self.assertEqual(result["data"]["users"], ["ada"])
+                        self.assertEqual(result["applied"], {"001_init": "a", "002_seed": "b"})
+
+                    def test_skips_applied_migration(self):
+                        store = {"data": {"users": ["ada"]}, "applied": {"001_init": "a"}}
+                        migrations = [
+                            {
+                                "id": "001_init",
+                                "checksum": "a",
+                                "depends_on": [],
+                                "apply": lambda data: data["users"].append("grace"),
+                            }
+                        ]
+
+                        result = run_migrations(store, migrations)
+
+                        self.assertEqual(result["data"]["users"], ["ada"])
+
+
+                if __name__ == "__main__":
+                    unittest.main()
+            """,
+        },
+        "grader": py_grader("""
+            import copy
+
+            run_visible_tests()
+            mod = importlib.import_module("migration_runner")
+
+            def set_value(key, value):
+                return lambda data: data.__setitem__(key, value)
+
+            def append_value(key, value):
+                return lambda data: data.setdefault(key, []).append(value)
+
+            store = {"data": {}, "applied": {}}
+            migrations = [
+                {"id": "003_seed", "checksum": "c", "depends_on": ["002_users"], "apply": append_value("users", "ada")},
+                {"id": "001_init", "checksum": "a", "depends_on": [], "apply": set_value("version", 1)},
+                {"id": "002_users", "checksum": "b", "depends_on": ["001_init"], "apply": set_value("users", [])},
+            ]
+            result = mod.run_migrations(store, migrations)
+            assert result["data"] == {"version": 1, "users": ["ada"]}
+            assert list(result["applied"].keys()) == ["001_init", "002_users", "003_seed"]
+
+            already = {
+                "data": {"version": 1, "users": ["ada"]},
+                "applied": {"001_init": "a", "002_users": "b", "003_seed": "c"},
+            }
+            before = copy.deepcopy(already)
+            rerun = mod.run_migrations(
+                already,
+                [{"id": "003_seed", "checksum": "c", "depends_on": ["002_users"], "apply": append_value("users", "grace")}],
+            )
+            assert rerun == before
+
+            try:
+                mod.run_migrations(
+                    already,
+                    [{"id": "003_seed", "checksum": "changed", "depends_on": ["002_users"], "apply": append_value("users", "grace")}],
+                )
+            except mod.MigrationError as error:
+                assert "checksum" in str(error).lower()
+            else:
+                raise AssertionError("expected checksum drift error")
+
+            failing_store = {"data": {"version": 1}, "applied": {"001_init": "a"}}
+            before_fail = copy.deepcopy(failing_store)
+
+            def explode(data):
+                data["partial"] = True
+                raise RuntimeError("boom")
+
+            try:
+                mod.run_migrations(
+                    failing_store,
+                    [{"id": "002_fail", "checksum": "x", "depends_on": ["001_init"], "apply": explode}],
+                )
+            except RuntimeError:
+                pass
+            else:
+                raise AssertionError("expected migration failure")
+            assert failing_store == before_fail
+
+            for bad, expected in [
+                ([{"id": "002_missing", "checksum": "b", "depends_on": ["001_missing"], "apply": set_value("x", 1)}], "missing"),
+                ([
+                    {"id": "001_a", "checksum": "a", "depends_on": ["002_b"], "apply": set_value("a", 1)},
+                    {"id": "002_b", "checksum": "b", "depends_on": ["001_a"], "apply": set_value("b", 2)},
+                ], "cycle"),
+            ]:
+                try:
+                    mod.run_migrations({"data": {}, "applied": {}}, bad)
+                except mod.MigrationError as error:
+                    assert expected in str(error).lower()
+                else:
+                    raise AssertionError(f"expected {expected} error")
+        """),
+    },
 ]
 
 
