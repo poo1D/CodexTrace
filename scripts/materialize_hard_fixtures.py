@@ -1944,6 +1944,118 @@ TASK_DEFS = [
             assert.deepEqual(incremental.end(), []);
         """),
     },
+    {
+        "task_id": "HARD-025",
+        "category": "ci_failure",
+        "repo_hint": "python/typing_protocol",
+        "instruction": "Fix the protocol typing CI failure so MemoryEventWriter structurally conforms to EventWriter and publish_events works with any protocol-compatible writer without changing the public API.",
+        "public_success_check": "python3 -m unittest discover -s tests",
+        "success_check": "python3 ../grader/check.py",
+        "files": {
+            "src/event_writer.py": """
+                from typing import Protocol
+
+
+                class EventWriter(Protocol):
+                    def write(self, message: str) -> int:
+                        ...
+
+                    def flush(self) -> None:
+                        ...
+
+
+                class MemoryEventWriter:
+                    def __init__(self):
+                        self.messages = []
+                        self.flushed = False
+
+                    def append(self, message: str) -> None:
+                        self.messages.append(message)
+
+                    def drain(self) -> None:
+                        self.flushed = True
+
+
+                def publish_events(events, writer=None):
+                    if writer is None:
+                        writer = MemoryEventWriter()
+                    for event in events:
+                        writer.append(f"event: {event}\\n")
+                    writer.drain()
+                    return writer
+            """,
+            "tests/test_event_writer.py": """
+                import sys
+                import unittest
+                from pathlib import Path
+
+                sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
+                from event_writer import EventWriter, MemoryEventWriter, publish_events
+
+
+                class EventWriterTest(unittest.TestCase):
+                    def test_memory_writer_conforms_to_protocol(self):
+                        writer = MemoryEventWriter()
+                        self.assertIsInstance(writer, EventWriter)
+                        self.assertEqual(writer.write("hello\\n"), len("hello\\n"))
+                        writer.flush()
+                        self.assertEqual(writer.messages, ["hello\\n"])
+                        self.assertTrue(writer.flushed)
+
+                    def test_publish_events_uses_memory_writer(self):
+                        writer = publish_events(["created", "closed"])
+                        self.assertEqual(writer.messages, ["event: created\\n", "event: closed\\n"])
+                        self.assertTrue(writer.flushed)
+
+
+                if __name__ == "__main__":
+                    unittest.main()
+            """,
+        },
+        "grader": py_grader("""
+            run_visible_tests()
+            mod = importlib.import_module("event_writer")
+
+            assert getattr(mod.EventWriter, "_is_runtime_protocol", False), "EventWriter must be runtime-checkable"
+
+            class RecordingWriter:
+                def __init__(self):
+                    self.messages = []
+                    self.flush_calls = 0
+
+                def write(self, message: str) -> int:
+                    self.messages.append(message)
+                    return len(message)
+
+                def flush(self) -> None:
+                    self.flush_calls += 1
+
+            recorder = RecordingWriter()
+            assert isinstance(recorder, mod.EventWriter), "foreign structural writer should satisfy EventWriter"
+
+            returned = mod.publish_events(["alpha", "beta"], recorder)
+            assert returned is recorder
+            assert recorder.messages == ["event: alpha\\n", "event: beta\\n"]
+            assert recorder.flush_calls == 1, "publish_events should flush once after writing all events"
+
+            memory = mod.MemoryEventWriter()
+            assert isinstance(memory, mod.EventWriter)
+            assert memory.write("direct\\n") == len("direct\\n")
+            assert memory.messages == ["direct\\n"]
+            memory.flush()
+            assert memory.flushed is True
+
+            class PartialWriter:
+                def write(self, message: str) -> int:
+                    return len(message)
+
+            assert not isinstance(PartialWriter(), mod.EventWriter), "flush must remain part of the protocol"
+
+            source = (ROOT / "src" / "event_writer.py").read_text(encoding="utf-8")
+            assert "Protocol" in source
+            assert "@runtime_checkable" in source
+        """),
+    },
 ]
 
 
