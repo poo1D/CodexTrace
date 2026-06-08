@@ -22,20 +22,26 @@ agent run.
 ./scripts/demo.sh
 ```
 
+By default, this writes reports to `/tmp/codextrace-demo` so the repository
+stays clean after a reviewer runs the demo.
+
 Then open the Web UI:
 
 ```bash
+./scripts/demo.sh --update-ui
 cd web
 npm install
 npm run dev
 ```
 
-The UI reads `web/public/report.json`, which the demo script refreshes.
+Open the printed Vite URL, usually `http://localhost:5173`. The UI reads
+`web/public/report.json`, which `--update-ui` refreshes explicitly.
 
 ## Try the Real Codex Fixture
 
 ```bash
 ./scripts/demo.sh demo/real-codex-run.jsonl
+./scripts/demo.sh demo/real-codex-run.jsonl --update-ui
 ```
 
 The real fixture is a healthy read-only Codex run captured from this repository.

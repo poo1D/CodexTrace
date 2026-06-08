@@ -86,17 +86,21 @@ Run the offline demo:
 
 It generates:
 
-- `demo/demo-report.json`
-- `demo/demo-report.md`
-- `web/public/report.json` for the replay UI
+- `/tmp/codextrace-demo/demo-report.json`
+- `/tmp/codextrace-demo/demo-report.md`
 
 Then start the visual replay:
 
 ```bash
+./scripts/demo.sh --update-ui
 cd web
 npm install
 npm run dev
 ```
+
+Open the printed Vite URL, usually `http://localhost:5173`. The
+`--update-ui` flag refreshes `web/public/report.json`, which is the static
+input used by the replay UI.
 
 For the full walkthrough, see `demo/README.md`.
 
