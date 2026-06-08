@@ -1,0 +1,18 @@
+{
+  "covered_process_tags": [],
+  "failure_count": 30,
+  "label_row_count": 60,
+  "labeled_failure_count": 30,
+  "labels_path": "benchmark/hard/pilot/hard30-real/manual-labels.jsonl",
+  "manifest_path": "benchmark/hard/pilot/hard30-real/runs.jsonl",
+  "missing_notes": [],
+  "missing_rows": [],
+  "ok": true,
+  "process_tag_coverage_count": 0,
+  "run_count": 60,
+  "tag_counts": {
+    "hidden_semantic_edge_case": 30
+  },
+  "unknown_tags": [],
+  "unlabeled_failures": []
+}

@@ -1,0 +1,25 @@
+{
+  "command": [
+    "/opt/homebrew/opt/python@3.14/bin/python3.14",
+    "-m",
+    "codex_trace.cli",
+    "research",
+    "run",
+    "--tasks",
+    "/private/tmp/codextrace-work/benchmark/hard/pilot/hard30-selection/tasks.jsonl",
+    "--output-dir",
+    "benchmark/hard/pilot/hard30-real/shards/HARD-012",
+    "--task-id",
+    "HARD-012",
+    "--codex-bin",
+    "codex",
+    "--sandbox",
+    "workspace-write",
+    "--timeout-seconds",
+    "600"
+  ],
+  "returncode": 0,
+  "stderr_path": "benchmark/hard/pilot/hard30-real/shards/HARD-012/shard-run.stderr",
+  "stdout_path": "benchmark/hard/pilot/hard30-real/shards/HARD-012/shard-run.stdout",
+  "task_id": "HARD-012"
+}

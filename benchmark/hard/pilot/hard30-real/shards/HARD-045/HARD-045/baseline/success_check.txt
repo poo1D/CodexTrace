@@ -1,0 +1,5 @@
+Traceback (most recent call last):
+  File "/private/tmp/codextrace-work/benchmark/hard/pilot/hard30-real/shards/HARD-045/HARD-045/baseline/repo/../grader/check.py", line 40, in <module>
+    assert [event["id"] for event in snap["left"]] == ["l-keep"]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError

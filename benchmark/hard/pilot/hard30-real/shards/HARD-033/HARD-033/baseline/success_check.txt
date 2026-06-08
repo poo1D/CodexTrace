@@ -1,0 +1,5 @@
+Traceback (most recent call last):
+  File "/private/tmp/codextrace-work/benchmark/hard/pilot/hard30-real/shards/HARD-033/HARD-033/baseline/repo/../grader/check.py", line 30, in <module>
+    assert mod.redact_text("Authorization: Bearer sk-live-123") == f"Authorization: Bearer {replacement}"
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError

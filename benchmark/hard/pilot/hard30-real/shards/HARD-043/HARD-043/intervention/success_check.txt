@@ -1,0 +1,23 @@
+Traceback (most recent call last):
+  File "/private/tmp/codextrace-work/benchmark/hard/pilot/hard30-real/shards/HARD-043/HARD-043/intervention/repo/src/migration_runner.py", line 69, in run_migrations
+    migration["apply"](data)
+    ~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/private/tmp/codextrace-work/benchmark/hard/pilot/hard30-real/shards/HARD-043/HARD-043/intervention/repo/../grader/check.py", line 71, in explode
+    raise RuntimeError("boom")
+RuntimeError: boom
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/private/tmp/codextrace-work/benchmark/hard/pilot/hard30-real/shards/HARD-043/HARD-043/intervention/repo/../grader/check.py", line 74, in <module>
+    mod.run_migrations(
+    ~~~~~~~~~~~~~~~~~~^
+        failing_store,
+        ^^^^^^^^^^^^^^
+        [{"id": "002_fail", "checksum": "x", "depends_on": ["001_init"], "apply": explode}],
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/private/tmp/codextrace-work/benchmark/hard/pilot/hard30-real/shards/HARD-043/HARD-043/intervention/repo/src/migration_runner.py", line 79, in run_migrations
+    raise MigrationError(f"failed to apply migration {migration_id}: {exc}") from exc
+migration_runner.MigrationError: failed to apply migration 002_fail: boom

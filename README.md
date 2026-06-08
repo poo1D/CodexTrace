@@ -52,10 +52,11 @@ Current stored pilots:
 | --- | ---: | ---: | ---: | --- |
 | full30 | 30 | 60 | 0 | Intervention reduces repeated tool calls `10.43 -> 7.00` and token usage `218.7k -> 184.8k`. |
 | hard10 | 10 | 20 | 5 | Intervention improves success `70% -> 80%` and reduces token usage `248.9k -> 187.5k`. |
+| hard30 | 30 | 60 | 30 | Intervention keeps success at `50% -> 50%` while reducing repeated tool calls `12.93 -> 9.20` and token usage `355.0k -> 256.3k`. |
 
-The hard tier also exposes a trace-only detector boundary: all five hidden
+The hard tier also exposes a trace-only detector boundary: all hard30 hidden
 semantic edge-case failures are missed by deterministic process rules
-(`TP=0`, `FP=0`, `FN=5`), showing why trace diagnosis should be paired with
+(`TP=0`, `FP=0`, `FN=30`), showing why trace diagnosis should be paired with
 strong task-level oracles.
 
 See `docs/artifact_guide.md` for the reviewer-facing walkthrough,
@@ -124,7 +125,8 @@ Key files:
 - `docs/submission_readiness_plan.md`: concrete path from pilot artifact to stronger paper submission
 - `benchmark/pilot/full30-real`: 30-task / 60-run real pilot
 - `benchmark/hard/pilot/hard10-real`: 10-task / 20-run hard-tier pilot with outcome failures
-- `benchmark/hard/pilot/hard30-selection`: selected 30-task hard-tier pilot for the next 60-run collection
+- `benchmark/hard/pilot/hard30-real`: 30-task / 60-run hard-tier pilot with hidden-grader failures and paper tables
+- `benchmark/hard/pilot/hard30-selection`: selected 30-task hard-tier pilot used for the hard30 collection
 
 Render prompts:
 
@@ -181,13 +183,18 @@ Current paper artifacts:
 ```bash
 codex-trace research aggregate benchmark/pilot/full30-real/runs.jsonl
 codex-trace research aggregate benchmark/hard/pilot/hard10-real/runs.jsonl
+codex-trace research aggregate benchmark/hard/pilot/hard30-real/runs.jsonl
 codex-trace research paper-report benchmark/hard/pilot/hard10-real/runs.jsonl \
   --labels benchmark/hard/pilot/hard10-real/manual-labels.jsonl
+codex-trace research paper-report benchmark/hard/pilot/hard30-real/runs.jsonl \
+  --labels benchmark/hard/pilot/hard30-real/manual-labels.jsonl
 codex-trace research summary --markdown-output docs/results_summary.md
 ```
 
-The current draft in `docs/paper_draft.md` reports two pilots: a 30-task seed
-benchmark where intervention reduces tool-call and token waste, and a 10-task
+The current draft in `docs/paper_draft.md` reports three pilots: a 30-task seed
+benchmark where intervention reduces tool-call and token waste, a 10-task
+hard pilot where intervention improves success, and a 30-task hard pilot where
+success is flat but waste drops sharply under the intervention.
 hard tier where intervention improves success from 70% to 80% while exposing a
 trace-only detector limitation on hidden semantic edge cases.
 
@@ -262,8 +269,8 @@ Findings:
 ## CV Bullets
 
 - Built `CodexTrace`, a GPU-free Agent Harness research tool that parses `codex exec --json` event streams into normalized traces and detects process failures such as missing verification, unrecovered command errors, repeated tool use, and sandbox blocks.
-- Designed and collected an 80-run Codex trace benchmark across a 30-task seed tier and 10-task hard tier, comparing baseline prompts with verification-focused harness interventions.
-- Measured intervention effects on real Codex runs: full30 repeated tool calls dropped `10.43 -> 7.00`, hard10 success improved `70% -> 80%`, and hard10 token usage dropped `248.9k -> 187.5k`.
+- Designed and collected a 140-run Codex trace benchmark across a 30-task seed tier, 10-task hard pilot, and 30-task hard tier, comparing baseline prompts with verification-focused harness interventions.
+- Measured intervention effects on real Codex runs: hard30 repeated tool calls dropped `12.93 -> 9.20`, hard30 token usage dropped `355.0k -> 256.3k`, and paired tasks improved on token usage in `26/30` cases.
 - Shipped a reproducible research artifact with hidden-grader fixtures, manual-label evaluation, generated paper tables, a TypeScript replay UI, Python CLI, and GitHub Actions CI.
 
 ## Non-goals

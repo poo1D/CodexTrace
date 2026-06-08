@@ -1,0 +1,57 @@
+{
+  "blocking": [],
+  "checks": [
+    {
+      "detail": "30 selected task(s), 30 unique",
+      "evidence": "benchmark/hard/pilot/hard30-selection",
+      "name": "hard30 selection",
+      "ok": true
+    },
+    {
+      "detail": "60 / 60 run records",
+      "evidence": "benchmark/hard/pilot/hard30-real/runs.jsonl",
+      "name": "hard30 real runs",
+      "ok": true,
+      "preflight": {
+        "duplicate_prompt_pairs": [],
+        "expected_run_records": 60,
+        "expected_task_count": 30,
+        "manifest": "benchmark/hard/pilot/hard30-real/runs.jsonl",
+        "missing_prompt_pairs": [],
+        "missing_tasks": [],
+        "missing_trace_paths": [],
+        "ok": true,
+        "run_records": 60,
+        "unexpected_tasks": []
+      }
+    },
+    {
+      "evidence": "benchmark/hard/pilot/hard30-real",
+      "missing": [],
+      "name": "hard30 finalized outputs",
+      "ok": true
+    },
+    {
+      "detail": "60 label row(s)",
+      "evidence": "benchmark/hard/pilot/hard30-real/manual-labels.jsonl",
+      "missing_notes": [],
+      "name": "hard30 manual labels",
+      "ok": true,
+      "unknown_tags": [],
+      "unlabeled_failures": []
+    },
+    {
+      "evidence": "docs/paper_draft.md",
+      "name": "paper draft",
+      "ok": true
+    },
+    {
+      "evidence": "docs/reproducibility_checklist.md",
+      "name": "reproducibility checklist",
+      "ok": true
+    }
+  ],
+  "next_actions": [],
+  "positioning": "submission-ready hard30 artifact",
+  "ready": true
+}

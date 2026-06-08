@@ -1,0 +1,12 @@
+{
+  "duplicate_prompt_pairs": [],
+  "expected_run_records": 60,
+  "expected_task_count": 30,
+  "manifest": "benchmark/hard/pilot/hard30-real/runs.jsonl",
+  "missing_prompt_pairs": [],
+  "missing_tasks": [],
+  "missing_trace_paths": [],
+  "ok": true,
+  "run_records": 60,
+  "unexpected_tasks": []
+}

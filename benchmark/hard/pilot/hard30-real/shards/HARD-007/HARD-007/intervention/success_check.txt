@@ -1,0 +1,5 @@
+Traceback (most recent call last):
+  File "/private/tmp/codextrace-work/benchmark/hard/pilot/hard30-real/shards/HARD-007/HARD-007/intervention/repo/../grader/check.py", line 34, in <module>
+    assert hasattr(mod, "deep_merge") or hasattr(mod, "_deep_merge")
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError

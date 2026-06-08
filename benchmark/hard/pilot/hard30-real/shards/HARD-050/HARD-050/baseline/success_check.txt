@@ -1,0 +1,22 @@
+Traceback (most recent call last):
+  File "/private/tmp/codextrace-work/benchmark/hard/pilot/hard30-real/shards/HARD-050/HARD-050/baseline/repo/../grader/check.py", line 91, in <module>
+    mod.resolve_config(defaults, cli={"server.port": "not-int"}, schema=schema)
+    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/codextrace-work/benchmark/hard/pilot/hard30-real/shards/HARD-050/HARD-050/baseline/repo/src/config_resolver.py", line 22, in resolve_config
+    _apply_override(config, defaults, path, value, schema)
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/codextrace-work/benchmark/hard/pilot/hard30-real/shards/HARD-050/HARD-050/baseline/repo/src/config_resolver.py", line 35, in _apply_override
+    coerced = _coerce(value, schema.get(dotted_path))
+  File "/private/tmp/codextrace-work/benchmark/hard/pilot/hard30-real/shards/HARD-050/HARD-050/baseline/repo/src/config_resolver.py", line 66, in _coerce
+    return _coerce_int(value)
+  File "/private/tmp/codextrace-work/benchmark/hard/pilot/hard30-real/shards/HARD-050/HARD-050/baseline/repo/src/config_resolver.py", line 103, in _coerce_int
+    raise ConfigError("invalid integer value: " + repr(value))
+config_resolver.ConfigError: invalid integer value: 'not-int'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/private/tmp/codextrace-work/benchmark/hard/pilot/hard30-real/shards/HARD-050/HARD-050/baseline/repo/../grader/check.py", line 93, in <module>
+    assert "server.port" in str(error)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError

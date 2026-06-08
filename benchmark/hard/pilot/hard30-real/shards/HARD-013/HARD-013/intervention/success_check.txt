@@ -1,0 +1,19 @@
+node:internal/modules/run_main:105
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
++ actual - expected
+
++ "(NOT archived = 'true')"
+- 'NOT (archived = true)'
+
+    at file:///private/tmp/codextrace-work/benchmark/hard/pilot/hard30-real/shards/HARD-013/HARD-013/intervention/grader/check.mjs:24:8 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: "(NOT archived = 'true')",
+  expected: 'NOT (archived = true)',
+  operator: 'strictEqual'
+}
+
+Node.js v24.3.0

@@ -250,10 +250,12 @@ def test_hard30_shard_skip_complete_filters_finished_manifests(tmp_path):
     )
     completed = commands[0].shard_dir / "runs.jsonl"
     completed.parent.mkdir(parents=True)
+    commands[0].shard_dir.joinpath("a").write_text("{}\n", encoding="utf-8")
+    commands[0].shard_dir.joinpath("b").write_text("{}\n", encoding="utf-8")
     completed.write_text(
         "\n".join([
-            json.dumps({"task_id": "HARD-001", "prompt_type": "baseline", "trace_path": "a"}),
-            json.dumps({"task_id": "HARD-001", "prompt_type": "intervention", "trace_path": "b"}),
+            json.dumps({"task_id": "HARD-001", "prompt_type": "baseline", "trace_path": "a", "codex_exit_code": 0}),
+            json.dumps({"task_id": "HARD-001", "prompt_type": "intervention", "trace_path": "b", "codex_exit_code": 0}),
         ]) + "\n",
         encoding="utf-8",
     )
@@ -273,18 +275,21 @@ def test_hard30_shard_status_summary_reports_readiness(tmp_path):
         dry_run=True,
     )
     complete_rows = [
-        {"task_id": "HARD-001", "prompt_type": "baseline", "trace_path": "a"},
-        {"task_id": "HARD-001", "prompt_type": "intervention", "trace_path": "b"},
+        {"task_id": "HARD-001", "prompt_type": "baseline", "trace_path": "a", "codex_exit_code": 0},
+        {"task_id": "HARD-001", "prompt_type": "intervention", "trace_path": "b", "codex_exit_code": 0},
     ]
     incomplete_rows = [
         {"task_id": "HARD-002", "prompt_type": "baseline", "trace_path": "c"},
     ]
     commands[0].shard_dir.mkdir(parents=True)
+    commands[0].shard_dir.joinpath("a").write_text("{}\n", encoding="utf-8")
+    commands[0].shard_dir.joinpath("b").write_text("{}\n", encoding="utf-8")
     commands[0].shard_dir.joinpath("runs.jsonl").write_text(
         "".join(json.dumps(row, sort_keys=True) + "\n" for row in complete_rows),
         encoding="utf-8",
     )
     commands[1].shard_dir.mkdir(parents=True)
+    commands[1].shard_dir.joinpath("c").write_text("{}\n", encoding="utf-8")
     commands[1].shard_dir.joinpath("runs.jsonl").write_text(
         "".join(json.dumps(row, sort_keys=True) + "\n" for row in incomplete_rows),
         encoding="utf-8",
@@ -306,12 +311,53 @@ def test_hard30_shard_status_summary_reports_readiness(tmp_path):
     assert summary["ready_to_merge"] is False
     assert summary["shards"][0]["prompt_types"] == ["baseline", "intervention"]
     assert summary["shards"][2]["returncode"] == 2
+    assert summary["shards"][2]["invalid_reasons"] == []
     assert summary["shards"][2]["metadata_path"].endswith("shard-run.json")
     assert "Ready to merge: no" in rendered
     assert "Failed shards: 1" in rendered
     assert "Failed: HARD-003" in rendered
     assert "Incomplete: HARD-002" in rendered
     assert "Missing: HARD-003, HARD-004" in rendered
+
+
+def test_hard30_shard_status_rejects_failed_codex_or_empty_trace(tmp_path):
+    selection_dir = Path("benchmark/hard/pilot/hard30-selection")
+    commands = build_shard_commands(
+        ["HARD-001"],
+        selection_dir=selection_dir,
+        run_dir=tmp_path / "hard30-real",
+    )
+    shard_dir = commands[0].shard_dir
+    shard_dir.mkdir(parents=True)
+    shard_dir.joinpath("empty.jsonl").write_text("", encoding="utf-8")
+    shard_dir.joinpath("runs.jsonl").write_text(
+        "\n".join([
+            json.dumps({
+                "task_id": "HARD-001",
+                "prompt_type": "baseline",
+                "trace_path": "empty.jsonl",
+                "codex_exit_code": 1,
+            }),
+            json.dumps({
+                "task_id": "HARD-001",
+                "prompt_type": "intervention",
+                "trace_path": "missing.jsonl",
+                "codex_exit_code": 0,
+            }),
+        ]) + "\n",
+        encoding="utf-8",
+    )
+
+    status = inspect_shard(commands[0])
+    summary = summarize_shards(commands)
+
+    assert status.complete is False
+    assert status.record_count == 2
+    assert "baseline codex_exit_code=1" in status.invalid_reasons
+    assert "baseline empty trace: empty.jsonl" in status.invalid_reasons
+    assert "intervention missing trace: missing.jsonl" in status.invalid_reasons
+    assert summary["failed"] == ["HARD-001"]
+    assert summary["incomplete"] == ["HARD-001"]
 
 
 def test_merge_hard30_shards_rewrites_relative_paths(tmp_path):

@@ -15,18 +15,19 @@ We introduce CodexTrace, an offline parser and diagnosis engine for
 `codex exec --json` traces. CodexTrace normalizes agent events into a stable
 schema, segments runs into phases, detects interpretable process-level failure
 patterns, and aggregates baseline-vs-intervention experiments. We evaluate the
-tool on two real Codex benchmark pilots: a 30-task seed benchmark with 60 runs,
-and a 10-task hard tier with 20 runs and hidden edge-case graders. On the
-30-task pilot, all runs succeed, but the intervention reduces repeated tool
-calls from 10.43 to 7.00 and average token usage from 218.7k to 184.8k. On the
-hard tier, intervention improves success rate from 70% to 80%, reduces repeated
-tool calls from 9.2 to 6.2, and reduces average token usage from 248.9k to
-187.5k. A manual-label analysis also shows a boundary of trace-only diagnosis:
-five hidden semantic edge-case failures receive failure score 0 because their
-visible process traces look clean. These results suggest that trace-based
-diagnosis is useful for exposing observable process failures and measuring
-harness interventions, but it should be paired with strong semantic oracles for
-hidden correctness failures.
+tool on three real Codex benchmark pilots: a 30-task seed benchmark with 60
+runs, an early 10-task hard tier with 20 runs, and a 30-task hard tier with 60
+runs and hidden edge-case graders. On the seed pilot, all runs succeed, but the
+intervention reduces repeated tool calls from 10.43 to 7.00 and average token
+usage from 218.7k to 184.8k. On the hard30 tier, success rate stays flat at
+50%, but the intervention reduces repeated tool calls from 12.93 to 9.20,
+average token usage from 355.0k to 256.3k, and failure score from 1.5 to 0.5.
+A manual-label analysis also shows a boundary of trace-only diagnosis: 30
+hidden semantic edge-case failures are missed by deterministic process rules
+because their visible process traces often look clean. These results suggest
+that trace-based diagnosis is useful for exposing observable process failures
+and measuring harness interventions, but it should be paired with strong
+semantic oracles for hidden correctness failures.
 
 ## 1. Introduction
 
@@ -154,9 +155,10 @@ changes. Each task is run with two prompt conditions:
   edits, post-edit verification, failed-command diagnosis, and evidence before
   completion.
 
-The hard tier contains 50 runnable harder tasks with hidden graders; the
-evaluated hard10 pilot uses the first 10. These tasks are designed to create
-outcome failures even when visible tests pass.
+The hard tier contains 50 runnable harder tasks with hidden graders. The
+current paper-facing hard30 artifact selects 30 of these tasks and stores 60
+real baseline/intervention runs. These tasks are designed to create outcome
+failures even when visible tests pass.
 
 ## 7. Results
 
@@ -166,22 +168,22 @@ On the 30-task seed pilot, all 60 runs pass their external graders. CodexTrace
 still detects one process failure: `CT-021/baseline` hits a sandbox or
 permission deadlock pattern and receives a failure score of 35.
 
-On the hard tier, manual labels mark all five outcome failures as
+On the hard30 tier, manual labels mark all 30 outcome failures as
 `hidden_semantic_edge_case`.
 
 | Pilot | Labeled failure tag | Count | Example |
 | --- | --- | ---: | --- |
 | full30 | `sandbox_permission_deadlock` | 1 | `CT-021/baseline` |
-| hard10 | `hidden_semantic_edge_case` | 5 | `HARD-001/baseline` |
+| hard30 | `hidden_semantic_edge_case` | 30 | `HARD-001/baseline` |
 
 ### RQ2: Detector Agreement
 
 The current process-only detector does not detect hidden semantic edge cases.
-For the hard-tier manual labels, detector agreement is:
+For the hard30 manual labels, detector agreement is:
 
 | Label | TP | FP | FN | Precision | Recall | F1 |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
-| `hidden_semantic_edge_case` | 0 | 0 | 5 | 0 | 0 | 0 |
+| `hidden_semantic_edge_case` | 0 | 0 | 30 | 0 | 0 | 0 |
 
 This is a boundary result rather than a contradiction of trace diagnosis. The
 detectors target process evidence; hidden semantic failures may require visible
@@ -201,7 +203,8 @@ reduces several waste signals:
 | avg_token_usage | 218.7k | 184.8k | -34.0k |
 | avg_failure_score | 2.83 | 1.00 | -1.83 |
 
-On the hard tier, intervention improves both outcome and waste metrics:
+On the early hard10 pilot, intervention improves both outcome and waste
+metrics:
 
 | Metric | Baseline | Intervention | Delta |
 | --- | ---: | ---: | ---: |
@@ -211,13 +214,29 @@ On the hard tier, intervention improves both outcome and waste metrics:
 | avg_token_usage | 248.9k | 187.5k | -61.5k |
 | avg_verify_events | 7.30 | 3.70 | -3.60 |
 
+On the hard30 tier, success stays flat but waste drops sharply:
+
+| Metric | Baseline | Intervention | Delta |
+| --- | ---: | ---: | ---: |
+| success_rate | 0.50 | 0.50 | 0.00 |
+| verification_rate | 1.00 | 1.00 | 0.00 |
+| avg_repeated_tool_calls | 12.93 | 9.20 | -3.73 |
+| avg_command_failures | 0.30 | 0.10 | -0.20 |
+| avg_token_usage | 355.0k | 256.3k | -98.7k |
+| avg_failure_score | 1.50 | 0.50 | -1.00 |
+
+Paired hard30 deltas show that token usage improves in 26 of 30 tasks,
+repeated tool calls improve in 26 of 30 tasks, and success improves in one task
+while regressing in one task.
+
 ### RQ4: Trace Signals By Outcome
 
-On the hard tier, the process signals do not strongly separate successful runs
-from hidden semantic failures. Failure and success runs both have verification
-rate 1.0, unresolved error 0, command failure count 0, and failure score 0.
-This supports the RQ2 boundary result: when visible tests are incomplete, a run
-can look procedurally sound while still failing a hidden oracle.
+On the hard30 tier, the process signals do not strongly separate successful
+runs from hidden semantic failures. Failure and success runs both have
+verification rate 1.0 and unresolved error 0; failure score differs only
+slightly, 1.17 for failed runs versus 0.83 for successful runs. This supports
+the RQ2 boundary result: when visible tests are incomplete, a run can look
+procedurally sound while still failing a hidden oracle.
 
 | Signal | Failure mean | Success mean | Delta success-failure |
 | --- | ---: | ---: | ---: |

@@ -1,0 +1,38 @@
+node:internal/modules/run_main:105
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
++ actual - expected
+
+  {
+    end: {
++     column: 5,
+-     column: 7,
+      line: 11
+    },
+    source: 'src/app.ts',
+    start: {
++     column: 12,
+-     column: 14,
+      line: 10
+    }
+  }
+
+    at file:///private/tmp/codextrace-work/benchmark/hard/pilot/hard30-real/shards/HARD-038/HARD-038/intervention/grader/check.mjs:46:8 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: {
+    source: 'src/app.ts',
+    start: { line: 10, column: 12 },
+    end: { line: 11, column: 5 }
+  },
+  expected: {
+    source: 'src/app.ts',
+    start: { line: 10, column: 14 },
+    end: { line: 11, column: 7 }
+  },
+  operator: 'deepStrictEqual'
+}
+
+Node.js v24.3.0

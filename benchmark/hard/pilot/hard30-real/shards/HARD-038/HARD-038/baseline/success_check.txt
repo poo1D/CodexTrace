@@ -1,0 +1,26 @@
+node:internal/modules/run_main:105
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: The validation function is expected to return "true". Received false
+
+Caught error:
+
+SourceMapError: mappings[0].generated.column must be a zero-based non-negative integer
+    at file:///private/tmp/codextrace-work/benchmark/hard/pilot/hard30-real/shards/HARD-038/HARD-038/baseline/grader/check.mjs:73:8 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: SourceMapError: mappings[0].generated.column must be a zero-based non-negative integer
+      at validateColumn (file:///private/tmp/codextrace-work/benchmark/hard/pilot/hard30-real/shards/HARD-038/HARD-038/baseline/repo/src/sourceMapRanges.mjs?v=1780884861054:119:11)
+      at validatePosition (file:///private/tmp/codextrace-work/benchmark/hard/pilot/hard30-real/shards/HARD-038/HARD-038/baseline/repo/src/sourceMapRanges.mjs?v=1780884861054:108:3)
+      at validateMappings (file:///private/tmp/codextrace-work/benchmark/hard/pilot/hard30-real/shards/HARD-038/HARD-038/baseline/repo/src/sourceMapRanges.mjs?v=1780884861054:77:5)
+      at mapRange (file:///private/tmp/codextrace-work/benchmark/hard/pilot/hard30-real/shards/HARD-038/HARD-038/baseline/repo/src/sourceMapRanges.mjs?v=1780884861054:15:20)
+      at file:///private/tmp/codextrace-work/benchmark/hard/pilot/hard30-real/shards/HARD-038/HARD-038/baseline/grader/check.mjs:74:9
+      at getActual (node:assert:530:5)
+      at strict.throws (node:assert:676:24)
+      at file:///private/tmp/codextrace-work/benchmark/hard/pilot/hard30-real/shards/HARD-038/HARD-038/baseline/grader/check.mjs:73:8,
+  expected: [Function (anonymous)],
+  operator: 'throws'
+}
+
+Node.js v24.3.0

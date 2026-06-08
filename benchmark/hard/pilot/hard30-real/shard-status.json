@@ -1,0 +1,497 @@
+{
+  "completed": [
+    "HARD-001",
+    "HARD-002",
+    "HARD-003",
+    "HARD-004",
+    "HARD-005",
+    "HARD-006",
+    "HARD-007",
+    "HARD-008",
+    "HARD-009",
+    "HARD-010",
+    "HARD-011",
+    "HARD-012",
+    "HARD-013",
+    "HARD-015",
+    "HARD-020",
+    "HARD-023",
+    "HARD-024",
+    "HARD-025",
+    "HARD-027",
+    "HARD-031",
+    "HARD-032",
+    "HARD-033",
+    "HARD-035",
+    "HARD-038",
+    "HARD-039",
+    "HARD-040",
+    "HARD-043",
+    "HARD-045",
+    "HARD-047",
+    "HARD-050"
+  ],
+  "completed_count": 30,
+  "expected_record_count": 60,
+  "failed": [],
+  "failed_count": 0,
+  "incomplete": [],
+  "incomplete_count": 0,
+  "missing": [],
+  "missing_count": 0,
+  "ready_to_merge": true,
+  "record_count": 60,
+  "shards": [
+    {
+      "complete": true,
+      "invalid_reasons": [],
+      "manifest_path": "benchmark/hard/pilot/hard30-real/shards/HARD-001/runs.jsonl",
+      "metadata_path": "benchmark/hard/pilot/hard30-real/shards/HARD-001/shard-run.json",
+      "prompt_types": [
+        "baseline",
+        "intervention"
+      ],
+      "record_count": 2,
+      "returncode": 0,
+      "stderr_path": "benchmark/hard/pilot/hard30-real/shards/HARD-001/shard-run.stderr",
+      "stdout_path": "benchmark/hard/pilot/hard30-real/shards/HARD-001/shard-run.stdout",
+      "task_id": "HARD-001"
+    },
+    {
+      "complete": true,
+      "invalid_reasons": [],
+      "manifest_path": "benchmark/hard/pilot/hard30-real/shards/HARD-002/runs.jsonl",
+      "metadata_path": "benchmark/hard/pilot/hard30-real/shards/HARD-002/shard-run.json",
+      "prompt_types": [
+        "baseline",
+        "intervention"
+      ],
+      "record_count": 2,
+      "returncode": 0,
+      "stderr_path": "benchmark/hard/pilot/hard30-real/shards/HARD-002/shard-run.stderr",
+      "stdout_path": "benchmark/hard/pilot/hard30-real/shards/HARD-002/shard-run.stdout",
+      "task_id": "HARD-002"
+    },
+    {
+      "complete": true,
+      "invalid_reasons": [],
+      "manifest_path": "benchmark/hard/pilot/hard30-real/shards/HARD-003/runs.jsonl",
+      "metadata_path": "benchmark/hard/pilot/hard30-real/shards/HARD-003/shard-run.json",
+      "prompt_types": [
+        "baseline",
+        "intervention"
+      ],
+      "record_count": 2,
+      "returncode": 0,
+      "stderr_path": "benchmark/hard/pilot/hard30-real/shards/HARD-003/shard-run.stderr",
+      "stdout_path": "benchmark/hard/pilot/hard30-real/shards/HARD-003/shard-run.stdout",
+      "task_id": "HARD-003"
+    },
+    {
+      "complete": true,
+      "invalid_reasons": [],
+      "manifest_path": "benchmark/hard/pilot/hard30-real/shards/HARD-004/runs.jsonl",
+      "metadata_path": "benchmark/hard/pilot/hard30-real/shards/HARD-004/shard-run.json",
+      "prompt_types": [
+        "baseline",
+        "intervention"
+      ],
+      "record_count": 2,
+      "returncode": 0,
+      "stderr_path": "benchmark/hard/pilot/hard30-real/shards/HARD-004/shard-run.stderr",
+      "stdout_path": "benchmark/hard/pilot/hard30-real/shards/HARD-004/shard-run.stdout",
+      "task_id": "HARD-004"
+    },
+    {
+      "complete": true,
+      "invalid_reasons": [],
+      "manifest_path": "benchmark/hard/pilot/hard30-real/shards/HARD-005/runs.jsonl",
+      "metadata_path": "benchmark/hard/pilot/hard30-real/shards/HARD-005/shard-run.json",
+      "prompt_types": [
+        "baseline",
+        "intervention"
+      ],
+      "record_count": 2,
+      "returncode": 0,
+      "stderr_path": "benchmark/hard/pilot/hard30-real/shards/HARD-005/shard-run.stderr",
+      "stdout_path": "benchmark/hard/pilot/hard30-real/shards/HARD-005/shard-run.stdout",
+      "task_id": "HARD-005"
+    },
+    {
+      "complete": true,
+      "invalid_reasons": [],
+      "manifest_path": "benchmark/hard/pilot/hard30-real/shards/HARD-006/runs.jsonl",
+      "metadata_path": "benchmark/hard/pilot/hard30-real/shards/HARD-006/shard-run.json",
+      "prompt_types": [
+        "baseline",
+        "intervention"
+      ],
+      "record_count": 2,
+      "returncode": 0,
+      "stderr_path": "benchmark/hard/pilot/hard30-real/shards/HARD-006/shard-run.stderr",
+      "stdout_path": "benchmark/hard/pilot/hard30-real/shards/HARD-006/shard-run.stdout",
+      "task_id": "HARD-006"
+    },
+    {
+      "complete": true,
+      "invalid_reasons": [],
+      "manifest_path": "benchmark/hard/pilot/hard30-real/shards/HARD-007/runs.jsonl",
+      "metadata_path": "benchmark/hard/pilot/hard30-real/shards/HARD-007/shard-run.json",
+      "prompt_types": [
+        "baseline",
+        "intervention"
+      ],
+      "record_count": 2,
+      "returncode": 0,
+      "stderr_path": "benchmark/hard/pilot/hard30-real/shards/HARD-007/shard-run.stderr",
+      "stdout_path": "benchmark/hard/pilot/hard30-real/shards/HARD-007/shard-run.stdout",
+      "task_id": "HARD-007"
+    },
+    {
+      "complete": true,
+      "invalid_reasons": [],
+      "manifest_path": "benchmark/hard/pilot/hard30-real/shards/HARD-008/runs.jsonl",
+      "metadata_path": "benchmark/hard/pilot/hard30-real/shards/HARD-008/shard-run.json",
+      "prompt_types": [
+        "baseline",
+        "intervention"
+      ],
+      "record_count": 2,
+      "returncode": 0,
+      "stderr_path": "benchmark/hard/pilot/hard30-real/shards/HARD-008/shard-run.stderr",
+      "stdout_path": "benchmark/hard/pilot/hard30-real/shards/HARD-008/shard-run.stdout",
+      "task_id": "HARD-008"
+    },
+    {
+      "complete": true,
+      "invalid_reasons": [],
+      "manifest_path": "benchmark/hard/pilot/hard30-real/shards/HARD-009/runs.jsonl",
+      "metadata_path": "benchmark/hard/pilot/hard30-real/shards/HARD-009/shard-run.json",
+      "prompt_types": [
+        "baseline",
+        "intervention"
+      ],
+      "record_count": 2,
+      "returncode": 0,
+      "stderr_path": "benchmark/hard/pilot/hard30-real/shards/HARD-009/shard-run.stderr",
+      "stdout_path": "benchmark/hard/pilot/hard30-real/shards/HARD-009/shard-run.stdout",
+      "task_id": "HARD-009"
+    },
+    {
+      "complete": true,
+      "invalid_reasons": [],
+      "manifest_path": "benchmark/hard/pilot/hard30-real/shards/HARD-010/runs.jsonl",
+      "metadata_path": "benchmark/hard/pilot/hard30-real/shards/HARD-010/shard-run.json",
+      "prompt_types": [
+        "baseline",
+        "intervention"
+      ],
+      "record_count": 2,
+      "returncode": 0,
+      "stderr_path": "benchmark/hard/pilot/hard30-real/shards/HARD-010/shard-run.stderr",
+      "stdout_path": "benchmark/hard/pilot/hard30-real/shards/HARD-010/shard-run.stdout",
+      "task_id": "HARD-010"
+    },
+    {
+      "complete": true,
+      "invalid_reasons": [],
+      "manifest_path": "benchmark/hard/pilot/hard30-real/shards/HARD-011/runs.jsonl",
+      "metadata_path": "benchmark/hard/pilot/hard30-real/shards/HARD-011/shard-run.json",
+      "prompt_types": [
+        "baseline",
+        "intervention"
+      ],
+      "record_count": 2,
+      "returncode": 0,
+      "stderr_path": "benchmark/hard/pilot/hard30-real/shards/HARD-011/shard-run.stderr",
+      "stdout_path": "benchmark/hard/pilot/hard30-real/shards/HARD-011/shard-run.stdout",
+      "task_id": "HARD-011"
+    },
+    {
+      "complete": true,
+      "invalid_reasons": [],
+      "manifest_path": "benchmark/hard/pilot/hard30-real/shards/HARD-012/runs.jsonl",
+      "metadata_path": "benchmark/hard/pilot/hard30-real/shards/HARD-012/shard-run.json",
+      "prompt_types": [
+        "baseline",
+        "intervention"
+      ],
+      "record_count": 2,
+      "returncode": 0,
+      "stderr_path": "benchmark/hard/pilot/hard30-real/shards/HARD-012/shard-run.stderr",
+      "stdout_path": "benchmark/hard/pilot/hard30-real/shards/HARD-012/shard-run.stdout",
+      "task_id": "HARD-012"
+    },
+    {
+      "complete": true,
+      "invalid_reasons": [],
+      "manifest_path": "benchmark/hard/pilot/hard30-real/shards/HARD-013/runs.jsonl",
+      "metadata_path": "benchmark/hard/pilot/hard30-real/shards/HARD-013/shard-run.json",
+      "prompt_types": [
+        "baseline",
+        "intervention"
+      ],
+      "record_count": 2,
+      "returncode": 0,
+      "stderr_path": "benchmark/hard/pilot/hard30-real/shards/HARD-013/shard-run.stderr",
+      "stdout_path": "benchmark/hard/pilot/hard30-real/shards/HARD-013/shard-run.stdout",
+      "task_id": "HARD-013"
+    },
+    {
+      "complete": true,
+      "invalid_reasons": [],
+      "manifest_path": "benchmark/hard/pilot/hard30-real/shards/HARD-015/runs.jsonl",
+      "metadata_path": "benchmark/hard/pilot/hard30-real/shards/HARD-015/shard-run.json",
+      "prompt_types": [
+        "baseline",
+        "intervention"
+      ],
+      "record_count": 2,
+      "returncode": 0,
+      "stderr_path": "benchmark/hard/pilot/hard30-real/shards/HARD-015/shard-run.stderr",
+      "stdout_path": "benchmark/hard/pilot/hard30-real/shards/HARD-015/shard-run.stdout",
+      "task_id": "HARD-015"
+    },
+    {
+      "complete": true,
+      "invalid_reasons": [],
+      "manifest_path": "benchmark/hard/pilot/hard30-real/shards/HARD-020/runs.jsonl",
+      "metadata_path": "benchmark/hard/pilot/hard30-real/shards/HARD-020/shard-run.json",
+      "prompt_types": [
+        "baseline",
+        "intervention"
+      ],
+      "record_count": 2,
+      "returncode": 0,
+      "stderr_path": "benchmark/hard/pilot/hard30-real/shards/HARD-020/shard-run.stderr",
+      "stdout_path": "benchmark/hard/pilot/hard30-real/shards/HARD-020/shard-run.stdout",
+      "task_id": "HARD-020"
+    },
+    {
+      "complete": true,
+      "invalid_reasons": [],
+      "manifest_path": "benchmark/hard/pilot/hard30-real/shards/HARD-023/runs.jsonl",
+      "metadata_path": "benchmark/hard/pilot/hard30-real/shards/HARD-023/shard-run.json",
+      "prompt_types": [
+        "baseline",
+        "intervention"
+      ],
+      "record_count": 2,
+      "returncode": 0,
+      "stderr_path": "benchmark/hard/pilot/hard30-real/shards/HARD-023/shard-run.stderr",
+      "stdout_path": "benchmark/hard/pilot/hard30-real/shards/HARD-023/shard-run.stdout",
+      "task_id": "HARD-023"
+    },
+    {
+      "complete": true,
+      "invalid_reasons": [],
+      "manifest_path": "benchmark/hard/pilot/hard30-real/shards/HARD-024/runs.jsonl",
+      "metadata_path": "benchmark/hard/pilot/hard30-real/shards/HARD-024/shard-run.json",
+      "prompt_types": [
+        "baseline",
+        "intervention"
+      ],
+      "record_count": 2,
+      "returncode": 0,
+      "stderr_path": "benchmark/hard/pilot/hard30-real/shards/HARD-024/shard-run.stderr",
+      "stdout_path": "benchmark/hard/pilot/hard30-real/shards/HARD-024/shard-run.stdout",
+      "task_id": "HARD-024"
+    },
+    {
+      "complete": true,
+      "invalid_reasons": [],
+      "manifest_path": "benchmark/hard/pilot/hard30-real/shards/HARD-025/runs.jsonl",
+      "metadata_path": "benchmark/hard/pilot/hard30-real/shards/HARD-025/shard-run.json",
+      "prompt_types": [
+        "baseline",
+        "intervention"
+      ],
+      "record_count": 2,
+      "returncode": 0,
+      "stderr_path": "benchmark/hard/pilot/hard30-real/shards/HARD-025/shard-run.stderr",
+      "stdout_path": "benchmark/hard/pilot/hard30-real/shards/HARD-025/shard-run.stdout",
+      "task_id": "HARD-025"
+    },
+    {
+      "complete": true,
+      "invalid_reasons": [],
+      "manifest_path": "benchmark/hard/pilot/hard30-real/shards/HARD-027/runs.jsonl",
+      "metadata_path": "benchmark/hard/pilot/hard30-real/shards/HARD-027/shard-run.json",
+      "prompt_types": [
+        "baseline",
+        "intervention"
+      ],
+      "record_count": 2,
+      "returncode": 0,
+      "stderr_path": "benchmark/hard/pilot/hard30-real/shards/HARD-027/shard-run.stderr",
+      "stdout_path": "benchmark/hard/pilot/hard30-real/shards/HARD-027/shard-run.stdout",
+      "task_id": "HARD-027"
+    },
+    {
+      "complete": true,
+      "invalid_reasons": [],
+      "manifest_path": "benchmark/hard/pilot/hard30-real/shards/HARD-031/runs.jsonl",
+      "metadata_path": "benchmark/hard/pilot/hard30-real/shards/HARD-031/shard-run.json",
+      "prompt_types": [
+        "baseline",
+        "intervention"
+      ],
+      "record_count": 2,
+      "returncode": 0,
+      "stderr_path": "benchmark/hard/pilot/hard30-real/shards/HARD-031/shard-run.stderr",
+      "stdout_path": "benchmark/hard/pilot/hard30-real/shards/HARD-031/shard-run.stdout",
+      "task_id": "HARD-031"
+    },
+    {
+      "complete": true,
+      "invalid_reasons": [],
+      "manifest_path": "benchmark/hard/pilot/hard30-real/shards/HARD-032/runs.jsonl",
+      "metadata_path": "benchmark/hard/pilot/hard30-real/shards/HARD-032/shard-run.json",
+      "prompt_types": [
+        "baseline",
+        "intervention"
+      ],
+      "record_count": 2,
+      "returncode": 0,
+      "stderr_path": "benchmark/hard/pilot/hard30-real/shards/HARD-032/shard-run.stderr",
+      "stdout_path": "benchmark/hard/pilot/hard30-real/shards/HARD-032/shard-run.stdout",
+      "task_id": "HARD-032"
+    },
+    {
+      "complete": true,
+      "invalid_reasons": [],
+      "manifest_path": "benchmark/hard/pilot/hard30-real/shards/HARD-033/runs.jsonl",
+      "metadata_path": "benchmark/hard/pilot/hard30-real/shards/HARD-033/shard-run.json",
+      "prompt_types": [
+        "baseline",
+        "intervention"
+      ],
+      "record_count": 2,
+      "returncode": 0,
+      "stderr_path": "benchmark/hard/pilot/hard30-real/shards/HARD-033/shard-run.stderr",
+      "stdout_path": "benchmark/hard/pilot/hard30-real/shards/HARD-033/shard-run.stdout",
+      "task_id": "HARD-033"
+    },
+    {
+      "complete": true,
+      "invalid_reasons": [],
+      "manifest_path": "benchmark/hard/pilot/hard30-real/shards/HARD-035/runs.jsonl",
+      "metadata_path": "benchmark/hard/pilot/hard30-real/shards/HARD-035/shard-run.json",
+      "prompt_types": [
+        "baseline",
+        "intervention"
+      ],
+      "record_count": 2,
+      "returncode": 0,
+      "stderr_path": "benchmark/hard/pilot/hard30-real/shards/HARD-035/shard-run.stderr",
+      "stdout_path": "benchmark/hard/pilot/hard30-real/shards/HARD-035/shard-run.stdout",
+      "task_id": "HARD-035"
+    },
+    {
+      "complete": true,
+      "invalid_reasons": [],
+      "manifest_path": "benchmark/hard/pilot/hard30-real/shards/HARD-038/runs.jsonl",
+      "metadata_path": "benchmark/hard/pilot/hard30-real/shards/HARD-038/shard-run.json",
+      "prompt_types": [
+        "baseline",
+        "intervention"
+      ],
+      "record_count": 2,
+      "returncode": 0,
+      "stderr_path": "benchmark/hard/pilot/hard30-real/shards/HARD-038/shard-run.stderr",
+      "stdout_path": "benchmark/hard/pilot/hard30-real/shards/HARD-038/shard-run.stdout",
+      "task_id": "HARD-038"
+    },
+    {
+      "complete": true,
+      "invalid_reasons": [],
+      "manifest_path": "benchmark/hard/pilot/hard30-real/shards/HARD-039/runs.jsonl",
+      "metadata_path": "benchmark/hard/pilot/hard30-real/shards/HARD-039/shard-run.json",
+      "prompt_types": [
+        "baseline",
+        "intervention"
+      ],
+      "record_count": 2,
+      "returncode": 0,
+      "stderr_path": "benchmark/hard/pilot/hard30-real/shards/HARD-039/shard-run.stderr",
+      "stdout_path": "benchmark/hard/pilot/hard30-real/shards/HARD-039/shard-run.stdout",
+      "task_id": "HARD-039"
+    },
+    {
+      "complete": true,
+      "invalid_reasons": [],
+      "manifest_path": "benchmark/hard/pilot/hard30-real/shards/HARD-040/runs.jsonl",
+      "metadata_path": "benchmark/hard/pilot/hard30-real/shards/HARD-040/shard-run.json",
+      "prompt_types": [
+        "baseline",
+        "intervention"
+      ],
+      "record_count": 2,
+      "returncode": 0,
+      "stderr_path": "benchmark/hard/pilot/hard30-real/shards/HARD-040/shard-run.stderr",
+      "stdout_path": "benchmark/hard/pilot/hard30-real/shards/HARD-040/shard-run.stdout",
+      "task_id": "HARD-040"
+    },
+    {
+      "complete": true,
+      "invalid_reasons": [],
+      "manifest_path": "benchmark/hard/pilot/hard30-real/shards/HARD-043/runs.jsonl",
+      "metadata_path": "benchmark/hard/pilot/hard30-real/shards/HARD-043/shard-run.json",
+      "prompt_types": [
+        "baseline",
+        "intervention"
+      ],
+      "record_count": 2,
+      "returncode": 0,
+      "stderr_path": "benchmark/hard/pilot/hard30-real/shards/HARD-043/shard-run.stderr",
+      "stdout_path": "benchmark/hard/pilot/hard30-real/shards/HARD-043/shard-run.stdout",
+      "task_id": "HARD-043"
+    },
+    {
+      "complete": true,
+      "invalid_reasons": [],
+      "manifest_path": "benchmark/hard/pilot/hard30-real/shards/HARD-045/runs.jsonl",
+      "metadata_path": "benchmark/hard/pilot/hard30-real/shards/HARD-045/shard-run.json",
+      "prompt_types": [
+        "baseline",
+        "intervention"
+      ],
+      "record_count": 2,
+      "returncode": 0,
+      "stderr_path": "benchmark/hard/pilot/hard30-real/shards/HARD-045/shard-run.stderr",
+      "stdout_path": "benchmark/hard/pilot/hard30-real/shards/HARD-045/shard-run.stdout",
+      "task_id": "HARD-045"
+    },
+    {
+      "complete": true,
+      "invalid_reasons": [],
+      "manifest_path": "benchmark/hard/pilot/hard30-real/shards/HARD-047/runs.jsonl",
+      "metadata_path": "benchmark/hard/pilot/hard30-real/shards/HARD-047/shard-run.json",
+      "prompt_types": [
+        "baseline",
+        "intervention"
+      ],
+      "record_count": 2,
+      "returncode": 0,
+      "stderr_path": "benchmark/hard/pilot/hard30-real/shards/HARD-047/shard-run.stderr",
+      "stdout_path": "benchmark/hard/pilot/hard30-real/shards/HARD-047/shard-run.stdout",
+      "task_id": "HARD-047"
+    },
+    {
+      "complete": true,
+      "invalid_reasons": [],
+      "manifest_path": "benchmark/hard/pilot/hard30-real/shards/HARD-050/runs.jsonl",
+      "metadata_path": "benchmark/hard/pilot/hard30-real/shards/HARD-050/shard-run.json",
+      "prompt_types": [
+        "baseline",
+        "intervention"
+      ],
+      "record_count": 2,
+      "returncode": 0,
+      "stderr_path": "benchmark/hard/pilot/hard30-real/shards/HARD-050/shard-run.stderr",
+      "stdout_path": "benchmark/hard/pilot/hard30-real/shards/HARD-050/shard-run.stdout",
+      "task_id": "HARD-050"
+    }
+  ],
+  "task_count": 30
+}

@@ -1,0 +1,5 @@
+Traceback (most recent call last):
+  File "/private/tmp/codextrace-work/benchmark/hard/pilot/hard30-real/shards/HARD-035/HARD-035/baseline/repo/../grader/check.py", line 38, in <module>
+    assert mod.plan_retries(response, attempts=3) == [7, 14, 28]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError

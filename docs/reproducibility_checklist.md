@@ -28,7 +28,8 @@ The stored pilots can be inspected and aggregated without re-running Codex.
 | `docs/experiment_protocol.md` | Collection, labeling, and evaluation protocol. |
 | `docs/related_work.md` | Compact bibliography and positioning notes. |
 | `docs/submission_readiness_plan.md` | Workstreams and decision gate for a stronger paper submission. |
-| `benchmark/hard/pilot/hard30-selection/` | Fixed 30-task hard-tier selection for the next 60-run baseline/intervention collection. |
+| `benchmark/hard/pilot/hard30-selection/` | Fixed 30-task hard-tier selection used for the 60-run hard30 collection. |
+| `benchmark/hard/pilot/hard30-real/` | Submission-ready 30-task / 60-run hard-tier artifact with reports, labels, and shard metadata. |
 | `scripts/run_hard30_shards.py` | Resumable hard30 collection runner with configurable per-task concurrency. |
 | `scripts/merge_hard30_shards.py` | Merge per-task hard30 shard manifests into the reporting `runs.jsonl`. |
 | `scripts/finalize_hard30_pilot.py` | Post-processing entrypoint for hard30 aggregate tables, labels, CSV, and paper-report artifacts. |
@@ -37,6 +38,7 @@ The stored pilots can be inspected and aggregated without re-running Codex.
 | `benchmark/pilot/full30-real` | 30-task / 60-run real seed pilot. |
 | `benchmark/hard/pilot/hard10-real` | 10-task / 20-run hard-tier pilot with outcome failures. |
 | `benchmark/hard/pilot/hard10-real/manual-labels.jsonl` | Manual hidden-failure labels for hard-tier RQ2 analysis. |
+| `benchmark/hard/pilot/hard30-real/manual-labels.jsonl` | Hard30 hidden-failure labels for RQ1/RQ2 analysis. |
 
 ## Reproduce Tables From Stored Traces
 
@@ -74,10 +76,10 @@ Hard-tier paper report with manual labels:
 
 ```bash
 PYTHONPATH=. python3 -m codex_trace.cli research paper-report \
-  benchmark/hard/pilot/hard10-real/runs.jsonl \
-  --labels benchmark/hard/pilot/hard10-real/manual-labels.jsonl \
-  --json-output /tmp/hard10-paper-report.json \
-  --markdown-output /tmp/hard10-paper-report.md
+  benchmark/hard/pilot/hard30-real/runs.jsonl \
+  --labels benchmark/hard/pilot/hard30-real/manual-labels.jsonl \
+  --json-output /tmp/hard30-paper-report.json \
+  --markdown-output /tmp/hard30-paper-report.md
 ```
 
 When labels are provided, the paper report includes both outcome-level RQ4
@@ -106,14 +108,15 @@ PYTHONPATH=. python3 -m codex_trace.cli research summary \
 | CodexTrace parses Codex JSONL traces and emits reports. | `codex_trace/parser.py`, `codex_trace/diagnose.py`, `demo/`, `tests/` | Implemented and CI-tested. |
 | The benchmark has a 30-task seed tier and two prompt conditions. | `benchmark/tasks.jsonl`, `benchmark/prompts/`, `benchmark/pilot/full30-real/runs.jsonl` | Implemented; 60 real stored runs. |
 | The benchmark has a hard tier with hidden graders. | `benchmark/hard/tasks.jsonl`, `benchmark/hard/repos/`, `benchmark/hard/pilot/hard10-real` | Implemented; 50 runnable hard tasks and 20 real stored hard10 runs. |
-| A balanced hard30 pilot has been selected for the next experiment pass. | `benchmark/hard/pilot/hard30-selection/tasks.jsonl`, `benchmark/hard/pilot/hard30-selection/manifest.json` | Implemented; 30 selected tasks, 60 expected baseline/intervention runs. |
+| A balanced hard30 pilot has been collected. | `benchmark/hard/pilot/hard30-real/runs.jsonl`, `benchmark/hard/pilot/hard30-real/readiness.md` | Implemented; 30 selected tasks, 60 complete baseline/intervention runs, readiness passes. |
 | Hard30 collection can run resumably with bounded concurrency. | `scripts/run_hard30_shards.py`, `scripts/merge_hard30_shards.py` | Implemented; one shard per hard30 task, configurable with `--max-parallel`. |
 | Hard30 shard failures are machine-auditable. | `scripts/run_hard30_shards.py --status-json ...` | Implemented; each shard writes `shard-run.json` with return code, command, and log paths. |
 | Hidden graders are not exposed during Codex execution. | `codex_trace/research.py`, `public_success_check` fields, hard-tier prompts | Implemented; hidden grader copied after Codex exits. |
 | Full30 intervention reduces process waste. | `benchmark/pilot/full30-real/aggregate.md` | Supported: repeated tool calls `10.43 -> 7.00`, token usage `218.7k -> 184.8k`. |
 | Hard10 intervention improves success and reduces waste. | `benchmark/hard/pilot/hard10-real/aggregate.md` | Supported: success `0.70 -> 0.80`, repeated tool calls `9.20 -> 6.20`, token usage `248.9k -> 187.5k`. |
-| Trace-only process rules miss hidden semantic edge failures. | `benchmark/hard/pilot/hard10-real/label-eval.md` | Supported as a boundary result: `TP=0`, `FP=0`, `FN=5` for `hidden_semantic_edge_case`. |
-| Hard10 process signals explain the detector boundary. | `docs/results_summary.md` RQ4 table | Supported: `verification_rate`, `unresolved_error`, `command_failure_count`, and `failure_score` are equal for success and failure outcomes. |
+| Hard30 intervention reduces process waste. | `benchmark/hard/pilot/hard30-real/aggregate.md`, `benchmark/hard/pilot/hard30-real/paired-task-summary.csv` | Supported: repeated tool calls `12.93 -> 9.20`, token usage `355.0k -> 256.3k`, token usage improves in 26/30 paired tasks. |
+| Trace-only process rules miss hidden semantic edge failures. | `benchmark/hard/pilot/hard30-real/label-eval.md` | Supported as a boundary result: `TP=0`, `FP=0`, `FN=30` for `hidden_semantic_edge_case`. |
+| Hard30 process signals explain the detector boundary. | `benchmark/hard/pilot/hard30-real/paper-report-labeled.md` RQ4 tables | Supported: hidden failures have verification rate 1.0 and unresolved error 0, so visible traces often look procedurally clean. |
 | Current claims are pilot-scale, not broad SWE-bench-scale claims. | `docs/paper_draft.md`, `docs/experiment_protocol.md` | Stated explicitly in limitations. |
 
 ## Validation Commands

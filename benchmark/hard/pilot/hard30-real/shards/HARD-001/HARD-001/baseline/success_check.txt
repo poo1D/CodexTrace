@@ -1,0 +1,7 @@
+Traceback (most recent call last):
+  File "/private/tmp/codextrace-work/benchmark/hard/pilot/hard30-real/shards/HARD-001/HARD-001/baseline/repo/../grader/check.py", line 26, in <module>
+    assert intervals.merge_intervals([(0, 1), (1, 2), (2, 2), (2, 3)]) == [(0, 1), (1, 2), (2, 2), (2, 3)]
+           ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/codextrace-work/benchmark/hard/pilot/hard30-real/shards/HARD-001/HARD-001/baseline/repo/src/intervals.py", line 6, in merge_intervals
+    raise ValueError("interval start must be less than end")
+ValueError: interval start must be less than end

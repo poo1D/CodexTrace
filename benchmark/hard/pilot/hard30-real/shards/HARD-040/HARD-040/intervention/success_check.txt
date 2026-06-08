@@ -1,0 +1,5 @@
+Traceback (most recent call last):
+  File "/private/tmp/codextrace-work/benchmark/hard/pilot/hard30-real/shards/HARD-040/HARD-040/intervention/repo/../grader/check.py", line 52, in <module>
+    assert result2["cash"]["balance"] == 130
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError

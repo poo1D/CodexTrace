@@ -34,6 +34,7 @@ class ShardStatus:
     manifest_path: Path
     prompt_types: tuple[str, ...] = ()
     returncode: int | None = None
+    invalid_reasons: tuple[str, ...] = ()
 
 
 def load_task_ids(selection_dir: Path = DEFAULT_SELECTION_DIR) -> list[str]:
@@ -108,6 +109,7 @@ def build_shard_commands(
 
 def inspect_shard(command: ShardCommand, expected_records: int = 2) -> ShardStatus:
     returncode = None
+    invalid_reasons = []
     if command.metadata_path.exists():
         metadata = json.loads(command.metadata_path.read_text(encoding="utf-8"))
         if metadata.get("returncode") is not None:
@@ -117,14 +119,26 @@ def inspect_shard(command: ShardCommand, expected_records: int = 2) -> ShardStat
         return ShardStatus(command.task_id, False, 0, manifest, returncode=returncode)
     rows = [json.loads(line) for line in manifest.read_text(encoding="utf-8").splitlines() if line.strip()]
     prompt_types = tuple(sorted(str(row.get("prompt_type", "")) for row in rows if row.get("prompt_type")))
-    complete = len(rows) == expected_records and returncode in (None, 0)
-    return ShardStatus(command.task_id, complete, len(rows), manifest, prompt_types, returncode)
+    for row in rows:
+        prompt_type = str(row.get("prompt_type", "unknown"))
+        codex_exit_code = row.get("codex_exit_code")
+        if codex_exit_code not in (None, 0):
+            invalid_reasons.append(f"{prompt_type} codex_exit_code={codex_exit_code}")
+        trace_path = str(row.get("trace_path", ""))
+        if trace_path:
+            trace_file = command.shard_dir / trace_path
+            if not trace_file.exists():
+                invalid_reasons.append(f"{prompt_type} missing trace: {trace_path}")
+            elif trace_file.stat().st_size == 0:
+                invalid_reasons.append(f"{prompt_type} empty trace: {trace_path}")
+    complete = len(rows) == expected_records and returncode in (None, 0) and not invalid_reasons
+    return ShardStatus(command.task_id, complete, len(rows), manifest, prompt_types, returncode, tuple(invalid_reasons))
 
 
 def summarize_shards(commands: list[ShardCommand]) -> dict[str, Any]:
     statuses = [inspect_shard(command) for command in commands]
     completed = [status.task_id for status in statuses if status.complete]
-    failed = [status.task_id for status in statuses if status.returncode not in (None, 0)]
+    failed = [status.task_id for status in statuses if status.returncode not in (None, 0) or status.invalid_reasons]
     incomplete = [status.task_id for status in statuses if status.record_count and not status.complete]
     missing = [status.task_id for status in statuses if not status.record_count]
     total_records = sum(status.record_count for status in statuses)
@@ -148,6 +162,7 @@ def summarize_shards(commands: list[ShardCommand]) -> dict[str, Any]:
                 "record_count": status.record_count,
                 "prompt_types": list(status.prompt_types),
                 "returncode": status.returncode,
+                "invalid_reasons": list(status.invalid_reasons),
                 "manifest_path": str(status.manifest_path),
                 "stdout_path": str(commands[index].stdout_path),
                 "stderr_path": str(commands[index].stderr_path),

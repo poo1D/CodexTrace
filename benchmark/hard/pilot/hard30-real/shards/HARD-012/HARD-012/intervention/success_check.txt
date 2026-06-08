@@ -1,0 +1,4 @@
+Traceback (most recent call last):
+  File "/private/tmp/codextrace-work/benchmark/hard/pilot/hard30-real/shards/HARD-012/HARD-012/intervention/repo/../grader/check.py", line 65, in <module>
+    raise AssertionError("exhausted retries should raise RetryError")
+AssertionError: exhausted retries should raise RetryError
