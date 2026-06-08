@@ -1,9 +1,9 @@
 # Hard-Tier Expansion Blueprint
 
-This blueprint specifies the hard-tier expansion from the current evaluated
-`hard10` pilot toward a 30-50 task hard tier. `HARD-011` through `HARD-050` are
-now runnable fixtures; the next step is selecting a balanced hard30 pilot and
-collecting real baseline/intervention traces.
+This blueprint specifies the hard-tier expansion from the early evaluated
+`hard10` pilot to the completed hard30 artifact. `HARD-011` through `HARD-050`
+are runnable fixtures, and the selected hard30 pilot has been materialized and
+collected in `benchmark/hard/pilot/hard30-real`.
 
 The goal is to create more outcome failures and, importantly, more observable
 process-failure positives for detector evaluation.
@@ -22,8 +22,8 @@ process-failure positives for detector evaluation.
 | Target | Current | Expansion target |
 | --- | ---: | ---: |
 | Hard tasks | 50 | 30-50 |
-| Hard runs | 20 | 60 |
-| Evaluated hard-pilot tasks | 10 | 30 |
+| Hard runs | 60 | 60 |
+| Evaluated hard-pilot tasks | 30 | 30 |
 | Hidden semantic tasks | 15 | 15 |
 | Observable process-failure tasks | 13 | 10-15 |
 | Process labels with positive examples | 1 | 4+ |
@@ -75,7 +75,8 @@ process-failure positives for detector evaluation.
 
 ## Manual Labeling Target
 
-After collecting these tasks, manual labels should aim for at least:
+For the next repeated or process-failure-heavy collection, manual labels should
+aim for at least:
 
 | Label | Minimum positive examples |
 | --- | ---: |
@@ -87,7 +88,7 @@ After collecting these tasks, manual labels should aim for at least:
 | `sandbox_permission_deadlock` | 2 |
 | `hidden_semantic_edge_case` | 8 |
 
-## Implementation Order
+## Completed Implementation Order
 
 1. Select a balanced hard30 pilot from the 50 runnable hard-tier tasks.
 2. Run dry-run materialization to confirm prompts and hidden grader isolation.
@@ -99,7 +100,9 @@ After collecting these tasks, manual labels should aim for at least:
 The selected hard30 pilot is materialized in
 `benchmark/hard/pilot/hard30-selection`. It keeps the evaluated hard10 pilot as
 a prefix and adds 20 tasks selected for category and process-pressure coverage.
-The expected next collection is 30 tasks x 2 prompt conditions = 60 real runs.
+The completed collection is stored in `benchmark/hard/pilot/hard30-real` as 30
+tasks x 2 prompt conditions = 60 real runs.
 
-This staged approach avoids running all 50 tasks before learning whether the
-selected designs actually produce the failure diversity needed for RQ1/RQ2/RQ4.
+The next staged approach should repeat hard30 or add process-failure-heavy
+tasks before running all 50 tasks, so the project can learn whether the designs
+produce the failure diversity needed for stronger RQ1/RQ2/RQ4 claims.

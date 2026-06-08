@@ -177,6 +177,8 @@ Current pilot status:
 - `benchmark/pilot/batch3-real`: 15 non-smoke tasks x 2 prompt conditions
 - `benchmark/pilot/full30-real`: 30 non-smoke tasks x 2 prompt conditions
 - `benchmark/hard/pilot/hard10-real`: 10 hard tasks x 2 prompt conditions
+- `benchmark/hard/pilot/hard30-real`: 30 selected hard tasks x 2 prompt
+  conditions
 - The full 30-task pilot has 60/60 successful outcomes. It validates collection
   and process-metric analysis, but a harder tier is still needed for
   outcome-failure analysis.
@@ -192,11 +194,16 @@ Current pilot status:
   an explicit RQ2 boundary result: trace rules can explain observable process
   failures, but hidden semantic edge cases require stronger oracles or separate
   semantic analysis.
+- The hard30 artifact has 30/60 successful outcomes. Baseline and intervention
+  success are both `0.5`, but repeated tool calls drop from `12.93 -> 9.20`
+  and average token usage drops from about `355.0k -> 256.3k`. Its manual
+  labels mark 30 hidden semantic edge-case failures, with detector agreement
+  `TP=0`, `FP=0`, `FN=30`.
 
 Required next dataset extension:
 
-- expand the hard tier beyond 10 tasks
-- include at least several additional expected baseline failures
+- repeat the hard30 collection or selected hard30 tasks
+- include more observable process failures, not only hidden semantic failures
 - keep hidden graders outside the agent worktree during Codex execution
 - target tasks where success requires preserving multiple invariants, diagnosing
   misleading visible tests, or avoiding over-broad edits

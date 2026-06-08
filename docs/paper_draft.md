@@ -254,11 +254,13 @@ kept in `docs/results_summary.md`.
 
 ## 8. Analysis
 
-The two pilots show complementary behavior. The 30-task seed tier validates the
-collection harness and shows that process-level interventions can reduce waste
-even when outcomes are saturated. The hard tier creates genuine outcome
-failures and shows a small success-rate lift, but also reveals that process-only
-trace rules cannot detect every correctness failure.
+The three pilots show complementary behavior. The 30-task seed tier validates
+the collection harness and shows that process-level interventions can reduce
+waste even when outcomes are saturated. The hard10 pilot creates genuine
+outcome failures and shows a small success-rate lift. The larger hard30 pilot
+keeps success flat but sharply reduces tool-call and token waste, while also
+revealing that process-only trace rules cannot detect every correctness
+failure.
 
 This distinction matters for a practical coding-agent harness. Trace diagnosis
 is useful for asking questions such as:
@@ -274,13 +276,15 @@ ran the visible tests cleanly but missed hidden edge cases.
 
 ## 9. Threats To Validity
 
-This study currently uses one agent interface, Codex CLI, and a small benchmark.
-The hard tier has only 10 tasks, so the 70% to 80% success-rate lift should be
-read as pilot evidence rather than a stable population estimate. The detectors
-are rule-based and intentionally interpretable, but incomplete. Manual labels
-for hidden semantic failures are based on hidden grader outcomes and qualitative
-inspection of failure messages. Larger repository tasks and repeated trials are
-needed before making broader claims.
+This study currently uses one agent interface, Codex CLI, and a pilot-scale
+benchmark. The hard30 artifact has 30 selected tasks and 60 real runs, but the
+70% to 80% hard10 success-rate lift should still be read as pilot evidence
+rather than a stable population estimate. The detectors are rule-based and
+intentionally interpretable, but incomplete. Manual labels for hidden semantic
+failures are based on hidden grader outcomes and qualitative inspection of
+failure messages. Larger repository tasks, repeated trials, richer process
+failure labels, and lightweight semantic checks are needed before making
+broader claims.
 
 ## 10. Conclusion
 
@@ -291,10 +295,9 @@ pilot also gives an important limitation: hidden semantic edge failures can
 escape process-only rules. A practical evaluation stack should therefore combine
 trace-based diagnosis with strong task-level oracles.
 
-The next step is to run the selected hard30 pilot from the 50 runnable hard-tier
-tasks, collect 60 baseline/intervention traces, and evaluate whether additional
-trace signals or lightweight semantic checks can recover hidden edge-case
-failures.
+The next step is to repeat the hard30 collection, add richer labels for
+observable process failures, and evaluate whether additional trace signals or
+lightweight semantic checks can recover hidden edge-case failures.
 
 For a reviewer-facing walkthrough, see `docs/artifact_guide.md`. For the
 generated result summary, see `docs/results_summary.md`. For claim-evidence

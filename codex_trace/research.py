@@ -568,12 +568,14 @@ def build_results_summary(
     full_manifest_path: str | Path,
     hard_manifest_path: str | Path,
     hard_labels_path: str | Path,
+    hard30_manifest_path: str | Path | None = None,
+    hard30_labels_path: str | Path | None = None,
 ) -> dict[str, Any]:
     full = aggregate_runs(full_manifest_path)
     hard = aggregate_runs(hard_manifest_path)
     hard_label_eval = evaluate_detector_labels(hard_manifest_path, hard_labels_path)
     hard_paper_report = build_paper_report(hard_manifest_path, labels_path=hard_labels_path)
-    return {
+    result: dict[str, Any] = {
         "full30": full,
         "hard10": hard,
         "hard10_label_evaluation": hard_label_eval,
@@ -581,14 +583,32 @@ def build_results_summary(
         "hard10_outcome_counts": hard_paper_report["outcome_counts"],
         "hard10_signal_by_outcome": hard_paper_report["signal_by_outcome"],
     }
+    if hard30_manifest_path and hard30_labels_path:
+        hard30 = aggregate_runs(hard30_manifest_path)
+        hard30_label_eval = evaluate_detector_labels(hard30_manifest_path, hard30_labels_path)
+        hard30_paper_report = build_paper_report(hard30_manifest_path, labels_path=hard30_labels_path)
+        result.update({
+            "hard30": hard30,
+            "hard30_label_evaluation": hard30_label_eval,
+            "hard30_taxonomy_distribution": hard30_paper_report["taxonomy_distribution"],
+            "hard30_outcome_counts": hard30_paper_report["outcome_counts"],
+            "hard30_signal_by_outcome": hard30_paper_report["signal_by_outcome"],
+            "hard30_paired_task_summary": hard30_paper_report["paired_task_summary"],
+        })
+    return result
 
 
 def render_results_summary_markdown(result: dict[str, Any]) -> str:
     full = result["full30"]
     hard = result["hard10"]
+    hard30 = result.get("hard30")
     hard_eval = result["hard10_label_evaluation"]
     hard_counts = result["hard10_outcome_counts"]
-    hidden_scores = hard_eval["labels"].get("hidden_semantic_edge_case", {})
+    boundary_eval = result.get("hard30_label_evaluation", hard_eval)
+    boundary_counts = result.get("hard30_outcome_counts", hard_counts)
+    boundary_signal_rows = result.get("hard30_signal_by_outcome", result["hard10_signal_by_outcome"])
+    boundary_name = "Hard30" if hard30 else "Hard10"
+    hidden_scores = boundary_eval["labels"].get("hidden_semantic_edge_case", {})
 
     lines = [
         "# CodexTrace Results Summary",
@@ -601,6 +621,13 @@ def render_results_summary_markdown(result: dict[str, Any]) -> str:
         "| --- | ---: | ---: | ---: | --- |",
         f"| full30 | {full['summary']['baseline']['n']} | {len(full['runs'])} | {sum(row['outcome'] == 'failure' for row in full['runs'])} | Process-waste analysis with saturated outcomes. |",
         f"| hard10 | {hard['summary']['baseline']['n']} | {len(hard['runs'])} | {hard_counts.get('failure', 0)} | Outcome-failure and hidden-grader analysis. |",
+    ]
+    if hard30:
+        lines.append(
+            f"| hard30 | {hard30['summary']['baseline']['n']} | {len(hard30['runs'])} | "
+            f"{boundary_counts.get('failure', 0)} | Submission-ready hard-tier hidden-grader artifact. |"
+        )
+    lines.extend([
         "",
         "## RQ3 Baseline vs Intervention",
         "",
@@ -608,7 +635,7 @@ def render_results_summary_markdown(result: dict[str, Any]) -> str:
         "",
         "| Metric | Baseline | Intervention | Delta |",
         "| --- | ---: | ---: | ---: |",
-    ]
+    ])
     _append_metric_rows(lines, full, (
         "success_rate",
         "avg_repeated_tool_calls",
@@ -633,6 +660,36 @@ def render_results_summary_markdown(result: dict[str, Any]) -> str:
         "avg_verify_events",
     ))
 
+    if hard30:
+        lines.extend([
+            "",
+            "### Hard30 Pilot",
+            "",
+            "| Metric | Baseline | Intervention | Delta |",
+            "| --- | ---: | ---: | ---: |",
+        ])
+        _append_metric_rows(lines, hard30, (
+            "success_rate",
+            "verification_rate",
+            "avg_repeated_tool_calls",
+            "avg_command_failures",
+            "avg_token_usage",
+            "avg_failure_score",
+        ))
+        paired = result.get("hard30_paired_task_summary", {})
+        token_row = paired.get("token_usage_delta", {})
+        repeated_row = paired.get("repeated_tool_call_delta", {})
+        success_row = paired.get("success_delta", {})
+        lines.extend([
+            "",
+            (
+                "Paired hard30 deltas: token usage improves in "
+                f"{token_row.get('improved', 0)}/{token_row.get('n', 0)} tasks, repeated tool calls improve in "
+                f"{repeated_row.get('improved', 0)}/{repeated_row.get('n', 0)} tasks, success improves in "
+                f"{success_row.get('improved', 0)} task(s) and regresses in {success_row.get('regressed', 0)} task(s)."
+            ),
+        ])
+
     lines.extend([
         "",
         "## RQ2 Detector Boundary Result",
@@ -649,12 +706,12 @@ def render_results_summary_markdown(result: dict[str, Any]) -> str:
         "",
         "## RQ4 Trace Signals By Outcome",
         "",
-        "Hard10 outcome failures are hidden semantic edge cases, so most process signals do not separate failures from successes.",
+        f"{boundary_name} outcome failures are hidden semantic edge cases, so most process signals do not separate failures from successes.",
         "",
         "| Signal | Failure mean | Success mean | Delta success-failure |",
         "| --- | ---: | ---: | ---: |",
     ])
-    for row in result["hard10_signal_by_outcome"]:
+    for row in boundary_signal_rows:
         lines.append(
             f"| {row['signal']} | {_fmt_signal_metric(row['signal'], row['failure_mean'])} | "
             f"{_fmt_signal_metric(row['signal'], row['success_mean'])} | "
@@ -663,7 +720,7 @@ def render_results_summary_markdown(result: dict[str, Any]) -> str:
 
     lines.extend([
         "",
-        "Interpretation: `verification_rate`, `unresolved_error`, `command_failure_count`, and `failure_score` are identical across hard10 successes and failures. The visible traces look procedurally clean; hidden graders reveal the missed semantic edge cases.",
+        "Interpretation: `verification_rate` and `unresolved_error` do not separate hidden semantic failures from successes. The visible traces often look procedurally clean; hidden graders reveal the missed semantic edge cases.",
         "",
         "## Claim-Evidence Shortlist",
         "",
@@ -671,9 +728,10 @@ def render_results_summary_markdown(result: dict[str, Any]) -> str:
         "| --- | --- |",
         "| Intervention reduces process waste on full30. | `avg_repeated_tool_calls`, `avg_command_failures`, `avg_recover_events`, and `avg_token_usage` improve in the full30 table. |",
         "| Intervention improves success on hard10. | hard10 `success_rate` improves from baseline to intervention. |",
-        "| Trace-only process rules have a semantic boundary. | hard10 label evaluation has 5 false negatives for `hidden_semantic_edge_case`. |",
-        "| RQ4 signal analysis explains the detector boundary. | hard10 `verification_rate`, `unresolved_error`, `command_failure_count`, and `failure_score` are equal for successful and failed runs. |",
-        "| Strong task oracles remain necessary. | hard10 failures are only visible through hidden graders, not process-rule findings. |",
+        "| Intervention reduces waste on hard30. | hard30 repeated tool calls, command failures, token usage, and failure score improve. |" if hard30 else "",
+        f"| Trace-only process rules have a semantic boundary. | {boundary_name.lower()} label evaluation has {hidden_scores.get('fn', 0)} false negatives for `hidden_semantic_edge_case`. |",
+        f"| RQ4 signal analysis explains the detector boundary. | {boundary_name.lower()} `verification_rate` and `unresolved_error` are equal for successful and failed runs. |",
+        "| Strong task oracles remain necessary. | hard-tier failures are only visible through hidden graders, not process-rule findings. |",
     ])
     return "\n".join(lines) + "\n"
 

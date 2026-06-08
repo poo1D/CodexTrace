@@ -10,7 +10,7 @@ This directory is the starting point for the paper experiment:
   refactors, CI failures, error localization, and multi-turn changes.
 - `repos/`: runnable fixture repositories plus external grader directories for
   the 30 seed tasks.
-- `hard/tasks.jsonl`: 10 harder fixtures with hidden edge-case graders for
+- `hard/tasks.jsonl`: 50 harder fixtures with hidden edge-case graders for
   outcome-failure analysis.
 - `hard/repos/`: runnable hard-tier fixture repositories plus hidden grader
   directories.
@@ -31,6 +31,9 @@ This directory is the starting point for the paper experiment:
 - `pilot/full30-real`: combined 30-task / 60-run real benchmark pilot.
 - `hard/pilot/hard10-real`: combined 10-task / 20-run hard-tier real pilot with
   genuine outcome failures.
+- `hard/pilot/hard30-selection`: selected 30-task hard-tier pilot manifest.
+- `hard/pilot/hard30-real`: completed 30-task / 60-run hard-tier artifact with
+  hidden-grader failures, manual labels, and paper tables.
 
 ## Render a Prompt
 
@@ -105,9 +108,9 @@ intervention-side process savings, but it does not yet provide outcome-failure
 examples. A harder task tier is required for final paper claims about failure
 prevalence, detector recall on true failures, and success-rate lift.
 
-## Current Hard Pilot Result
+## Current Hard Pilot Results
 
-The current hard pilot covers 10 harder tasks with baseline and intervention
+The early hard pilot covers 10 harder tasks with baseline and intervention
 conditions:
 
 ```bash
@@ -117,6 +120,21 @@ codex-trace research aggregate benchmark/hard/pilot/hard10-real/runs.jsonl
 This pilot has 20 runs: 15 successful outcomes and 5 failures. Baseline success
 is `0.7`, intervention success is `0.8`, repeated tool calls drop from
 `9.2 -> 6.2`, and average token usage drops from about `248.9k -> 187.5k`.
+
+The paper-facing hard30 artifact covers 30 selected hard tasks with baseline
+and intervention conditions:
+
+```bash
+codex-trace research aggregate benchmark/hard/pilot/hard30-real/runs.jsonl
+codex-trace research paper-report benchmark/hard/pilot/hard30-real/runs.jsonl \
+  --labels benchmark/hard/pilot/hard30-real/manual-labels.jsonl
+```
+
+This artifact has 60 runs: 30 successful outcomes and 30 hidden-grader
+failures. Success stays flat at `0.5 -> 0.5`, while repeated tool calls drop
+from `12.93 -> 9.20` and average token usage drops from about `355.0k ->
+256.3k`. Paired hard30 deltas improve token usage and repeated tool calls in
+26 of 30 tasks.
 
 Hard-tier prompts expose only public verification commands. Hidden graders are
 copied into the run directory only after the Codex process exits, then used to

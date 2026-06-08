@@ -34,11 +34,21 @@
     {
       "detail": "60 label row(s)",
       "evidence": "benchmark/hard/pilot/hard30-real/manual-labels.jsonl",
+      "extra_labels": [],
+      "missing_failure_labels": [],
       "missing_notes": [],
       "name": "hard30 manual labels",
       "ok": true,
+      "outcome_mismatches": [],
       "unknown_tags": [],
       "unlabeled_failures": []
+    },
+    {
+      "detail": "detector labels=1, paired n=[30]",
+      "evidence": "benchmark/hard/pilot/hard30-real/paper-report-labeled.json",
+      "name": "hard30 report content",
+      "ok": true,
+      "problems": []
     },
     {
       "evidence": "docs/paper_draft.md",

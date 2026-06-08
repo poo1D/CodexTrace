@@ -23,6 +23,10 @@ REQUIRED_HARD30_OUTPUTS = (
     "labels.jsonl",
     "paper-report.json",
     "paper-report.md",
+    "paper-report-labeled.json",
+    "paper-report-labeled.md",
+    "label-eval.json",
+    "label-eval.md",
 )
 VALID_FAILURE_TAGS = {
     "verification_gap",
@@ -78,6 +82,7 @@ def check_hard30_outputs(run_dir: Path) -> dict[str, Any]:
 
 
 def check_manual_labels(run_dir: Path) -> dict[str, Any]:
+    manifest_path = run_dir / "runs.jsonl"
     labels_path = run_dir / "manual-labels.jsonl"
     if not labels_path.exists():
         return {
@@ -86,7 +91,34 @@ def check_manual_labels(run_dir: Path) -> dict[str, Any]:
             "evidence": str(labels_path),
             "detail": "missing manual-labels.jsonl",
         }
+    manifest_rows = []
+    if manifest_path.exists():
+        manifest_rows = [json.loads(line) for line in manifest_path.read_text(encoding="utf-8").splitlines() if line.strip()]
     rows = [json.loads(line) for line in labels_path.read_text(encoding="utf-8").splitlines() if line.strip()]
+    manifest_by_key = {
+        (str(row.get("task_id")), str(row.get("prompt_type"))): row
+        for row in manifest_rows
+    }
+    label_by_key = {
+        (str(row.get("task_id")), str(row.get("prompt_type"))): row
+        for row in rows
+    }
+    missing_failure_labels = [
+        f"{task_id}/{prompt_type}"
+        for (task_id, prompt_type), row in sorted(manifest_by_key.items())
+        if row.get("outcome") == "failure" and (task_id, prompt_type) not in label_by_key
+    ]
+    extra_labels = [
+        f"{task_id}/{prompt_type}"
+        for task_id, prompt_type in sorted(label_by_key)
+        if manifest_by_key and (task_id, prompt_type) not in manifest_by_key
+    ]
+    outcome_mismatches = [
+        f"{task_id}/{prompt_type}"
+        for (task_id, prompt_type), row in sorted(label_by_key.items())
+        if (task_id, prompt_type) in manifest_by_key
+        and str(row.get("outcome", "")) != str(manifest_by_key[(task_id, prompt_type)].get("outcome", ""))
+    ]
     unlabeled_failures = [
         f"{row.get('task_id')}/{row.get('prompt_type')}"
         for row in rows
@@ -103,15 +135,70 @@ def check_manual_labels(run_dir: Path) -> dict[str, Any]:
         for tag in row.get("failure_tags", [])
         if tag not in VALID_FAILURE_TAGS
     })
-    ok = not (unlabeled_failures or missing_notes or unknown_tags)
+    ok = not (
+        missing_failure_labels
+        or extra_labels
+        or outcome_mismatches
+        or unlabeled_failures
+        or missing_notes
+        or unknown_tags
+    )
     return {
         "name": "hard30 manual labels",
         "ok": ok,
         "evidence": str(labels_path),
         "detail": f"{len(rows)} label row(s)",
+        "missing_failure_labels": missing_failure_labels,
+        "extra_labels": extra_labels,
+        "outcome_mismatches": outcome_mismatches,
         "unlabeled_failures": unlabeled_failures,
         "missing_notes": missing_notes,
         "unknown_tags": unknown_tags,
+    }
+
+
+def check_hard30_report_content(run_dir: Path) -> dict[str, Any]:
+    labeled_report_path = run_dir / "paper-report-labeled.json"
+    label_eval_path = run_dir / "label-eval.json"
+    problems = []
+    paired_task_n = []
+    detector_label_count = 0
+
+    try:
+        labeled_report = json.loads(labeled_report_path.read_text(encoding="utf-8"))
+    except (FileNotFoundError, json.JSONDecodeError) as error:
+        labeled_report = {}
+        problems.append(f"invalid labeled report: {error}")
+
+    try:
+        label_eval = json.loads(label_eval_path.read_text(encoding="utf-8"))
+    except (FileNotFoundError, json.JSONDecodeError) as error:
+        label_eval = {}
+        problems.append(f"invalid label eval: {error}")
+
+    if labeled_report:
+        detector_eval = labeled_report.get("detector_evaluation") or {}
+        detector_label_count = int((detector_eval.get("summary") or {}).get("labels", 0) or 0)
+        if detector_label_count <= 0:
+            problems.append("paper-report-labeled.json has no detector labels")
+        paired_summary = labeled_report.get("paired_task_summary") or {}
+        for metric in ("success_delta", "verification_delta", "repeated_tool_call_delta", "token_usage_delta", "failure_score_delta"):
+            n = int((paired_summary.get(metric) or {}).get("n", 0) or 0)
+            paired_task_n.append(n)
+            if n != 30:
+                problems.append(f"{metric} paired n is {n}, expected 30")
+
+    if label_eval:
+        labels = label_eval.get("labels") or {}
+        if not labels:
+            problems.append("label-eval.json has no per-label scores")
+
+    return {
+        "name": "hard30 report content",
+        "ok": not problems,
+        "evidence": str(labeled_report_path),
+        "detail": f"detector labels={detector_label_count}, paired n={sorted(set(paired_task_n)) if paired_task_n else []}",
+        "problems": problems,
     }
 
 
@@ -121,6 +208,7 @@ def build_report(selection_dir: Path, run_dir: Path) -> dict[str, Any]:
         check_hard30_real_runs(run_dir, selection_dir),
         check_hard30_outputs(run_dir),
         check_manual_labels(run_dir),
+        check_hard30_report_content(run_dir),
         check_exists(Path("docs/paper_draft.md"), "paper draft"),
         check_exists(Path("docs/reproducibility_checklist.md"), "reproducibility checklist"),
     ]
@@ -214,6 +302,14 @@ def render_report(report: dict[str, Any]) -> str:
             detail = "missing notes: " + ", ".join(check["missing_notes"])
         if check.get("unknown_tags"):
             detail = "unknown tags: " + ", ".join(check["unknown_tags"])
+        if check.get("missing_failure_labels"):
+            detail = "missing failure labels: " + ", ".join(check["missing_failure_labels"])
+        if check.get("extra_labels"):
+            detail = "extra labels: " + ", ".join(check["extra_labels"])
+        if check.get("outcome_mismatches"):
+            detail = "outcome mismatches: " + ", ".join(check["outcome_mismatches"])
+        if check.get("problems"):
+            detail = "; ".join(check["problems"])
         lines.append(f"| {check['name']} | {status} | `{check['evidence']}` | {detail} |")
     if report["blocking"]:
         lines.extend(["", "## Blocking Items", ""])

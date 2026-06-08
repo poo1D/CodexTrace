@@ -590,8 +590,30 @@ def test_submission_readiness_accepts_complete_synthetic_artifact(tmp_path):
         "".join(json.dumps(row, sort_keys=True) + "\n" for row in runs),
         encoding="utf-8",
     )
-    for name in ("aggregate.json", "aggregate.md", "runs.csv", "paired-task-deltas.csv", "paired-task-summary.csv", "labels.jsonl", "paper-report.json", "paper-report.md"):
+    paired_summary = {
+        metric: {"n": 30, "improved": 1, "regressed": 0, "unchanged": 29, "avg_delta": 0}
+        for metric in ("success_delta", "verification_delta", "repeated_tool_call_delta", "token_usage_delta", "failure_score_delta")
+    }
+    labeled_report = {
+        "detector_evaluation": {"summary": {"labels": 1}, "labels": {"hidden_semantic_edge_case": {"fn": 30}}},
+        "paired_task_summary": paired_summary,
+    }
+    label_eval = {"summary": {"labels": 1}, "labels": {"hidden_semantic_edge_case": {"fn": 30}}}
+    for name in (
+        "aggregate.json",
+        "aggregate.md",
+        "runs.csv",
+        "paired-task-deltas.csv",
+        "paired-task-summary.csv",
+        "labels.jsonl",
+        "paper-report.json",
+        "paper-report.md",
+        "paper-report-labeled.md",
+        "label-eval.md",
+    ):
         run_dir.joinpath(name).write_text("{}\n", encoding="utf-8")
+    run_dir.joinpath("paper-report-labeled.json").write_text(json.dumps(labeled_report) + "\n", encoding="utf-8")
+    run_dir.joinpath("label-eval.json").write_text(json.dumps(label_eval) + "\n", encoding="utf-8")
     run_dir.joinpath("manual-labels.jsonl").write_text(
         "".join(json.dumps(row, sort_keys=True) + "\n" for row in labels),
         encoding="utf-8",
@@ -645,8 +667,30 @@ def test_submission_readiness_rejects_low_quality_manual_labels(tmp_path):
         "".join(json.dumps(row, sort_keys=True) + "\n" for row in rows),
         encoding="utf-8",
     )
-    for name in ("aggregate.json", "aggregate.md", "runs.csv", "paired-task-deltas.csv", "paired-task-summary.csv", "labels.jsonl", "paper-report.json", "paper-report.md"):
+    paired_summary = {
+        metric: {"n": 30, "improved": 1, "regressed": 0, "unchanged": 29, "avg_delta": 0}
+        for metric in ("success_delta", "verification_delta", "repeated_tool_call_delta", "token_usage_delta", "failure_score_delta")
+    }
+    labeled_report = {
+        "detector_evaluation": {"summary": {"labels": 1}, "labels": {"hidden_semantic_edge_case": {"fn": 30}}},
+        "paired_task_summary": paired_summary,
+    }
+    label_eval = {"summary": {"labels": 1}, "labels": {"hidden_semantic_edge_case": {"fn": 30}}}
+    for name in (
+        "aggregate.json",
+        "aggregate.md",
+        "runs.csv",
+        "paired-task-deltas.csv",
+        "paired-task-summary.csv",
+        "labels.jsonl",
+        "paper-report.json",
+        "paper-report.md",
+        "paper-report-labeled.md",
+        "label-eval.md",
+    ):
         run_dir.joinpath(name).write_text("{}\n", encoding="utf-8")
+    run_dir.joinpath("paper-report-labeled.json").write_text(json.dumps(labeled_report) + "\n", encoding="utf-8")
+    run_dir.joinpath("label-eval.json").write_text(json.dumps(label_eval) + "\n", encoding="utf-8")
     run_dir.joinpath("manual-labels.jsonl").write_text(
         "".join(json.dumps(row, sort_keys=True) + "\n" for row in labels),
         encoding="utf-8",
@@ -661,6 +705,84 @@ def test_submission_readiness_rejects_low_quality_manual_labels(tmp_path):
     assert len(label_check["missing_notes"]) == 30
     assert "hard30 manual labels" in report["blocking"]
     assert "unknown tags: not_a_taxonomy_tag" in markdown
+
+
+def test_submission_readiness_rejects_missing_manifest_failure_label(tmp_path):
+    root = Path.cwd()
+    selection_dir = tmp_path / "selection"
+    selection_dir.mkdir()
+    task_ids = [f"HARD-{index:03d}" for index in range(1, 31)]
+    selection_dir.joinpath("task_ids.txt").write_text("\n".join(task_ids) + "\n", encoding="utf-8")
+    selection_dir.joinpath("tasks.jsonl").write_text("{}\n", encoding="utf-8")
+    selection_dir.joinpath("manifest.json").write_text("{}\n", encoding="utf-8")
+    run_dir = tmp_path / "hard30-real"
+    run_dir.mkdir()
+    rows = []
+    labels = []
+    for task_id in task_ids:
+        rows.extend([
+            {
+                "task_id": task_id,
+                "prompt_type": "baseline",
+                "trace_path": str((root / "demo/failing-codex-trace.jsonl").resolve()),
+                "outcome": "failure",
+            },
+            {
+                "task_id": task_id,
+                "prompt_type": "intervention",
+                "trace_path": str((root / "demo/healthy-codex-trace.jsonl").resolve()),
+                "outcome": "success",
+            },
+        ])
+        if task_id != "HARD-030":
+            labels.append({
+                "task_id": task_id,
+                "prompt_type": "baseline",
+                "outcome": "failure",
+                "failure_tags": ["hidden_semantic_edge_case"],
+                "notes": "Hidden semantic edge case captured by the synthetic label.",
+            })
+    run_dir.joinpath("runs.jsonl").write_text(
+        "".join(json.dumps(row, sort_keys=True) + "\n" for row in rows),
+        encoding="utf-8",
+    )
+    paired_summary = {
+        metric: {"n": 30, "improved": 1, "regressed": 0, "unchanged": 29, "avg_delta": 0}
+        for metric in ("success_delta", "verification_delta", "repeated_tool_call_delta", "token_usage_delta", "failure_score_delta")
+    }
+    labeled_report = {
+        "detector_evaluation": {"summary": {"labels": 1}, "labels": {"hidden_semantic_edge_case": {"fn": 30}}},
+        "paired_task_summary": paired_summary,
+    }
+    label_eval = {"summary": {"labels": 1}, "labels": {"hidden_semantic_edge_case": {"fn": 30}}}
+    for name in (
+        "aggregate.json",
+        "aggregate.md",
+        "runs.csv",
+        "paired-task-deltas.csv",
+        "paired-task-summary.csv",
+        "labels.jsonl",
+        "paper-report.json",
+        "paper-report.md",
+        "paper-report-labeled.md",
+        "label-eval.md",
+    ):
+        run_dir.joinpath(name).write_text("{}\n", encoding="utf-8")
+    run_dir.joinpath("paper-report-labeled.json").write_text(json.dumps(labeled_report) + "\n", encoding="utf-8")
+    run_dir.joinpath("label-eval.json").write_text(json.dumps(label_eval) + "\n", encoding="utf-8")
+    run_dir.joinpath("manual-labels.jsonl").write_text(
+        "".join(json.dumps(row, sort_keys=True) + "\n" for row in labels),
+        encoding="utf-8",
+    )
+
+    report = build_report(selection_dir, run_dir)
+    label_check = next(check for check in report["checks"] if check["name"] == "hard30 manual labels")
+    markdown = render_report(report)
+
+    assert report["ready"] is False
+    assert label_check["missing_failure_labels"] == ["HARD-030/baseline"]
+    assert "hard30 manual labels" in report["blocking"]
+    assert "missing failure labels: HARD-030/baseline" in markdown
 
 
 def test_audit_manual_labels_reports_quality_and_coverage(tmp_path):
@@ -809,16 +931,23 @@ def test_build_results_summary_from_stored_pilots():
         "benchmark/pilot/full30-real/runs.jsonl",
         "benchmark/hard/pilot/hard10-real/runs.jsonl",
         "benchmark/hard/pilot/hard10-real/manual-labels.jsonl",
+        "benchmark/hard/pilot/hard30-real/runs.jsonl",
+        "benchmark/hard/pilot/hard30-real/manual-labels.jsonl",
     )
     markdown = render_results_summary_markdown(result)
 
     assert result["full30"]["summary"]["baseline"]["n"] == 30
     assert result["hard10"]["summary"]["baseline"]["success_rate"] == 0.7
+    assert result["hard30"]["summary"]["baseline"]["n"] == 30
+    assert result["hard30"]["summary"]["baseline"]["success_rate"] == 0.5
     assert result["hard10_label_evaluation"]["labels"]["hidden_semantic_edge_case"]["fn"] == 5
+    assert result["hard30_label_evaluation"]["labels"]["hidden_semantic_edge_case"]["fn"] == 30
     assert "## RQ3 Baseline vs Intervention" in markdown
+    assert "### Hard30 Pilot" in markdown
     assert "## RQ4 Trace Signals By Outcome" in markdown
-    assert "| failure_score | 0 | 0 | 0 |" in markdown
+    assert "| failure_score | 1.167 | 0.8333 | -0.3334 |" in markdown
     assert "hidden_semantic_edge_case" in markdown
+    assert "30 false negatives" in markdown
 
 
 def test_smoke_fixture_success_check_starts_failing():

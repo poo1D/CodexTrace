@@ -44,7 +44,7 @@ npm run dev
 | Question | Evidence |
 | --- | --- |
 | RQ1: What failure modes are observable? | `docs/failure_taxonomy.md`, `docs/paper_draft.md` |
-| RQ2: Can trace rules detect failures? | `benchmark/hard/pilot/hard10-real/label-eval.md` |
+| RQ2: Can trace rules detect failures? | `benchmark/hard/pilot/hard30-real/label-eval.md` |
 | RQ3: Do harness interventions help? | `docs/results_summary.md` RQ3 tables |
 | RQ4: Which signals explain failure? | `docs/results_summary.md` RQ4 trace-signal table |
 
@@ -53,7 +53,8 @@ The stored pilots currently include:
 | Pilot | Tasks | Runs | Role |
 | --- | ---: | ---: | --- |
 | full30 | 30 | 60 | Measures process-waste reduction when outcomes are saturated. |
-| hard10 | 10 | 20 | Measures outcome failures and hidden-grader boundary behavior. |
+| hard10 | 10 | 20 | Early hard-tier pilot with a small success-rate lift. |
+| hard30 | 30 | 60 | Paper-facing hard-tier artifact with hidden-grader failures and paired waste deltas. |
 
 ## Reproduce Result Tables
 
@@ -69,18 +70,18 @@ Hard-tier detector evaluation:
 
 ```bash
 PYTHONPATH=. python3 -m codex_trace.cli research evaluate-labels \
-  benchmark/hard/pilot/hard10-real/runs.jsonl \
-  benchmark/hard/pilot/hard10-real/manual-labels.jsonl \
-  --markdown-output /tmp/hard10-label-eval.md
+  benchmark/hard/pilot/hard30-real/runs.jsonl \
+  benchmark/hard/pilot/hard30-real/manual-labels.jsonl \
+  --markdown-output /tmp/hard30-label-eval.md
 ```
 
 Hard-tier paper report:
 
 ```bash
 PYTHONPATH=. python3 -m codex_trace.cli research paper-report \
-  benchmark/hard/pilot/hard10-real/runs.jsonl \
-  --labels benchmark/hard/pilot/hard10-real/manual-labels.jsonl \
-  --markdown-output /tmp/hard10-paper-report.md
+  benchmark/hard/pilot/hard30-real/runs.jsonl \
+  --labels benchmark/hard/pilot/hard30-real/manual-labels.jsonl \
+  --markdown-output /tmp/hard30-paper-report.md
 ```
 
 ## Current Result Snapshot
@@ -90,42 +91,42 @@ PYTHONPATH=. python3 -m codex_trace.cli research paper-report \
 | full30 repeated tool calls | `10.43 -> 7.00` |
 | full30 token usage | `218.7k -> 184.8k` |
 | hard10 success rate | `70% -> 80%` |
-| hard10 repeated tool calls | `9.20 -> 6.20` |
-| hard10 token usage | `248.9k -> 187.5k` |
-| hidden semantic detector boundary | `TP=0`, `FP=0`, `FN=5` |
+| hard30 repeated tool calls | `12.93 -> 9.20` |
+| hard30 token usage | `355.0k -> 256.3k` |
+| hidden semantic detector boundary | `TP=0`, `FP=0`, `FN=30` |
 
 The RQ4 signal table shows why the detector boundary matters:
-`verification_rate`, `unresolved_error`, `command_failure_count`, and
-`failure_score` are identical for hard10 success and failure outcomes. The
-visible traces look clean; hidden graders reveal the missed edge cases.
+`verification_rate` and `unresolved_error` do not separate hard30 success and
+failure outcomes. The visible traces often look clean; hidden graders reveal
+the missed edge cases.
 
 ## What To Cite In A CV Or Interview
 
 - Built a GPU-free Codex trace diagnosis system that parses real
   `codex exec --json` runs into a normalized event schema.
-- Designed an 80-run benchmark across a 30-task seed tier and a 10-task hard
-  tier with hidden graders.
+- Designed a 140-run benchmark across a 30-task seed tier, a 10-task hard
+  pilot, and a 30-task hard-tier artifact with hidden graders.
 - Measured harness intervention effects on real Codex runs: reduced repeated
-  tool calls and token usage, with hard-tier success improving from 70% to 80%.
+  tool calls and token usage, with hard10 success improving from 70% to 80%
+  and hard30 token usage improving in 26 of 30 paired tasks.
 - Documented a negative boundary result: deterministic trace rules miss hidden
   semantic failures when visible process traces look clean.
 
 ## Known Limits
 
 - The artifact studies Codex CLI traces, not all coding agents.
-- The evaluated hard10 pilot has 10 tasks, so success-rate changes are pilot
-  evidence rather than broad population estimates. The hard task suite now has
-  50 runnable tasks after adding `HARD-011` through `HARD-050`.
+- The hard30 artifact has 30 selected tasks, but repeated trials are still
+  needed before treating the measured deltas as population estimates.
 - The detectors are deterministic and interpretable, but incomplete.
 - Hidden semantic correctness still requires strong task-level oracles.
 
 ## Next Research Step
 
-The strongest next step is to run the selected hard30 pilot. The suite now has
-50 runnable tasks, and `benchmark/hard/pilot/hard30-selection` fixes the next
-30-task / 60-run collection target with category and process-pressure coverage.
-That would strengthen RQ1/RQ2 distribution claims and make the RQ3 success-rate
-estimate less fragile.
+The strongest next step is repeated hard30 trials plus richer manual labels for
+observable process failures. The current hard30 artifact is complete and
+submission-ready as a pilot artifact, but its failures are dominated by hidden
+semantic edge cases, so broader RQ1/RQ2 taxonomy claims need either more
+process-failure-heavy tasks or a lightweight semantic analysis layer.
 
 See `docs/submission_readiness_plan.md` for the concrete workstreams and
 decision gate for moving from the current pilot artifact to a stronger paper

@@ -15,37 +15,36 @@ process failures, and repeatability.
 | --- | --- | --- |
 | System artifact | Parser, diagnosis engine, CLI, Web UI, benchmark runner, hidden-grader support. | Low. The system is implemented and CI-tested. |
 | Seed benchmark | 30 tasks, 60 real Codex runs, all outcomes pass. | Medium. Good for waste analysis, weak for failure-distribution claims. |
-| Hard benchmark | 50 runnable tasks; the evaluated hard10 pilot has 10 tasks, 20 real Codex runs, and 5 outcome failures. | Medium. Good pilot, small sample for success-rate claims. |
-| Detector evaluation | Manual labels expose `TP=0`, `FP=0`, `FN=5` for hidden semantic edge cases. | Medium. Strong boundary result, but not enough positive process-failure labels. |
-| RQ4 signal analysis | Hard10 signal table explains why clean traces can still fail hidden graders. | Medium. Needs more observable failures to identify predictive process signals. |
+| Hard benchmark | 50 runnable tasks; the paper-facing hard30 artifact has 30 selected tasks, 60 real Codex runs, and 30 outcome failures. | Medium. Stronger artifact, but single-trial success deltas remain pilot evidence. |
+| Detector evaluation | Manual labels expose `TP=0`, `FP=0`, `FN=30` for hard30 hidden semantic edge cases. | Medium. Strong boundary result, but not enough positive process-failure labels. |
+| RQ4 signal analysis | Hard30 signal table explains why clean traces can still fail hidden graders. | Medium. Needs more observable failures to identify predictive process signals. |
 
 ## Target For A Stronger Submission
 
-The next submission-ready target should be:
+The next stronger-submission target should be:
 
-- 30-50 hard-tier tasks.
-- 60-100 hard-tier runs across baseline and intervention.
+- Repeat hard30 trials or add randomized reruns for a subset of tasks.
+- 60-100 additional hard-tier runs across baseline and intervention.
 - At least 15-25 manually labeled outcome failures.
 - A mix of hidden semantic failures and observable process failures.
-- Repeated trials for at least a subset of tasks to reduce prompt-order noise.
 - A paper draft whose main claims are supported by generated tables.
 
-## Workstream 1: Expand Hard-Tier Tasks
+## Workstream 1: Repeat And Stress Hard30
 
-Goal: move from the evaluated `hard10` pilot to a harder 30-50 task suite
-while preserving hidden grader isolation. `HARD-011` through `HARD-050` are now
-implemented; the next step is collecting real baseline/intervention traces for
-the selected hard30 pilot.
+Goal: move from one completed hard30 collection to a more stable estimate while
+preserving hidden grader isolation. `HARD-011` through `HARD-050` are
+implemented, and the selected hard30 pilot has been collected in
+`benchmark/hard/pilot/hard30-real`.
 
 The hard30 pilot selection is fixed in
 `benchmark/hard/pilot/hard30-selection`. It keeps the evaluated hard10 pilot as
 a prefix and adds 20 tasks selected for category and process-pressure coverage.
-Collection can run as one shard per task with `scripts/run_hard30_shards.py`;
-`scripts/merge_hard30_shards.py` then creates the single `runs.jsonl` consumed
-by the reporting tools. After collection, `scripts/finalize_hard30_pilot.py`
-generates the aggregate tables, per-run CSV, manual-label template, and
-paper-report artifacts, including `paired-task-deltas.csv` and
-`paired-task-summary.csv` for RQ3 analysis.
+Collection runs as one shard per task with `scripts/run_hard30_shards.py`;
+`scripts/merge_hard30_shards.py` creates the single `runs.jsonl` consumed by
+the reporting tools. `scripts/finalize_hard30_pilot.py` generates the aggregate
+tables, per-run CSV, manual-label template, and paper-report artifacts,
+including `paired-task-deltas.csv` and `paired-task-summary.csv` for RQ3
+analysis.
 
 Hard30 collection plan:
 
@@ -57,7 +56,7 @@ Hard30 collection plan:
 | dependency/sandbox-friction tasks | 3-5 | Agent must adapt command strategy without deadlocking. |
 | refactor-with-invariants tasks | 5-8 | Agent can over-edit or miss behavioral invariants. |
 
-Acceptance criteria:
+Completed acceptance criteria:
 
 - The selected hard30 `tasks.jsonl` dry-runs to 60 baseline/intervention
   records.
@@ -67,6 +66,14 @@ Acceptance criteria:
 - Initial fixtures fail their hidden graders before agent edits.
 - Prompt materialization keeps hidden grader details out of agent prompts.
 - The selected tasks preserve category and expected failure-pressure coverage.
+
+Remaining acceptance criteria:
+
+- Repeat at least a subset of hard30 tasks to measure run-to-run variance.
+- Add process-failure-heavy tasks or labels so RQ1/RQ2 are not dominated by
+  `hidden_semantic_edge_case`.
+- Re-run submission readiness after each collection with
+  `scripts/check_submission_readiness.py`.
 
 ## Workstream 2: Improve Manual Labeling
 

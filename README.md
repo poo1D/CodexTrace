@@ -120,7 +120,7 @@ Key files:
 - `docs/paper_draft.md`: result-driven workshop-style paper draft
 - `docs/paper_outline.md`: paper outline and experiment plan
 - `docs/reproducibility_checklist.md`: claim-evidence map and reproduction commands
-- `docs/results_summary.md`: generated full30 + hard10 result summary, including RQ4 trace-signal analysis
+- `docs/results_summary.md`: generated full30 + hard10 + hard30 result summary, including RQ4 trace-signal analysis
 - `docs/related_work.md`: compact bibliography and positioning notes
 - `docs/submission_readiness_plan.md`: concrete path from pilot artifact to stronger paper submission
 - `benchmark/pilot/full30-real`: 30-task / 60-run real pilot
@@ -195,7 +195,7 @@ The current draft in `docs/paper_draft.md` reports three pilots: a 30-task seed
 benchmark where intervention reduces tool-call and token waste, a 10-task
 hard pilot where intervention improves success, and a 30-task hard pilot where
 success is flat but waste drops sharply under the intervention.
-hard tier where intervention improves success from 70% to 80% while exposing a
+Together, the hard pilots show both a small pilot success lift and a
 trace-only detector limitation on hidden semantic edge cases.
 
 To run the Web UI:

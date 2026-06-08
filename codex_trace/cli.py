@@ -76,10 +76,12 @@ def main(argv: list[str] | None = None) -> int:
     paper_cmd.add_argument("--json-output", type=Path)
     paper_cmd.add_argument("--markdown-output", type=Path)
 
-    summary_cmd = research_subparsers.add_parser("summary", help="Generate a combined full30/hard10 paper result summary.")
+    summary_cmd = research_subparsers.add_parser("summary", help="Generate a combined full30/hard10/hard30 paper result summary.")
     summary_cmd.add_argument("--full-manifest", type=Path, default=Path("benchmark/pilot/full30-real/runs.jsonl"))
     summary_cmd.add_argument("--hard-manifest", type=Path, default=Path("benchmark/hard/pilot/hard10-real/runs.jsonl"))
     summary_cmd.add_argument("--hard-labels", type=Path, default=Path("benchmark/hard/pilot/hard10-real/manual-labels.jsonl"))
+    summary_cmd.add_argument("--hard30-manifest", type=Path, default=Path("benchmark/hard/pilot/hard30-real/runs.jsonl"))
+    summary_cmd.add_argument("--hard30-labels", type=Path, default=Path("benchmark/hard/pilot/hard30-real/manual-labels.jsonl"))
     summary_cmd.add_argument("--json-output", type=Path)
     summary_cmd.add_argument("--markdown-output", type=Path)
 
@@ -151,7 +153,15 @@ def main(argv: list[str] | None = None) -> int:
         return 0
 
     if args.command == "research" and args.research_command == "summary":
-        result = build_results_summary(args.full_manifest, args.hard_manifest, args.hard_labels)
+        hard30_manifest = args.hard30_manifest if args.hard30_manifest.exists() else None
+        hard30_labels = args.hard30_labels if args.hard30_labels.exists() else None
+        result = build_results_summary(
+            args.full_manifest,
+            args.hard_manifest,
+            args.hard_labels,
+            hard30_manifest,
+            hard30_labels,
+        )
         if args.json_output or args.markdown_output:
             write_results_summary_outputs(result, args.json_output, args.markdown_output)
         else:

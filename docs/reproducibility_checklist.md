@@ -22,7 +22,7 @@ The stored pilots can be inspected and aggregated without re-running Codex.
 | --- | --- |
 | `docs/artifact_guide.md` | Fifteen-minute reviewer/interviewer walkthrough. |
 | `docs/paper_draft.md` | Result-driven workshop-style draft. |
-| `docs/results_summary.md` | Generated full30 + hard10 result summary, including RQ4 trace-signal analysis. |
+| `docs/results_summary.md` | Generated full30 + hard10 + hard30 result summary, including RQ4 trace-signal analysis. |
 | `docs/failure_taxonomy.md` | Definitions for process-level failure labels. |
 | `docs/hard_tier_expansion_blueprint.md` | Implemented HARD-011 to HARD-050 fixtures and hard30 pilot selection plan. |
 | `docs/experiment_protocol.md` | Collection, labeling, and evaluation protocol. |
@@ -237,14 +237,13 @@ failed_initial ['HARD-001', 'HARD-002', 'HARD-003', 'HARD-004', 'HARD-005', 'HAR
 
 ## Current Gaps Before A Stronger Submission
 
-- Expand the hard tier from 10 tasks toward 30-50 tasks.
+- Repeat the hard30 collection or add randomized trials to reduce prompt/order effects.
 - Add more observable process failures, not only hidden semantic failures.
-- Add repeated trials or randomization to reduce prompt/order effects.
 - Consider a lightweight semantic analysis layer for hidden edge-case failures.
 - Improve detector evaluation with richer manual labels beyond the current
   hard-tier boundary label.
 
 For a concrete expansion backlog and submission decision gate, see
 `docs/submission_readiness_plan.md`. For the implemented HARD-011 to HARD-050
-fixtures and hard30 pilot selection plan, see
+fixtures and completed hard30 pilot selection plan, see
 `docs/hard_tier_expansion_blueprint.md`.
