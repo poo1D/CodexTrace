@@ -44,7 +44,7 @@
       "unlabeled_failures": []
     },
     {
-      "detail": "detector labels=1, paired n=[30]",
+      "detail": "detector labels=2, paired n=[30]",
       "evidence": "benchmark/hard/pilot/hard30-real/paper-report-labeled.json",
       "name": "hard30 report content",
       "ok": true,

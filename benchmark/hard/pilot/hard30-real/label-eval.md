@@ -4,17 +4,18 @@
 
 | Metric | Value |
 | --- | ---: |
-| labels | 1 |
-| micro_precision | 0 |
-| micro_recall | 0 |
-| micro_f1 | 0 |
-| macro_f1 | 0 |
+| labels | 2 |
+| micro_precision | 1 |
+| micro_recall | 0.1176 |
+| micro_f1 | 0.2105 |
+| macro_f1 | 0.5 |
 
 ## Per-Label Scores
 
 | Label | TP | FP | FN | Precision | Recall | F1 |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
 | hidden_semantic_edge_case | 0 | 0 | 30 | 0 | 0 | 0 |
+| repetitive_exploration | 4 | 0 | 0 | 1 | 1 | 1 |
 
 ## Runs
 
@@ -40,7 +41,7 @@
 | HARD-009 | intervention | hidden_semantic_edge_case | - | - | hidden_semantic_edge_case |
 | HARD-010 | baseline | - | - | - | - |
 | HARD-010 | intervention | - | - | - | - |
-| HARD-011 | baseline | - | - | - | - |
+| HARD-011 | baseline | repetitive_exploration | repetitive_exploration | - | - |
 | HARD-011 | intervention | - | - | - | - |
 | HARD-012 | baseline | hidden_semantic_edge_case | - | - | hidden_semantic_edge_case |
 | HARD-012 | intervention | hidden_semantic_edge_case | - | - | hidden_semantic_edge_case |
@@ -62,14 +63,14 @@
 | HARD-031 | intervention | - | - | - | - |
 | HARD-032 | baseline | hidden_semantic_edge_case | - | - | hidden_semantic_edge_case |
 | HARD-032 | intervention | hidden_semantic_edge_case | - | - | hidden_semantic_edge_case |
-| HARD-033 | baseline | hidden_semantic_edge_case | - | - | hidden_semantic_edge_case |
+| HARD-033 | baseline | hidden_semantic_edge_case, repetitive_exploration | repetitive_exploration | - | hidden_semantic_edge_case |
 | HARD-033 | intervention | hidden_semantic_edge_case | - | - | hidden_semantic_edge_case |
 | HARD-035 | baseline | hidden_semantic_edge_case | - | - | hidden_semantic_edge_case |
 | HARD-035 | intervention | hidden_semantic_edge_case | - | - | hidden_semantic_edge_case |
 | HARD-038 | baseline | hidden_semantic_edge_case | - | - | hidden_semantic_edge_case |
 | HARD-038 | intervention | hidden_semantic_edge_case | - | - | hidden_semantic_edge_case |
-| HARD-039 | baseline | - | - | - | - |
-| HARD-039 | intervention | - | - | - | - |
+| HARD-039 | baseline | repetitive_exploration | repetitive_exploration | - | - |
+| HARD-039 | intervention | repetitive_exploration | repetitive_exploration | - | - |
 | HARD-040 | baseline | hidden_semantic_edge_case | - | - | hidden_semantic_edge_case |
 | HARD-040 | intervention | hidden_semantic_edge_case | - | - | hidden_semantic_edge_case |
 | HARD-043 | baseline | hidden_semantic_edge_case | - | - | hidden_semantic_edge_case |

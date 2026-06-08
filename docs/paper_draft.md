@@ -168,26 +168,32 @@ On the 30-task seed pilot, all 60 runs pass their external graders. CodexTrace
 still detects one process failure: `CT-021/baseline` hits a sandbox or
 permission deadlock pattern and receives a failure score of 35.
 
-On the hard30 tier, manual labels mark all 30 outcome failures as
-`hidden_semantic_edge_case`.
+On the hard30 tier, manual labels mark 30 hidden semantic edge-case failures
+and 4 high-volume `repetitive_exploration` process positives identified during
+trace review.
 
 | Pilot | Labeled failure tag | Count | Example |
 | --- | --- | ---: | --- |
 | full30 | `sandbox_permission_deadlock` | 1 | `CT-021/baseline` |
 | hard30 | `hidden_semantic_edge_case` | 30 | `HARD-001/baseline` |
+| hard30 | `repetitive_exploration` | 4 | `HARD-011/baseline` |
 
 ### RQ2: Detector Agreement
 
-The current process-only detector does not detect hidden semantic edge cases.
-For the hard30 manual labels, detector agreement is:
+The current process-only detector detects the reviewed repetitive-exploration
+positives, but it does not detect hidden semantic edge cases. For the hard30
+manual labels, detector agreement is:
 
 | Label | TP | FP | FN | Precision | Recall | F1 |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
 | `hidden_semantic_edge_case` | 0 | 0 | 30 | 0 | 0 | 0 |
+| `repetitive_exploration` | 4 | 0 | 0 | 1 | 1 | 1 |
 
 This is a boundary result rather than a contradiction of trace diagnosis. The
 detectors target process evidence; hidden semantic failures may require visible
-edge tests, stronger task oracles, or a semantic analysis layer.
+edge tests, stronger task oracles, or a semantic analysis layer. The
+`repetitive_exploration` row shows that process-positive labels can be detected
+from trace signals when the failure mode is actually observable.
 
 ### RQ3: Baseline vs Intervention
 
@@ -223,7 +229,7 @@ On the hard30 tier, success stays flat but waste drops sharply:
 | avg_repeated_tool_calls | 12.93 | 9.20 | -3.73 |
 | avg_command_failures | 0.30 | 0.10 | -0.20 |
 | avg_token_usage | 355.0k | 256.3k | -98.7k |
-| avg_failure_score | 1.50 | 0.50 | -1.00 |
+| avg_failure_score | 3.50 | 1.17 | -2.33 |
 
 Paired hard30 deltas show that token usage improves in 26 of 30 tasks,
 repeated tool calls improve in 26 of 30 tasks, and success improves in one task

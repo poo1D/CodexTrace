@@ -9,7 +9,7 @@ HARD-007,success,failure,-1,0,-2,-72244,0
 HARD-008,success,success,0,0,-4,-75974,0
 HARD-009,failure,failure,0,0,0,-35606,0
 HARD-010,success,success,0,0,-5,-150279,0
-HARD-011,success,success,0,0,-6,-216568,-10
+HARD-011,success,success,0,0,-6,-216568,-30
 HARD-012,failure,failure,0,0,-2,-39944,0
 HARD-013,failure,failure,0,0,-9,-235860,-5
 HARD-015,failure,failure,0,0,-5,-111558,0
@@ -20,7 +20,7 @@ HARD-025,success,success,0,0,-4,-36371,0
 HARD-027,failure,failure,0,0,-11,-204667,-5
 HARD-031,success,success,0,0,5,111523,0
 HARD-032,failure,failure,0,0,-3,-40264,0
-HARD-033,failure,failure,0,0,-15,-699231,-15
+HARD-033,failure,failure,0,0,-15,-699231,-35
 HARD-035,failure,failure,0,0,-1,33439,0
 HARD-038,failure,failure,0,0,-3,-86667,0
 HARD-039,success,success,0,0,1,80525,0

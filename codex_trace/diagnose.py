@@ -57,6 +57,16 @@ def diagnose(trace: Trace) -> Diagnosis:
             recommendation="Summarize discovered facts after each exploration pass and switch from broad search to targeted file reads.",
         ))
 
+    repeated_volume = _repeated_tool_call_volume(trace.events)
+    if repeated_volume and not repeated:
+        findings.append(Finding(
+            code="repeated_search_or_read",
+            title="High repeated tool-call volume suggests inefficient exploration",
+            severity="medium",
+            evidence=repeated_volume,
+            recommendation="Checkpoint what has already been learned, then switch to a narrower edit/verification loop instead of repeating the same commands.",
+        ))
+
     sandbox_events = _sandbox_events(trace.events)
     if sandbox_events:
         findings.append(Finding(
@@ -130,6 +140,20 @@ def _unresolved_failed_commands(events: list[TraceEvent], failed: list[TraceEven
 def _repeated_searches(events: list[TraceEvent]) -> list[tuple[str, int]]:
     commands = [_normalize_command(event.command or "") for event in events if event.kind == "command" and _is_search(event.command or "")]
     return [(cmd, count) for cmd, count in Counter(commands).items() if count >= 2]
+
+
+def _repeated_tool_call_volume(events: list[TraceEvent], threshold: int = 20) -> list[str]:
+    commands = [_normalize_command(event.command or "") for event in events if event.kind == "command" and event.command]
+    counts = Counter(commands)
+    repeated_total = sum(count - 1 for count in counts.values() if count > 1)
+    if repeated_total < threshold:
+        return []
+    top_repeats = [
+        f"`{command}` repeated {count} times"
+        for command, count in counts.most_common(3)
+        if count > 1
+    ]
+    return [f"{repeated_total} repeated command invocation(s) across the trace."] + top_repeats
 
 
 def _sandbox_events(events: list[TraceEvent]) -> list[TraceEvent]:

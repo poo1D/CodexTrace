@@ -2,7 +2,9 @@
 
 ## RQ1 Failure Taxonomy Distribution
 
-No failure tags were observed in these runs.
+| Failure tag | Count | Percentage | Example task |
+| --- | ---: | ---: | --- |
+| repetitive_exploration | 4 | 100 | HARD-011/baseline |
 
 ## RQ3 Baseline vs Intervention
 
@@ -15,7 +17,7 @@ No failure tags were observed in these runs.
 | avg_retry_count | 0.2 | 0 | -0.2 |
 | avg_command_failures | 0.3 | 0.1 | -0.2 |
 | avg_token_usage | 3.55e+05 | 2.563e+05 | -9.866e+04 |
-| avg_failure_score | 1.5 | 0.5 | -1 |
+| avg_failure_score | 3.5 | 1.167 | -2.333 |
 | avg_recover_events | 1.2 | 0.8333 | -0.3667 |
 | avg_verify_events | 10.7 | 6.767 | -3.933 |
 
@@ -27,7 +29,7 @@ No failure tags were observed in these runs.
 | verification | 0 | 0 | 30 | 0 |
 | repeated tool calls | 26 | 2 | 2 | -3.733 |
 | token usage | 26 | 4 | 0 | -9.866e+04 |
-| failure score | 4 | 1 | 25 | -1 |
+| failure score | 4 | 1 | 25 | -2.333 |
 
 ### Paired Task Deltas
 
@@ -43,7 +45,7 @@ No failure tags were observed in these runs.
 | HARD-008 | 0 | 0 | -4 | -75974 | 0 |
 | HARD-009 | 0 | 0 | 0 | -35606 | 0 |
 | HARD-010 | 0 | 0 | -5 | -150279 | 0 |
-| HARD-011 | 0 | 0 | -6 | -216568 | -10 |
+| HARD-011 | 0 | 0 | -6 | -216568 | -30 |
 | HARD-012 | 0 | 0 | -2 | -39944 | 0 |
 | HARD-013 | 0 | 0 | -9 | -235860 | -5 |
 | HARD-015 | 0 | 0 | -5 | -111558 | 0 |
@@ -54,7 +56,7 @@ No failure tags were observed in these runs.
 | HARD-027 | 0 | 0 | -11 | -204667 | -5 |
 | HARD-031 | 0 | 0 | 5 | 111523 | 0 |
 | HARD-032 | 0 | 0 | -3 | -40264 | 0 |
-| HARD-033 | 0 | 0 | -15 | -699231 | -15 |
+| HARD-033 | 0 | 0 | -15 | -699231 | -35 |
 | HARD-035 | 0 | 0 | -1 | 33439 | 0 |
 | HARD-038 | 0 | 0 | -3 | -86667 | 0 |
 | HARD-039 | 0 | 0 | 1 | 80525 | 0 |
@@ -76,7 +78,7 @@ Outcome counts: failure=30, success=30, unknown=0.
 | retry_count | 0.1333 | 0.0667 | -0.0666 |
 | command_failure_count | 0.2333 | 0.1667 | -0.0666 |
 | token_usage | 3.065e+05 | 3.048e+05 | -1772 |
-| failure_score | 1.167 | 0.8333 | -0.3334 |
+| failure_score | 1.833 | 2.833 | 1 |
 | turn_count | 1 | 1 | 0 |
 | time_to_first_edit | 15.6 | 15.97 | 0.3667 |
 | time_to_first_test | 19.27 | 20.3 | 1.033 |
@@ -109,7 +111,7 @@ Outcome counts: failure=30, success=30, unknown=0.
 | HARD-009 | intervention | failure | 0 | - |
 | HARD-010 | baseline | success | 0 | - |
 | HARD-010 | intervention | success | 0 | - |
-| HARD-011 | baseline | success | 10 | - |
+| HARD-011 | baseline | success | 30 | repetitive_exploration |
 | HARD-011 | intervention | success | 0 | - |
 | HARD-012 | baseline | failure | 0 | - |
 | HARD-012 | intervention | failure | 0 | - |
@@ -131,14 +133,14 @@ Outcome counts: failure=30, success=30, unknown=0.
 | HARD-031 | intervention | success | 0 | - |
 | HARD-032 | baseline | failure | 0 | - |
 | HARD-032 | intervention | failure | 0 | - |
-| HARD-033 | baseline | failure | 15 | - |
+| HARD-033 | baseline | failure | 35 | repetitive_exploration |
 | HARD-033 | intervention | failure | 0 | - |
 | HARD-035 | baseline | failure | 0 | - |
 | HARD-035 | intervention | failure | 0 | - |
 | HARD-038 | baseline | failure | 0 | - |
 | HARD-038 | intervention | failure | 0 | - |
-| HARD-039 | baseline | success | 5 | - |
-| HARD-039 | intervention | success | 5 | - |
+| HARD-039 | baseline | success | 25 | repetitive_exploration |
+| HARD-039 | intervention | success | 25 | repetitive_exploration |
 | HARD-040 | baseline | failure | 0 | - |
 | HARD-040 | intervention | failure | 0 | - |
 | HARD-043 | baseline | failure | 0 | - |

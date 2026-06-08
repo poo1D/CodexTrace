@@ -943,11 +943,13 @@ def test_build_results_summary_from_stored_pilots():
     assert result["hard30"]["summary"]["baseline"]["success_rate"] == 0.5
     assert result["hard10_label_evaluation"]["labels"]["hidden_semantic_edge_case"]["fn"] == 5
     assert result["hard30_label_evaluation"]["labels"]["hidden_semantic_edge_case"]["fn"] == 30
+    assert result["hard30_label_evaluation"]["labels"]["repetitive_exploration"]["tp"] == 4
     assert "## RQ3 Baseline vs Intervention" in markdown
     assert "### Hard30 Pilot" in markdown
     assert "## RQ4 Trace Signals By Outcome" in markdown
-    assert "| failure_score | 1.167 | 0.8333 | -0.3334 |" in markdown
+    assert "| failure_score | 1.833 | 2.833 | 1 |" in markdown
     assert "hidden_semantic_edge_case" in markdown
+    assert "repetitive_exploration" in markdown
     assert "30 false negatives" in markdown
 
 
@@ -958,6 +960,7 @@ def test_paper_claim_audit_marks_overclaims_as_unsupported():
 
     assert result["summary"]["hard30_tasks"] == 30
     assert result["summary"]["hard30_runs"] == 60
+    assert result["summary"]["hard30_repetitive_exploration_tp"] == 4
     assert result["summary"]["status_counts"]["supported"] >= 3
     assert claims["Harness intervention increases verification rate."]["status"] == "unsupported"
     assert claims["Trace-based process rules detect most failure processes."]["status"] == "unsupported"

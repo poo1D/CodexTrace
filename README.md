@@ -57,7 +57,9 @@ Current stored pilots:
 The hard tier also exposes a trace-only detector boundary: all hard30 hidden
 semantic edge-case failures are missed by deterministic process rules
 (`TP=0`, `FP=0`, `FN=30`), showing why trace diagnosis should be paired with
-strong task-level oracles.
+strong task-level oracles. At the same time, reviewed high-volume
+`repetitive_exploration` process positives are detected from trace signals
+(`TP=4`, `FP=0`, `FN=0`).
 
 See `docs/artifact_guide.md` for the reviewer-facing walkthrough,
 `docs/results_summary.md` for the generated result summary and RQ4

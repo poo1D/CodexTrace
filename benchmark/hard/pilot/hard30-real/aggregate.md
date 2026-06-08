@@ -13,7 +13,7 @@
 | avg_recover_events | 1.2 | 0.8333 | -0.3667 |
 | avg_verify_events | 10.7 | 6.767 | -3.933 |
 | avg_token_usage | 3.55e+05 | 2.563e+05 | -9.866e+04 |
-| avg_failure_score | 1.5 | 0.5 | -1 |
+| avg_failure_score | 3.5 | 1.167 | -2.333 |
 
 ## Runs
 
@@ -39,7 +39,7 @@
 | HARD-009 | intervention | failure | 0 | - |
 | HARD-010 | baseline | success | 0 | - |
 | HARD-010 | intervention | success | 0 | - |
-| HARD-011 | baseline | success | 10 | - |
+| HARD-011 | baseline | success | 30 | repeated_search_or_read |
 | HARD-011 | intervention | success | 0 | - |
 | HARD-012 | baseline | failure | 0 | - |
 | HARD-012 | intervention | failure | 0 | - |
@@ -61,14 +61,14 @@
 | HARD-031 | intervention | success | 0 | - |
 | HARD-032 | baseline | failure | 0 | - |
 | HARD-032 | intervention | failure | 0 | - |
-| HARD-033 | baseline | failure | 15 | - |
+| HARD-033 | baseline | failure | 35 | repeated_search_or_read |
 | HARD-033 | intervention | failure | 0 | - |
 | HARD-035 | baseline | failure | 0 | - |
 | HARD-035 | intervention | failure | 0 | - |
 | HARD-038 | baseline | failure | 0 | - |
 | HARD-038 | intervention | failure | 0 | - |
-| HARD-039 | baseline | success | 5 | - |
-| HARD-039 | intervention | success | 5 | - |
+| HARD-039 | baseline | success | 25 | repeated_search_or_read |
+| HARD-039 | intervention | success | 25 | repeated_search_or_read |
 | HARD-040 | baseline | failure | 0 | - |
 | HARD-040 | intervention | failure | 0 | - |
 | HARD-043 | baseline | failure | 0 | - |

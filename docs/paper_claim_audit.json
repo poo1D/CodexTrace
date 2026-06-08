@@ -31,9 +31,9 @@
       "status": "supported"
     },
     {
-      "action": "Reframe as a boundary result until process-failure-positive tasks or richer labels are collected.",
+      "action": "Claim process-positive detection only for observed process labels; do not claim most overall failures are detected.",
       "claim": "Trace-based process rules detect most failure processes.",
-      "evidence": "hard30 has 30 failures, all labeled hidden semantic edge cases; trace-only recall for that label is 0.00 with FN=30.",
+      "evidence": "hard30 includes 4 detected repetitive-exploration process positives (F1=1.00), but hidden semantic recall is 0.00 with FN=30.",
       "status": "unsupported"
     },
     {
@@ -53,6 +53,8 @@
     "claims": 8,
     "hard30_failures": 30,
     "hard30_ready": true,
+    "hard30_repetitive_exploration_fn": 0,
+    "hard30_repetitive_exploration_tp": 4,
     "hard30_runs": 60,
     "hard30_tasks": 30,
     "status_counts": {

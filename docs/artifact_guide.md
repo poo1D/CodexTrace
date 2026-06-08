@@ -95,6 +95,7 @@ PYTHONPATH=. python3 -m codex_trace.cli research paper-report \
 | hard30 repeated tool calls | `12.93 -> 9.20` |
 | hard30 token usage | `355.0k -> 256.3k` |
 | hidden semantic detector boundary | `TP=0`, `FP=0`, `FN=30` |
+| repetitive exploration detection | `TP=4`, `FP=0`, `FN=0` |
 
 The RQ4 signal table shows why the detector boundary matters:
 `verification_rate` and `unresolved_error` do not separate hard30 success and

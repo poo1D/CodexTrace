@@ -1,5 +1,5 @@
 metric,n,improved,regressed,unchanged,avg_delta
-failure_score_delta,30,4,1,25,-1.0
+failure_score_delta,30,4,1,25,-2.3333
 repeated_tool_call_delta,30,26,2,2,-3.7333
 success_delta,30,1,1,28,0.0
 token_usage_delta,30,26,4,0,-98656.7667

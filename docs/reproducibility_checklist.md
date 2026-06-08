@@ -118,6 +118,7 @@ PYTHONPATH=. python3 -m codex_trace.cli research summary \
 | Hard10 intervention improves success and reduces waste. | `benchmark/hard/pilot/hard10-real/aggregate.md` | Supported: success `0.70 -> 0.80`, repeated tool calls `9.20 -> 6.20`, token usage `248.9k -> 187.5k`. |
 | Hard30 intervention reduces process waste. | `benchmark/hard/pilot/hard30-real/aggregate.md`, `benchmark/hard/pilot/hard30-real/paired-task-summary.csv` | Supported: repeated tool calls `12.93 -> 9.20`, token usage `355.0k -> 256.3k`, token usage improves in 26/30 paired tasks. |
 | Trace-only process rules miss hidden semantic edge failures. | `benchmark/hard/pilot/hard30-real/label-eval.md` | Supported as a boundary result: `TP=0`, `FP=0`, `FN=30` for `hidden_semantic_edge_case`. |
+| Trace rules detect observed repetitive exploration positives. | `benchmark/hard/pilot/hard30-real/label-eval.md` | Supported for the reviewed process-positive subset: `TP=4`, `FP=0`, `FN=0` for `repetitive_exploration`. |
 | Hard30 process signals explain the detector boundary. | `benchmark/hard/pilot/hard30-real/paper-report-labeled.md` RQ4 tables | Supported: hidden failures have verification rate 1.0 and unresolved error 0, so visible traces often look procedurally clean. |
 | Current claims are pilot-scale, not broad SWE-bench-scale claims. | `docs/paper_draft.md`, `docs/experiment_protocol.md` | Stated explicitly in limitations. |
 

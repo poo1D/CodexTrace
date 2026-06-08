@@ -211,9 +211,15 @@
     {
       "task_id": "HARD-011",
       "prompt_type": "baseline",
-      "expected": [],
-      "predicted": [],
-      "true_positive": [],
+      "expected": [
+        "repetitive_exploration"
+      ],
+      "predicted": [
+        "repetitive_exploration"
+      ],
+      "true_positive": [
+        "repetitive_exploration"
+      ],
       "false_positive": [],
       "false_negative": []
     },
@@ -450,10 +456,15 @@
       "task_id": "HARD-033",
       "prompt_type": "baseline",
       "expected": [
-        "hidden_semantic_edge_case"
+        "hidden_semantic_edge_case",
+        "repetitive_exploration"
       ],
-      "predicted": [],
-      "true_positive": [],
+      "predicted": [
+        "repetitive_exploration"
+      ],
+      "true_positive": [
+        "repetitive_exploration"
+      ],
       "false_positive": [],
       "false_negative": [
         "hidden_semantic_edge_case"
@@ -527,18 +538,30 @@
     {
       "task_id": "HARD-039",
       "prompt_type": "baseline",
-      "expected": [],
-      "predicted": [],
-      "true_positive": [],
+      "expected": [
+        "repetitive_exploration"
+      ],
+      "predicted": [
+        "repetitive_exploration"
+      ],
+      "true_positive": [
+        "repetitive_exploration"
+      ],
       "false_positive": [],
       "false_negative": []
     },
     {
       "task_id": "HARD-039",
       "prompt_type": "intervention",
-      "expected": [],
-      "predicted": [],
-      "true_positive": [],
+      "expected": [
+        "repetitive_exploration"
+      ],
+      "predicted": [
+        "repetitive_exploration"
+      ],
+      "true_positive": [
+        "repetitive_exploration"
+      ],
       "false_positive": [],
       "false_negative": []
     },
@@ -669,13 +692,21 @@
       "precision": 0,
       "recall": 0.0,
       "f1": 0
+    },
+    "repetitive_exploration": {
+      "tp": 4,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0
     }
   },
   "summary": {
-    "labels": 1,
-    "micro_precision": 0,
-    "micro_recall": 0.0,
-    "micro_f1": 0,
-    "macro_f1": 0
+    "labels": 2,
+    "micro_precision": 1.0,
+    "micro_recall": 0.1176,
+    "micro_f1": 0.2105,
+    "macro_f1": 0.5
   }
 }

@@ -696,13 +696,15 @@ def render_results_summary_markdown(result: dict[str, Any]) -> str:
         "",
         "| Label | TP | FP | FN | Precision | Recall | F1 |",
         "| --- | ---: | ---: | ---: | ---: | ---: | ---: |",
-        (
-            "| hidden_semantic_edge_case | "
-            f"{hidden_scores.get('tp', 0)} | {hidden_scores.get('fp', 0)} | {hidden_scores.get('fn', 0)} | "
-            f"{_fmt(hidden_scores.get('precision', 0))} | {_fmt(hidden_scores.get('recall', 0))} | {_fmt(hidden_scores.get('f1', 0))} |"
-        ),
+    ])
+    for label, scores in sorted(boundary_eval["labels"].items()):
+        lines.append(
+            f"| {label} | {scores.get('tp', 0)} | {scores.get('fp', 0)} | {scores.get('fn', 0)} | "
+            f"{_fmt(scores.get('precision', 0))} | {_fmt(scores.get('recall', 0))} | {_fmt(scores.get('f1', 0))} |"
+        )
+    lines.extend([
         "",
-        "Interpretation: the current deterministic process rules do not detect hidden semantic edge-case failures when the visible process trace looks clean.",
+        "Interpretation: deterministic process rules detect high-volume `repetitive_exploration` positives, but still do not detect hidden semantic edge-case failures when the visible process trace looks clean.",
         "",
         "## RQ4 Trace Signals By Outcome",
         "",
@@ -729,7 +731,7 @@ def render_results_summary_markdown(result: dict[str, Any]) -> str:
         "| Intervention reduces process waste on full30. | `avg_repeated_tool_calls`, `avg_command_failures`, `avg_recover_events`, and `avg_token_usage` improve in the full30 table. |",
         "| Intervention improves success on hard10. | hard10 `success_rate` improves from baseline to intervention. |",
         "| Intervention reduces waste on hard30. | hard30 repeated tool calls, command failures, token usage, and failure score improve. |" if hard30 else "",
-        f"| Trace-only process rules have a semantic boundary. | {boundary_name.lower()} label evaluation has {hidden_scores.get('fn', 0)} false negatives for `hidden_semantic_edge_case`. |",
+        f"| Trace-only process rules have a semantic boundary. | {boundary_name.lower()} label evaluation has {hidden_scores.get('fn', 0)} false negatives for `hidden_semantic_edge_case`, while detecting observed process positives such as `repetitive_exploration`. |",
         f"| RQ4 signal analysis explains the detector boundary. | {boundary_name.lower()} `verification_rate` and `unresolved_error` are equal for successful and failed runs. |",
         "| Strong task oracles remain necessary. | hard-tier failures are only visible through hidden graders, not process-rule findings. |",
     ])

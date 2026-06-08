@@ -44,3 +44,14 @@ def test_real_trace_does_not_treat_readme_text_as_sandbox_failure():
 
     assert diagnosis.outcome == "healthy"
     assert "sandbox_or_permission_block" not in {finding.code for finding in diagnosis.findings}
+
+
+def test_detects_high_repeated_tool_call_volume_in_real_hard_trace():
+    diagnosis = diagnose(parse_jsonl("benchmark/hard/pilot/hard30-real/shards/HARD-033/HARD-033/baseline/trace.jsonl"))
+
+    assert "repeated_search_or_read" in {finding.code for finding in diagnosis.findings}
+    assert any(
+        "repeated command invocation" in evidence
+        for finding in diagnosis.findings
+        for evidence in finding.evidence
+    )

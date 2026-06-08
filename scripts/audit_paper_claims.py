@@ -29,6 +29,7 @@ def build_claim_audit(
     paired = hard30["paired_task_summary"]
     label_eval = hard30["detector_evaluation"]
     hidden = label_eval["labels"].get("hidden_semantic_edge_case", {})
+    repetitive = label_eval["labels"].get("repetitive_exploration", {})
     signal_rows = {row["signal"]: row for row in hard30["signal_by_outcome"]}
 
     full30_task_count = int(full30["summary"]["baseline"]["n"])
@@ -46,6 +47,9 @@ def build_claim_audit(
     paired_n = int(paired["token_usage_delta"]["n"])
     hidden_fn = int(hidden.get("fn", 0) or 0)
     hidden_recall = float(hidden.get("recall", 0) or 0)
+    repetitive_tp = int(repetitive.get("tp", 0) or 0)
+    repetitive_fn = int(repetitive.get("fn", 0) or 0)
+    repetitive_f1 = float(repetitive.get("f1", 0) or 0)
     verification_signal_delta = float(signal_rows["verification_rate"]["delta_success_minus_failure"])
     unresolved_signal_delta = float(signal_rows["unresolved_error"]["delta_success_minus_failure"])
 
@@ -83,8 +87,8 @@ def build_claim_audit(
         {
             "claim": "Trace-based process rules detect most failure processes.",
             "status": "unsupported",
-            "evidence": f"hard30 has {hard30_failures} failures, all labeled hidden semantic edge cases; trace-only recall for that label is {hidden_recall:.2f} with FN={hidden_fn}.",
-            "action": "Reframe as a boundary result until process-failure-positive tasks or richer labels are collected.",
+            "evidence": f"hard30 includes {repetitive_tp} detected repetitive-exploration process positives (F1={repetitive_f1:.2f}), but hidden semantic recall is {hidden_recall:.2f} with FN={hidden_fn}.",
+            "action": "Claim process-positive detection only for observed process labels; do not claim most overall failures are detected.",
         },
         {
             "claim": "Trace signals explain whether hidden semantic failures will fail.",
@@ -110,6 +114,8 @@ def build_claim_audit(
             "hard30_runs": hard30_run_count,
             "hard30_failures": hard30_failures,
             "hard30_ready": hard30_ready,
+            "hard30_repetitive_exploration_tp": repetitive_tp,
+            "hard30_repetitive_exploration_fn": repetitive_fn,
         },
         "claims": claims,
     }
@@ -130,6 +136,7 @@ def render_claim_audit_markdown(result: dict[str, Any]) -> str:
         f"- Partial: {counts.get('partial', 0)}",
         f"- Unsupported: {counts.get('unsupported', 0)}",
         f"- Hard30 artifact: {summary['hard30_tasks']} tasks, {summary['hard30_runs']} runs, {summary['hard30_failures']} failures, readiness={'yes' if summary['hard30_ready'] else 'no'}",
+        f"- Hard30 detected repetitive-exploration positives: TP={summary['hard30_repetitive_exploration_tp']}, FN={summary['hard30_repetitive_exploration_fn']}",
         "",
         "## Claim Status",
         "",
