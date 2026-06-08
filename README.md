@@ -121,6 +121,7 @@ Key files:
 - `docs/experiment_protocol.md`: collection and labeling protocol
 - `docs/failure_taxonomy.md`: process-level failure labels
 - `docs/hard_tier_expansion_blueprint.md`: HARD-011 to HARD-050 fixtures and hard30 pilot selection plan
+- `docs/paper_claim_audit.md`: generated support/partial/unsupported audit for thesis-level claims
 - `docs/paper_draft.md`: result-driven workshop-style paper draft
 - `docs/paper_outline.md`: paper outline and experiment plan
 - `docs/reproducibility_checklist.md`: claim-evidence map and reproduction commands
@@ -193,6 +194,7 @@ codex-trace research paper-report benchmark/hard/pilot/hard10-real/runs.jsonl \
 codex-trace research paper-report benchmark/hard/pilot/hard30-real/runs.jsonl \
   --labels benchmark/hard/pilot/hard30-real/manual-labels.jsonl
 codex-trace research summary --markdown-output docs/results_summary.md
+PYTHONPATH=. python3 scripts/audit_paper_claims.py --markdown-output docs/paper_claim_audit.md
 ```
 
 The current draft in `docs/paper_draft.md` reports three pilots: a 30-task seed

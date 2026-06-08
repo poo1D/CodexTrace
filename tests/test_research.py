@@ -3,6 +3,7 @@ from pathlib import Path
 
 from scripts.finalize_hard30_pilot import finalize, preflight, render_preflight
 from scripts.audit_manual_labels import audit_manual_labels, render_audit
+from scripts.audit_paper_claims import build_claim_audit, render_claim_audit_markdown
 from scripts.merge_hard30_shards import merge_shards, rewrite_shard_row
 from scripts.run_hard30_shards import (
     build_shard_commands,
@@ -948,6 +949,21 @@ def test_build_results_summary_from_stored_pilots():
     assert "| failure_score | 1.167 | 0.8333 | -0.3334 |" in markdown
     assert "hidden_semantic_edge_case" in markdown
     assert "30 false negatives" in markdown
+
+
+def test_paper_claim_audit_marks_overclaims_as_unsupported():
+    result = build_claim_audit()
+    markdown = render_claim_audit_markdown(result)
+    claims = {row["claim"]: row for row in result["claims"]}
+
+    assert result["summary"]["hard30_tasks"] == 30
+    assert result["summary"]["hard30_runs"] == 60
+    assert result["summary"]["status_counts"]["supported"] >= 3
+    assert claims["Harness intervention increases verification rate."]["status"] == "unsupported"
+    assert claims["Trace-based process rules detect most failure processes."]["status"] == "unsupported"
+    assert claims["Harness intervention increases success rate."]["status"] == "partial"
+    assert claims["Harness intervention reduces repeated tool-call and token waste."]["status"] == "supported"
+    assert "Do not state `unsupported` claims as findings" in markdown
 
 
 def test_smoke_fixture_success_check_starts_failing():

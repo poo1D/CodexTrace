@@ -23,6 +23,7 @@ The stored pilots can be inspected and aggregated without re-running Codex.
 | `docs/artifact_guide.md` | Fifteen-minute reviewer/interviewer walkthrough. |
 | `docs/paper_draft.md` | Result-driven workshop-style draft. |
 | `docs/results_summary.md` | Generated full30 + hard10 + hard30 result summary, including RQ4 trace-signal analysis. |
+| `docs/paper_claim_audit.md` | Generated support/partial/unsupported audit for thesis-level paper claims. |
 | `docs/failure_taxonomy.md` | Definitions for process-level failure labels. |
 | `docs/hard_tier_expansion_blueprint.md` | Implemented HARD-011 to HARD-050 fixtures and hard30 pilot selection plan. |
 | `docs/experiment_protocol.md` | Collection, labeling, and evaluation protocol. |
@@ -34,6 +35,7 @@ The stored pilots can be inspected and aggregated without re-running Codex.
 | `scripts/merge_hard30_shards.py` | Merge per-task hard30 shard manifests into the reporting `runs.jsonl`. |
 | `scripts/finalize_hard30_pilot.py` | Post-processing entrypoint for hard30 aggregate tables, labels, CSV, and paper-report artifacts. |
 | `scripts/audit_manual_labels.py` | Standalone progress and quality audit for hard30 manual failure labels. |
+| `scripts/audit_paper_claims.py` | Machine-readable guard against overclaiming unsupported paper findings. |
 | `scripts/check_submission_readiness.py` | Machine-readable gate for hard30 collection, finalization, labeling, and paper artifact readiness. |
 | `benchmark/pilot/full30-real` | 30-task / 60-run real seed pilot. |
 | `benchmark/hard/pilot/hard10-real` | 10-task / 20-run hard-tier pilot with outcome failures. |
@@ -200,6 +202,15 @@ PYTHONPATH=. PYTHONPYCACHEPREFIX=/tmp/codextrace-pycache \
   python3 scripts/check_submission_readiness.py \
   --json-output /tmp/codextrace-readiness.json \
   --markdown-output /tmp/codextrace-readiness.md
+```
+
+Run the paper-claim audit:
+
+```bash
+PYTHONPATH=. PYTHONPYCACHEPREFIX=/tmp/codextrace-pycache \
+  python3 scripts/audit_paper_claims.py \
+  --json-output /tmp/codextrace-claim-audit.json \
+  --markdown-output /tmp/codextrace-claim-audit.md
 ```
 
 When the gate is not ready, the Markdown/JSON report includes ordered next

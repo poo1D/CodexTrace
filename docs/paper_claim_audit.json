@@ -1,0 +1,64 @@
+{
+  "claims": [
+    {
+      "action": "Keep as a headline artifact claim.",
+      "claim": "CodexTrace is a GPU-free offline parser and diagnosis engine for Codex JSONL traces.",
+      "evidence": "Parser, diagnosis CLI, reports, demo traces, and CI-tested package exist; stored pilots can be analyzed without Codex or GPU.",
+      "status": "supported"
+    },
+    {
+      "action": "Describe as a 30-task paper-facing hard artifact plus a 30-task seed pilot, not as a broad benchmark.",
+      "claim": "The benchmark has 30-50 coding tasks with baseline and intervention traces.",
+      "evidence": "full30 has 30 seed tasks; hard30 has 30 selected hard tasks and 60 real runs; readiness=True.",
+      "status": "supported"
+    },
+    {
+      "action": "State that success improves in the early hard10 pilot but is flat on hard30.",
+      "claim": "Harness intervention increases success rate.",
+      "evidence": "hard10 success delta is +0.10; hard30 success delta is +0.00.",
+      "status": "partial"
+    },
+    {
+      "action": "Do not claim verification-rate lift for current stored pilots; frame verification as saturated.",
+      "claim": "Harness intervention increases verification rate.",
+      "evidence": "hard30 verification delta is +0.00; both baseline and intervention verification rates are already 1.00.",
+      "status": "unsupported"
+    },
+    {
+      "action": "Use as the strongest current RQ3 result.",
+      "claim": "Harness intervention reduces repeated tool-call and token waste.",
+      "evidence": "hard30 repeated tool calls change -3.73; token usage changes -98656.8; paired improvements are repeated=26/30, token=26/30.",
+      "status": "supported"
+    },
+    {
+      "action": "Reframe as a boundary result until process-failure-positive tasks or richer labels are collected.",
+      "claim": "Trace-based process rules detect most failure processes.",
+      "evidence": "hard30 has 30 failures, all labeled hidden semantic edge cases; trace-only recall for that label is 0.00 with FN=30.",
+      "status": "unsupported"
+    },
+    {
+      "action": "Say process signals explain the detector boundary, not hidden correctness.",
+      "claim": "Trace signals explain whether hidden semantic failures will fail.",
+      "evidence": "hard30 verification-rate signal delta is +0.00; unresolved-error delta is +0.00.",
+      "status": "unsupported"
+    },
+    {
+      "action": "Keep as a limitation and contribution.",
+      "claim": "Strong task-level oracles remain necessary.",
+      "evidence": "hard30 visible traces often verify cleanly, but hidden graders expose 30 failures and 30 trace-only false negatives.",
+      "status": "supported"
+    }
+  ],
+  "summary": {
+    "claims": 8,
+    "hard30_failures": 30,
+    "hard30_ready": true,
+    "hard30_runs": 60,
+    "hard30_tasks": 30,
+    "status_counts": {
+      "partial": 1,
+      "supported": 4,
+      "unsupported": 3
+    }
+  }
+}

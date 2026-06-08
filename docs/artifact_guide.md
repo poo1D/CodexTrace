@@ -24,14 +24,15 @@ oracles for hidden semantic correctness.
 1. Read the project snapshot in `README.md`.
 2. Open the paper draft in `docs/paper_draft.md`.
 3. Inspect generated results in `docs/results_summary.md`.
-4. Check claim-to-evidence mapping in `docs/reproducibility_checklist.md`.
-5. Run the offline demo:
+4. Check thesis-level support status in `docs/paper_claim_audit.md`.
+5. Check claim-to-evidence mapping in `docs/reproducibility_checklist.md`.
+6. Run the offline demo:
 
 ```bash
 ./scripts/demo.sh
 ```
 
-6. Optionally open the visual replay UI:
+7. Optionally open the visual replay UI:
 
 ```bash
 cd web
