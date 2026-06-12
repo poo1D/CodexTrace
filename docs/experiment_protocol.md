@@ -9,7 +9,8 @@ Paper title:
 - RQ1: What observable failure modes appear in multi-turn coding-agent traces?
 - RQ2: Can these failure modes be detected from trace signals alone?
 - RQ3: Do simple harness interventions improve success or reduce waste?
-- RQ4: Which trace signals best explain whether a run will fail?
+- RQ4: Which trace signals explain observable process failures, and where do
+  they fail to explain hidden semantic outcomes?
 
 ## Dataset
 

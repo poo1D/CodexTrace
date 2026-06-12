@@ -18,8 +18,9 @@ patterns, and aggregates baseline-vs-intervention experiments. We evaluate the
 tool on six real Codex benchmark pilots: a 30-task seed benchmark with 60
 runs, an early 10-task hard tier with 20 runs, a 30-task hard tier with 60
 runs and hidden edge-case graders, a 12-task process-stress tier, an 8-task
-verification-lift tier, and a 4-task no-verify ablation. On the seed pilot, all
-runs succeed, but the
+verification-lift tier, and a 4-task no-verify ablation. The ordinary and
+weak-baseline pilots have saturated verification rates, so they do not support
+a verification-rate-lift claim. On the seed pilot, all runs succeed, but the
 intervention reduces repeated tool calls from 10.43 to 7.00 and average token
 usage from 218.7k to 184.8k. On the hard30 tier, success rate stays flat at
 50%, but the intervention reduces repeated tool calls from 12.93 to 9.20,
@@ -52,7 +53,8 @@ We ask four research questions:
 - RQ1: What observable failure modes appear in multi-turn coding-agent traces?
 - RQ2: Can these failure modes be detected from trace signals alone?
 - RQ3: Do simple harness interventions improve success or reduce waste?
-- RQ4: Which trace signals best explain whether a run will fail?
+- RQ4: Which trace signals explain observable process failures, and where do
+  they fail to explain hidden semantic outcomes?
 
 ## 2. Related Work
 

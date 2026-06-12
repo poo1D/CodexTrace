@@ -32,8 +32,13 @@ REQUIRED_CAVEATS = (
     ),
     RequiredCaveat(
         path=Path("docs/paper_draft.md"),
-        phrases=("negative result for the verification-rate-lift claim", "not claim a verification-rate lift"),
-        description="Paper draft should present verification-lift as a negative result, not as a supported main finding.",
+        phrases=(
+            "negative result for the verification-rate-lift claim",
+            "not claim a verification-rate lift",
+            "ordinary and weak-baseline pilots have saturated verification rates",
+            "fail to explain hidden semantic outcomes",
+        ),
+        description="Paper draft should present verification-lift as a negative result and frame RQ4 around the process/semantic boundary.",
     ),
     RequiredCaveat(
         path=Path("docs/results_summary.md"),
