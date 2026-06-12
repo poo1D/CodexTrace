@@ -142,11 +142,11 @@ demo writeup.
 
 Required edits:
 
-- Add an artifact availability paragraph.
-- Add a clearer dataset construction table.
+- Add an artifact availability paragraph. Done in `docs/paper_draft.md`.
+- Add a clearer dataset construction table. Done in `docs/paper_draft.md`.
 - Add a limitations paragraph that distinguishes process diagnosis from
-  semantic correctness.
-- Add a short "why no GPU is needed" method note.
+  semantic correctness. Done in `docs/paper_draft.md`.
+- Add a short "why no GPU is needed" method note. Done in `docs/paper_draft.md`.
 - Keep all numeric claims tied to generated artifacts.
 
 Acceptance criteria:

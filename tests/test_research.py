@@ -634,6 +634,8 @@ def test_submission_readiness_accepts_complete_synthetic_artifact(tmp_path):
     assert report["next_actions"] == []
     assert "Ready: yes" in markdown
     assert "submission-ready hard30 artifact" in report["positioning"]
+    paper_check = next(check for check in report["checks"] if check["name"] == "paper draft content")
+    assert paper_check["ok"] is True
 
 
 def test_submission_readiness_rejects_low_quality_manual_labels(tmp_path):
@@ -1132,6 +1134,15 @@ def test_claim_text_guard_prevents_unsupported_claim_drift(tmp_path):
 
     assert failing["ok"] is False
     assert failing["problems"][0]["kind"] == "unqualified_overclaim"
+
+
+def test_paper_draft_contains_submission_polish_sections():
+    text = Path("docs/paper_draft.md").read_text(encoding="utf-8")
+
+    assert "## 10. Artifact Availability" in text
+    assert "| Tier | Tasks | Runs | Baseline | Intervention | Outcome oracle | Primary use |" in text
+    assert "No model training, fine-tuning, embedding index, or GPU inference is used" in text
+    assert "Trace diagnosis is less suited for proving semantic correctness" in text
 
 
 def test_thesis_readiness_identifies_original_thesis_gaps():

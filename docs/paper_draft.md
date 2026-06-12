@@ -145,9 +145,25 @@ check. For hard-tier tasks, the prompt exposes only a public success check such
 as `python3 -m unittest discover -s tests` or `npm test`; the hidden grader is
 copied into the run directory only after the Codex process exits.
 
+No model training, fine-tuning, embedding index, or GPU inference is used by
+CodexTrace itself. Once `codex exec --json` traces have been collected, all
+normalization, phase segmentation, failure detection, aggregation, manual-label
+evaluation, and report generation run as deterministic local Python code over
+stored JSONL, JSON, CSV, and Markdown artifacts.
+
 ## 6. Benchmark
 
-The current benchmark has two tiers.
+The current benchmark is organized as a seed tier, a hard hidden-grader tier,
+and auxiliary stress tiers used to probe specific claims.
+
+| Tier | Tasks | Runs | Baseline | Intervention | Outcome oracle | Primary use |
+| --- | ---: | ---: | --- | --- | --- | --- |
+| seed full30 | 30 | 60 | ordinary prompt | evidence-gated prompt | external visible grader | waste analysis with saturated success |
+| hard10 | 10 | 20 | ordinary prompt | evidence-gated prompt | hidden grader | early outcome-failure pilot |
+| hard30 | 30 | 60 | ordinary prompt | evidence-gated prompt | hidden grader | paper-facing boundary and RQ3 artifact |
+| process-stress | 12 | 24 | ordinary prompt | evidence-gated prompt | hidden grader | observable-process stress slice |
+| verification-lift | 8 | 16 | weak optional-verification prompt | evidence-gated prompt | hidden grader | negative stress test for verification-rate lift |
+| verification-ablation | 4 | 8 | explicit no-verify prompt | evidence-gated prompt | hidden grader | mechanism ablation for harness-controlled verification |
 
 The seed tier contains 30 runnable coding tasks covering bug fixes, features,
 test writing, refactors, CI failures, error localization, and multi-turn
@@ -349,7 +365,18 @@ failure messages. Larger repository tasks, repeated trials, richer process
 failure labels, and lightweight semantic checks are needed before making
 broader claims.
 
-## 10. Conclusion
+## 10. Artifact Availability
+
+The repository contains the analyzer, fixture generators, stored Codex JSONL
+manifests, generated reports, manual labels, and reproduction commands needed
+to inspect the pilot artifact without rerunning Codex. The main entry points
+are `docs/artifact_guide.md` for a short reviewer path,
+`docs/results_summary.md` for generated RQ tables,
+`docs/paper_claim_audit.md` and `docs/claim_text_guard.md` for claim-support
+guards, and `docs/reproducibility_checklist.md` for claim-to-evidence mapping
+and commands.
+
+## 11. Conclusion
 
 CodexTrace shows that coding-agent traces can be used as first-class evaluation
 objects, not merely logs. In real Codex runs, trace analysis exposes process

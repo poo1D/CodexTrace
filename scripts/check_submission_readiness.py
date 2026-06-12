@@ -202,6 +202,37 @@ def check_hard30_report_content(run_dir: Path) -> dict[str, Any]:
     }
 
 
+def check_paper_draft_content(path: Path = Path("docs/paper_draft.md")) -> dict[str, Any]:
+    problems = []
+    try:
+        text = path.read_text(encoding="utf-8")
+    except FileNotFoundError:
+        return {
+            "name": "paper draft content",
+            "ok": False,
+            "evidence": str(path),
+            "problems": ["missing paper draft"],
+        }
+
+    required_phrases = {
+        "artifact availability section": "## 10. Artifact Availability",
+        "dataset construction table": "| Tier | Tasks | Runs | Baseline | Intervention | Outcome oracle | Primary use |",
+        "gpu-free method note": "No model training, fine-tuning, embedding index, or GPU inference is used",
+        "process-vs-semantic limitation": "Trace diagnosis is less suited for proving semantic correctness",
+    }
+    for label, phrase in required_phrases.items():
+        if phrase not in text:
+            problems.append(f"missing {label}")
+
+    return {
+        "name": "paper draft content",
+        "ok": not problems,
+        "evidence": str(path),
+        "detail": "artifact availability, dataset table, GPU-free note, and semantic-limit caveat",
+        "problems": problems,
+    }
+
+
 def build_report(selection_dir: Path, run_dir: Path) -> dict[str, Any]:
     checks = [
         check_hard30_selection(selection_dir),
@@ -209,7 +240,7 @@ def build_report(selection_dir: Path, run_dir: Path) -> dict[str, Any]:
         check_hard30_outputs(run_dir),
         check_manual_labels(run_dir),
         check_hard30_report_content(run_dir),
-        check_exists(Path("docs/paper_draft.md"), "paper draft"),
+        check_paper_draft_content(),
         check_exists(Path("docs/reproducibility_checklist.md"), "reproducibility checklist"),
     ]
     blocking = [check for check in checks if not check["ok"]]
