@@ -10,6 +10,7 @@ No failure tags were observed in these runs.
 | --- | ---: | ---: | ---: |
 | success_rate | 0.7 | 0.8 | 0.1 |
 | verification_rate | 1 | 1 | 0 |
+| success_check_verification_rate | 1 | 1 | 0 |
 | unresolved_error_rate | 0 | 0 | 0 |
 | avg_repeated_tool_calls | 9.2 | 6.2 | -3 |
 | avg_retry_count | 0 | 0 | 0 |
@@ -19,6 +20,32 @@ No failure tags were observed in these runs.
 | avg_recover_events | 0 | 0 | 0 |
 | avg_verify_events | 7.3 | 3.7 | -3.6 |
 
+### Paired Task Summary
+
+| Metric | Improved | Regressed | Unchanged | Average delta |
+| --- | ---: | ---: | ---: | ---: |
+| success | 1 | 0 | 9 | 0.1 |
+| verification | 0 | 0 | 10 | 0 |
+| success check verification | 0 | 0 | 10 | 0 |
+| repeated tool calls | 9 | 1 | 0 | -3 |
+| token usage | 9 | 1 | 0 | -6.145e+04 |
+| failure score | 0 | 0 | 10 | 0 |
+
+### Paired Task Deltas
+
+| Task | Success delta | Verification delta | Success-check verification delta | Repeated calls delta | Token delta | Failure score delta |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| HARD-001 | 1 | 0 | 0 | -4 | -102386 | 0 |
+| HARD-002 | 0 | 0 | 0 | 2 | 34062 | 0 |
+| HARD-003 | 0 | 0 | 0 | -2 | -35359 | 0 |
+| HARD-004 | 0 | 0 | 0 | -9 | -116010 | 0 |
+| HARD-005 | 0 | 0 | 0 | -1 | -4290 | 0 |
+| HARD-006 | 0 | 0 | 0 | -3 | -37533 | 0 |
+| HARD-007 | 0 | 0 | 0 | -1 | -35238 | 0 |
+| HARD-008 | 0 | 0 | 0 | -1 | -35537 | 0 |
+| HARD-009 | 0 | 0 | 0 | -6 | -101031 | 0 |
+| HARD-010 | 0 | 0 | 0 | -5 | -181152 | 0 |
+
 ## RQ4 Trace Signals By Outcome
 
 Outcome counts: failure=5, success=15, unknown=0.
@@ -26,6 +53,7 @@ Outcome counts: failure=5, success=15, unknown=0.
 | Signal | Failure mean | Success mean | Delta success-failure |
 | --- | ---: | ---: | ---: |
 | verification_rate | 1 | 1 | 0 |
+| success_check_verification_rate | 1 | 1 | 0 |
 | unresolved_error | 0 | 0 | 0 |
 | repeated_tool_call_count | 8 | 7.6 | -0.4 |
 | retry_count | 0 | 0 | 0 |

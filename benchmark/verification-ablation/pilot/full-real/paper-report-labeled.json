@@ -8,6 +8,8 @@
         "outcome": "success",
         "success": 1,
         "verification_rate": 0,
+        "success_check_verification_rate": 0,
+        "visible_success_check": "python3 ../grader/check.py",
         "unresolved_error": 0,
         "repeated_tool_call_count": 4,
         "retry_count": 0,
@@ -40,6 +42,8 @@
         "outcome": "success",
         "success": 1,
         "verification_rate": 1,
+        "success_check_verification_rate": 1,
+        "visible_success_check": "python3 -m unittest discover -s tests",
         "unresolved_error": 0,
         "repeated_tool_call_count": 5,
         "retry_count": 0,
@@ -66,6 +70,8 @@
         "outcome": "failure",
         "success": 0,
         "verification_rate": 0,
+        "success_check_verification_rate": 0,
+        "visible_success_check": "python3 ../grader/check.py",
         "unresolved_error": 0,
         "repeated_tool_call_count": 5,
         "retry_count": 0,
@@ -98,6 +104,8 @@
         "outcome": "failure",
         "success": 0,
         "verification_rate": 1,
+        "success_check_verification_rate": 1,
+        "visible_success_check": "python3 -m unittest discover -s tests",
         "unresolved_error": 0,
         "repeated_tool_call_count": 5,
         "retry_count": 0,
@@ -124,6 +132,8 @@
         "outcome": "success",
         "success": 1,
         "verification_rate": 0,
+        "success_check_verification_rate": 0,
+        "visible_success_check": "python3 ../grader/check.py",
         "unresolved_error": 0,
         "repeated_tool_call_count": 3,
         "retry_count": 0,
@@ -154,6 +164,8 @@
         "outcome": "success",
         "success": 1,
         "verification_rate": 1,
+        "success_check_verification_rate": 1,
+        "visible_success_check": "python3 -m unittest discover -s tests",
         "unresolved_error": 0,
         "repeated_tool_call_count": 6,
         "retry_count": 0,
@@ -180,6 +192,8 @@
         "outcome": "success",
         "success": 1,
         "verification_rate": 0,
+        "success_check_verification_rate": 0,
+        "visible_success_check": "python3 ../grader/check.py",
         "unresolved_error": 0,
         "repeated_tool_call_count": 4,
         "retry_count": 0,
@@ -212,6 +226,8 @@
         "outcome": "success",
         "success": 1,
         "verification_rate": 1,
+        "success_check_verification_rate": 1,
+        "visible_success_check": "python3 -m unittest discover -s tests",
         "unresolved_error": 0,
         "repeated_tool_call_count": 5,
         "retry_count": 0,
@@ -237,6 +253,7 @@
         "n": 4,
         "success_rate": 0.75,
         "verification_rate": 0.0,
+        "success_check_verification_rate": 0.0,
         "unresolved_error_rate": 0.0,
         "avg_repeated_tool_calls": 4.0,
         "avg_retry_count": 0.0,
@@ -253,6 +270,7 @@
         "n": 4,
         "success_rate": 0.75,
         "verification_rate": 1.0,
+        "success_check_verification_rate": 1.0,
         "unresolved_error_rate": 0.0,
         "avg_repeated_tool_calls": 5.25,
         "avg_retry_count": 0.0,
@@ -277,6 +295,7 @@
       "avg_token_usage": 26316.5,
       "avg_turn_count": 0.0,
       "avg_verify_events": 2.0,
+      "success_check_verification_rate": 1.0,
       "success_rate": 0.0,
       "unresolved_error_rate": 0.0,
       "verification_rate": 1.0
@@ -463,6 +482,7 @@
       "intervention_outcome": "success",
       "success_delta": 0,
       "verification_delta": 1,
+      "success_check_verification_delta": 1,
       "repeated_tool_call_delta": 1,
       "token_usage_delta": 34563,
       "failure_score_delta": -70
@@ -473,6 +493,7 @@
       "intervention_outcome": "failure",
       "success_delta": 0,
       "verification_delta": 1,
+      "success_check_verification_delta": 1,
       "repeated_tool_call_delta": 0,
       "token_usage_delta": -141,
       "failure_score_delta": -70
@@ -483,6 +504,7 @@
       "intervention_outcome": "success",
       "success_delta": 0,
       "verification_delta": 1,
+      "success_check_verification_delta": 1,
       "repeated_tool_call_delta": 3,
       "token_usage_delta": 36087,
       "failure_score_delta": -35
@@ -493,6 +515,7 @@
       "intervention_outcome": "success",
       "success_delta": 0,
       "verification_delta": 1,
+      "success_check_verification_delta": 1,
       "repeated_tool_call_delta": 1,
       "token_usage_delta": 34757,
       "failure_score_delta": -70
@@ -507,6 +530,13 @@
       "avg_delta": 0.0
     },
     "verification_delta": {
+      "n": 4,
+      "improved": 4,
+      "regressed": 0,
+      "unchanged": 0,
+      "avg_delta": 1.0
+    },
+    "success_check_verification_delta": {
       "n": 4,
       "improved": 4,
       "regressed": 0,
@@ -538,6 +568,12 @@
   "signal_by_outcome": [
     {
       "signal": "verification_rate",
+      "failure_mean": 0.5,
+      "success_mean": 0.5,
+      "delta_success_minus_failure": 0.0
+    },
+    {
+      "signal": "success_check_verification_rate",
       "failure_mean": 0.5,
       "success_mean": 0.5,
       "delta_success_minus_failure": 0.0
@@ -626,6 +662,14 @@
       "failure_tag": "hidden_semantic_edge_case",
       "n": 2,
       "signal": "verification_rate",
+      "label_mean": 0.5,
+      "overall_mean": 0.5,
+      "delta_label_minus_overall": 0.0
+    },
+    {
+      "failure_tag": "hidden_semantic_edge_case",
+      "n": 2,
+      "signal": "success_check_verification_rate",
       "label_mean": 0.5,
       "overall_mean": 0.5,
       "delta_label_minus_overall": 0.0
@@ -745,6 +789,14 @@
     {
       "failure_tag": "premature_completion",
       "n": 3,
+      "signal": "success_check_verification_rate",
+      "label_mean": 0.0,
+      "overall_mean": 0.5,
+      "delta_label_minus_overall": -0.5
+    },
+    {
+      "failure_tag": "premature_completion",
+      "n": 3,
       "signal": "unresolved_error",
       "label_mean": 0.0,
       "overall_mean": 0.0,
@@ -850,6 +902,14 @@
       "failure_tag": "verification_gap",
       "n": 4,
       "signal": "verification_rate",
+      "label_mean": 0.0,
+      "overall_mean": 0.5,
+      "delta_label_minus_overall": -0.5
+    },
+    {
+      "failure_tag": "verification_gap",
+      "n": 4,
+      "signal": "success_check_verification_rate",
       "label_mean": 0.0,
       "overall_mean": 0.5,
       "delta_label_minus_overall": -0.5

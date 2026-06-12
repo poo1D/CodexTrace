@@ -21,13 +21,13 @@
     {
       "action": "Do not claim verification-rate lift for current stored pilots; frame verification as saturated.",
       "claim": "Harness intervention increases verification rate.",
-      "evidence": "hard30 verification delta is +0.00; process-stress verification delta is +0.00; verification-lift delta is +0.00; all stored pilots are saturated.",
+      "evidence": "hard30 verification delta is +0.00 and exact success-check delta is +0.00; process-stress verification delta is +0.00 and exact success-check delta is +0.00; verification-lift verification delta is +0.00 and exact success-check delta is +0.00; stored ordinary/weak-baseline pilots are saturated.",
       "status": "unsupported"
     },
     {
       "action": "Use only as a mechanism ablation, not as ordinary-baseline evidence.",
       "claim": "Harness constraints can control verification behavior under a no-verify ablation.",
-      "evidence": "verification-ablation verification delta is +1.00; failure-score delta is -61.25.",
+      "evidence": "verification-ablation verification delta is +1.00; exact success-check delta is +1.00; failure-score delta is -61.25.",
       "status": "supported"
     },
     {
@@ -86,10 +86,12 @@
     },
     "verification_ablation_failures": 2,
     "verification_ablation_runs": 8,
+    "verification_ablation_success_check_delta": 1.0,
     "verification_ablation_tasks": 4,
     "verification_ablation_verification_delta": 1.0,
     "verification_lift_failures": 2,
     "verification_lift_runs": 16,
+    "verification_lift_success_check_delta": 0.0,
     "verification_lift_tasks": 8,
     "verification_lift_verification_delta": 0.0
   }

@@ -10,6 +10,7 @@ No failure tags were observed in these runs.
 | --- | ---: | ---: | ---: |
 | success_rate | 0.9167 | 0.9167 | 0 |
 | verification_rate | 1 | 1 | 0 |
+| success_check_verification_rate | 1 | 1 | 0 |
 | unresolved_error_rate | 0 | 0 | 0 |
 | avg_repeated_tool_calls | 8.083 | 7.167 | -0.9166 |
 | avg_retry_count | 0.1667 | 0.25 | 0.0833 |
@@ -25,26 +26,27 @@ No failure tags were observed in these runs.
 | --- | ---: | ---: | ---: | ---: |
 | success | 0 | 0 | 12 | 0 |
 | verification | 0 | 0 | 12 | 0 |
+| success check verification | 0 | 0 | 12 | 0 |
 | repeated tool calls | 4 | 3 | 5 | -0.9167 |
 | token usage | 5 | 7 | 0 | -2.387e+04 |
 | failure score | 0 | 0 | 12 | 0 |
 
 ### Paired Task Deltas
 
-| Task | Success delta | Verification delta | Repeated calls delta | Token delta | Failure score delta |
-| --- | ---: | ---: | ---: | ---: | ---: |
-| PST-001 | 0 | 0 | 0 | 288 | 0 |
-| PST-002 | 0 | 0 | -3 | -72615 | 0 |
-| PST-003 | 0 | 0 | 0 | 36102 | 0 |
-| PST-004 | 0 | 0 | 0 | -34437 | 0 |
-| PST-005 | 0 | 0 | -2 | -36751 | 0 |
-| PST-006 | 0 | 0 | 3 | 34976 | 0 |
-| PST-007 | 0 | 0 | 1 | 1753 | 0 |
-| PST-008 | 0 | 0 | -3 | -74629 | 0 |
-| PST-009 | 0 | 0 | 0 | 290 | 0 |
-| PST-010 | 0 | 0 | 2 | 36189 | 0 |
-| PST-011 | 0 | 0 | 0 | 1145 | 0 |
-| PST-012 | 0 | 0 | -9 | -178732 | 0 |
+| Task | Success delta | Verification delta | Success-check verification delta | Repeated calls delta | Token delta | Failure score delta |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| PST-001 | 0 | 0 | 0 | 0 | 288 | 0 |
+| PST-002 | 0 | 0 | 0 | -3 | -72615 | 0 |
+| PST-003 | 0 | 0 | 0 | 0 | 36102 | 0 |
+| PST-004 | 0 | 0 | 0 | 0 | -34437 | 0 |
+| PST-005 | 0 | 0 | 0 | -2 | -36751 | 0 |
+| PST-006 | 0 | 0 | 0 | 3 | 34976 | 0 |
+| PST-007 | 0 | 0 | 0 | 1 | 1753 | 0 |
+| PST-008 | 0 | 0 | 0 | -3 | -74629 | 0 |
+| PST-009 | 0 | 0 | 0 | 0 | 290 | 0 |
+| PST-010 | 0 | 0 | 0 | 2 | 36189 | 0 |
+| PST-011 | 0 | 0 | 0 | 0 | 1145 | 0 |
+| PST-012 | 0 | 0 | 0 | -9 | -178732 | 0 |
 
 ## RQ4 Trace Signals By Outcome
 
@@ -53,6 +55,7 @@ Outcome counts: failure=2, success=22, unknown=0.
 | Signal | Failure mean | Success mean | Delta success-failure |
 | --- | ---: | ---: | ---: |
 | verification_rate | 1 | 1 | 0 |
+| success_check_verification_rate | 1 | 1 | 0 |
 | unresolved_error | 0 | 0 | 0 |
 | repeated_tool_call_count | 6.5 | 7.727 | 1.227 |
 | retry_count | 0 | 0.2273 | 0.2273 |

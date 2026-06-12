@@ -5,12 +5,14 @@
       "pilot": {
         "baseline_failure_score": 1.25,
         "baseline_repeated_calls": 8.0833,
+        "baseline_success_check_verification_rate": 1.0,
         "baseline_success_rate": 0.9167,
         "baseline_token_usage": 208990.5833,
         "baseline_verification_rate": 1.0,
         "exists": true,
         "intervention_failure_score": 1.25,
         "intervention_repeated_calls": 7.1667,
+        "intervention_success_check_verification_rate": 1.0,
         "intervention_success_rate": 0.9167,
         "intervention_token_usage": 185122.1667,
         "intervention_verification_rate": 1.0,
@@ -60,8 +62,8 @@
       "status": "satisfied"
     },
     {
-      "evidence": "verification is saturated in stored pilots: full30=1.00->1.00, hard10=1.00->1.00, hard30=1.00->1.00, process-stress=1.00->1.00, verification-lift=1.00->1.00.",
-      "gap": "The ordinary and weak-baseline pilots are negative results; the no-verify ablation shows the harness can lift verification from 0.00 to 1.00, but this is not an ordinary-baseline result.",
+      "evidence": "verification is saturated in stored pilots: full30=1.00->1.00 (exact=1.00->1.00), hard10=1.00->1.00 (exact=1.00->1.00), hard30=1.00->1.00 (exact=1.00->1.00), process-stress=1.00->1.00 (exact=1.00->1.00), verification-lift=1.00->1.00 (exact=1.00->1.00).",
+      "gap": "The ordinary and weak-baseline pilots are negative results; the no-verify ablation shows the harness can lift verification from 0.00 to 1.00, and exact success-check verification from 0.00 to 1.00, but this is not an ordinary-baseline result.",
       "id": "verification_lift",
       "requirement": "Show that harness intervention increases verification rate.",
       "status": "missing"
@@ -74,7 +76,7 @@
       "status": "satisfied"
     },
     {
-      "evidence": "hard30 hidden failures are not separated by process signals: verification delta=+0.00, unresolved-error delta=+0.00; repetitive_exploration positives are explained by repeated calls, token usage, and failure score; RQ4 signal audit ready=True.",
+      "evidence": "hard30 hidden failures are not separated by process signals: verification delta=+0.00, exact success-check delta=+0.00, unresolved-error delta=+0.00; repetitive_exploration positives are explained by repeated calls, token usage, and failure score; RQ4 signal audit ready=True.",
       "gap": "Boundary-style RQ4 is supported: process signals explain observable process failures, while hidden semantic correctness remains a limitation.",
       "id": "rq4_explanation",
       "requirement": "Identify trace signals that explain whether a run fails.",
@@ -96,12 +98,14 @@
       "pilot": {
         "baseline_failure_score": 61.25,
         "baseline_repeated_calls": 4.0,
+        "baseline_success_check_verification_rate": 0.0,
         "baseline_success_rate": 0.75,
         "baseline_token_usage": 145766.5,
         "baseline_verification_rate": 0.0,
         "exists": true,
         "intervention_failure_score": 0.0,
         "intervention_repeated_calls": 5.25,
+        "intervention_success_check_verification_rate": 1.0,
         "intervention_success_rate": 0.75,
         "intervention_token_usage": 172083.0,
         "intervention_verification_rate": 1.0,
@@ -127,12 +131,14 @@
       "pilot": {
         "baseline_failure_score": 0.0,
         "baseline_repeated_calls": 6.125,
+        "baseline_success_check_verification_rate": 1.0,
         "baseline_success_rate": 0.875,
         "baseline_token_usage": 176823.625,
         "baseline_verification_rate": 1.0,
         "exists": true,
         "intervention_failure_score": 0.0,
         "intervention_repeated_calls": 5.375,
+        "intervention_success_check_verification_rate": 1.0,
         "intervention_success_rate": 0.875,
         "intervention_token_usage": 172161.875,
         "intervention_verification_rate": 1.0,

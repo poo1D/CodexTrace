@@ -20,11 +20,13 @@ This generated summary consolidates the current paper-facing result tables.
 | Metric | Baseline | Intervention | Delta |
 | --- | ---: | ---: | ---: |
 | success_rate | 1.00 | 1.00 | 0.00 |
+| verification_rate | 1.00 | 1.00 | 0.00 |
+| success_check_verification_rate | 1.00 | 1.00 | 0.00 |
 | avg_repeated_tool_calls | 10.43 | 7 | -3.433 |
 | avg_command_failures | 0.5 | 0.2 | -0.3 |
 | avg_recover_events | 2.067 | 0.4 | -1.667 |
 | avg_token_usage | 218.7k | 184.8k | -34.0k |
-| avg_failure_score | 2.833 | 1 | -1.833 |
+| avg_failure_score | 4.167 | 1 | -3.167 |
 
 ### Hard10 Pilot
 
@@ -32,6 +34,7 @@ This generated summary consolidates the current paper-facing result tables.
 | --- | ---: | ---: | ---: |
 | success_rate | 0.70 | 0.80 | 0.10 |
 | verification_rate | 1.00 | 1.00 | 0.00 |
+| success_check_verification_rate | 1.00 | 1.00 | 0.00 |
 | avg_repeated_tool_calls | 9.2 | 6.2 | -3 |
 | avg_token_usage | 248.9k | 187.5k | -61.4k |
 | avg_verify_events | 7.3 | 3.7 | -3.6 |
@@ -42,6 +45,7 @@ This generated summary consolidates the current paper-facing result tables.
 | --- | ---: | ---: | ---: |
 | success_rate | 0.50 | 0.50 | 0.00 |
 | verification_rate | 1.00 | 1.00 | 0.00 |
+| success_check_verification_rate | 1.00 | 1.00 | 0.00 |
 | avg_repeated_tool_calls | 12.93 | 9.2 | -3.733 |
 | avg_command_failures | 0.3 | 0.1 | -0.2 |
 | avg_token_usage | 355.0k | 256.3k | -98.7k |
@@ -55,6 +59,7 @@ Paired hard30 deltas: token usage improves in 26/30 tasks, repeated tool calls i
 | --- | ---: | ---: | ---: |
 | success_rate | 0.92 | 0.92 | 0.00 |
 | verification_rate | 1.00 | 1.00 | 0.00 |
+| success_check_verification_rate | 1.00 | 1.00 | 0.00 |
 | avg_repeated_tool_calls | 8.083 | 7.167 | -0.9166 |
 | avg_recover_events | 1.25 | 0.8333 | -0.4167 |
 | avg_token_usage | 209.0k | 185.1k | -23.9k |
@@ -68,12 +73,13 @@ Paired process-stress deltas: token usage improves in 5/12 tasks, repeated tool 
 | --- | ---: | ---: | ---: |
 | success_rate | 0.88 | 0.88 | 0.00 |
 | verification_rate | 1.00 | 1.00 | 0.00 |
+| success_check_verification_rate | 1.00 | 1.00 | 0.00 |
 | avg_repeated_tool_calls | 6.125 | 5.375 | -0.75 |
 | avg_verify_events | 2.625 | 2.125 | -0.5 |
 | avg_token_usage | 176.8k | 172.2k | -4.7k |
 | avg_failure_score | 0 | 0 | 0 |
 
-Paired verification-lift deltas: verification improves in 0/8 tasks, token usage improves in 5/8 tasks, repeated tool calls improve in 5/8 tasks.
+Paired verification-lift deltas: verification improves in 0/8 tasks, exact success-check verification improves in 0/8 tasks, token usage improves in 5/8 tasks, repeated tool calls improve in 5/8 tasks.
 
 ### Verification Ablation Pilot
 
@@ -83,12 +89,13 @@ This auxiliary pilot uses an explicit no-verification baseline and should not be
 | --- | ---: | ---: | ---: |
 | success_rate | 0.75 | 0.75 | 0.00 |
 | verification_rate | 0.00 | 1.00 | 1.00 |
+| success_check_verification_rate | 0.00 | 1.00 | 1.00 |
 | avg_repeated_tool_calls | 4 | 5.25 | 1.25 |
 | avg_verify_events | 0 | 2 | 2 |
 | avg_token_usage | 145.8k | 172.1k | 26.3k |
 | avg_failure_score | 61.25 | 0 | -61.25 |
 
-Paired verification-ablation deltas: verification improves in 4/4 tasks and failure score improves in 4/4 tasks.
+Paired verification-ablation deltas: verification improves in 4/4 tasks, exact success-check verification improves in 4/4 tasks, and failure score improves in 4/4 tasks.
 
 ## RQ2 Detector Boundary Result
 
@@ -154,6 +161,7 @@ Hard30 outcome failures are hidden semantic edge cases, so most process signals 
 | Signal | Failure mean | Success mean | Delta success-failure |
 | --- | ---: | ---: | ---: |
 | verification_rate | 1.00 | 1.00 | 0.00 |
+| success_check_verification_rate | 1.00 | 1.00 | 0.00 |
 | unresolved_error | 0 | 0 | 0 |
 | repeated_tool_call_count | 10.8 | 11.33 | 0.5333 |
 | retry_count | 0.1333 | 0.0667 | -0.0666 |

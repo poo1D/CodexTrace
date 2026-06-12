@@ -970,12 +970,15 @@ def test_build_results_summary_from_stored_pilots():
     assert result["hard30_label_evaluation"]["labels"]["repetitive_exploration"]["tp"] == 4
     assert result["process_stress"]["summary"]["baseline"]["n"] == 12
     assert result["process_stress"]["summary"]["baseline"]["success_rate"] == 0.9167
+    assert result["process_stress"]["deltas"]["success_check_verification_rate"] == 0
     assert result["process_stress_label_evaluation"]["labels"]["hidden_semantic_edge_case"]["fn"] == 2
     assert result["verification_lift"]["summary"]["baseline"]["n"] == 8
     assert result["verification_lift"]["summary"]["baseline"]["verification_rate"] == 1
+    assert result["verification_lift"]["deltas"]["success_check_verification_rate"] == 0
     assert result["verification_lift_label_evaluation"]["labels"]["hidden_semantic_edge_case"]["fn"] == 2
     assert result["verification_ablation"]["summary"]["baseline"]["n"] == 4
     assert result["verification_ablation"]["deltas"]["verification_rate"] == 1
+    assert result["verification_ablation"]["deltas"]["success_check_verification_rate"] == 1
     assert result["verification_ablation_label_evaluation"]["labels"]["verification_gap"]["tp"] == 4
     assert result["verification_ablation_label_evaluation"]["labels"]["premature_completion"]["tp"] == 3
     assert "## RQ3 Baseline vs Intervention" in markdown
@@ -1097,9 +1100,11 @@ def test_paper_claim_audit_marks_overclaims_as_unsupported():
     assert result["summary"]["verification_lift_runs"] == 16
     assert result["summary"]["verification_lift_failures"] == 2
     assert result["summary"]["verification_lift_verification_delta"] == 0
+    assert result["summary"]["verification_lift_success_check_delta"] == 0
     assert result["summary"]["verification_ablation_tasks"] == 4
     assert result["summary"]["verification_ablation_runs"] == 8
     assert result["summary"]["verification_ablation_verification_delta"] == 1
+    assert result["summary"]["verification_ablation_success_check_delta"] == 1
     assert result["summary"]["rq4_signal_audit_ready"] is True
     assert result["summary"]["status_counts"]["supported"] >= 3
     assert claims["Harness intervention increases verification rate."]["status"] == "unsupported"
@@ -1137,11 +1142,14 @@ def test_thesis_readiness_identifies_original_thesis_gaps():
     assert verification_pilot["tasks"] == 8
     assert verification_pilot["runs"] == 16
     assert verification_pilot["baseline_verification_rate"] == verification_pilot["intervention_verification_rate"]
+    assert verification_pilot["baseline_success_check_verification_rate"] == verification_pilot["intervention_success_check_verification_rate"]
     ablation_pilot = result["verification_ablation_experiment"]["current_scaffold"]["pilot"]
     assert ablation_pilot["tasks"] == 4
     assert ablation_pilot["runs"] == 8
     assert ablation_pilot["baseline_verification_rate"] == 0
     assert ablation_pilot["intervention_verification_rate"] == 1
+    assert ablation_pilot["baseline_success_check_verification_rate"] == 0
+    assert ablation_pilot["intervention_success_check_verification_rate"] == 1
     pilot = result["next_experiment"]["current_scaffold"]["pilot"]
     assert pilot["tasks"] == 12
     assert pilot["runs"] == 24
@@ -1199,6 +1207,7 @@ def test_rq4_signal_audit_explains_boundary_and_process_signals():
 
     assert result["summary"]["ready"] is True
     assert result["hard30_hidden_boundary"]["verification_delta_success_minus_failure"] == 0
+    assert result["hard30_hidden_boundary"]["success_check_verification_delta_success_minus_failure"] == 0
     assert result["hard30_hidden_boundary"]["unresolved_error_delta_success_minus_failure"] == 0
     assert result["summary"]["detector_fixture_label_count"] == 6
     assert result["hard30_repetitive_exploration_top_signals"][0]["signal"] == "token_usage"

@@ -24,6 +24,7 @@ Micro F1: 0.875; Macro F1: 0.6667.
 | --- | ---: | ---: | ---: |
 | success_rate | 0.75 | 0.75 | 0 |
 | verification_rate | 0 | 1 | 1 |
+| success_check_verification_rate | 0 | 1 | 1 |
 | unresolved_error_rate | 0 | 0 | 0 |
 | avg_repeated_tool_calls | 4 | 5.25 | 1.25 |
 | avg_retry_count | 0 | 0 | 0 |
@@ -39,18 +40,19 @@ Micro F1: 0.875; Macro F1: 0.6667.
 | --- | ---: | ---: | ---: | ---: |
 | success | 0 | 0 | 4 | 0 |
 | verification | 4 | 0 | 0 | 1 |
+| success check verification | 4 | 0 | 0 | 1 |
 | repeated tool calls | 0 | 3 | 1 | 1.25 |
 | token usage | 1 | 3 | 0 | 2.632e+04 |
 | failure score | 4 | 0 | 0 | -61.25 |
 
 ### Paired Task Deltas
 
-| Task | Success delta | Verification delta | Repeated calls delta | Token delta | Failure score delta |
-| --- | ---: | ---: | ---: | ---: | ---: |
-| VAB-001 | 0 | 1 | 1 | 34563 | -70 |
-| VAB-002 | 0 | 1 | 0 | -141 | -70 |
-| VAB-003 | 0 | 1 | 3 | 36087 | -35 |
-| VAB-004 | 0 | 1 | 1 | 34757 | -70 |
+| Task | Success delta | Verification delta | Success-check verification delta | Repeated calls delta | Token delta | Failure score delta |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| VAB-001 | 0 | 1 | 1 | 1 | 34563 | -70 |
+| VAB-002 | 0 | 1 | 1 | 0 | -141 | -70 |
+| VAB-003 | 0 | 1 | 1 | 3 | 36087 | -35 |
+| VAB-004 | 0 | 1 | 1 | 1 | 34757 | -70 |
 
 ## RQ4 Trace Signals By Outcome
 
@@ -59,6 +61,7 @@ Outcome counts: failure=2, success=6, unknown=0.
 | Signal | Failure mean | Success mean | Delta success-failure |
 | --- | ---: | ---: | ---: |
 | verification_rate | 0.5 | 0.5 | 0 |
+| success_check_verification_rate | 0.5 | 0.5 | 0 |
 | unresolved_error | 0 | 0 | 0 |
 | repeated_tool_call_count | 5 | 4.5 | -0.5 |
 | retry_count | 0 | 0 | 0 |
@@ -78,6 +81,7 @@ Outcome counts: failure=2, success=6, unknown=0.
 | Label | Runs | Signal | Mean | Overall mean | Delta label-overall |
 | --- | ---: | --- | ---: | ---: | ---: |
 | hidden_semantic_edge_case | 2 | verification_rate | 0.5 | 0.5 | 0 |
+| hidden_semantic_edge_case | 2 | success_check_verification_rate | 0.5 | 0.5 | 0 |
 | hidden_semantic_edge_case | 2 | unresolved_error | 0 | 0 | 0 |
 | hidden_semantic_edge_case | 2 | repeated_tool_call_count | 5 | 5 | 0 |
 | hidden_semantic_edge_case | 2 | retry_count | 0 | 0 | 0 |
@@ -92,6 +96,7 @@ Outcome counts: failure=2, success=6, unknown=0.
 | hidden_semantic_edge_case | 2 | phase_verify_events | 1 | 1 | 0 |
 | hidden_semantic_edge_case | 2 | phase_recover_events | 0 | 0 | 0 |
 | premature_completion | 3 | verification_rate | 0 | 0.5 | -0.5 |
+| premature_completion | 3 | success_check_verification_rate | 0 | 0.5 | -0.5 |
 | premature_completion | 3 | unresolved_error | 0 | 0 | 0 |
 | premature_completion | 3 | repeated_tool_call_count | 4.333 | 5 | -0.6667 |
 | premature_completion | 3 | retry_count | 0 | 0 | 0 |
@@ -106,6 +111,7 @@ Outcome counts: failure=2, success=6, unknown=0.
 | premature_completion | 3 | phase_verify_events | 0 | 1 | -1 |
 | premature_completion | 3 | phase_recover_events | 0 | 0 | 0 |
 | verification_gap | 4 | verification_rate | 0 | 0.5 | -0.5 |
+| verification_gap | 4 | success_check_verification_rate | 0 | 0.5 | -0.5 |
 | verification_gap | 4 | unresolved_error | 0 | 0 | 0 |
 | verification_gap | 4 | repeated_tool_call_count | 4 | 5 | -1 |
 | verification_gap | 4 | retry_count | 0 | 0 | 0 |

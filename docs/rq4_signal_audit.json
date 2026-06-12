@@ -201,6 +201,7 @@
   ],
   "hard30_hidden_boundary": {
     "failure_score_delta_success_minus_failure": 1.0,
+    "success_check_verification_delta_success_minus_failure": 0.0,
     "token_usage_delta_success_minus_failure": -1771.6333,
     "unresolved_error_delta_success_minus_failure": 0.0,
     "verification_delta_success_minus_failure": 0.0
@@ -252,6 +253,7 @@
     "full30_sandbox_top_signal_count": 5,
     "hard30_hidden_boundary": {
       "failure_score_delta_success_minus_failure": 1.0,
+      "success_check_verification_delta_success_minus_failure": 0.0,
       "token_usage_delta_success_minus_failure": -1771.6333,
       "unresolved_error_delta_success_minus_failure": 0.0,
       "verification_delta_success_minus_failure": 0.0

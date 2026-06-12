@@ -7,6 +7,7 @@ This generated audit summarizes which trace signals explain observable process l
 - Ready for boundary-style RQ4 claim: yes
 - Detector-fixture labels with top signals: 6
 - Hard30 hidden semantic verification delta: +0.00
+- Hard30 hidden semantic exact success-check delta: +0.00
 - Hard30 hidden semantic unresolved-error delta: +0.00
 
 ## Hidden Semantic Boundary
@@ -14,6 +15,7 @@ This generated audit summarizes which trace signals explain observable process l
 | Signal | Delta success-failure | Interpretation |
 | --- | ---: | --- |
 | verification_rate | +0.00 | Hidden failures are still verified. |
+| success_check_verification_rate | +0.00 | Hidden failures still run the visible success check. |
 | unresolved_error | +0.00 | Hidden failures do not leave unresolved tool errors. |
 | token_usage | -1771.6 | Token usage does not reliably expose hidden correctness. |
 | failure_score | +1.00 | Process failure score does not rank hidden correctness. |

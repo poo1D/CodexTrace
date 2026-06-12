@@ -54,8 +54,8 @@ Current stored pilots:
 | hard10 | 10 | 20 | 5 | Intervention improves success `70% -> 80%` and reduces token usage `248.9k -> 187.5k`. |
 | hard30 | 30 | 60 | 30 | Intervention keeps success at `50% -> 50%` while reducing repeated tool calls `12.93 -> 9.20` and token usage `355.0k -> 256.3k`. |
 | process-stress | 12 | 24 | 2 | Intervention keeps success at `91.67% -> 91.67%` while reducing repeated tool calls `8.08 -> 7.17` and token usage `209.0k -> 185.1k`. |
-| verification-lift | 8 | 16 | 2 | Targeted stress test does not raise verification rate `100% -> 100%`, but reduces repeated tool calls `6.13 -> 5.38` and token usage `176.8k -> 172.2k`. |
-| verification-ablation | 4 | 8 | 2 | Auxiliary no-verify baseline ablation lifts verification `0% -> 100%` and drops failure score `61.25 -> 0`, but is not an ordinary baseline. |
+| verification-lift | 8 | 16 | 2 | Targeted stress test does not raise broad or exact success-check verification `100% -> 100%`, but reduces repeated tool calls `6.13 -> 5.38` and token usage `176.8k -> 172.2k`. |
+| verification-ablation | 4 | 8 | 2 | Auxiliary no-verify baseline ablation lifts broad and exact success-check verification `0% -> 100%` and drops failure score `61.25 -> 0`, but is not an ordinary baseline. |
 
 The hard tier also exposes a trace-only detector boundary: all hard30 hidden
 semantic edge-case failures are missed by deterministic process rules
@@ -227,9 +227,9 @@ PYTHONPATH=. python3 scripts/audit_paper_claims.py --markdown-output docs/paper_
 The current draft in `docs/paper_draft.md` reports the seed, hard10, hard30,
 process-stress, verification-lift, and verification-ablation pilots. The
 ordinary and weak-baseline pilots support waste reduction but not
-verification-rate lift; the no-verify ablation is reported only as a mechanism
-check that the harness can control verification behavior under an artificial
-baseline condition.
+verification-rate lift, even under exact visible success-check matching; the
+no-verify ablation is reported only as a mechanism check that the harness can
+control verification behavior under an artificial baseline condition.
 
 To run the Web UI:
 

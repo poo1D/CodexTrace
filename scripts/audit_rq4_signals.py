@@ -33,6 +33,7 @@ def build_rq4_signal_audit(
     hard30_outcome = {row["signal"]: row for row in hard30["signal_by_outcome"]}
     hidden_boundary = {
         "verification_delta_success_minus_failure": hard30_outcome["verification_rate"]["delta_success_minus_failure"],
+        "success_check_verification_delta_success_minus_failure": hard30_outcome["success_check_verification_rate"]["delta_success_minus_failure"],
         "unresolved_error_delta_success_minus_failure": hard30_outcome["unresolved_error"]["delta_success_minus_failure"],
         "token_usage_delta_success_minus_failure": hard30_outcome["token_usage"]["delta_success_minus_failure"],
         "failure_score_delta_success_minus_failure": hard30_outcome["failure_score"]["delta_success_minus_failure"],
@@ -48,6 +49,7 @@ def build_rq4_signal_audit(
 
     ready = (
         hidden_boundary["verification_delta_success_minus_failure"] == 0
+        and hidden_boundary["success_check_verification_delta_success_minus_failure"] == 0
         and hidden_boundary["unresolved_error_delta_success_minus_failure"] == 0
         and len(hard30_repetitive) >= 3
         and len(full30_sandbox) >= 3
@@ -80,6 +82,7 @@ def render_rq4_signal_audit_markdown(result: dict[str, Any]) -> str:
         f"- Ready for boundary-style RQ4 claim: {'yes' if result['summary']['ready'] else 'no'}",
         f"- Detector-fixture labels with top signals: {result['summary']['detector_fixture_label_count']}",
         f"- Hard30 hidden semantic verification delta: {boundary['verification_delta_success_minus_failure']:+.2f}",
+        f"- Hard30 hidden semantic exact success-check delta: {boundary['success_check_verification_delta_success_minus_failure']:+.2f}",
         f"- Hard30 hidden semantic unresolved-error delta: {boundary['unresolved_error_delta_success_minus_failure']:+.2f}",
         "",
         "## Hidden Semantic Boundary",
@@ -87,6 +90,7 @@ def render_rq4_signal_audit_markdown(result: dict[str, Any]) -> str:
         "| Signal | Delta success-failure | Interpretation |",
         "| --- | ---: | --- |",
         f"| verification_rate | {boundary['verification_delta_success_minus_failure']:+.2f} | Hidden failures are still verified. |",
+        f"| success_check_verification_rate | {boundary['success_check_verification_delta_success_minus_failure']:+.2f} | Hidden failures still run the visible success check. |",
         f"| unresolved_error | {boundary['unresolved_error_delta_success_minus_failure']:+.2f} | Hidden failures do not leave unresolved tool errors. |",
         f"| token_usage | {boundary['token_usage_delta_success_minus_failure']:+.1f} | Token usage does not reliably expose hidden correctness. |",
         f"| failure_score | {boundary['failure_score_delta_success_minus_failure']:+.2f} | Process failure score does not rank hidden correctness. |",

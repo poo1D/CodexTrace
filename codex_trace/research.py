@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import csv
 import json
+import re
 import shutil
 import subprocess
 import os
@@ -28,6 +29,7 @@ TAXONOMY_ALIASES = {
 }
 PAPER_SIGNAL_KEYS = (
     "verification_rate",
+    "success_check_verification_rate",
     "unresolved_error",
     "repeated_tool_call_count",
     "retry_count",
@@ -62,6 +64,8 @@ class RunRecord:
     prompt_type: str
     trace_path: Path
     outcome: str = "unknown"
+    prompt_path: Path | None = None
+    success_check: str = ""
 
 
 def load_tasks(path: str | Path) -> list[BenchmarkTask]:
@@ -96,11 +100,14 @@ def _load_run_manifest_items(path: str | Path) -> list[tuple[RunRecord, str]]:
             continue
         item = json.loads(line)
         raw_trace_path = str(item["trace_path"])
+        raw_prompt_path = str(item.get("prompt_path", ""))
         items.append((RunRecord(
             task_id=str(item["task_id"]),
             prompt_type=str(item["prompt_type"]),
             trace_path=(manifest_path.parent / raw_trace_path).resolve(),
             outcome=str(item.get("outcome", "unknown")),
+            prompt_path=(manifest_path.parent / raw_prompt_path).resolve() if raw_prompt_path else None,
+            success_check=str(item.get("success_check", "")),
         ), raw_trace_path))
     return items
 
@@ -303,6 +310,7 @@ def render_aggregate_markdown(result: dict[str, Any]) -> str:
     for key in (
         "success_rate",
         "verification_rate",
+        "success_check_verification_rate",
         "unresolved_error_rate",
         "avg_repeated_tool_calls",
         "avg_retry_count",
@@ -333,6 +341,8 @@ def write_runs_csv(result: dict[str, Any], path: str | Path) -> None:
         "outcome",
         "success",
         "verification_rate",
+        "success_check_verification_rate",
+        "visible_success_check",
         "unresolved_error",
         "repeated_tool_call_count",
         "retry_count",
@@ -353,7 +363,7 @@ def write_runs_csv(result: dict[str, Any], path: str | Path) -> None:
         "taxonomy_tags",
     ]
     with output_path.open("w", encoding="utf-8", newline="") as handle:
-        writer = csv.DictWriter(handle, fieldnames=fieldnames)
+        writer = csv.DictWriter(handle, fieldnames=fieldnames, lineterminator="\n")
         writer.writeheader()
         for row in result["runs"]:
             serialized = dict(row)
@@ -371,12 +381,13 @@ def write_paired_task_deltas_csv(result: dict[str, Any], path: str | Path) -> No
         "intervention_outcome",
         "success_delta",
         "verification_delta",
+        "success_check_verification_delta",
         "repeated_tool_call_delta",
         "token_usage_delta",
         "failure_score_delta",
     ]
     with output_path.open("w", encoding="utf-8", newline="") as handle:
-        writer = csv.DictWriter(handle, fieldnames=fieldnames)
+        writer = csv.DictWriter(handle, fieldnames=fieldnames, lineterminator="\n")
         writer.writeheader()
         for row in result.get("paired_task_deltas", []):
             writer.writerow({key: row.get(key, "") for key in fieldnames})
@@ -387,7 +398,7 @@ def write_paired_task_summary_csv(result: dict[str, Any], path: str | Path) -> N
     output_path.parent.mkdir(parents=True, exist_ok=True)
     fieldnames = ["metric", "n", "improved", "regressed", "unchanged", "avg_delta"]
     with output_path.open("w", encoding="utf-8", newline="") as handle:
-        writer = csv.DictWriter(handle, fieldnames=fieldnames)
+        writer = csv.DictWriter(handle, fieldnames=fieldnames, lineterminator="\n")
         writer.writeheader()
         for metric, row in sorted(result.get("paired_task_summary", {}).items()):
             writer.writerow({
@@ -461,6 +472,7 @@ def render_paper_report_markdown(result: dict[str, Any]) -> str:
     for key in (
         "success_rate",
         "verification_rate",
+        "success_check_verification_rate",
         "unresolved_error_rate",
         "avg_repeated_tool_calls",
         "avg_retry_count",
@@ -487,6 +499,7 @@ def render_paper_report_markdown(result: dict[str, Any]) -> str:
         for key, label in (
             ("success_delta", "success"),
             ("verification_delta", "verification"),
+            ("success_check_verification_delta", "success check verification"),
             ("repeated_tool_call_delta", "repeated tool calls"),
             ("token_usage_delta", "token usage"),
             ("failure_score_delta", "failure score"),
@@ -500,12 +513,13 @@ def render_paper_report_markdown(result: dict[str, Any]) -> str:
             "",
             "### Paired Task Deltas",
             "",
-            "| Task | Success delta | Verification delta | Repeated calls delta | Token delta | Failure score delta |",
-            "| --- | ---: | ---: | ---: | ---: | ---: |",
+            "| Task | Success delta | Verification delta | Success-check verification delta | Repeated calls delta | Token delta | Failure score delta |",
+            "| --- | ---: | ---: | ---: | ---: | ---: | ---: |",
         ])
         for row in result["paired_task_deltas"]:
             lines.append(
                 f"| {row['task_id']} | {_fmt(row['success_delta'])} | {_fmt(row['verification_delta'])} | "
+                f"{_fmt(row['success_check_verification_delta'])} | "
                 f"{_fmt(row['repeated_tool_call_delta'])} | {_fmt(row['token_usage_delta'])} | {_fmt(row['failure_score_delta'])} |"
             )
 
@@ -739,6 +753,8 @@ def render_results_summary_markdown(result: dict[str, Any]) -> str:
     ])
     _append_metric_rows(lines, full, (
         "success_rate",
+        "verification_rate",
+        "success_check_verification_rate",
         "avg_repeated_tool_calls",
         "avg_command_failures",
         "avg_recover_events",
@@ -756,6 +772,7 @@ def render_results_summary_markdown(result: dict[str, Any]) -> str:
     _append_metric_rows(lines, hard, (
         "success_rate",
         "verification_rate",
+        "success_check_verification_rate",
         "avg_repeated_tool_calls",
         "avg_token_usage",
         "avg_verify_events",
@@ -772,6 +789,7 @@ def render_results_summary_markdown(result: dict[str, Any]) -> str:
         _append_metric_rows(lines, hard30, (
             "success_rate",
             "verification_rate",
+            "success_check_verification_rate",
             "avg_repeated_tool_calls",
             "avg_command_failures",
             "avg_token_usage",
@@ -802,6 +820,7 @@ def render_results_summary_markdown(result: dict[str, Any]) -> str:
         _append_metric_rows(lines, process_stress, (
             "success_rate",
             "verification_rate",
+            "success_check_verification_rate",
             "avg_repeated_tool_calls",
             "avg_recover_events",
             "avg_token_usage",
@@ -832,6 +851,7 @@ def render_results_summary_markdown(result: dict[str, Any]) -> str:
         _append_metric_rows(lines, verification_lift, (
             "success_rate",
             "verification_rate",
+            "success_check_verification_rate",
             "avg_repeated_tool_calls",
             "avg_verify_events",
             "avg_token_usage",
@@ -841,11 +861,13 @@ def render_results_summary_markdown(result: dict[str, Any]) -> str:
         token_row = paired.get("token_usage_delta", {})
         repeated_row = paired.get("repeated_tool_call_delta", {})
         verification_row = paired.get("verification_delta", {})
+        success_check_row = paired.get("success_check_verification_delta", {})
         lines.extend([
             "",
             (
                 "Paired verification-lift deltas: verification improves in "
-                f"{verification_row.get('improved', 0)}/{verification_row.get('n', 0)} tasks, token usage improves in "
+                f"{verification_row.get('improved', 0)}/{verification_row.get('n', 0)} tasks, exact success-check verification improves in "
+                f"{success_check_row.get('improved', 0)}/{success_check_row.get('n', 0)} tasks, token usage improves in "
                 f"{token_row.get('improved', 0)}/{token_row.get('n', 0)} tasks, repeated tool calls improve in "
                 f"{repeated_row.get('improved', 0)}/{repeated_row.get('n', 0)} tasks."
             ),
@@ -864,6 +886,7 @@ def render_results_summary_markdown(result: dict[str, Any]) -> str:
         _append_metric_rows(lines, verification_ablation, (
             "success_rate",
             "verification_rate",
+            "success_check_verification_rate",
             "avg_repeated_tool_calls",
             "avg_verify_events",
             "avg_token_usage",
@@ -871,12 +894,14 @@ def render_results_summary_markdown(result: dict[str, Any]) -> str:
         ))
         paired = result.get("verification_ablation_paired_task_summary", {})
         verification_row = paired.get("verification_delta", {})
+        success_check_row = paired.get("success_check_verification_delta", {})
         score_row = paired.get("failure_score_delta", {})
         lines.extend([
             "",
             (
                 "Paired verification-ablation deltas: verification improves in "
-                f"{verification_row.get('improved', 0)}/{verification_row.get('n', 0)} tasks and failure score improves in "
+                f"{verification_row.get('improved', 0)}/{verification_row.get('n', 0)} tasks, exact success-check verification improves in "
+                f"{success_check_row.get('improved', 0)}/{success_check_row.get('n', 0)} tasks, and failure score improves in "
                 f"{score_row.get('improved', 0)}/{score_row.get('n', 0)} tasks."
             ),
         ])
@@ -1089,6 +1114,9 @@ def paired_task_deltas(run_rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
             "intervention_outcome": intervention["outcome"],
             "success_delta": intervention["success"] - baseline["success"],
             "verification_delta": intervention["verification_rate"] - baseline["verification_rate"],
+            "success_check_verification_delta": (
+                intervention["success_check_verification_rate"] - baseline["success_check_verification_rate"]
+            ),
             "repeated_tool_call_delta": intervention["repeated_tool_call_count"] - baseline["repeated_tool_call_count"],
             "token_usage_delta": intervention["token_usage"] - baseline["token_usage"],
             "failure_score_delta": intervention["failure_score"] - baseline["failure_score"],
@@ -1100,6 +1128,7 @@ def paired_task_summary(rows: list[dict[str, Any]]) -> dict[str, dict[str, Any]]
     directions = {
         "success_delta": 1,
         "verification_delta": 1,
+        "success_check_verification_delta": 1,
         "repeated_tool_call_delta": -1,
         "token_usage_delta": -1,
         "failure_score_delta": -1,
@@ -1279,6 +1308,7 @@ def _run_metrics(record: RunRecord, trace: Trace, diagnosis: Diagnosis) -> dict[
     finding_codes = [finding.code for finding in diagnosis.findings]
     taxonomy_tags = [canonical_label(code) for code in finding_codes]
     phase_counts = _phase_counts(trace)
+    visible_success_check = _visible_success_check(record)
     return {
         "task_id": record.task_id,
         "prompt_type": record.prompt_type,
@@ -1286,6 +1316,8 @@ def _run_metrics(record: RunRecord, trace: Trace, diagnosis: Diagnosis) -> dict[
         "outcome": record.outcome,
         "success": 1 if record.outcome == "success" else 0,
         "verification_rate": 1 if metrics.get("post_edit_verification_commands", 0) > 0 else 0,
+        "success_check_verification_rate": _has_post_edit_success_check(trace, visible_success_check),
+        "visible_success_check": visible_success_check,
         "unresolved_error": 1 if "command_failure_unhandled" in finding_codes else 0,
         "repeated_tool_call_count": _repeated_tool_call_count(trace),
         "retry_count": _retry_count(trace),
@@ -1305,6 +1337,33 @@ def _run_metrics(record: RunRecord, trace: Trace, diagnosis: Diagnosis) -> dict[
         "finding_codes": finding_codes,
         "taxonomy_tags": taxonomy_tags,
     }
+
+
+def _visible_success_check(record: RunRecord) -> str:
+    if record.prompt_path and record.prompt_path.exists():
+        lines = record.prompt_path.read_text(encoding="utf-8").splitlines()
+        for index, line in enumerate(lines[:-1]):
+            if line.strip().lower() in {"success check:", "visible success check:"}:
+                return lines[index + 1].strip()
+    return record.success_check.strip()
+
+
+def _has_post_edit_success_check(trace: Trace, success_check: str) -> int:
+    normalized_check = _normalize_command_for_match(success_check)
+    if not normalized_check:
+        return 0
+    saw_edit = False
+    for event in trace.events:
+        if event.kind == "file_change":
+            saw_edit = True
+        elif saw_edit and event.kind == "command" and event.command:
+            if normalized_check in _normalize_command_for_match(event.command):
+                return 1
+    return 0
+
+
+def _normalize_command_for_match(command: str) -> str:
+    return re.sub(r"\s+", " ", command.strip().lower())
 
 
 def _label_scores(rows: list[dict[str, Any]]) -> dict[str, dict[str, Any]]:
@@ -1375,7 +1434,7 @@ def _fmt_signal_metric(signal: str, value: Any) -> str:
     numeric = float(value or 0)
     if signal == "token_usage":
         return f"{numeric / 1000:.1f}k"
-    if signal == "verification_rate":
+    if signal.endswith("_rate"):
         return f"{numeric:.2f}"
     return _fmt(value)
 
@@ -1387,6 +1446,7 @@ def _summarize_group(rows: list[dict[str, Any]]) -> dict[str, Any]:
         "n": len(rows),
         "success_rate": _mean(rows, "success"),
         "verification_rate": _mean(rows, "verification_rate"),
+        "success_check_verification_rate": _mean(rows, "success_check_verification_rate"),
         "unresolved_error_rate": _mean(rows, "unresolved_error"),
         "avg_repeated_tool_calls": _mean(rows, "repeated_tool_call_count"),
         "avg_retry_count": _mean(rows, "retry_count"),

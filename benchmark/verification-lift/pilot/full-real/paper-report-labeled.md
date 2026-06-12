@@ -20,6 +20,7 @@ Micro F1: 0; Macro F1: 0.
 | --- | ---: | ---: | ---: |
 | success_rate | 0.875 | 0.875 | 0 |
 | verification_rate | 1 | 1 | 0 |
+| success_check_verification_rate | 1 | 1 | 0 |
 | unresolved_error_rate | 0 | 0 | 0 |
 | avg_repeated_tool_calls | 6.125 | 5.375 | -0.75 |
 | avg_retry_count | 0 | 0 | 0 |
@@ -35,22 +36,23 @@ Micro F1: 0; Macro F1: 0.
 | --- | ---: | ---: | ---: | ---: |
 | success | 0 | 0 | 8 | 0 |
 | verification | 0 | 0 | 8 | 0 |
+| success check verification | 0 | 0 | 8 | 0 |
 | repeated tool calls | 5 | 1 | 2 | -0.75 |
 | token usage | 5 | 3 | 0 | -4662 |
 | failure score | 0 | 0 | 8 | 0 |
 
 ### Paired Task Deltas
 
-| Task | Success delta | Verification delta | Repeated calls delta | Token delta | Failure score delta |
-| --- | ---: | ---: | ---: | ---: | ---: |
-| VLT-001 | 0 | 0 | -1 | -585 | 0 |
-| VLT-002 | 0 | 0 | -2 | -35147 | 0 |
-| VLT-003 | 0 | 0 | 0 | 3 | 0 |
-| VLT-004 | 0 | 0 | -2 | -231 | 0 |
-| VLT-005 | 0 | 0 | 0 | 186 | 0 |
-| VLT-006 | 0 | 0 | -1 | -1319 | 0 |
-| VLT-007 | 0 | 0 | -1 | -989 | 0 |
-| VLT-008 | 0 | 0 | 1 | 788 | 0 |
+| Task | Success delta | Verification delta | Success-check verification delta | Repeated calls delta | Token delta | Failure score delta |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| VLT-001 | 0 | 0 | 0 | -1 | -585 | 0 |
+| VLT-002 | 0 | 0 | 0 | -2 | -35147 | 0 |
+| VLT-003 | 0 | 0 | 0 | 0 | 3 | 0 |
+| VLT-004 | 0 | 0 | 0 | -2 | -231 | 0 |
+| VLT-005 | 0 | 0 | 0 | 0 | 186 | 0 |
+| VLT-006 | 0 | 0 | 0 | -1 | -1319 | 0 |
+| VLT-007 | 0 | 0 | 0 | -1 | -989 | 0 |
+| VLT-008 | 0 | 0 | 0 | 1 | 788 | 0 |
 
 ## RQ4 Trace Signals By Outcome
 
@@ -59,6 +61,7 @@ Outcome counts: failure=2, success=14, unknown=0.
 | Signal | Failure mean | Success mean | Delta success-failure |
 | --- | ---: | ---: | ---: |
 | verification_rate | 1 | 1 | 0 |
+| success_check_verification_rate | 1 | 1 | 0 |
 | unresolved_error | 0 | 0 | 0 |
 | repeated_tool_call_count | 6 | 5.714 | -0.2857 |
 | retry_count | 0 | 0 | 0 |
@@ -78,6 +81,7 @@ Outcome counts: failure=2, success=14, unknown=0.
 | Label | Runs | Signal | Mean | Overall mean | Delta label-overall |
 | --- | ---: | --- | ---: | ---: | ---: |
 | hidden_semantic_edge_case | 2 | verification_rate | 1 | 1 | 0 |
+| hidden_semantic_edge_case | 2 | success_check_verification_rate | 1 | 1 | 0 |
 | hidden_semantic_edge_case | 2 | unresolved_error | 0 | 0 | 0 |
 | hidden_semantic_edge_case | 2 | repeated_tool_call_count | 6 | 6 | 0 |
 | hidden_semantic_edge_case | 2 | retry_count | 0 | 0 | 0 |

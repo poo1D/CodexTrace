@@ -1,9 +1,9 @@
-task_id,prompt_type,outcome,success,verification_rate,unresolved_error,repeated_tool_call_count,retry_count,command_failure_count,token_usage,failure_score,turn_count,time_to_first_edit,time_to_first_test,phase_setup_events,phase_inspect_events,phase_edit_events,phase_verify_events,phase_recover_events,phase_complete_events,phase_other_events,finding_codes,taxonomy_tags
-VAB-001,baseline,success,1,0,0,4,0,0,137079,70,1,13,,3,10,2,0,0,2,0,verification_gap;premature_completion,verification_gap;premature_completion
-VAB-001,intervention,success,1,1,0,5,0,0,171642,0,1,13,16,3,10,3,2,0,2,0,,
-VAB-002,baseline,failure,0,0,0,5,0,0,172596,70,1,13,,3,10,5,0,0,2,0,verification_gap;premature_completion,verification_gap;premature_completion
-VAB-002,intervention,failure,0,1,0,5,0,0,172455,0,1,13,16,3,10,3,2,0,2,0,,
-VAB-003,baseline,success,1,0,0,3,0,0,136484,35,1,10,,3,7,3,0,0,1,0,verification_gap,verification_gap
-VAB-003,intervention,success,1,1,0,6,0,0,172571,0,1,15,18,3,12,3,2,0,2,0,,
-VAB-004,baseline,success,1,0,0,4,0,0,136907,70,1,13,,3,10,2,0,0,2,0,verification_gap;premature_completion,verification_gap;premature_completion
-VAB-004,intervention,success,1,1,0,5,0,0,171664,0,1,13,16,3,10,3,2,0,2,0,,
+task_id,prompt_type,outcome,success,verification_rate,success_check_verification_rate,visible_success_check,unresolved_error,repeated_tool_call_count,retry_count,command_failure_count,token_usage,failure_score,turn_count,time_to_first_edit,time_to_first_test,phase_setup_events,phase_inspect_events,phase_edit_events,phase_verify_events,phase_recover_events,phase_complete_events,phase_other_events,finding_codes,taxonomy_tags
+VAB-001,baseline,success,1,0,0,python3 ../grader/check.py,0,4,0,0,137079,70,1,13,,3,10,2,0,0,2,0,verification_gap;premature_completion,verification_gap;premature_completion
+VAB-001,intervention,success,1,1,1,python3 -m unittest discover -s tests,0,5,0,0,171642,0,1,13,16,3,10,3,2,0,2,0,,
+VAB-002,baseline,failure,0,0,0,python3 ../grader/check.py,0,5,0,0,172596,70,1,13,,3,10,5,0,0,2,0,verification_gap;premature_completion,verification_gap;premature_completion
+VAB-002,intervention,failure,0,1,1,python3 -m unittest discover -s tests,0,5,0,0,172455,0,1,13,16,3,10,3,2,0,2,0,,
+VAB-003,baseline,success,1,0,0,python3 ../grader/check.py,0,3,0,0,136484,35,1,10,,3,7,3,0,0,1,0,verification_gap,verification_gap
+VAB-003,intervention,success,1,1,1,python3 -m unittest discover -s tests,0,6,0,0,172571,0,1,15,18,3,12,3,2,0,2,0,,
+VAB-004,baseline,success,1,0,0,python3 ../grader/check.py,0,4,0,0,136907,70,1,13,,3,10,2,0,0,2,0,verification_gap;premature_completion,verification_gap;premature_completion
+VAB-004,intervention,success,1,1,1,python3 -m unittest discover -s tests,0,5,0,0,171664,0,1,13,16,3,10,3,2,0,2,0,,

@@ -160,10 +160,11 @@ Candidate signals:
 
 - verification is saturated in the stored hard pilots, so the paper should not
   claim a verification-rate lift; the targeted verification-lift pilot also
-  stays saturated at 1.00 -> 1.00
+  stays saturated at 1.00 -> 1.00 for both broad verification and exact visible
+  success-check verification
 - the no-verify verification-ablation pilot is a mechanism check only:
-  verification rises 0.00 -> 1.00 and failure score drops 61.25 -> 0.00, but it
-  is not ordinary-baseline evidence
+  broad and exact success-check verification rise 0.00 -> 1.00 and failure
+  score drops 61.25 -> 0.00, but it is not ordinary-baseline evidence
 - intervention most consistently reduces process waste: repeated tool calls,
   command failures, recovery events, token usage, and failure score
 - success improves in the early hard10 pilot but is flat on hard30

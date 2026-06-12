@@ -6,6 +6,7 @@
 | --- | ---: | ---: | ---: |
 | success_rate | 0.9167 | 0.9167 | 0 |
 | verification_rate | 1 | 1 | 0 |
+| success_check_verification_rate | 1 | 1 | 0 |
 | unresolved_error_rate | 0 | 0 | 0 |
 | avg_repeated_tool_calls | 8.083 | 7.167 | -0.9166 |
 | avg_retry_count | 0.1667 | 0.25 | 0.0833 |

@@ -263,13 +263,15 @@ verification-rate lift. In the process-stress tier, success remains
 flat at 0.92 -> 0.92, while repeated tool calls improve from 8.08 to 7.17 and
 token usage improves from 209.0k to 185.1k. In the targeted verification-lift
 tier, even a weak baseline prompt that permits skipped command execution still
-verifies every run: verification remains 1.00 -> 1.00, success remains
-0.88 -> 0.88, repeated tool calls improve from 6.13 to 5.38, and token usage
-improves from 176.8k to 172.2k. Finally, a no-verify ablation intentionally
-forbids the baseline from running tests while requiring the intervention to
-produce evidence. In that artificial setting, verification rises from 0.00 to
-1.00 and failure score drops from 61.25 to 0.00, while success stays flat at
-0.75 -> 0.75 and token usage increases from 145.8k to 172.1k. This supports a
+verifies every run: broad verification and exact visible-success-check
+verification both remain 1.00 -> 1.00, success remains 0.88 -> 0.88, repeated
+tool calls improve from 6.13 to 5.38, and token usage improves from 176.8k to
+172.2k. Finally, a no-verify ablation intentionally forbids the baseline from
+running tests while requiring the intervention to produce evidence. In that
+artificial setting, broad verification and exact visible-success-check
+verification both rise from 0.00 to 1.00 and failure score drops from 61.25 to
+0.00, while success stays flat at 0.75 -> 0.75 and token usage increases from
+145.8k to 172.1k. This supports a
 narrow mechanism claim that harness constraints can control verification
 behavior, but it is not ordinary-baseline evidence. Overall, the ordinary and
 weak-baseline pilots are a negative result for the verification-rate-lift claim
@@ -279,15 +281,16 @@ and a positive result for the narrower waste-reduction claim.
 
 On the hard30 tier, the process signals do not strongly separate successful
 runs from hidden semantic failures. Failure and success runs both have
-verification rate 1.0 and unresolved error 0. Repeated tool calls and token
-usage are also close across outcomes, and failure score is higher for
-successful runs than failed runs. This supports the RQ2 boundary result: when
-visible tests are incomplete, a run can look procedurally sound while still
-failing a hidden oracle.
+verification rate 1.0, exact visible-success-check verification rate 1.0, and
+unresolved error 0. Repeated tool calls and token usage are also close across
+outcomes, and failure score is higher for successful runs than failed runs.
+This supports the RQ2 boundary result: when visible tests are incomplete, a run
+can look procedurally sound while still failing a hidden oracle.
 
 | Signal | Failure mean | Success mean | Delta success-failure |
 | --- | ---: | ---: | ---: |
 | verification_rate | 1.00 | 1.00 | 0.00 |
+| success_check_verification_rate | 1.00 | 1.00 | 0.00 |
 | unresolved_error | 0 | 0 | 0 |
 | repeated_tool_call_count | 10.8 | 11.33 | 0.53 |
 | command_failure_count | 0.23 | 0.17 | -0.07 |
@@ -315,11 +318,12 @@ keeps success flat but sharply reduces tool-call and token waste, while also
 revealing that process-only trace rules cannot detect every correctness
 failure. The process-stress and verification-lift pilots add a useful boundary:
 current Codex CLI behavior already verifies consistently, so the paper should
-not claim a verification-rate lift under ordinary or weak-baseline conditions.
-The no-verify ablation shows that an evidence-gated harness can force
-verification when the baseline is explicitly forbidden to verify, but that
-result belongs in the analysis as a mechanism check rather than a main outcome
-claim.
+not claim a verification-rate lift under ordinary or weak-baseline conditions;
+that remains true when verification is restricted to the task's exact visible
+success check. The no-verify ablation shows that an evidence-gated harness can
+force verification when the baseline is explicitly forbidden to verify, but
+that result belongs in the analysis as a mechanism check rather than a main
+outcome claim.
 
 This distinction matters for a practical coding-agent harness. Trace diagnosis
 is useful for asking questions such as:

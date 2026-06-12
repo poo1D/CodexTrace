@@ -62,6 +62,7 @@ def build_claim_audit(
     hard30_success_delta = float(hard30_deltas.get("success_rate", 0) or 0)
     hard10_success_delta = float(hard10["deltas"].get("success_rate", 0) or 0)
     verification_delta = float(hard30_deltas.get("verification_rate", 0) or 0)
+    success_check_verification_delta = float(hard30_deltas.get("success_check_verification_rate", 0) or 0)
     repeated_delta = float(hard30_deltas.get("avg_repeated_tool_calls", 0) or 0)
     token_delta = float(hard30_deltas.get("avg_token_usage", 0) or 0)
     token_improved = int(paired["token_usage_delta"]["improved"])
@@ -91,6 +92,7 @@ def build_claim_audit(
     process_stress_failures = int(process_stress.get("outcome_counts", {}).get("failure", 0) or 0) if process_stress else 0
     process_stress_success_delta = float(process_stress_deltas.get("success_rate", 0) or 0)
     process_stress_verification_delta = float(process_stress_deltas.get("verification_rate", 0) or 0)
+    process_stress_success_check_delta = float(process_stress_deltas.get("success_check_verification_rate", 0) or 0)
     process_stress_repeated_delta = float(process_stress_deltas.get("avg_repeated_tool_calls", 0) or 0)
     process_stress_token_delta = float(process_stress_deltas.get("avg_token_usage", 0) or 0)
     process_stress_repeated_improved = int(process_stress_paired.get("repeated_tool_call_delta", {}).get("improved", 0) or 0)
@@ -105,6 +107,7 @@ def build_claim_audit(
     verification_lift_runs = len(verification_lift["aggregate"]["runs"]) if verification_lift else 0
     verification_lift_failures = int(verification_lift.get("outcome_counts", {}).get("failure", 0) or 0) if verification_lift else 0
     verification_lift_verification_delta = float(verification_lift_deltas.get("verification_rate", 0) or 0)
+    verification_lift_success_check_delta = float(verification_lift_deltas.get("success_check_verification_rate", 0) or 0)
     verification_lift_repeated_delta = float(verification_lift_deltas.get("avg_repeated_tool_calls", 0) or 0)
     verification_lift_token_delta = float(verification_lift_deltas.get("avg_token_usage", 0) or 0)
     verification_lift_hidden_fn = int(verification_lift_hidden.get("fn", 0) or 0)
@@ -114,6 +117,7 @@ def build_claim_audit(
     verification_ablation_runs = len(verification_ablation["aggregate"]["runs"]) if verification_ablation else 0
     verification_ablation_failures = int(verification_ablation.get("outcome_counts", {}).get("failure", 0) or 0) if verification_ablation else 0
     verification_ablation_verification_delta = float(verification_ablation_deltas.get("verification_rate", 0) or 0)
+    verification_ablation_success_check_delta = float(verification_ablation_deltas.get("success_check_verification_rate", 0) or 0)
     verification_ablation_failure_score_delta = float(verification_ablation_deltas.get("avg_failure_score", 0) or 0)
 
     claims = [
@@ -138,13 +142,18 @@ def build_claim_audit(
         {
             "claim": "Harness intervention increases verification rate.",
             "status": "unsupported",
-            "evidence": f"hard30 verification delta is {verification_delta:+.2f}; process-stress verification delta is {process_stress_verification_delta:+.2f}; verification-lift delta is {verification_lift_verification_delta:+.2f}; all stored pilots are saturated.",
+            "evidence": (
+                f"hard30 verification delta is {verification_delta:+.2f} and exact success-check delta is {success_check_verification_delta:+.2f}; "
+                f"process-stress verification delta is {process_stress_verification_delta:+.2f} and exact success-check delta is {process_stress_success_check_delta:+.2f}; "
+                f"verification-lift verification delta is {verification_lift_verification_delta:+.2f} and exact success-check delta is {verification_lift_success_check_delta:+.2f}; "
+                "stored ordinary/weak-baseline pilots are saturated."
+            ),
             "action": "Do not claim verification-rate lift for current stored pilots; frame verification as saturated.",
         },
         {
             "claim": "Harness constraints can control verification behavior under a no-verify ablation.",
-            "status": "supported" if verification_ablation_verification_delta > 0 else "partial",
-            "evidence": f"verification-ablation verification delta is {verification_ablation_verification_delta:+.2f}; failure-score delta is {verification_ablation_failure_score_delta:+.2f}.",
+            "status": "supported" if verification_ablation_verification_delta > 0 and verification_ablation_success_check_delta > 0 else "partial",
+            "evidence": f"verification-ablation verification delta is {verification_ablation_verification_delta:+.2f}; exact success-check delta is {verification_ablation_success_check_delta:+.2f}; failure-score delta is {verification_ablation_failure_score_delta:+.2f}.",
             "action": "Use only as a mechanism ablation, not as ordinary-baseline evidence.",
         },
         {
@@ -204,10 +213,12 @@ def build_claim_audit(
             "verification_lift_runs": verification_lift_runs,
             "verification_lift_failures": verification_lift_failures,
             "verification_lift_verification_delta": verification_lift_verification_delta,
+            "verification_lift_success_check_delta": verification_lift_success_check_delta,
             "verification_ablation_tasks": verification_ablation_tasks,
             "verification_ablation_runs": verification_ablation_runs,
             "verification_ablation_failures": verification_ablation_failures,
             "verification_ablation_verification_delta": verification_ablation_verification_delta,
+            "verification_ablation_success_check_delta": verification_ablation_success_check_delta,
             "rq4_signal_audit_ready": rq4_ready,
         },
         "claims": claims,
@@ -233,8 +244,8 @@ def render_claim_audit_markdown(result: dict[str, Any]) -> str:
         f"- Full30 detected sandbox/permission positives: TP={summary['full30_sandbox_permission_tp']}, FP={summary['full30_sandbox_permission_fp']}, FN={summary['full30_sandbox_permission_fn']}",
         f"- Controlled detector fixture labels: {summary['detector_fixture_labels']}, micro-F1={summary['detector_fixture_micro_f1']:.2f}",
         f"- Process-stress artifact: {summary['process_stress_tasks']} tasks, {summary['process_stress_runs']} runs, {summary['process_stress_failures']} failures, success delta={summary['process_stress_success_delta']:+.2f}",
-        f"- Verification-lift artifact: {summary['verification_lift_tasks']} tasks, {summary['verification_lift_runs']} runs, {summary['verification_lift_failures']} failures, verification delta={summary['verification_lift_verification_delta']:+.2f}",
-        f"- Verification-ablation artifact: {summary['verification_ablation_tasks']} tasks, {summary['verification_ablation_runs']} runs, {summary['verification_ablation_failures']} failures, verification delta={summary['verification_ablation_verification_delta']:+.2f}",
+        f"- Verification-lift artifact: {summary['verification_lift_tasks']} tasks, {summary['verification_lift_runs']} runs, {summary['verification_lift_failures']} failures, verification delta={summary['verification_lift_verification_delta']:+.2f}, exact success-check delta={summary['verification_lift_success_check_delta']:+.2f}",
+        f"- Verification-ablation artifact: {summary['verification_ablation_tasks']} tasks, {summary['verification_ablation_runs']} runs, {summary['verification_ablation_failures']} failures, verification delta={summary['verification_ablation_verification_delta']:+.2f}, exact success-check delta={summary['verification_ablation_success_check_delta']:+.2f}",
         f"- RQ4 signal audit ready: {'yes' if summary['rq4_signal_audit_ready'] else 'no'}",
         "",
         "## Claim Status",

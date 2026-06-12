@@ -91,7 +91,9 @@ def build_thesis_readiness(
     if process_pilot_summary.get("exists"):
         process_verification_evidence = (
             f", process-stress={process_pilot_summary['baseline_verification_rate']:.2f}->"
-            f"{process_pilot_summary['intervention_verification_rate']:.2f}"
+            f"{process_pilot_summary['intervention_verification_rate']:.2f} "
+            f"(exact={process_pilot_summary['baseline_success_check_verification_rate']:.2f}->"
+            f"{process_pilot_summary['intervention_success_check_verification_rate']:.2f})"
         )
         process_waste_evidence = (
             f"; process-stress success delta={process_pilot_summary['intervention_success_rate'] - process_pilot_summary['baseline_success_rate']:+.2f}, "
@@ -101,7 +103,9 @@ def build_thesis_readiness(
     if verification_lift_summary.get("exists"):
         verification_lift_evidence = (
             f", verification-lift={verification_lift_summary['baseline_verification_rate']:.2f}->"
-            f"{verification_lift_summary['intervention_verification_rate']:.2f}"
+            f"{verification_lift_summary['intervention_verification_rate']:.2f} "
+            f"(exact={verification_lift_summary['baseline_success_check_verification_rate']:.2f}->"
+            f"{verification_lift_summary['intervention_success_check_verification_rate']:.2f})"
         )
         verification_lift_waste_evidence = (
             f"; verification-lift success delta={verification_lift_summary['intervention_success_rate'] - verification_lift_summary['baseline_success_rate']:+.2f}, "
@@ -114,6 +118,11 @@ def build_thesis_readiness(
         )
     verification_lift_delta = (
         verification_lift_summary["intervention_verification_rate"] - verification_lift_summary["baseline_verification_rate"]
+        if verification_lift_summary.get("exists")
+        else 0
+    )
+    verification_lift_success_check_delta = (
+        verification_lift_summary["intervention_success_check_verification_rate"] - verification_lift_summary["baseline_success_check_verification_rate"]
         if verification_lift_summary.get("exists")
         else 0
     )
@@ -176,19 +185,24 @@ def build_thesis_readiness(
         {
             "id": "verification_lift",
             "requirement": "Show that harness intervention increases verification rate.",
-            "status": "satisfied" if verification_lift_delta > 0 else "missing",
+            "status": "satisfied" if verification_lift_delta > 0 and verification_lift_success_check_delta > 0 else "missing",
             "evidence": (
                 "verification is saturated in stored pilots: "
-                f"full30={full30_summary['baseline']['verification_rate']:.2f}->{full30_summary['intervention']['verification_rate']:.2f}, "
-                f"hard10={hard10_summary['baseline']['verification_rate']:.2f}->{hard10_summary['intervention']['verification_rate']:.2f}, "
-                f"hard30={hard30_summary['baseline']['verification_rate']:.2f}->{hard30_summary['intervention']['verification_rate']:.2f}"
+                f"full30={full30_summary['baseline']['verification_rate']:.2f}->{full30_summary['intervention']['verification_rate']:.2f} "
+                f"(exact={full30_summary['baseline'].get('success_check_verification_rate', 0):.2f}->{full30_summary['intervention'].get('success_check_verification_rate', 0):.2f}), "
+                f"hard10={hard10_summary['baseline']['verification_rate']:.2f}->{hard10_summary['intervention']['verification_rate']:.2f} "
+                f"(exact={hard10_summary['baseline'].get('success_check_verification_rate', 0):.2f}->{hard10_summary['intervention'].get('success_check_verification_rate', 0):.2f}), "
+                f"hard30={hard30_summary['baseline']['verification_rate']:.2f}->{hard30_summary['intervention']['verification_rate']:.2f} "
+                f"(exact={hard30_summary['baseline'].get('success_check_verification_rate', 0):.2f}->{hard30_summary['intervention'].get('success_check_verification_rate', 0):.2f})"
                 f"{process_verification_evidence}{verification_lift_evidence}."
             ),
             "gap": (
-                "None for original thesis." if verification_lift_delta > 0
+                "None for original thesis." if verification_lift_delta > 0 and verification_lift_success_check_delta > 0
                 else (
                     "The ordinary and weak-baseline pilots are negative results; the no-verify ablation shows the harness can lift verification "
                     f"from {verification_ablation_summary.get('baseline_verification_rate', 0):.2f} to {verification_ablation_summary.get('intervention_verification_rate', 0):.2f}, "
+                    f"and exact success-check verification from {verification_ablation_summary.get('baseline_success_check_verification_rate', 0):.2f} "
+                    f"to {verification_ablation_summary.get('intervention_success_check_verification_rate', 0):.2f}, "
                     "but this is not an ordinary-baseline result."
                 )
             ),
@@ -212,6 +226,7 @@ def build_thesis_readiness(
             "evidence": (
                 "hard30 hidden failures are not separated by process signals: "
                 f"verification delta={signal_rows['verification_rate']['delta_success_minus_failure']:+.2f}, "
+                f"exact success-check delta={signal_rows.get('success_check_verification_rate', {}).get('delta_success_minus_failure', 0):+.2f}, "
                 f"unresolved-error delta={signal_rows['unresolved_error']['delta_success_minus_failure']:+.2f}; "
                 "repetitive_exploration positives are explained by repeated calls, token usage, and failure score; "
                 f"RQ4 signal audit ready={rq4_ready}."
@@ -337,6 +352,7 @@ def render_thesis_readiness_markdown(result: dict[str, Any]) -> str:
                 f"{pilot['tasks']} task(s), {pilot['runs']} run(s), "
                 f"success {pilot['baseline_success_rate']:.2f}->{pilot['intervention_success_rate']:.2f}, "
                 f"verification {pilot['baseline_verification_rate']:.2f}->{pilot['intervention_verification_rate']:.2f}, "
+                f"exact success-check {pilot['baseline_success_check_verification_rate']:.2f}->{pilot['intervention_success_check_verification_rate']:.2f}, "
                 f"repeated calls {pilot['baseline_repeated_calls']:.2f}->{pilot['intervention_repeated_calls']:.2f}, "
                 f"token usage {pilot['baseline_token_usage'] / 1000:.1f}k->{pilot['intervention_token_usage'] / 1000:.1f}k."
             ),
@@ -368,6 +384,7 @@ def render_thesis_readiness_markdown(result: dict[str, Any]) -> str:
                 "Current verification-lift pilot: "
                 f"{verification_pilot['tasks']} task(s), {verification_pilot['runs']} run(s), "
                 f"verification {verification_pilot['baseline_verification_rate']:.2f}->{verification_pilot['intervention_verification_rate']:.2f}, "
+                f"exact success-check {verification_pilot['baseline_success_check_verification_rate']:.2f}->{verification_pilot['intervention_success_check_verification_rate']:.2f}, "
                 f"success {verification_pilot['baseline_success_rate']:.2f}->{verification_pilot['intervention_success_rate']:.2f}."
             ),
             "",
@@ -398,6 +415,7 @@ def render_thesis_readiness_markdown(result: dict[str, Any]) -> str:
                 "Current verification-ablation pilot: "
                 f"{ablation_pilot['tasks']} task(s), {ablation_pilot['runs']} run(s), "
                 f"verification {ablation_pilot['baseline_verification_rate']:.2f}->{ablation_pilot['intervention_verification_rate']:.2f}, "
+                f"exact success-check {ablation_pilot['baseline_success_check_verification_rate']:.2f}->{ablation_pilot['intervention_success_check_verification_rate']:.2f}, "
                 f"success {ablation_pilot['baseline_success_rate']:.2f}->{ablation_pilot['intervention_success_rate']:.2f}, "
                 f"failure score {ablation_pilot['baseline_failure_score']:.2f}->{ablation_pilot['intervention_failure_score']:.2f}."
             ),
@@ -430,6 +448,8 @@ def _process_pilot_summary(aggregate: dict[str, Any] | None) -> dict[str, Any]:
         "intervention_success_rate": float(intervention.get("success_rate", 0) or 0),
         "baseline_verification_rate": float(baseline.get("verification_rate", 0) or 0),
         "intervention_verification_rate": float(intervention.get("verification_rate", 0) or 0),
+        "baseline_success_check_verification_rate": float(baseline.get("success_check_verification_rate", 0) or 0),
+        "intervention_success_check_verification_rate": float(intervention.get("success_check_verification_rate", 0) or 0),
         "baseline_repeated_calls": float(baseline.get("avg_repeated_tool_calls", 0) or 0),
         "intervention_repeated_calls": float(intervention.get("avg_repeated_tool_calls", 0) or 0),
         "baseline_token_usage": float(baseline.get("avg_token_usage", 0) or 0),
