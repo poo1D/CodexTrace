@@ -1225,6 +1225,8 @@ def test_experiment_protocol_maps_rqs_to_evidence():
     assert "| RQ2 trace-only detection |" in text
     assert "| RQ3 intervention effect |" in text
     assert "| RQ4 explanatory signals |" in text
+    assert "docs/hard30_task_diagnosis.md" in text
+    assert "one intervention repair (`HARD-050`), one intervention regression" in text
     assert "ordinary and weak-baseline verification rates are saturated" in normalized
 
 

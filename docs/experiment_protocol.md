@@ -167,7 +167,7 @@ codex-trace research paper-report benchmark/runs.example.jsonl \
 | --- | --- | --- | --- |
 | RQ1 failure modes | `docs/failure_taxonomy.md`, `benchmark/*/manual-labels.jsonl` | `codex-trace research paper-report ... --labels ...` | Taxonomy distribution and manual-label counts identify which failure modes appear. |
 | RQ2 trace-only detection | `benchmark/detector-fixtures/label-eval.md`, hard/process paper reports | `codex-trace research evaluate-labels MANIFEST LABELS` | Per-label precision/recall/F1 show detected process positives and hidden-semantic false negatives. |
-| RQ3 intervention effect | `docs/results_summary.md`, `paired-task-summary.csv` | `codex-trace research summary --markdown-output docs/results_summary.md` | Baseline/intervention deltas and paired task summaries show success, verification, waste, and token changes. |
+| RQ3 intervention effect | `docs/results_summary.md`, `paired-task-summary.csv`, `docs/hard30_task_diagnosis.md` | `codex-trace research summary --markdown-output docs/results_summary.md`; `python3 scripts/audit_hard30_task_diagnosis.py ...` | Baseline/intervention deltas, paired task summaries, and task-level diagnosis show success, verification, waste, token changes, repairs, and regressions. |
 | RQ4 explanatory signals | `docs/rq4_signal_audit.md`, `paper-report-labeled.json` | `python3 scripts/audit_rq4_signals.py ...` | Signal means/deltas separate observable process positives and document the hidden-semantic boundary. |
 
 The current evidence should be read with these boundaries:
@@ -220,6 +220,9 @@ Current pilot status:
   and average token usage drops from about `355.0k -> 256.3k`. Its manual
   labels mark 30 hidden semantic edge-case failures, with detector agreement
   `TP=0`, `FP=0`, `FN=30`.
+- The hard30 task diagnosis identifies 14 tasks that fail under both prompts,
+  one intervention repair (`HARD-050`), one intervention regression
+  (`HARD-007`), and paired token/repeated-call improvements in 26 of 30 tasks.
 
 Required next dataset extension:
 

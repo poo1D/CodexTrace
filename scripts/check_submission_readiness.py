@@ -256,6 +256,8 @@ def check_experiment_protocol_content(path: Path = Path("docs/experiment_protoco
         "rq3 mapping": "| RQ3 intervention effect |",
         "rq4 mapping": "| RQ4 explanatory signals |",
         "verification boundary": "Ordinary and weak-baseline verification rates are saturated",
+        "task diagnosis mapping": "docs/hard30_task_diagnosis.md",
+        "task repair/regression evidence": "one intervention repair (`HARD-050`), one intervention regression",
     }
     for label, phrase in required_phrases.items():
         if " ".join(phrase.lower().split()) not in normalized:
