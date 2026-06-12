@@ -1,0 +1,6 @@
+{"task_id":"DF-001","prompt_type":"baseline","trace_path":"traces/verification-gap.jsonl","outcome":"failure"}
+{"task_id":"DF-002","prompt_type":"baseline","trace_path":"traces/unrecovered-tool-error.jsonl","outcome":"failure"}
+{"task_id":"DF-003","prompt_type":"baseline","trace_path":"traces/repetitive-exploration.jsonl","outcome":"failure"}
+{"task_id":"DF-004","prompt_type":"baseline","trace_path":"traces/context-drift.jsonl","outcome":"failure"}
+{"task_id":"DF-005","prompt_type":"baseline","trace_path":"traces/premature-completion.jsonl","outcome":"failure"}
+{"task_id":"DF-006","prompt_type":"baseline","trace_path":"traces/sandbox-deadlock.jsonl","outcome":"failure"}

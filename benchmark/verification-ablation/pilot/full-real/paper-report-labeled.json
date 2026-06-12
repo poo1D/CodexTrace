@@ -1,0 +1,962 @@
+{
+  "aggregate": {
+    "runs": [
+      {
+        "task_id": "VAB-001",
+        "prompt_type": "baseline",
+        "trace_path": "/Users/lidengye/Developer/CodexTrace-github/benchmark/verification-ablation/pilot/full-real/VAB-001/baseline/trace.jsonl",
+        "outcome": "success",
+        "success": 1,
+        "verification_rate": 0,
+        "unresolved_error": 0,
+        "repeated_tool_call_count": 4,
+        "retry_count": 0,
+        "command_failure_count": 0,
+        "token_usage": 137079,
+        "failure_score": 70,
+        "turn_count": 1,
+        "time_to_first_edit": 13,
+        "time_to_first_test": null,
+        "phase_setup_events": 3,
+        "phase_inspect_events": 10,
+        "phase_edit_events": 2,
+        "phase_verify_events": 0,
+        "phase_recover_events": 0,
+        "phase_complete_events": 2,
+        "phase_other_events": 0,
+        "finding_codes": [
+          "verification_gap",
+          "premature_completion"
+        ],
+        "taxonomy_tags": [
+          "verification_gap",
+          "premature_completion"
+        ]
+      },
+      {
+        "task_id": "VAB-001",
+        "prompt_type": "intervention",
+        "trace_path": "/Users/lidengye/Developer/CodexTrace-github/benchmark/verification-ablation/pilot/full-real/VAB-001/intervention/trace.jsonl",
+        "outcome": "success",
+        "success": 1,
+        "verification_rate": 1,
+        "unresolved_error": 0,
+        "repeated_tool_call_count": 5,
+        "retry_count": 0,
+        "command_failure_count": 0,
+        "token_usage": 171642,
+        "failure_score": 0,
+        "turn_count": 1,
+        "time_to_first_edit": 13,
+        "time_to_first_test": 16,
+        "phase_setup_events": 3,
+        "phase_inspect_events": 10,
+        "phase_edit_events": 3,
+        "phase_verify_events": 2,
+        "phase_recover_events": 0,
+        "phase_complete_events": 2,
+        "phase_other_events": 0,
+        "finding_codes": [],
+        "taxonomy_tags": []
+      },
+      {
+        "task_id": "VAB-002",
+        "prompt_type": "baseline",
+        "trace_path": "/Users/lidengye/Developer/CodexTrace-github/benchmark/verification-ablation/pilot/full-real/VAB-002/baseline/trace.jsonl",
+        "outcome": "failure",
+        "success": 0,
+        "verification_rate": 0,
+        "unresolved_error": 0,
+        "repeated_tool_call_count": 5,
+        "retry_count": 0,
+        "command_failure_count": 0,
+        "token_usage": 172596,
+        "failure_score": 70,
+        "turn_count": 1,
+        "time_to_first_edit": 13,
+        "time_to_first_test": null,
+        "phase_setup_events": 3,
+        "phase_inspect_events": 10,
+        "phase_edit_events": 5,
+        "phase_verify_events": 0,
+        "phase_recover_events": 0,
+        "phase_complete_events": 2,
+        "phase_other_events": 0,
+        "finding_codes": [
+          "verification_gap",
+          "premature_completion"
+        ],
+        "taxonomy_tags": [
+          "verification_gap",
+          "premature_completion"
+        ]
+      },
+      {
+        "task_id": "VAB-002",
+        "prompt_type": "intervention",
+        "trace_path": "/Users/lidengye/Developer/CodexTrace-github/benchmark/verification-ablation/pilot/full-real/VAB-002/intervention/trace.jsonl",
+        "outcome": "failure",
+        "success": 0,
+        "verification_rate": 1,
+        "unresolved_error": 0,
+        "repeated_tool_call_count": 5,
+        "retry_count": 0,
+        "command_failure_count": 0,
+        "token_usage": 172455,
+        "failure_score": 0,
+        "turn_count": 1,
+        "time_to_first_edit": 13,
+        "time_to_first_test": 16,
+        "phase_setup_events": 3,
+        "phase_inspect_events": 10,
+        "phase_edit_events": 3,
+        "phase_verify_events": 2,
+        "phase_recover_events": 0,
+        "phase_complete_events": 2,
+        "phase_other_events": 0,
+        "finding_codes": [],
+        "taxonomy_tags": []
+      },
+      {
+        "task_id": "VAB-003",
+        "prompt_type": "baseline",
+        "trace_path": "/Users/lidengye/Developer/CodexTrace-github/benchmark/verification-ablation/pilot/full-real/VAB-003/baseline/trace.jsonl",
+        "outcome": "success",
+        "success": 1,
+        "verification_rate": 0,
+        "unresolved_error": 0,
+        "repeated_tool_call_count": 3,
+        "retry_count": 0,
+        "command_failure_count": 0,
+        "token_usage": 136484,
+        "failure_score": 35,
+        "turn_count": 1,
+        "time_to_first_edit": 10,
+        "time_to_first_test": null,
+        "phase_setup_events": 3,
+        "phase_inspect_events": 7,
+        "phase_edit_events": 3,
+        "phase_verify_events": 0,
+        "phase_recover_events": 0,
+        "phase_complete_events": 1,
+        "phase_other_events": 0,
+        "finding_codes": [
+          "verification_gap"
+        ],
+        "taxonomy_tags": [
+          "verification_gap"
+        ]
+      },
+      {
+        "task_id": "VAB-003",
+        "prompt_type": "intervention",
+        "trace_path": "/Users/lidengye/Developer/CodexTrace-github/benchmark/verification-ablation/pilot/full-real/VAB-003/intervention/trace.jsonl",
+        "outcome": "success",
+        "success": 1,
+        "verification_rate": 1,
+        "unresolved_error": 0,
+        "repeated_tool_call_count": 6,
+        "retry_count": 0,
+        "command_failure_count": 0,
+        "token_usage": 172571,
+        "failure_score": 0,
+        "turn_count": 1,
+        "time_to_first_edit": 15,
+        "time_to_first_test": 18,
+        "phase_setup_events": 3,
+        "phase_inspect_events": 12,
+        "phase_edit_events": 3,
+        "phase_verify_events": 2,
+        "phase_recover_events": 0,
+        "phase_complete_events": 2,
+        "phase_other_events": 0,
+        "finding_codes": [],
+        "taxonomy_tags": []
+      },
+      {
+        "task_id": "VAB-004",
+        "prompt_type": "baseline",
+        "trace_path": "/Users/lidengye/Developer/CodexTrace-github/benchmark/verification-ablation/pilot/full-real/VAB-004/baseline/trace.jsonl",
+        "outcome": "success",
+        "success": 1,
+        "verification_rate": 0,
+        "unresolved_error": 0,
+        "repeated_tool_call_count": 4,
+        "retry_count": 0,
+        "command_failure_count": 0,
+        "token_usage": 136907,
+        "failure_score": 70,
+        "turn_count": 1,
+        "time_to_first_edit": 13,
+        "time_to_first_test": null,
+        "phase_setup_events": 3,
+        "phase_inspect_events": 10,
+        "phase_edit_events": 2,
+        "phase_verify_events": 0,
+        "phase_recover_events": 0,
+        "phase_complete_events": 2,
+        "phase_other_events": 0,
+        "finding_codes": [
+          "verification_gap",
+          "premature_completion"
+        ],
+        "taxonomy_tags": [
+          "verification_gap",
+          "premature_completion"
+        ]
+      },
+      {
+        "task_id": "VAB-004",
+        "prompt_type": "intervention",
+        "trace_path": "/Users/lidengye/Developer/CodexTrace-github/benchmark/verification-ablation/pilot/full-real/VAB-004/intervention/trace.jsonl",
+        "outcome": "success",
+        "success": 1,
+        "verification_rate": 1,
+        "unresolved_error": 0,
+        "repeated_tool_call_count": 5,
+        "retry_count": 0,
+        "command_failure_count": 0,
+        "token_usage": 171664,
+        "failure_score": 0,
+        "turn_count": 1,
+        "time_to_first_edit": 13,
+        "time_to_first_test": 16,
+        "phase_setup_events": 3,
+        "phase_inspect_events": 10,
+        "phase_edit_events": 3,
+        "phase_verify_events": 2,
+        "phase_recover_events": 0,
+        "phase_complete_events": 2,
+        "phase_other_events": 0,
+        "finding_codes": [],
+        "taxonomy_tags": []
+      }
+    ],
+    "summary": {
+      "baseline": {
+        "n": 4,
+        "success_rate": 0.75,
+        "verification_rate": 0.0,
+        "unresolved_error_rate": 0.0,
+        "avg_repeated_tool_calls": 4.0,
+        "avg_retry_count": 0.0,
+        "avg_command_failures": 0.0,
+        "avg_token_usage": 145766.5,
+        "avg_failure_score": 61.25,
+        "avg_turn_count": 1.0,
+        "avg_inspect_events": 9.25,
+        "avg_edit_events": 3.0,
+        "avg_verify_events": 0.0,
+        "avg_recover_events": 0.0
+      },
+      "intervention": {
+        "n": 4,
+        "success_rate": 0.75,
+        "verification_rate": 1.0,
+        "unresolved_error_rate": 0.0,
+        "avg_repeated_tool_calls": 5.25,
+        "avg_retry_count": 0.0,
+        "avg_command_failures": 0.0,
+        "avg_token_usage": 172083.0,
+        "avg_failure_score": 0.0,
+        "avg_turn_count": 1.0,
+        "avg_inspect_events": 10.5,
+        "avg_edit_events": 3.0,
+        "avg_verify_events": 2.0,
+        "avg_recover_events": 0.0
+      }
+    },
+    "deltas": {
+      "avg_command_failures": 0.0,
+      "avg_edit_events": 0.0,
+      "avg_failure_score": -61.25,
+      "avg_inspect_events": 1.25,
+      "avg_recover_events": 0.0,
+      "avg_repeated_tool_calls": 1.25,
+      "avg_retry_count": 0.0,
+      "avg_token_usage": 26316.5,
+      "avg_turn_count": 0.0,
+      "avg_verify_events": 2.0,
+      "success_rate": 0.0,
+      "unresolved_error_rate": 0.0,
+      "verification_rate": 1.0
+    }
+  },
+  "taxonomy_distribution": [
+    {
+      "failure_tag": "verification_gap",
+      "count": 4,
+      "percentage": 44.44,
+      "example_task": "VAB-001/baseline"
+    },
+    {
+      "failure_tag": "premature_completion",
+      "count": 3,
+      "percentage": 33.33,
+      "example_task": "VAB-001/baseline"
+    },
+    {
+      "failure_tag": "hidden_semantic_edge_case",
+      "count": 2,
+      "percentage": 22.22,
+      "example_task": "VAB-002/baseline"
+    }
+  ],
+  "detector_evaluation": {
+    "runs": [
+      {
+        "task_id": "VAB-001",
+        "prompt_type": "baseline",
+        "expected": [
+          "premature_completion",
+          "verification_gap"
+        ],
+        "predicted": [
+          "premature_completion",
+          "verification_gap"
+        ],
+        "true_positive": [
+          "premature_completion",
+          "verification_gap"
+        ],
+        "false_positive": [],
+        "false_negative": []
+      },
+      {
+        "task_id": "VAB-001",
+        "prompt_type": "intervention",
+        "expected": [],
+        "predicted": [],
+        "true_positive": [],
+        "false_positive": [],
+        "false_negative": []
+      },
+      {
+        "task_id": "VAB-002",
+        "prompt_type": "baseline",
+        "expected": [
+          "hidden_semantic_edge_case",
+          "premature_completion",
+          "verification_gap"
+        ],
+        "predicted": [
+          "premature_completion",
+          "verification_gap"
+        ],
+        "true_positive": [
+          "premature_completion",
+          "verification_gap"
+        ],
+        "false_positive": [],
+        "false_negative": [
+          "hidden_semantic_edge_case"
+        ]
+      },
+      {
+        "task_id": "VAB-002",
+        "prompt_type": "intervention",
+        "expected": [
+          "hidden_semantic_edge_case"
+        ],
+        "predicted": [],
+        "true_positive": [],
+        "false_positive": [],
+        "false_negative": [
+          "hidden_semantic_edge_case"
+        ]
+      },
+      {
+        "task_id": "VAB-003",
+        "prompt_type": "baseline",
+        "expected": [
+          "verification_gap"
+        ],
+        "predicted": [
+          "verification_gap"
+        ],
+        "true_positive": [
+          "verification_gap"
+        ],
+        "false_positive": [],
+        "false_negative": []
+      },
+      {
+        "task_id": "VAB-003",
+        "prompt_type": "intervention",
+        "expected": [],
+        "predicted": [],
+        "true_positive": [],
+        "false_positive": [],
+        "false_negative": []
+      },
+      {
+        "task_id": "VAB-004",
+        "prompt_type": "baseline",
+        "expected": [
+          "premature_completion",
+          "verification_gap"
+        ],
+        "predicted": [
+          "premature_completion",
+          "verification_gap"
+        ],
+        "true_positive": [
+          "premature_completion",
+          "verification_gap"
+        ],
+        "false_positive": [],
+        "false_negative": []
+      },
+      {
+        "task_id": "VAB-004",
+        "prompt_type": "intervention",
+        "expected": [],
+        "predicted": [],
+        "true_positive": [],
+        "false_positive": [],
+        "false_negative": []
+      }
+    ],
+    "labels": {
+      "hidden_semantic_edge_case": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 2,
+        "precision": 0,
+        "recall": 0.0,
+        "f1": 0
+      },
+      "premature_completion": {
+        "tp": 3,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0
+      },
+      "verification_gap": {
+        "tp": 4,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0
+      }
+    },
+    "summary": {
+      "labels": 3,
+      "micro_precision": 1.0,
+      "micro_recall": 0.7778,
+      "micro_f1": 0.875,
+      "macro_f1": 0.6667
+    }
+  },
+  "outcome_counts": {
+    "success": 6,
+    "failure": 2,
+    "unknown": 0
+  },
+  "paired_task_deltas": [
+    {
+      "task_id": "VAB-001",
+      "baseline_outcome": "success",
+      "intervention_outcome": "success",
+      "success_delta": 0,
+      "verification_delta": 1,
+      "repeated_tool_call_delta": 1,
+      "token_usage_delta": 34563,
+      "failure_score_delta": -70
+    },
+    {
+      "task_id": "VAB-002",
+      "baseline_outcome": "failure",
+      "intervention_outcome": "failure",
+      "success_delta": 0,
+      "verification_delta": 1,
+      "repeated_tool_call_delta": 0,
+      "token_usage_delta": -141,
+      "failure_score_delta": -70
+    },
+    {
+      "task_id": "VAB-003",
+      "baseline_outcome": "success",
+      "intervention_outcome": "success",
+      "success_delta": 0,
+      "verification_delta": 1,
+      "repeated_tool_call_delta": 3,
+      "token_usage_delta": 36087,
+      "failure_score_delta": -35
+    },
+    {
+      "task_id": "VAB-004",
+      "baseline_outcome": "success",
+      "intervention_outcome": "success",
+      "success_delta": 0,
+      "verification_delta": 1,
+      "repeated_tool_call_delta": 1,
+      "token_usage_delta": 34757,
+      "failure_score_delta": -70
+    }
+  ],
+  "paired_task_summary": {
+    "success_delta": {
+      "n": 4,
+      "improved": 0,
+      "regressed": 0,
+      "unchanged": 4,
+      "avg_delta": 0.0
+    },
+    "verification_delta": {
+      "n": 4,
+      "improved": 4,
+      "regressed": 0,
+      "unchanged": 0,
+      "avg_delta": 1.0
+    },
+    "repeated_tool_call_delta": {
+      "n": 4,
+      "improved": 0,
+      "regressed": 3,
+      "unchanged": 1,
+      "avg_delta": 1.25
+    },
+    "token_usage_delta": {
+      "n": 4,
+      "improved": 1,
+      "regressed": 3,
+      "unchanged": 0,
+      "avg_delta": 26316.5
+    },
+    "failure_score_delta": {
+      "n": 4,
+      "improved": 4,
+      "regressed": 0,
+      "unchanged": 0,
+      "avg_delta": -61.25
+    }
+  },
+  "signal_by_outcome": [
+    {
+      "signal": "verification_rate",
+      "failure_mean": 0.5,
+      "success_mean": 0.5,
+      "delta_success_minus_failure": 0.0
+    },
+    {
+      "signal": "unresolved_error",
+      "failure_mean": 0.0,
+      "success_mean": 0.0,
+      "delta_success_minus_failure": 0.0
+    },
+    {
+      "signal": "repeated_tool_call_count",
+      "failure_mean": 5.0,
+      "success_mean": 4.5,
+      "delta_success_minus_failure": -0.5
+    },
+    {
+      "signal": "retry_count",
+      "failure_mean": 0.0,
+      "success_mean": 0.0,
+      "delta_success_minus_failure": 0.0
+    },
+    {
+      "signal": "command_failure_count",
+      "failure_mean": 0.0,
+      "success_mean": 0.0,
+      "delta_success_minus_failure": 0.0
+    },
+    {
+      "signal": "token_usage",
+      "failure_mean": 172525.5,
+      "success_mean": 154391.1667,
+      "delta_success_minus_failure": -18134.3333
+    },
+    {
+      "signal": "failure_score",
+      "failure_mean": 35.0,
+      "success_mean": 29.1667,
+      "delta_success_minus_failure": -5.8333
+    },
+    {
+      "signal": "turn_count",
+      "failure_mean": 1.0,
+      "success_mean": 1.0,
+      "delta_success_minus_failure": 0.0
+    },
+    {
+      "signal": "time_to_first_edit",
+      "failure_mean": 13.0,
+      "success_mean": 12.8333,
+      "delta_success_minus_failure": -0.1667
+    },
+    {
+      "signal": "time_to_first_test",
+      "failure_mean": 8.0,
+      "success_mean": 8.3333,
+      "delta_success_minus_failure": 0.3333
+    },
+    {
+      "signal": "phase_inspect_events",
+      "failure_mean": 10.0,
+      "success_mean": 9.8333,
+      "delta_success_minus_failure": -0.1667
+    },
+    {
+      "signal": "phase_edit_events",
+      "failure_mean": 4.0,
+      "success_mean": 2.6667,
+      "delta_success_minus_failure": -1.3333
+    },
+    {
+      "signal": "phase_verify_events",
+      "failure_mean": 1.0,
+      "success_mean": 1.0,
+      "delta_success_minus_failure": 0.0
+    },
+    {
+      "signal": "phase_recover_events",
+      "failure_mean": 0.0,
+      "success_mean": 0.0,
+      "delta_success_minus_failure": 0.0
+    }
+  ],
+  "signal_by_label": [
+    {
+      "failure_tag": "hidden_semantic_edge_case",
+      "n": 2,
+      "signal": "verification_rate",
+      "label_mean": 0.5,
+      "overall_mean": 0.5,
+      "delta_label_minus_overall": 0.0
+    },
+    {
+      "failure_tag": "hidden_semantic_edge_case",
+      "n": 2,
+      "signal": "unresolved_error",
+      "label_mean": 0.0,
+      "overall_mean": 0.0,
+      "delta_label_minus_overall": 0.0
+    },
+    {
+      "failure_tag": "hidden_semantic_edge_case",
+      "n": 2,
+      "signal": "repeated_tool_call_count",
+      "label_mean": 5.0,
+      "overall_mean": 5.0,
+      "delta_label_minus_overall": 0.0
+    },
+    {
+      "failure_tag": "hidden_semantic_edge_case",
+      "n": 2,
+      "signal": "retry_count",
+      "label_mean": 0.0,
+      "overall_mean": 0.0,
+      "delta_label_minus_overall": 0.0
+    },
+    {
+      "failure_tag": "hidden_semantic_edge_case",
+      "n": 2,
+      "signal": "command_failure_count",
+      "label_mean": 0.0,
+      "overall_mean": 0.0,
+      "delta_label_minus_overall": 0.0
+    },
+    {
+      "failure_tag": "hidden_semantic_edge_case",
+      "n": 2,
+      "signal": "token_usage",
+      "label_mean": 172525.5,
+      "overall_mean": 172525.5,
+      "delta_label_minus_overall": 0.0
+    },
+    {
+      "failure_tag": "hidden_semantic_edge_case",
+      "n": 2,
+      "signal": "failure_score",
+      "label_mean": 35.0,
+      "overall_mean": 35.0,
+      "delta_label_minus_overall": 0.0
+    },
+    {
+      "failure_tag": "hidden_semantic_edge_case",
+      "n": 2,
+      "signal": "turn_count",
+      "label_mean": 1.0,
+      "overall_mean": 1.0,
+      "delta_label_minus_overall": 0.0
+    },
+    {
+      "failure_tag": "hidden_semantic_edge_case",
+      "n": 2,
+      "signal": "time_to_first_edit",
+      "label_mean": 13.0,
+      "overall_mean": 13.0,
+      "delta_label_minus_overall": 0.0
+    },
+    {
+      "failure_tag": "hidden_semantic_edge_case",
+      "n": 2,
+      "signal": "time_to_first_test",
+      "label_mean": 8.0,
+      "overall_mean": 8.0,
+      "delta_label_minus_overall": 0.0
+    },
+    {
+      "failure_tag": "hidden_semantic_edge_case",
+      "n": 2,
+      "signal": "phase_inspect_events",
+      "label_mean": 10.0,
+      "overall_mean": 10.0,
+      "delta_label_minus_overall": 0.0
+    },
+    {
+      "failure_tag": "hidden_semantic_edge_case",
+      "n": 2,
+      "signal": "phase_edit_events",
+      "label_mean": 4.0,
+      "overall_mean": 4.0,
+      "delta_label_minus_overall": 0.0
+    },
+    {
+      "failure_tag": "hidden_semantic_edge_case",
+      "n": 2,
+      "signal": "phase_verify_events",
+      "label_mean": 1.0,
+      "overall_mean": 1.0,
+      "delta_label_minus_overall": 0.0
+    },
+    {
+      "failure_tag": "hidden_semantic_edge_case",
+      "n": 2,
+      "signal": "phase_recover_events",
+      "label_mean": 0.0,
+      "overall_mean": 0.0,
+      "delta_label_minus_overall": 0.0
+    },
+    {
+      "failure_tag": "premature_completion",
+      "n": 3,
+      "signal": "verification_rate",
+      "label_mean": 0.0,
+      "overall_mean": 0.5,
+      "delta_label_minus_overall": -0.5
+    },
+    {
+      "failure_tag": "premature_completion",
+      "n": 3,
+      "signal": "unresolved_error",
+      "label_mean": 0.0,
+      "overall_mean": 0.0,
+      "delta_label_minus_overall": 0.0
+    },
+    {
+      "failure_tag": "premature_completion",
+      "n": 3,
+      "signal": "repeated_tool_call_count",
+      "label_mean": 4.3333,
+      "overall_mean": 5.0,
+      "delta_label_minus_overall": -0.6667
+    },
+    {
+      "failure_tag": "premature_completion",
+      "n": 3,
+      "signal": "retry_count",
+      "label_mean": 0.0,
+      "overall_mean": 0.0,
+      "delta_label_minus_overall": 0.0
+    },
+    {
+      "failure_tag": "premature_completion",
+      "n": 3,
+      "signal": "command_failure_count",
+      "label_mean": 0.0,
+      "overall_mean": 0.0,
+      "delta_label_minus_overall": 0.0
+    },
+    {
+      "failure_tag": "premature_completion",
+      "n": 3,
+      "signal": "token_usage",
+      "label_mean": 148860.6667,
+      "overall_mean": 172525.5,
+      "delta_label_minus_overall": -23664.8333
+    },
+    {
+      "failure_tag": "premature_completion",
+      "n": 3,
+      "signal": "failure_score",
+      "label_mean": 70.0,
+      "overall_mean": 35.0,
+      "delta_label_minus_overall": 35.0
+    },
+    {
+      "failure_tag": "premature_completion",
+      "n": 3,
+      "signal": "turn_count",
+      "label_mean": 1.0,
+      "overall_mean": 1.0,
+      "delta_label_minus_overall": 0.0
+    },
+    {
+      "failure_tag": "premature_completion",
+      "n": 3,
+      "signal": "time_to_first_edit",
+      "label_mean": 13.0,
+      "overall_mean": 13.0,
+      "delta_label_minus_overall": 0.0
+    },
+    {
+      "failure_tag": "premature_completion",
+      "n": 3,
+      "signal": "time_to_first_test",
+      "label_mean": 0.0,
+      "overall_mean": 8.0,
+      "delta_label_minus_overall": -8.0
+    },
+    {
+      "failure_tag": "premature_completion",
+      "n": 3,
+      "signal": "phase_inspect_events",
+      "label_mean": 10.0,
+      "overall_mean": 10.0,
+      "delta_label_minus_overall": 0.0
+    },
+    {
+      "failure_tag": "premature_completion",
+      "n": 3,
+      "signal": "phase_edit_events",
+      "label_mean": 3.0,
+      "overall_mean": 4.0,
+      "delta_label_minus_overall": -1.0
+    },
+    {
+      "failure_tag": "premature_completion",
+      "n": 3,
+      "signal": "phase_verify_events",
+      "label_mean": 0.0,
+      "overall_mean": 1.0,
+      "delta_label_minus_overall": -1.0
+    },
+    {
+      "failure_tag": "premature_completion",
+      "n": 3,
+      "signal": "phase_recover_events",
+      "label_mean": 0.0,
+      "overall_mean": 0.0,
+      "delta_label_minus_overall": 0.0
+    },
+    {
+      "failure_tag": "verification_gap",
+      "n": 4,
+      "signal": "verification_rate",
+      "label_mean": 0.0,
+      "overall_mean": 0.5,
+      "delta_label_minus_overall": -0.5
+    },
+    {
+      "failure_tag": "verification_gap",
+      "n": 4,
+      "signal": "unresolved_error",
+      "label_mean": 0.0,
+      "overall_mean": 0.0,
+      "delta_label_minus_overall": 0.0
+    },
+    {
+      "failure_tag": "verification_gap",
+      "n": 4,
+      "signal": "repeated_tool_call_count",
+      "label_mean": 4.0,
+      "overall_mean": 5.0,
+      "delta_label_minus_overall": -1.0
+    },
+    {
+      "failure_tag": "verification_gap",
+      "n": 4,
+      "signal": "retry_count",
+      "label_mean": 0.0,
+      "overall_mean": 0.0,
+      "delta_label_minus_overall": 0.0
+    },
+    {
+      "failure_tag": "verification_gap",
+      "n": 4,
+      "signal": "command_failure_count",
+      "label_mean": 0.0,
+      "overall_mean": 0.0,
+      "delta_label_minus_overall": 0.0
+    },
+    {
+      "failure_tag": "verification_gap",
+      "n": 4,
+      "signal": "token_usage",
+      "label_mean": 145766.5,
+      "overall_mean": 172525.5,
+      "delta_label_minus_overall": -26759.0
+    },
+    {
+      "failure_tag": "verification_gap",
+      "n": 4,
+      "signal": "failure_score",
+      "label_mean": 61.25,
+      "overall_mean": 35.0,
+      "delta_label_minus_overall": 26.25
+    },
+    {
+      "failure_tag": "verification_gap",
+      "n": 4,
+      "signal": "turn_count",
+      "label_mean": 1.0,
+      "overall_mean": 1.0,
+      "delta_label_minus_overall": 0.0
+    },
+    {
+      "failure_tag": "verification_gap",
+      "n": 4,
+      "signal": "time_to_first_edit",
+      "label_mean": 12.25,
+      "overall_mean": 13.0,
+      "delta_label_minus_overall": -0.75
+    },
+    {
+      "failure_tag": "verification_gap",
+      "n": 4,
+      "signal": "time_to_first_test",
+      "label_mean": 0.0,
+      "overall_mean": 8.0,
+      "delta_label_minus_overall": -8.0
+    },
+    {
+      "failure_tag": "verification_gap",
+      "n": 4,
+      "signal": "phase_inspect_events",
+      "label_mean": 9.25,
+      "overall_mean": 10.0,
+      "delta_label_minus_overall": -0.75
+    },
+    {
+      "failure_tag": "verification_gap",
+      "n": 4,
+      "signal": "phase_edit_events",
+      "label_mean": 3.0,
+      "overall_mean": 4.0,
+      "delta_label_minus_overall": -1.0
+    },
+    {
+      "failure_tag": "verification_gap",
+      "n": 4,
+      "signal": "phase_verify_events",
+      "label_mean": 0.0,
+      "overall_mean": 1.0,
+      "delta_label_minus_overall": -1.0
+    },
+    {
+      "failure_tag": "verification_gap",
+      "n": 4,
+      "signal": "phase_recover_events",
+      "label_mean": 0.0,
+      "overall_mean": 0.0,
+      "delta_label_minus_overall": 0.0
+    }
+  ]
+}

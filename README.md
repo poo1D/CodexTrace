@@ -53,17 +53,24 @@ Current stored pilots:
 | full30 | 30 | 60 | 0 | Intervention reduces repeated tool calls `10.43 -> 7.00` and token usage `218.7k -> 184.8k`. |
 | hard10 | 10 | 20 | 5 | Intervention improves success `70% -> 80%` and reduces token usage `248.9k -> 187.5k`. |
 | hard30 | 30 | 60 | 30 | Intervention keeps success at `50% -> 50%` while reducing repeated tool calls `12.93 -> 9.20` and token usage `355.0k -> 256.3k`. |
+| process-stress | 12 | 24 | 2 | Intervention keeps success at `91.67% -> 91.67%` while reducing repeated tool calls `8.08 -> 7.17` and token usage `209.0k -> 185.1k`. |
+| verification-lift | 8 | 16 | 2 | Targeted stress test does not raise verification rate `100% -> 100%`, but reduces repeated tool calls `6.13 -> 5.38` and token usage `176.8k -> 172.2k`. |
+| verification-ablation | 4 | 8 | 2 | Auxiliary no-verify baseline ablation lifts verification `0% -> 100%` and drops failure score `61.25 -> 0`, but is not an ordinary baseline. |
 
 The hard tier also exposes a trace-only detector boundary: all hard30 hidden
 semantic edge-case failures are missed by deterministic process rules
 (`TP=0`, `FP=0`, `FN=30`), showing why trace diagnosis should be paired with
 strong task-level oracles. At the same time, reviewed high-volume
 `repetitive_exploration` process positives are detected from trace signals
-(`TP=4`, `FP=0`, `FN=0`).
+(`TP=4`, `FP=0`, `FN=0`). Controlled detector fixtures cover all six
+process labels with micro-F1 `1.00`; those fixtures are rule-level sanity
+checks, not real-pilot outcome evidence.
 
 See `docs/artifact_guide.md` for the reviewer-facing walkthrough,
 `docs/results_summary.md` for the generated result summary and RQ4
-trace-signal analysis, and `docs/reproducibility_checklist.md` for
+trace-signal analysis, `docs/rq4_signal_audit.md` for the generated
+boundary-style signal audit, `docs/thesis_readiness.md` for the
+original-thesis gap audit, and `docs/reproducibility_checklist.md` for
 claim-to-evidence mapping.
 
 ## Quickstart
@@ -119,6 +126,16 @@ Key files:
 - `benchmark/labels.example.jsonl`: example manual failure labels for detector evaluation
 - `benchmark/prompts/baseline.txt`: baseline prompt template
 - `benchmark/prompts/intervention.txt`: harness-intervention prompt template
+- `benchmark/detector-fixtures/`: controlled JSONL traces covering the process-rule taxonomy
+- `benchmark/process-stress/tasks.jsonl`: materialized process-stress slice for closing original-thesis evidence gaps
+- `benchmark/verification-lift/tasks.jsonl`: targeted verification-lift stress tier under a weak-baseline prompt contrast
+- `benchmark/verification-lift/prompts/`: verification-lift baseline/intervention prompt templates
+- `benchmark/verification-ablation/tasks.jsonl`: auxiliary no-verify baseline ablation tasks for harness-control evidence
+- `benchmark/verification-ablation/prompts/`: no-verify baseline and evidence-gated prompt templates
+- `scripts/materialize_process_stress_fixtures.py`: rebuilds the process-stress fixture repositories
+- `scripts/audit_process_stress_plan.py`: checks process-stress coverage and materialized fixture readiness
+- `scripts/audit_verification_lift_plan.py`: checks verification-lift task, prompt, and fixture readiness
+- `scripts/audit_verification_ablation_plan.py`: checks verification-ablation task, prompt, and fixture readiness
 - `docs/artifact_guide.md`: 15-minute reviewer/interviewer walkthrough
 - `docs/experiment_protocol.md`: collection and labeling protocol
 - `docs/failure_taxonomy.md`: process-level failure labels
@@ -127,10 +144,18 @@ Key files:
 - `docs/paper_draft.md`: result-driven workshop-style paper draft
 - `docs/paper_outline.md`: paper outline and experiment plan
 - `docs/reproducibility_checklist.md`: claim-evidence map and reproduction commands
-- `docs/results_summary.md`: generated full30 + hard10 + hard30 result summary, including RQ4 trace-signal analysis
+- `docs/results_summary.md`: generated full30 + hard10 + hard30 + process-stress + verification-lift + verification-ablation result summary, including RQ4 trace-signal analysis
+- `docs/rq4_signal_audit.md`: generated signal audit for observable process failures and hidden semantic boundaries
+- `docs/process_stress_plan_audit.md`: generated coverage audit for the materialized process-stress tier
+- `docs/verification_lift_plan_audit.md`: generated coverage audit for the targeted verification-lift tier
+- `docs/verification_ablation_plan_audit.md`: generated coverage audit for the no-verify ablation tier
 - `docs/related_work.md`: compact bibliography and positioning notes
 - `docs/submission_readiness_plan.md`: concrete path from pilot artifact to stronger paper submission
+- `docs/thesis_readiness.md`: generated audit of which original-thesis requirements are satisfied, partial, or missing
 - `benchmark/pilot/full30-real`: 30-task / 60-run real pilot
+- `benchmark/process-stress/pilot/full-real`: 12-task / 24-run real pilot for the process-stress tier
+- `benchmark/verification-lift/pilot/full-real`: 8-task / 16-run real pilot for the verification-lift tier
+- `benchmark/verification-ablation/pilot/full-real`: 4-task / 8-run real no-verify ablation pilot
 - `benchmark/hard/pilot/hard10-real`: 10-task / 20-run hard-tier pilot with outcome failures
 - `benchmark/hard/pilot/hard30-real`: 30-task / 60-run hard-tier pilot with hidden-grader failures and paper tables
 - `benchmark/hard/pilot/hard30-selection`: selected 30-task hard-tier pilot used for the hard30 collection
@@ -199,12 +224,12 @@ codex-trace research summary --markdown-output docs/results_summary.md
 PYTHONPATH=. python3 scripts/audit_paper_claims.py --markdown-output docs/paper_claim_audit.md
 ```
 
-The current draft in `docs/paper_draft.md` reports three pilots: a 30-task seed
-benchmark where intervention reduces tool-call and token waste, a 10-task
-hard pilot where intervention improves success, and a 30-task hard pilot where
-success is flat but waste drops sharply under the intervention.
-Together, the hard pilots show both a small pilot success lift and a
-trace-only detector limitation on hidden semantic edge cases.
+The current draft in `docs/paper_draft.md` reports the seed, hard10, hard30,
+process-stress, verification-lift, and verification-ablation pilots. The
+ordinary and weak-baseline pilots support waste reduction but not
+verification-rate lift; the no-verify ablation is reported only as a mechanism
+check that the harness can control verification behavior under an artificial
+baseline condition.
 
 To run the Web UI:
 
@@ -277,7 +302,7 @@ Findings:
 ## CV Bullets
 
 - Built `CodexTrace`, a GPU-free Agent Harness research tool that parses `codex exec --json` event streams into normalized traces and detects process failures such as missing verification, unrecovered command errors, repeated tool use, and sandbox blocks.
-- Designed and collected a 140-run Codex trace benchmark across a 30-task seed tier, 10-task hard pilot, and 30-task hard tier, comparing baseline prompts with verification-focused harness interventions.
+- Designed and collected a 188-run Codex trace benchmark across seed, hard, process-stress, verification-lift, and no-verify ablation tiers, comparing baseline prompts with verification-focused harness interventions.
 - Measured intervention effects on real Codex runs: hard30 repeated tool calls dropped `12.93 -> 9.20`, hard30 token usage dropped `355.0k -> 256.3k`, and paired tasks improved on token usage in `26/30` cases.
 - Shipped a reproducible research artifact with hidden-grader fixtures, manual-label evaluation, generated paper tables, a TypeScript replay UI, Python CLI, and GitHub Actions CI.
 

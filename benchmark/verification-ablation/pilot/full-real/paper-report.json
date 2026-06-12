@@ -1,0 +1,471 @@
+{
+  "aggregate": {
+    "runs": [
+      {
+        "task_id": "VAB-001",
+        "prompt_type": "baseline",
+        "trace_path": "/Users/lidengye/Developer/CodexTrace-github/benchmark/verification-ablation/pilot/full-real/VAB-001/baseline/trace.jsonl",
+        "outcome": "success",
+        "success": 1,
+        "verification_rate": 0,
+        "unresolved_error": 0,
+        "repeated_tool_call_count": 4,
+        "retry_count": 0,
+        "command_failure_count": 0,
+        "token_usage": 137079,
+        "failure_score": 70,
+        "turn_count": 1,
+        "time_to_first_edit": 13,
+        "time_to_first_test": null,
+        "phase_setup_events": 3,
+        "phase_inspect_events": 10,
+        "phase_edit_events": 2,
+        "phase_verify_events": 0,
+        "phase_recover_events": 0,
+        "phase_complete_events": 2,
+        "phase_other_events": 0,
+        "finding_codes": [
+          "verification_gap",
+          "premature_completion"
+        ],
+        "taxonomy_tags": [
+          "verification_gap",
+          "premature_completion"
+        ]
+      },
+      {
+        "task_id": "VAB-001",
+        "prompt_type": "intervention",
+        "trace_path": "/Users/lidengye/Developer/CodexTrace-github/benchmark/verification-ablation/pilot/full-real/VAB-001/intervention/trace.jsonl",
+        "outcome": "success",
+        "success": 1,
+        "verification_rate": 1,
+        "unresolved_error": 0,
+        "repeated_tool_call_count": 5,
+        "retry_count": 0,
+        "command_failure_count": 0,
+        "token_usage": 171642,
+        "failure_score": 0,
+        "turn_count": 1,
+        "time_to_first_edit": 13,
+        "time_to_first_test": 16,
+        "phase_setup_events": 3,
+        "phase_inspect_events": 10,
+        "phase_edit_events": 3,
+        "phase_verify_events": 2,
+        "phase_recover_events": 0,
+        "phase_complete_events": 2,
+        "phase_other_events": 0,
+        "finding_codes": [],
+        "taxonomy_tags": []
+      },
+      {
+        "task_id": "VAB-002",
+        "prompt_type": "baseline",
+        "trace_path": "/Users/lidengye/Developer/CodexTrace-github/benchmark/verification-ablation/pilot/full-real/VAB-002/baseline/trace.jsonl",
+        "outcome": "failure",
+        "success": 0,
+        "verification_rate": 0,
+        "unresolved_error": 0,
+        "repeated_tool_call_count": 5,
+        "retry_count": 0,
+        "command_failure_count": 0,
+        "token_usage": 172596,
+        "failure_score": 70,
+        "turn_count": 1,
+        "time_to_first_edit": 13,
+        "time_to_first_test": null,
+        "phase_setup_events": 3,
+        "phase_inspect_events": 10,
+        "phase_edit_events": 5,
+        "phase_verify_events": 0,
+        "phase_recover_events": 0,
+        "phase_complete_events": 2,
+        "phase_other_events": 0,
+        "finding_codes": [
+          "verification_gap",
+          "premature_completion"
+        ],
+        "taxonomy_tags": [
+          "verification_gap",
+          "premature_completion"
+        ]
+      },
+      {
+        "task_id": "VAB-002",
+        "prompt_type": "intervention",
+        "trace_path": "/Users/lidengye/Developer/CodexTrace-github/benchmark/verification-ablation/pilot/full-real/VAB-002/intervention/trace.jsonl",
+        "outcome": "failure",
+        "success": 0,
+        "verification_rate": 1,
+        "unresolved_error": 0,
+        "repeated_tool_call_count": 5,
+        "retry_count": 0,
+        "command_failure_count": 0,
+        "token_usage": 172455,
+        "failure_score": 0,
+        "turn_count": 1,
+        "time_to_first_edit": 13,
+        "time_to_first_test": 16,
+        "phase_setup_events": 3,
+        "phase_inspect_events": 10,
+        "phase_edit_events": 3,
+        "phase_verify_events": 2,
+        "phase_recover_events": 0,
+        "phase_complete_events": 2,
+        "phase_other_events": 0,
+        "finding_codes": [],
+        "taxonomy_tags": []
+      },
+      {
+        "task_id": "VAB-003",
+        "prompt_type": "baseline",
+        "trace_path": "/Users/lidengye/Developer/CodexTrace-github/benchmark/verification-ablation/pilot/full-real/VAB-003/baseline/trace.jsonl",
+        "outcome": "success",
+        "success": 1,
+        "verification_rate": 0,
+        "unresolved_error": 0,
+        "repeated_tool_call_count": 3,
+        "retry_count": 0,
+        "command_failure_count": 0,
+        "token_usage": 136484,
+        "failure_score": 35,
+        "turn_count": 1,
+        "time_to_first_edit": 10,
+        "time_to_first_test": null,
+        "phase_setup_events": 3,
+        "phase_inspect_events": 7,
+        "phase_edit_events": 3,
+        "phase_verify_events": 0,
+        "phase_recover_events": 0,
+        "phase_complete_events": 1,
+        "phase_other_events": 0,
+        "finding_codes": [
+          "verification_gap"
+        ],
+        "taxonomy_tags": [
+          "verification_gap"
+        ]
+      },
+      {
+        "task_id": "VAB-003",
+        "prompt_type": "intervention",
+        "trace_path": "/Users/lidengye/Developer/CodexTrace-github/benchmark/verification-ablation/pilot/full-real/VAB-003/intervention/trace.jsonl",
+        "outcome": "success",
+        "success": 1,
+        "verification_rate": 1,
+        "unresolved_error": 0,
+        "repeated_tool_call_count": 6,
+        "retry_count": 0,
+        "command_failure_count": 0,
+        "token_usage": 172571,
+        "failure_score": 0,
+        "turn_count": 1,
+        "time_to_first_edit": 15,
+        "time_to_first_test": 18,
+        "phase_setup_events": 3,
+        "phase_inspect_events": 12,
+        "phase_edit_events": 3,
+        "phase_verify_events": 2,
+        "phase_recover_events": 0,
+        "phase_complete_events": 2,
+        "phase_other_events": 0,
+        "finding_codes": [],
+        "taxonomy_tags": []
+      },
+      {
+        "task_id": "VAB-004",
+        "prompt_type": "baseline",
+        "trace_path": "/Users/lidengye/Developer/CodexTrace-github/benchmark/verification-ablation/pilot/full-real/VAB-004/baseline/trace.jsonl",
+        "outcome": "success",
+        "success": 1,
+        "verification_rate": 0,
+        "unresolved_error": 0,
+        "repeated_tool_call_count": 4,
+        "retry_count": 0,
+        "command_failure_count": 0,
+        "token_usage": 136907,
+        "failure_score": 70,
+        "turn_count": 1,
+        "time_to_first_edit": 13,
+        "time_to_first_test": null,
+        "phase_setup_events": 3,
+        "phase_inspect_events": 10,
+        "phase_edit_events": 2,
+        "phase_verify_events": 0,
+        "phase_recover_events": 0,
+        "phase_complete_events": 2,
+        "phase_other_events": 0,
+        "finding_codes": [
+          "verification_gap",
+          "premature_completion"
+        ],
+        "taxonomy_tags": [
+          "verification_gap",
+          "premature_completion"
+        ]
+      },
+      {
+        "task_id": "VAB-004",
+        "prompt_type": "intervention",
+        "trace_path": "/Users/lidengye/Developer/CodexTrace-github/benchmark/verification-ablation/pilot/full-real/VAB-004/intervention/trace.jsonl",
+        "outcome": "success",
+        "success": 1,
+        "verification_rate": 1,
+        "unresolved_error": 0,
+        "repeated_tool_call_count": 5,
+        "retry_count": 0,
+        "command_failure_count": 0,
+        "token_usage": 171664,
+        "failure_score": 0,
+        "turn_count": 1,
+        "time_to_first_edit": 13,
+        "time_to_first_test": 16,
+        "phase_setup_events": 3,
+        "phase_inspect_events": 10,
+        "phase_edit_events": 3,
+        "phase_verify_events": 2,
+        "phase_recover_events": 0,
+        "phase_complete_events": 2,
+        "phase_other_events": 0,
+        "finding_codes": [],
+        "taxonomy_tags": []
+      }
+    ],
+    "summary": {
+      "baseline": {
+        "n": 4,
+        "success_rate": 0.75,
+        "verification_rate": 0.0,
+        "unresolved_error_rate": 0.0,
+        "avg_repeated_tool_calls": 4.0,
+        "avg_retry_count": 0.0,
+        "avg_command_failures": 0.0,
+        "avg_token_usage": 145766.5,
+        "avg_failure_score": 61.25,
+        "avg_turn_count": 1.0,
+        "avg_inspect_events": 9.25,
+        "avg_edit_events": 3.0,
+        "avg_verify_events": 0.0,
+        "avg_recover_events": 0.0
+      },
+      "intervention": {
+        "n": 4,
+        "success_rate": 0.75,
+        "verification_rate": 1.0,
+        "unresolved_error_rate": 0.0,
+        "avg_repeated_tool_calls": 5.25,
+        "avg_retry_count": 0.0,
+        "avg_command_failures": 0.0,
+        "avg_token_usage": 172083.0,
+        "avg_failure_score": 0.0,
+        "avg_turn_count": 1.0,
+        "avg_inspect_events": 10.5,
+        "avg_edit_events": 3.0,
+        "avg_verify_events": 2.0,
+        "avg_recover_events": 0.0
+      }
+    },
+    "deltas": {
+      "avg_command_failures": 0.0,
+      "avg_edit_events": 0.0,
+      "avg_failure_score": -61.25,
+      "avg_inspect_events": 1.25,
+      "avg_recover_events": 0.0,
+      "avg_repeated_tool_calls": 1.25,
+      "avg_retry_count": 0.0,
+      "avg_token_usage": 26316.5,
+      "avg_turn_count": 0.0,
+      "avg_verify_events": 2.0,
+      "success_rate": 0.0,
+      "unresolved_error_rate": 0.0,
+      "verification_rate": 1.0
+    }
+  },
+  "taxonomy_distribution": [
+    {
+      "failure_tag": "verification_gap",
+      "count": 4,
+      "percentage": 57.14,
+      "example_task": "VAB-001/baseline"
+    },
+    {
+      "failure_tag": "premature_completion",
+      "count": 3,
+      "percentage": 42.86,
+      "example_task": "VAB-001/baseline"
+    }
+  ],
+  "detector_evaluation": null,
+  "outcome_counts": {
+    "success": 6,
+    "failure": 2,
+    "unknown": 0
+  },
+  "paired_task_deltas": [
+    {
+      "task_id": "VAB-001",
+      "baseline_outcome": "success",
+      "intervention_outcome": "success",
+      "success_delta": 0,
+      "verification_delta": 1,
+      "repeated_tool_call_delta": 1,
+      "token_usage_delta": 34563,
+      "failure_score_delta": -70
+    },
+    {
+      "task_id": "VAB-002",
+      "baseline_outcome": "failure",
+      "intervention_outcome": "failure",
+      "success_delta": 0,
+      "verification_delta": 1,
+      "repeated_tool_call_delta": 0,
+      "token_usage_delta": -141,
+      "failure_score_delta": -70
+    },
+    {
+      "task_id": "VAB-003",
+      "baseline_outcome": "success",
+      "intervention_outcome": "success",
+      "success_delta": 0,
+      "verification_delta": 1,
+      "repeated_tool_call_delta": 3,
+      "token_usage_delta": 36087,
+      "failure_score_delta": -35
+    },
+    {
+      "task_id": "VAB-004",
+      "baseline_outcome": "success",
+      "intervention_outcome": "success",
+      "success_delta": 0,
+      "verification_delta": 1,
+      "repeated_tool_call_delta": 1,
+      "token_usage_delta": 34757,
+      "failure_score_delta": -70
+    }
+  ],
+  "paired_task_summary": {
+    "success_delta": {
+      "n": 4,
+      "improved": 0,
+      "regressed": 0,
+      "unchanged": 4,
+      "avg_delta": 0.0
+    },
+    "verification_delta": {
+      "n": 4,
+      "improved": 4,
+      "regressed": 0,
+      "unchanged": 0,
+      "avg_delta": 1.0
+    },
+    "repeated_tool_call_delta": {
+      "n": 4,
+      "improved": 0,
+      "regressed": 3,
+      "unchanged": 1,
+      "avg_delta": 1.25
+    },
+    "token_usage_delta": {
+      "n": 4,
+      "improved": 1,
+      "regressed": 3,
+      "unchanged": 0,
+      "avg_delta": 26316.5
+    },
+    "failure_score_delta": {
+      "n": 4,
+      "improved": 4,
+      "regressed": 0,
+      "unchanged": 0,
+      "avg_delta": -61.25
+    }
+  },
+  "signal_by_outcome": [
+    {
+      "signal": "verification_rate",
+      "failure_mean": 0.5,
+      "success_mean": 0.5,
+      "delta_success_minus_failure": 0.0
+    },
+    {
+      "signal": "unresolved_error",
+      "failure_mean": 0.0,
+      "success_mean": 0.0,
+      "delta_success_minus_failure": 0.0
+    },
+    {
+      "signal": "repeated_tool_call_count",
+      "failure_mean": 5.0,
+      "success_mean": 4.5,
+      "delta_success_minus_failure": -0.5
+    },
+    {
+      "signal": "retry_count",
+      "failure_mean": 0.0,
+      "success_mean": 0.0,
+      "delta_success_minus_failure": 0.0
+    },
+    {
+      "signal": "command_failure_count",
+      "failure_mean": 0.0,
+      "success_mean": 0.0,
+      "delta_success_minus_failure": 0.0
+    },
+    {
+      "signal": "token_usage",
+      "failure_mean": 172525.5,
+      "success_mean": 154391.1667,
+      "delta_success_minus_failure": -18134.3333
+    },
+    {
+      "signal": "failure_score",
+      "failure_mean": 35.0,
+      "success_mean": 29.1667,
+      "delta_success_minus_failure": -5.8333
+    },
+    {
+      "signal": "turn_count",
+      "failure_mean": 1.0,
+      "success_mean": 1.0,
+      "delta_success_minus_failure": 0.0
+    },
+    {
+      "signal": "time_to_first_edit",
+      "failure_mean": 13.0,
+      "success_mean": 12.8333,
+      "delta_success_minus_failure": -0.1667
+    },
+    {
+      "signal": "time_to_first_test",
+      "failure_mean": 8.0,
+      "success_mean": 8.3333,
+      "delta_success_minus_failure": 0.3333
+    },
+    {
+      "signal": "phase_inspect_events",
+      "failure_mean": 10.0,
+      "success_mean": 9.8333,
+      "delta_success_minus_failure": -0.1667
+    },
+    {
+      "signal": "phase_edit_events",
+      "failure_mean": 4.0,
+      "success_mean": 2.6667,
+      "delta_success_minus_failure": -1.3333
+    },
+    {
+      "signal": "phase_verify_events",
+      "failure_mean": 1.0,
+      "success_mean": 1.0,
+      "delta_success_minus_failure": 0.0
+    },
+    {
+      "signal": "phase_recover_events",
+      "failure_mean": 0.0,
+      "success_mean": 0.0,
+      "delta_success_minus_failure": 0.0
+    }
+  ],
+  "signal_by_label": []
+}

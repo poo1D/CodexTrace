@@ -1,0 +1,262 @@
+{
+  "detector_fixture_top_signals_by_label": {
+    "context_drift": [
+      {
+        "delta_label_minus_overall": 14598.3333,
+        "failure_tag": "context_drift",
+        "label_mean": 26400.0,
+        "n": 1,
+        "overall_mean": 11801.6667,
+        "signal": "token_usage"
+      },
+      {
+        "delta_label_minus_overall": -20.8333,
+        "failure_tag": "context_drift",
+        "label_mean": 20.0,
+        "n": 1,
+        "overall_mean": 40.8333,
+        "signal": "failure_score"
+      },
+      {
+        "delta_label_minus_overall": 1.5,
+        "failure_tag": "context_drift",
+        "label_mean": 3.0,
+        "n": 1,
+        "overall_mean": 1.5,
+        "signal": "phase_inspect_events"
+      }
+    ],
+    "premature_completion": [
+      {
+        "delta_label_minus_overall": -3251.6667,
+        "failure_tag": "premature_completion",
+        "label_mean": 8550.0,
+        "n": 1,
+        "overall_mean": 11801.6667,
+        "signal": "token_usage"
+      },
+      {
+        "delta_label_minus_overall": 29.1667,
+        "failure_tag": "premature_completion",
+        "label_mean": 70.0,
+        "n": 1,
+        "overall_mean": 40.8333,
+        "signal": "failure_score"
+      },
+      {
+        "delta_label_minus_overall": 2.0,
+        "failure_tag": "premature_completion",
+        "label_mean": 3.0,
+        "n": 1,
+        "overall_mean": 1.0,
+        "signal": "time_to_first_edit"
+      }
+    ],
+    "repetitive_exploration": [
+      {
+        "delta_label_minus_overall": -521.6667,
+        "failure_tag": "repetitive_exploration",
+        "label_mean": 11280.0,
+        "n": 1,
+        "overall_mean": 11801.6667,
+        "signal": "token_usage"
+      },
+      {
+        "delta_label_minus_overall": -20.8333,
+        "failure_tag": "repetitive_exploration",
+        "label_mean": 20.0,
+        "n": 1,
+        "overall_mean": 40.8333,
+        "signal": "failure_score"
+      },
+      {
+        "delta_label_minus_overall": 2.5,
+        "failure_tag": "repetitive_exploration",
+        "label_mean": 4.0,
+        "n": 1,
+        "overall_mean": 1.5,
+        "signal": "phase_inspect_events"
+      }
+    ],
+    "sandbox_permission_deadlock": [
+      {
+        "delta_label_minus_overall": -4341.6667,
+        "failure_tag": "sandbox_permission_deadlock",
+        "label_mean": 7460.0,
+        "n": 1,
+        "overall_mean": 11801.6667,
+        "signal": "token_usage"
+      },
+      {
+        "delta_label_minus_overall": 19.1667,
+        "failure_tag": "sandbox_permission_deadlock",
+        "label_mean": 60.0,
+        "n": 1,
+        "overall_mean": 40.8333,
+        "signal": "failure_score"
+      },
+      {
+        "delta_label_minus_overall": -1.5,
+        "failure_tag": "sandbox_permission_deadlock",
+        "label_mean": 0.0,
+        "n": 1,
+        "overall_mean": 1.5,
+        "signal": "phase_inspect_events"
+      }
+    ],
+    "unrecovered_tool_error": [
+      {
+        "delta_label_minus_overall": -4161.6667,
+        "failure_tag": "unrecovered_tool_error",
+        "label_mean": 7640.0,
+        "n": 2,
+        "overall_mean": 11801.6667,
+        "signal": "token_usage"
+      },
+      {
+        "delta_label_minus_overall": 9.1667,
+        "failure_tag": "unrecovered_tool_error",
+        "label_mean": 50.0,
+        "n": 2,
+        "overall_mean": 40.8333,
+        "signal": "failure_score"
+      },
+      {
+        "delta_label_minus_overall": -1.5,
+        "failure_tag": "unrecovered_tool_error",
+        "label_mean": 0.0,
+        "n": 2,
+        "overall_mean": 1.5,
+        "signal": "phase_inspect_events"
+      }
+    ],
+    "verification_gap": [
+      {
+        "delta_label_minus_overall": -2876.6667,
+        "failure_tag": "verification_gap",
+        "label_mean": 8925.0,
+        "n": 2,
+        "overall_mean": 11801.6667,
+        "signal": "token_usage"
+      },
+      {
+        "delta_label_minus_overall": 11.6667,
+        "failure_tag": "verification_gap",
+        "label_mean": 52.5,
+        "n": 2,
+        "overall_mean": 40.8333,
+        "signal": "failure_score"
+      },
+      {
+        "delta_label_minus_overall": 2.0,
+        "failure_tag": "verification_gap",
+        "label_mean": 3.0,
+        "n": 2,
+        "overall_mean": 1.0,
+        "signal": "time_to_first_edit"
+      }
+    ]
+  },
+  "full30_sandbox_permission_top_signals": [
+    {
+      "delta_label_minus_overall": 327463.05,
+      "failure_tag": "sandbox_permission_deadlock",
+      "label_mean": 529226.0,
+      "n": 1,
+      "overall_mean": 201762.95,
+      "signal": "token_usage"
+    },
+    {
+      "delta_label_minus_overall": 52.4167,
+      "failure_tag": "sandbox_permission_deadlock",
+      "label_mean": 55.0,
+      "n": 1,
+      "overall_mean": 2.5833,
+      "signal": "failure_score"
+    },
+    {
+      "delta_label_minus_overall": 30.7667,
+      "failure_tag": "sandbox_permission_deadlock",
+      "label_mean": 32.0,
+      "n": 1,
+      "overall_mean": 1.2333,
+      "signal": "phase_recover_events"
+    },
+    {
+      "delta_label_minus_overall": 16.2833,
+      "failure_tag": "sandbox_permission_deadlock",
+      "label_mean": 25.0,
+      "n": 1,
+      "overall_mean": 8.7167,
+      "signal": "repeated_tool_call_count"
+    },
+    {
+      "delta_label_minus_overall": 4.65,
+      "failure_tag": "sandbox_permission_deadlock",
+      "label_mean": 5.0,
+      "n": 1,
+      "overall_mean": 0.35,
+      "signal": "command_failure_count"
+    }
+  ],
+  "hard30_hidden_boundary": {
+    "failure_score_delta_success_minus_failure": 1.0,
+    "token_usage_delta_success_minus_failure": -1771.6333,
+    "unresolved_error_delta_success_minus_failure": 0.0,
+    "verification_delta_success_minus_failure": 0.0
+  },
+  "hard30_repetitive_exploration_top_signals": [
+    {
+      "delta_label_minus_overall": 360238.4667,
+      "failure_tag": "repetitive_exploration",
+      "label_mean": 666767.0,
+      "n": 4,
+      "overall_mean": 306528.5333,
+      "signal": "token_usage"
+    },
+    {
+      "delta_label_minus_overall": 26.9167,
+      "failure_tag": "repetitive_exploration",
+      "label_mean": 28.75,
+      "n": 4,
+      "overall_mean": 1.8333,
+      "signal": "failure_score"
+    },
+    {
+      "delta_label_minus_overall": 13.45,
+      "failure_tag": "repetitive_exploration",
+      "label_mean": 24.25,
+      "n": 4,
+      "overall_mean": 10.8,
+      "signal": "repeated_tool_call_count"
+    },
+    {
+      "delta_label_minus_overall": 13.3333,
+      "failure_tag": "repetitive_exploration",
+      "label_mean": 21.5,
+      "n": 4,
+      "overall_mean": 8.1667,
+      "signal": "phase_verify_events"
+    },
+    {
+      "delta_label_minus_overall": 6.8667,
+      "failure_tag": "repetitive_exploration",
+      "label_mean": 14.0,
+      "n": 4,
+      "overall_mean": 7.1333,
+      "signal": "phase_edit_events"
+    }
+  ],
+  "summary": {
+    "detector_fixture_label_count": 6,
+    "full30_sandbox_top_signal_count": 5,
+    "hard30_hidden_boundary": {
+      "failure_score_delta_success_minus_failure": 1.0,
+      "token_usage_delta_success_minus_failure": -1771.6333,
+      "unresolved_error_delta_success_minus_failure": 0.0,
+      "verification_delta_success_minus_failure": 0.0
+    },
+    "hard30_repetitive_top_signal_count": 5,
+    "ready": true
+  }
+}

@@ -15,13 +15,16 @@ We introduce CodexTrace, an offline parser and diagnosis engine for
 `codex exec --json` traces. CodexTrace normalizes agent events into a stable
 schema, segments runs into phases, detects interpretable process-level failure
 patterns, and aggregates baseline-vs-intervention experiments. We evaluate the
-tool on three real Codex benchmark pilots: a 30-task seed benchmark with 60
-runs, an early 10-task hard tier with 20 runs, and a 30-task hard tier with 60
-runs and hidden edge-case graders. On the seed pilot, all runs succeed, but the
+tool on six real Codex benchmark pilots: a 30-task seed benchmark with 60
+runs, an early 10-task hard tier with 20 runs, a 30-task hard tier with 60
+runs and hidden edge-case graders, a 12-task process-stress tier, an 8-task
+verification-lift tier, and a 4-task no-verify ablation. On the seed pilot, all
+runs succeed, but the
 intervention reduces repeated tool calls from 10.43 to 7.00 and average token
 usage from 218.7k to 184.8k. On the hard30 tier, success rate stays flat at
 50%, but the intervention reduces repeated tool calls from 12.93 to 9.20,
-average token usage from 355.0k to 256.3k, and failure score from 1.5 to 0.5.
+average token usage from 355.0k to 256.3k, and failure score from 3.50 to
+1.17.
 A manual-label analysis also shows a boundary of trace-only diagnosis: 30
 hidden semantic edge-case failures are missed by deterministic process rules
 because their visible process traces often look clean. These results suggest
@@ -180,9 +183,22 @@ trace review.
 
 ### RQ2: Detector Agreement
 
-The current process-only detector detects the reviewed repetitive-exploration
-positives, but it does not detect hidden semantic edge cases. For the hard30
-manual labels, detector agreement is:
+The current process-only detector has two different evaluation surfaces. First,
+on controlled detector fixtures where each process failure mode is explicitly
+present in a minimal JSONL trace, it recovers all six taxonomy labels:
+
+| Label | TP | FP | FN | Precision | Recall | F1 |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| `context_drift` | 1 | 0 | 0 | 1 | 1 | 1 |
+| `premature_completion` | 1 | 0 | 0 | 1 | 1 | 1 |
+| `repetitive_exploration` | 1 | 0 | 0 | 1 | 1 | 1 |
+| `sandbox_permission_deadlock` | 1 | 0 | 0 | 1 | 1 | 1 |
+| `unrecovered_tool_error` | 2 | 0 | 0 | 1 | 1 | 1 |
+| `verification_gap` | 2 | 0 | 0 | 1 | 1 | 1 |
+
+Second, on real pilot traces, the detector identifies reviewed observable
+process positives but does not detect hidden semantic edge cases. For the
+hard30 manual labels, detector agreement is:
 
 | Label | TP | FP | FN | Precision | Recall | F1 |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
@@ -194,6 +210,13 @@ detectors target process evidence; hidden semantic failures may require visible
 edge tests, stronger task oracles, or a semantic analysis layer. The
 `repetitive_exploration` row shows that process-positive labels can be detected
 from trace signals when the failure mode is actually observable.
+
+A full30 process-positive slice adds one reviewed
+`sandbox_permission_deadlock` example with TP=1, FP=0, FN=0, while also
+showing two `repetitive_exploration` false positives. This gives a more useful
+claim than "rules detect everything": deterministic trace rules can recover
+explicit process failures, but they still require threshold tuning and do not
+replace semantic task oracles.
 
 ### RQ3: Baseline vs Intervention
 
@@ -235,38 +258,68 @@ Paired hard30 deltas show that token usage improves in 26 of 30 tasks,
 repeated tool calls improve in 26 of 30 tasks, and success improves in one task
 while regressing in one task.
 
+Three auxiliary pilots further test whether the original thesis should claim
+verification-rate lift. In the process-stress tier, success remains
+flat at 0.92 -> 0.92, while repeated tool calls improve from 8.08 to 7.17 and
+token usage improves from 209.0k to 185.1k. In the targeted verification-lift
+tier, even a weak baseline prompt that permits skipped command execution still
+verifies every run: verification remains 1.00 -> 1.00, success remains
+0.88 -> 0.88, repeated tool calls improve from 6.13 to 5.38, and token usage
+improves from 176.8k to 172.2k. Finally, a no-verify ablation intentionally
+forbids the baseline from running tests while requiring the intervention to
+produce evidence. In that artificial setting, verification rises from 0.00 to
+1.00 and failure score drops from 61.25 to 0.00, while success stays flat at
+0.75 -> 0.75 and token usage increases from 145.8k to 172.1k. This supports a
+narrow mechanism claim that harness constraints can control verification
+behavior, but it is not ordinary-baseline evidence. Overall, the ordinary and
+weak-baseline pilots are a negative result for the verification-rate-lift claim
+and a positive result for the narrower waste-reduction claim.
+
 ### RQ4: Trace Signals By Outcome
 
 On the hard30 tier, the process signals do not strongly separate successful
 runs from hidden semantic failures. Failure and success runs both have
-verification rate 1.0 and unresolved error 0; failure score differs only
-slightly, 1.17 for failed runs versus 0.83 for successful runs. This supports
-the RQ2 boundary result: when visible tests are incomplete, a run can look
-procedurally sound while still failing a hidden oracle.
+verification rate 1.0 and unresolved error 0. Repeated tool calls and token
+usage are also close across outcomes, and failure score is higher for
+successful runs than failed runs. This supports the RQ2 boundary result: when
+visible tests are incomplete, a run can look procedurally sound while still
+failing a hidden oracle.
 
 | Signal | Failure mean | Success mean | Delta success-failure |
 | --- | ---: | ---: | ---: |
 | verification_rate | 1.00 | 1.00 | 0.00 |
 | unresolved_error | 0 | 0 | 0 |
-| repeated_tool_call_count | 8.00 | 7.60 | -0.40 |
-| command_failure_count | 0 | 0 | 0 |
-| token_usage | 225.6k | 215.7k | -9.9k |
-| failure_score | 0 | 0 | 0 |
+| repeated_tool_call_count | 10.8 | 11.33 | 0.53 |
+| command_failure_count | 0.23 | 0.17 | -0.07 |
+| token_usage | 306.5k | 304.8k | -1.8k |
+| failure_score | 1.83 | 2.83 | 1.00 |
 
-The strongest current evidence for intervention is therefore not failure-score
-separation on hard semantic failures; it is outcome improvement and reduced
-process waste under the intervention prompt. The generated full signal table is
-kept in `docs/results_summary.md`.
+For observable process positives, the signal story is different. In hard30
+`repetitive_exploration` runs, token usage is 666.8k versus a 306.5k baseline,
+failure score is 28.75 versus 1.83, and repeated tool calls are 24.25 versus
+10.8. In the full30 `sandbox_permission_deadlock` example, phase-recover events
+are 32 versus 1.23, command failures are 5 versus 0.35, and token usage is
+529.2k versus 201.8k. The strongest current evidence for intervention is
+therefore not failure-score separation on hidden semantic failures; it is
+outcome improvement and reduced process waste under the intervention prompt.
+The generated full signal tables are kept in `docs/results_summary.md` and
+`docs/rq4_signal_audit.md`.
 
 ## 8. Analysis
 
-The three pilots show complementary behavior. The 30-task seed tier validates
+The stored pilots show complementary behavior. The 30-task seed tier validates
 the collection harness and shows that process-level interventions can reduce
 waste even when outcomes are saturated. The hard10 pilot creates genuine
 outcome failures and shows a small success-rate lift. The larger hard30 pilot
 keeps success flat but sharply reduces tool-call and token waste, while also
 revealing that process-only trace rules cannot detect every correctness
-failure.
+failure. The process-stress and verification-lift pilots add a useful boundary:
+current Codex CLI behavior already verifies consistently, so the paper should
+not claim a verification-rate lift under ordinary or weak-baseline conditions.
+The no-verify ablation shows that an evidence-gated harness can force
+verification when the baseline is explicitly forbidden to verify, but that
+result belongs in the analysis as a mechanism check rather than a main outcome
+claim.
 
 This distinction matters for a practical coding-agent harness. Trace diagnosis
 is useful for asking questions such as:

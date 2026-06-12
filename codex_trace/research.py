@@ -566,17 +566,37 @@ def write_paper_report_outputs(result: dict[str, Any], json_path: str | Path | N
 
 def build_results_summary(
     full_manifest_path: str | Path,
+    full_process_labels_path: str | Path | None,
+    detector_fixture_manifest_path: str | Path | None,
+    detector_fixture_labels_path: str | Path | None,
     hard_manifest_path: str | Path,
     hard_labels_path: str | Path,
     hard30_manifest_path: str | Path | None = None,
     hard30_labels_path: str | Path | None = None,
+    process_stress_manifest_path: str | Path | None = None,
+    process_stress_labels_path: str | Path | None = None,
+    verification_lift_manifest_path: str | Path | None = None,
+    verification_lift_labels_path: str | Path | None = None,
+    verification_ablation_manifest_path: str | Path | None = None,
+    verification_ablation_labels_path: str | Path | None = None,
 ) -> dict[str, Any]:
-    full = aggregate_runs(full_manifest_path)
-    hard = aggregate_runs(hard_manifest_path)
-    hard_label_eval = evaluate_detector_labels(hard_manifest_path, hard_labels_path)
-    hard_paper_report = build_paper_report(hard_manifest_path, labels_path=hard_labels_path)
+    full = _load_finalized_aggregate(full_manifest_path) or aggregate_runs(full_manifest_path)
+    full_process_eval = evaluate_detector_labels(full_manifest_path, full_process_labels_path) if full_process_labels_path else None
+    detector_fixture_eval = (
+        evaluate_detector_labels(detector_fixture_manifest_path, detector_fixture_labels_path)
+        if detector_fixture_manifest_path and detector_fixture_labels_path
+        else None
+    )
+    hard_paper_report = _load_finalized_paper_report(hard_manifest_path, hard_labels_path) or build_paper_report(
+        hard_manifest_path,
+        labels_path=hard_labels_path,
+    )
+    hard = hard_paper_report["aggregate"]
+    hard_label_eval = hard_paper_report["detector_evaluation"]
     result: dict[str, Any] = {
         "full30": full,
+        "full30_process_label_evaluation": full_process_eval,
+        "detector_fixture_label_evaluation": detector_fixture_eval,
         "hard10": hard,
         "hard10_label_evaluation": hard_label_eval,
         "hard10_taxonomy_distribution": hard_paper_report["taxonomy_distribution"],
@@ -584,9 +604,12 @@ def build_results_summary(
         "hard10_signal_by_outcome": hard_paper_report["signal_by_outcome"],
     }
     if hard30_manifest_path and hard30_labels_path:
-        hard30 = aggregate_runs(hard30_manifest_path)
-        hard30_label_eval = evaluate_detector_labels(hard30_manifest_path, hard30_labels_path)
-        hard30_paper_report = build_paper_report(hard30_manifest_path, labels_path=hard30_labels_path)
+        hard30_paper_report = _load_finalized_paper_report(hard30_manifest_path, hard30_labels_path) or build_paper_report(
+            hard30_manifest_path,
+            labels_path=hard30_labels_path,
+        )
+        hard30 = hard30_paper_report["aggregate"]
+        hard30_label_eval = hard30_paper_report["detector_evaluation"]
         result.update({
             "hard30": hard30,
             "hard30_label_evaluation": hard30_label_eval,
@@ -595,13 +618,73 @@ def build_results_summary(
             "hard30_signal_by_outcome": hard30_paper_report["signal_by_outcome"],
             "hard30_paired_task_summary": hard30_paper_report["paired_task_summary"],
         })
+    if process_stress_manifest_path and process_stress_labels_path:
+        process_stress_report = (
+            _load_finalized_paper_report(process_stress_manifest_path, process_stress_labels_path)
+            or build_paper_report(process_stress_manifest_path, labels_path=process_stress_labels_path)
+        )
+        result.update({
+            "process_stress": process_stress_report["aggregate"],
+            "process_stress_label_evaluation": process_stress_report["detector_evaluation"],
+            "process_stress_taxonomy_distribution": process_stress_report["taxonomy_distribution"],
+            "process_stress_outcome_counts": process_stress_report["outcome_counts"],
+            "process_stress_signal_by_outcome": process_stress_report["signal_by_outcome"],
+            "process_stress_paired_task_summary": process_stress_report["paired_task_summary"],
+        })
+    if verification_lift_manifest_path and verification_lift_labels_path:
+        verification_lift_report = (
+            _load_finalized_paper_report(verification_lift_manifest_path, verification_lift_labels_path)
+            or build_paper_report(verification_lift_manifest_path, labels_path=verification_lift_labels_path)
+        )
+        result.update({
+            "verification_lift": verification_lift_report["aggregate"],
+            "verification_lift_label_evaluation": verification_lift_report["detector_evaluation"],
+            "verification_lift_taxonomy_distribution": verification_lift_report["taxonomy_distribution"],
+            "verification_lift_outcome_counts": verification_lift_report["outcome_counts"],
+            "verification_lift_signal_by_outcome": verification_lift_report["signal_by_outcome"],
+            "verification_lift_paired_task_summary": verification_lift_report["paired_task_summary"],
+        })
+    if verification_ablation_manifest_path and verification_ablation_labels_path:
+        verification_ablation_report = (
+            _load_finalized_paper_report(verification_ablation_manifest_path, verification_ablation_labels_path)
+            or build_paper_report(verification_ablation_manifest_path, labels_path=verification_ablation_labels_path)
+        )
+        result.update({
+            "verification_ablation": verification_ablation_report["aggregate"],
+            "verification_ablation_label_evaluation": verification_ablation_report["detector_evaluation"],
+            "verification_ablation_taxonomy_distribution": verification_ablation_report["taxonomy_distribution"],
+            "verification_ablation_outcome_counts": verification_ablation_report["outcome_counts"],
+            "verification_ablation_signal_by_outcome": verification_ablation_report["signal_by_outcome"],
+            "verification_ablation_paired_task_summary": verification_ablation_report["paired_task_summary"],
+        })
     return result
+
+
+def _load_finalized_aggregate(manifest_path: str | Path) -> dict[str, Any] | None:
+    aggregate_path = Path(manifest_path).parent / "aggregate.json"
+    if not aggregate_path.exists():
+        return None
+    return json.loads(aggregate_path.read_text(encoding="utf-8"))
+
+
+def _load_finalized_paper_report(manifest_path: str | Path, labels_path: str | Path | None) -> dict[str, Any] | None:
+    run_dir = Path(manifest_path).parent
+    candidates = [run_dir / "paper-report-labeled.json", run_dir / "paper-report.json"] if labels_path else [run_dir / "paper-report.json"]
+    for path in candidates:
+        if path.exists():
+            return json.loads(path.read_text(encoding="utf-8"))
+    return None
 
 
 def render_results_summary_markdown(result: dict[str, Any]) -> str:
     full = result["full30"]
+    full_process_eval = result.get("full30_process_label_evaluation")
+    detector_fixture_eval = result.get("detector_fixture_label_evaluation")
     hard = result["hard10"]
     hard30 = result.get("hard30")
+    process_stress = result.get("process_stress")
+    verification_lift = result.get("verification_lift")
+    verification_ablation = result.get("verification_ablation")
     hard_eval = result["hard10_label_evaluation"]
     hard_counts = result["hard10_outcome_counts"]
     boundary_eval = result.get("hard30_label_evaluation", hard_eval)
@@ -626,6 +709,24 @@ def render_results_summary_markdown(result: dict[str, Any]) -> str:
         lines.append(
             f"| hard30 | {hard30['summary']['baseline']['n']} | {len(hard30['runs'])} | "
             f"{boundary_counts.get('failure', 0)} | Submission-ready hard-tier hidden-grader artifact. |"
+        )
+    if process_stress:
+        process_counts = result.get("process_stress_outcome_counts", {})
+        lines.append(
+            f"| process-stress | {process_stress['summary']['baseline']['n']} | {len(process_stress['runs'])} | "
+            f"{process_counts.get('failure', 0)} | Failure-mode stress tasks with real Codex traces. |"
+        )
+    if verification_lift:
+        verification_counts = result.get("verification_lift_outcome_counts", {})
+        lines.append(
+            f"| verification-lift | {verification_lift['summary']['baseline']['n']} | {len(verification_lift['runs'])} | "
+            f"{verification_counts.get('failure', 0)} | Targeted verification-rate stress prompt contrast. |"
+        )
+    if verification_ablation:
+        ablation_counts = result.get("verification_ablation_outcome_counts", {})
+        lines.append(
+            f"| verification-ablation | {verification_ablation['summary']['baseline']['n']} | {len(verification_ablation['runs'])} | "
+            f"{ablation_counts.get('failure', 0)} | Auxiliary no-verify baseline ablation, not an ordinary baseline. |"
         )
     lines.extend([
         "",
@@ -690,6 +791,96 @@ def render_results_summary_markdown(result: dict[str, Any]) -> str:
             ),
         ])
 
+    if process_stress:
+        lines.extend([
+            "",
+            "### Process-Stress Pilot",
+            "",
+            "| Metric | Baseline | Intervention | Delta |",
+            "| --- | ---: | ---: | ---: |",
+        ])
+        _append_metric_rows(lines, process_stress, (
+            "success_rate",
+            "verification_rate",
+            "avg_repeated_tool_calls",
+            "avg_recover_events",
+            "avg_token_usage",
+            "avg_failure_score",
+        ))
+        paired = result.get("process_stress_paired_task_summary", {})
+        token_row = paired.get("token_usage_delta", {})
+        repeated_row = paired.get("repeated_tool_call_delta", {})
+        success_row = paired.get("success_delta", {})
+        lines.extend([
+            "",
+            (
+                "Paired process-stress deltas: token usage improves in "
+                f"{token_row.get('improved', 0)}/{token_row.get('n', 0)} tasks, repeated tool calls improve in "
+                f"{repeated_row.get('improved', 0)}/{repeated_row.get('n', 0)} tasks, success improves in "
+                f"{success_row.get('improved', 0)} task(s) and regresses in {success_row.get('regressed', 0)} task(s)."
+            ),
+        ])
+
+    if verification_lift:
+        lines.extend([
+            "",
+            "### Verification-Lift Pilot",
+            "",
+            "| Metric | Baseline | Intervention | Delta |",
+            "| --- | ---: | ---: | ---: |",
+        ])
+        _append_metric_rows(lines, verification_lift, (
+            "success_rate",
+            "verification_rate",
+            "avg_repeated_tool_calls",
+            "avg_verify_events",
+            "avg_token_usage",
+            "avg_failure_score",
+        ))
+        paired = result.get("verification_lift_paired_task_summary", {})
+        token_row = paired.get("token_usage_delta", {})
+        repeated_row = paired.get("repeated_tool_call_delta", {})
+        verification_row = paired.get("verification_delta", {})
+        lines.extend([
+            "",
+            (
+                "Paired verification-lift deltas: verification improves in "
+                f"{verification_row.get('improved', 0)}/{verification_row.get('n', 0)} tasks, token usage improves in "
+                f"{token_row.get('improved', 0)}/{token_row.get('n', 0)} tasks, repeated tool calls improve in "
+                f"{repeated_row.get('improved', 0)}/{repeated_row.get('n', 0)} tasks."
+            ),
+        ])
+
+    if verification_ablation:
+        lines.extend([
+            "",
+            "### Verification Ablation Pilot",
+            "",
+            "This auxiliary pilot uses an explicit no-verification baseline and should not be interpreted as the ordinary Codex baseline.",
+            "",
+            "| Metric | Baseline | Intervention | Delta |",
+            "| --- | ---: | ---: | ---: |",
+        ])
+        _append_metric_rows(lines, verification_ablation, (
+            "success_rate",
+            "verification_rate",
+            "avg_repeated_tool_calls",
+            "avg_verify_events",
+            "avg_token_usage",
+            "avg_failure_score",
+        ))
+        paired = result.get("verification_ablation_paired_task_summary", {})
+        verification_row = paired.get("verification_delta", {})
+        score_row = paired.get("failure_score_delta", {})
+        lines.extend([
+            "",
+            (
+                "Paired verification-ablation deltas: verification improves in "
+                f"{verification_row.get('improved', 0)}/{verification_row.get('n', 0)} tasks and failure score improves in "
+                f"{score_row.get('improved', 0)}/{score_row.get('n', 0)} tasks."
+            ),
+        ])
+
     lines.extend([
         "",
         "## RQ2 Detector Boundary Result",
@@ -705,6 +896,107 @@ def render_results_summary_markdown(result: dict[str, Any]) -> str:
     lines.extend([
         "",
         "Interpretation: deterministic process rules detect high-volume `repetitive_exploration` positives, but still do not detect hidden semantic edge-case failures when the visible process trace looks clean.",
+    ])
+    if detector_fixture_eval:
+        fixture_summary = detector_fixture_eval.get("summary", {})
+        lines.extend([
+            "",
+            "### Controlled Detector Fixture Check",
+            "",
+            (
+                "These minimal JSONL traces are rule-level fixtures, not real Codex pilot runs. "
+                f"They cover {fixture_summary.get('labels', 0)} process labels with "
+                f"micro-F1 {_fmt(fixture_summary.get('micro_f1', 0))}."
+            ),
+            "",
+            "| Label | TP | FP | FN | Precision | Recall | F1 |",
+            "| --- | ---: | ---: | ---: | ---: | ---: | ---: |",
+        ])
+        for label, scores in sorted(detector_fixture_eval.get("labels", {}).items()):
+            lines.append(
+                f"| {label} | {scores.get('tp', 0)} | {scores.get('fp', 0)} | {scores.get('fn', 0)} | "
+                f"{_fmt(scores.get('precision', 0))} | {_fmt(scores.get('recall', 0))} | {_fmt(scores.get('f1', 0))} |"
+            )
+    if full_process_eval:
+        lines.extend([
+            "",
+            "### Full30 Process-Positive Detector Check",
+            "",
+            "| Label | TP | FP | FN | Precision | Recall | F1 |",
+            "| --- | ---: | ---: | ---: | ---: | ---: | ---: |",
+        ])
+        for label, scores in sorted(full_process_eval.get("labels", {}).items()):
+            lines.append(
+                f"| {label} | {scores.get('tp', 0)} | {scores.get('fp', 0)} | {scores.get('fn', 0)} | "
+                f"{_fmt(scores.get('precision', 0))} | {_fmt(scores.get('recall', 0))} | {_fmt(scores.get('f1', 0))} |"
+            )
+        lines.extend([
+            "",
+            "Interpretation: full30 adds an observed sandbox/permission process positive, while also exposing repetitive-exploration false positives in the process-label slice.",
+        ])
+    if process_stress:
+        process_eval = result.get("process_stress_label_evaluation", {})
+        process_hidden = process_eval.get("labels", {}).get("hidden_semantic_edge_case", {})
+        lines.extend([
+            "",
+            "### Process-Stress Detector Boundary Check",
+            "",
+            "| Label | TP | FP | FN | Precision | Recall | F1 |",
+            "| --- | ---: | ---: | ---: | ---: | ---: | ---: |",
+        ])
+        for label, scores in sorted(process_eval.get("labels", {}).items()):
+            lines.append(
+                f"| {label} | {scores.get('tp', 0)} | {scores.get('fp', 0)} | {scores.get('fn', 0)} | "
+                f"{_fmt(scores.get('precision', 0))} | {_fmt(scores.get('recall', 0))} | {_fmt(scores.get('f1', 0))} |"
+            )
+        lines.extend([
+            "",
+            (
+                "Interpretation: the process-stress pilot repeats the same boundary: both failed runs are "
+                f"hidden semantic edge cases, producing {process_hidden.get('fn', 0)} trace-only false negatives."
+            ),
+        ])
+    if verification_lift:
+        verification_eval = result.get("verification_lift_label_evaluation", {})
+        verification_hidden = verification_eval.get("labels", {}).get("hidden_semantic_edge_case", {})
+        lines.extend([
+            "",
+            "### Verification-Lift Detector Boundary Check",
+            "",
+            "| Label | TP | FP | FN | Precision | Recall | F1 |",
+            "| --- | ---: | ---: | ---: | ---: | ---: | ---: |",
+        ])
+        for label, scores in sorted(verification_eval.get("labels", {}).items()):
+            lines.append(
+                f"| {label} | {scores.get('tp', 0)} | {scores.get('fp', 0)} | {scores.get('fn', 0)} | "
+                f"{_fmt(scores.get('precision', 0))} | {_fmt(scores.get('recall', 0))} | {_fmt(scores.get('f1', 0))} |"
+            )
+        lines.extend([
+            "",
+            (
+                "Interpretation: the targeted verification-lift pilot still has saturated verification "
+                f"and {verification_hidden.get('fn', 0)} hidden semantic false negatives."
+            ),
+        ])
+    if verification_ablation:
+        ablation_eval = result.get("verification_ablation_label_evaluation", {})
+        lines.extend([
+            "",
+            "### Verification Ablation Detector Check",
+            "",
+            "| Label | TP | FP | FN | Precision | Recall | F1 |",
+            "| --- | ---: | ---: | ---: | ---: | ---: | ---: |",
+        ])
+        for label, scores in sorted(ablation_eval.get("labels", {}).items()):
+            lines.append(
+                f"| {label} | {scores.get('tp', 0)} | {scores.get('fp', 0)} | {scores.get('fn', 0)} | "
+                f"{_fmt(scores.get('precision', 0))} | {_fmt(scores.get('recall', 0))} | {_fmt(scores.get('f1', 0))} |"
+            )
+        lines.extend([
+            "",
+            "Interpretation: explicit no-verify ablation creates detectable verification gaps, while hidden semantic failures remain outside process-rule detection.",
+        ])
+    lines.extend([
         "",
         "## RQ4 Trace Signals By Outcome",
         "",
@@ -731,6 +1023,8 @@ def render_results_summary_markdown(result: dict[str, Any]) -> str:
         "| Intervention reduces process waste on full30. | `avg_repeated_tool_calls`, `avg_command_failures`, `avg_recover_events`, and `avg_token_usage` improve in the full30 table. |",
         "| Intervention improves success on hard10. | hard10 `success_rate` improves from baseline to intervention. |",
         "| Intervention reduces waste on hard30. | hard30 repeated tool calls, command failures, token usage, and failure score improve. |" if hard30 else "",
+        "| Process-stress intervention reduces token and repeated-call waste while success stays flat. | process-stress keeps success at 91.67% while reducing repeated tool calls and token usage. |" if process_stress else "",
+        "| Verification-lift stress test does not support a verification-rate lift. | verification-lift verification remains 100% -> 100%, while repeated calls and token usage fall slightly. |" if verification_lift else "",
         f"| Trace-only process rules have a semantic boundary. | {boundary_name.lower()} label evaluation has {hidden_scores.get('fn', 0)} false negatives for `hidden_semantic_edge_case`, while detecting observed process positives such as `repetitive_exploration`. |",
         f"| RQ4 signal analysis explains the detector boundary. | {boundary_name.lower()} `verification_rate` and `unresolved_error` are equal for successful and failed runs. |",
         "| Strong task oracles remain necessary. | hard-tier failures are only visible through hidden graders, not process-rule findings. |",
@@ -1108,7 +1402,7 @@ def _summarize_group(rows: list[dict[str, Any]]) -> dict[str, Any]:
 
 
 def _deltas(baseline: dict[str, Any], intervention: dict[str, Any]) -> dict[str, float]:
-    keys = set(baseline) | set(intervention)
+    keys = sorted(set(baseline) | set(intervention))
     return {
         key: float(intervention.get(key, 0) or 0) - float(baseline.get(key, 0) or 0)
         for key in keys

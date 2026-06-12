@@ -1,0 +1,5 @@
+{"failure_tags":["verification_gap","premature_completion"],"notes":"Ablation baseline edited files and explicitly finished without running the visible success check.","outcome":"success","prompt_type":"baseline","task_id":"VAB-001"}
+{"failure_tags":["verification_gap","premature_completion","hidden_semantic_edge_case"],"notes":"Ablation baseline edited files without verification and hidden grader still failed the semantic edge case.","outcome":"failure","prompt_type":"baseline","task_id":"VAB-002"}
+{"failure_tags":["hidden_semantic_edge_case"],"notes":"Intervention verified visible tests, but hidden grader required rejecting --limit 0.","outcome":"failure","prompt_type":"intervention","task_id":"VAB-002"}
+{"failure_tags":["verification_gap"],"notes":"Ablation baseline edited files and stopped without a post-edit verification command.","outcome":"success","prompt_type":"baseline","task_id":"VAB-003"}
+{"failure_tags":["verification_gap","premature_completion"],"notes":"Ablation baseline edited files and declared completion without running the visible success check.","outcome":"success","prompt_type":"baseline","task_id":"VAB-004"}

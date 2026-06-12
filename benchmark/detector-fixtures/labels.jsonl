@@ -1,0 +1,6 @@
+{"task_id":"DF-001","prompt_type":"baseline","failure_tags":["verification_gap"]}
+{"task_id":"DF-002","prompt_type":"baseline","failure_tags":["unrecovered_tool_error"]}
+{"task_id":"DF-003","prompt_type":"baseline","failure_tags":["repetitive_exploration"]}
+{"task_id":"DF-004","prompt_type":"baseline","failure_tags":["context_drift"]}
+{"task_id":"DF-005","prompt_type":"baseline","failure_tags":["verification_gap","premature_completion"]}
+{"task_id":"DF-006","prompt_type":"baseline","failure_tags":["unrecovered_tool_error","sandbox_permission_deadlock"]}

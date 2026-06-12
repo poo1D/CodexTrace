@@ -1,0 +1,8 @@
+{"failure_score": 70, "failure_tags": [], "notes": "", "outcome": "success", "prompt_type": "baseline", "suggested_tags": ["premature_completion", "verification_gap"], "task_id": "VAB-001", "trace_path": "VAB-001/baseline/trace.jsonl"}
+{"failure_score": 0, "failure_tags": [], "notes": "", "outcome": "success", "prompt_type": "intervention", "suggested_tags": [], "task_id": "VAB-001", "trace_path": "VAB-001/intervention/trace.jsonl"}
+{"failure_score": 70, "failure_tags": [], "notes": "", "outcome": "failure", "prompt_type": "baseline", "suggested_tags": ["premature_completion", "verification_gap"], "task_id": "VAB-002", "trace_path": "VAB-002/baseline/trace.jsonl"}
+{"failure_score": 0, "failure_tags": [], "notes": "", "outcome": "failure", "prompt_type": "intervention", "suggested_tags": [], "task_id": "VAB-002", "trace_path": "VAB-002/intervention/trace.jsonl"}
+{"failure_score": 35, "failure_tags": [], "notes": "", "outcome": "success", "prompt_type": "baseline", "suggested_tags": ["verification_gap"], "task_id": "VAB-003", "trace_path": "VAB-003/baseline/trace.jsonl"}
+{"failure_score": 0, "failure_tags": [], "notes": "", "outcome": "success", "prompt_type": "intervention", "suggested_tags": [], "task_id": "VAB-003", "trace_path": "VAB-003/intervention/trace.jsonl"}
+{"failure_score": 70, "failure_tags": [], "notes": "", "outcome": "success", "prompt_type": "baseline", "suggested_tags": ["premature_completion", "verification_gap"], "task_id": "VAB-004", "trace_path": "VAB-004/baseline/trace.jsonl"}
+{"failure_score": 0, "failure_tags": [], "notes": "", "outcome": "success", "prompt_type": "intervention", "suggested_tags": [], "task_id": "VAB-004", "trace_path": "VAB-004/intervention/trace.jsonl"}

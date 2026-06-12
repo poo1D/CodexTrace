@@ -21,20 +21,26 @@
     {
       "action": "Do not claim verification-rate lift for current stored pilots; frame verification as saturated.",
       "claim": "Harness intervention increases verification rate.",
-      "evidence": "hard30 verification delta is +0.00; both baseline and intervention verification rates are already 1.00.",
+      "evidence": "hard30 verification delta is +0.00; process-stress verification delta is +0.00; verification-lift delta is +0.00; all stored pilots are saturated.",
       "status": "unsupported"
+    },
+    {
+      "action": "Use only as a mechanism ablation, not as ordinary-baseline evidence.",
+      "claim": "Harness constraints can control verification behavior under a no-verify ablation.",
+      "evidence": "verification-ablation verification delta is +1.00; failure-score delta is -61.25.",
+      "status": "supported"
     },
     {
       "action": "Use as the strongest current RQ3 result.",
       "claim": "Harness intervention reduces repeated tool-call and token waste.",
-      "evidence": "hard30 repeated tool calls change -3.73; token usage changes -98656.8; paired improvements are repeated=26/30, token=26/30.",
+      "evidence": "hard30 repeated tool calls change -3.73, token usage -98656.8; process-stress repeated tool calls change -0.92, token usage -23868.4; verification-lift repeated tool calls change -0.75, token usage -4661.8.",
       "status": "supported"
     },
     {
-      "action": "Claim process-positive detection only for observed process labels; do not claim most overall failures are detected.",
+      "action": "Claim rule-level taxonomy coverage and observed process-positive detection; do not claim most real-world outcome failures are detected.",
       "claim": "Trace-based process rules detect most failure processes.",
-      "evidence": "hard30 includes 4 detected repetitive-exploration process positives (F1=1.00), but hidden semantic recall is 0.00 with FN=30.",
-      "status": "unsupported"
+      "evidence": "controlled detector fixtures cover 6 labels with micro-F1=1.00; hard30 includes 4 detected repetitive-exploration process positives (F1=1.00); full30 includes sandbox/permission TP=1, FP=0, FN=0, with 2 repetitive-exploration FP in the process-label slice. Hidden semantic recall is 0.00 with FN=30; process-stress hidden semantic FN=2; verification-lift hidden semantic FN=2.",
+      "status": "partial"
     },
     {
       "action": "Say process signals explain the detector boundary, not hidden correctness.",
@@ -43,24 +49,48 @@
       "status": "unsupported"
     },
     {
+      "action": "Use as the paper's RQ4 framing.",
+      "claim": "Trace signals explain observable process failures and the hidden-semantic boundary.",
+      "evidence": "RQ4 signal audit ready=True; hard30 hidden failures have verification delta +0.00 and unresolved-error delta +0.00, while real process positives have large repeated-call, token, failure-score, command-failure, or recover-phase deltas.",
+      "status": "supported"
+    },
+    {
       "action": "Keep as a limitation and contribution.",
       "claim": "Strong task-level oracles remain necessary.",
-      "evidence": "hard30 visible traces often verify cleanly, but hidden graders expose 30 failures and 30 trace-only false negatives.",
+      "evidence": "hard30 visible traces often verify cleanly, but hidden graders expose 30 failures and 30 trace-only false negatives; process-stress adds 2 failures and 2 false negatives; verification-lift adds 2 failures and 2 false negatives.",
       "status": "supported"
     }
   ],
   "summary": {
-    "claims": 8,
+    "claims": 10,
+    "detector_fixture_labels": 6,
+    "detector_fixture_micro_f1": 1.0,
+    "full30_sandbox_permission_fn": 0,
+    "full30_sandbox_permission_fp": 0,
+    "full30_sandbox_permission_tp": 1,
     "hard30_failures": 30,
     "hard30_ready": true,
     "hard30_repetitive_exploration_fn": 0,
     "hard30_repetitive_exploration_tp": 4,
     "hard30_runs": 60,
     "hard30_tasks": 30,
+    "process_stress_failures": 2,
+    "process_stress_runs": 24,
+    "process_stress_success_delta": 0.0,
+    "process_stress_tasks": 12,
+    "rq4_signal_audit_ready": true,
     "status_counts": {
-      "partial": 1,
-      "supported": 4,
-      "unsupported": 3
-    }
+      "partial": 2,
+      "supported": 6,
+      "unsupported": 2
+    },
+    "verification_ablation_failures": 2,
+    "verification_ablation_runs": 8,
+    "verification_ablation_tasks": 4,
+    "verification_ablation_verification_delta": 1.0,
+    "verification_lift_failures": 2,
+    "verification_lift_runs": 16,
+    "verification_lift_tasks": 8,
+    "verification_lift_verification_delta": 0.0
   }
 }

@@ -1,0 +1,374 @@
+{
+  "aggregate": {
+    "runs": [
+      {
+        "task_id": "PST-001",
+        "prompt_type": "baseline",
+        "trace_path": "/Users/lidengye/Developer/CodexTrace-github/benchmark/process-stress/pilot/ramp-real/PST-001/baseline/trace.jsonl",
+        "outcome": "success",
+        "success": 1,
+        "verification_rate": 1,
+        "unresolved_error": 0,
+        "repeated_tool_call_count": 5,
+        "retry_count": 0,
+        "command_failure_count": 0,
+        "token_usage": 171259,
+        "failure_score": 0,
+        "turn_count": 1,
+        "time_to_first_edit": 13,
+        "time_to_first_test": 16,
+        "phase_setup_events": 3,
+        "phase_inspect_events": 10,
+        "phase_edit_events": 3,
+        "phase_verify_events": 2,
+        "phase_recover_events": 0,
+        "phase_complete_events": 2,
+        "phase_other_events": 0,
+        "finding_codes": [],
+        "taxonomy_tags": []
+      },
+      {
+        "task_id": "PST-001",
+        "prompt_type": "intervention",
+        "trace_path": "/Users/lidengye/Developer/CodexTrace-github/benchmark/process-stress/pilot/ramp-real/PST-001/intervention/trace.jsonl",
+        "outcome": "success",
+        "success": 1,
+        "verification_rate": 1,
+        "unresolved_error": 0,
+        "repeated_tool_call_count": 5,
+        "retry_count": 0,
+        "command_failure_count": 0,
+        "token_usage": 171658,
+        "failure_score": 0,
+        "turn_count": 1,
+        "time_to_first_edit": 13,
+        "time_to_first_test": 16,
+        "phase_setup_events": 3,
+        "phase_inspect_events": 10,
+        "phase_edit_events": 3,
+        "phase_verify_events": 2,
+        "phase_recover_events": 0,
+        "phase_complete_events": 2,
+        "phase_other_events": 0,
+        "finding_codes": [],
+        "taxonomy_tags": []
+      },
+      {
+        "task_id": "PST-003",
+        "prompt_type": "baseline",
+        "trace_path": "/Users/lidengye/Developer/CodexTrace-github/benchmark/process-stress/pilot/ramp-real/PST-003/baseline/trace.jsonl",
+        "outcome": "success",
+        "success": 1,
+        "verification_rate": 1,
+        "unresolved_error": 0,
+        "repeated_tool_call_count": 8,
+        "retry_count": 1,
+        "command_failure_count": 1,
+        "token_usage": 172661,
+        "failure_score": 5,
+        "turn_count": 1,
+        "time_to_first_edit": 15,
+        "time_to_first_test": 12,
+        "phase_setup_events": 3,
+        "phase_inspect_events": 9,
+        "phase_edit_events": 5,
+        "phase_verify_events": 4,
+        "phase_recover_events": 1,
+        "phase_complete_events": 2,
+        "phase_other_events": 0,
+        "finding_codes": [],
+        "taxonomy_tags": []
+      },
+      {
+        "task_id": "PST-003",
+        "prompt_type": "intervention",
+        "trace_path": "/Users/lidengye/Developer/CodexTrace-github/benchmark/process-stress/pilot/ramp-real/PST-003/intervention/trace.jsonl",
+        "outcome": "success",
+        "success": 1,
+        "verification_rate": 1,
+        "unresolved_error": 0,
+        "repeated_tool_call_count": 5,
+        "retry_count": 0,
+        "command_failure_count": 0,
+        "token_usage": 171817,
+        "failure_score": 0,
+        "turn_count": 1,
+        "time_to_first_edit": 13,
+        "time_to_first_test": 16,
+        "phase_setup_events": 3,
+        "phase_inspect_events": 10,
+        "phase_edit_events": 3,
+        "phase_verify_events": 2,
+        "phase_recover_events": 0,
+        "phase_complete_events": 2,
+        "phase_other_events": 0,
+        "finding_codes": [],
+        "taxonomy_tags": []
+      },
+      {
+        "task_id": "PST-011",
+        "prompt_type": "baseline",
+        "trace_path": "/Users/lidengye/Developer/CodexTrace-github/benchmark/process-stress/pilot/ramp-real/PST-011/baseline/trace.jsonl",
+        "outcome": "success",
+        "success": 1,
+        "verification_rate": 1,
+        "unresolved_error": 0,
+        "repeated_tool_call_count": 8,
+        "retry_count": 0,
+        "command_failure_count": 0,
+        "token_usage": 174150,
+        "failure_score": 0,
+        "turn_count": 1,
+        "time_to_first_edit": 17,
+        "time_to_first_test": 22,
+        "phase_setup_events": 3,
+        "phase_inspect_events": 14,
+        "phase_edit_events": 5,
+        "phase_verify_events": 2,
+        "phase_recover_events": 0,
+        "phase_complete_events": 2,
+        "phase_other_events": 0,
+        "finding_codes": [],
+        "taxonomy_tags": []
+      },
+      {
+        "task_id": "PST-011",
+        "prompt_type": "intervention",
+        "trace_path": "/Users/lidengye/Developer/CodexTrace-github/benchmark/process-stress/pilot/ramp-real/PST-011/intervention/trace.jsonl",
+        "outcome": "success",
+        "success": 1,
+        "verification_rate": 1,
+        "unresolved_error": 0,
+        "repeated_tool_call_count": 8,
+        "retry_count": 0,
+        "command_failure_count": 0,
+        "token_usage": 173964,
+        "failure_score": 0,
+        "turn_count": 1,
+        "time_to_first_edit": 19,
+        "time_to_first_test": 22,
+        "phase_setup_events": 3,
+        "phase_inspect_events": 16,
+        "phase_edit_events": 3,
+        "phase_verify_events": 2,
+        "phase_recover_events": 0,
+        "phase_complete_events": 2,
+        "phase_other_events": 0,
+        "finding_codes": [],
+        "taxonomy_tags": []
+      }
+    ],
+    "summary": {
+      "baseline": {
+        "n": 3,
+        "success_rate": 1.0,
+        "verification_rate": 1.0,
+        "unresolved_error_rate": 0.0,
+        "avg_repeated_tool_calls": 7.0,
+        "avg_retry_count": 0.3333,
+        "avg_command_failures": 0.3333,
+        "avg_token_usage": 172690.0,
+        "avg_failure_score": 1.6667,
+        "avg_turn_count": 1.0,
+        "avg_inspect_events": 11.0,
+        "avg_edit_events": 4.3333,
+        "avg_verify_events": 2.6667,
+        "avg_recover_events": 0.3333
+      },
+      "intervention": {
+        "n": 3,
+        "success_rate": 1.0,
+        "verification_rate": 1.0,
+        "unresolved_error_rate": 0.0,
+        "avg_repeated_tool_calls": 6.0,
+        "avg_retry_count": 0.0,
+        "avg_command_failures": 0.0,
+        "avg_token_usage": 172479.6667,
+        "avg_failure_score": 0.0,
+        "avg_turn_count": 1.0,
+        "avg_inspect_events": 12.0,
+        "avg_edit_events": 3.0,
+        "avg_verify_events": 2.0,
+        "avg_recover_events": 0.0
+      }
+    },
+    "deltas": {
+      "unresolved_error_rate": 0.0,
+      "avg_retry_count": -0.3333,
+      "avg_edit_events": -1.3333000000000004,
+      "avg_token_usage": -210.33329999999842,
+      "avg_failure_score": -1.6667,
+      "avg_verify_events": -0.6667000000000001,
+      "avg_command_failures": -0.3333,
+      "verification_rate": 0.0,
+      "avg_recover_events": -0.3333,
+      "avg_repeated_tool_calls": -1.0,
+      "avg_turn_count": 0.0,
+      "avg_inspect_events": 1.0,
+      "success_rate": 0.0
+    }
+  },
+  "taxonomy_distribution": [],
+  "detector_evaluation": null,
+  "outcome_counts": {
+    "success": 6,
+    "failure": 0,
+    "unknown": 0
+  },
+  "paired_task_deltas": [
+    {
+      "task_id": "PST-001",
+      "baseline_outcome": "success",
+      "intervention_outcome": "success",
+      "success_delta": 0,
+      "verification_delta": 0,
+      "repeated_tool_call_delta": 0,
+      "token_usage_delta": 399,
+      "failure_score_delta": 0
+    },
+    {
+      "task_id": "PST-003",
+      "baseline_outcome": "success",
+      "intervention_outcome": "success",
+      "success_delta": 0,
+      "verification_delta": 0,
+      "repeated_tool_call_delta": -3,
+      "token_usage_delta": -844,
+      "failure_score_delta": -5
+    },
+    {
+      "task_id": "PST-011",
+      "baseline_outcome": "success",
+      "intervention_outcome": "success",
+      "success_delta": 0,
+      "verification_delta": 0,
+      "repeated_tool_call_delta": 0,
+      "token_usage_delta": -186,
+      "failure_score_delta": 0
+    }
+  ],
+  "paired_task_summary": {
+    "success_delta": {
+      "n": 3,
+      "improved": 0,
+      "regressed": 0,
+      "unchanged": 3,
+      "avg_delta": 0.0
+    },
+    "verification_delta": {
+      "n": 3,
+      "improved": 0,
+      "regressed": 0,
+      "unchanged": 3,
+      "avg_delta": 0.0
+    },
+    "repeated_tool_call_delta": {
+      "n": 3,
+      "improved": 1,
+      "regressed": 0,
+      "unchanged": 2,
+      "avg_delta": -1.0
+    },
+    "token_usage_delta": {
+      "n": 3,
+      "improved": 2,
+      "regressed": 1,
+      "unchanged": 0,
+      "avg_delta": -210.3333
+    },
+    "failure_score_delta": {
+      "n": 3,
+      "improved": 1,
+      "regressed": 0,
+      "unchanged": 2,
+      "avg_delta": -1.6667
+    }
+  },
+  "signal_by_outcome": [
+    {
+      "signal": "verification_rate",
+      "failure_mean": 0,
+      "success_mean": 1.0,
+      "delta_success_minus_failure": 1.0
+    },
+    {
+      "signal": "unresolved_error",
+      "failure_mean": 0,
+      "success_mean": 0.0,
+      "delta_success_minus_failure": 0.0
+    },
+    {
+      "signal": "repeated_tool_call_count",
+      "failure_mean": 0,
+      "success_mean": 6.5,
+      "delta_success_minus_failure": 6.5
+    },
+    {
+      "signal": "retry_count",
+      "failure_mean": 0,
+      "success_mean": 0.1667,
+      "delta_success_minus_failure": 0.1667
+    },
+    {
+      "signal": "command_failure_count",
+      "failure_mean": 0,
+      "success_mean": 0.1667,
+      "delta_success_minus_failure": 0.1667
+    },
+    {
+      "signal": "token_usage",
+      "failure_mean": 0,
+      "success_mean": 172584.8333,
+      "delta_success_minus_failure": 172584.8333
+    },
+    {
+      "signal": "failure_score",
+      "failure_mean": 0,
+      "success_mean": 0.8333,
+      "delta_success_minus_failure": 0.8333
+    },
+    {
+      "signal": "turn_count",
+      "failure_mean": 0,
+      "success_mean": 1.0,
+      "delta_success_minus_failure": 1.0
+    },
+    {
+      "signal": "time_to_first_edit",
+      "failure_mean": 0,
+      "success_mean": 15.0,
+      "delta_success_minus_failure": 15.0
+    },
+    {
+      "signal": "time_to_first_test",
+      "failure_mean": 0,
+      "success_mean": 17.3333,
+      "delta_success_minus_failure": 17.3333
+    },
+    {
+      "signal": "phase_inspect_events",
+      "failure_mean": 0,
+      "success_mean": 11.5,
+      "delta_success_minus_failure": 11.5
+    },
+    {
+      "signal": "phase_edit_events",
+      "failure_mean": 0,
+      "success_mean": 3.6667,
+      "delta_success_minus_failure": 3.6667
+    },
+    {
+      "signal": "phase_verify_events",
+      "failure_mean": 0,
+      "success_mean": 2.3333,
+      "delta_success_minus_failure": 2.3333
+    },
+    {
+      "signal": "phase_recover_events",
+      "failure_mean": 0,
+      "success_mean": 0.1667,
+      "delta_success_minus_failure": 0.1667
+    }
+  ],
+  "signal_by_label": []
+}

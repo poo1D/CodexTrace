@@ -4,6 +4,11 @@ from pathlib import Path
 from scripts.finalize_hard30_pilot import finalize, preflight, render_preflight
 from scripts.audit_manual_labels import audit_manual_labels, render_audit
 from scripts.audit_paper_claims import build_claim_audit, render_claim_audit_markdown
+from scripts.audit_process_stress_plan import audit_process_stress_plan
+from scripts.audit_rq4_signals import build_rq4_signal_audit, render_rq4_signal_audit_markdown
+from scripts.audit_thesis_readiness import build_thesis_readiness, render_thesis_readiness_markdown
+from scripts.audit_verification_ablation_plan import audit_verification_ablation_plan
+from scripts.audit_verification_lift_plan import audit_verification_lift_plan
 from scripts.merge_hard30_shards import merge_shards, rewrite_shard_row
 from scripts.run_hard30_shards import (
     build_shard_commands,
@@ -930,27 +935,146 @@ def test_build_paper_report_tables():
 def test_build_results_summary_from_stored_pilots():
     result = build_results_summary(
         "benchmark/pilot/full30-real/runs.jsonl",
+        "benchmark/pilot/full30-real/process-labels.jsonl",
+        "benchmark/detector-fixtures/runs.jsonl",
+        "benchmark/detector-fixtures/labels.jsonl",
         "benchmark/hard/pilot/hard10-real/runs.jsonl",
         "benchmark/hard/pilot/hard10-real/manual-labels.jsonl",
         "benchmark/hard/pilot/hard30-real/runs.jsonl",
         "benchmark/hard/pilot/hard30-real/manual-labels.jsonl",
+        "benchmark/process-stress/pilot/full-real/runs.jsonl",
+        "benchmark/process-stress/pilot/full-real/manual-labels.jsonl",
+        "benchmark/verification-lift/pilot/full-real/runs.jsonl",
+        "benchmark/verification-lift/pilot/full-real/manual-labels.jsonl",
+        "benchmark/verification-ablation/pilot/full-real/runs.jsonl",
+        "benchmark/verification-ablation/pilot/full-real/manual-labels.jsonl",
     )
     markdown = render_results_summary_markdown(result)
 
     assert result["full30"]["summary"]["baseline"]["n"] == 30
+    assert result["full30_process_label_evaluation"]["labels"]["sandbox_permission_deadlock"]["tp"] == 1
+    assert result["detector_fixture_label_evaluation"]["summary"]["micro_f1"] == 1
+    assert set(result["detector_fixture_label_evaluation"]["labels"]) >= {
+        "verification_gap",
+        "unrecovered_tool_error",
+        "repetitive_exploration",
+        "context_drift",
+        "premature_completion",
+        "sandbox_permission_deadlock",
+    }
     assert result["hard10"]["summary"]["baseline"]["success_rate"] == 0.7
     assert result["hard30"]["summary"]["baseline"]["n"] == 30
     assert result["hard30"]["summary"]["baseline"]["success_rate"] == 0.5
     assert result["hard10_label_evaluation"]["labels"]["hidden_semantic_edge_case"]["fn"] == 5
     assert result["hard30_label_evaluation"]["labels"]["hidden_semantic_edge_case"]["fn"] == 30
     assert result["hard30_label_evaluation"]["labels"]["repetitive_exploration"]["tp"] == 4
+    assert result["process_stress"]["summary"]["baseline"]["n"] == 12
+    assert result["process_stress"]["summary"]["baseline"]["success_rate"] == 0.9167
+    assert result["process_stress_label_evaluation"]["labels"]["hidden_semantic_edge_case"]["fn"] == 2
+    assert result["verification_lift"]["summary"]["baseline"]["n"] == 8
+    assert result["verification_lift"]["summary"]["baseline"]["verification_rate"] == 1
+    assert result["verification_lift_label_evaluation"]["labels"]["hidden_semantic_edge_case"]["fn"] == 2
+    assert result["verification_ablation"]["summary"]["baseline"]["n"] == 4
+    assert result["verification_ablation"]["deltas"]["verification_rate"] == 1
+    assert result["verification_ablation_label_evaluation"]["labels"]["verification_gap"]["tp"] == 4
+    assert result["verification_ablation_label_evaluation"]["labels"]["premature_completion"]["tp"] == 3
     assert "## RQ3 Baseline vs Intervention" in markdown
     assert "### Hard30 Pilot" in markdown
+    assert "### Process-Stress Pilot" in markdown
+    assert "### Verification-Lift Pilot" in markdown
+    assert "### Verification Ablation Pilot" in markdown
+    assert "### Full30 Process-Positive Detector Check" in markdown
+    assert "### Controlled Detector Fixture Check" in markdown
     assert "## RQ4 Trace Signals By Outcome" in markdown
     assert "| failure_score | 1.833 | 2.833 | 1 |" in markdown
     assert "hidden_semantic_edge_case" in markdown
     assert "repetitive_exploration" in markdown
     assert "30 false negatives" in markdown
+    assert "2 trace-only false negatives" in markdown
+    assert "verification remains 100% -> 100%" in markdown
+
+
+def test_build_results_summary_prefers_finalized_outputs(tmp_path):
+    full_dir = tmp_path / "full30"
+    hard_dir = tmp_path / "hard10"
+    hard30_dir = tmp_path / "hard30"
+    for directory in (full_dir, hard_dir, hard30_dir):
+        directory.mkdir()
+
+    full_dir.joinpath("aggregate.json").write_text(
+        json.dumps({
+            "runs": [],
+            "summary": {
+                "baseline": {"n": 30, "success_rate": 0.25, "avg_repeated_tool_calls": 99},
+                "intervention": {"n": 30, "success_rate": 0.5, "avg_repeated_tool_calls": 11},
+            },
+            "deltas": {"success_rate": 0.25, "avg_repeated_tool_calls": -88},
+        }),
+        encoding="utf-8",
+    )
+    paper_report = {
+        "aggregate": {
+            "runs": [],
+            "summary": {
+                "baseline": {"n": 10, "success_rate": 0.4, "verification_rate": 1},
+                "intervention": {"n": 10, "success_rate": 0.9, "verification_rate": 1},
+            },
+            "deltas": {"success_rate": 0.5, "verification_rate": 0},
+        },
+        "detector_evaluation": {
+            "labels": {"hidden_semantic_edge_case": {"tp": 0, "fp": 0, "fn": 7, "precision": 0, "recall": 0, "f1": 0}},
+            "summary": {"micro_f1": 0, "macro_f1": 0},
+            "runs": [],
+        },
+        "taxonomy_distribution": [],
+        "outcome_counts": {"success": 3, "failure": 7, "unknown": 0},
+        "signal_by_outcome": [
+            {"signal": "verification_rate", "failure_mean": 1, "success_mean": 1, "delta_success_minus_failure": 0}
+        ],
+        "paired_task_summary": {},
+    }
+    hard_dir.joinpath("paper-report-labeled.json").write_text(json.dumps(paper_report), encoding="utf-8")
+
+    hard30_report = dict(paper_report)
+    hard30_report["aggregate"] = {
+        "runs": [],
+        "summary": {
+            "baseline": {"n": 30, "success_rate": 0.1, "verification_rate": 1},
+            "intervention": {"n": 30, "success_rate": 0.2, "verification_rate": 1},
+        },
+        "deltas": {"success_rate": 0.1, "verification_rate": 0},
+    }
+    hard30_report["detector_evaluation"] = {
+        "labels": {
+            "hidden_semantic_edge_case": {"tp": 0, "fp": 0, "fn": 30, "precision": 0, "recall": 0, "f1": 0},
+            "repetitive_exploration": {"tp": 4, "fp": 0, "fn": 0, "precision": 1, "recall": 1, "f1": 1},
+        },
+        "summary": {"micro_f1": 0.2, "macro_f1": 0.5},
+        "runs": [],
+    }
+    hard30_report["outcome_counts"] = {"success": 6, "failure": 24, "unknown": 0}
+    hard30_report["paired_task_summary"] = {
+        "token_usage_delta": {"n": 30, "improved": 26, "regressed": 4},
+        "repeated_tool_call_delta": {"n": 30, "improved": 25, "regressed": 5},
+        "success_delta": {"n": 30, "improved": 3, "regressed": 0},
+    }
+    hard30_dir.joinpath("paper-report-labeled.json").write_text(json.dumps(hard30_report), encoding="utf-8")
+
+    result = build_results_summary(
+        full_dir / "runs.jsonl",
+        None,
+        None,
+        None,
+        hard_dir / "runs.jsonl",
+        hard_dir / "manual-labels.jsonl",
+        hard30_dir / "runs.jsonl",
+        hard30_dir / "manual-labels.jsonl",
+    )
+
+    assert result["full30"]["summary"]["baseline"]["avg_repeated_tool_calls"] == 99
+    assert result["hard10"]["summary"]["intervention"]["success_rate"] == 0.9
+    assert result["hard30"]["summary"]["baseline"]["success_rate"] == 0.1
+    assert result["hard30_label_evaluation"]["labels"]["repetitive_exploration"]["tp"] == 4
 
 
 def test_paper_claim_audit_marks_overclaims_as_unsupported():
@@ -961,12 +1085,134 @@ def test_paper_claim_audit_marks_overclaims_as_unsupported():
     assert result["summary"]["hard30_tasks"] == 30
     assert result["summary"]["hard30_runs"] == 60
     assert result["summary"]["hard30_repetitive_exploration_tp"] == 4
+    assert result["summary"]["full30_sandbox_permission_tp"] == 1
+    assert result["summary"]["full30_sandbox_permission_fp"] == 0
+    assert result["summary"]["full30_sandbox_permission_fn"] == 0
+    assert result["summary"]["detector_fixture_labels"] == 6
+    assert result["summary"]["detector_fixture_micro_f1"] == 1
+    assert result["summary"]["process_stress_tasks"] == 12
+    assert result["summary"]["process_stress_runs"] == 24
+    assert result["summary"]["process_stress_failures"] == 2
+    assert result["summary"]["verification_lift_tasks"] == 8
+    assert result["summary"]["verification_lift_runs"] == 16
+    assert result["summary"]["verification_lift_failures"] == 2
+    assert result["summary"]["verification_lift_verification_delta"] == 0
+    assert result["summary"]["verification_ablation_tasks"] == 4
+    assert result["summary"]["verification_ablation_runs"] == 8
+    assert result["summary"]["verification_ablation_verification_delta"] == 1
+    assert result["summary"]["rq4_signal_audit_ready"] is True
     assert result["summary"]["status_counts"]["supported"] >= 3
     assert claims["Harness intervention increases verification rate."]["status"] == "unsupported"
-    assert claims["Trace-based process rules detect most failure processes."]["status"] == "unsupported"
+    assert claims["Harness constraints can control verification behavior under a no-verify ablation."]["status"] == "supported"
+    assert claims["Trace-based process rules detect most failure processes."]["status"] == "partial"
+    assert claims["Trace signals explain observable process failures and the hidden-semantic boundary."]["status"] == "supported"
     assert claims["Harness intervention increases success rate."]["status"] == "partial"
     assert claims["Harness intervention reduces repeated tool-call and token waste."]["status"] == "supported"
     assert "Do not state `unsupported` claims as findings" in markdown
+
+
+def test_thesis_readiness_identifies_original_thesis_gaps():
+    result = build_thesis_readiness()
+    markdown = render_thesis_readiness_markdown(result)
+    requirements = {row["id"]: row for row in result["requirements"]}
+
+    assert result["summary"]["ready_for_original_thesis"] is False
+    assert result["summary"]["ready_for_boundary_result_paper"] is True
+    assert requirements["taxonomy"]["status"] == "satisfied"
+    assert requirements["benchmark"]["status"] == "satisfied"
+    assert requirements["verification_lift"]["status"] == "missing"
+    assert requirements["process_rule_detection"]["status"] == "satisfied"
+    assert requirements["rq4_explanation"]["status"] == "satisfied"
+    assert result["summary"]["status_counts"]["satisfied"] == 6
+    assert "full30 sandbox_permission_deadlock has TP=1" in markdown
+    assert "controlled detector fixtures cover 6 labels" in markdown
+    assert "Boundary-style RQ4 is supported" in markdown
+    assert "process-stress tier" in markdown
+    assert "verification-lift tier" in markdown
+    assert "verification is saturated" in markdown
+    assert result["next_experiment"]["current_scaffold"]["ready"] is True
+    assert result["verification_lift_experiment"]["current_scaffold"]["ready"] is True
+    assert result["verification_lift_experiment"]["current_scaffold"]["task_count"] == 8
+    verification_pilot = result["verification_lift_experiment"]["current_scaffold"]["pilot"]
+    assert verification_pilot["tasks"] == 8
+    assert verification_pilot["runs"] == 16
+    assert verification_pilot["baseline_verification_rate"] == verification_pilot["intervention_verification_rate"]
+    ablation_pilot = result["verification_ablation_experiment"]["current_scaffold"]["pilot"]
+    assert ablation_pilot["tasks"] == 4
+    assert ablation_pilot["runs"] == 8
+    assert ablation_pilot["baseline_verification_rate"] == 0
+    assert ablation_pilot["intervention_verification_rate"] == 1
+    pilot = result["next_experiment"]["current_scaffold"]["pilot"]
+    assert pilot["tasks"] == 12
+    assert pilot["runs"] == 24
+    assert pilot["baseline_success_rate"] == pilot["intervention_success_rate"]
+    assert pilot["baseline_repeated_calls"] > pilot["intervention_repeated_calls"]
+    assert pilot["baseline_token_usage"] > pilot["intervention_token_usage"]
+
+
+def test_process_stress_plan_covers_target_failure_tags():
+    result = audit_process_stress_plan()
+
+    assert result["ok"] is True
+    assert result["task_count"] == 12
+    assert result["materialized_count"] == 12
+    assert result["tag_counts"] == {
+        "verification_gap": 3,
+        "unrecovered_tool_error": 3,
+        "repetitive_exploration": 3,
+        "context_drift": 3,
+        "premature_completion": 4,
+        "sandbox_permission_deadlock": 2,
+    }
+
+
+def test_verification_lift_plan_covers_prompt_contrast():
+    result = audit_verification_lift_plan()
+    tasks = load_tasks("benchmark/verification-lift/tasks.jsonl")
+    baseline_prompt = render_prompt(tasks[0], "baseline", "benchmark/verification-lift/prompts")
+    intervention_prompt = render_prompt(tasks[0], "intervention", "benchmark/verification-lift/prompts")
+
+    assert result["ok"] is True
+    assert result["task_count"] == 8
+    assert result["materialized_count"] == 8
+    assert result["tag_counts"]["verification_gap"] == 8
+    assert "skip command execution" in baseline_prompt
+    assert "Run the visible success check" in intervention_prompt
+
+
+def test_verification_ablation_plan_covers_no_verify_prompt_contrast():
+    result = audit_verification_ablation_plan()
+    tasks = load_tasks("benchmark/verification-ablation/tasks.jsonl")
+    baseline_prompt = render_prompt(tasks[0], "baseline", "benchmark/verification-ablation/prompts")
+    intervention_prompt = render_prompt(tasks[0], "intervention", "benchmark/verification-ablation/prompts")
+
+    assert result["ok"] is True
+    assert result["task_count"] == 4
+    assert result["materialized_count"] == 4
+    assert "Do not run test, build, lint, grader" in baseline_prompt
+    assert "Run the visible success check" in intervention_prompt
+
+
+def test_rq4_signal_audit_explains_boundary_and_process_signals():
+    result = build_rq4_signal_audit()
+    markdown = render_rq4_signal_audit_markdown(result)
+
+    assert result["summary"]["ready"] is True
+    assert result["hard30_hidden_boundary"]["verification_delta_success_minus_failure"] == 0
+    assert result["hard30_hidden_boundary"]["unresolved_error_delta_success_minus_failure"] == 0
+    assert result["summary"]["detector_fixture_label_count"] == 6
+    assert result["hard30_repetitive_exploration_top_signals"][0]["signal"] == "token_usage"
+    assert any(row["signal"] == "repeated_tool_call_count" for row in result["hard30_repetitive_exploration_top_signals"])
+    assert any(row["signal"] == "phase_recover_events" for row in result["full30_sandbox_permission_top_signals"])
+    assert "Hidden Semantic Boundary" in markdown
+
+
+def test_process_stress_fixtures_start_failing_visible_checks():
+    tasks = load_tasks("benchmark/process-stress/tasks.jsonl")
+    results = [run_success_check(task.fixture_path, task.public_success_check, timeout_seconds=30) for task in tasks]
+
+    assert len(results) == 12
+    assert all(result.returncode != 0 for result in results)
 
 
 def test_smoke_fixture_success_check_starts_failing():

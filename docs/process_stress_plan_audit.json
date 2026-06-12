@@ -1,0 +1,16 @@
+{
+  "materialized_count": 12,
+  "ok": true,
+  "problems": [],
+  "readme_path": "benchmark/process-stress/README.md",
+  "tag_counts": {
+    "context_drift": 3,
+    "premature_completion": 4,
+    "repetitive_exploration": 3,
+    "sandbox_permission_deadlock": 2,
+    "unrecovered_tool_error": 3,
+    "verification_gap": 3
+  },
+  "task_count": 12,
+  "tasks_path": "benchmark/process-stress/tasks.jsonl"
+}

@@ -1,0 +1,245 @@
+{
+  "runs": [
+    {
+      "task_id": "PST-001",
+      "prompt_type": "baseline",
+      "expected": [],
+      "predicted": [],
+      "true_positive": [],
+      "false_positive": [],
+      "false_negative": []
+    },
+    {
+      "task_id": "PST-001",
+      "prompt_type": "intervention",
+      "expected": [],
+      "predicted": [],
+      "true_positive": [],
+      "false_positive": [],
+      "false_negative": []
+    },
+    {
+      "task_id": "PST-002",
+      "prompt_type": "baseline",
+      "expected": [
+        "hidden_semantic_edge_case"
+      ],
+      "predicted": [],
+      "true_positive": [],
+      "false_positive": [],
+      "false_negative": [
+        "hidden_semantic_edge_case"
+      ]
+    },
+    {
+      "task_id": "PST-002",
+      "prompt_type": "intervention",
+      "expected": [
+        "hidden_semantic_edge_case"
+      ],
+      "predicted": [],
+      "true_positive": [],
+      "false_positive": [],
+      "false_negative": [
+        "hidden_semantic_edge_case"
+      ]
+    },
+    {
+      "task_id": "PST-003",
+      "prompt_type": "baseline",
+      "expected": [],
+      "predicted": [],
+      "true_positive": [],
+      "false_positive": [],
+      "false_negative": []
+    },
+    {
+      "task_id": "PST-003",
+      "prompt_type": "intervention",
+      "expected": [],
+      "predicted": [],
+      "true_positive": [],
+      "false_positive": [],
+      "false_negative": []
+    },
+    {
+      "task_id": "PST-004",
+      "prompt_type": "baseline",
+      "expected": [],
+      "predicted": [],
+      "true_positive": [],
+      "false_positive": [],
+      "false_negative": []
+    },
+    {
+      "task_id": "PST-004",
+      "prompt_type": "intervention",
+      "expected": [],
+      "predicted": [],
+      "true_positive": [],
+      "false_positive": [],
+      "false_negative": []
+    },
+    {
+      "task_id": "PST-005",
+      "prompt_type": "baseline",
+      "expected": [],
+      "predicted": [],
+      "true_positive": [],
+      "false_positive": [],
+      "false_negative": []
+    },
+    {
+      "task_id": "PST-005",
+      "prompt_type": "intervention",
+      "expected": [],
+      "predicted": [],
+      "true_positive": [],
+      "false_positive": [],
+      "false_negative": []
+    },
+    {
+      "task_id": "PST-006",
+      "prompt_type": "baseline",
+      "expected": [],
+      "predicted": [],
+      "true_positive": [],
+      "false_positive": [],
+      "false_negative": []
+    },
+    {
+      "task_id": "PST-006",
+      "prompt_type": "intervention",
+      "expected": [],
+      "predicted": [],
+      "true_positive": [],
+      "false_positive": [],
+      "false_negative": []
+    },
+    {
+      "task_id": "PST-007",
+      "prompt_type": "baseline",
+      "expected": [],
+      "predicted": [],
+      "true_positive": [],
+      "false_positive": [],
+      "false_negative": []
+    },
+    {
+      "task_id": "PST-007",
+      "prompt_type": "intervention",
+      "expected": [],
+      "predicted": [],
+      "true_positive": [],
+      "false_positive": [],
+      "false_negative": []
+    },
+    {
+      "task_id": "PST-008",
+      "prompt_type": "baseline",
+      "expected": [],
+      "predicted": [],
+      "true_positive": [],
+      "false_positive": [],
+      "false_negative": []
+    },
+    {
+      "task_id": "PST-008",
+      "prompt_type": "intervention",
+      "expected": [],
+      "predicted": [],
+      "true_positive": [],
+      "false_positive": [],
+      "false_negative": []
+    },
+    {
+      "task_id": "PST-009",
+      "prompt_type": "baseline",
+      "expected": [],
+      "predicted": [],
+      "true_positive": [],
+      "false_positive": [],
+      "false_negative": []
+    },
+    {
+      "task_id": "PST-009",
+      "prompt_type": "intervention",
+      "expected": [],
+      "predicted": [],
+      "true_positive": [],
+      "false_positive": [],
+      "false_negative": []
+    },
+    {
+      "task_id": "PST-010",
+      "prompt_type": "baseline",
+      "expected": [],
+      "predicted": [],
+      "true_positive": [],
+      "false_positive": [],
+      "false_negative": []
+    },
+    {
+      "task_id": "PST-010",
+      "prompt_type": "intervention",
+      "expected": [],
+      "predicted": [],
+      "true_positive": [],
+      "false_positive": [],
+      "false_negative": []
+    },
+    {
+      "task_id": "PST-011",
+      "prompt_type": "baseline",
+      "expected": [],
+      "predicted": [],
+      "true_positive": [],
+      "false_positive": [],
+      "false_negative": []
+    },
+    {
+      "task_id": "PST-011",
+      "prompt_type": "intervention",
+      "expected": [],
+      "predicted": [],
+      "true_positive": [],
+      "false_positive": [],
+      "false_negative": []
+    },
+    {
+      "task_id": "PST-012",
+      "prompt_type": "baseline",
+      "expected": [],
+      "predicted": [],
+      "true_positive": [],
+      "false_positive": [],
+      "false_negative": []
+    },
+    {
+      "task_id": "PST-012",
+      "prompt_type": "intervention",
+      "expected": [],
+      "predicted": [],
+      "true_positive": [],
+      "false_positive": [],
+      "false_negative": []
+    }
+  ],
+  "labels": {
+    "hidden_semantic_edge_case": {
+      "tp": 0,
+      "fp": 0,
+      "fn": 2,
+      "precision": 0,
+      "recall": 0.0,
+      "f1": 0
+    }
+  },
+  "summary": {
+    "labels": 1,
+    "micro_precision": 0,
+    "micro_recall": 0.0,
+    "micro_f1": 0,
+    "macro_f1": 0
+  }
+}

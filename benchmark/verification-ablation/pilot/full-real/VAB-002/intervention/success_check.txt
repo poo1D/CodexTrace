@@ -1,0 +1,4 @@
+Traceback (most recent call last):
+  File "/Users/lidengye/Developer/CodexTrace-github/benchmark/verification-ablation/pilot/full-real/VAB-002/intervention/repo/../grader/check.py", line 33, in <module>
+    raise AssertionError(f"{argv!r} should fail")
+AssertionError: ['--limit', '0'] should fail

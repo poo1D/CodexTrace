@@ -1,0 +1,16 @@
+{
+  "materialized_count": 8,
+  "ok": true,
+  "problems": [],
+  "prompt_dir": "benchmark/verification-lift/prompts",
+  "readme_path": "benchmark/verification-lift/README.md",
+  "tag_counts": {
+    "context_drift": 2,
+    "premature_completion": 3,
+    "repetitive_exploration": 1,
+    "sandbox_permission_deadlock": 1,
+    "verification_gap": 8
+  },
+  "task_count": 8,
+  "tasks_path": "benchmark/verification-lift/tasks.jsonl"
+}

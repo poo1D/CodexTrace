@@ -1,0 +1,582 @@
+{
+  "runs": [
+    {
+      "task_id": "CT-001",
+      "prompt_type": "baseline",
+      "expected": [],
+      "predicted": [],
+      "true_positive": [],
+      "false_positive": [],
+      "false_negative": []
+    },
+    {
+      "task_id": "CT-001",
+      "prompt_type": "intervention",
+      "expected": [],
+      "predicted": [],
+      "true_positive": [],
+      "false_positive": [],
+      "false_negative": []
+    },
+    {
+      "task_id": "CT-006",
+      "prompt_type": "baseline",
+      "expected": [],
+      "predicted": [],
+      "true_positive": [],
+      "false_positive": [],
+      "false_negative": []
+    },
+    {
+      "task_id": "CT-006",
+      "prompt_type": "intervention",
+      "expected": [],
+      "predicted": [],
+      "true_positive": [],
+      "false_positive": [],
+      "false_negative": []
+    },
+    {
+      "task_id": "CT-011",
+      "prompt_type": "baseline",
+      "expected": [],
+      "predicted": [],
+      "true_positive": [],
+      "false_positive": [],
+      "false_negative": []
+    },
+    {
+      "task_id": "CT-011",
+      "prompt_type": "intervention",
+      "expected": [],
+      "predicted": [],
+      "true_positive": [],
+      "false_positive": [],
+      "false_negative": []
+    },
+    {
+      "task_id": "CT-016",
+      "prompt_type": "baseline",
+      "expected": [],
+      "predicted": [],
+      "true_positive": [],
+      "false_positive": [],
+      "false_negative": []
+    },
+    {
+      "task_id": "CT-016",
+      "prompt_type": "intervention",
+      "expected": [],
+      "predicted": [],
+      "true_positive": [],
+      "false_positive": [],
+      "false_negative": []
+    },
+    {
+      "task_id": "CT-021",
+      "prompt_type": "baseline",
+      "expected": [
+        "sandbox_permission_deadlock"
+      ],
+      "predicted": [
+        "repetitive_exploration",
+        "sandbox_permission_deadlock"
+      ],
+      "true_positive": [
+        "sandbox_permission_deadlock"
+      ],
+      "false_positive": [
+        "repetitive_exploration"
+      ],
+      "false_negative": []
+    },
+    {
+      "task_id": "CT-021",
+      "prompt_type": "intervention",
+      "expected": [],
+      "predicted": [],
+      "true_positive": [],
+      "false_positive": [],
+      "false_negative": []
+    },
+    {
+      "task_id": "CT-026",
+      "prompt_type": "baseline",
+      "expected": [],
+      "predicted": [],
+      "true_positive": [],
+      "false_positive": [],
+      "false_negative": []
+    },
+    {
+      "task_id": "CT-026",
+      "prompt_type": "intervention",
+      "expected": [],
+      "predicted": [],
+      "true_positive": [],
+      "false_positive": [],
+      "false_negative": []
+    },
+    {
+      "task_id": "CT-028",
+      "prompt_type": "baseline",
+      "expected": [],
+      "predicted": [],
+      "true_positive": [],
+      "false_positive": [],
+      "false_negative": []
+    },
+    {
+      "task_id": "CT-028",
+      "prompt_type": "intervention",
+      "expected": [],
+      "predicted": [],
+      "true_positive": [],
+      "false_positive": [],
+      "false_negative": []
+    },
+    {
+      "task_id": "CT-002",
+      "prompt_type": "baseline",
+      "expected": [],
+      "predicted": [],
+      "true_positive": [],
+      "false_positive": [],
+      "false_negative": []
+    },
+    {
+      "task_id": "CT-002",
+      "prompt_type": "intervention",
+      "expected": [],
+      "predicted": [],
+      "true_positive": [],
+      "false_positive": [],
+      "false_negative": []
+    },
+    {
+      "task_id": "CT-003",
+      "prompt_type": "baseline",
+      "expected": [],
+      "predicted": [],
+      "true_positive": [],
+      "false_positive": [],
+      "false_negative": []
+    },
+    {
+      "task_id": "CT-003",
+      "prompt_type": "intervention",
+      "expected": [],
+      "predicted": [],
+      "true_positive": [],
+      "false_positive": [],
+      "false_negative": []
+    },
+    {
+      "task_id": "CT-004",
+      "prompt_type": "baseline",
+      "expected": [],
+      "predicted": [],
+      "true_positive": [],
+      "false_positive": [],
+      "false_negative": []
+    },
+    {
+      "task_id": "CT-004",
+      "prompt_type": "intervention",
+      "expected": [],
+      "predicted": [],
+      "true_positive": [],
+      "false_positive": [],
+      "false_negative": []
+    },
+    {
+      "task_id": "CT-005",
+      "prompt_type": "baseline",
+      "expected": [],
+      "predicted": [],
+      "true_positive": [],
+      "false_positive": [],
+      "false_negative": []
+    },
+    {
+      "task_id": "CT-005",
+      "prompt_type": "intervention",
+      "expected": [],
+      "predicted": [],
+      "true_positive": [],
+      "false_positive": [],
+      "false_negative": []
+    },
+    {
+      "task_id": "CT-007",
+      "prompt_type": "baseline",
+      "expected": [],
+      "predicted": [],
+      "true_positive": [],
+      "false_positive": [],
+      "false_negative": []
+    },
+    {
+      "task_id": "CT-007",
+      "prompt_type": "intervention",
+      "expected": [],
+      "predicted": [],
+      "true_positive": [],
+      "false_positive": [],
+      "false_negative": []
+    },
+    {
+      "task_id": "CT-008",
+      "prompt_type": "baseline",
+      "expected": [],
+      "predicted": [],
+      "true_positive": [],
+      "false_positive": [],
+      "false_negative": []
+    },
+    {
+      "task_id": "CT-008",
+      "prompt_type": "intervention",
+      "expected": [],
+      "predicted": [],
+      "true_positive": [],
+      "false_positive": [],
+      "false_negative": []
+    },
+    {
+      "task_id": "CT-009",
+      "prompt_type": "baseline",
+      "expected": [],
+      "predicted": [],
+      "true_positive": [],
+      "false_positive": [],
+      "false_negative": []
+    },
+    {
+      "task_id": "CT-009",
+      "prompt_type": "intervention",
+      "expected": [],
+      "predicted": [],
+      "true_positive": [],
+      "false_positive": [],
+      "false_negative": []
+    },
+    {
+      "task_id": "CT-010",
+      "prompt_type": "baseline",
+      "expected": [],
+      "predicted": [],
+      "true_positive": [],
+      "false_positive": [],
+      "false_negative": []
+    },
+    {
+      "task_id": "CT-010",
+      "prompt_type": "intervention",
+      "expected": [],
+      "predicted": [],
+      "true_positive": [],
+      "false_positive": [],
+      "false_negative": []
+    },
+    {
+      "task_id": "CT-012",
+      "prompt_type": "baseline",
+      "expected": [],
+      "predicted": [],
+      "true_positive": [],
+      "false_positive": [],
+      "false_negative": []
+    },
+    {
+      "task_id": "CT-012",
+      "prompt_type": "intervention",
+      "expected": [],
+      "predicted": [],
+      "true_positive": [],
+      "false_positive": [],
+      "false_negative": []
+    },
+    {
+      "task_id": "CT-013",
+      "prompt_type": "baseline",
+      "expected": [],
+      "predicted": [],
+      "true_positive": [],
+      "false_positive": [],
+      "false_negative": []
+    },
+    {
+      "task_id": "CT-013",
+      "prompt_type": "intervention",
+      "expected": [],
+      "predicted": [],
+      "true_positive": [],
+      "false_positive": [],
+      "false_negative": []
+    },
+    {
+      "task_id": "CT-014",
+      "prompt_type": "baseline",
+      "expected": [],
+      "predicted": [],
+      "true_positive": [],
+      "false_positive": [],
+      "false_negative": []
+    },
+    {
+      "task_id": "CT-014",
+      "prompt_type": "intervention",
+      "expected": [],
+      "predicted": [],
+      "true_positive": [],
+      "false_positive": [],
+      "false_negative": []
+    },
+    {
+      "task_id": "CT-015",
+      "prompt_type": "baseline",
+      "expected": [],
+      "predicted": [],
+      "true_positive": [],
+      "false_positive": [],
+      "false_negative": []
+    },
+    {
+      "task_id": "CT-015",
+      "prompt_type": "intervention",
+      "expected": [],
+      "predicted": [],
+      "true_positive": [],
+      "false_positive": [],
+      "false_negative": []
+    },
+    {
+      "task_id": "CT-017",
+      "prompt_type": "baseline",
+      "expected": [],
+      "predicted": [],
+      "true_positive": [],
+      "false_positive": [],
+      "false_negative": []
+    },
+    {
+      "task_id": "CT-017",
+      "prompt_type": "intervention",
+      "expected": [],
+      "predicted": [],
+      "true_positive": [],
+      "false_positive": [],
+      "false_negative": []
+    },
+    {
+      "task_id": "CT-018",
+      "prompt_type": "baseline",
+      "expected": [],
+      "predicted": [],
+      "true_positive": [],
+      "false_positive": [],
+      "false_negative": []
+    },
+    {
+      "task_id": "CT-018",
+      "prompt_type": "intervention",
+      "expected": [],
+      "predicted": [],
+      "true_positive": [],
+      "false_positive": [],
+      "false_negative": []
+    },
+    {
+      "task_id": "CT-019",
+      "prompt_type": "baseline",
+      "expected": [],
+      "predicted": [],
+      "true_positive": [],
+      "false_positive": [],
+      "false_negative": []
+    },
+    {
+      "task_id": "CT-019",
+      "prompt_type": "intervention",
+      "expected": [],
+      "predicted": [],
+      "true_positive": [],
+      "false_positive": [],
+      "false_negative": []
+    },
+    {
+      "task_id": "CT-020",
+      "prompt_type": "baseline",
+      "expected": [],
+      "predicted": [],
+      "true_positive": [],
+      "false_positive": [],
+      "false_negative": []
+    },
+    {
+      "task_id": "CT-020",
+      "prompt_type": "intervention",
+      "expected": [],
+      "predicted": [],
+      "true_positive": [],
+      "false_positive": [],
+      "false_negative": []
+    },
+    {
+      "task_id": "CT-022",
+      "prompt_type": "baseline",
+      "expected": [],
+      "predicted": [],
+      "true_positive": [],
+      "false_positive": [],
+      "false_negative": []
+    },
+    {
+      "task_id": "CT-022",
+      "prompt_type": "intervention",
+      "expected": [],
+      "predicted": [],
+      "true_positive": [],
+      "false_positive": [],
+      "false_negative": []
+    },
+    {
+      "task_id": "CT-023",
+      "prompt_type": "baseline",
+      "expected": [],
+      "predicted": [],
+      "true_positive": [],
+      "false_positive": [],
+      "false_negative": []
+    },
+    {
+      "task_id": "CT-023",
+      "prompt_type": "intervention",
+      "expected": [],
+      "predicted": [],
+      "true_positive": [],
+      "false_positive": [],
+      "false_negative": []
+    },
+    {
+      "task_id": "CT-024",
+      "prompt_type": "baseline",
+      "expected": [],
+      "predicted": [],
+      "true_positive": [],
+      "false_positive": [],
+      "false_negative": []
+    },
+    {
+      "task_id": "CT-024",
+      "prompt_type": "intervention",
+      "expected": [],
+      "predicted": [],
+      "true_positive": [],
+      "false_positive": [],
+      "false_negative": []
+    },
+    {
+      "task_id": "CT-025",
+      "prompt_type": "baseline",
+      "expected": [],
+      "predicted": [],
+      "true_positive": [],
+      "false_positive": [],
+      "false_negative": []
+    },
+    {
+      "task_id": "CT-025",
+      "prompt_type": "intervention",
+      "expected": [],
+      "predicted": [],
+      "true_positive": [],
+      "false_positive": [],
+      "false_negative": []
+    },
+    {
+      "task_id": "CT-027",
+      "prompt_type": "baseline",
+      "expected": [],
+      "predicted": [],
+      "true_positive": [],
+      "false_positive": [],
+      "false_negative": []
+    },
+    {
+      "task_id": "CT-027",
+      "prompt_type": "intervention",
+      "expected": [],
+      "predicted": [],
+      "true_positive": [],
+      "false_positive": [],
+      "false_negative": []
+    },
+    {
+      "task_id": "CT-029",
+      "prompt_type": "baseline",
+      "expected": [],
+      "predicted": [],
+      "true_positive": [],
+      "false_positive": [],
+      "false_negative": []
+    },
+    {
+      "task_id": "CT-029",
+      "prompt_type": "intervention",
+      "expected": [],
+      "predicted": [],
+      "true_positive": [],
+      "false_positive": [],
+      "false_negative": []
+    },
+    {
+      "task_id": "CT-030",
+      "prompt_type": "baseline",
+      "expected": [],
+      "predicted": [
+        "repetitive_exploration"
+      ],
+      "true_positive": [],
+      "false_positive": [
+        "repetitive_exploration"
+      ],
+      "false_negative": []
+    },
+    {
+      "task_id": "CT-030",
+      "prompt_type": "intervention",
+      "expected": [],
+      "predicted": [],
+      "true_positive": [],
+      "false_positive": [],
+      "false_negative": []
+    }
+  ],
+  "labels": {
+    "repetitive_exploration": {
+      "tp": 0,
+      "fp": 2,
+      "fn": 0,
+      "precision": 0.0,
+      "recall": 0,
+      "f1": 0
+    },
+    "sandbox_permission_deadlock": {
+      "tp": 1,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0
+    }
+  },
+  "summary": {
+    "labels": 2,
+    "micro_precision": 0.3333,
+    "micro_recall": 1.0,
+    "micro_f1": 0.5,
+    "macro_f1": 0.5
+  }
+}

@@ -1,0 +1,157 @@
+{
+  "runs": [
+    {
+      "task_id": "DF-001",
+      "prompt_type": "baseline",
+      "expected": [
+        "verification_gap"
+      ],
+      "predicted": [
+        "verification_gap"
+      ],
+      "true_positive": [
+        "verification_gap"
+      ],
+      "false_positive": [],
+      "false_negative": []
+    },
+    {
+      "task_id": "DF-002",
+      "prompt_type": "baseline",
+      "expected": [
+        "unrecovered_tool_error"
+      ],
+      "predicted": [
+        "unrecovered_tool_error"
+      ],
+      "true_positive": [
+        "unrecovered_tool_error"
+      ],
+      "false_positive": [],
+      "false_negative": []
+    },
+    {
+      "task_id": "DF-003",
+      "prompt_type": "baseline",
+      "expected": [
+        "repetitive_exploration"
+      ],
+      "predicted": [
+        "repetitive_exploration"
+      ],
+      "true_positive": [
+        "repetitive_exploration"
+      ],
+      "false_positive": [],
+      "false_negative": []
+    },
+    {
+      "task_id": "DF-004",
+      "prompt_type": "baseline",
+      "expected": [
+        "context_drift"
+      ],
+      "predicted": [
+        "context_drift"
+      ],
+      "true_positive": [
+        "context_drift"
+      ],
+      "false_positive": [],
+      "false_negative": []
+    },
+    {
+      "task_id": "DF-005",
+      "prompt_type": "baseline",
+      "expected": [
+        "premature_completion",
+        "verification_gap"
+      ],
+      "predicted": [
+        "premature_completion",
+        "verification_gap"
+      ],
+      "true_positive": [
+        "premature_completion",
+        "verification_gap"
+      ],
+      "false_positive": [],
+      "false_negative": []
+    },
+    {
+      "task_id": "DF-006",
+      "prompt_type": "baseline",
+      "expected": [
+        "sandbox_permission_deadlock",
+        "unrecovered_tool_error"
+      ],
+      "predicted": [
+        "sandbox_permission_deadlock",
+        "unrecovered_tool_error"
+      ],
+      "true_positive": [
+        "sandbox_permission_deadlock",
+        "unrecovered_tool_error"
+      ],
+      "false_positive": [],
+      "false_negative": []
+    }
+  ],
+  "labels": {
+    "context_drift": {
+      "tp": 1,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0
+    },
+    "premature_completion": {
+      "tp": 1,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0
+    },
+    "repetitive_exploration": {
+      "tp": 1,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0
+    },
+    "sandbox_permission_deadlock": {
+      "tp": 1,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0
+    },
+    "unrecovered_tool_error": {
+      "tp": 2,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0
+    },
+    "verification_gap": {
+      "tp": 2,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0
+    }
+  },
+  "summary": {
+    "labels": 6,
+    "micro_precision": 1.0,
+    "micro_recall": 1.0,
+    "micro_f1": 1.0,
+    "macro_f1": 1.0
+  }
+}

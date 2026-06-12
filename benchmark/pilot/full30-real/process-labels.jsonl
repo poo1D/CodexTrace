@@ -1,0 +1,1 @@
+{"failure_tags":["sandbox_permission_deadlock"],"notes":"Successful run, but the trace shows repeated environment/network/permission blocked install attempts before switching strategy; detector flags sandbox_or_permission_block.","outcome":"success","prompt_type":"baseline","task_id":"CT-021"}

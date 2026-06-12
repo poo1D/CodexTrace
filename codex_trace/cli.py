@@ -76,12 +76,21 @@ def main(argv: list[str] | None = None) -> int:
     paper_cmd.add_argument("--json-output", type=Path)
     paper_cmd.add_argument("--markdown-output", type=Path)
 
-    summary_cmd = research_subparsers.add_parser("summary", help="Generate a combined full30/hard10/hard30 paper result summary.")
+    summary_cmd = research_subparsers.add_parser("summary", help="Generate a combined full30/hard10/hard30/process-stress paper result summary.")
     summary_cmd.add_argument("--full-manifest", type=Path, default=Path("benchmark/pilot/full30-real/runs.jsonl"))
+    summary_cmd.add_argument("--full-process-labels", type=Path, default=Path("benchmark/pilot/full30-real/process-labels.jsonl"))
+    summary_cmd.add_argument("--detector-fixture-manifest", type=Path, default=Path("benchmark/detector-fixtures/runs.jsonl"))
+    summary_cmd.add_argument("--detector-fixture-labels", type=Path, default=Path("benchmark/detector-fixtures/labels.jsonl"))
     summary_cmd.add_argument("--hard-manifest", type=Path, default=Path("benchmark/hard/pilot/hard10-real/runs.jsonl"))
     summary_cmd.add_argument("--hard-labels", type=Path, default=Path("benchmark/hard/pilot/hard10-real/manual-labels.jsonl"))
     summary_cmd.add_argument("--hard30-manifest", type=Path, default=Path("benchmark/hard/pilot/hard30-real/runs.jsonl"))
     summary_cmd.add_argument("--hard30-labels", type=Path, default=Path("benchmark/hard/pilot/hard30-real/manual-labels.jsonl"))
+    summary_cmd.add_argument("--process-stress-manifest", type=Path, default=Path("benchmark/process-stress/pilot/full-real/runs.jsonl"))
+    summary_cmd.add_argument("--process-stress-labels", type=Path, default=Path("benchmark/process-stress/pilot/full-real/manual-labels.jsonl"))
+    summary_cmd.add_argument("--verification-lift-manifest", type=Path, default=Path("benchmark/verification-lift/pilot/full-real/runs.jsonl"))
+    summary_cmd.add_argument("--verification-lift-labels", type=Path, default=Path("benchmark/verification-lift/pilot/full-real/manual-labels.jsonl"))
+    summary_cmd.add_argument("--verification-ablation-manifest", type=Path, default=Path("benchmark/verification-ablation/pilot/full-real/runs.jsonl"))
+    summary_cmd.add_argument("--verification-ablation-labels", type=Path, default=Path("benchmark/verification-ablation/pilot/full-real/manual-labels.jsonl"))
     summary_cmd.add_argument("--json-output", type=Path)
     summary_cmd.add_argument("--markdown-output", type=Path)
 
@@ -155,12 +164,30 @@ def main(argv: list[str] | None = None) -> int:
     if args.command == "research" and args.research_command == "summary":
         hard30_manifest = args.hard30_manifest if args.hard30_manifest.exists() else None
         hard30_labels = args.hard30_labels if args.hard30_labels.exists() else None
+        full_process_labels = args.full_process_labels if args.full_process_labels.exists() else None
+        detector_fixture_manifest = args.detector_fixture_manifest if args.detector_fixture_manifest.exists() else None
+        detector_fixture_labels = args.detector_fixture_labels if args.detector_fixture_labels.exists() else None
+        process_stress_manifest = args.process_stress_manifest if args.process_stress_manifest.exists() else None
+        process_stress_labels = args.process_stress_labels if args.process_stress_labels.exists() else None
+        verification_lift_manifest = args.verification_lift_manifest if args.verification_lift_manifest.exists() else None
+        verification_lift_labels = args.verification_lift_labels if args.verification_lift_labels.exists() else None
+        verification_ablation_manifest = args.verification_ablation_manifest if args.verification_ablation_manifest.exists() else None
+        verification_ablation_labels = args.verification_ablation_labels if args.verification_ablation_labels.exists() else None
         result = build_results_summary(
             args.full_manifest,
+            full_process_labels,
+            detector_fixture_manifest,
+            detector_fixture_labels,
             args.hard_manifest,
             args.hard_labels,
             hard30_manifest,
             hard30_labels,
+            process_stress_manifest,
+            process_stress_labels,
+            verification_lift_manifest,
+            verification_lift_labels,
+            verification_ablation_manifest,
+            verification_ablation_labels,
         )
         if args.json_output or args.markdown_output:
             write_results_summary_outputs(result, args.json_output, args.markdown_output)

@@ -1,0 +1,2 @@
+{"failure_tags":["hidden_semantic_edge_case"],"notes":"Visible unittest passed, but hidden grader required rejecting --limit 0 as an invalid value.","outcome":"failure","prompt_type":"baseline","task_id":"VLT-002"}
+{"failure_tags":["hidden_semantic_edge_case"],"notes":"Visible unittest passed, but hidden grader required rejecting --limit 0 as an invalid value.","outcome":"failure","prompt_type":"intervention","task_id":"VLT-002"}

@@ -11,10 +11,16 @@ unrecovered tool errors, repetitive exploration, context drift, premature
 completion, and sandbox deadlocks. We introduce CodexTrace, an offline parser
 and diagnosis engine for `codex exec --json` traces. CodexTrace normalizes agent
 events, detects process-level failure patterns, and compares baseline prompts
-against simple harness interventions. In a small coding-task benchmark, we
-measure whether trace-based rules can identify failure modes and whether
-interventions improve verification behavior, reduce unresolved errors, and
-lower token/tool-call waste.
+against simple harness interventions. Across a 30-task seed pilot, a 10-task
+hard pilot, a 30-task hard-tier artifact with hidden graders, and auxiliary
+process-stress / verification-lift / no-verify ablation pilots, intervention
+primarily reduces token and tool-call waste; it improves success in the hard10
+pilot but not in the larger hard30 pilot. The no-verify ablation shows harness
+constraints can force verification only under an artificial baseline condition,
+not under the ordinary Codex baseline. The hard30 labels also expose a boundary
+result: trace-only process rules detect reviewed repetitive exploration
+positives but miss hidden semantic edge-case failures whose visible process
+traces look clean.
 
 ## 1. Introduction
 
@@ -51,12 +57,14 @@ even before final outcome is known.
 
 ## 4. Benchmark
 
-- 30-50 small tasks
-- categories: bug fix, feature, test writing, refactor, CI failure, error
-  localization, multi-turn change
-- two prompt conditions: baseline and intervention
+- 30-task seed tier with 60 real baseline/intervention runs
+- 50-task hard tier with hidden graders; current paper-facing hard30 selection
+  has 30 tasks and 60 real runs
+- categories include bug fix, feature, test writing, refactor, CI failure,
+  error localization, and multi-turn change
 - traces collected with `codex exec --json`
-- outcomes labeled from success-check commands and manual inspection
+- outcomes labeled from external success checks; hard-tier hidden graders are
+  copied only after Codex exits
 
 ## 5. Method: CodexTrace
 
@@ -93,6 +101,8 @@ Core modules:
 Question:
 
 - Which failures appear most often in baseline runs?
+- Which labeled hard-tier failures are observable process failures versus
+  hidden semantic edge cases?
 
 Table:
 
@@ -131,7 +141,8 @@ Metrics:
 
 Question:
 
-- Which trace signals best explain failure?
+- Which trace signals explain observable process failures, and where do they
+  fail to explain hidden semantic failures?
 
 Candidate signals:
 
@@ -147,10 +158,21 @@ Candidate signals:
 
 ## 7. Analysis
 
-- verification gap is expected to be a high-impact failure mode
-- intervention should most strongly improve verification rate
-- success-rate gains may be smaller than process-quality gains
-- some sandbox failures require system-level changes, not prompt changes
+- verification is saturated in the stored hard pilots, so the paper should not
+  claim a verification-rate lift; the targeted verification-lift pilot also
+  stays saturated at 1.00 -> 1.00
+- the no-verify verification-ablation pilot is a mechanism check only:
+  verification rises 0.00 -> 1.00 and failure score drops 61.25 -> 0.00, but it
+  is not ordinary-baseline evidence
+- intervention most consistently reduces process waste: repeated tool calls,
+  command failures, recovery events, token usage, and failure score
+- success improves in the early hard10 pilot but is flat on hard30
+- hidden semantic edge-case failures can pass visible verification and remain
+  invisible to deterministic process rules
+- controlled detector fixtures cover the six process labels, while real pilots
+  show only partial natural coverage and threshold false positives
+- trace diagnosis should be paired with strong task-level oracles rather than
+  used as a replacement for correctness evaluation
 
 ## 8. Limitations
 

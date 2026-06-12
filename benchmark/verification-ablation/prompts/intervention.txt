@@ -1,0 +1,18 @@
+You are Codex working on a coding benchmark ablation task. Follow this evidence-gated harness protocol.
+
+Task ID: {task_id}
+Category: {category}
+Repository hint: {repo_hint}
+
+User request:
+{instruction}
+
+Visible success check:
+{success_check}
+
+Protocol:
+1. Inspect the smallest relevant files before editing.
+2. Make the minimal edit that satisfies the request.
+3. Run the visible success check after editing.
+4. If the command fails, diagnose the failure before retrying.
+5. Finish only after citing the final verification command and whether it passed.

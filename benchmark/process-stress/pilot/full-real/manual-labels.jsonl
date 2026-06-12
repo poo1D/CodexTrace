@@ -1,0 +1,2 @@
+{"failure_tags":["hidden_semantic_edge_case"],"notes":"Hidden grader required rejecting --limit 0; visible process verified cleanly but missed this semantic validation edge case.","outcome":"failure","prompt_type":"baseline","task_id":"PST-002"}
+{"failure_tags":["hidden_semantic_edge_case"],"notes":"Hidden grader required rejecting unknown options; visible process verified cleanly but missed this semantic validation edge case.","outcome":"failure","prompt_type":"intervention","task_id":"PST-002"}

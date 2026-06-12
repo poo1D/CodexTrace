@@ -1,0 +1,9 @@
+{
+  "materialized_count": 4,
+  "ok": true,
+  "problems": [],
+  "prompt_dir": "benchmark/verification-ablation/prompts",
+  "readme_path": "benchmark/verification-ablation/README.md",
+  "task_count": 4,
+  "tasks_path": "benchmark/verification-ablation/tasks.jsonl"
+}

@@ -22,8 +22,13 @@ The stored pilots can be inspected and aggregated without re-running Codex.
 | --- | --- |
 | `docs/artifact_guide.md` | Fifteen-minute reviewer/interviewer walkthrough. |
 | `docs/paper_draft.md` | Result-driven workshop-style draft. |
-| `docs/results_summary.md` | Generated full30 + hard10 + hard30 result summary, including RQ4 trace-signal analysis. |
+| `docs/results_summary.md` | Generated full30 + hard10 + hard30 + process-stress + verification-lift + verification-ablation result summary, including RQ4 trace-signal analysis. |
+| `docs/rq4_signal_audit.md` | Generated signal audit for observable process positives and hidden semantic boundaries. |
 | `docs/paper_claim_audit.md` | Generated support/partial/unsupported audit for thesis-level paper claims. |
+| `docs/thesis_readiness.md` | Generated audit of which original-thesis requirements are satisfied, partial, or missing. |
+| `docs/process_stress_plan_audit.md` | Generated coverage audit for the planned process-stress tier. |
+| `docs/verification_lift_plan_audit.md` | Generated task/prompt readiness audit for the verification-lift tier. |
+| `docs/verification_ablation_plan_audit.md` | Generated task/prompt readiness audit for the no-verify ablation tier. |
 | `docs/failure_taxonomy.md` | Definitions for process-level failure labels. |
 | `docs/hard_tier_expansion_blueprint.md` | Implemented HARD-011 to HARD-050 fixtures and hard30 pilot selection plan. |
 | `docs/experiment_protocol.md` | Collection, labeling, and evaluation protocol. |
@@ -31,6 +36,14 @@ The stored pilots can be inspected and aggregated without re-running Codex.
 | `docs/submission_readiness_plan.md` | Workstreams and decision gate for a stronger paper submission. |
 | `benchmark/hard/pilot/hard30-selection/` | Fixed 30-task hard-tier selection used for the 60-run hard30 collection. |
 | `benchmark/hard/pilot/hard30-real/` | Submission-ready 30-task / 60-run hard-tier artifact with reports, labels, and shard metadata. |
+| `benchmark/process-stress/tasks.jsonl` | Materialized 12-task process-stress tier for observable process failures. |
+| `benchmark/detector-fixtures/` | Controlled JSONL detector fixtures covering the process-rule taxonomy. |
+| `benchmark/verification-lift/tasks.jsonl` | Targeted 8-task verification-lift tier for the missing verification-rate claim. |
+| `benchmark/verification-lift/prompts/` | Weak-baseline and evidence-gated prompt templates for the verification-lift tier. |
+| `benchmark/verification-lift/pilot/full-real/` | 8-task / 16-run real verification-lift pilot with aggregate and manual labels. |
+| `benchmark/verification-ablation/tasks.jsonl` | Auxiliary 4-task no-verify ablation tier for harness-control evidence. |
+| `benchmark/verification-ablation/prompts/` | No-verify baseline and evidence-gated prompt templates for the ablation tier. |
+| `benchmark/verification-ablation/pilot/full-real/` | 4-task / 8-run real verification-ablation pilot with aggregate and manual labels. |
 | `scripts/run_hard30_shards.py` | Resumable hard30 collection runner with configurable per-task concurrency. |
 | `scripts/merge_hard30_shards.py` | Merge per-task hard30 shard manifests into the reporting `runs.jsonl`. |
 | `scripts/finalize_hard30_pilot.py` | Post-processing entrypoint for hard30 aggregate tables, labels, CSV, and paper-report artifacts. |
@@ -38,6 +51,7 @@ The stored pilots can be inspected and aggregated without re-running Codex.
 | `scripts/audit_paper_claims.py` | Machine-readable guard against overclaiming unsupported paper findings. |
 | `scripts/check_submission_readiness.py` | Machine-readable gate for hard30 collection, finalization, labeling, and paper artifact readiness. |
 | `benchmark/pilot/full30-real` | 30-task / 60-run real seed pilot. |
+| `benchmark/pilot/full30-real/process-labels.jsonl` | Manual process-positive labels for full30 sandbox/permission detector coverage. |
 | `benchmark/hard/pilot/hard10-real` | 10-task / 20-run hard-tier pilot with outcome failures. |
 | `benchmark/hard/pilot/hard10-real/manual-labels.jsonl` | Manual hidden-failure labels for hard-tier RQ2 analysis. |
 | `benchmark/hard/pilot/hard30-real/manual-labels.jsonl` | Hard30 hidden-failure labels for RQ1/RQ2 analysis. |
@@ -52,6 +66,34 @@ PYTHONPATH=. python3 -m codex_trace.cli research aggregate \
   --json-output /tmp/full30-aggregate.json \
   --markdown-output /tmp/full30-aggregate.md \
   --csv-output /tmp/full30-runs.csv
+```
+
+Full30 process-positive detector evaluation:
+
+```bash
+PYTHONPATH=. python3 -m codex_trace.cli research evaluate-labels \
+  benchmark/pilot/full30-real/runs.jsonl \
+  benchmark/pilot/full30-real/process-labels.jsonl \
+  --json-output /tmp/full30-process-label-eval.json \
+  --markdown-output /tmp/full30-process-label-eval.md
+```
+
+Controlled detector-fixture evaluation:
+
+```bash
+PYTHONPATH=. python3 -m codex_trace.cli research evaluate-labels \
+  benchmark/detector-fixtures/runs.jsonl \
+  benchmark/detector-fixtures/labels.jsonl \
+  --json-output /tmp/detector-fixture-label-eval.json \
+  --markdown-output /tmp/detector-fixture-label-eval.md
+```
+
+RQ4 signal audit:
+
+```bash
+PYTHONPATH=. python3 scripts/audit_rq4_signals.py \
+  --json-output /tmp/rq4-signal-audit.json \
+  --markdown-output /tmp/rq4-signal-audit.md
 ```
 
 Hard 10-task aggregate:
@@ -103,6 +145,96 @@ PYTHONPATH=. python3 -m codex_trace.cli research summary \
   --json-output /tmp/results-summary.json
 ```
 
+Original-thesis readiness audit:
+
+```bash
+PYTHONPATH=. python3 scripts/materialize_process_stress_fixtures.py
+
+PYTHONPATH=. python3 scripts/audit_process_stress_plan.py \
+  --markdown-output /tmp/process-stress-plan-audit.md \
+  --json-output /tmp/process-stress-plan-audit.json
+
+PYTHONPATH=. python3 scripts/audit_verification_lift_plan.py \
+  --markdown-output /tmp/verification-lift-plan-audit.md \
+  --json-output /tmp/verification-lift-plan-audit.json
+
+PYTHONPATH=. python3 scripts/audit_verification_ablation_plan.py \
+  --markdown-output /tmp/verification-ablation-plan-audit.md \
+  --json-output /tmp/verification-ablation-plan-audit.json
+
+PYTHONPATH=. python3 scripts/audit_thesis_readiness.py \
+  --markdown-output /tmp/thesis-readiness.md \
+  --json-output /tmp/thesis-readiness.json
+```
+
+Dry-run the process-stress tier without model calls:
+
+```bash
+PYTHONPATH=. python3 -m codex_trace.cli research run \
+  --tasks benchmark/process-stress/tasks.jsonl \
+  --output-dir /tmp/codextrace-process-stress-dry \
+  --dry-run
+```
+
+Dry-run the verification-lift tier without model calls:
+
+```bash
+PYTHONPATH=. python3 -m codex_trace.cli research run \
+  --tasks benchmark/verification-lift/tasks.jsonl \
+  --prompt-dir benchmark/verification-lift/prompts \
+  --output-dir /tmp/codextrace-verification-lift-dry \
+  --dry-run
+```
+
+Current verification-lift pilot outputs:
+
+```bash
+PYTHONPATH=. python3 -m codex_trace.cli research aggregate \
+  benchmark/verification-lift/pilot/full-real/runs.jsonl \
+  --markdown-output /tmp/verification-lift-full-aggregate.md \
+  --json-output /tmp/verification-lift-full-aggregate.json
+
+PYTHONPATH=. python3 -m codex_trace.cli research paper-report \
+  benchmark/verification-lift/pilot/full-real/runs.jsonl \
+  --labels benchmark/verification-lift/pilot/full-real/manual-labels.jsonl \
+  --markdown-output /tmp/verification-lift-paper-report.md \
+  --json-output /tmp/verification-lift-paper-report.json
+```
+
+Current process-stress pilot outputs:
+
+```bash
+PYTHONPATH=. python3 -m codex_trace.cli research aggregate \
+  benchmark/process-stress/pilot/full-real/runs.jsonl \
+  --markdown-output /tmp/process-stress-full-aggregate.md \
+  --json-output /tmp/process-stress-full-aggregate.json
+```
+
+Dry-run the verification-ablation tier without model calls:
+
+```bash
+PYTHONPATH=. python3 -m codex_trace.cli research run \
+  --tasks benchmark/verification-ablation/tasks.jsonl \
+  --prompt-dir benchmark/verification-ablation/prompts \
+  --output-dir /tmp/codextrace-verification-ablation-dry \
+  --dry-run
+```
+
+Current verification-ablation pilot outputs:
+
+```bash
+PYTHONPATH=. python3 -m codex_trace.cli research aggregate \
+  benchmark/verification-ablation/pilot/full-real/runs.jsonl \
+  --markdown-output /tmp/verification-ablation-aggregate.md \
+  --json-output /tmp/verification-ablation-aggregate.json
+
+PYTHONPATH=. python3 -m codex_trace.cli research paper-report \
+  benchmark/verification-ablation/pilot/full-real/runs.jsonl \
+  --labels benchmark/verification-ablation/pilot/full-real/manual-labels.jsonl \
+  --markdown-output /tmp/verification-ablation-paper-report.md \
+  --json-output /tmp/verification-ablation-paper-report.json
+```
+
 ## Claim-Evidence Map
 
 | Claim | Evidence | Current status |
@@ -119,7 +251,15 @@ PYTHONPATH=. python3 -m codex_trace.cli research summary \
 | Hard30 intervention reduces process waste. | `benchmark/hard/pilot/hard30-real/aggregate.md`, `benchmark/hard/pilot/hard30-real/paired-task-summary.csv` | Supported: repeated tool calls `12.93 -> 9.20`, token usage `355.0k -> 256.3k`, token usage improves in 26/30 paired tasks. |
 | Trace-only process rules miss hidden semantic edge failures. | `benchmark/hard/pilot/hard30-real/label-eval.md` | Supported as a boundary result: `TP=0`, `FP=0`, `FN=30` for `hidden_semantic_edge_case`. |
 | Trace rules detect observed repetitive exploration positives. | `benchmark/hard/pilot/hard30-real/label-eval.md` | Supported for the reviewed process-positive subset: `TP=4`, `FP=0`, `FN=0` for `repetitive_exploration`. |
-| Hard30 process signals explain the detector boundary. | `benchmark/hard/pilot/hard30-real/paper-report-labeled.md` RQ4 tables | Supported: hidden failures have verification rate 1.0 and unresolved error 0, so visible traces often look procedurally clean. |
+| Trace rules detect an observed sandbox/permission positive. | `benchmark/pilot/full30-real/process-label-eval.md` | Supported for the reviewed full30 process-positive subset: `TP=1`, `FP=0`, `FN=0` for `sandbox_permission_deadlock`; the same slice exposes `repetitive_exploration` false positives. |
+| Trace rules cover the process taxonomy on controlled fixtures. | `benchmark/detector-fixtures/label-eval.md` | Supported as a rule-level sanity check: 6 labels, micro-F1 `1.00`. |
+| Process signals explain observable process failures and detector boundaries. | `docs/rq4_signal_audit.md`, `benchmark/hard/pilot/hard30-real/paper-report-labeled.md` RQ4 tables | Supported as a boundary-style RQ4 result: hidden failures have verification rate 1.0 and unresolved error 0, while repetitive exploration and sandbox/permission positives have large token, repeated-call, failure-score, or recover-phase deltas. |
+| Original-thesis verification-rate lift is not yet supported. | `docs/thesis_readiness.md`, `docs/paper_claim_audit.md`, `benchmark/verification-lift/pilot/full-real/aggregate.md` | Missing: stored ordinary and weak-baseline pilots, including the targeted verification-lift pilot, have saturated verification rates `1.00 -> 1.00`. |
+| Original-thesis process-rule recall is supported at rule level, with real-pilot limits. | `docs/thesis_readiness.md`, `benchmark/detector-fixtures/label-eval.md`, `benchmark/pilot/full30-real/process-label-eval.md` | Controlled fixtures cover all process labels; real pilots naturally expose only some observable process positives and hidden semantic boundaries. |
+| A process-stress tier is materialized for the missing evidence. | `benchmark/process-stress/tasks.jsonl`, `docs/process_stress_plan_audit.md` | Materialized: 12 tasks, at least two per target observable process label. |
+| A process-stress real pilot validates collection. | `benchmark/process-stress/pilot/full-real/aggregate.md` | 12 tasks, 24 runs; success `0.9167 -> 0.9167`, repeated calls `8.08 -> 7.17`, token usage `209.0k -> 185.1k`. |
+| A verification-lift tier tests the missing verification-rate claim. | `benchmark/verification-lift/pilot/full-real/aggregate.md`, `docs/thesis_readiness.md` | Negative result: 8 tasks, 16 runs; verification remains `1.00 -> 1.00`, repeated calls improve `6.13 -> 5.38`, token usage improves `176.8k -> 172.2k`. |
+| A no-verify ablation tests whether harness constraints can control verification behavior. | `benchmark/verification-ablation/pilot/full-real/aggregate.md`, `benchmark/verification-ablation/pilot/full-real/label-eval.md`, `docs/paper_claim_audit.md` | Supported only as a mechanism ablation: 4 tasks, 8 runs; verification rises `0.00 -> 1.00`, failure score drops `61.25 -> 0.00`, and detector labels recover `verification_gap` TP=4 and `premature_completion` TP=3. |
 | Current claims are pilot-scale, not broad SWE-bench-scale claims. | `docs/paper_draft.md`, `docs/experiment_protocol.md` | Stated explicitly in limitations. |
 
 ## Validation Commands

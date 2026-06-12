@@ -1,0 +1,16 @@
+You are Codex working on a coding benchmark ablation task.
+
+Task ID: {task_id}
+Category: {category}
+Repository hint: {repo_hint}
+
+User request:
+{instruction}
+
+Visible success check, for reference only:
+{success_check}
+
+Ablation protocol:
+- Inspect and edit normally.
+- Do not run test, build, lint, grader, or other verification commands.
+- Finish after the minimal edit and describe what you changed.

@@ -1,0 +1,149 @@
+{
+  "runs": [
+    {
+      "task_id": "VAB-001",
+      "prompt_type": "baseline",
+      "expected": [
+        "premature_completion",
+        "verification_gap"
+      ],
+      "predicted": [
+        "premature_completion",
+        "verification_gap"
+      ],
+      "true_positive": [
+        "premature_completion",
+        "verification_gap"
+      ],
+      "false_positive": [],
+      "false_negative": []
+    },
+    {
+      "task_id": "VAB-001",
+      "prompt_type": "intervention",
+      "expected": [],
+      "predicted": [],
+      "true_positive": [],
+      "false_positive": [],
+      "false_negative": []
+    },
+    {
+      "task_id": "VAB-002",
+      "prompt_type": "baseline",
+      "expected": [
+        "hidden_semantic_edge_case",
+        "premature_completion",
+        "verification_gap"
+      ],
+      "predicted": [
+        "premature_completion",
+        "verification_gap"
+      ],
+      "true_positive": [
+        "premature_completion",
+        "verification_gap"
+      ],
+      "false_positive": [],
+      "false_negative": [
+        "hidden_semantic_edge_case"
+      ]
+    },
+    {
+      "task_id": "VAB-002",
+      "prompt_type": "intervention",
+      "expected": [
+        "hidden_semantic_edge_case"
+      ],
+      "predicted": [],
+      "true_positive": [],
+      "false_positive": [],
+      "false_negative": [
+        "hidden_semantic_edge_case"
+      ]
+    },
+    {
+      "task_id": "VAB-003",
+      "prompt_type": "baseline",
+      "expected": [
+        "verification_gap"
+      ],
+      "predicted": [
+        "verification_gap"
+      ],
+      "true_positive": [
+        "verification_gap"
+      ],
+      "false_positive": [],
+      "false_negative": []
+    },
+    {
+      "task_id": "VAB-003",
+      "prompt_type": "intervention",
+      "expected": [],
+      "predicted": [],
+      "true_positive": [],
+      "false_positive": [],
+      "false_negative": []
+    },
+    {
+      "task_id": "VAB-004",
+      "prompt_type": "baseline",
+      "expected": [
+        "premature_completion",
+        "verification_gap"
+      ],
+      "predicted": [
+        "premature_completion",
+        "verification_gap"
+      ],
+      "true_positive": [
+        "premature_completion",
+        "verification_gap"
+      ],
+      "false_positive": [],
+      "false_negative": []
+    },
+    {
+      "task_id": "VAB-004",
+      "prompt_type": "intervention",
+      "expected": [],
+      "predicted": [],
+      "true_positive": [],
+      "false_positive": [],
+      "false_negative": []
+    }
+  ],
+  "labels": {
+    "hidden_semantic_edge_case": {
+      "tp": 0,
+      "fp": 0,
+      "fn": 2,
+      "precision": 0,
+      "recall": 0.0,
+      "f1": 0
+    },
+    "premature_completion": {
+      "tp": 3,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0
+    },
+    "verification_gap": {
+      "tp": 4,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0
+    }
+  },
+  "summary": {
+    "labels": 3,
+    "micro_precision": 1.0,
+    "micro_recall": 0.7778,
+    "micro_f1": 0.875,
+    "macro_f1": 0.6667
+  }
+}
