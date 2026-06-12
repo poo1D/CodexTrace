@@ -136,11 +136,13 @@ Key files:
 - `scripts/audit_process_stress_plan.py`: checks process-stress coverage and materialized fixture readiness
 - `scripts/audit_verification_lift_plan.py`: checks verification-lift task, prompt, and fixture readiness
 - `scripts/audit_verification_ablation_plan.py`: checks verification-ablation task, prompt, and fixture readiness
+- `scripts/audit_claim_text_guard.py`: checks paper-facing docs for unsupported verification-lift or hidden-semantic overclaims
 - `docs/artifact_guide.md`: 15-minute reviewer/interviewer walkthrough
 - `docs/experiment_protocol.md`: collection and labeling protocol
 - `docs/failure_taxonomy.md`: process-level failure labels
 - `docs/hard_tier_expansion_blueprint.md`: HARD-011 to HARD-050 fixtures and hard30 pilot selection plan
 - `docs/paper_claim_audit.md`: generated support/partial/unsupported audit for thesis-level claims
+- `docs/claim_text_guard.md`: generated guard that checks paper-facing text for unsupported-claim drift
 - `docs/paper_draft.md`: result-driven workshop-style paper draft
 - `docs/paper_outline.md`: paper outline and experiment plan
 - `docs/reproducibility_checklist.md`: claim-evidence map and reproduction commands

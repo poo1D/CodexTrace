@@ -3,6 +3,7 @@ from pathlib import Path
 
 from scripts.finalize_hard30_pilot import finalize, preflight, render_preflight
 from scripts.audit_manual_labels import audit_manual_labels, render_audit
+from scripts.audit_claim_text_guard import audit_claim_text_guard, render_claim_text_guard_markdown
 from scripts.audit_paper_claims import build_claim_audit, render_claim_audit_markdown
 from scripts.audit_process_stress_plan import audit_process_stress_plan
 from scripts.audit_rq4_signals import build_rq4_signal_audit, render_rq4_signal_audit_markdown
@@ -1114,6 +1115,23 @@ def test_paper_claim_audit_marks_overclaims_as_unsupported():
     assert claims["Harness intervention increases success rate."]["status"] == "partial"
     assert claims["Harness intervention reduces repeated tool-call and token waste."]["status"] == "supported"
     assert "Do not state `unsupported` claims as findings" in markdown
+
+
+def test_claim_text_guard_prevents_unsupported_claim_drift(tmp_path):
+    result = audit_claim_text_guard()
+    markdown = render_claim_text_guard_markdown(result)
+
+    assert result["ok"] is True
+    assert result["problem_count"] == 0
+    assert "No unsupported-claim drift detected." in markdown
+
+    draft = tmp_path / "draft.md"
+    draft.write_text("Harness intervention increases verification rate on ordinary baselines.\n", encoding="utf-8")
+
+    failing = audit_claim_text_guard((draft,))
+
+    assert failing["ok"] is False
+    assert failing["problems"][0]["kind"] == "unqualified_overclaim"
 
 
 def test_thesis_readiness_identifies_original_thesis_gaps():

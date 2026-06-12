@@ -1,0 +1,32 @@
+{
+  "files": [
+    {
+      "line_count": 326,
+      "path": "README.md",
+      "problems": []
+    },
+    {
+      "line_count": 367,
+      "path": "docs/paper_draft.md",
+      "problems": []
+    },
+    {
+      "line_count": 190,
+      "path": "docs/paper_outline.md",
+      "problems": []
+    },
+    {
+      "line_count": 192,
+      "path": "docs/results_summary.md",
+      "problems": []
+    },
+    {
+      "line_count": 412,
+      "path": "docs/reproducibility_checklist.md",
+      "problems": []
+    }
+  ],
+  "ok": true,
+  "problem_count": 0,
+  "problems": []
+}
