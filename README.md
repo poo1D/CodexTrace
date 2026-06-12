@@ -141,6 +141,7 @@ Key files:
 - `scripts/audit_verification_lift_v2_plan.py`: checks the ordinary-baseline verification-lift v2 scaffold
 - `scripts/audit_verification_ablation_plan.py`: checks verification-ablation task, prompt, and fixture readiness
 - `scripts/audit_verification_lift_next_experiment.py`: records the ordinary-baseline experiment gate still needed to close verification lift
+- `scripts/finalize_benchmark_pilot.py`: preflights and finalizes non-hard30 pilot outputs such as verification-lift v2
 - `scripts/audit_claim_text_guard.py`: checks paper-facing docs for unsupported verification-lift or hidden-semantic overclaims
 - `scripts/audit_goal_completion.py`: checks original-goal completion status against current evidence
 - `scripts/audit_paper_numbers.py`: checks paper-draft numeric claims against stored aggregate artifacts

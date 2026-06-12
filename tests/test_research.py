@@ -2,6 +2,11 @@ import json
 from pathlib import Path
 
 from scripts.finalize_hard30_pilot import finalize, preflight, render_preflight
+from scripts.finalize_benchmark_pilot import (
+    finalize as finalize_benchmark_pilot,
+    preflight as preflight_benchmark_pilot,
+    render_preflight as render_benchmark_pilot_preflight,
+)
 from scripts.audit_manual_labels import audit_manual_labels, render_audit
 from scripts.audit_claim_text_guard import audit_claim_text_guard, render_claim_text_guard_markdown
 from scripts.audit_goal_completion import build_goal_completion_audit, render_goal_completion_audit_markdown
@@ -480,6 +485,122 @@ def test_finalize_hard30_pilot_writes_report_artifacts(tmp_path):
     paired_summary_csv = (tmp_path / "paired-task-summary.csv").read_text(encoding="utf-8")
     assert "metric,n,improved,regressed,unchanged,avg_delta" in paired_summary_csv
     assert "success_delta,1,1,0,0,1" in paired_summary_csv
+
+
+def test_finalize_benchmark_pilot_writes_report_artifacts(tmp_path):
+    root = Path.cwd()
+    runs = [
+        {
+            "task_id": "VLV2-001",
+            "prompt_type": "baseline",
+            "trace_path": str((root / "demo/failing-codex-trace.jsonl").resolve()),
+            "outcome": "failure",
+        },
+        {
+            "task_id": "VLV2-001",
+            "prompt_type": "intervention",
+            "trace_path": str((root / "demo/healthy-codex-trace.jsonl").resolve()),
+            "outcome": "success",
+        },
+    ]
+    tmp_path.joinpath("runs.jsonl").write_text(
+        "".join(json.dumps(row, sort_keys=True) + "\n" for row in runs),
+        encoding="utf-8",
+    )
+
+    written = finalize_benchmark_pilot(tmp_path)
+
+    expected = {
+        "aggregate.json",
+        "aggregate.md",
+        "runs.csv",
+        "paired-task-deltas.csv",
+        "paired-task-summary.csv",
+        "labels.jsonl",
+        "paper-report.json",
+        "paper-report.md",
+    }
+    assert {path.name for path in written} == expected
+    assert all((tmp_path / name).exists() for name in expected)
+    assert "VLV2-001,failure,success,1" in (tmp_path / "paired-task-deltas.csv").read_text(encoding="utf-8")
+
+
+def test_benchmark_pilot_preflight_accepts_complete_manifest(tmp_path):
+    root = Path.cwd()
+    tasks = tmp_path / "tasks.jsonl"
+    tasks.write_text(
+        json.dumps({
+            "task_id": "VLV2-001",
+            "category": "verification_lift_v2",
+            "instruction": "Fix it.",
+            "success_check": "python3 ../grader/check.py",
+            "fixture_path": ".",
+        }) + "\n",
+        encoding="utf-8",
+    )
+    rows = [
+        {
+            "task_id": "VLV2-001",
+            "prompt_type": "baseline",
+            "trace_path": str((root / "demo/failing-codex-trace.jsonl").resolve()),
+            "outcome": "failure",
+        },
+        {
+            "task_id": "VLV2-001",
+            "prompt_type": "intervention",
+            "trace_path": str((root / "demo/healthy-codex-trace.jsonl").resolve()),
+            "outcome": "success",
+        },
+    ]
+    tmp_path.joinpath("runs.jsonl").write_text(
+        "".join(json.dumps(row, sort_keys=True) + "\n" for row in rows),
+        encoding="utf-8",
+    )
+
+    summary = preflight_benchmark_pilot(tmp_path, tasks)
+    rendered = render_benchmark_pilot_preflight(summary)
+
+    assert summary["ok"] is True
+    assert summary["run_records"] == 2
+    assert summary["missing_prompt_pairs"] == []
+    assert summary["missing_trace_paths"] == []
+    assert "Ready to finalize: yes" in rendered
+
+
+def test_benchmark_pilot_preflight_rejects_missing_trace_and_prompt_pair(tmp_path):
+    tasks = tmp_path / "tasks.jsonl"
+    tasks.write_text(
+        json.dumps({
+            "task_id": "VLV2-001",
+            "category": "verification_lift_v2",
+            "instruction": "Fix it.",
+            "success_check": "python3 ../grader/check.py",
+            "fixture_path": ".",
+        }) + "\n",
+        encoding="utf-8",
+    )
+    tmp_path.joinpath("runs.jsonl").write_text(
+        json.dumps({
+            "task_id": "VLV2-001",
+            "prompt_type": "baseline",
+            "trace_path": "missing/trace.jsonl",
+            "outcome": "failure",
+        }) + "\n",
+        encoding="utf-8",
+    )
+
+    summary = preflight_benchmark_pilot(tmp_path, tasks)
+    rendered = render_benchmark_pilot_preflight(summary)
+
+    assert summary["ok"] is False
+    assert summary["run_records"] == 1
+    assert summary["missing_prompt_pairs"] == [{"task_id": "VLV2-001", "prompt_type": "intervention"}]
+    assert summary["missing_trace_paths"] == [
+        {"task_id": "VLV2-001", "prompt_type": "baseline", "trace_path": "missing/trace.jsonl"}
+    ]
+    assert "Ready to finalize: no" in rendered
+    assert "Missing prompt pairs: VLV2-001/intervention" in rendered
+    assert "Missing trace files: VLV2-001/baseline -> missing/trace.jsonl" in rendered
 
 
 def test_hard30_preflight_accepts_complete_manifest(tmp_path):
@@ -1223,6 +1344,7 @@ def test_reviewer_docs_surface_hard30_task_diagnosis():
     assert "docs/paper_number_guard.md" in readme
     assert "docs/reviewer_path_audit.md" in readme
     assert "scripts/audit_hard30_task_diagnosis.py" in readme
+    assert "scripts/finalize_benchmark_pilot.py" in readme
     assert "scripts/audit_goal_completion.py --markdown-output docs/goal_completion_audit.md" in readme
     assert "scripts/audit_verification_lift_next_experiment.py --markdown-output docs/verification_lift_next_experiment.md" in readme
     assert "scripts/audit_verification_lift_v2_plan.py --markdown-output docs/verification_lift_v2_plan_audit.md" in readme
@@ -1241,6 +1363,7 @@ def test_reviewer_docs_surface_hard30_task_diagnosis():
     assert "`HARD-050` repaired, `HARD-007` regressed" in guide
     assert "188-run benchmark" in guide
     assert "scripts/audit_hard30_task_diagnosis.py" in checklist
+    assert "scripts/finalize_benchmark_pilot.py" in checklist
     assert "scripts/audit_goal_completion.py" in checklist
     assert "scripts/audit_verification_lift_next_experiment.py" in checklist
     assert "scripts/audit_verification_lift_v2_plan.py" in checklist
@@ -1249,6 +1372,7 @@ def test_reviewer_docs_surface_hard30_task_diagnosis():
     assert "scripts/audit_reviewer_path.py" in checklist
     assert "--markdown-output /tmp/hard30-task-diagnosis.md" in checklist
     assert "--output-dir /tmp/codextrace-verification-lift-v2-dry" in checklist
+    assert "--preflight-json /tmp/verification-lift-v2-preflight.json" in checklist
 
 
 def test_paper_outline_tracks_current_boundary_result():

@@ -57,6 +57,7 @@ The stored pilots can be inspected and aggregated without re-running Codex.
 | `scripts/run_hard30_shards.py` | Resumable hard30 collection runner with configurable per-task concurrency. |
 | `scripts/merge_hard30_shards.py` | Merge per-task hard30 shard manifests into the reporting `runs.jsonl`. |
 | `scripts/finalize_hard30_pilot.py` | Post-processing entrypoint for hard30 aggregate tables, labels, CSV, and paper-report artifacts. |
+| `scripts/finalize_benchmark_pilot.py` | Generic preflight/finalize entrypoint for non-hard30 pilots such as verification-lift v2. |
 | `scripts/audit_manual_labels.py` | Standalone progress and quality audit for hard30 manual failure labels. |
 | `scripts/audit_paper_claims.py` | Machine-readable guard against overclaiming unsupported paper findings. |
 | `scripts/audit_claim_text_guard.py` | Text-level guard against reintroducing unsupported verification-lift or hidden-semantic claims. |
@@ -245,6 +246,20 @@ PYTHONPATH=. python3 -m codex_trace.cli research run \
   --prompt-dir benchmark/verification-lift-v2/prompts \
   --output-dir /tmp/codextrace-verification-lift-v2-dry \
   --dry-run
+```
+
+After collecting real verification-lift v2 traces, preflight and finalize the pilot:
+
+```bash
+PYTHONPATH=. python3 scripts/finalize_benchmark_pilot.py \
+  --run-dir benchmark/verification-lift-v2/pilot/full-real \
+  --tasks benchmark/verification-lift-v2/tasks.jsonl \
+  --preflight-only \
+  --preflight-json /tmp/verification-lift-v2-preflight.json
+
+PYTHONPATH=. python3 scripts/finalize_benchmark_pilot.py \
+  --run-dir benchmark/verification-lift-v2/pilot/full-real \
+  --tasks benchmark/verification-lift-v2/tasks.jsonl
 ```
 
 Current verification-lift pilot outputs:

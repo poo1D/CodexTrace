@@ -1,7 +1,7 @@
 {
   "files": [
     {
-      "line_count": 353,
+      "line_count": 354,
       "path": "README.md",
       "problems": []
     },
@@ -21,7 +21,7 @@
       "problems": []
     },
     {
-      "line_count": 483,
+      "line_count": 498,
       "path": "docs/reproducibility_checklist.md",
       "problems": []
     }
