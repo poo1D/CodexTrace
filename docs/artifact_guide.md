@@ -111,8 +111,9 @@ the missed edge cases.
 
 - Built a GPU-free Codex trace diagnosis system that parses real
   `codex exec --json` runs into a normalized event schema.
-- Designed a 140-run benchmark across a 30-task seed tier, a 10-task hard
-  pilot, and a 30-task hard-tier artifact with hidden graders.
+- Designed a 188-run benchmark across seed, hard, process-stress,
+  verification-lift, and no-verify ablation tiers, including a 30-task
+  hard-tier artifact with hidden graders.
 - Measured harness intervention effects on real Codex runs: reduced repeated
   tool calls and token usage, with hard10 success improving from 70% to 80%
   and hard30 token usage improving in 26 of 30 paired tasks.

@@ -1198,8 +1198,19 @@ def test_reviewer_docs_surface_hard30_task_diagnosis():
     assert "docs/hard30_task_diagnosis.md" in guide
     assert "| Which tasks get lost? |" in guide
     assert "`HARD-050` repaired, `HARD-007` regressed" in guide
+    assert "188-run benchmark" in guide
     assert "scripts/audit_hard30_task_diagnosis.py" in checklist
     assert "--markdown-output /tmp/hard30-task-diagnosis.md" in checklist
+
+
+def test_paper_outline_tracks_current_boundary_result():
+    outline = Path("docs/paper_outline.md").read_text(encoding="utf-8")
+
+    assert "A task-level hard30 diagnosis identifies 14 double-failure" in outline
+    assert "one intervention repair (`HARD-050`)" in outline
+    assert "one intervention regression" in outline
+    assert "task-level waste delta" in outline
+    assert "verification is saturated" in outline
 
 
 def test_experiment_protocol_maps_rqs_to_evidence():

@@ -20,7 +20,9 @@ constraints can force verification only under an artificial baseline condition,
 not under the ordinary Codex baseline. The hard30 labels also expose a boundary
 result: trace-only process rules detect reviewed repetitive exploration
 positives but miss hidden semantic edge-case failures whose visible process
-traces look clean.
+traces look clean. A task-level hard30 diagnosis identifies 14 double-failure
+tasks, one intervention repair (`HARD-050`), one intervention regression
+(`HARD-007`), and the largest token-waste reduction (`HARD-033`).
 
 ## 1. Introduction
 
@@ -136,6 +138,8 @@ Metrics:
 - repeated tool-call count
 - token usage
 - failure score
+- paired task repair/regression
+- task-level waste delta
 
 ### E4: Explanatory Trace Signals
 
@@ -168,6 +172,9 @@ Candidate signals:
 - intervention most consistently reduces process waste: repeated tool calls,
   command failures, recovery events, token usage, and failure score
 - success improves in the early hard10 pilot but is flat on hard30
+- task-level hard30 diagnosis shows 14 double failures, one repair
+  (`HARD-050`), one regression (`HARD-007`), and token/repeated-call
+  improvements in 26 of 30 tasks
 - hidden semantic edge-case failures can pass visible verification and remain
   invisible to deterministic process rules
 - controlled detector fixtures cover the six process labels, while real pilots
