@@ -1144,6 +1144,7 @@ def test_paper_draft_contains_submission_polish_sections():
     text = Path("docs/paper_draft.md").read_text(encoding="utf-8")
 
     assert "## 10. Artifact Availability" in text
+    assert "| Work line | Primary question | Typical evidence | CodexTrace difference |" in text
     assert "| Tier | Tasks | Runs | Baseline | Intervention | Outcome oracle | Primary use |" in text
     assert "| Schema object | Fields | Purpose |" in text
     assert "| Taxonomy label | Implementation finding | Detector signal |" in text

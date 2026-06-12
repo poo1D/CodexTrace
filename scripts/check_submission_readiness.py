@@ -216,6 +216,7 @@ def check_paper_draft_content(path: Path = Path("docs/paper_draft.md")) -> dict[
 
     required_phrases = {
         "artifact availability section": "## 10. Artifact Availability",
+        "related-work positioning matrix": "| Work line | Primary question | Typical evidence | CodexTrace difference |",
         "dataset construction table": "| Tier | Tasks | Runs | Baseline | Intervention | Outcome oracle | Primary use |",
         "trace schema table": "| Schema object | Fields | Purpose |",
         "detector rule mapping": "| Taxonomy label | Implementation finding | Detector signal |",
@@ -230,7 +231,7 @@ def check_paper_draft_content(path: Path = Path("docs/paper_draft.md")) -> dict[
         "name": "paper draft content",
         "ok": not problems,
         "evidence": str(path),
-        "detail": "artifact availability, dataset table, schema/rule tables, GPU-free note, and semantic-limit caveat",
+        "detail": "artifact availability, related-work positioning, dataset table, schema/rule tables, GPU-free note, and semantic-limit caveat",
         "problems": problems,
     }
 

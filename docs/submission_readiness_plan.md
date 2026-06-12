@@ -142,6 +142,7 @@ demo writeup.
 
 Required edits:
 
+- Add a related-work positioning matrix. Done in `docs/paper_draft.md`.
 - Add an artifact availability paragraph. Done in `docs/paper_draft.md`.
 - Add a clearer dataset construction table. Done in `docs/paper_draft.md`.
 - Add a limitations paragraph that distinguishes process diagnosis from

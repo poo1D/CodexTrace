@@ -80,3 +80,12 @@ CodexTrace sits between software-engineering benchmarks and agent observability:
   repository exploration, and sandbox friction.
 - Unlike LLM-as-judge trajectory diagnosis, its first version uses deterministic
   rules to keep findings auditable and cheap to run.
+
+## Positioning Matrix
+
+| Work line | Primary question | Typical evidence | CodexTrace difference |
+| --- | --- | --- | --- |
+| SWE-bench-style benchmarks | Did the patch solve a real issue? | Final tests or issue-level success | Keeps outcome labels, but analyzes how the run unfolded. |
+| Coding-agent frameworks | Which interface lets agents edit and test code? | Agent success under a tool interface | Does not propose a new interface; diagnoses traces from an existing one. |
+| General agent benchmarks | Can agents act in multi-turn environments? | Task score across environments | Narrows to coding traces and software-process failure modes. |
+| Trajectory diagnosis | Where did an agent execution fail? | Failure localization over trajectories | Uses deterministic coding-specific rules and aggregate intervention metrics. |

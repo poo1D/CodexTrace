@@ -86,6 +86,18 @@ and more structural: it focuses on coding-agent JSONL traces and uses
 deterministic process rules before considering LLM-as-judge or semantic
 diagnosis.
 
+Table 1 summarizes the positioning. CodexTrace is not intended to replace
+outcome benchmarks, agent frameworks, or semantic failure diagnosis. Its
+contribution is a process-level layer that can be run after a coding-agent run
+to explain observable tool-use failures and quantify harness interventions.
+
+| Work line | Primary question | Typical evidence | CodexTrace difference |
+| --- | --- | --- | --- |
+| SWE-bench-style benchmarks | Did the patch solve a real issue? | Final tests or issue-level success | Keeps outcome labels, but analyzes how the run unfolded. |
+| Coding-agent frameworks | Which interface lets agents edit and test code? | Agent success under a tool interface | Does not propose a new interface; diagnoses traces from an existing one. |
+| General agent benchmarks | Can agents act in multi-turn environments? | Task score across environments | Narrows to coding traces and software-process failure modes. |
+| Trajectory diagnosis | Where did an agent execution fail? | Failure localization over trajectories | Uses deterministic coding-specific rules and aggregate intervention metrics. |
+
 ## 3. Problem Definition
 
 We define a coding-agent run as:
