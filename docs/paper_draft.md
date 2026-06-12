@@ -134,10 +134,33 @@ codex exec --json
         -> baseline vs intervention comparison
 ```
 
-The normalized trace schema records event type, status, content, command,
-paths, token usage, inferred phase, and failure tags. The phase segmenter maps
-events into setup, inspect, edit, verify, recover, complete, and other. The
-detector emits rule-based findings with evidence snippets and recommendations.
+The normalized trace schema records the fields needed for process diagnosis
+without preserving the full raw event payload in every downstream table:
+
+| Schema object | Fields | Purpose |
+| --- | --- | --- |
+| `Run` | task id, prompt type, outcome, source trace, usage | Unit of experimental comparison and aggregation. |
+| `TraceEvent` | id, kind, status, title/detail, raw type, timestamp | Stable event representation across Codex JSONL variants. |
+| tool evidence | command, exit code, files, metadata | Captures shell/tool behavior and file-change evidence. |
+| process state | phase, event ids, finding code, severity | Supports phase counts, detector evidence, and diagnosis reports. |
+
+The phase segmenter maps events into setup, inspect, edit, verify, recover,
+complete, and other. It uses command shape, file-change events, completion
+messages, and failed-command context to infer whether later work is still
+inspection, active editing, verification, or recovery.
+
+The detector emits rule-based findings with evidence snippets and
+recommendations. The paper-facing taxonomy maps to implementation findings as
+follows:
+
+| Taxonomy label | Implementation finding | Detector signal |
+| --- | --- | --- |
+| `verification_gap` | `verification_gap` | File changes occur and no post-edit verification command follows. |
+| `unrecovered_tool_error` | `command_failure_unhandled` | A failed command is not followed by a similar successful command or verification. |
+| `repetitive_exploration` | `repeated_search_or_read` | Search/read commands repeat or repeated tool-call volume exceeds the threshold. |
+| `context_drift` | `long_context_no_progress` | High input-token usage with little implementation or verification progress. |
+| `premature_completion` | `premature_completion` | Final completion language appears after edits without verification evidence. |
+| `sandbox_permission_deadlock` | `sandbox_or_permission_block` | Failed or blocked events mention sandbox, permission, approval, or denial. |
 
 The research runner materializes fixture repositories in isolated run
 directories, executes `codex exec --json`, and then runs an external success

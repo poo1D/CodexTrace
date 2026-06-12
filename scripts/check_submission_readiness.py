@@ -217,6 +217,8 @@ def check_paper_draft_content(path: Path = Path("docs/paper_draft.md")) -> dict[
     required_phrases = {
         "artifact availability section": "## 10. Artifact Availability",
         "dataset construction table": "| Tier | Tasks | Runs | Baseline | Intervention | Outcome oracle | Primary use |",
+        "trace schema table": "| Schema object | Fields | Purpose |",
+        "detector rule mapping": "| Taxonomy label | Implementation finding | Detector signal |",
         "gpu-free method note": "No model training, fine-tuning, embedding index, or GPU inference is used",
         "process-vs-semantic limitation": "Trace diagnosis is less suited for proving semantic correctness",
     }
@@ -228,7 +230,7 @@ def check_paper_draft_content(path: Path = Path("docs/paper_draft.md")) -> dict[
         "name": "paper draft content",
         "ok": not problems,
         "evidence": str(path),
-        "detail": "artifact availability, dataset table, GPU-free note, and semantic-limit caveat",
+        "detail": "artifact availability, dataset table, schema/rule tables, GPU-free note, and semantic-limit caveat",
         "problems": problems,
     }
 

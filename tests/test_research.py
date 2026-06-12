@@ -1145,6 +1145,10 @@ def test_paper_draft_contains_submission_polish_sections():
 
     assert "## 10. Artifact Availability" in text
     assert "| Tier | Tasks | Runs | Baseline | Intervention | Outcome oracle | Primary use |" in text
+    assert "| Schema object | Fields | Purpose |" in text
+    assert "| Taxonomy label | Implementation finding | Detector signal |" in text
+    assert "| `verification_gap` | `verification_gap` |" in text
+    assert "| `unrecovered_tool_error` | `command_failure_unhandled` |" in text
     assert "| Evidence slice | Baseline | Intervention | Interpretation |" in text
     assert "No model training, fine-tuning, embedding index, or GPU inference is used" in text
     assert "Trace diagnosis is less suited for proving semantic correctness" in text

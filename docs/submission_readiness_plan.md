@@ -147,6 +147,7 @@ Required edits:
 - Add a limitations paragraph that distinguishes process diagnosis from
   semantic correctness. Done in `docs/paper_draft.md`.
 - Add a short "why no GPU is needed" method note. Done in `docs/paper_draft.md`.
+- Add trace schema and detector-rule mapping tables. Done in `docs/paper_draft.md`.
 - Keep all numeric claims tied to generated artifacts.
 
 Acceptance criteria:
