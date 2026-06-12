@@ -56,6 +56,8 @@ The stored pilots can be inspected and aggregated without re-running Codex.
 | `benchmark/verification-ablation/pilot/full-real/` | 4-task / 8-run real verification-ablation pilot with aggregate and manual labels. |
 | `scripts/run_hard30_shards.py` | Resumable hard30 collection runner with configurable per-task concurrency. |
 | `scripts/merge_hard30_shards.py` | Merge per-task hard30 shard manifests into the reporting `runs.jsonl`. |
+| `scripts/run_benchmark_shards.py` | Resumable generic per-task collection runner for tiers such as verification-lift v2. |
+| `scripts/merge_benchmark_shards.py` | Merge generic per-task shard manifests into the reporting `runs.jsonl`. |
 | `scripts/finalize_hard30_pilot.py` | Post-processing entrypoint for hard30 aggregate tables, labels, CSV, and paper-report artifacts. |
 | `scripts/finalize_benchmark_pilot.py` | Generic preflight/finalize entrypoint for non-hard30 pilots such as verification-lift v2. |
 | `scripts/audit_manual_labels.py` | Standalone progress and quality audit for hard30 manual failure labels. |
@@ -246,6 +248,29 @@ PYTHONPATH=. python3 -m codex_trace.cli research run \
   --prompt-dir benchmark/verification-lift-v2/prompts \
   --output-dir /tmp/codextrace-verification-lift-v2-dry \
   --dry-run
+```
+
+Resumable real collection for verification-lift v2:
+
+```bash
+PYTHONPATH=. python3 scripts/run_benchmark_shards.py \
+  --tasks benchmark/verification-lift-v2/tasks.jsonl \
+  --prompt-dir benchmark/verification-lift-v2/prompts \
+  --run-dir benchmark/verification-lift-v2/pilot/full-real \
+  --max-parallel 4 \
+  --timeout-seconds 600 \
+  --skip-complete
+
+PYTHONPATH=. python3 scripts/run_benchmark_shards.py \
+  --tasks benchmark/verification-lift-v2/tasks.jsonl \
+  --prompt-dir benchmark/verification-lift-v2/prompts \
+  --run-dir benchmark/verification-lift-v2/pilot/full-real \
+  --status \
+  --status-json /tmp/verification-lift-v2-shard-status.json
+
+PYTHONPATH=. python3 scripts/merge_benchmark_shards.py \
+  --run-dir benchmark/verification-lift-v2/pilot/full-real \
+  --tasks benchmark/verification-lift-v2/tasks.jsonl
 ```
 
 After collecting real verification-lift v2 traces, preflight and finalize the pilot:

@@ -26,6 +26,17 @@ from scripts.audit_verification_lift_next_experiment import (
     render_verification_lift_next_experiment_markdown,
 )
 from scripts.merge_hard30_shards import merge_shards, rewrite_shard_row
+from scripts.merge_benchmark_shards import (
+    merge_shards as merge_benchmark_shards,
+    rewrite_shard_row as rewrite_benchmark_shard_row,
+)
+from scripts.run_benchmark_shards import (
+    build_shard_commands as build_benchmark_shard_commands,
+    inspect_shard as inspect_benchmark_shard,
+    render_status as render_benchmark_shard_status,
+    select_task_ids as select_benchmark_task_ids,
+    summarize_shards as summarize_benchmark_shards,
+)
 from scripts.run_hard30_shards import (
     build_shard_commands,
     filter_commands,
@@ -270,6 +281,68 @@ def test_hard30_shard_task_selection_rejects_invalid_slices():
         raise AssertionError("zero limit should fail")
 
 
+def test_benchmark_shard_commands_target_verification_lift_v2_prompt_dir(tmp_path):
+    tasks_path = Path("benchmark/verification-lift-v2/tasks.jsonl")
+    prompt_dir = Path("benchmark/verification-lift-v2/prompts")
+    selected = select_benchmark_task_ids(tasks_path, offset=1, limit=2)
+    commands = build_benchmark_shard_commands(
+        selected,
+        tasks_path=tasks_path,
+        prompt_dir=prompt_dir,
+        run_dir=tmp_path / "verification-lift-v2-real",
+        timeout_seconds=900,
+        codex_bin="codex-test",
+        sandbox="workspace-write",
+        dry_run=True,
+    )
+
+    assert selected == ["VLV2-002", "VLV2-003"]
+    assert len(commands) == 2
+    assert commands[0].task_id == "VLV2-002"
+    assert commands[0].shard_dir == tmp_path / "verification-lift-v2-real" / "shards" / "VLV2-002"
+    assert commands[0].command[commands[0].command.index("--tasks") + 1] == str(tasks_path)
+    assert commands[0].command[commands[0].command.index("--prompt-dir") + 1] == str(prompt_dir)
+    assert commands[0].command[commands[0].command.index("--task-id") + 1] == "VLV2-002"
+    assert commands[0].command[commands[0].command.index("--codex-bin") + 1] == "codex-test"
+    assert commands[0].command[commands[0].command.index("--timeout-seconds") + 1] == "900"
+    assert "--dry-run" in commands[0].command
+
+
+def test_benchmark_shard_status_summary_reports_v2_readiness(tmp_path):
+    tasks_path = Path("benchmark/verification-lift-v2/tasks.jsonl")
+    prompt_dir = Path("benchmark/verification-lift-v2/prompts")
+    commands = build_benchmark_shard_commands(
+        ["VLV2-001", "VLV2-002"],
+        tasks_path=tasks_path,
+        prompt_dir=prompt_dir,
+        run_dir=tmp_path / "verification-lift-v2-real",
+        dry_run=True,
+    )
+    complete_rows = [
+        {"task_id": "VLV2-001", "prompt_type": "baseline", "trace_path": "a", "codex_exit_code": 0},
+        {"task_id": "VLV2-001", "prompt_type": "intervention", "trace_path": "b", "codex_exit_code": 0},
+    ]
+    commands[0].shard_dir.mkdir(parents=True)
+    commands[0].shard_dir.joinpath("a").write_text("{}\n", encoding="utf-8")
+    commands[0].shard_dir.joinpath("b").write_text("{}\n", encoding="utf-8")
+    commands[0].shard_dir.joinpath("runs.jsonl").write_text(
+        "".join(json.dumps(row, sort_keys=True) + "\n" for row in complete_rows),
+        encoding="utf-8",
+    )
+
+    status = inspect_benchmark_shard(commands[0])
+    summary = summarize_benchmark_shards(commands)
+    rendered = render_benchmark_shard_status(summary)
+
+    assert status.complete is True
+    assert summary["completed"] == ["VLV2-001"]
+    assert summary["missing"] == ["VLV2-002"]
+    assert summary["record_count"] == 2
+    assert summary["expected_record_count"] == 4
+    assert "Benchmark Shard Status" in rendered
+    assert "Ready to merge: no" in rendered
+
+
 def test_hard30_shard_skip_complete_filters_finished_manifests(tmp_path):
     selection_dir = Path("benchmark/hard/pilot/hard30-selection")
     commands = build_shard_commands(
@@ -442,6 +515,72 @@ def test_rewrite_shard_row_leaves_empty_paths_empty():
     row = rewrite_shard_row({"trace_path": "HARD-001/baseline/trace.jsonl", "grader_path": ""}, Path("shards/HARD-001"))
 
     assert row["trace_path"] == "shards/HARD-001/HARD-001/baseline/trace.jsonl"
+    assert row["grader_path"] == ""
+
+
+def test_merge_benchmark_shards_rewrites_relative_paths(tmp_path):
+    tasks_path = tmp_path / "tasks.jsonl"
+    task_ids = ["VLV2-001", "VLV2-002"]
+    tasks_path.write_text(
+        "".join(
+            json.dumps({
+                "task_id": task_id,
+                "category": "verification_lift_v2",
+                "instruction": "Fix it.",
+                "success_check": "python3 ../grader/check.py",
+                "fixture_path": ".",
+            }) + "\n"
+            for task_id in task_ids
+        ),
+        encoding="utf-8",
+    )
+    run_dir = tmp_path / "verification-lift-v2-real"
+    for task_id in task_ids:
+        shard_dir = run_dir / "shards" / task_id
+        shard_dir.mkdir(parents=True)
+        rows = [
+            {
+                "task_id": task_id,
+                "prompt_type": "baseline",
+                "trace_path": f"{task_id}/baseline/trace.jsonl",
+                "outcome": "failure",
+                "workdir": f"{task_id}/baseline/repo",
+                "grader_path": f"{task_id}/baseline/grader",
+                "prompt_path": f"{task_id}/baseline/prompt.md",
+            },
+            {
+                "task_id": task_id,
+                "prompt_type": "intervention",
+                "trace_path": f"{task_id}/intervention/trace.jsonl",
+                "outcome": "success",
+                "workdir": f"{task_id}/intervention/repo",
+                "grader_path": "",
+                "prompt_path": f"{task_id}/intervention/prompt.md",
+            },
+        ]
+        shard_dir.joinpath("runs.jsonl").write_text(
+            "".join(json.dumps(row, sort_keys=True) + "\n" for row in rows),
+            encoding="utf-8",
+        )
+
+    merged = merge_benchmark_shards(run_dir=run_dir, tasks_path=tasks_path)
+    manifest_rows = [
+        json.loads(line)
+        for line in run_dir.joinpath("runs.jsonl").read_text(encoding="utf-8").splitlines()
+        if line.strip()
+    ]
+
+    assert len(merged) == 4
+    assert manifest_rows == merged
+    assert manifest_rows[0]["trace_path"] == "shards/VLV2-001/VLV2-001/baseline/trace.jsonl"
+    assert manifest_rows[0]["workdir"] == "shards/VLV2-001/VLV2-001/baseline/repo"
+    assert manifest_rows[1]["grader_path"] == ""
+
+
+def test_rewrite_benchmark_shard_row_leaves_empty_paths_empty():
+    row = rewrite_benchmark_shard_row({"trace_path": "VLV2-001/baseline/trace.jsonl", "grader_path": ""}, Path("shards/VLV2-001"))
+
+    assert row["trace_path"] == "shards/VLV2-001/VLV2-001/baseline/trace.jsonl"
     assert row["grader_path"] == ""
 
 
@@ -1344,6 +1483,8 @@ def test_reviewer_docs_surface_hard30_task_diagnosis():
     assert "docs/paper_number_guard.md" in readme
     assert "docs/reviewer_path_audit.md" in readme
     assert "scripts/audit_hard30_task_diagnosis.py" in readme
+    assert "scripts/run_benchmark_shards.py" in readme
+    assert "scripts/merge_benchmark_shards.py" in readme
     assert "scripts/finalize_benchmark_pilot.py" in readme
     assert "scripts/audit_goal_completion.py --markdown-output docs/goal_completion_audit.md" in readme
     assert "scripts/audit_verification_lift_next_experiment.py --markdown-output docs/verification_lift_next_experiment.md" in readme
@@ -1363,6 +1504,8 @@ def test_reviewer_docs_surface_hard30_task_diagnosis():
     assert "`HARD-050` repaired, `HARD-007` regressed" in guide
     assert "188-run benchmark" in guide
     assert "scripts/audit_hard30_task_diagnosis.py" in checklist
+    assert "scripts/run_benchmark_shards.py" in checklist
+    assert "scripts/merge_benchmark_shards.py" in checklist
     assert "scripts/finalize_benchmark_pilot.py" in checklist
     assert "scripts/audit_goal_completion.py" in checklist
     assert "scripts/audit_verification_lift_next_experiment.py" in checklist
@@ -1372,6 +1515,7 @@ def test_reviewer_docs_surface_hard30_task_diagnosis():
     assert "scripts/audit_reviewer_path.py" in checklist
     assert "--markdown-output /tmp/hard30-task-diagnosis.md" in checklist
     assert "--output-dir /tmp/codextrace-verification-lift-v2-dry" in checklist
+    assert "--status-json /tmp/verification-lift-v2-shard-status.json" in checklist
     assert "--preflight-json /tmp/verification-lift-v2-preflight.json" in checklist
 
 
