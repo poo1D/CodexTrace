@@ -69,8 +69,9 @@ checks, not real-pilot outcome evidence.
 See `docs/artifact_guide.md` for the reviewer-facing walkthrough,
 `docs/results_summary.md` for the generated result summary and RQ4
 trace-signal analysis, `docs/rq4_signal_audit.md` for the generated
-boundary-style signal audit, `docs/thesis_readiness.md` for the
-original-thesis gap audit, and `docs/reproducibility_checklist.md` for
+boundary-style signal audit, `docs/hard30_task_diagnosis.md` for task-level
+hard30 repairs/regressions and double failures, `docs/thesis_readiness.md` for
+the original-thesis gap audit, and `docs/reproducibility_checklist.md` for
 claim-to-evidence mapping.
 
 ## Quickstart
@@ -224,6 +225,9 @@ codex-trace research paper-report benchmark/hard/pilot/hard10-real/runs.jsonl \
 codex-trace research paper-report benchmark/hard/pilot/hard30-real/runs.jsonl \
   --labels benchmark/hard/pilot/hard30-real/manual-labels.jsonl
 codex-trace research summary --markdown-output docs/results_summary.md
+PYTHONPATH=. python3 scripts/audit_hard30_task_diagnosis.py \
+  --json-output docs/hard30_task_diagnosis.json \
+  --markdown-output docs/hard30_task_diagnosis.md
 PYTHONPATH=. python3 scripts/audit_paper_claims.py --markdown-output docs/paper_claim_audit.md
 ```
 

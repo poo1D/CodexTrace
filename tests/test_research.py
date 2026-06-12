@@ -1192,9 +1192,12 @@ def test_paper_draft_contains_submission_polish_sections():
 
 
 def test_reviewer_docs_surface_hard30_task_diagnosis():
+    readme = Path("README.md").read_text(encoding="utf-8")
     guide = Path("docs/artifact_guide.md").read_text(encoding="utf-8")
     checklist = Path("docs/reproducibility_checklist.md").read_text(encoding="utf-8")
 
+    assert "docs/hard30_task_diagnosis.md" in readme
+    assert "scripts/audit_hard30_task_diagnosis.py" in readme
     assert "docs/hard30_task_diagnosis.md" in guide
     assert "| Which tasks get lost? |" in guide
     assert "`HARD-050` repaired, `HARD-007` regressed" in guide
