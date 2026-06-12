@@ -24,15 +24,17 @@ oracles for hidden semantic correctness.
 1. Read the project snapshot in `README.md`.
 2. Open the paper draft in `docs/paper_draft.md`.
 3. Inspect generated results in `docs/results_summary.md`.
-4. Check thesis-level support status in `docs/paper_claim_audit.md`.
-5. Check claim-to-evidence mapping in `docs/reproducibility_checklist.md`.
-6. Run the offline demo:
+4. Inspect task-level hard30 repairs, regressions, and double failures in
+   `docs/hard30_task_diagnosis.md`.
+5. Check thesis-level support status in `docs/paper_claim_audit.md`.
+6. Check claim-to-evidence mapping in `docs/reproducibility_checklist.md`.
+7. Run the offline demo:
 
 ```bash
 ./scripts/demo.sh
 ```
 
-7. Optionally open the visual replay UI:
+8. Optionally open the visual replay UI:
 
 ```bash
 cd web
@@ -48,6 +50,7 @@ npm run dev
 | RQ2: Can trace rules detect failures? | `benchmark/hard/pilot/hard30-real/label-eval.md` |
 | RQ3: Do harness interventions help? | `docs/results_summary.md` RQ3 tables |
 | RQ4: Which signals explain failure? | `docs/results_summary.md` RQ4 trace-signal table |
+| Which tasks get lost? | `docs/hard30_task_diagnosis.md` |
 
 The stored pilots currently include:
 
@@ -94,6 +97,8 @@ PYTHONPATH=. python3 -m codex_trace.cli research paper-report \
 | hard10 success rate | `70% -> 80%` |
 | hard30 repeated tool calls | `12.93 -> 9.20` |
 | hard30 token usage | `355.0k -> 256.3k` |
+| hard30 double-failure tasks | `14` |
+| hard30 repair/regression | `HARD-050` repaired, `HARD-007` regressed |
 | hidden semantic detector boundary | `TP=0`, `FP=0`, `FN=30` |
 | repetitive exploration detection | `TP=4`, `FP=0`, `FN=0` |
 

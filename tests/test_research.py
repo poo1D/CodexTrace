@@ -1191,6 +1191,17 @@ def test_paper_draft_contains_submission_polish_sections():
     assert "Trace diagnosis is less suited for proving semantic correctness" in text
 
 
+def test_reviewer_docs_surface_hard30_task_diagnosis():
+    guide = Path("docs/artifact_guide.md").read_text(encoding="utf-8")
+    checklist = Path("docs/reproducibility_checklist.md").read_text(encoding="utf-8")
+
+    assert "docs/hard30_task_diagnosis.md" in guide
+    assert "| Which tasks get lost? |" in guide
+    assert "`HARD-050` repaired, `HARD-007` regressed" in guide
+    assert "scripts/audit_hard30_task_diagnosis.py" in checklist
+    assert "--markdown-output /tmp/hard30-task-diagnosis.md" in checklist
+
+
 def test_experiment_protocol_maps_rqs_to_evidence():
     text = Path("docs/experiment_protocol.md").read_text(encoding="utf-8")
     normalized = " ".join(text.lower().split())

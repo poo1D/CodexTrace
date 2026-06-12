@@ -130,12 +130,21 @@ PYTHONPATH=. python3 -m codex_trace.cli research paper-report \
   --markdown-output /tmp/hard30-paper-report.md
 ```
 
+Hard30 task-level diagnosis:
+
+```bash
+PYTHONPATH=. python3 scripts/audit_hard30_task_diagnosis.py \
+  --json-output /tmp/hard30-task-diagnosis.json \
+  --markdown-output /tmp/hard30-task-diagnosis.md
+```
+
 When labels are provided, the paper report includes both outcome-level RQ4
 trace signals and per-manual-label signal means. The latter is the table to use
 when explaining which trace features characterize each failure class.
 The same report also includes paired per-task baseline/intervention deltas for
-RQ3, so improvement claims can be inspected task by task rather than only as
-aggregate means.
+RQ3, and `scripts/audit_hard30_task_diagnosis.py` turns those deltas into the
+task-level answer for which hard30 tasks get lost, repair, regress, or waste
+the most tool calls and tokens.
 The paired summary counts improved/regressed/unchanged tasks for success,
 verification, repeated calls, token usage, and failure score. `finalize`
 also writes `paired-task-deltas.csv` and `paired-task-summary.csv` for
