@@ -323,6 +323,11 @@ On the hard30 tier, success stays flat but waste drops sharply:
 Paired hard30 deltas show that token usage improves in 26 of 30 tasks,
 repeated tool calls improve in 26 of 30 tasks, and success improves in one task
 while regressing in one task.
+The generated task-level diagnosis in `docs/hard30_task_diagnosis.md` shows
+that 14 tasks fail under both prompts, `HARD-050` is the single hard30 repair,
+`HARD-007` is the single outcome regression, and the largest waste reduction is
+`HARD-033`, where repeated tool calls drop by 15 and token usage drops by
+699.2k tokens.
 
 Three auxiliary pilots further test whether the original thesis should claim
 verification-rate lift. In the process-stress tier, success remains

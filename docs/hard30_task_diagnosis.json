@@ -1,0 +1,934 @@
+{
+  "double_failures": [
+    {
+      "baseline_outcome": "failure",
+      "category": "bug_fix",
+      "failure_pattern": "both_failed",
+      "failure_score_delta": 0,
+      "failure_tags": [
+        "hidden_semantic_edge_case"
+      ],
+      "intervention_outcome": "failure",
+      "repeated_tool_call_delta": -3,
+      "repo_hint": "python/interval_merge",
+      "success_delta": 0,
+      "task_id": "HARD-001",
+      "token_usage_delta": -69768
+    },
+    {
+      "baseline_outcome": "failure",
+      "category": "feature",
+      "failure_pattern": "both_failed",
+      "failure_score_delta": 0,
+      "failure_tags": [
+        "hidden_semantic_edge_case"
+      ],
+      "intervention_outcome": "failure",
+      "repeated_tool_call_delta": -3,
+      "repo_hint": "typescript/retry",
+      "success_delta": 0,
+      "task_id": "HARD-006",
+      "token_usage_delta": -73787
+    },
+    {
+      "baseline_outcome": "failure",
+      "category": "multi_turn_change",
+      "failure_pattern": "both_failed",
+      "failure_score_delta": 0,
+      "failure_tags": [
+        "hidden_semantic_edge_case"
+      ],
+      "intervention_outcome": "failure",
+      "repeated_tool_call_delta": 0,
+      "repo_hint": "python/booking_policy",
+      "success_delta": 0,
+      "task_id": "HARD-009",
+      "token_usage_delta": -35606
+    },
+    {
+      "baseline_outcome": "failure",
+      "category": "dependency_friction",
+      "failure_pattern": "both_failed",
+      "failure_score_delta": 0,
+      "failure_tags": [
+        "hidden_semantic_edge_case"
+      ],
+      "intervention_outcome": "failure",
+      "repeated_tool_call_delta": -2,
+      "repo_hint": "python/http_client",
+      "success_delta": 0,
+      "task_id": "HARD-012",
+      "token_usage_delta": -39944
+    },
+    {
+      "baseline_outcome": "failure",
+      "category": "multi_turn_change",
+      "failure_pattern": "both_failed",
+      "failure_score_delta": -5,
+      "failure_tags": [
+        "hidden_semantic_edge_case"
+      ],
+      "intervention_outcome": "failure",
+      "repeated_tool_call_delta": -9,
+      "repo_hint": "typescript/filter_builder",
+      "success_delta": 0,
+      "task_id": "HARD-013",
+      "token_usage_delta": -235860
+    },
+    {
+      "baseline_outcome": "failure",
+      "category": "ci_failure",
+      "failure_pattern": "both_failed",
+      "failure_score_delta": 0,
+      "failure_tags": [
+        "hidden_semantic_edge_case"
+      ],
+      "intervention_outcome": "failure",
+      "repeated_tool_call_delta": -5,
+      "repo_hint": "typescript/package_exports",
+      "success_delta": 0,
+      "task_id": "HARD-015",
+      "token_usage_delta": -111558
+    },
+    {
+      "baseline_outcome": "failure",
+      "category": "dependency_friction",
+      "failure_pattern": "both_failed",
+      "failure_score_delta": -5,
+      "failure_tags": [
+        "hidden_semantic_edge_case"
+      ],
+      "intervention_outcome": "failure",
+      "repeated_tool_call_delta": -11,
+      "repo_hint": "typescript/date_formatter",
+      "success_delta": 0,
+      "task_id": "HARD-027",
+      "token_usage_delta": -204667
+    },
+    {
+      "baseline_outcome": "failure",
+      "category": "stateful_regression",
+      "failure_pattern": "both_failed",
+      "failure_score_delta": 0,
+      "failure_tags": [
+        "hidden_semantic_edge_case"
+      ],
+      "intervention_outcome": "failure",
+      "repeated_tool_call_delta": -3,
+      "repo_hint": "typescript/undoable_queue",
+      "success_delta": 0,
+      "task_id": "HARD-032",
+      "token_usage_delta": -40264
+    },
+    {
+      "baseline_outcome": "failure",
+      "category": "error_recovery",
+      "failure_pattern": "both_failed",
+      "failure_score_delta": -35,
+      "failure_tags": [
+        "hidden_semantic_edge_case",
+        "repetitive_exploration"
+      ],
+      "intervention_outcome": "failure",
+      "repeated_tool_call_delta": -15,
+      "repo_hint": "python/log_redactor",
+      "success_delta": 0,
+      "task_id": "HARD-033",
+      "token_usage_delta": -699231
+    },
+    {
+      "baseline_outcome": "failure",
+      "category": "dependency_friction",
+      "failure_pattern": "both_failed",
+      "failure_score_delta": 0,
+      "failure_tags": [
+        "hidden_semantic_edge_case"
+      ],
+      "intervention_outcome": "failure",
+      "repeated_tool_call_delta": -1,
+      "repo_hint": "python/retry_policy",
+      "success_delta": 0,
+      "task_id": "HARD-035",
+      "token_usage_delta": 33439
+    },
+    {
+      "baseline_outcome": "failure",
+      "category": "error_localization",
+      "failure_pattern": "both_failed",
+      "failure_score_delta": 0,
+      "failure_tags": [
+        "hidden_semantic_edge_case"
+      ],
+      "intervention_outcome": "failure",
+      "repeated_tool_call_delta": -3,
+      "repo_hint": "typescript/source_map_ranges",
+      "success_delta": 0,
+      "task_id": "HARD-038",
+      "token_usage_delta": -86667
+    },
+    {
+      "baseline_outcome": "failure",
+      "category": "stateful_regression",
+      "failure_pattern": "both_failed",
+      "failure_score_delta": 0,
+      "failure_tags": [
+        "hidden_semantic_edge_case"
+      ],
+      "intervention_outcome": "failure",
+      "repeated_tool_call_delta": -2,
+      "repo_hint": "python/ledger_reconciler",
+      "success_delta": 0,
+      "task_id": "HARD-040",
+      "token_usage_delta": -47757
+    },
+    {
+      "baseline_outcome": "failure",
+      "category": "data_migration",
+      "failure_pattern": "both_failed",
+      "failure_score_delta": 0,
+      "failure_tags": [
+        "hidden_semantic_edge_case"
+      ],
+      "intervention_outcome": "failure",
+      "repeated_tool_call_delta": -4,
+      "repo_hint": "python/migration_runner",
+      "success_delta": 0,
+      "task_id": "HARD-043",
+      "token_usage_delta": -118044
+    },
+    {
+      "baseline_outcome": "failure",
+      "category": "stateful_regression",
+      "failure_pattern": "both_failed",
+      "failure_score_delta": 0,
+      "failure_tags": [
+        "hidden_semantic_edge_case"
+      ],
+      "intervention_outcome": "failure",
+      "repeated_tool_call_delta": -4,
+      "repo_hint": "python/stream_window_join",
+      "success_delta": 0,
+      "task_id": "HARD-045",
+      "token_usage_delta": -76776
+    }
+  ],
+  "intervention_regressions": [
+    {
+      "baseline_outcome": "success",
+      "category": "refactor",
+      "failure_pattern": "intervention_regressed",
+      "failure_score_delta": 0,
+      "failure_tags": [
+        "hidden_semantic_edge_case"
+      ],
+      "intervention_outcome": "failure",
+      "repeated_tool_call_delta": -2,
+      "repo_hint": "python/config_merge",
+      "success_delta": -1,
+      "task_id": "HARD-007",
+      "token_usage_delta": -72244
+    }
+  ],
+  "intervention_repairs": [
+    {
+      "baseline_outcome": "failure",
+      "category": "multi_turn_change",
+      "failure_pattern": "intervention_repaired",
+      "failure_score_delta": 0,
+      "failure_tags": [
+        "hidden_semantic_edge_case"
+      ],
+      "intervention_outcome": "success",
+      "repeated_tool_call_delta": -4,
+      "repo_hint": "python/config_overlay_resolver",
+      "success_delta": 1,
+      "task_id": "HARD-050",
+      "token_usage_delta": -170828
+    }
+  ],
+  "summary": {
+    "category_counts": {
+      "bug_fix": 4,
+      "ci_failure": 2,
+      "data_migration": 1,
+      "dependency_friction": 3,
+      "error_localization": 2,
+      "error_recovery": 3,
+      "feature": 4,
+      "multi_turn_change": 3,
+      "multi_turn_tool_debug": 2,
+      "refactor": 1,
+      "sandbox_friction": 1,
+      "stateful_regression": 4
+    },
+    "double_failure_count": 14,
+    "failure_pattern_counts": {
+      "both_failed": 14,
+      "both_succeeded": 14,
+      "intervention_regressed": 1,
+      "intervention_repaired": 1
+    },
+    "intervention_regression_count": 1,
+    "intervention_repair_count": 1,
+    "label_counts": {
+      "hidden_semantic_edge_case": 16,
+      "repetitive_exploration": 3
+    },
+    "repeated_call_improved_count": 26,
+    "stable_success_count": 14,
+    "task_count": 30,
+    "token_improved_count": 26
+  },
+  "tasks": [
+    {
+      "baseline_outcome": "failure",
+      "category": "bug_fix",
+      "failure_pattern": "both_failed",
+      "failure_score_delta": 0,
+      "failure_tags": [
+        "hidden_semantic_edge_case"
+      ],
+      "intervention_outcome": "failure",
+      "repeated_tool_call_delta": -3,
+      "repo_hint": "python/interval_merge",
+      "success_delta": 0,
+      "task_id": "HARD-001",
+      "token_usage_delta": -69768
+    },
+    {
+      "baseline_outcome": "success",
+      "category": "bug_fix",
+      "failure_pattern": "both_succeeded",
+      "failure_score_delta": 0,
+      "failure_tags": [],
+      "intervention_outcome": "success",
+      "repeated_tool_call_delta": -5,
+      "repo_hint": "python/csv_records",
+      "success_delta": 0,
+      "task_id": "HARD-002",
+      "token_usage_delta": -74603
+    },
+    {
+      "baseline_outcome": "success",
+      "category": "feature",
+      "failure_pattern": "both_succeeded",
+      "failure_score_delta": 0,
+      "failure_tags": [],
+      "intervention_outcome": "success",
+      "repeated_tool_call_delta": -3,
+      "repo_hint": "python/cent_allocation",
+      "success_delta": 0,
+      "task_id": "HARD-003",
+      "token_usage_delta": -73318
+    },
+    {
+      "baseline_outcome": "success",
+      "category": "error_localization",
+      "failure_pattern": "both_succeeded",
+      "failure_score_delta": 0,
+      "failure_tags": [],
+      "intervention_outcome": "success",
+      "repeated_tool_call_delta": -2,
+      "repo_hint": "python/toposort",
+      "success_delta": 0,
+      "task_id": "HARD-004",
+      "token_usage_delta": -9556
+    },
+    {
+      "baseline_outcome": "success",
+      "category": "bug_fix",
+      "failure_pattern": "both_succeeded",
+      "failure_score_delta": 0,
+      "failure_tags": [],
+      "intervention_outcome": "success",
+      "repeated_tool_call_delta": 0,
+      "repo_hint": "typescript/router",
+      "success_delta": 0,
+      "task_id": "HARD-005",
+      "token_usage_delta": 71341
+    },
+    {
+      "baseline_outcome": "failure",
+      "category": "feature",
+      "failure_pattern": "both_failed",
+      "failure_score_delta": 0,
+      "failure_tags": [
+        "hidden_semantic_edge_case"
+      ],
+      "intervention_outcome": "failure",
+      "repeated_tool_call_delta": -3,
+      "repo_hint": "typescript/retry",
+      "success_delta": 0,
+      "task_id": "HARD-006",
+      "token_usage_delta": -73787
+    },
+    {
+      "baseline_outcome": "success",
+      "category": "refactor",
+      "failure_pattern": "intervention_regressed",
+      "failure_score_delta": 0,
+      "failure_tags": [
+        "hidden_semantic_edge_case"
+      ],
+      "intervention_outcome": "failure",
+      "repeated_tool_call_delta": -2,
+      "repo_hint": "python/config_merge",
+      "success_delta": -1,
+      "task_id": "HARD-007",
+      "token_usage_delta": -72244
+    },
+    {
+      "baseline_outcome": "success",
+      "category": "bug_fix",
+      "failure_pattern": "both_succeeded",
+      "failure_score_delta": 0,
+      "failure_tags": [],
+      "intervention_outcome": "success",
+      "repeated_tool_call_delta": -4,
+      "repo_hint": "typescript/undo_redo",
+      "success_delta": 0,
+      "task_id": "HARD-008",
+      "token_usage_delta": -75974
+    },
+    {
+      "baseline_outcome": "failure",
+      "category": "multi_turn_change",
+      "failure_pattern": "both_failed",
+      "failure_score_delta": 0,
+      "failure_tags": [
+        "hidden_semantic_edge_case"
+      ],
+      "intervention_outcome": "failure",
+      "repeated_tool_call_delta": 0,
+      "repo_hint": "python/booking_policy",
+      "success_delta": 0,
+      "task_id": "HARD-009",
+      "token_usage_delta": -35606
+    },
+    {
+      "baseline_outcome": "success",
+      "category": "feature",
+      "failure_pattern": "both_succeeded",
+      "failure_score_delta": 0,
+      "failure_tags": [],
+      "intervention_outcome": "success",
+      "repeated_tool_call_delta": -5,
+      "repo_hint": "typescript/markdown_table",
+      "success_delta": 0,
+      "task_id": "HARD-010",
+      "token_usage_delta": -150279
+    },
+    {
+      "baseline_outcome": "success",
+      "category": "error_recovery",
+      "failure_pattern": "both_succeeded",
+      "failure_score_delta": -30,
+      "failure_tags": [
+        "repetitive_exploration"
+      ],
+      "intervention_outcome": "success",
+      "repeated_tool_call_delta": -6,
+      "repo_hint": "python/json_patch",
+      "success_delta": 0,
+      "task_id": "HARD-011",
+      "token_usage_delta": -216568
+    },
+    {
+      "baseline_outcome": "failure",
+      "category": "dependency_friction",
+      "failure_pattern": "both_failed",
+      "failure_score_delta": 0,
+      "failure_tags": [
+        "hidden_semantic_edge_case"
+      ],
+      "intervention_outcome": "failure",
+      "repeated_tool_call_delta": -2,
+      "repo_hint": "python/http_client",
+      "success_delta": 0,
+      "task_id": "HARD-012",
+      "token_usage_delta": -39944
+    },
+    {
+      "baseline_outcome": "failure",
+      "category": "multi_turn_change",
+      "failure_pattern": "both_failed",
+      "failure_score_delta": -5,
+      "failure_tags": [
+        "hidden_semantic_edge_case"
+      ],
+      "intervention_outcome": "failure",
+      "repeated_tool_call_delta": -9,
+      "repo_hint": "typescript/filter_builder",
+      "success_delta": 0,
+      "task_id": "HARD-013",
+      "token_usage_delta": -235860
+    },
+    {
+      "baseline_outcome": "failure",
+      "category": "ci_failure",
+      "failure_pattern": "both_failed",
+      "failure_score_delta": 0,
+      "failure_tags": [
+        "hidden_semantic_edge_case"
+      ],
+      "intervention_outcome": "failure",
+      "repeated_tool_call_delta": -5,
+      "repo_hint": "typescript/package_exports",
+      "success_delta": 0,
+      "task_id": "HARD-015",
+      "token_usage_delta": -111558
+    },
+    {
+      "baseline_outcome": "success",
+      "category": "sandbox_friction",
+      "failure_pattern": "both_succeeded",
+      "failure_score_delta": 0,
+      "failure_tags": [],
+      "intervention_outcome": "success",
+      "repeated_tool_call_delta": -4,
+      "repo_hint": "typescript/asset_loader",
+      "success_delta": 0,
+      "task_id": "HARD-020",
+      "token_usage_delta": -76225
+    },
+    {
+      "baseline_outcome": "success",
+      "category": "error_recovery",
+      "failure_pattern": "both_succeeded",
+      "failure_score_delta": 0,
+      "failure_tags": [],
+      "intervention_outcome": "success",
+      "repeated_tool_call_delta": -7,
+      "repo_hint": "python/cache_stampede",
+      "success_delta": 0,
+      "task_id": "HARD-023",
+      "token_usage_delta": -164714
+    },
+    {
+      "baseline_outcome": "success",
+      "category": "feature",
+      "failure_pattern": "both_succeeded",
+      "failure_score_delta": 5,
+      "failure_tags": [],
+      "intervention_outcome": "success",
+      "repeated_tool_call_delta": -5,
+      "repo_hint": "typescript/csv_stream",
+      "success_delta": 0,
+      "task_id": "HARD-024",
+      "token_usage_delta": -218376
+    },
+    {
+      "baseline_outcome": "success",
+      "category": "ci_failure",
+      "failure_pattern": "both_succeeded",
+      "failure_score_delta": 0,
+      "failure_tags": [],
+      "intervention_outcome": "success",
+      "repeated_tool_call_delta": -4,
+      "repo_hint": "python/typing_protocol",
+      "success_delta": 0,
+      "task_id": "HARD-025",
+      "token_usage_delta": -36371
+    },
+    {
+      "baseline_outcome": "failure",
+      "category": "dependency_friction",
+      "failure_pattern": "both_failed",
+      "failure_score_delta": -5,
+      "failure_tags": [
+        "hidden_semantic_edge_case"
+      ],
+      "intervention_outcome": "failure",
+      "repeated_tool_call_delta": -11,
+      "repo_hint": "typescript/date_formatter",
+      "success_delta": 0,
+      "task_id": "HARD-027",
+      "token_usage_delta": -204667
+    },
+    {
+      "baseline_outcome": "success",
+      "category": "multi_turn_tool_debug",
+      "failure_pattern": "both_succeeded",
+      "failure_score_delta": 0,
+      "failure_tags": [],
+      "intervention_outcome": "success",
+      "repeated_tool_call_delta": 5,
+      "repo_hint": "python/env_manifest_resolver",
+      "success_delta": 0,
+      "task_id": "HARD-031",
+      "token_usage_delta": 111523
+    },
+    {
+      "baseline_outcome": "failure",
+      "category": "stateful_regression",
+      "failure_pattern": "both_failed",
+      "failure_score_delta": 0,
+      "failure_tags": [
+        "hidden_semantic_edge_case"
+      ],
+      "intervention_outcome": "failure",
+      "repeated_tool_call_delta": -3,
+      "repo_hint": "typescript/undoable_queue",
+      "success_delta": 0,
+      "task_id": "HARD-032",
+      "token_usage_delta": -40264
+    },
+    {
+      "baseline_outcome": "failure",
+      "category": "error_recovery",
+      "failure_pattern": "both_failed",
+      "failure_score_delta": -35,
+      "failure_tags": [
+        "hidden_semantic_edge_case",
+        "repetitive_exploration"
+      ],
+      "intervention_outcome": "failure",
+      "repeated_tool_call_delta": -15,
+      "repo_hint": "python/log_redactor",
+      "success_delta": 0,
+      "task_id": "HARD-033",
+      "token_usage_delta": -699231
+    },
+    {
+      "baseline_outcome": "failure",
+      "category": "dependency_friction",
+      "failure_pattern": "both_failed",
+      "failure_score_delta": 0,
+      "failure_tags": [
+        "hidden_semantic_edge_case"
+      ],
+      "intervention_outcome": "failure",
+      "repeated_tool_call_delta": -1,
+      "repo_hint": "python/retry_policy",
+      "success_delta": 0,
+      "task_id": "HARD-035",
+      "token_usage_delta": 33439
+    },
+    {
+      "baseline_outcome": "failure",
+      "category": "error_localization",
+      "failure_pattern": "both_failed",
+      "failure_score_delta": 0,
+      "failure_tags": [
+        "hidden_semantic_edge_case"
+      ],
+      "intervention_outcome": "failure",
+      "repeated_tool_call_delta": -3,
+      "repo_hint": "typescript/source_map_ranges",
+      "success_delta": 0,
+      "task_id": "HARD-038",
+      "token_usage_delta": -86667
+    },
+    {
+      "baseline_outcome": "success",
+      "category": "multi_turn_tool_debug",
+      "failure_pattern": "both_succeeded",
+      "failure_score_delta": 0,
+      "failure_tags": [
+        "repetitive_exploration"
+      ],
+      "intervention_outcome": "success",
+      "repeated_tool_call_delta": 1,
+      "repo_hint": "python/cli_report_writer",
+      "success_delta": 0,
+      "task_id": "HARD-039",
+      "token_usage_delta": 80525
+    },
+    {
+      "baseline_outcome": "failure",
+      "category": "stateful_regression",
+      "failure_pattern": "both_failed",
+      "failure_score_delta": 0,
+      "failure_tags": [
+        "hidden_semantic_edge_case"
+      ],
+      "intervention_outcome": "failure",
+      "repeated_tool_call_delta": -2,
+      "repo_hint": "python/ledger_reconciler",
+      "success_delta": 0,
+      "task_id": "HARD-040",
+      "token_usage_delta": -47757
+    },
+    {
+      "baseline_outcome": "failure",
+      "category": "data_migration",
+      "failure_pattern": "both_failed",
+      "failure_score_delta": 0,
+      "failure_tags": [
+        "hidden_semantic_edge_case"
+      ],
+      "intervention_outcome": "failure",
+      "repeated_tool_call_delta": -4,
+      "repo_hint": "python/migration_runner",
+      "success_delta": 0,
+      "task_id": "HARD-043",
+      "token_usage_delta": -118044
+    },
+    {
+      "baseline_outcome": "failure",
+      "category": "stateful_regression",
+      "failure_pattern": "both_failed",
+      "failure_score_delta": 0,
+      "failure_tags": [
+        "hidden_semantic_edge_case"
+      ],
+      "intervention_outcome": "failure",
+      "repeated_tool_call_delta": -4,
+      "repo_hint": "python/stream_window_join",
+      "success_delta": 0,
+      "task_id": "HARD-045",
+      "token_usage_delta": -76776
+    },
+    {
+      "baseline_outcome": "success",
+      "category": "stateful_regression",
+      "failure_pattern": "both_succeeded",
+      "failure_score_delta": 0,
+      "failure_tags": [],
+      "intervention_outcome": "success",
+      "repeated_tool_call_delta": -2,
+      "repo_hint": "python/webhook_replay_guard",
+      "success_delta": 0,
+      "task_id": "HARD-047",
+      "token_usage_delta": -77546
+    },
+    {
+      "baseline_outcome": "failure",
+      "category": "multi_turn_change",
+      "failure_pattern": "intervention_repaired",
+      "failure_score_delta": 0,
+      "failure_tags": [
+        "hidden_semantic_edge_case"
+      ],
+      "intervention_outcome": "success",
+      "repeated_tool_call_delta": -4,
+      "repo_hint": "python/config_overlay_resolver",
+      "success_delta": 1,
+      "task_id": "HARD-050",
+      "token_usage_delta": -170828
+    }
+  ],
+  "top_repeated_call_reductions": [
+    {
+      "baseline_outcome": "failure",
+      "category": "error_recovery",
+      "failure_pattern": "both_failed",
+      "failure_score_delta": -35,
+      "failure_tags": [
+        "hidden_semantic_edge_case",
+        "repetitive_exploration"
+      ],
+      "intervention_outcome": "failure",
+      "repeated_tool_call_delta": -15,
+      "repo_hint": "python/log_redactor",
+      "success_delta": 0,
+      "task_id": "HARD-033",
+      "token_usage_delta": -699231
+    },
+    {
+      "baseline_outcome": "failure",
+      "category": "dependency_friction",
+      "failure_pattern": "both_failed",
+      "failure_score_delta": -5,
+      "failure_tags": [
+        "hidden_semantic_edge_case"
+      ],
+      "intervention_outcome": "failure",
+      "repeated_tool_call_delta": -11,
+      "repo_hint": "typescript/date_formatter",
+      "success_delta": 0,
+      "task_id": "HARD-027",
+      "token_usage_delta": -204667
+    },
+    {
+      "baseline_outcome": "failure",
+      "category": "multi_turn_change",
+      "failure_pattern": "both_failed",
+      "failure_score_delta": -5,
+      "failure_tags": [
+        "hidden_semantic_edge_case"
+      ],
+      "intervention_outcome": "failure",
+      "repeated_tool_call_delta": -9,
+      "repo_hint": "typescript/filter_builder",
+      "success_delta": 0,
+      "task_id": "HARD-013",
+      "token_usage_delta": -235860
+    },
+    {
+      "baseline_outcome": "success",
+      "category": "error_recovery",
+      "failure_pattern": "both_succeeded",
+      "failure_score_delta": 0,
+      "failure_tags": [],
+      "intervention_outcome": "success",
+      "repeated_tool_call_delta": -7,
+      "repo_hint": "python/cache_stampede",
+      "success_delta": 0,
+      "task_id": "HARD-023",
+      "token_usage_delta": -164714
+    },
+    {
+      "baseline_outcome": "success",
+      "category": "error_recovery",
+      "failure_pattern": "both_succeeded",
+      "failure_score_delta": -30,
+      "failure_tags": [
+        "repetitive_exploration"
+      ],
+      "intervention_outcome": "success",
+      "repeated_tool_call_delta": -6,
+      "repo_hint": "python/json_patch",
+      "success_delta": 0,
+      "task_id": "HARD-011",
+      "token_usage_delta": -216568
+    }
+  ],
+  "top_waste_reductions": [
+    {
+      "baseline_outcome": "failure",
+      "category": "error_recovery",
+      "failure_pattern": "both_failed",
+      "failure_score_delta": -35,
+      "failure_tags": [
+        "hidden_semantic_edge_case",
+        "repetitive_exploration"
+      ],
+      "intervention_outcome": "failure",
+      "repeated_tool_call_delta": -15,
+      "repo_hint": "python/log_redactor",
+      "success_delta": 0,
+      "task_id": "HARD-033",
+      "token_usage_delta": -699231
+    },
+    {
+      "baseline_outcome": "failure",
+      "category": "multi_turn_change",
+      "failure_pattern": "both_failed",
+      "failure_score_delta": -5,
+      "failure_tags": [
+        "hidden_semantic_edge_case"
+      ],
+      "intervention_outcome": "failure",
+      "repeated_tool_call_delta": -9,
+      "repo_hint": "typescript/filter_builder",
+      "success_delta": 0,
+      "task_id": "HARD-013",
+      "token_usage_delta": -235860
+    },
+    {
+      "baseline_outcome": "success",
+      "category": "feature",
+      "failure_pattern": "both_succeeded",
+      "failure_score_delta": 5,
+      "failure_tags": [],
+      "intervention_outcome": "success",
+      "repeated_tool_call_delta": -5,
+      "repo_hint": "typescript/csv_stream",
+      "success_delta": 0,
+      "task_id": "HARD-024",
+      "token_usage_delta": -218376
+    },
+    {
+      "baseline_outcome": "success",
+      "category": "error_recovery",
+      "failure_pattern": "both_succeeded",
+      "failure_score_delta": -30,
+      "failure_tags": [
+        "repetitive_exploration"
+      ],
+      "intervention_outcome": "success",
+      "repeated_tool_call_delta": -6,
+      "repo_hint": "python/json_patch",
+      "success_delta": 0,
+      "task_id": "HARD-011",
+      "token_usage_delta": -216568
+    },
+    {
+      "baseline_outcome": "failure",
+      "category": "dependency_friction",
+      "failure_pattern": "both_failed",
+      "failure_score_delta": -5,
+      "failure_tags": [
+        "hidden_semantic_edge_case"
+      ],
+      "intervention_outcome": "failure",
+      "repeated_tool_call_delta": -11,
+      "repo_hint": "typescript/date_formatter",
+      "success_delta": 0,
+      "task_id": "HARD-027",
+      "token_usage_delta": -204667
+    }
+  ],
+  "top_waste_regressions": [
+    {
+      "baseline_outcome": "success",
+      "category": "multi_turn_tool_debug",
+      "failure_pattern": "both_succeeded",
+      "failure_score_delta": 0,
+      "failure_tags": [],
+      "intervention_outcome": "success",
+      "repeated_tool_call_delta": 5,
+      "repo_hint": "python/env_manifest_resolver",
+      "success_delta": 0,
+      "task_id": "HARD-031",
+      "token_usage_delta": 111523
+    },
+    {
+      "baseline_outcome": "success",
+      "category": "multi_turn_tool_debug",
+      "failure_pattern": "both_succeeded",
+      "failure_score_delta": 0,
+      "failure_tags": [
+        "repetitive_exploration"
+      ],
+      "intervention_outcome": "success",
+      "repeated_tool_call_delta": 1,
+      "repo_hint": "python/cli_report_writer",
+      "success_delta": 0,
+      "task_id": "HARD-039",
+      "token_usage_delta": 80525
+    },
+    {
+      "baseline_outcome": "success",
+      "category": "bug_fix",
+      "failure_pattern": "both_succeeded",
+      "failure_score_delta": 0,
+      "failure_tags": [],
+      "intervention_outcome": "success",
+      "repeated_tool_call_delta": 0,
+      "repo_hint": "typescript/router",
+      "success_delta": 0,
+      "task_id": "HARD-005",
+      "token_usage_delta": 71341
+    },
+    {
+      "baseline_outcome": "failure",
+      "category": "dependency_friction",
+      "failure_pattern": "both_failed",
+      "failure_score_delta": 0,
+      "failure_tags": [
+        "hidden_semantic_edge_case"
+      ],
+      "intervention_outcome": "failure",
+      "repeated_tool_call_delta": -1,
+      "repo_hint": "python/retry_policy",
+      "success_delta": 0,
+      "task_id": "HARD-035",
+      "token_usage_delta": 33439
+    },
+    {
+      "baseline_outcome": "success",
+      "category": "error_localization",
+      "failure_pattern": "both_succeeded",
+      "failure_score_delta": 0,
+      "failure_tags": [],
+      "intervention_outcome": "success",
+      "repeated_tool_call_delta": -2,
+      "repo_hint": "python/toposort",
+      "success_delta": 0,
+      "task_id": "HARD-004",
+      "token_usage_delta": -9556
+    }
+  ]
+}

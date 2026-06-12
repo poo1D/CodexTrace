@@ -24,6 +24,7 @@ The stored pilots can be inspected and aggregated without re-running Codex.
 | `docs/paper_draft.md` | Result-driven workshop-style draft. |
 | `docs/results_summary.md` | Generated full30 + hard10 + hard30 + process-stress + verification-lift + verification-ablation result summary, including RQ4 trace-signal analysis. |
 | `docs/rq4_signal_audit.md` | Generated signal audit for observable process positives and hidden semantic boundaries. |
+| `docs/hard30_task_diagnosis.md` | Generated task-level hard30 diagnosis for double failures, intervention repairs/regressions, and largest waste deltas. |
 | `docs/paper_claim_audit.md` | Generated support/partial/unsupported audit for thesis-level paper claims. |
 | `docs/claim_text_guard.md` | Generated guard that checks paper-facing text for unsupported-claim drift. |
 | `docs/thesis_readiness.md` | Generated audit of which original-thesis requirements are satisfied, partial, or missing. |
@@ -51,6 +52,7 @@ The stored pilots can be inspected and aggregated without re-running Codex.
 | `scripts/audit_manual_labels.py` | Standalone progress and quality audit for hard30 manual failure labels. |
 | `scripts/audit_paper_claims.py` | Machine-readable guard against overclaiming unsupported paper findings. |
 | `scripts/audit_claim_text_guard.py` | Text-level guard against reintroducing unsupported verification-lift or hidden-semantic claims. |
+| `scripts/audit_hard30_task_diagnosis.py` | Generates task-level hard30 failure-pattern and waste-delta diagnosis. |
 | `scripts/check_submission_readiness.py` | Machine-readable gate for hard30 collection, finalization, labeling, and paper artifact readiness. |
 | `benchmark/pilot/full30-real` | 30-task / 60-run real seed pilot. |
 | `benchmark/pilot/full30-real/process-labels.jsonl` | Manual process-positive labels for full30 sandbox/permission detector coverage. |

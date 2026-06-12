@@ -4,6 +4,7 @@ from pathlib import Path
 from scripts.finalize_hard30_pilot import finalize, preflight, render_preflight
 from scripts.audit_manual_labels import audit_manual_labels, render_audit
 from scripts.audit_claim_text_guard import audit_claim_text_guard, render_claim_text_guard_markdown
+from scripts.audit_hard30_task_diagnosis import build_task_diagnosis, render_task_diagnosis_markdown
 from scripts.audit_paper_claims import build_claim_audit, render_claim_audit_markdown
 from scripts.audit_process_stress_plan import audit_process_stress_plan
 from scripts.audit_rq4_signals import build_rq4_signal_audit, render_rq4_signal_audit_markdown
@@ -1098,6 +1099,23 @@ def test_build_results_summary_prefers_finalized_outputs(tmp_path):
     assert result["hard10"]["summary"]["intervention"]["success_rate"] == 0.9
     assert result["hard30"]["summary"]["baseline"]["success_rate"] == 0.1
     assert result["hard30_label_evaluation"]["labels"]["repetitive_exploration"]["tp"] == 4
+
+
+def test_hard30_task_diagnosis_identifies_lost_tasks_and_waste_patterns():
+    result = build_task_diagnosis()
+    markdown = render_task_diagnosis_markdown(result)
+
+    assert result["summary"]["task_count"] == 30
+    assert result["summary"]["double_failure_count"] == 14
+    assert result["summary"]["intervention_repair_count"] == 1
+    assert result["summary"]["intervention_regression_count"] == 1
+    assert result["summary"]["token_improved_count"] == 26
+    assert result["intervention_repairs"][0]["task_id"] == "HARD-050"
+    assert result["intervention_regressions"][0]["task_id"] == "HARD-007"
+    assert result["top_waste_reductions"][0]["task_id"] == "HARD-033"
+    assert "## Double-Failure Tasks" in markdown
+    assert "HARD-050" in markdown
+    assert "HARD-007" in markdown
 
 
 def test_paper_claim_audit_marks_overclaims_as_unsupported():

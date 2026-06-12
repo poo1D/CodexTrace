@@ -148,6 +148,7 @@ Key files:
 - `docs/reproducibility_checklist.md`: claim-evidence map and reproduction commands
 - `docs/results_summary.md`: generated full30 + hard10 + hard30 + process-stress + verification-lift + verification-ablation result summary, including RQ4 trace-signal analysis
 - `docs/rq4_signal_audit.md`: generated signal audit for observable process failures and hidden semantic boundaries
+- `docs/hard30_task_diagnosis.md`: generated task-level hard30 diagnosis for double failures, repairs, regressions, and waste deltas
 - `docs/process_stress_plan_audit.md`: generated coverage audit for the materialized process-stress tier
 - `docs/verification_lift_plan_audit.md`: generated coverage audit for the targeted verification-lift tier
 - `docs/verification_ablation_plan_audit.md`: generated coverage audit for the no-verify ablation tier
