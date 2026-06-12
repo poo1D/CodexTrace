@@ -11,6 +11,7 @@ DEFAULT_VERIFICATION_ABLATION_AGGREGATE = Path("benchmark/verification-ablation/
 DEFAULT_VERIFICATION_LIFT_BASELINE = Path("benchmark/verification-lift/prompts/baseline.txt")
 DEFAULT_VERIFICATION_ABLATION_BASELINE = Path("benchmark/verification-ablation/prompts/baseline.txt")
 DEFAULT_THESIS_READINESS = Path("docs/thesis_readiness.json")
+DEFAULT_VERIFICATION_LIFT_V2_AUDIT = Path("docs/verification_lift_v2_plan_audit.json")
 
 
 def _read_json(path: Path) -> dict[str, Any]:
@@ -36,10 +37,12 @@ def build_verification_lift_next_experiment_audit(
     verification_lift_baseline_path: Path = DEFAULT_VERIFICATION_LIFT_BASELINE,
     verification_ablation_baseline_path: Path = DEFAULT_VERIFICATION_ABLATION_BASELINE,
     thesis_readiness_path: Path = DEFAULT_THESIS_READINESS,
+    verification_lift_v2_audit_path: Path = DEFAULT_VERIFICATION_LIFT_V2_AUDIT,
 ) -> dict[str, Any]:
     lift = _read_json(verification_lift_aggregate_path)
     ablation = _read_json(verification_ablation_aggregate_path)
     thesis = _read_json(thesis_readiness_path)
+    v2_audit = _read_json(verification_lift_v2_audit_path) if verification_lift_v2_audit_path.exists() else {}
     lift_baseline = verification_lift_baseline_path.read_text(encoding="utf-8")
     ablation_baseline = verification_ablation_baseline_path.read_text(encoding="utf-8")
     requirements = {row["id"]: row for row in thesis["requirements"]}
@@ -130,6 +133,15 @@ def build_verification_lift_next_experiment_audit(
             "ordinary_baseline_required": True,
             "no_verify_ablation_disallowed_for_original_claim": True,
         },
+        "planned_v2_scaffold": {
+            "exists": bool(v2_audit),
+            "ready": bool(v2_audit.get("ok")),
+            "task_count": int(v2_audit.get("task_count", 0) or 0),
+            "materialized_count": int(v2_audit.get("materialized_count", 0) or 0),
+            "baseline_prompt_is_ordinary": bool(v2_audit.get("baseline_prompt_is_ordinary")),
+            "intervention_is_evidence_gated": bool(v2_audit.get("intervention_is_evidence_gated")),
+            "audit_path": str(verification_lift_v2_audit_path),
+        },
         "acceptance_gates": acceptance_gates,
     }
 
@@ -137,6 +149,7 @@ def build_verification_lift_next_experiment_audit(
 def render_verification_lift_next_experiment_markdown(result: dict[str, Any]) -> str:
     lift = result["current_evidence"]["verification_lift"]
     ablation = result["current_evidence"]["verification_ablation"]
+    planned = result["planned_v2_scaffold"]
     lines = [
         "# Verification-Lift Next Experiment Audit",
         "",
@@ -170,6 +183,16 @@ def render_verification_lift_next_experiment_markdown(result: dict[str, Any]) ->
         f"- Ablation baseline forbids verification: {'yes' if result['prompt_constraints']['ablation_baseline_forbids_verification'] else 'no'}",
         "- Ordinary baseline required: yes",
         "- No-verify ablation disallowed for original claim: yes",
+        "",
+        "## Planned Ordinary-Baseline V2 Scaffold",
+        "",
+        f"- Exists: {'yes' if planned['exists'] else 'no'}",
+        f"- Ready: {'yes' if planned['ready'] else 'no'}",
+        f"- Tasks: {planned['task_count']}",
+        f"- Materialized fixtures: {planned['materialized_count']}",
+        f"- Baseline prompt is ordinary: {'yes' if planned['baseline_prompt_is_ordinary'] else 'no'}",
+        f"- Intervention is evidence-gated: {'yes' if planned['intervention_is_evidence_gated'] else 'no'}",
+        f"- Audit: `{planned['audit_path']}`",
         "",
         "## Acceptance Gates",
         "",

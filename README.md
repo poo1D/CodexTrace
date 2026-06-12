@@ -131,11 +131,14 @@ Key files:
 - `benchmark/process-stress/tasks.jsonl`: materialized process-stress slice for closing original-thesis evidence gaps
 - `benchmark/verification-lift/tasks.jsonl`: targeted verification-lift stress tier under a weak-baseline prompt contrast
 - `benchmark/verification-lift/prompts/`: verification-lift baseline/intervention prompt templates
+- `benchmark/verification-lift-v2/tasks.jsonl`: ordinary-baseline verification-lift v2 tier for the next claim-closing experiment
+- `benchmark/verification-lift-v2/prompts/`: ordinary baseline and evidence-gated v2 prompt templates
 - `benchmark/verification-ablation/tasks.jsonl`: auxiliary no-verify baseline ablation tasks for harness-control evidence
 - `benchmark/verification-ablation/prompts/`: no-verify baseline and evidence-gated prompt templates
 - `scripts/materialize_process_stress_fixtures.py`: rebuilds the process-stress fixture repositories
 - `scripts/audit_process_stress_plan.py`: checks process-stress coverage and materialized fixture readiness
 - `scripts/audit_verification_lift_plan.py`: checks verification-lift task, prompt, and fixture readiness
+- `scripts/audit_verification_lift_v2_plan.py`: checks the ordinary-baseline verification-lift v2 scaffold
 - `scripts/audit_verification_ablation_plan.py`: checks verification-ablation task, prompt, and fixture readiness
 - `scripts/audit_verification_lift_next_experiment.py`: records the ordinary-baseline experiment gate still needed to close verification lift
 - `scripts/audit_claim_text_guard.py`: checks paper-facing docs for unsupported verification-lift or hidden-semantic overclaims
@@ -162,6 +165,7 @@ Key files:
 - `docs/hard30_task_diagnosis.md`: generated task-level hard30 diagnosis for double failures, repairs, regressions, and waste deltas
 - `docs/process_stress_plan_audit.md`: generated coverage audit for the materialized process-stress tier
 - `docs/verification_lift_plan_audit.md`: generated coverage audit for the targeted verification-lift tier
+- `docs/verification_lift_v2_plan_audit.md`: generated coverage audit for the ordinary-baseline verification-lift v2 tier
 - `docs/verification_ablation_plan_audit.md`: generated coverage audit for the no-verify ablation tier
 - `docs/related_work.md`: compact bibliography and positioning notes
 - `docs/submission_readiness_plan.md`: concrete path from pilot artifact to stronger paper submission
@@ -243,6 +247,7 @@ PYTHONPATH=. python3 scripts/audit_thesis_readiness.py --markdown-output docs/th
 PYTHONPATH=. python3 scripts/audit_claim_text_guard.py --markdown-output docs/claim_text_guard.md
 PYTHONPATH=. python3 scripts/audit_goal_completion.py --markdown-output docs/goal_completion_audit.md
 PYTHONPATH=. python3 scripts/audit_verification_lift_next_experiment.py --markdown-output docs/verification_lift_next_experiment.md
+PYTHONPATH=. python3 scripts/audit_verification_lift_v2_plan.py --markdown-output docs/verification_lift_v2_plan_audit.md
 PYTHONPATH=. python3 scripts/audit_paper_numbers.py --markdown-output docs/paper_number_guard.md
 PYTHONPATH=. python3 scripts/audit_reviewer_path.py --markdown-output docs/reviewer_path_audit.md
 PYTHONPATH=. python3 scripts/audit_submission_package.py --markdown-output docs/submission_package.md

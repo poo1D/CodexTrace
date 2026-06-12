@@ -35,6 +35,7 @@ The stored pilots can be inspected and aggregated without re-running Codex.
 | `docs/submission_package.md` | Generated RQ-to-evidence map for safe boundary-result paper claims. |
 | `docs/process_stress_plan_audit.md` | Generated coverage audit for the planned process-stress tier. |
 | `docs/verification_lift_plan_audit.md` | Generated task/prompt readiness audit for the verification-lift tier. |
+| `docs/verification_lift_v2_plan_audit.md` | Generated task/prompt readiness audit for the ordinary-baseline verification-lift v2 tier. |
 | `docs/verification_ablation_plan_audit.md` | Generated task/prompt readiness audit for the no-verify ablation tier. |
 | `docs/failure_taxonomy.md` | Definitions for process-level failure labels. |
 | `docs/hard_tier_expansion_blueprint.md` | Implemented HARD-011 to HARD-050 fixtures and hard30 pilot selection plan. |
@@ -48,6 +49,8 @@ The stored pilots can be inspected and aggregated without re-running Codex.
 | `benchmark/verification-lift/tasks.jsonl` | Targeted 8-task verification-lift tier for the missing verification-rate claim. |
 | `benchmark/verification-lift/prompts/` | Weak-baseline and evidence-gated prompt templates for the verification-lift tier. |
 | `benchmark/verification-lift/pilot/full-real/` | 8-task / 16-run real verification-lift pilot with aggregate and manual labels. |
+| `benchmark/verification-lift-v2/tasks.jsonl` | Ordinary-baseline 8-task verification-lift v2 tier for the next claim-closing experiment. |
+| `benchmark/verification-lift-v2/prompts/` | Ordinary baseline and evidence-gated prompt templates for verification-lift v2. |
 | `benchmark/verification-ablation/tasks.jsonl` | Auxiliary 4-task no-verify ablation tier for harness-control evidence. |
 | `benchmark/verification-ablation/prompts/` | No-verify baseline and evidence-gated prompt templates for the ablation tier. |
 | `benchmark/verification-ablation/pilot/full-real/` | 4-task / 8-run real verification-ablation pilot with aggregate and manual labels. |
@@ -59,6 +62,7 @@ The stored pilots can be inspected and aggregated without re-running Codex.
 | `scripts/audit_claim_text_guard.py` | Text-level guard against reintroducing unsupported verification-lift or hidden-semantic claims. |
 | `scripts/audit_goal_completion.py` | Goal-level completion audit for the original objective and boundary-result paper state. |
 | `scripts/audit_verification_lift_next_experiment.py` | Next-experiment audit for the unresolved ordinary-baseline verification-lift claim. |
+| `scripts/audit_verification_lift_v2_plan.py` | Plan audit for the ordinary-baseline verification-lift v2 scaffold. |
 | `scripts/audit_paper_numbers.py` | Numeric guard for paper-draft values copied from generated result artifacts. |
 | `scripts/audit_reviewer_path.py` | Reviewer-path coverage guard for required paper artifacts. |
 | `scripts/audit_hard30_task_diagnosis.py` | Generates task-level hard30 failure-pattern and waste-delta diagnosis. |
@@ -181,6 +185,10 @@ PYTHONPATH=. python3 scripts/audit_verification_lift_plan.py \
   --markdown-output /tmp/verification-lift-plan-audit.md \
   --json-output /tmp/verification-lift-plan-audit.json
 
+PYTHONPATH=. python3 scripts/audit_verification_lift_v2_plan.py \
+  --markdown-output /tmp/verification-lift-v2-plan-audit.md \
+  --json-output /tmp/verification-lift-v2-plan-audit.json
+
 PYTHONPATH=. python3 scripts/audit_verification_ablation_plan.py \
   --markdown-output /tmp/verification-ablation-plan-audit.md \
   --json-output /tmp/verification-ablation-plan-audit.json
@@ -226,6 +234,16 @@ PYTHONPATH=. python3 -m codex_trace.cli research run \
   --tasks benchmark/verification-lift/tasks.jsonl \
   --prompt-dir benchmark/verification-lift/prompts \
   --output-dir /tmp/codextrace-verification-lift-dry \
+  --dry-run
+```
+
+Dry-run the ordinary-baseline verification-lift v2 tier without model calls:
+
+```bash
+PYTHONPATH=. python3 -m codex_trace.cli research run \
+  --tasks benchmark/verification-lift-v2/tasks.jsonl \
+  --prompt-dir benchmark/verification-lift-v2/prompts \
+  --output-dir /tmp/codextrace-verification-lift-v2-dry \
   --dry-run
 ```
 

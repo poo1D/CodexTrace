@@ -418,6 +418,8 @@ def check_verification_lift_next_experiment_content(path: Path = Path("docs/veri
         "original claim still open": "Original verification-lift claim closed: no",
         "next experiment required": "Next experiment required: yes",
         "ablation boundary": "No-verify ablation cannot close the ordinary-baseline claim",
+        "v2 scaffold": "## Planned Ordinary-Baseline V2 Scaffold",
+        "v2 ready": "Ready: yes",
         "ordinary baseline gate": "ordinary_baseline",
         "saturation gate": "non_saturated_baseline_or_depth_metric",
     }

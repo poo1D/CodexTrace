@@ -45,6 +45,15 @@
   "next_experiment_required": true,
   "ok": true,
   "original_verification_lift_closed": false,
+  "planned_v2_scaffold": {
+    "audit_path": "docs/verification_lift_v2_plan_audit.json",
+    "baseline_prompt_is_ordinary": true,
+    "exists": true,
+    "intervention_is_evidence_gated": true,
+    "materialized_count": 8,
+    "ready": true,
+    "task_count": 8
+  },
   "prompt_constraints": {
     "ablation_baseline_forbids_verification": true,
     "current_lift_baseline_allows_skip": true,

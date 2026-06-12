@@ -23,6 +23,16 @@ This generated audit records whether current evidence closes the original ordina
 - Ordinary baseline required: yes
 - No-verify ablation disallowed for original claim: yes
 
+## Planned Ordinary-Baseline V2 Scaffold
+
+- Exists: yes
+- Ready: yes
+- Tasks: 8
+- Materialized fixtures: 8
+- Baseline prompt is ordinary: yes
+- Intervention is evidence-gated: yes
+- Audit: `docs/verification_lift_v2_plan_audit.json`
+
 ## Acceptance Gates
 
 - `ordinary_baseline`: Baseline prompt must be ordinary or weak-baseline, not an explicit no-verify ablation. Rationale: A no-verify baseline can prove harness control but cannot close the original ordinary-baseline claim.
