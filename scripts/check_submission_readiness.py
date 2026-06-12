@@ -402,6 +402,38 @@ def check_goal_completion_audit_content(path: Path = Path("docs/goal_completion_
     }
 
 
+def check_verification_lift_next_experiment_content(path: Path = Path("docs/verification_lift_next_experiment.md")) -> dict[str, Any]:
+    problems = []
+    try:
+        text = path.read_text(encoding="utf-8")
+    except FileNotFoundError:
+        return {
+            "name": "verification-lift next experiment audit",
+            "ok": False,
+            "evidence": str(path),
+            "problems": ["missing verification-lift next experiment audit"],
+        }
+
+    required_phrases = {
+        "original claim still open": "Original verification-lift claim closed: no",
+        "next experiment required": "Next experiment required: yes",
+        "ablation boundary": "No-verify ablation cannot close the ordinary-baseline claim",
+        "ordinary baseline gate": "ordinary_baseline",
+        "saturation gate": "non_saturated_baseline_or_depth_metric",
+    }
+    for label, phrase in required_phrases.items():
+        if phrase not in text:
+            problems.append(f"missing {label}")
+
+    return {
+        "name": "verification-lift next experiment audit",
+        "ok": not problems,
+        "evidence": str(path),
+        "detail": "records the ordinary-baseline experiment gate needed to close verification lift",
+        "problems": problems,
+    }
+
+
 def build_report(selection_dir: Path, run_dir: Path) -> dict[str, Any]:
     checks = [
         check_hard30_selection(selection_dir),
@@ -414,6 +446,7 @@ def build_report(selection_dir: Path, run_dir: Path) -> dict[str, Any]:
         check_paper_number_guard_content(),
         check_reviewer_path_audit_content(),
         check_goal_completion_audit_content(),
+        check_verification_lift_next_experiment_content(),
         check_paper_draft_content(),
         check_experiment_protocol_content(),
         check_exists(Path("docs/reproducibility_checklist.md"), "reproducibility checklist"),

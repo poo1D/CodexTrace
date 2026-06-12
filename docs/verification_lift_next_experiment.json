@@ -1,0 +1,55 @@
+{
+  "acceptance_gates": [
+    {
+      "gate": "Baseline prompt must be ordinary or weak-baseline, not an explicit no-verify ablation.",
+      "id": "ordinary_baseline",
+      "rationale": "A no-verify baseline can prove harness control but cannot close the original ordinary-baseline claim."
+    },
+    {
+      "gate": "Measure broad verification, exact visible success-check verification, and verification depth so saturation is visible.",
+      "id": "non_saturated_baseline_or_depth_metric",
+      "rationale": "The current weak-baseline pilot has baseline verification 1.00 and exact verification 1.00, leaving no rate headroom."
+    },
+    {
+      "gate": "Collect at least 8 paired tasks and 16 real runs before treating the result as a verification-lift experiment.",
+      "id": "paired_task_count",
+      "rationale": "This matches the current verification-lift tier size while avoiding single-task anecdotes."
+    },
+    {
+      "gate": "Close the original claim only if intervention verification rate or exact success-check verification increases over a non-ablation baseline.",
+      "id": "claim_closure",
+      "rationale": "If the non-ablation baseline remains saturated, keep the paper framed as a boundary result."
+    }
+  ],
+  "current_evidence": {
+    "thesis_requirement_status": "missing",
+    "verification_ablation": {
+      "baseline_is_no_verify_ablation": true,
+      "baseline_verification_rate": 0.0,
+      "intervention_verification_rate": 1.0,
+      "success_check_verification_delta": 1.0,
+      "tasks": 4,
+      "verification_delta": 1.0
+    },
+    "verification_lift": {
+      "baseline_saturated": true,
+      "baseline_success_check_verification_rate": 1.0,
+      "baseline_verification_rate": 1.0,
+      "intervention_success_check_verification_rate": 1.0,
+      "intervention_verification_rate": 1.0,
+      "success_check_verification_delta": 0.0,
+      "tasks": 8,
+      "verification_delta": 0.0
+    }
+  },
+  "next_experiment_required": true,
+  "ok": true,
+  "original_verification_lift_closed": false,
+  "prompt_constraints": {
+    "ablation_baseline_forbids_verification": true,
+    "current_lift_baseline_allows_skip": true,
+    "no_verify_ablation_disallowed_for_original_claim": true,
+    "ordinary_baseline_required": true
+  },
+  "status": "next_experiment_required"
+}

@@ -15,6 +15,10 @@ from scripts.audit_submission_package import build_submission_package, render_su
 from scripts.audit_thesis_readiness import build_thesis_readiness, render_thesis_readiness_markdown
 from scripts.audit_verification_ablation_plan import audit_verification_ablation_plan
 from scripts.audit_verification_lift_plan import audit_verification_lift_plan
+from scripts.audit_verification_lift_next_experiment import (
+    build_verification_lift_next_experiment_audit,
+    render_verification_lift_next_experiment_markdown,
+)
 from scripts.merge_hard30_shards import merge_shards, rewrite_shard_row
 from scripts.run_hard30_shards import (
     build_shard_commands,
@@ -30,6 +34,7 @@ from scripts.check_submission_readiness import (
     check_paper_number_guard_content,
     check_reviewer_path_audit_content,
     check_submission_package_content,
+    check_verification_lift_next_experiment_content,
     render_report,
 )
 
@@ -1211,11 +1216,13 @@ def test_reviewer_docs_surface_hard30_task_diagnosis():
 
     assert "docs/hard30_task_diagnosis.md" in readme
     assert "docs/goal_completion_audit.md" in readme
+    assert "docs/verification_lift_next_experiment.md" in readme
     assert "docs/submission_package.md" in readme
     assert "docs/paper_number_guard.md" in readme
     assert "docs/reviewer_path_audit.md" in readme
     assert "scripts/audit_hard30_task_diagnosis.py" in readme
     assert "scripts/audit_goal_completion.py --markdown-output docs/goal_completion_audit.md" in readme
+    assert "scripts/audit_verification_lift_next_experiment.py --markdown-output docs/verification_lift_next_experiment.md" in readme
     assert "scripts/audit_paper_numbers.py --markdown-output docs/paper_number_guard.md" in readme
     assert "scripts/audit_reviewer_path.py --markdown-output docs/reviewer_path_audit.md" in readme
     assert "scripts/audit_submission_package.py --markdown-output docs/submission_package.md" in readme
@@ -1232,6 +1239,7 @@ def test_reviewer_docs_surface_hard30_task_diagnosis():
     assert "188-run benchmark" in guide
     assert "scripts/audit_hard30_task_diagnosis.py" in checklist
     assert "scripts/audit_goal_completion.py" in checklist
+    assert "scripts/audit_verification_lift_next_experiment.py" in checklist
     assert "scripts/audit_submission_package.py" in checklist
     assert "scripts/audit_paper_numbers.py" in checklist
     assert "scripts/audit_reviewer_path.py" in checklist
@@ -1316,6 +1324,7 @@ def test_submission_package_maps_rqs_to_safe_paper_claims():
     assert package["summary"]["required_boundary"] == "ordinary verification-rate lift remains unsupported; no-verify lift is an ablation only"
     assert "docs/submission_package.md" in package["required_files"]
     assert "docs/goal_completion_audit.md" in package["required_files"]
+    assert "docs/verification_lift_next_experiment.md" in package["required_files"]
     assert "docs/paper_number_guard.md" in package["required_files"]
     assert "docs/reviewer_path_audit.md" in package["required_files"]
     assert [row["rq"] for row in package["rq_rows"]] == ["RQ1", "RQ2", "RQ3", "RQ4"]
@@ -1409,6 +1418,34 @@ def test_goal_completion_audit_keeps_original_goal_open():
     assert result["blocking_items"][0]["id"] == "verification_lift"
     assert "Should mark active goal complete: no" in markdown
     assert "Run a stronger ordinary-baseline verification-lift experiment" in markdown
+
+
+def test_verification_lift_next_experiment_audit_keeps_ablation_in_bounds():
+    result = build_verification_lift_next_experiment_audit()
+    markdown = render_verification_lift_next_experiment_markdown(result)
+
+    assert result["ok"] is True
+    assert result["original_verification_lift_closed"] is False
+    assert result["next_experiment_required"] is True
+    assert result["current_evidence"]["verification_lift"]["verification_delta"] == 0
+    assert result["current_evidence"]["verification_lift"]["success_check_verification_delta"] == 0
+    assert result["current_evidence"]["verification_lift"]["baseline_saturated"] is True
+    assert result["current_evidence"]["verification_ablation"]["verification_delta"] == 1
+    assert result["current_evidence"]["verification_ablation"]["success_check_verification_delta"] == 1
+    assert result["prompt_constraints"]["ablation_baseline_forbids_verification"] is True
+    assert any(gate["id"] == "ordinary_baseline" for gate in result["acceptance_gates"])
+    assert "No-verify ablation cannot close the ordinary-baseline claim" in markdown
+
+
+def test_submission_readiness_validates_verification_lift_next_experiment_content(tmp_path):
+    broken = tmp_path / "verification_lift_next_experiment.md"
+    broken.write_text("# Verification-Lift Next Experiment Audit\nOriginal verification-lift claim closed: yes\n", encoding="utf-8")
+
+    check = check_verification_lift_next_experiment_content(broken)
+
+    assert check["ok"] is False
+    assert "missing original claim still open" in check["problems"]
+    assert "missing next experiment required" in check["problems"]
 
 
 def test_submission_readiness_validates_goal_completion_audit_content(tmp_path):
