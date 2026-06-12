@@ -236,6 +236,19 @@ replace semantic task oracles.
 
 ### RQ3: Baseline vs Intervention
 
+Table 4 summarizes the paper-facing result in the compact form implied by the
+thesis. The current evidence supports success improvement only in the early
+hard10 pilot, supports waste reduction most strongly on hard30, and gives a
+negative result for verification-rate lift under ordinary or weak-baseline
+conditions.
+
+| Evidence slice | Baseline | Intervention | Interpretation |
+| --- | ---: | ---: | --- |
+| hard10 success | 0.70 | 0.80 | Pilot success lift; not stable enough alone for a broad claim. |
+| hard30 waste | 12.93 repeated calls / 355.0k tokens | 9.20 repeated calls / 256.3k tokens | Supported paired waste reduction with flat success. |
+| verification-lift stress | 1.00 broad / 1.00 exact | 1.00 broad / 1.00 exact | Negative result for ordinary or weak-baseline verification-rate lift. |
+| no-verify ablation | 0.00 broad / 0.00 exact | 1.00 broad / 1.00 exact | Mechanism check only; not an ordinary baseline. |
+
 On the 30-task seed pilot, success rate is already saturated, but intervention
 reduces several waste signals:
 

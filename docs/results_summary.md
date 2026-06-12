@@ -15,6 +15,15 @@ This generated summary consolidates the current paper-facing result tables.
 
 ## RQ3 Baseline vs Intervention
 
+### Headline Result Snapshot
+
+| Evidence slice | Baseline | Intervention | Interpretation |
+| --- | ---: | ---: | --- |
+| hard10 success | 0.70 | 0.80 | Pilot success lift; not stable enough alone for a broad claim. |
+| hard30 waste | 12.93 repeated calls / 355.0k tokens | 9.2 repeated calls / 256.3k tokens | Supported paired waste reduction with flat success. |
+| verification-lift stress | 1.00 broad / 1.00 exact | 1.00 broad / 1.00 exact | Negative result for ordinary or weak-baseline verification-rate lift. |
+| no-verify ablation | 0.00 broad / 0.00 exact | 1.00 broad / 1.00 exact | Mechanism check only; not an ordinary baseline. |
+
 ### Full30 Seed Pilot
 
 | Metric | Baseline | Intervention | Delta |

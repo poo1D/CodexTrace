@@ -985,6 +985,10 @@ def test_build_results_summary_from_stored_pilots():
     assert result["verification_ablation_label_evaluation"]["labels"]["verification_gap"]["tp"] == 4
     assert result["verification_ablation_label_evaluation"]["labels"]["premature_completion"]["tp"] == 3
     assert "## RQ3 Baseline vs Intervention" in markdown
+    assert "### Headline Result Snapshot" in markdown
+    assert "| hard30 waste | 12.93 repeated calls / 355.0k tokens | 9.2 repeated calls / 256.3k tokens |" in markdown
+    assert "| verification-lift stress | 1.00 broad / 1.00 exact | 1.00 broad / 1.00 exact |" in markdown
+    assert "| no-verify ablation | 0.00 broad / 0.00 exact | 1.00 broad / 1.00 exact |" in markdown
     assert "### Hard30 Pilot" in markdown
     assert "### Process-Stress Pilot" in markdown
     assert "### Verification-Lift Pilot" in markdown
@@ -1141,6 +1145,7 @@ def test_paper_draft_contains_submission_polish_sections():
 
     assert "## 10. Artifact Availability" in text
     assert "| Tier | Tasks | Runs | Baseline | Intervention | Outcome oracle | Primary use |" in text
+    assert "| Evidence slice | Baseline | Intervention | Interpretation |" in text
     assert "No model training, fine-tuning, embedding index, or GPU inference is used" in text
     assert "Trace diagnosis is less suited for proving semantic correctness" in text
 

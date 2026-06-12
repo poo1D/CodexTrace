@@ -746,6 +746,42 @@ def render_results_summary_markdown(result: dict[str, Any]) -> str:
         "",
         "## RQ3 Baseline vs Intervention",
         "",
+        "### Headline Result Snapshot",
+        "",
+        "| Evidence slice | Baseline | Intervention | Interpretation |",
+        "| --- | ---: | ---: | --- |",
+        (
+            f"| hard10 success | {_fmt_signal_metric('success_rate', hard['summary']['baseline']['success_rate'])} | "
+            f"{_fmt_signal_metric('success_rate', hard['summary']['intervention']['success_rate'])} | "
+            "Pilot success lift; not stable enough alone for a broad claim. |"
+        ),
+    ])
+    if hard30:
+        lines.append(
+            f"| hard30 waste | {_fmt(hard30['summary']['baseline']['avg_repeated_tool_calls'])} repeated calls / "
+            f"{_fmt_signal_metric('token_usage', hard30['summary']['baseline']['avg_token_usage'])} tokens | "
+            f"{_fmt(hard30['summary']['intervention']['avg_repeated_tool_calls'])} repeated calls / "
+            f"{_fmt_signal_metric('token_usage', hard30['summary']['intervention']['avg_token_usage'])} tokens | "
+            "Supported paired waste reduction with flat success. |"
+        )
+    if verification_lift:
+        lines.append(
+            f"| verification-lift stress | {_fmt_signal_metric('verification_rate', verification_lift['summary']['baseline']['verification_rate'])} broad / "
+            f"{_fmt_signal_metric('success_check_verification_rate', verification_lift['summary']['baseline']['success_check_verification_rate'])} exact | "
+            f"{_fmt_signal_metric('verification_rate', verification_lift['summary']['intervention']['verification_rate'])} broad / "
+            f"{_fmt_signal_metric('success_check_verification_rate', verification_lift['summary']['intervention']['success_check_verification_rate'])} exact | "
+            "Negative result for ordinary or weak-baseline verification-rate lift. |"
+        )
+    if verification_ablation:
+        lines.append(
+            f"| no-verify ablation | {_fmt_signal_metric('verification_rate', verification_ablation['summary']['baseline']['verification_rate'])} broad / "
+            f"{_fmt_signal_metric('success_check_verification_rate', verification_ablation['summary']['baseline']['success_check_verification_rate'])} exact | "
+            f"{_fmt_signal_metric('verification_rate', verification_ablation['summary']['intervention']['verification_rate'])} broad / "
+            f"{_fmt_signal_metric('success_check_verification_rate', verification_ablation['summary']['intervention']['success_check_verification_rate'])} exact | "
+            "Mechanism check only; not an ordinary baseline. |"
+        )
+    lines.extend([
+        "",
         "### Full30 Seed Pilot",
         "",
         "| Metric | Baseline | Intervention | Delta |",
