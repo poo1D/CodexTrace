@@ -20,6 +20,14 @@
     },
     {
       "covered": true,
+      "path": "docs/goal_completion_audit.md",
+      "present_in": [
+        "README.md",
+        "docs/reproducibility_checklist.md"
+      ]
+    },
+    {
+      "covered": true,
       "path": "docs/paper_draft.md",
       "present_in": [
         "README.md",
@@ -112,6 +120,6 @@
     "checklist_missing": 0,
     "guide_missing": 0,
     "missing": 0,
-    "required_files": 12
+    "required_files": 13
   }
 }

@@ -3,7 +3,7 @@
 This generated guard checks that required reviewer files are discoverable from the paper-facing entry points.
 
 OK: yes
-Required files: 12
+Required files: 13
 Missing everywhere: 0
 Missing from artifact guide required set: 0
 Missing from reproducibility checklist: 0
@@ -12,6 +12,7 @@ Missing from reproducibility checklist: 0
 | --- | --- | --- |
 | `README.md` | yes | `README.md`, `docs/artifact_guide.md` |
 | `docs/submission_package.md` | yes | `README.md`, `docs/artifact_guide.md`, `docs/reproducibility_checklist.md` |
+| `docs/goal_completion_audit.md` | yes | `README.md`, `docs/reproducibility_checklist.md` |
 | `docs/paper_draft.md` | yes | `README.md`, `docs/artifact_guide.md`, `docs/reproducibility_checklist.md` |
 | `docs/claim_text_guard.md` | yes | `README.md`, `docs/artifact_guide.md`, `docs/reproducibility_checklist.md` |
 | `docs/paper_number_guard.md` | yes | `README.md`, `docs/artifact_guide.md`, `docs/reproducibility_checklist.md` |

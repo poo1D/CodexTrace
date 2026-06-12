@@ -4,6 +4,7 @@ from pathlib import Path
 from scripts.finalize_hard30_pilot import finalize, preflight, render_preflight
 from scripts.audit_manual_labels import audit_manual_labels, render_audit
 from scripts.audit_claim_text_guard import audit_claim_text_guard, render_claim_text_guard_markdown
+from scripts.audit_goal_completion import build_goal_completion_audit, render_goal_completion_audit_markdown
 from scripts.audit_hard30_task_diagnosis import build_task_diagnosis, render_task_diagnosis_markdown
 from scripts.audit_paper_numbers import build_paper_number_guard, render_paper_number_guard_markdown
 from scripts.audit_paper_claims import build_claim_audit, render_claim_audit_markdown
@@ -25,6 +26,7 @@ from scripts.run_hard30_shards import (
 )
 from scripts.check_submission_readiness import (
     build_report,
+    check_goal_completion_audit_content,
     check_paper_number_guard_content,
     check_reviewer_path_audit_content,
     check_submission_package_content,
@@ -1208,10 +1210,12 @@ def test_reviewer_docs_surface_hard30_task_diagnosis():
     checklist = Path("docs/reproducibility_checklist.md").read_text(encoding="utf-8")
 
     assert "docs/hard30_task_diagnosis.md" in readme
+    assert "docs/goal_completion_audit.md" in readme
     assert "docs/submission_package.md" in readme
     assert "docs/paper_number_guard.md" in readme
     assert "docs/reviewer_path_audit.md" in readme
     assert "scripts/audit_hard30_task_diagnosis.py" in readme
+    assert "scripts/audit_goal_completion.py --markdown-output docs/goal_completion_audit.md" in readme
     assert "scripts/audit_paper_numbers.py --markdown-output docs/paper_number_guard.md" in readme
     assert "scripts/audit_reviewer_path.py --markdown-output docs/reviewer_path_audit.md" in readme
     assert "scripts/audit_submission_package.py --markdown-output docs/submission_package.md" in readme
@@ -1227,6 +1231,7 @@ def test_reviewer_docs_surface_hard30_task_diagnosis():
     assert "`HARD-050` repaired, `HARD-007` regressed" in guide
     assert "188-run benchmark" in guide
     assert "scripts/audit_hard30_task_diagnosis.py" in checklist
+    assert "scripts/audit_goal_completion.py" in checklist
     assert "scripts/audit_submission_package.py" in checklist
     assert "scripts/audit_paper_numbers.py" in checklist
     assert "scripts/audit_reviewer_path.py" in checklist
@@ -1310,6 +1315,7 @@ def test_submission_package_maps_rqs_to_safe_paper_claims():
     assert package["summary"]["unsupported_claim_count"] == 2
     assert package["summary"]["required_boundary"] == "ordinary verification-rate lift remains unsupported; no-verify lift is an ablation only"
     assert "docs/submission_package.md" in package["required_files"]
+    assert "docs/goal_completion_audit.md" in package["required_files"]
     assert "docs/paper_number_guard.md" in package["required_files"]
     assert "docs/reviewer_path_audit.md" in package["required_files"]
     assert [row["rq"] for row in package["rq_rows"]] == ["RQ1", "RQ2", "RQ3", "RQ4"]
@@ -1390,6 +1396,30 @@ def test_submission_readiness_validates_reviewer_path_audit_content(tmp_path):
     assert check["ok"] is False
     assert "missing ok" in check["problems"]
     assert "missing checklist coverage" in check["problems"]
+
+
+def test_goal_completion_audit_keeps_original_goal_open():
+    result = build_goal_completion_audit()
+    markdown = render_goal_completion_audit_markdown(result)
+
+    assert result["summary"]["original_goal_complete"] is False
+    assert result["summary"]["boundary_result_paper_ready"] is True
+    assert result["summary"]["should_mark_goal_complete"] is False
+    assert result["summary"]["blocking_items"] == 1
+    assert result["blocking_items"][0]["id"] == "verification_lift"
+    assert "Should mark active goal complete: no" in markdown
+    assert "Run a stronger ordinary-baseline verification-lift experiment" in markdown
+
+
+def test_submission_readiness_validates_goal_completion_audit_content(tmp_path):
+    broken = tmp_path / "goal_completion_audit.md"
+    broken.write_text("# Goal Completion Audit\nOriginal goal complete: yes\n", encoding="utf-8")
+
+    check = check_goal_completion_audit_content(broken)
+
+    assert check["ok"] is False
+    assert "missing original incomplete" in check["problems"]
+    assert "missing do not complete" in check["problems"]
 
 
 def test_process_stress_plan_covers_target_failure_tags():

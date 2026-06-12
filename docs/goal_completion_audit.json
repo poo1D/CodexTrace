@@ -1,0 +1,70 @@
+{
+  "blocking_items": [
+    {
+      "completion_effect": "blocks original goal completion",
+      "evidence": "verification is saturated in stored pilots: full30=1.00->1.00 (exact=1.00->1.00), hard10=1.00->1.00 (exact=1.00->1.00), hard30=1.00->1.00 (exact=1.00->1.00), process-stress=1.00->1.00 (exact=1.00->1.00), verification-lift=1.00->1.00 (exact=1.00->1.00).",
+      "id": "verification_lift",
+      "objective": "Show harness intervention raises ordinary-baseline verification rate.",
+      "status": "missing"
+    }
+  ],
+  "items": [
+    {
+      "completion_effect": "complete",
+      "evidence": "docs/failure_taxonomy.md contains 6 target process labels.",
+      "id": "taxonomy",
+      "objective": "Propose a multi-turn coding-agent failure taxonomy.",
+      "status": "satisfied"
+    },
+    {
+      "completion_effect": "complete",
+      "evidence": "hard30 has 30 tasks and 60 runs; readiness=True.",
+      "id": "benchmark",
+      "objective": "Build a 30-50 task Codex JSONL trace benchmark with baseline and intervention runs.",
+      "status": "satisfied"
+    },
+    {
+      "completion_effect": "complete",
+      "evidence": "Stored traces can be parsed, diagnosed, aggregated, and rendered from repository artifacts.",
+      "id": "codextrace",
+      "objective": "Provide a GPU-free offline parser and diagnosis engine.",
+      "status": "satisfied"
+    },
+    {
+      "completion_effect": "complete for boundary paper; limited for broad real-world claims",
+      "evidence": "controlled detector fixtures cover 6 labels with micro-F1=1.00; hard30 repetitive_exploration detector has TP=4, FP=0, FN=0; full30 sandbox_permission_deadlock has TP=1, FP=0, FN=0; full30 process-label repetitive_exploration has FP=2; hidden_semantic_edge_case recall=0.00.",
+      "id": "trace_rule_detection",
+      "objective": "Show trace-based rules can detect observable failure processes.",
+      "status": "satisfied"
+    },
+    {
+      "completion_effect": "blocks original goal completion",
+      "evidence": "verification is saturated in stored pilots: full30=1.00->1.00 (exact=1.00->1.00), hard10=1.00->1.00 (exact=1.00->1.00), hard30=1.00->1.00 (exact=1.00->1.00), process-stress=1.00->1.00 (exact=1.00->1.00), verification-lift=1.00->1.00 (exact=1.00->1.00).",
+      "id": "verification_lift",
+      "objective": "Show harness intervention raises ordinary-baseline verification rate.",
+      "status": "missing"
+    },
+    {
+      "completion_effect": "complete for waste; success lift remains pilot-qualified",
+      "evidence": "hard10 success delta=+0.10; hard30 success delta=+0.00; hard30 repeated calls delta=-3.73; token delta=-98656.8; paired improvements repeated=26/30, token=26/30; task diagnosis: double failures=14, repairs=1, regressions=1; process-stress success delta=+0.00, repeated calls=8.08->7.17, token usage=209.0k->185.1k; verification-lift success delta=+0.00, repeated calls=6.12->5.38, token usage=176.8k->172.2k.",
+      "id": "success_or_waste",
+      "objective": "Show intervention improves success and/or reduces tool-call and token waste.",
+      "status": "satisfied"
+    },
+    {
+      "completion_effect": "complete for boundary-style RQ4",
+      "evidence": "hard30 hidden failures are not separated by process signals: verification delta=+0.00, exact success-check delta=+0.00, unresolved-error delta=+0.00; repetitive_exploration positives are explained by repeated calls, token usage, and failure score; RQ4 signal audit ready=True.",
+      "id": "rq4",
+      "objective": "Identify trace signals that explain failures or detector boundaries.",
+      "status": "satisfied"
+    }
+  ],
+  "summary": {
+    "blocking_items": 1,
+    "boundary_result_paper_ready": true,
+    "items": 7,
+    "next_decision": "Run a stronger ordinary-baseline verification-lift experiment if preserving the original thesis; otherwise revise the thesis to a boundary-result paper centered on waste reduction and trace-diagnosis limits.",
+    "original_goal_complete": false,
+    "should_mark_goal_complete": false
+  }
+}

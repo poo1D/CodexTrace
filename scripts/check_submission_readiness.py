@@ -370,6 +370,38 @@ def check_reviewer_path_audit_content(path: Path = Path("docs/reviewer_path_audi
     }
 
 
+def check_goal_completion_audit_content(path: Path = Path("docs/goal_completion_audit.md")) -> dict[str, Any]:
+    problems = []
+    try:
+        text = path.read_text(encoding="utf-8")
+    except FileNotFoundError:
+        return {
+            "name": "goal completion audit",
+            "ok": False,
+            "evidence": str(path),
+            "problems": ["missing goal completion audit"],
+        }
+
+    required_phrases = {
+        "original incomplete": "Original goal complete: no",
+        "boundary ready": "Boundary-result paper ready: yes",
+        "do not complete": "Should mark active goal complete: no",
+        "verification blocker": "verification_lift",
+        "next decision": "Run a stronger ordinary-baseline verification-lift experiment",
+    }
+    for label, phrase in required_phrases.items():
+        if phrase not in text:
+            problems.append(f"missing {label}")
+
+    return {
+        "name": "goal completion audit",
+        "ok": not problems,
+        "evidence": str(path),
+        "detail": "original goal remains incomplete while boundary-result paper is ready",
+        "problems": problems,
+    }
+
+
 def build_report(selection_dir: Path, run_dir: Path) -> dict[str, Any]:
     checks = [
         check_hard30_selection(selection_dir),
@@ -381,6 +413,7 @@ def build_report(selection_dir: Path, run_dir: Path) -> dict[str, Any]:
         check_submission_package_content(),
         check_paper_number_guard_content(),
         check_reviewer_path_audit_content(),
+        check_goal_completion_audit_content(),
         check_paper_draft_content(),
         check_experiment_protocol_content(),
         check_exists(Path("docs/reproducibility_checklist.md"), "reproducibility checklist"),

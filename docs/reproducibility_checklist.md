@@ -27,6 +27,7 @@ The stored pilots can be inspected and aggregated without re-running Codex.
 | `docs/hard30_task_diagnosis.md` | Generated task-level hard30 diagnosis for double failures, intervention repairs/regressions, and largest waste deltas. |
 | `docs/paper_claim_audit.md` | Generated support/partial/unsupported audit for thesis-level paper claims. |
 | `docs/claim_text_guard.md` | Generated guard that checks paper-facing text for unsupported-claim drift. |
+| `docs/goal_completion_audit.md` | Generated audit of whether the active original objective is complete or still blocked by evidence gaps. |
 | `docs/paper_number_guard.md` | Generated guard that checks paper-draft numeric claims against stored aggregate artifacts. |
 | `docs/reviewer_path_audit.md` | Generated guard that checks required reviewer files are discoverable from paper-facing entry points. |
 | `docs/thesis_readiness.md` | Generated audit of which original-thesis requirements are satisfied, partial, or missing. |
@@ -55,6 +56,7 @@ The stored pilots can be inspected and aggregated without re-running Codex.
 | `scripts/audit_manual_labels.py` | Standalone progress and quality audit for hard30 manual failure labels. |
 | `scripts/audit_paper_claims.py` | Machine-readable guard against overclaiming unsupported paper findings. |
 | `scripts/audit_claim_text_guard.py` | Text-level guard against reintroducing unsupported verification-lift or hidden-semantic claims. |
+| `scripts/audit_goal_completion.py` | Goal-level completion audit for the original objective and boundary-result paper state. |
 | `scripts/audit_paper_numbers.py` | Numeric guard for paper-draft values copied from generated result artifacts. |
 | `scripts/audit_reviewer_path.py` | Reviewer-path coverage guard for required paper artifacts. |
 | `scripts/audit_hard30_task_diagnosis.py` | Generates task-level hard30 failure-pattern and waste-delta diagnosis. |
@@ -184,6 +186,10 @@ PYTHONPATH=. python3 scripts/audit_verification_ablation_plan.py \
 PYTHONPATH=. python3 scripts/audit_thesis_readiness.py \
   --markdown-output /tmp/thesis-readiness.md \
   --json-output /tmp/thesis-readiness.json
+
+PYTHONPATH=. python3 scripts/audit_goal_completion.py \
+  --markdown-output /tmp/goal-completion-audit.md \
+  --json-output /tmp/goal-completion-audit.json
 
 PYTHONPATH=. python3 scripts/audit_paper_numbers.py \
   --markdown-output /tmp/paper-number-guard.md \
