@@ -1144,9 +1144,14 @@ def test_paper_claim_audit_marks_overclaims_as_unsupported():
     assert result["summary"]["verification_ablation_verification_delta"] == 1
     assert result["summary"]["verification_ablation_success_check_delta"] == 1
     assert result["summary"]["rq4_signal_audit_ready"] is True
+    assert result["summary"]["hard30_double_failure_tasks"] == 14
+    assert result["summary"]["hard30_intervention_repairs"] == 1
+    assert result["summary"]["hard30_intervention_regressions"] == 1
+    assert result["summary"]["hard30_task_token_improved"] == 26
     assert result["summary"]["status_counts"]["supported"] >= 3
     assert claims["Harness intervention increases verification rate."]["status"] == "unsupported"
     assert claims["Harness constraints can control verification behavior under a no-verify ablation."]["status"] == "supported"
+    assert claims["Task-level hard30 diagnosis identifies where agents get lost and where intervention helps or hurts."]["status"] == "supported"
     assert claims["Trace-based process rules detect most failure processes."]["status"] == "partial"
     assert claims["Trace signals explain observable process failures and the hidden-semantic boundary."]["status"] == "supported"
     assert claims["Harness intervention increases success rate."]["status"] == "partial"
@@ -1213,6 +1218,7 @@ def test_thesis_readiness_identifies_original_thesis_gaps():
     assert result["summary"]["status_counts"]["satisfied"] == 6
     assert "full30 sandbox_permission_deadlock has TP=1" in markdown
     assert "controlled detector fixtures cover 6 labels" in markdown
+    assert "task diagnosis: double failures=14, repairs=1, regressions=1" in markdown
     assert "Boundary-style RQ4 is supported" in markdown
     assert "process-stress tier" in markdown
     assert "verification-lift tier" in markdown

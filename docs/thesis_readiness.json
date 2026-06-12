@@ -69,7 +69,7 @@
       "status": "missing"
     },
     {
-      "evidence": "hard10 success delta=+0.10; hard30 success delta=+0.00; hard30 repeated calls delta=-3.73; token delta=-98656.8; paired improvements repeated=26/30, token=26/30; process-stress success delta=+0.00, repeated calls=8.08->7.17, token usage=209.0k->185.1k; verification-lift success delta=+0.00, repeated calls=6.12->5.38, token usage=176.8k->172.2k.",
+      "evidence": "hard10 success delta=+0.10; hard30 success delta=+0.00; hard30 repeated calls delta=-3.73; token delta=-98656.8; paired improvements repeated=26/30, token=26/30; task diagnosis: double failures=14, repairs=1, regressions=1; process-stress success delta=+0.00, repeated calls=8.08->7.17, token usage=209.0k->185.1k; verification-lift success delta=+0.00, repeated calls=6.12->5.38, token usage=176.8k->172.2k.",
       "gap": "Repeat hard30 or add a process-stress tier if a stable success-rate lift is required.",
       "id": "success_or_waste",
       "requirement": "Show intervention improves success and/or reduces tool-call and token waste.",

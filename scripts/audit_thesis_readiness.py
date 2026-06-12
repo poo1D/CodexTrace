@@ -19,6 +19,7 @@ DEFAULT_VERIFICATION_LIFT_PILOT = Path("benchmark/verification-lift/pilot/full-r
 DEFAULT_VERIFICATION_ABLATION_AUDIT = Path("docs/verification_ablation_plan_audit.json")
 DEFAULT_VERIFICATION_ABLATION_PILOT = Path("benchmark/verification-ablation/pilot/full-real/aggregate.json")
 DEFAULT_RQ4_SIGNAL_AUDIT = Path("docs/rq4_signal_audit.json")
+DEFAULT_HARD30_TASK_DIAGNOSIS = Path("docs/hard30_task_diagnosis.json")
 DEFAULT_TAXONOMY = Path("docs/failure_taxonomy.md")
 
 
@@ -36,6 +37,7 @@ def build_thesis_readiness(
     verification_ablation_audit_path: Path = DEFAULT_VERIFICATION_ABLATION_AUDIT,
     verification_ablation_pilot_path: Path = DEFAULT_VERIFICATION_ABLATION_PILOT,
     rq4_signal_audit_path: Path = DEFAULT_RQ4_SIGNAL_AUDIT,
+    hard30_task_diagnosis_path: Path = DEFAULT_HARD30_TASK_DIAGNOSIS,
     taxonomy_path: Path = DEFAULT_TAXONOMY,
 ) -> dict[str, Any]:
     full30 = _read_json(full30_aggregate_path)
@@ -51,6 +53,7 @@ def build_thesis_readiness(
     verification_ablation = _read_json(verification_ablation_audit_path) if verification_ablation_audit_path.exists() else {"ok": False, "task_count": 0}
     verification_ablation_pilot = _read_json(verification_ablation_pilot_path) if verification_ablation_pilot_path.exists() else None
     rq4_signal_audit = _read_json(rq4_signal_audit_path) if rq4_signal_audit_path.exists() else {"summary": {"ready": False}}
+    hard30_task_diagnosis = _read_json(hard30_task_diagnosis_path) if hard30_task_diagnosis_path.exists() else {"summary": {}}
     taxonomy_text = taxonomy_path.read_text(encoding="utf-8")
 
     full30_summary = full30["summary"]
@@ -129,6 +132,10 @@ def build_thesis_readiness(
     token_improved = int(hard30_paired["token_usage_delta"]["improved"])
     repeated_improved = int(hard30_paired["repeated_tool_call_delta"]["improved"])
     paired_n = int(hard30_paired["token_usage_delta"]["n"])
+    task_diagnosis_summary = hard30_task_diagnosis.get("summary", {})
+    double_failure_count = int(task_diagnosis_summary.get("double_failure_count", 0) or 0)
+    intervention_repair_count = int(task_diagnosis_summary.get("intervention_repair_count", 0) or 0)
+    intervention_regression_count = int(task_diagnosis_summary.get("intervention_regression_count", 0) or 0)
     hidden = hard30_eval.get("hidden_semantic_edge_case", {})
     repetitive = hard30_eval.get("repetitive_exploration", {})
     full30_sandbox = full30_process_eval.get("labels", {}).get("sandbox_permission_deadlock", {})
@@ -214,7 +221,8 @@ def build_thesis_readiness(
             "evidence": (
                 f"hard10 success delta={hard10_success_delta:+.2f}; hard30 success delta={hard30_success_delta:+.2f}; "
                 f"hard30 repeated calls delta={hard30_repeated_delta:+.2f}; token delta={hard30_token_delta:+.1f}; "
-                f"paired improvements repeated={repeated_improved}/{paired_n}, token={token_improved}/{paired_n}"
+                f"paired improvements repeated={repeated_improved}/{paired_n}, token={token_improved}/{paired_n}; "
+                f"task diagnosis: double failures={double_failure_count}, repairs={intervention_repair_count}, regressions={intervention_regression_count}"
                 f"{process_waste_evidence}{verification_lift_waste_evidence}."
             ),
             "gap": "Repeat hard30 or add a process-stress tier if a stable success-rate lift is required.",
@@ -478,6 +486,7 @@ def main() -> int:
     parser.add_argument("--verification-ablation-audit", type=Path, default=DEFAULT_VERIFICATION_ABLATION_AUDIT)
     parser.add_argument("--verification-ablation-pilot", type=Path, default=DEFAULT_VERIFICATION_ABLATION_PILOT)
     parser.add_argument("--rq4-signal-audit", type=Path, default=DEFAULT_RQ4_SIGNAL_AUDIT)
+    parser.add_argument("--hard30-task-diagnosis", type=Path, default=DEFAULT_HARD30_TASK_DIAGNOSIS)
     parser.add_argument("--taxonomy", type=Path, default=DEFAULT_TAXONOMY)
     parser.add_argument("--json-output", type=Path)
     parser.add_argument("--markdown-output", type=Path)
@@ -497,6 +506,7 @@ def main() -> int:
         args.verification_ablation_audit,
         args.verification_ablation_pilot,
         args.rq4_signal_audit,
+        args.hard30_task_diagnosis,
         args.taxonomy,
     )
     if args.json_output or args.markdown_output:

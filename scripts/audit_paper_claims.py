@@ -16,6 +16,7 @@ DEFAULT_PROCESS_STRESS_REPORT = Path("benchmark/process-stress/pilot/full-real/p
 DEFAULT_VERIFICATION_LIFT_REPORT = Path("benchmark/verification-lift/pilot/full-real/paper-report-labeled.json")
 DEFAULT_VERIFICATION_ABLATION_REPORT = Path("benchmark/verification-ablation/pilot/full-real/paper-report-labeled.json")
 DEFAULT_RQ4_SIGNAL_AUDIT = Path("docs/rq4_signal_audit.json")
+DEFAULT_HARD30_TASK_DIAGNOSIS = Path("docs/hard30_task_diagnosis.json")
 
 
 def build_claim_audit(
@@ -29,6 +30,7 @@ def build_claim_audit(
     verification_lift_report_path: Path = DEFAULT_VERIFICATION_LIFT_REPORT,
     verification_ablation_report_path: Path = DEFAULT_VERIFICATION_ABLATION_REPORT,
     rq4_signal_audit_path: Path = DEFAULT_RQ4_SIGNAL_AUDIT,
+    hard30_task_diagnosis_path: Path = DEFAULT_HARD30_TASK_DIAGNOSIS,
 ) -> dict[str, Any]:
     full30 = _read_json(full30_aggregate_path)
     full30_process_eval = _read_json(full30_process_label_eval_path) if full30_process_label_eval_path.exists() else {"labels": {}}
@@ -40,6 +42,7 @@ def build_claim_audit(
     verification_lift = _read_json(verification_lift_report_path) if verification_lift_report_path.exists() else None
     verification_ablation = _read_json(verification_ablation_report_path) if verification_ablation_report_path.exists() else None
     rq4_signal_audit = _read_json(rq4_signal_audit_path) if rq4_signal_audit_path.exists() else {"summary": {"ready": False}}
+    hard30_task_diagnosis = _read_json(hard30_task_diagnosis_path) if hard30_task_diagnosis_path.exists() else {"summary": {}}
 
     hard30_aggregate = hard30["aggregate"]
     hard30_summary = hard30_aggregate["summary"]
@@ -119,6 +122,16 @@ def build_claim_audit(
     verification_ablation_verification_delta = float(verification_ablation_deltas.get("verification_rate", 0) or 0)
     verification_ablation_success_check_delta = float(verification_ablation_deltas.get("success_check_verification_rate", 0) or 0)
     verification_ablation_failure_score_delta = float(verification_ablation_deltas.get("avg_failure_score", 0) or 0)
+    task_diagnosis_summary = hard30_task_diagnosis.get("summary", {})
+    double_failure_count = int(task_diagnosis_summary.get("double_failure_count", 0) or 0)
+    intervention_repair_count = int(task_diagnosis_summary.get("intervention_repair_count", 0) or 0)
+    intervention_regression_count = int(task_diagnosis_summary.get("intervention_regression_count", 0) or 0)
+    task_token_improved_count = int(task_diagnosis_summary.get("token_improved_count", 0) or 0)
+    task_repeated_improved_count = int(task_diagnosis_summary.get("repeated_call_improved_count", 0) or 0)
+    top_waste_reductions = hard30_task_diagnosis.get("top_waste_reductions", [])
+    top_waste_task = top_waste_reductions[0] if top_waste_reductions else {}
+    repair_tasks = ", ".join(row["task_id"] for row in hard30_task_diagnosis.get("intervention_repairs", [])) or "none"
+    regression_tasks = ", ".join(row["task_id"] for row in hard30_task_diagnosis.get("intervention_regressions", [])) or "none"
 
     claims = [
         {
@@ -161,6 +174,18 @@ def build_claim_audit(
             "status": "supported" if repeated_delta < 0 and token_delta < 0 and process_stress_repeated_delta < 0 and process_stress_token_delta < 0 and verification_lift_repeated_delta < 0 and verification_lift_token_delta < 0 else "partial",
             "evidence": f"hard30 repeated tool calls change {repeated_delta:+.2f}, token usage {token_delta:+.1f}; process-stress repeated tool calls change {process_stress_repeated_delta:+.2f}, token usage {process_stress_token_delta:+.1f}; verification-lift repeated tool calls change {verification_lift_repeated_delta:+.2f}, token usage {verification_lift_token_delta:+.1f}.",
             "action": "Use as the strongest current RQ3 result.",
+        },
+        {
+            "claim": "Task-level hard30 diagnosis identifies where agents get lost and where intervention helps or hurts.",
+            "status": "supported" if double_failure_count and intervention_repair_count and intervention_regression_count else "partial",
+            "evidence": (
+                f"hard30 task diagnosis has {double_failure_count} double-failure tasks, "
+                f"{intervention_repair_count} intervention repair ({repair_tasks}), "
+                f"{intervention_regression_count} intervention regression ({regression_tasks}), "
+                f"token improvements in {task_token_improved_count}/{paired_n} tasks, repeated-call improvements in {task_repeated_improved_count}/{paired_n} tasks; "
+                f"largest token reduction is {top_waste_task.get('task_id', 'n/a')} ({top_waste_task.get('token_usage_delta', 0)} tokens)."
+            ),
+            "action": "Use as the task-level answer to which hard30 tasks are easiest to get lost in.",
         },
         {
             "claim": "Trace-based process rules detect most failure processes.",
@@ -220,6 +245,11 @@ def build_claim_audit(
             "verification_ablation_verification_delta": verification_ablation_verification_delta,
             "verification_ablation_success_check_delta": verification_ablation_success_check_delta,
             "rq4_signal_audit_ready": rq4_ready,
+            "hard30_double_failure_tasks": double_failure_count,
+            "hard30_intervention_repairs": intervention_repair_count,
+            "hard30_intervention_regressions": intervention_regression_count,
+            "hard30_task_token_improved": task_token_improved_count,
+            "hard30_task_repeated_improved": task_repeated_improved_count,
         },
         "claims": claims,
     }
@@ -289,6 +319,7 @@ def main() -> int:
     parser.add_argument("--verification-lift-report", type=Path, default=DEFAULT_VERIFICATION_LIFT_REPORT)
     parser.add_argument("--verification-ablation-report", type=Path, default=DEFAULT_VERIFICATION_ABLATION_REPORT)
     parser.add_argument("--rq4-signal-audit", type=Path, default=DEFAULT_RQ4_SIGNAL_AUDIT)
+    parser.add_argument("--hard30-task-diagnosis", type=Path, default=DEFAULT_HARD30_TASK_DIAGNOSIS)
     parser.add_argument("--json-output", type=Path)
     parser.add_argument("--markdown-output", type=Path)
     args = parser.parse_args()
@@ -304,6 +335,7 @@ def main() -> int:
         args.verification_lift_report,
         args.verification_ablation_report,
         args.rq4_signal_audit,
+        args.hard30_task_diagnosis,
     )
     if args.json_output or args.markdown_output:
         write_claim_audit_outputs(result, args.json_output, args.markdown_output)

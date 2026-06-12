@@ -4,8 +4,8 @@ This generated audit maps the original thesis-style claims to the evidence curre
 
 ## Summary
 
-- Claims audited: 10
-- Supported: 6
+- Claims audited: 11
+- Supported: 7
 - Partial: 2
 - Unsupported: 2
 - Hard30 artifact: 30 tasks, 60 runs, 30 failures, readiness=yes
@@ -27,6 +27,7 @@ This generated audit maps the original thesis-style claims to the evidence curre
 | Harness intervention increases verification rate. | unsupported | hard30 verification delta is +0.00 and exact success-check delta is +0.00; process-stress verification delta is +0.00 and exact success-check delta is +0.00; verification-lift verification delta is +0.00 and exact success-check delta is +0.00; stored ordinary/weak-baseline pilots are saturated. | Do not claim verification-rate lift for current stored pilots; frame verification as saturated. |
 | Harness constraints can control verification behavior under a no-verify ablation. | supported | verification-ablation verification delta is +1.00; exact success-check delta is +1.00; failure-score delta is -61.25. | Use only as a mechanism ablation, not as ordinary-baseline evidence. |
 | Harness intervention reduces repeated tool-call and token waste. | supported | hard30 repeated tool calls change -3.73, token usage -98656.8; process-stress repeated tool calls change -0.92, token usage -23868.4; verification-lift repeated tool calls change -0.75, token usage -4661.8. | Use as the strongest current RQ3 result. |
+| Task-level hard30 diagnosis identifies where agents get lost and where intervention helps or hurts. | supported | hard30 task diagnosis has 14 double-failure tasks, 1 intervention repair (HARD-050), 1 intervention regression (HARD-007), token improvements in 26/30 tasks, repeated-call improvements in 26/30 tasks; largest token reduction is HARD-033 (-699231 tokens). | Use as the task-level answer to which hard30 tasks are easiest to get lost in. |
 | Trace-based process rules detect most failure processes. | partial | controlled detector fixtures cover 6 labels with micro-F1=1.00; hard30 includes 4 detected repetitive-exploration process positives (F1=1.00); full30 includes sandbox/permission TP=1, FP=0, FN=0, with 2 repetitive-exploration FP in the process-label slice. Hidden semantic recall is 0.00 with FN=30; process-stress hidden semantic FN=2; verification-lift hidden semantic FN=2. | Claim rule-level taxonomy coverage and observed process-positive detection; do not claim most real-world outcome failures are detected. |
 | Trace signals explain whether hidden semantic failures will fail. | unsupported | hard30 verification-rate signal delta is +0.00; unresolved-error delta is +0.00. | Say process signals explain the detector boundary, not hidden correctness. |
 | Trace signals explain observable process failures and the hidden-semantic boundary. | supported | RQ4 signal audit ready=True; hard30 hidden failures have verification delta +0.00 and unresolved-error delta +0.00, while real process positives have large repeated-call, token, failure-score, command-failure, or recover-phase deltas. | Use as the paper's RQ4 framing. |

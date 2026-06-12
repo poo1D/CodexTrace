@@ -37,6 +37,12 @@
       "status": "supported"
     },
     {
+      "action": "Use as the task-level answer to which hard30 tasks are easiest to get lost in.",
+      "claim": "Task-level hard30 diagnosis identifies where agents get lost and where intervention helps or hurts.",
+      "evidence": "hard30 task diagnosis has 14 double-failure tasks, 1 intervention repair (HARD-050), 1 intervention regression (HARD-007), token improvements in 26/30 tasks, repeated-call improvements in 26/30 tasks; largest token reduction is HARD-033 (-699231 tokens).",
+      "status": "supported"
+    },
+    {
       "action": "Claim rule-level taxonomy coverage and observed process-positive detection; do not claim most real-world outcome failures are detected.",
       "claim": "Trace-based process rules detect most failure processes.",
       "evidence": "controlled detector fixtures cover 6 labels with micro-F1=1.00; hard30 includes 4 detected repetitive-exploration process positives (F1=1.00); full30 includes sandbox/permission TP=1, FP=0, FN=0, with 2 repetitive-exploration FP in the process-label slice. Hidden semantic recall is 0.00 with FN=30; process-stress hidden semantic FN=2; verification-lift hidden semantic FN=2.",
@@ -62,17 +68,22 @@
     }
   ],
   "summary": {
-    "claims": 10,
+    "claims": 11,
     "detector_fixture_labels": 6,
     "detector_fixture_micro_f1": 1.0,
     "full30_sandbox_permission_fn": 0,
     "full30_sandbox_permission_fp": 0,
     "full30_sandbox_permission_tp": 1,
+    "hard30_double_failure_tasks": 14,
     "hard30_failures": 30,
+    "hard30_intervention_regressions": 1,
+    "hard30_intervention_repairs": 1,
     "hard30_ready": true,
     "hard30_repetitive_exploration_fn": 0,
     "hard30_repetitive_exploration_tp": 4,
     "hard30_runs": 60,
+    "hard30_task_repeated_improved": 26,
+    "hard30_task_token_improved": 26,
     "hard30_tasks": 30,
     "process_stress_failures": 2,
     "process_stress_runs": 24,
@@ -81,7 +92,7 @@
     "rq4_signal_audit_ready": true,
     "status_counts": {
       "partial": 2,
-      "supported": 6,
+      "supported": 7,
       "unsupported": 2
     },
     "verification_ablation_failures": 2,
