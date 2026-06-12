@@ -236,6 +236,40 @@ def check_paper_draft_content(path: Path = Path("docs/paper_draft.md")) -> dict[
     }
 
 
+def check_experiment_protocol_content(path: Path = Path("docs/experiment_protocol.md")) -> dict[str, Any]:
+    problems = []
+    try:
+        text = path.read_text(encoding="utf-8")
+    except FileNotFoundError:
+        return {
+            "name": "experiment protocol content",
+            "ok": False,
+            "evidence": str(path),
+            "problems": ["missing experiment protocol"],
+        }
+
+    normalized = " ".join(text.lower().split())
+    required_phrases = {
+        "rq-to-evidence map": "## RQ-To-Evidence Map",
+        "rq1 mapping": "| RQ1 failure modes |",
+        "rq2 mapping": "| RQ2 trace-only detection |",
+        "rq3 mapping": "| RQ3 intervention effect |",
+        "rq4 mapping": "| RQ4 explanatory signals |",
+        "verification boundary": "Ordinary and weak-baseline verification rates are saturated",
+    }
+    for label, phrase in required_phrases.items():
+        if " ".join(phrase.lower().split()) not in normalized:
+            problems.append(f"missing {label}")
+
+    return {
+        "name": "experiment protocol content",
+        "ok": not problems,
+        "evidence": str(path),
+        "detail": "RQ-to-evidence map with reproduction commands and current evidence boundaries",
+        "problems": problems,
+    }
+
+
 def build_report(selection_dir: Path, run_dir: Path) -> dict[str, Any]:
     checks = [
         check_hard30_selection(selection_dir),
@@ -244,6 +278,7 @@ def build_report(selection_dir: Path, run_dir: Path) -> dict[str, Any]:
         check_manual_labels(run_dir),
         check_hard30_report_content(run_dir),
         check_paper_draft_content(),
+        check_experiment_protocol_content(),
         check_exists(Path("docs/reproducibility_checklist.md"), "reproducibility checklist"),
     ]
     blocking = [check for check in checks if not check["ok"]]

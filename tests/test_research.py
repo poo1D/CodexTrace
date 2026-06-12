@@ -636,6 +636,8 @@ def test_submission_readiness_accepts_complete_synthetic_artifact(tmp_path):
     assert "submission-ready hard30 artifact" in report["positioning"]
     paper_check = next(check for check in report["checks"] if check["name"] == "paper draft content")
     assert paper_check["ok"] is True
+    protocol_check = next(check for check in report["checks"] if check["name"] == "experiment protocol content")
+    assert protocol_check["ok"] is True
 
 
 def test_submission_readiness_rejects_low_quality_manual_labels(tmp_path):
@@ -1153,6 +1155,18 @@ def test_paper_draft_contains_submission_polish_sections():
     assert "| Evidence slice | Baseline | Intervention | Interpretation |" in text
     assert "No model training, fine-tuning, embedding index, or GPU inference is used" in text
     assert "Trace diagnosis is less suited for proving semantic correctness" in text
+
+
+def test_experiment_protocol_maps_rqs_to_evidence():
+    text = Path("docs/experiment_protocol.md").read_text(encoding="utf-8")
+    normalized = " ".join(text.lower().split())
+
+    assert "## RQ-To-Evidence Map" in text
+    assert "| RQ1 failure modes |" in text
+    assert "| RQ2 trace-only detection |" in text
+    assert "| RQ3 intervention effect |" in text
+    assert "| RQ4 explanatory signals |" in text
+    assert "ordinary and weak-baseline verification rates are saturated" in normalized
 
 
 def test_thesis_readiness_identifies_original_thesis_gaps():

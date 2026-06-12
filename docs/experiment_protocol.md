@@ -160,6 +160,26 @@ codex-trace research paper-report benchmark/runs.example.jsonl \
   --markdown-output reports/example-paper-report.md
 ```
 
+## RQ-To-Evidence Map
+
+| RQ | Primary artifact | Reproduction command | Acceptance evidence |
+| --- | --- | --- | --- |
+| RQ1 failure modes | `docs/failure_taxonomy.md`, `benchmark/*/manual-labels.jsonl` | `codex-trace research paper-report ... --labels ...` | Taxonomy distribution and manual-label counts identify which failure modes appear. |
+| RQ2 trace-only detection | `benchmark/detector-fixtures/label-eval.md`, hard/process paper reports | `codex-trace research evaluate-labels MANIFEST LABELS` | Per-label precision/recall/F1 show detected process positives and hidden-semantic false negatives. |
+| RQ3 intervention effect | `docs/results_summary.md`, `paired-task-summary.csv` | `codex-trace research summary --markdown-output docs/results_summary.md` | Baseline/intervention deltas and paired task summaries show success, verification, waste, and token changes. |
+| RQ4 explanatory signals | `docs/rq4_signal_audit.md`, `paper-report-labeled.json` | `python3 scripts/audit_rq4_signals.py ...` | Signal means/deltas separate observable process positives and document the hidden-semantic boundary. |
+
+The current evidence should be read with these boundaries:
+
+- RQ1/RQ2 process coverage is strongest on controlled detector fixtures and
+  reviewed process-positive slices; real hard-tier failures are dominated by
+  hidden semantic edge cases.
+- RQ3 is strongest for repeated-call and token waste reduction. Ordinary and
+  weak-baseline verification rates are saturated; only the no-verify ablation
+  demonstrates direct harness control over verification behavior.
+- RQ4 is a boundary-style result: trace signals explain observable process
+  failures better than hidden semantic correctness.
+
 ## Minimal Acceptance Bar For A Workshop-Style Draft
 
 - 30 tasks x 2 prompt conditions
