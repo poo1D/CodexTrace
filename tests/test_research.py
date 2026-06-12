@@ -21,7 +21,7 @@ from scripts.run_hard30_shards import (
     select_task_ids,
     summarize_shards,
 )
-from scripts.check_submission_readiness import build_report, render_report
+from scripts.check_submission_readiness import build_report, check_submission_package_content, render_report
 
 from codex_trace.research import (
     aggregate_runs,
@@ -1288,6 +1288,7 @@ def test_submission_package_maps_rqs_to_safe_paper_claims():
     assert package["summary"]["ready_for_original_thesis"] is False
     assert package["summary"]["unsupported_claim_count"] == 2
     assert package["summary"]["required_boundary"] == "ordinary verification-rate lift remains unsupported; no-verify lift is an ablation only"
+    assert "docs/submission_package.md" in package["required_files"]
     assert [row["rq"] for row in package["rq_rows"]] == ["RQ1", "RQ2", "RQ3", "RQ4"]
     assert package["rq_rows"][2]["status"] == "supported"
     assert "ordinary verification-rate lift is unsupported" in package["rq_rows"][2]["claim_boundary"]
@@ -1295,6 +1296,18 @@ def test_submission_package_maps_rqs_to_safe_paper_claims():
     assert "## RQ-To-Evidence Map" in markdown
     assert "docs/hard30_task_diagnosis.md" in markdown
     assert "Unsupported Claims To Avoid" in markdown
+
+
+def test_submission_readiness_validates_submission_package_content(tmp_path):
+    broken = tmp_path / "submission_package.md"
+    broken.write_text("# CodexTrace Submission Package Map\n", encoding="utf-8")
+
+    check = check_submission_package_content(broken)
+
+    assert check["ok"] is False
+    assert "missing rq map" in check["problems"]
+    assert "missing required boundary" in check["problems"]
+    assert "missing verification overclaim guard" in check["problems"]
 
 
 def test_process_stress_plan_covers_target_failure_tags():

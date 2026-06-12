@@ -34,6 +34,7 @@ This generated map turns the current evidence into reviewer-facing paper claims.
 ## Required Reviewer Files
 
 - `README.md`
+- `docs/submission_package.md`
 - `docs/paper_draft.md`
 - `docs/results_summary.md`
 - `docs/paper_claim_audit.md`

@@ -272,6 +272,40 @@ def check_experiment_protocol_content(path: Path = Path("docs/experiment_protoco
     }
 
 
+def check_submission_package_content(path: Path = Path("docs/submission_package.md")) -> dict[str, Any]:
+    problems = []
+    try:
+        text = path.read_text(encoding="utf-8")
+    except FileNotFoundError:
+        return {
+            "name": "submission package map",
+            "ok": False,
+            "evidence": str(path),
+            "problems": ["missing submission package map"],
+        }
+
+    required_phrases = {
+        "rq map": "## RQ-To-Evidence Map",
+        "rq3 row": "| RQ3 | supported |",
+        "required boundary": "ordinary verification-rate lift remains unsupported; no-verify lift is an ablation only",
+        "unsupported claims": "## Unsupported Claims To Avoid",
+        "verification overclaim guard": "Harness intervention increases verification rate.",
+        "required reviewer files": "## Required Reviewer Files",
+        "self reference": "docs/submission_package.md",
+    }
+    for label, phrase in required_phrases.items():
+        if phrase not in text:
+            problems.append(f"missing {label}")
+
+    return {
+        "name": "submission package map",
+        "ok": not problems,
+        "evidence": str(path),
+        "detail": "RQ-to-evidence map, unsupported-claim guard, required boundary, and reviewer file list",
+        "problems": problems,
+    }
+
+
 def build_report(selection_dir: Path, run_dir: Path) -> dict[str, Any]:
     checks = [
         check_hard30_selection(selection_dir),
@@ -280,7 +314,7 @@ def build_report(selection_dir: Path, run_dir: Path) -> dict[str, Any]:
         check_manual_labels(run_dir),
         check_hard30_report_content(run_dir),
         check_exists(Path("docs/hard30_task_diagnosis.md"), "hard30 task diagnosis"),
-        check_exists(Path("docs/submission_package.md"), "submission package map"),
+        check_submission_package_content(),
         check_paper_draft_content(),
         check_experiment_protocol_content(),
         check_exists(Path("docs/reproducibility_checklist.md"), "reproducibility checklist"),

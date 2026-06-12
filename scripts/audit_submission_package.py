@@ -94,6 +94,7 @@ def build_submission_package() -> dict[str, Any]:
         "partial_claims": partial_claims,
         "required_files": [
             "README.md",
+            "docs/submission_package.md",
             "docs/paper_draft.md",
             "docs/results_summary.md",
             "docs/paper_claim_audit.md",
