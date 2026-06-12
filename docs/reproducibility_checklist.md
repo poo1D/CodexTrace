@@ -365,6 +365,17 @@ PYTHONPATH=. PYTHONPYCACHEPREFIX=/tmp/codextrace-pycache \
   --markdown-output /tmp/codextrace-claim-text-guard.md
 ```
 
+Check Git credential hygiene before pushing generated artifacts:
+
+```bash
+git config --show-origin --get-all credential.helper
+test ! -e ./-
+rg -n "gh[o]_|github[_]pat_|gh[p]_" .
+```
+
+Expected: credential helpers should not include `store --file=-`, the file
+`./-` should not exist, and the token-pattern scan should return no matches.
+
 When the gate is not ready, the Markdown/JSON report includes ordered next
 actions for collection, merge, finalization, and labeling.
 

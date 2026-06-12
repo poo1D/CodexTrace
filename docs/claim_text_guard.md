@@ -13,8 +13,8 @@ This generated guard checks paper-facing text for unsupported claim drift.
 | `README.md` | 326 | 0 |
 | `docs/paper_draft.md` | 407 | 0 |
 | `docs/paper_outline.md` | 190 | 0 |
-| `docs/results_summary.md` | 192 | 0 |
-| `docs/reproducibility_checklist.md` | 412 | 0 |
+| `docs/results_summary.md` | 201 | 0 |
+| `docs/reproducibility_checklist.md` | 423 | 0 |
 
 ## Problems
 
