@@ -306,6 +306,38 @@ def check_submission_package_content(path: Path = Path("docs/submission_package.
     }
 
 
+def check_paper_number_guard_content(path: Path = Path("docs/paper_number_guard.md")) -> dict[str, Any]:
+    problems = []
+    try:
+        text = path.read_text(encoding="utf-8")
+    except FileNotFoundError:
+        return {
+            "name": "paper number guard",
+            "ok": False,
+            "evidence": str(path),
+            "problems": ["missing paper number guard"],
+        }
+
+    required_phrases = {
+        "ok": "OK: yes",
+        "missing count": "Missing snippets: 0",
+        "full30 failure-score check": "full30 failure-score row",
+        "hard10 token check": "hard10 token row",
+        "verification ablation check": "verification-ablation paragraph",
+    }
+    for label, phrase in required_phrases.items():
+        if phrase not in text:
+            problems.append(f"missing {label}")
+
+    return {
+        "name": "paper number guard",
+        "ok": not problems,
+        "evidence": str(path),
+        "detail": "paper-draft numeric claims match stored aggregate artifacts",
+        "problems": problems,
+    }
+
+
 def build_report(selection_dir: Path, run_dir: Path) -> dict[str, Any]:
     checks = [
         check_hard30_selection(selection_dir),
@@ -315,6 +347,7 @@ def build_report(selection_dir: Path, run_dir: Path) -> dict[str, Any]:
         check_hard30_report_content(run_dir),
         check_exists(Path("docs/hard30_task_diagnosis.md"), "hard30 task diagnosis"),
         check_submission_package_content(),
+        check_paper_number_guard_content(),
         check_paper_draft_content(),
         check_experiment_protocol_content(),
         check_exists(Path("docs/reproducibility_checklist.md"), "reproducibility checklist"),

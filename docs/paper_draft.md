@@ -296,7 +296,7 @@ reduces several waste signals:
 | avg_command_failures | 0.50 | 0.20 | -0.30 |
 | avg_recover_events | 2.07 | 0.40 | -1.67 |
 | avg_token_usage | 218.7k | 184.8k | -34.0k |
-| avg_failure_score | 2.83 | 1.00 | -1.83 |
+| avg_failure_score | 4.17 | 1.00 | -3.17 |
 
 On the early hard10 pilot, intervention improves both outcome and waste
 metrics:
@@ -306,7 +306,7 @@ metrics:
 | success_rate | 0.70 | 0.80 | +0.10 |
 | verification_rate | 1.00 | 1.00 | 0.00 |
 | avg_repeated_tool_calls | 9.20 | 6.20 | -3.00 |
-| avg_token_usage | 248.9k | 187.5k | -61.5k |
+| avg_token_usage | 248.9k | 187.5k | -61.4k |
 | avg_verify_events | 7.30 | 3.70 | -3.60 |
 
 On the hard30 tier, success stays flat but waste drops sharply:

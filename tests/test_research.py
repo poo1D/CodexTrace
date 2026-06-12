@@ -5,6 +5,7 @@ from scripts.finalize_hard30_pilot import finalize, preflight, render_preflight
 from scripts.audit_manual_labels import audit_manual_labels, render_audit
 from scripts.audit_claim_text_guard import audit_claim_text_guard, render_claim_text_guard_markdown
 from scripts.audit_hard30_task_diagnosis import build_task_diagnosis, render_task_diagnosis_markdown
+from scripts.audit_paper_numbers import build_paper_number_guard, render_paper_number_guard_markdown
 from scripts.audit_paper_claims import build_claim_audit, render_claim_audit_markdown
 from scripts.audit_process_stress_plan import audit_process_stress_plan
 from scripts.audit_rq4_signals import build_rq4_signal_audit, render_rq4_signal_audit_markdown
@@ -21,7 +22,12 @@ from scripts.run_hard30_shards import (
     select_task_ids,
     summarize_shards,
 )
-from scripts.check_submission_readiness import build_report, check_submission_package_content, render_report
+from scripts.check_submission_readiness import (
+    build_report,
+    check_paper_number_guard_content,
+    check_submission_package_content,
+    render_report,
+)
 
 from codex_trace.research import (
     aggregate_runs,
@@ -1199,7 +1205,9 @@ def test_reviewer_docs_surface_hard30_task_diagnosis():
 
     assert "docs/hard30_task_diagnosis.md" in readme
     assert "docs/submission_package.md" in readme
+    assert "docs/paper_number_guard.md" in readme
     assert "scripts/audit_hard30_task_diagnosis.py" in readme
+    assert "scripts/audit_paper_numbers.py --markdown-output docs/paper_number_guard.md" in readme
     assert "scripts/audit_submission_package.py --markdown-output docs/submission_package.md" in readme
     assert "scripts/audit_thesis_readiness.py --markdown-output docs/thesis_readiness.md" in readme
     assert "scripts/audit_claim_text_guard.py --markdown-output docs/claim_text_guard.md" in readme
@@ -1209,6 +1217,7 @@ def test_reviewer_docs_surface_hard30_task_diagnosis():
     assert "188-run benchmark" in guide
     assert "scripts/audit_hard30_task_diagnosis.py" in checklist
     assert "scripts/audit_submission_package.py" in checklist
+    assert "scripts/audit_paper_numbers.py" in checklist
     assert "--markdown-output /tmp/hard30-task-diagnosis.md" in checklist
 
 
@@ -1289,6 +1298,7 @@ def test_submission_package_maps_rqs_to_safe_paper_claims():
     assert package["summary"]["unsupported_claim_count"] == 2
     assert package["summary"]["required_boundary"] == "ordinary verification-rate lift remains unsupported; no-verify lift is an ablation only"
     assert "docs/submission_package.md" in package["required_files"]
+    assert "docs/paper_number_guard.md" in package["required_files"]
     assert [row["rq"] for row in package["rq_rows"]] == ["RQ1", "RQ2", "RQ3", "RQ4"]
     assert package["rq_rows"][2]["status"] == "supported"
     assert "ordinary verification-rate lift is unsupported" in package["rq_rows"][2]["claim_boundary"]
@@ -1308,6 +1318,35 @@ def test_submission_readiness_validates_submission_package_content(tmp_path):
     assert "missing rq map" in check["problems"]
     assert "missing required boundary" in check["problems"]
     assert "missing verification overclaim guard" in check["problems"]
+
+
+def test_paper_number_guard_keeps_draft_numbers_in_sync(tmp_path):
+    result = build_paper_number_guard()
+    markdown = render_paper_number_guard_markdown(result)
+
+    assert result["ok"] is True
+    assert result["summary"]["checked"] == 9
+    assert result["summary"]["missing"] == 0
+    assert "full30 failure-score row" in markdown
+    assert "hard10 token row" in markdown
+
+    stale = tmp_path / "paper_draft.md"
+    stale.write_text("success rate stays flat at 50%\n", encoding="utf-8")
+    failing = build_paper_number_guard(paper_draft_path=stale)
+
+    assert failing["ok"] is False
+    assert any(row["name"] == "hard10 token row" for row in failing["missing"])
+
+
+def test_submission_readiness_validates_paper_number_guard_content(tmp_path):
+    broken = tmp_path / "paper_number_guard.md"
+    broken.write_text("# Paper Number Guard\nOK: no\n", encoding="utf-8")
+
+    check = check_paper_number_guard_content(broken)
+
+    assert check["ok"] is False
+    assert "missing ok" in check["problems"]
+    assert "missing missing count" in check["problems"]
 
 
 def test_process_stress_plan_covers_target_failure_tags():
