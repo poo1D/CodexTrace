@@ -8,6 +8,7 @@ from scripts.audit_hard30_task_diagnosis import build_task_diagnosis, render_tas
 from scripts.audit_paper_numbers import build_paper_number_guard, render_paper_number_guard_markdown
 from scripts.audit_paper_claims import build_claim_audit, render_claim_audit_markdown
 from scripts.audit_process_stress_plan import audit_process_stress_plan
+from scripts.audit_reviewer_path import build_reviewer_path_audit, render_reviewer_path_audit_markdown
 from scripts.audit_rq4_signals import build_rq4_signal_audit, render_rq4_signal_audit_markdown
 from scripts.audit_submission_package import build_submission_package, render_submission_package_markdown
 from scripts.audit_thesis_readiness import build_thesis_readiness, render_thesis_readiness_markdown
@@ -25,6 +26,7 @@ from scripts.run_hard30_shards import (
 from scripts.check_submission_readiness import (
     build_report,
     check_paper_number_guard_content,
+    check_reviewer_path_audit_content,
     check_submission_package_content,
     render_report,
 )
@@ -1208,8 +1210,10 @@ def test_reviewer_docs_surface_hard30_task_diagnosis():
     assert "docs/hard30_task_diagnosis.md" in readme
     assert "docs/submission_package.md" in readme
     assert "docs/paper_number_guard.md" in readme
+    assert "docs/reviewer_path_audit.md" in readme
     assert "scripts/audit_hard30_task_diagnosis.py" in readme
     assert "scripts/audit_paper_numbers.py --markdown-output docs/paper_number_guard.md" in readme
+    assert "scripts/audit_reviewer_path.py --markdown-output docs/reviewer_path_audit.md" in readme
     assert "scripts/audit_submission_package.py --markdown-output docs/submission_package.md" in readme
     assert "scripts/audit_thesis_readiness.py --markdown-output docs/thesis_readiness.md" in readme
     assert "scripts/audit_claim_text_guard.py --markdown-output docs/claim_text_guard.md" in readme
@@ -1225,6 +1229,7 @@ def test_reviewer_docs_surface_hard30_task_diagnosis():
     assert "scripts/audit_hard30_task_diagnosis.py" in checklist
     assert "scripts/audit_submission_package.py" in checklist
     assert "scripts/audit_paper_numbers.py" in checklist
+    assert "scripts/audit_reviewer_path.py" in checklist
     assert "--markdown-output /tmp/hard30-task-diagnosis.md" in checklist
 
 
@@ -1306,6 +1311,7 @@ def test_submission_package_maps_rqs_to_safe_paper_claims():
     assert package["summary"]["required_boundary"] == "ordinary verification-rate lift remains unsupported; no-verify lift is an ablation only"
     assert "docs/submission_package.md" in package["required_files"]
     assert "docs/paper_number_guard.md" in package["required_files"]
+    assert "docs/reviewer_path_audit.md" in package["required_files"]
     assert [row["rq"] for row in package["rq_rows"]] == ["RQ1", "RQ2", "RQ3", "RQ4"]
     assert package["rq_rows"][2]["status"] == "supported"
     assert "ordinary verification-rate lift is unsupported" in package["rq_rows"][2]["claim_boundary"]
@@ -1354,6 +1360,36 @@ def test_submission_readiness_validates_paper_number_guard_content(tmp_path):
     assert check["ok"] is False
     assert "missing ok" in check["problems"]
     assert "missing missing count" in check["problems"]
+
+
+def test_reviewer_path_audit_covers_required_artifacts(tmp_path):
+    result = build_reviewer_path_audit()
+    markdown = render_reviewer_path_audit_markdown(result)
+
+    assert result["ok"] is True
+    assert result["summary"]["missing"] == 0
+    assert result["summary"]["guide_missing"] == 0
+    assert result["summary"]["checklist_missing"] == 0
+    assert any(row["path"] == "docs/reviewer_path_audit.md" for row in result["coverage"])
+    assert "Missing from reproducibility checklist: 0" in markdown
+
+    package = tmp_path / "submission_package.json"
+    package.write_text(json.dumps({"required_files": ["docs/not-linked.md"]}), encoding="utf-8")
+    failing = build_reviewer_path_audit(submission_package_path=package)
+
+    assert failing["ok"] is False
+    assert failing["missing"][0]["path"] == "docs/not-linked.md"
+
+
+def test_submission_readiness_validates_reviewer_path_audit_content(tmp_path):
+    broken = tmp_path / "reviewer_path_audit.md"
+    broken.write_text("# Reviewer Path Audit\nOK: no\n", encoding="utf-8")
+
+    check = check_reviewer_path_audit_content(broken)
+
+    assert check["ok"] is False
+    assert "missing ok" in check["problems"]
+    assert "missing checklist coverage" in check["problems"]
 
 
 def test_process_stress_plan_covers_target_failure_tags():

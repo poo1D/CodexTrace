@@ -28,6 +28,7 @@ The stored pilots can be inspected and aggregated without re-running Codex.
 | `docs/paper_claim_audit.md` | Generated support/partial/unsupported audit for thesis-level paper claims. |
 | `docs/claim_text_guard.md` | Generated guard that checks paper-facing text for unsupported-claim drift. |
 | `docs/paper_number_guard.md` | Generated guard that checks paper-draft numeric claims against stored aggregate artifacts. |
+| `docs/reviewer_path_audit.md` | Generated guard that checks required reviewer files are discoverable from paper-facing entry points. |
 | `docs/thesis_readiness.md` | Generated audit of which original-thesis requirements are satisfied, partial, or missing. |
 | `docs/submission_package.md` | Generated RQ-to-evidence map for safe boundary-result paper claims. |
 | `docs/process_stress_plan_audit.md` | Generated coverage audit for the planned process-stress tier. |
@@ -55,6 +56,7 @@ The stored pilots can be inspected and aggregated without re-running Codex.
 | `scripts/audit_paper_claims.py` | Machine-readable guard against overclaiming unsupported paper findings. |
 | `scripts/audit_claim_text_guard.py` | Text-level guard against reintroducing unsupported verification-lift or hidden-semantic claims. |
 | `scripts/audit_paper_numbers.py` | Numeric guard for paper-draft values copied from generated result artifacts. |
+| `scripts/audit_reviewer_path.py` | Reviewer-path coverage guard for required paper artifacts. |
 | `scripts/audit_hard30_task_diagnosis.py` | Generates task-level hard30 failure-pattern and waste-delta diagnosis. |
 | `scripts/audit_submission_package.py` | Generates the reviewer-facing RQ-to-evidence submission package map. |
 | `scripts/check_submission_readiness.py` | Machine-readable gate for hard30 collection, finalization, labeling, and paper artifact readiness. |
@@ -186,6 +188,10 @@ PYTHONPATH=. python3 scripts/audit_thesis_readiness.py \
 PYTHONPATH=. python3 scripts/audit_paper_numbers.py \
   --markdown-output /tmp/paper-number-guard.md \
   --json-output /tmp/paper-number-guard.json
+
+PYTHONPATH=. python3 scripts/audit_reviewer_path.py \
+  --markdown-output /tmp/reviewer-path-audit.md \
+  --json-output /tmp/reviewer-path-audit.json
 
 PYTHONPATH=. python3 scripts/audit_submission_package.py \
   --markdown-output /tmp/submission-package.md \

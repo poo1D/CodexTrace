@@ -139,6 +139,7 @@ Key files:
 - `scripts/audit_verification_ablation_plan.py`: checks verification-ablation task, prompt, and fixture readiness
 - `scripts/audit_claim_text_guard.py`: checks paper-facing docs for unsupported verification-lift or hidden-semantic overclaims
 - `scripts/audit_paper_numbers.py`: checks paper-draft numeric claims against stored aggregate artifacts
+- `scripts/audit_reviewer_path.py`: checks required reviewer files are discoverable from paper-facing entry points
 - `scripts/audit_submission_package.py`: generates the RQ-to-evidence submission package map
 - `docs/artifact_guide.md`: 15-minute reviewer/interviewer walkthrough
 - `docs/experiment_protocol.md`: collection and labeling protocol
@@ -147,6 +148,7 @@ Key files:
 - `docs/paper_claim_audit.md`: generated support/partial/unsupported audit for thesis-level claims
 - `docs/claim_text_guard.md`: generated guard that checks paper-facing text for unsupported-claim drift
 - `docs/paper_number_guard.md`: generated guard that checks paper-draft numeric claims against stored artifacts
+- `docs/reviewer_path_audit.md`: generated guard that checks reviewer-path coverage for required paper artifacts
 - `docs/paper_draft.md`: result-driven workshop-style paper draft
 - `docs/paper_outline.md`: paper outline and experiment plan
 - `docs/reproducibility_checklist.md`: claim-evidence map and reproduction commands
@@ -236,6 +238,7 @@ PYTHONPATH=. python3 scripts/audit_paper_claims.py --markdown-output docs/paper_
 PYTHONPATH=. python3 scripts/audit_thesis_readiness.py --markdown-output docs/thesis_readiness.md
 PYTHONPATH=. python3 scripts/audit_claim_text_guard.py --markdown-output docs/claim_text_guard.md
 PYTHONPATH=. python3 scripts/audit_paper_numbers.py --markdown-output docs/paper_number_guard.md
+PYTHONPATH=. python3 scripts/audit_reviewer_path.py --markdown-output docs/reviewer_path_audit.md
 PYTHONPATH=. python3 scripts/audit_submission_package.py --markdown-output docs/submission_package.md
 ```
 

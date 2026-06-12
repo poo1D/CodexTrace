@@ -338,6 +338,38 @@ def check_paper_number_guard_content(path: Path = Path("docs/paper_number_guard.
     }
 
 
+def check_reviewer_path_audit_content(path: Path = Path("docs/reviewer_path_audit.md")) -> dict[str, Any]:
+    problems = []
+    try:
+        text = path.read_text(encoding="utf-8")
+    except FileNotFoundError:
+        return {
+            "name": "reviewer path audit",
+            "ok": False,
+            "evidence": str(path),
+            "problems": ["missing reviewer path audit"],
+        }
+
+    required_phrases = {
+        "ok": "OK: yes",
+        "missing everywhere": "Missing everywhere: 0",
+        "guide coverage": "Missing from artifact guide required set: 0",
+        "checklist coverage": "Missing from reproducibility checklist: 0",
+        "required files table": "| Required file | Covered | Present in |",
+    }
+    for label, phrase in required_phrases.items():
+        if phrase not in text:
+            problems.append(f"missing {label}")
+
+    return {
+        "name": "reviewer path audit",
+        "ok": not problems,
+        "evidence": str(path),
+        "detail": "required reviewer files are discoverable from paper-facing entry points",
+        "problems": problems,
+    }
+
+
 def build_report(selection_dir: Path, run_dir: Path) -> dict[str, Any]:
     checks = [
         check_hard30_selection(selection_dir),
@@ -348,6 +380,7 @@ def build_report(selection_dir: Path, run_dir: Path) -> dict[str, Any]:
         check_exists(Path("docs/hard30_task_diagnosis.md"), "hard30 task diagnosis"),
         check_submission_package_content(),
         check_paper_number_guard_content(),
+        check_reviewer_path_audit_content(),
         check_paper_draft_content(),
         check_experiment_protocol_content(),
         check_exists(Path("docs/reproducibility_checklist.md"), "reproducibility checklist"),

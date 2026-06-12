@@ -1,0 +1,117 @@
+{
+  "checklist_missing": [],
+  "coverage": [
+    {
+      "covered": true,
+      "path": "README.md",
+      "present_in": [
+        "README.md",
+        "docs/artifact_guide.md"
+      ]
+    },
+    {
+      "covered": true,
+      "path": "docs/submission_package.md",
+      "present_in": [
+        "README.md",
+        "docs/artifact_guide.md",
+        "docs/reproducibility_checklist.md"
+      ]
+    },
+    {
+      "covered": true,
+      "path": "docs/paper_draft.md",
+      "present_in": [
+        "README.md",
+        "docs/artifact_guide.md",
+        "docs/reproducibility_checklist.md"
+      ]
+    },
+    {
+      "covered": true,
+      "path": "docs/claim_text_guard.md",
+      "present_in": [
+        "README.md",
+        "docs/artifact_guide.md",
+        "docs/reproducibility_checklist.md"
+      ]
+    },
+    {
+      "covered": true,
+      "path": "docs/paper_number_guard.md",
+      "present_in": [
+        "README.md",
+        "docs/artifact_guide.md",
+        "docs/reproducibility_checklist.md"
+      ]
+    },
+    {
+      "covered": true,
+      "path": "docs/reviewer_path_audit.md",
+      "present_in": [
+        "README.md",
+        "docs/reproducibility_checklist.md"
+      ]
+    },
+    {
+      "covered": true,
+      "path": "docs/results_summary.md",
+      "present_in": [
+        "README.md",
+        "docs/artifact_guide.md",
+        "docs/reproducibility_checklist.md"
+      ]
+    },
+    {
+      "covered": true,
+      "path": "docs/paper_claim_audit.md",
+      "present_in": [
+        "README.md",
+        "docs/artifact_guide.md",
+        "docs/reproducibility_checklist.md"
+      ]
+    },
+    {
+      "covered": true,
+      "path": "docs/thesis_readiness.md",
+      "present_in": [
+        "README.md",
+        "docs/reproducibility_checklist.md"
+      ]
+    },
+    {
+      "covered": true,
+      "path": "docs/rq4_signal_audit.md",
+      "present_in": [
+        "README.md",
+        "docs/reproducibility_checklist.md"
+      ]
+    },
+    {
+      "covered": true,
+      "path": "docs/hard30_task_diagnosis.md",
+      "present_in": [
+        "README.md",
+        "docs/artifact_guide.md",
+        "docs/reproducibility_checklist.md"
+      ]
+    },
+    {
+      "covered": true,
+      "path": "docs/reproducibility_checklist.md",
+      "present_in": [
+        "README.md",
+        "docs/artifact_guide.md"
+      ]
+    }
+  ],
+  "guide_missing": [],
+  "missing": [],
+  "ok": true,
+  "summary": {
+    "checklist_missing": 0,
+    "guide_missing": 0,
+    "missing": 0,
+    "required_files": 12
+  }
+}
