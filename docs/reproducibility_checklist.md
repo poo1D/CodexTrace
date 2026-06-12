@@ -28,6 +28,7 @@ The stored pilots can be inspected and aggregated without re-running Codex.
 | `docs/paper_claim_audit.md` | Generated support/partial/unsupported audit for thesis-level paper claims. |
 | `docs/claim_text_guard.md` | Generated guard that checks paper-facing text for unsupported-claim drift. |
 | `docs/thesis_readiness.md` | Generated audit of which original-thesis requirements are satisfied, partial, or missing. |
+| `docs/submission_package.md` | Generated RQ-to-evidence map for safe boundary-result paper claims. |
 | `docs/process_stress_plan_audit.md` | Generated coverage audit for the planned process-stress tier. |
 | `docs/verification_lift_plan_audit.md` | Generated task/prompt readiness audit for the verification-lift tier. |
 | `docs/verification_ablation_plan_audit.md` | Generated task/prompt readiness audit for the no-verify ablation tier. |
@@ -53,6 +54,7 @@ The stored pilots can be inspected and aggregated without re-running Codex.
 | `scripts/audit_paper_claims.py` | Machine-readable guard against overclaiming unsupported paper findings. |
 | `scripts/audit_claim_text_guard.py` | Text-level guard against reintroducing unsupported verification-lift or hidden-semantic claims. |
 | `scripts/audit_hard30_task_diagnosis.py` | Generates task-level hard30 failure-pattern and waste-delta diagnosis. |
+| `scripts/audit_submission_package.py` | Generates the reviewer-facing RQ-to-evidence submission package map. |
 | `scripts/check_submission_readiness.py` | Machine-readable gate for hard30 collection, finalization, labeling, and paper artifact readiness. |
 | `benchmark/pilot/full30-real` | 30-task / 60-run real seed pilot. |
 | `benchmark/pilot/full30-real/process-labels.jsonl` | Manual process-positive labels for full30 sandbox/permission detector coverage. |
@@ -178,6 +180,10 @@ PYTHONPATH=. python3 scripts/audit_verification_ablation_plan.py \
 PYTHONPATH=. python3 scripts/audit_thesis_readiness.py \
   --markdown-output /tmp/thesis-readiness.md \
   --json-output /tmp/thesis-readiness.json
+
+PYTHONPATH=. python3 scripts/audit_submission_package.py \
+  --markdown-output /tmp/submission-package.md \
+  --json-output /tmp/submission-package.json
 ```
 
 Dry-run the process-stress tier without model calls:

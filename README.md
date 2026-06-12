@@ -138,6 +138,7 @@ Key files:
 - `scripts/audit_verification_lift_plan.py`: checks verification-lift task, prompt, and fixture readiness
 - `scripts/audit_verification_ablation_plan.py`: checks verification-ablation task, prompt, and fixture readiness
 - `scripts/audit_claim_text_guard.py`: checks paper-facing docs for unsupported verification-lift or hidden-semantic overclaims
+- `scripts/audit_submission_package.py`: generates the RQ-to-evidence submission package map
 - `docs/artifact_guide.md`: 15-minute reviewer/interviewer walkthrough
 - `docs/experiment_protocol.md`: collection and labeling protocol
 - `docs/failure_taxonomy.md`: process-level failure labels
@@ -147,6 +148,7 @@ Key files:
 - `docs/paper_draft.md`: result-driven workshop-style paper draft
 - `docs/paper_outline.md`: paper outline and experiment plan
 - `docs/reproducibility_checklist.md`: claim-evidence map and reproduction commands
+- `docs/submission_package.md`: generated RQ-to-evidence map for safe paper submission claims
 - `docs/results_summary.md`: generated full30 + hard10 + hard30 + process-stress + verification-lift + verification-ablation result summary, including RQ4 trace-signal analysis
 - `docs/rq4_signal_audit.md`: generated signal audit for observable process failures and hidden semantic boundaries
 - `docs/hard30_task_diagnosis.md`: generated task-level hard30 diagnosis for double failures, repairs, regressions, and waste deltas
@@ -231,6 +233,7 @@ PYTHONPATH=. python3 scripts/audit_hard30_task_diagnosis.py \
 PYTHONPATH=. python3 scripts/audit_paper_claims.py --markdown-output docs/paper_claim_audit.md
 PYTHONPATH=. python3 scripts/audit_thesis_readiness.py --markdown-output docs/thesis_readiness.md
 PYTHONPATH=. python3 scripts/audit_claim_text_guard.py --markdown-output docs/claim_text_guard.md
+PYTHONPATH=. python3 scripts/audit_submission_package.py --markdown-output docs/submission_package.md
 ```
 
 The current draft in `docs/paper_draft.md` reports the seed, hard10, hard30,

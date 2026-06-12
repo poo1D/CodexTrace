@@ -280,6 +280,7 @@ def build_report(selection_dir: Path, run_dir: Path) -> dict[str, Any]:
         check_manual_labels(run_dir),
         check_hard30_report_content(run_dir),
         check_exists(Path("docs/hard30_task_diagnosis.md"), "hard30 task diagnosis"),
+        check_exists(Path("docs/submission_package.md"), "submission package map"),
         check_paper_draft_content(),
         check_experiment_protocol_content(),
         check_exists(Path("docs/reproducibility_checklist.md"), "reproducibility checklist"),

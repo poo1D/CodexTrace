@@ -8,6 +8,7 @@ from scripts.audit_hard30_task_diagnosis import build_task_diagnosis, render_tas
 from scripts.audit_paper_claims import build_claim_audit, render_claim_audit_markdown
 from scripts.audit_process_stress_plan import audit_process_stress_plan
 from scripts.audit_rq4_signals import build_rq4_signal_audit, render_rq4_signal_audit_markdown
+from scripts.audit_submission_package import build_submission_package, render_submission_package_markdown
 from scripts.audit_thesis_readiness import build_thesis_readiness, render_thesis_readiness_markdown
 from scripts.audit_verification_ablation_plan import audit_verification_ablation_plan
 from scripts.audit_verification_lift_plan import audit_verification_lift_plan
@@ -1197,7 +1198,9 @@ def test_reviewer_docs_surface_hard30_task_diagnosis():
     checklist = Path("docs/reproducibility_checklist.md").read_text(encoding="utf-8")
 
     assert "docs/hard30_task_diagnosis.md" in readme
+    assert "docs/submission_package.md" in readme
     assert "scripts/audit_hard30_task_diagnosis.py" in readme
+    assert "scripts/audit_submission_package.py --markdown-output docs/submission_package.md" in readme
     assert "scripts/audit_thesis_readiness.py --markdown-output docs/thesis_readiness.md" in readme
     assert "scripts/audit_claim_text_guard.py --markdown-output docs/claim_text_guard.md" in readme
     assert "docs/hard30_task_diagnosis.md" in guide
@@ -1205,6 +1208,7 @@ def test_reviewer_docs_surface_hard30_task_diagnosis():
     assert "`HARD-050` repaired, `HARD-007` regressed" in guide
     assert "188-run benchmark" in guide
     assert "scripts/audit_hard30_task_diagnosis.py" in checklist
+    assert "scripts/audit_submission_package.py" in checklist
     assert "--markdown-output /tmp/hard30-task-diagnosis.md" in checklist
 
 
@@ -1273,6 +1277,24 @@ def test_thesis_readiness_identifies_original_thesis_gaps():
     assert pilot["baseline_success_rate"] == pilot["intervention_success_rate"]
     assert pilot["baseline_repeated_calls"] > pilot["intervention_repeated_calls"]
     assert pilot["baseline_token_usage"] > pilot["intervention_token_usage"]
+
+
+def test_submission_package_maps_rqs_to_safe_paper_claims():
+    package = build_submission_package()
+    markdown = render_submission_package_markdown(package)
+
+    assert package["summary"]["rq_count"] == 4
+    assert package["summary"]["package_ready_for_boundary_paper"] is True
+    assert package["summary"]["ready_for_original_thesis"] is False
+    assert package["summary"]["unsupported_claim_count"] == 2
+    assert package["summary"]["required_boundary"] == "ordinary verification-rate lift remains unsupported; no-verify lift is an ablation only"
+    assert [row["rq"] for row in package["rq_rows"]] == ["RQ1", "RQ2", "RQ3", "RQ4"]
+    assert package["rq_rows"][2]["status"] == "supported"
+    assert "ordinary verification-rate lift is unsupported" in package["rq_rows"][2]["claim_boundary"]
+    assert any(row["claim"] == "Harness intervention increases verification rate." for row in package["unsupported_claims"])
+    assert "## RQ-To-Evidence Map" in markdown
+    assert "docs/hard30_task_diagnosis.md" in markdown
+    assert "Unsupported Claims To Avoid" in markdown
 
 
 def test_process_stress_plan_covers_target_failure_tags():
