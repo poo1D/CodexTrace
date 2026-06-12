@@ -179,15 +179,25 @@ The current machine-readable gate is:
 PYTHONPATH=. python3 scripts/check_submission_readiness.py
 ```
 
-It returns a non-zero exit code until the hard30 traces, generated tables, and
-manual labels are present. Its report includes the next commands to run.
-Failed-run manual labels must use known taxonomy tags and include non-empty
-notes so RQ1/RQ2 claims remain auditable.
-Use `scripts/audit_manual_labels.py` after editing `manual-labels.jsonl` to
+Current status: this gate passes for the stored hard30 artifact. The report
+positions the repository as a `submission-ready hard30 artifact`, meaning the
+30-task / 60-run hard-tier package, generated tables, paper draft, experiment
+protocol, manual labels, and reproducibility checklist are present and
+machine-checkable.
+
+The gate remains useful during future collection: if traces, generated tables,
+or manual labels are missing, it returns a non-zero exit code and reports the
+next commands to run. Failed-run manual labels must use known taxonomy tags and
+include non-empty notes so RQ1/RQ2 claims remain auditable. Use
+`scripts/audit_manual_labels.py` after editing `manual-labels.jsonl` to
 summarize missing rows, missing notes, unknown tags, and per-tag coverage.
 
-Until then, the honest positioning is:
+The honest positioning for the current artifact is:
 
 > A reproducible pilot artifact showing that trace diagnosis can measure
 > process failures and harness-level waste reductions, with an explicit boundary
 > result for hidden semantic failures.
+
+The stronger-submission work remains: repeat a hard-tier subset to estimate
+variance and collect more natural observable process-failure positives so RQ1,
+RQ2, and RQ4 are not dominated by hidden semantic edge cases.

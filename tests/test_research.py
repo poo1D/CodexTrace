@@ -640,6 +640,17 @@ def test_submission_readiness_accepts_complete_synthetic_artifact(tmp_path):
     assert protocol_check["ok"] is True
 
 
+def test_submission_readiness_plan_matches_current_gate_status():
+    text = Path("docs/submission_readiness_plan.md").read_text(encoding="utf-8")
+    normalized = " ".join(text.split())
+
+    assert "Current status: this gate passes for the stored hard30 artifact." in text
+    assert "submission-ready hard30 artifact" in text
+    assert "if traces, generated tables, or manual labels are missing" in normalized
+    assert "repeat a hard-tier subset to estimate variance" in normalized
+    assert "collect more natural observable process-failure positives" in normalized
+
+
 def test_submission_readiness_rejects_low_quality_manual_labels(tmp_path):
     root = Path.cwd()
     selection_dir = tmp_path / "selection"
