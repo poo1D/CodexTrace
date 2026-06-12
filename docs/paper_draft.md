@@ -427,9 +427,11 @@ manifests, generated reports, manual labels, and reproduction commands needed
 to inspect the pilot artifact without rerunning Codex. The main entry points
 are `docs/artifact_guide.md` for a short reviewer path,
 `docs/results_summary.md` for generated RQ tables,
-`docs/paper_claim_audit.md` and `docs/claim_text_guard.md` for claim-support
-guards, and `docs/reproducibility_checklist.md` for claim-to-evidence mapping
-and commands.
+`docs/submission_package.md` for safe RQ-to-evidence claim framing,
+`docs/paper_claim_audit.md`, `docs/claim_text_guard.md`, and
+`docs/paper_number_guard.md` for claim-support and numeric-drift guards, and
+`docs/reproducibility_checklist.md` for claim-to-evidence mapping and
+commands.
 
 ## 11. Conclusion
 
@@ -447,3 +449,6 @@ lightweight semantic checks can recover hidden edge-case failures.
 For a reviewer-facing walkthrough, see `docs/artifact_guide.md`. For the
 generated result summary, see `docs/results_summary.md`. For claim-evidence
 mapping and reproduction commands, see `docs/reproducibility_checklist.md`.
+For safe claim framing and generated guard status, see
+`docs/submission_package.md`, `docs/claim_text_guard.md`, and
+`docs/paper_number_guard.md`.

@@ -1196,6 +1196,8 @@ def test_paper_draft_contains_submission_polish_sections():
     assert "| Evidence slice | Baseline | Intervention | Interpretation |" in text
     assert "No model training, fine-tuning, embedding index, or GPU inference is used" in text
     assert "Trace diagnosis is less suited for proving semantic correctness" in text
+    assert "docs/submission_package.md" in text
+    assert "docs/paper_number_guard.md" in text
 
 
 def test_reviewer_docs_surface_hard30_task_diagnosis():
@@ -1212,7 +1214,12 @@ def test_reviewer_docs_surface_hard30_task_diagnosis():
     assert "scripts/audit_thesis_readiness.py --markdown-output docs/thesis_readiness.md" in readme
     assert "scripts/audit_claim_text_guard.py --markdown-output docs/claim_text_guard.md" in readme
     assert "docs/hard30_task_diagnosis.md" in guide
+    assert "docs/submission_package.md" in guide
+    assert "docs/claim_text_guard.md" in guide
+    assert "docs/paper_number_guard.md" in guide
     assert "| Which tasks get lost? |" in guide
+    assert "| Which claims are safe to write? |" in guide
+    assert "| Did paper text drift from evidence? |" in guide
     assert "`HARD-050` repaired, `HARD-007` regressed" in guide
     assert "188-run benchmark" in guide
     assert "scripts/audit_hard30_task_diagnosis.py" in checklist

@@ -26,15 +26,18 @@ oracles for hidden semantic correctness.
 3. Inspect generated results in `docs/results_summary.md`.
 4. Inspect task-level hard30 repairs, regressions, and double failures in
    `docs/hard30_task_diagnosis.md`.
-5. Check thesis-level support status in `docs/paper_claim_audit.md`.
-6. Check claim-to-evidence mapping in `docs/reproducibility_checklist.md`.
-7. Run the offline demo:
+5. Check safe paper-claim framing in `docs/submission_package.md`.
+6. Check thesis-level support status in `docs/paper_claim_audit.md`.
+7. Check drift guards in `docs/claim_text_guard.md` and
+   `docs/paper_number_guard.md`.
+8. Check claim-to-evidence mapping in `docs/reproducibility_checklist.md`.
+9. Run the offline demo:
 
 ```bash
 ./scripts/demo.sh
 ```
 
-8. Optionally open the visual replay UI:
+10. Optionally open the visual replay UI:
 
 ```bash
 cd web
@@ -51,6 +54,8 @@ npm run dev
 | RQ3: Do harness interventions help? | `docs/results_summary.md` RQ3 tables |
 | RQ4: Which signals explain failure? | `docs/results_summary.md` RQ4 trace-signal table |
 | Which tasks get lost? | `docs/hard30_task_diagnosis.md` |
+| Which claims are safe to write? | `docs/submission_package.md`, `docs/paper_claim_audit.md` |
+| Did paper text drift from evidence? | `docs/claim_text_guard.md`, `docs/paper_number_guard.md` |
 
 The stored pilots currently include:
 
