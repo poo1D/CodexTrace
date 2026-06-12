@@ -229,6 +229,8 @@ PYTHONPATH=. python3 scripts/audit_hard30_task_diagnosis.py \
   --json-output docs/hard30_task_diagnosis.json \
   --markdown-output docs/hard30_task_diagnosis.md
 PYTHONPATH=. python3 scripts/audit_paper_claims.py --markdown-output docs/paper_claim_audit.md
+PYTHONPATH=. python3 scripts/audit_thesis_readiness.py --markdown-output docs/thesis_readiness.md
+PYTHONPATH=. python3 scripts/audit_claim_text_guard.py --markdown-output docs/claim_text_guard.md
 ```
 
 The current draft in `docs/paper_draft.md` reports the seed, hard10, hard30,

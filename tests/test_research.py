@@ -1198,6 +1198,8 @@ def test_reviewer_docs_surface_hard30_task_diagnosis():
 
     assert "docs/hard30_task_diagnosis.md" in readme
     assert "scripts/audit_hard30_task_diagnosis.py" in readme
+    assert "scripts/audit_thesis_readiness.py --markdown-output docs/thesis_readiness.md" in readme
+    assert "scripts/audit_claim_text_guard.py --markdown-output docs/claim_text_guard.md" in readme
     assert "docs/hard30_task_diagnosis.md" in guide
     assert "| Which tasks get lost? |" in guide
     assert "`HARD-050` repaired, `HARD-007` regressed" in guide
