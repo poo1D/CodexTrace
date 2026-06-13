@@ -1490,6 +1490,11 @@ def test_paper_draft_contains_submission_polish_sections():
     assert "| Work line | Primary question | Typical evidence | CodexTrace difference |" in text
     assert "| Tier | Tasks | Runs | Baseline | Intervention | Outcome oracle | Primary use |" in text
     assert "| Schema object | Fields | Purpose |" in text
+    assert "| Paper field | Implementation source | Notes |" in text
+    assert "`Step.event_type`" in text
+    assert "`Step.tool_name`" in text
+    assert "`Step.file_paths`" in text
+    assert "`Step.failure_tags`" in text
     assert "| Taxonomy label | Implementation finding | Detector signal |" in text
     assert "| `verification_gap` | `verification_gap` |" in text
     assert "| `unrecovered_tool_error` | `command_failure_unhandled` |" in text

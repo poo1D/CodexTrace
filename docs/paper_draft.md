@@ -159,6 +159,27 @@ without preserving the full raw event payload in every downstream table:
 | tool evidence | command, exit code, files, metadata | Captures shell/tool behavior and file-change evidence. |
 | process state | phase, event ids, finding code, severity | Supports phase counts, detector evidence, and diagnosis reports. |
 
+For paper reporting, CodexTrace exposes the schema in the Run/Step form used
+by the experiment protocol:
+
+| Paper field | Implementation source | Notes |
+| --- | --- | --- |
+| `Run.task_id` | run manifest `task_id` | Stable task identifier. |
+| `Run.prompt_type` | run manifest `prompt_type` | `baseline` or `intervention`. |
+| `Run.outcome` | run manifest `outcome` | External grader label. |
+| `Run.usage` | Codex JSONL usage metadata | Token counts when present. |
+| `Step.timestamp` | event timestamp / ordering | Missing timestamps fall back to trace order. |
+| `Step.event_type` | `TraceEvent.kind` and `raw_type` | Normalized event kind plus original Codex type. |
+| `Step.content` | event title/detail | Human-readable command, message, or evidence snippet. |
+| `Step.tool_name` | command/tool event metadata | Shell command, MCP tool, or web/search tool name. |
+| `Step.command` | `TraceEvent.command` | Normalized shell command for command events. |
+| `Step.status` | `TraceEvent.status` and exit code | Completed, failed, blocked, or error-like status. |
+| `Step.error` | failed/error event detail | Derived from failed commands, error events, or blocked tool output. |
+| `Step.file_paths` | file-change metadata | Paths touched by file-change events. |
+| `Step.token_usage` | run usage plus event metadata | Used for run-level token metrics and context-drift signals. |
+| `Step.phase` | phase segmenter output | setup, inspect, edit, verify, recover, complete, or other. |
+| `Step.failure_tags` | detector/manual-label outputs | Process taxonomy tags attached during diagnosis or labeling. |
+
 The phase segmenter maps events into setup, inspect, edit, verify, recover,
 complete, and other. It uses command shape, file-change events, completion
 messages, and failed-command context to infer whether later work is still
