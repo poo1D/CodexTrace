@@ -317,6 +317,41 @@ def check_submission_package_content(path: Path = Path("docs/submission_package.
     }
 
 
+def check_headline_results_content(path: Path = Path("docs/headline_results.md")) -> dict[str, Any]:
+    problems = []
+    try:
+        text = path.read_text(encoding="utf-8")
+    except FileNotFoundError:
+        return {
+            "name": "headline results table",
+            "ok": False,
+            "evidence": str(path),
+            "problems": ["missing headline results table"],
+        }
+
+    required_phrases = {
+        "ready": "Ready: yes",
+        "verification lift unsupported": "Ordinary verification-rate lift supported: no",
+        "hard30 success": "hard30_success",
+        "hard30 repeated calls": "hard30_repeated_tool_calls",
+        "hard30 token usage": "hard30_token_usage",
+        "v2 verification": "verification_lift_v2_verification",
+        "ablation verification": "no_verify_ablation_verification",
+        "not ordinary baseline": "not an ordinary baseline",
+    }
+    for label, phrase in required_phrases.items():
+        if phrase not in text:
+            problems.append(f"missing {label}")
+
+    return {
+        "name": "headline results table",
+        "ok": not problems,
+        "evidence": str(path),
+        "detail": "compact actual headline table with verification-lift boundary and no-verify ablation caveat",
+        "problems": problems,
+    }
+
+
 def check_paper_number_guard_content(path: Path = Path("docs/paper_number_guard.md")) -> dict[str, Any]:
     problems = []
     try:
@@ -528,7 +563,7 @@ def check_reproducibility_audit_content(path: Path = Path("docs/reproducibility_
 
     required_phrases = {
         "ready": "Ready: yes",
-        "coverage count": "Commands covered: 21 / 21",
+        "coverage count": "Commands covered: 22 / 22",
         "balanced fences": "Markdown fences balanced: yes",
         "submission gate": "submission_readiness_gate",
         "scope caveat": "does not execute the full real Codex collection commands",
@@ -622,6 +657,7 @@ def build_report(selection_dir: Path, run_dir: Path) -> dict[str, Any]:
         check_hard30_report_content(run_dir),
         check_exists(Path("docs/hard30_task_diagnosis.md"), "hard30 task diagnosis"),
         check_submission_package_content(),
+        check_headline_results_content(),
         check_paper_number_guard_content(),
         check_reviewer_path_audit_content(),
         check_metric_coverage_audit_content(),

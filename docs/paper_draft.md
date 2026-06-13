@@ -480,6 +480,7 @@ manifests, generated reports, manual labels, and reproduction commands needed
 to inspect the pilot artifact without rerunning Codex. The main entry points
 are `docs/artifact_guide.md` for a short reviewer path,
 `docs/results_summary.md` for generated RQ tables,
+`docs/headline_results.md` for the compact actual headline table,
 `docs/submission_package.md` for safe RQ-to-evidence claim framing,
 `docs/metric_coverage_audit.md` for experiment-metric coverage,
 `docs/failure_taxonomy_audit.md` for six-label taxonomy coverage,
@@ -505,7 +506,8 @@ observable process failures, and evaluate whether additional trace signals or
 lightweight semantic checks can recover hidden edge-case failures.
 
 For a reviewer-facing walkthrough, see `docs/artifact_guide.md`. For the
-generated result summary, see `docs/results_summary.md`. For claim-evidence
+generated result summary and compact headline table, see
+`docs/results_summary.md` and `docs/headline_results.md`. For claim-evidence
 mapping and reproduction commands, see `docs/reproducibility_checklist.md`.
 For safe claim framing and generated guard status, see
 `docs/submission_package.md`, `docs/failure_taxonomy_audit.md`,

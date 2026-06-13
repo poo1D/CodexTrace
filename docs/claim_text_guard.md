@@ -10,11 +10,11 @@ This generated guard checks paper-facing text for unsupported claim drift.
 
 | File | Lines | Problems |
 | --- | ---: | ---: |
-| `README.md` | 378 | 0 |
-| `docs/paper_draft.md` | 514 | 0 |
+| `README.md` | 382 | 0 |
+| `docs/paper_draft.md` | 516 | 0 |
 | `docs/paper_outline.md` | 203 | 0 |
 | `docs/results_summary.md` | 248 | 0 |
-| `docs/reproducibility_checklist.md` | 590 | 0 |
+| `docs/reproducibility_checklist.md` | 596 | 0 |
 
 ## Problems
 

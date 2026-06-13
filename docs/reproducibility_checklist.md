@@ -24,6 +24,7 @@ The stored pilots can be inspected and aggregated without re-running Codex.
 | `docs/paper_draft.md` | Result-driven workshop-style draft. |
 | `docs/paper_outline.md` | Current outline and boundary-result writing plan. |
 | `docs/results_summary.md` | Generated full30 + hard10 + hard30 + process-stress + verification-lift + verification-lift-v2 + verification-ablation result summary, including RQ4 trace-signal analysis. |
+| `docs/headline_results.md` | Generated compact actual headline table replacing the expected-results sketch. |
 | `docs/rq4_signal_audit.md` | Generated signal audit for observable process positives and hidden semantic boundaries. |
 | `docs/metric_coverage_audit.md` | Generated coverage audit for the metrics named in the experiment design. |
 | `docs/failure_taxonomy_audit.md` | Generated coverage audit for the six process-failure taxonomy labels. |
@@ -72,6 +73,7 @@ The stored pilots can be inspected and aggregated without re-running Codex.
 | `scripts/audit_claim_text_guard.py` | Text-level guard against reintroducing unsupported verification-lift or hidden-semantic claims. |
 | `scripts/audit_goal_completion.py` | Goal-level completion audit for the original objective and boundary-result paper state. |
 | `scripts/audit_verification_lift_next_experiment.py` | Claim-closure audit for the unresolved ordinary-baseline verification-lift claim. |
+| `scripts/audit_headline_results.py` | Generates the compact headline-results table and verification-lift boundary note. |
 | `scripts/audit_verification_lift_v2_plan.py` | Plan audit for the ordinary-baseline verification-lift v2 scaffold. |
 | `scripts/audit_paper_numbers.py` | Numeric guard for paper-draft values copied from generated result artifacts. |
 | `scripts/audit_reviewer_path.py` | Reviewer-path coverage guard for required paper artifacts. |
@@ -259,6 +261,10 @@ PYTHONPATH=. python3 scripts/audit_goal_completion.py \
 PYTHONPATH=. python3 scripts/audit_verification_lift_next_experiment.py \
   --markdown-output /tmp/verification-lift-next-experiment.md \
   --json-output /tmp/verification-lift-next-experiment.json
+
+PYTHONPATH=. python3 scripts/audit_headline_results.py \
+  --markdown-output /tmp/headline-results.md \
+  --json-output /tmp/headline-results.json
 
 PYTHONPATH=. python3 scripts/audit_paper_numbers.py \
   --markdown-output /tmp/paper-number-guard.md \

@@ -69,7 +69,8 @@ checks, not real-pilot outcome evidence.
 
 See `docs/artifact_guide.md` for the reviewer-facing walkthrough,
 `docs/results_summary.md` for the generated result summary and RQ4
-trace-signal analysis, `docs/rq4_signal_audit.md` for the generated
+trace-signal analysis, `docs/headline_results.md` for the compact actual
+headline table, `docs/rq4_signal_audit.md` for the generated
 boundary-style signal audit, `docs/metric_coverage_audit.md` for experiment
 metric coverage, `docs/failure_taxonomy_audit.md` for six-label taxonomy
 coverage, `docs/related_work_audit.md` for related-work positioning coverage,
@@ -148,6 +149,7 @@ Key files:
 - `scripts/audit_verification_lift_v2_plan.py`: checks the ordinary-baseline verification-lift v2 scaffold
 - `scripts/audit_verification_ablation_plan.py`: checks verification-ablation task, prompt, and fixture readiness
 - `scripts/audit_verification_lift_next_experiment.py`: records whether ordinary-baseline verification-lift evidence closes the claim or requires thesis revision
+- `scripts/audit_headline_results.py`: generates the compact actual headline table and verification-lift boundary note
 - `scripts/run_benchmark_shards.py`: resumable per-task benchmark collection runner for tiers such as verification-lift v2
 - `scripts/merge_benchmark_shards.py`: merges generic per-task shard manifests into one pilot `runs.jsonl`
 - `scripts/finalize_benchmark_pilot.py`: preflights and finalizes non-hard30 pilot outputs such as verification-lift v2
@@ -169,6 +171,7 @@ Key files:
 - `docs/claim_text_guard.md`: generated guard that checks paper-facing text for unsupported-claim drift
 - `docs/goal_completion_audit.md`: generated audit showing original-goal completion status and blocking evidence gaps
 - `docs/verification_lift_next_experiment.md`: generated audit for ordinary-baseline verification-lift claim closure and thesis-revision status
+- `docs/headline_results.md`: generated compact actual headline table replacing the expected-results sketch
 - `docs/paper_number_guard.md`: generated guard that checks paper-draft numeric claims against stored artifacts
 - `docs/reviewer_path_audit.md`: generated guard that checks reviewer-path coverage for required paper artifacts
 - `docs/paper_draft.md`: result-driven workshop-style paper draft
@@ -269,6 +272,7 @@ PYTHONPATH=. python3 scripts/audit_claim_text_guard.py --markdown-output docs/cl
 PYTHONPATH=. python3 scripts/audit_goal_completion.py --markdown-output docs/goal_completion_audit.md
 PYTHONPATH=. python3 scripts/audit_verification_lift_next_experiment.py --markdown-output docs/verification_lift_next_experiment.md
 PYTHONPATH=. python3 scripts/audit_verification_lift_v2_plan.py --markdown-output docs/verification_lift_v2_plan_audit.md
+PYTHONPATH=. python3 scripts/audit_headline_results.py --markdown-output docs/headline_results.md
 PYTHONPATH=. python3 scripts/audit_paper_numbers.py --markdown-output docs/paper_number_guard.md
 PYTHONPATH=. python3 scripts/audit_reviewer_path.py --markdown-output docs/reviewer_path_audit.md
 PYTHONPATH=. python3 scripts/audit_submission_package.py --markdown-output docs/submission_package.md

@@ -13,6 +13,7 @@ from scripts.audit_metric_coverage import build_metric_coverage_audit, render_me
 from scripts.audit_claim_text_guard import audit_claim_text_guard, render_claim_text_guard_markdown
 from scripts.audit_goal_completion import build_goal_completion_audit, render_goal_completion_audit_markdown
 from scripts.audit_hard30_task_diagnosis import build_task_diagnosis, render_task_diagnosis_markdown
+from scripts.audit_headline_results import build_headline_results, render_headline_results_markdown
 from scripts.audit_paper_numbers import build_paper_number_guard, render_paper_number_guard_markdown
 from scripts.audit_paper_structure import build_paper_structure_audit, render_paper_structure_audit_markdown
 from scripts.audit_paper_claims import build_claim_audit, render_claim_audit_markdown
@@ -54,6 +55,7 @@ from scripts.check_submission_readiness import (
     build_report,
     check_failure_taxonomy_audit_content,
     check_goal_completion_audit_content,
+    check_headline_results_content,
     check_metric_coverage_audit_content,
     check_paper_number_guard_content,
     check_paper_structure_audit_content,
@@ -1313,13 +1315,14 @@ def test_reproducibility_audit_covers_key_commands():
     markdown = render_reproducibility_audit_markdown(result)
 
     assert result["summary"]["ready"] is True
-    assert result["summary"]["covered_command_count"] == 21
+    assert result["summary"]["covered_command_count"] == 22
     assert result["summary"]["fences_balanced"] is True
     assert {row["id"] for row in result["commands"]} >= {
         "full30_aggregate",
         "controlled_fixture_eval",
         "hard30_paper_report",
         "combined_summary",
+        "headline_results",
         "submission_readiness_gate",
         "claim_text_guard",
     }
@@ -1407,6 +1410,29 @@ def test_build_results_summary_from_stored_pilots():
     assert "30 false negatives" in markdown
     assert "2 trace-only false negatives" in markdown
     assert "verification-lift-v2 verification remains 100% -> 100%" in markdown
+
+
+def test_headline_results_table_tracks_actual_evidence_boundaries():
+    result = build_headline_results()
+    markdown = render_headline_results_markdown(result)
+    rows = {row["id"]: row for row in result["rows"]}
+
+    assert result["summary"]["ready"] is True
+    assert result["summary"]["ordinary_verification_rate_lift_supported"] is False
+    assert result["summary"]["waste_reduction_supported"] is True
+    assert rows["hard30_success"]["baseline"] == 0.5
+    assert rows["hard30_success"]["intervention"] == 0.5
+    assert rows["hard30_repeated_tool_calls"]["baseline"] == 12.9333
+    assert rows["hard30_repeated_tool_calls"]["intervention"] == 9.2
+    assert rows["hard30_token_usage"]["baseline"] == 354971.1
+    assert rows["hard30_token_usage"]["intervention"] == 256314.3333
+    assert rows["verification_lift_v2_verification"]["delta"] == 0
+    assert rows["verification_lift_v2_exact_verification"]["delta"] == 0
+    assert rows["no_verify_ablation_verification"]["delta"] == 1
+    assert rows["no_verify_ablation_exact_verification"]["delta"] == 1
+    assert "Ordinary verification-rate lift supported: no" in markdown
+    assert "no_verify_ablation_verification" in markdown
+    assert "not an ordinary baseline" in markdown
 
 
 def test_build_results_summary_prefers_finalized_outputs(tmp_path):
@@ -1603,6 +1629,7 @@ def test_reviewer_docs_surface_hard30_task_diagnosis():
     assert "docs/goal_completion_audit.md" in readme
     assert "docs/verification_lift_next_experiment.md" in readme
     assert "docs/verification_lift_v2_plan_audit.md" in readme
+    assert "docs/headline_results.md" in readme
     assert "benchmark/verification-lift-v2/pilot/full-real" in readme
     assert "verification-lift-v2 | 8 | 16 | 2" in readme
     assert "completed claim-closure retest" in readme
@@ -1620,6 +1647,7 @@ def test_reviewer_docs_surface_hard30_task_diagnosis():
     assert "scripts/audit_goal_completion.py --markdown-output docs/goal_completion_audit.md" in readme
     assert "scripts/audit_verification_lift_next_experiment.py --markdown-output docs/verification_lift_next_experiment.md" in readme
     assert "scripts/audit_verification_lift_v2_plan.py --markdown-output docs/verification_lift_v2_plan_audit.md" in readme
+    assert "scripts/audit_headline_results.py --markdown-output docs/headline_results.md" in readme
     assert "scripts/audit_paper_numbers.py --markdown-output docs/paper_number_guard.md" in readme
     assert "scripts/audit_reviewer_path.py --markdown-output docs/reviewer_path_audit.md" in readme
     assert "scripts/audit_submission_package.py --markdown-output docs/submission_package.md" in readme
@@ -1631,6 +1659,7 @@ def test_reviewer_docs_surface_hard30_task_diagnosis():
     assert "scripts/audit_claim_text_guard.py --markdown-output docs/claim_text_guard.md" in readme
     assert "docs/hard30_task_diagnosis.md" in guide
     assert "docs/submission_package.md" in guide
+    assert "docs/headline_results.md" in guide
     assert "docs/claim_text_guard.md" in guide
     assert "docs/paper_number_guard.md" in guide
     assert "docs/failure_taxonomy_audit.md" in guide
@@ -1651,6 +1680,7 @@ def test_reviewer_docs_surface_hard30_task_diagnosis():
     assert "scripts/audit_goal_completion.py" in checklist
     assert "scripts/audit_verification_lift_next_experiment.py" in checklist
     assert "scripts/audit_verification_lift_v2_plan.py" in checklist
+    assert "scripts/audit_headline_results.py" in checklist
     assert "scripts/audit_submission_package.py" in checklist
     assert "scripts/audit_paper_numbers.py" in checklist
     assert "scripts/audit_reviewer_path.py" in checklist
@@ -1665,6 +1695,7 @@ def test_reviewer_docs_surface_hard30_task_diagnosis():
     assert "benchmark/verification-lift-v2/pilot/full-real/aggregate.md" in checklist
     assert "completed claim-closure retest" in checklist
     assert "repeated calls improve `8.62 -> 5.50`" in checklist
+    assert "--markdown-output /tmp/headline-results.md" in checklist
 
 
 def test_paper_outline_tracks_current_boundary_result():
@@ -1763,6 +1794,7 @@ def test_submission_package_maps_rqs_to_safe_paper_claims():
     assert "docs/goal_completion_audit.md" in package["required_files"]
     assert "docs/verification_lift_next_experiment.md" in package["required_files"]
     assert "docs/verification_lift_v2_plan_audit.md" in package["required_files"]
+    assert "docs/headline_results.md" in package["required_files"]
     assert "docs/paper_draft.md" in package["required_files"]
     assert "docs/paper_structure_audit.md" in package["required_files"]
     assert "docs/experiment_protocol.md" in package["required_files"]
@@ -1785,6 +1817,7 @@ def test_submission_package_maps_rqs_to_safe_paper_claims():
     assert "docs/related_work_audit.md" in markdown
     assert "docs/paper_structure_audit.md" in markdown
     assert "docs/reproducibility_audit.md" in markdown
+    assert "docs/headline_results.md" in markdown
     assert "Unsupported Claims To Avoid" in markdown
 
 
@@ -1798,6 +1831,18 @@ def test_submission_readiness_validates_submission_package_content(tmp_path):
     assert "missing rq map" in check["problems"]
     assert "missing required boundary" in check["problems"]
     assert "missing verification overclaim guard" in check["problems"]
+
+
+def test_submission_readiness_validates_headline_results_content(tmp_path):
+    broken = tmp_path / "headline_results.md"
+    broken.write_text("# Headline Results Table\nReady: no\n", encoding="utf-8")
+
+    check = check_headline_results_content(broken)
+
+    assert check["ok"] is False
+    assert "missing ready" in check["problems"]
+    assert "missing verification lift unsupported" in check["problems"]
+    assert "missing not ordinary baseline" in check["problems"]
 
 
 def test_paper_number_guard_keeps_draft_numbers_in_sync(tmp_path):
@@ -1846,6 +1891,7 @@ def test_reviewer_path_audit_covers_required_artifacts(tmp_path):
     assert any(row["path"] == "docs/related_work_audit.md" for row in result["coverage"])
     assert any(row["path"] == "docs/paper_structure_audit.md" for row in result["coverage"])
     assert any(row["path"] == "docs/reproducibility_audit.md" for row in result["coverage"])
+    assert any(row["path"] == "docs/headline_results.md" for row in result["coverage"])
     assert "Missing from reproducibility checklist: 0" in markdown
 
     package = tmp_path / "submission_package.json"

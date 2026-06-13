@@ -24,25 +24,26 @@ oracles for hidden semantic correctness.
 1. Read the project snapshot in `README.md`.
 2. Open the paper draft in `docs/paper_draft.md`.
 3. Inspect generated results in `docs/results_summary.md`.
-4. Inspect task-level hard30 repairs, regressions, and double failures in
+4. Inspect the compact actual headline table in `docs/headline_results.md`.
+5. Inspect task-level hard30 repairs, regressions, and double failures in
    `docs/hard30_task_diagnosis.md`.
-5. Check safe paper-claim framing in `docs/submission_package.md`.
-6. Check thesis-level support status in `docs/paper_claim_audit.md`.
-7. Check drift guards in `docs/claim_text_guard.md` and
+6. Check safe paper-claim framing in `docs/submission_package.md`.
+7. Check thesis-level support status in `docs/paper_claim_audit.md`.
+8. Check drift guards in `docs/claim_text_guard.md` and
    `docs/paper_number_guard.md`.
-8. Check failure-taxonomy coverage in `docs/failure_taxonomy_audit.md`.
-9. Check related-work positioning coverage in `docs/related_work_audit.md`.
-10. Check paper structure and RQ coverage in `docs/paper_structure_audit.md`.
-11. Check metric coverage in `docs/metric_coverage_audit.md`.
-12. Check reproduction command coverage in `docs/reproducibility_audit.md`.
-13. Check claim-to-evidence mapping in `docs/reproducibility_checklist.md`.
-14. Run the offline demo:
+9. Check failure-taxonomy coverage in `docs/failure_taxonomy_audit.md`.
+10. Check related-work positioning coverage in `docs/related_work_audit.md`.
+11. Check paper structure and RQ coverage in `docs/paper_structure_audit.md`.
+12. Check metric coverage in `docs/metric_coverage_audit.md`.
+13. Check reproduction command coverage in `docs/reproducibility_audit.md`.
+14. Check claim-to-evidence mapping in `docs/reproducibility_checklist.md`.
+15. Run the offline demo:
 
 ```bash
 ./scripts/demo.sh
 ```
 
-15. Optionally open the visual replay UI:
+16. Optionally open the visual replay UI:
 
 ```bash
 cd web
@@ -60,6 +61,7 @@ npm run dev
 | Is the related-work positioning covered? | `docs/related_work.md`, `docs/related_work_audit.md` |
 | Does the paper draft cover the required structure? | `docs/paper_draft.md`, `docs/paper_structure_audit.md` |
 | RQ3: Do harness interventions help? | `docs/results_summary.md` RQ3 tables |
+| What headline table should the paper use? | `docs/headline_results.md` |
 | RQ4: Which signals explain failure? | `docs/results_summary.md` RQ4 trace-signal table |
 | Are all planned metrics reported? | `docs/metric_coverage_audit.md` |
 | Are reproduction commands complete? | `docs/reproducibility_checklist.md`, `docs/reproducibility_audit.md` |

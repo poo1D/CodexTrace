@@ -1,0 +1,112 @@
+{
+  "rows": [
+    {
+      "baseline": 0.7,
+      "delta": 0.1,
+      "id": "hard10_success",
+      "interpretation": "pilot-qualified success lift",
+      "intervention": 0.8,
+      "label": "Hard10 success rate",
+      "metric": "success_rate",
+      "pilot": "hard10"
+    },
+    {
+      "baseline": 0.5,
+      "delta": 0.0,
+      "id": "hard30_success",
+      "interpretation": "flat hard30 success",
+      "intervention": 0.5,
+      "label": "Hard30 success rate",
+      "metric": "success_rate",
+      "pilot": "hard30"
+    },
+    {
+      "baseline": 1.0,
+      "delta": 0.0,
+      "id": "hard30_verification",
+      "interpretation": "saturated; no ordinary verification lift",
+      "intervention": 1.0,
+      "label": "Hard30 verification rate",
+      "metric": "verification_rate",
+      "pilot": "hard30"
+    },
+    {
+      "baseline": 12.9333,
+      "delta": -3.7333,
+      "id": "hard30_repeated_tool_calls",
+      "interpretation": "supported waste reduction",
+      "intervention": 9.2,
+      "label": "Hard30 repeated tool calls",
+      "metric": "avg_repeated_tool_calls",
+      "pilot": "hard30"
+    },
+    {
+      "baseline": 0.0,
+      "delta": 0.0,
+      "id": "hard30_unresolved_error_rate",
+      "interpretation": "no unresolved-error movement",
+      "intervention": 0.0,
+      "label": "Hard30 unresolved error rate",
+      "metric": "unresolved_error_rate",
+      "pilot": "hard30"
+    },
+    {
+      "baseline": 354971.1,
+      "delta": -98656.7667,
+      "id": "hard30_token_usage",
+      "interpretation": "supported waste reduction",
+      "intervention": 256314.3333,
+      "label": "Hard30 token usage",
+      "metric": "avg_token_usage",
+      "pilot": "hard30"
+    },
+    {
+      "baseline": 1.0,
+      "delta": 0.0,
+      "id": "verification_lift_v2_verification",
+      "interpretation": "ordinary-baseline retest is saturated",
+      "intervention": 1.0,
+      "label": "Verification-lift-v2 verification",
+      "metric": "verification_rate",
+      "pilot": "verification_lift_v2"
+    },
+    {
+      "baseline": 1.0,
+      "delta": 0.0,
+      "id": "verification_lift_v2_exact_verification",
+      "interpretation": "exact visible success-check verification is saturated",
+      "intervention": 1.0,
+      "label": "Verification-lift-v2 exact verification",
+      "metric": "success_check_verification_rate",
+      "pilot": "verification_lift_v2"
+    },
+    {
+      "baseline": 0.0,
+      "delta": 1.0,
+      "id": "no_verify_ablation_verification",
+      "interpretation": "mechanism check only; not an ordinary baseline",
+      "intervention": 1.0,
+      "label": "No-verify ablation verification",
+      "metric": "verification_rate",
+      "pilot": "verification_ablation"
+    },
+    {
+      "baseline": 0.0,
+      "delta": 1.0,
+      "id": "no_verify_ablation_exact_verification",
+      "interpretation": "mechanism check only; not an ordinary baseline",
+      "intervention": 1.0,
+      "label": "No-verify ablation exact verification",
+      "metric": "success_check_verification_rate",
+      "pilot": "verification_ablation"
+    }
+  ],
+  "summary": {
+    "boundary": "ordinary verification-rate lift is unsupported; no-verify ablation is a mechanism check only, not an ordinary baseline",
+    "no_verify_ablation_lift_observed": true,
+    "ordinary_verification_rate_lift_supported": false,
+    "ready": true,
+    "source": "docs/results_summary.json",
+    "waste_reduction_supported": true
+  }
+}
