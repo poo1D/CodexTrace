@@ -1,0 +1,73 @@
+{
+  "labels": [
+    {
+      "covered": true,
+      "detector_fixture": true,
+      "fixture_f1": 1.0,
+      "fixture_precision": 1.0,
+      "fixture_recall": 1.0,
+      "label": "verification_gap",
+      "paper_draft": true,
+      "taxonomy_doc": true
+    },
+    {
+      "covered": true,
+      "detector_fixture": true,
+      "fixture_f1": 1.0,
+      "fixture_precision": 1.0,
+      "fixture_recall": 1.0,
+      "label": "unrecovered_tool_error",
+      "paper_draft": true,
+      "taxonomy_doc": true
+    },
+    {
+      "covered": true,
+      "detector_fixture": true,
+      "fixture_f1": 1.0,
+      "fixture_precision": 1.0,
+      "fixture_recall": 1.0,
+      "label": "repetitive_exploration",
+      "paper_draft": true,
+      "taxonomy_doc": true
+    },
+    {
+      "covered": true,
+      "detector_fixture": true,
+      "fixture_f1": 1.0,
+      "fixture_precision": 1.0,
+      "fixture_recall": 1.0,
+      "label": "context_drift",
+      "paper_draft": true,
+      "taxonomy_doc": true
+    },
+    {
+      "covered": true,
+      "detector_fixture": true,
+      "fixture_f1": 1.0,
+      "fixture_precision": 1.0,
+      "fixture_recall": 1.0,
+      "label": "premature_completion",
+      "paper_draft": true,
+      "taxonomy_doc": true
+    },
+    {
+      "covered": true,
+      "detector_fixture": true,
+      "fixture_f1": 1.0,
+      "fixture_precision": 1.0,
+      "fixture_recall": 1.0,
+      "label": "sandbox_permission_deadlock",
+      "paper_draft": true,
+      "taxonomy_doc": true
+    }
+  ],
+  "summary": {
+    "covered_label_count": 6,
+    "fixture_eval_path": "benchmark/detector-fixtures/label-eval.json",
+    "fixture_micro_f1": 1.0,
+    "paper_draft_path": "docs/paper_draft.md",
+    "ready": true,
+    "target_label_count": 6,
+    "taxonomy_path": "docs/failure_taxonomy.md"
+  }
+}

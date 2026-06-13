@@ -27,6 +27,7 @@
     "docs/paper_number_guard.md",
     "docs/reviewer_path_audit.md",
     "docs/metric_coverage_audit.md",
+    "docs/failure_taxonomy_audit.md",
     "docs/results_summary.md",
     "docs/paper_claim_audit.md",
     "docs/thesis_readiness.md",
@@ -40,6 +41,7 @@
       "paper_action": "Frame RQ1 as an observable process taxonomy plus limited natural positives.",
       "primary_evidence": [
         "docs/failure_taxonomy.md",
+        "docs/failure_taxonomy_audit.md",
         "benchmark/detector-fixtures/label-eval.md",
         "docs/results_summary.md"
       ],
@@ -51,6 +53,7 @@
       "claim_boundary": "Supported for rule fixtures and observed process positives; not supported for hidden semantic failures.",
       "paper_action": "Report trace-only detection as a boundary result, with hidden semantic false negatives explicit.",
       "primary_evidence": [
+        "docs/failure_taxonomy_audit.md",
         "benchmark/detector-fixtures/label-eval.md",
         "benchmark/hard/pilot/hard30-real/label-eval.md",
         "benchmark/pilot/full30-real/process-label-eval.md"

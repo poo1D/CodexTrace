@@ -16,8 +16,8 @@ This generated map turns the current evidence into reviewer-facing paper claims.
 
 | RQ | Status | Evidence | Boundary | Paper action |
 | --- | --- | --- | --- | --- |
-| RQ1 | satisfied | `docs/failure_taxonomy.md`, `benchmark/detector-fixtures/label-eval.md`, `docs/results_summary.md` | Use the six-label process taxonomy; do not imply the current real pilots cover every label equally. | Frame RQ1 as an observable process taxonomy plus limited natural positives. |
-| RQ2 | partial | `benchmark/detector-fixtures/label-eval.md`, `benchmark/hard/pilot/hard30-real/label-eval.md`, `benchmark/pilot/full30-real/process-label-eval.md` | Supported for rule fixtures and observed process positives; not supported for hidden semantic failures. | Report trace-only detection as a boundary result, with hidden semantic false negatives explicit. |
+| RQ1 | satisfied | `docs/failure_taxonomy.md`, `docs/failure_taxonomy_audit.md`, `benchmark/detector-fixtures/label-eval.md`, `docs/results_summary.md` | Use the six-label process taxonomy; do not imply the current real pilots cover every label equally. | Frame RQ1 as an observable process taxonomy plus limited natural positives. |
+| RQ2 | partial | `docs/failure_taxonomy_audit.md`, `benchmark/detector-fixtures/label-eval.md`, `benchmark/hard/pilot/hard30-real/label-eval.md`, `benchmark/pilot/full30-real/process-label-eval.md` | Supported for rule fixtures and observed process positives; not supported for hidden semantic failures. | Report trace-only detection as a boundary result, with hidden semantic false negatives explicit. |
 | RQ3 | supported | `docs/results_summary.md`, `docs/hard30_task_diagnosis.md`, `docs/paper_claim_audit.md` | Waste reduction is supported; success lift is pilot-qualified; ordinary verification-rate lift is unsupported. | Lead with hard30 paired waste reduction and treat no-verify verification lift as mechanism ablation only. |
 | RQ4 | satisfied | `docs/rq4_signal_audit.md`, `docs/results_summary.md`, `benchmark/hard/pilot/hard30-real/paper-report-labeled.md` | Signals explain observable process positives and the hidden-semantic boundary, not hidden correctness by themselves. | Show the signal table as an explanation of where trace diagnosis works and where task oracles are still required. |
 
@@ -46,6 +46,7 @@ This generated map turns the current evidence into reviewer-facing paper claims.
 - `docs/paper_number_guard.md`
 - `docs/reviewer_path_audit.md`
 - `docs/metric_coverage_audit.md`
+- `docs/failure_taxonomy_audit.md`
 - `docs/results_summary.md`
 - `docs/paper_claim_audit.md`
 - `docs/thesis_readiness.md`

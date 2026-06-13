@@ -112,6 +112,15 @@
     },
     {
       "covered": true,
+      "path": "docs/failure_taxonomy_audit.md",
+      "present_in": [
+        "README.md",
+        "docs/artifact_guide.md",
+        "docs/reproducibility_checklist.md"
+      ]
+    },
+    {
+      "covered": true,
       "path": "docs/results_summary.md",
       "present_in": [
         "README.md",
@@ -169,6 +178,6 @@
     "checklist_missing": 0,
     "guide_missing": 0,
     "missing": 0,
-    "required_files": 19
+    "required_files": 20
   }
 }

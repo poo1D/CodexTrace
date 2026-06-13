@@ -71,7 +71,8 @@ See `docs/artifact_guide.md` for the reviewer-facing walkthrough,
 `docs/results_summary.md` for the generated result summary and RQ4
 trace-signal analysis, `docs/rq4_signal_audit.md` for the generated
 boundary-style signal audit, `docs/metric_coverage_audit.md` for experiment
-metric coverage, `docs/hard30_task_diagnosis.md` for task-level
+metric coverage, `docs/failure_taxonomy_audit.md` for six-label taxonomy
+coverage, `docs/hard30_task_diagnosis.md` for task-level
 hard30 repairs/regressions and double failures, `docs/thesis_readiness.md` for
 the original-thesis gap audit, and `docs/reproducibility_checklist.md` for
 claim-to-evidence mapping.
@@ -152,6 +153,7 @@ Key files:
 - `scripts/audit_paper_numbers.py`: checks paper-draft numeric claims against stored aggregate artifacts
 - `scripts/audit_reviewer_path.py`: checks required reviewer files are discoverable from paper-facing entry points
 - `scripts/audit_metric_coverage.py`: checks planned experiment metrics across run rows, summaries, CSV, and aggregate Markdown
+- `scripts/audit_failure_taxonomy.py`: checks six-label taxonomy coverage across docs, paper mapping, and detector fixtures
 - `scripts/audit_submission_package.py`: generates the RQ-to-evidence submission package map
 - `docs/artifact_guide.md`: 15-minute reviewer/interviewer walkthrough
 - `docs/experiment_protocol.md`: collection and labeling protocol
@@ -170,6 +172,7 @@ Key files:
 - `docs/results_summary.md`: generated full30 + hard10 + hard30 + process-stress + verification-lift + verification-lift-v2 + verification-ablation result summary, including RQ4 trace-signal analysis
 - `docs/rq4_signal_audit.md`: generated signal audit for observable process failures and hidden semantic boundaries
 - `docs/metric_coverage_audit.md`: generated coverage audit for the experiment-design metrics
+- `docs/failure_taxonomy_audit.md`: generated coverage audit for the six process-failure taxonomy labels
 - `docs/hard30_task_diagnosis.md`: generated task-level hard30 diagnosis for double failures, repairs, regressions, and waste deltas
 - `docs/process_stress_plan_audit.md`: generated coverage audit for the materialized process-stress tier
 - `docs/verification_lift_plan_audit.md`: generated coverage audit for the targeted verification-lift tier
@@ -260,6 +263,7 @@ PYTHONPATH=. python3 scripts/audit_verification_lift_v2_plan.py --markdown-outpu
 PYTHONPATH=. python3 scripts/audit_paper_numbers.py --markdown-output docs/paper_number_guard.md
 PYTHONPATH=. python3 scripts/audit_reviewer_path.py --markdown-output docs/reviewer_path_audit.md
 PYTHONPATH=. python3 scripts/audit_submission_package.py --markdown-output docs/submission_package.md
+PYTHONPATH=. python3 scripts/audit_failure_taxonomy.py --markdown-output docs/failure_taxonomy_audit.md
 ```
 
 The current draft in `docs/paper_draft.md` reports the seed, hard10, hard30,

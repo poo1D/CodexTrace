@@ -8,6 +8,7 @@ from scripts.finalize_benchmark_pilot import (
     render_preflight as render_benchmark_pilot_preflight,
 )
 from scripts.audit_manual_labels import audit_manual_labels, render_audit
+from scripts.audit_failure_taxonomy import build_failure_taxonomy_audit, render_failure_taxonomy_audit_markdown
 from scripts.audit_metric_coverage import build_metric_coverage_audit, render_metric_coverage_audit_markdown
 from scripts.audit_claim_text_guard import audit_claim_text_guard, render_claim_text_guard_markdown
 from scripts.audit_goal_completion import build_goal_completion_audit, render_goal_completion_audit_markdown
@@ -48,6 +49,7 @@ from scripts.run_hard30_shards import (
 )
 from scripts.check_submission_readiness import (
     build_report,
+    check_failure_taxonomy_audit_content,
     check_goal_completion_audit_content,
     check_metric_coverage_audit_content,
     check_paper_number_guard_content,
@@ -1243,6 +1245,25 @@ def test_metric_coverage_audit_covers_experiment_design_metrics():
     assert "avg_time_to_first_test" in markdown
 
 
+def test_failure_taxonomy_audit_covers_process_labels():
+    result = build_failure_taxonomy_audit()
+    markdown = render_failure_taxonomy_audit_markdown(result)
+
+    assert result["summary"]["ready"] is True
+    assert result["summary"]["covered_label_count"] == 6
+    assert result["summary"]["fixture_micro_f1"] == 1
+    assert {row["label"] for row in result["labels"]} == {
+        "verification_gap",
+        "unrecovered_tool_error",
+        "repetitive_exploration",
+        "context_drift",
+        "premature_completion",
+        "sandbox_permission_deadlock",
+    }
+    assert all(row["covered"] for row in result["labels"])
+    assert "rule-level taxonomy coverage" in markdown
+
+
 def test_build_results_summary_from_stored_pilots():
     result = build_results_summary(
         "benchmark/pilot/full30-real/runs.jsonl",
@@ -1504,6 +1525,7 @@ def test_paper_draft_contains_submission_polish_sections():
     assert "Trace diagnosis is less suited for proving semantic correctness" in text
     assert "docs/submission_package.md" in text
     assert "docs/paper_number_guard.md" in text
+    assert "docs/failure_taxonomy_audit.md" in text
 
 
 def test_reviewer_docs_surface_hard30_task_diagnosis():
@@ -1521,6 +1543,7 @@ def test_reviewer_docs_surface_hard30_task_diagnosis():
     assert "docs/submission_package.md" in readme
     assert "docs/paper_number_guard.md" in readme
     assert "docs/reviewer_path_audit.md" in readme
+    assert "docs/failure_taxonomy_audit.md" in readme
     assert "scripts/audit_hard30_task_diagnosis.py" in readme
     assert "scripts/run_benchmark_shards.py" in readme
     assert "scripts/merge_benchmark_shards.py" in readme
@@ -1531,12 +1554,14 @@ def test_reviewer_docs_surface_hard30_task_diagnosis():
     assert "scripts/audit_paper_numbers.py --markdown-output docs/paper_number_guard.md" in readme
     assert "scripts/audit_reviewer_path.py --markdown-output docs/reviewer_path_audit.md" in readme
     assert "scripts/audit_submission_package.py --markdown-output docs/submission_package.md" in readme
+    assert "scripts/audit_failure_taxonomy.py --markdown-output docs/failure_taxonomy_audit.md" in readme
     assert "scripts/audit_thesis_readiness.py --markdown-output docs/thesis_readiness.md" in readme
     assert "scripts/audit_claim_text_guard.py --markdown-output docs/claim_text_guard.md" in readme
     assert "docs/hard30_task_diagnosis.md" in guide
     assert "docs/submission_package.md" in guide
     assert "docs/claim_text_guard.md" in guide
     assert "docs/paper_number_guard.md" in guide
+    assert "docs/failure_taxonomy_audit.md" in guide
     assert "| Which tasks get lost? |" in guide
     assert "| Which claims are safe to write? |" in guide
     assert "| Did paper text drift from evidence? |" in guide
@@ -1554,6 +1579,7 @@ def test_reviewer_docs_surface_hard30_task_diagnosis():
     assert "scripts/audit_submission_package.py" in checklist
     assert "scripts/audit_paper_numbers.py" in checklist
     assert "scripts/audit_reviewer_path.py" in checklist
+    assert "scripts/audit_failure_taxonomy.py" in checklist
     assert "--markdown-output /tmp/hard30-task-diagnosis.md" in checklist
     assert "--output-dir /tmp/codextrace-verification-lift-v2-dry" in checklist
     assert "--status-json /tmp/verification-lift-v2-shard-status.json" in checklist
@@ -1664,6 +1690,7 @@ def test_submission_package_maps_rqs_to_safe_paper_claims():
     assert "docs/paper_number_guard.md" in package["required_files"]
     assert "docs/reviewer_path_audit.md" in package["required_files"]
     assert "docs/metric_coverage_audit.md" in package["required_files"]
+    assert "docs/failure_taxonomy_audit.md" in package["required_files"]
     assert [row["rq"] for row in package["rq_rows"]] == ["RQ1", "RQ2", "RQ3", "RQ4"]
     assert package["rq_rows"][2]["status"] == "supported"
     assert "ordinary verification-rate lift is unsupported" in package["rq_rows"][2]["claim_boundary"]
@@ -1671,6 +1698,7 @@ def test_submission_package_maps_rqs_to_safe_paper_claims():
     assert "verification-lift-v2 verification delta is +0.00" in markdown
     assert "## RQ-To-Evidence Map" in markdown
     assert "docs/hard30_task_diagnosis.md" in markdown
+    assert "docs/failure_taxonomy_audit.md" in markdown
     assert "Unsupported Claims To Avoid" in markdown
 
 
@@ -1728,6 +1756,7 @@ def test_reviewer_path_audit_covers_required_artifacts(tmp_path):
     assert any(row["path"] == "docs/experiment_protocol.md" for row in result["coverage"])
     assert any(row["path"] == "docs/paper_outline.md" for row in result["coverage"])
     assert any(row["path"] == "docs/reviewer_path_audit.md" for row in result["coverage"])
+    assert any(row["path"] == "docs/failure_taxonomy_audit.md" for row in result["coverage"])
     assert "Missing from reproducibility checklist: 0" in markdown
 
     package = tmp_path / "submission_package.json"
@@ -1759,6 +1788,18 @@ def test_submission_readiness_validates_metric_coverage_audit_content(tmp_path):
     assert "missing ready" in check["problems"]
     assert "missing coverage count" in check["problems"]
     assert "missing time to first test" in check["problems"]
+
+
+def test_submission_readiness_validates_failure_taxonomy_audit_content(tmp_path):
+    broken = tmp_path / "failure_taxonomy_audit.md"
+    broken.write_text("# Failure Taxonomy Coverage Audit\nReady: no\n", encoding="utf-8")
+
+    check = check_failure_taxonomy_audit_content(broken)
+
+    assert check["ok"] is False
+    assert "missing ready" in check["problems"]
+    assert "missing coverage count" in check["problems"]
+    assert "missing fixture f1" in check["problems"]
 
 
 def test_goal_completion_audit_keeps_original_goal_open():

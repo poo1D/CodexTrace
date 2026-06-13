@@ -415,6 +415,39 @@ def check_metric_coverage_audit_content(path: Path = Path("docs/metric_coverage_
     }
 
 
+def check_failure_taxonomy_audit_content(path: Path = Path("docs/failure_taxonomy_audit.md")) -> dict[str, Any]:
+    problems = []
+    try:
+        text = path.read_text(encoding="utf-8")
+    except FileNotFoundError:
+        return {
+            "name": "failure taxonomy audit",
+            "ok": False,
+            "evidence": str(path),
+            "problems": ["missing failure taxonomy audit"],
+        }
+
+    required_phrases = {
+        "ready": "Ready: yes",
+        "coverage count": "Labels covered: 6 / 6",
+        "fixture f1": "Detector-fixture micro-F1: 1",
+        "verification gap": "verification_gap",
+        "sandbox deadlock": "sandbox_permission_deadlock",
+        "boundary interpretation": "rule-level taxonomy coverage",
+    }
+    for label, phrase in required_phrases.items():
+        if phrase not in text:
+            problems.append(f"missing {label}")
+
+    return {
+        "name": "failure taxonomy audit",
+        "ok": not problems,
+        "evidence": str(path),
+        "detail": "six target process-failure labels are covered by taxonomy docs, paper mapping, and detector fixtures",
+        "problems": problems,
+    }
+
+
 def check_goal_completion_audit_content(path: Path = Path("docs/goal_completion_audit.md")) -> dict[str, Any]:
     problems = []
     try:
@@ -494,6 +527,7 @@ def build_report(selection_dir: Path, run_dir: Path) -> dict[str, Any]:
         check_paper_number_guard_content(),
         check_reviewer_path_audit_content(),
         check_metric_coverage_audit_content(),
+        check_failure_taxonomy_audit_content(),
         check_goal_completion_audit_content(),
         check_verification_lift_next_experiment_content(),
         check_paper_draft_content(),
