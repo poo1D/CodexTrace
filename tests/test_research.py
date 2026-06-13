@@ -1626,10 +1626,13 @@ def test_submission_package_maps_rqs_to_safe_paper_claims():
     assert package["summary"]["ready_for_original_thesis"] is False
     assert package["summary"]["unsupported_claim_count"] == 2
     assert package["summary"]["required_boundary"] == "ordinary verification-rate lift remains unsupported; no-verify lift is an ablation only"
+    assert "docs/artifact_guide.md" in package["required_files"]
     assert "docs/submission_package.md" in package["required_files"]
     assert "docs/goal_completion_audit.md" in package["required_files"]
     assert "docs/verification_lift_next_experiment.md" in package["required_files"]
     assert "docs/verification_lift_v2_plan_audit.md" in package["required_files"]
+    assert "docs/experiment_protocol.md" in package["required_files"]
+    assert "docs/paper_outline.md" in package["required_files"]
     assert "docs/paper_number_guard.md" in package["required_files"]
     assert "docs/reviewer_path_audit.md" in package["required_files"]
     assert [row["rq"] for row in package["rq_rows"]] == ["RQ1", "RQ2", "RQ3", "RQ4"]
@@ -1692,6 +1695,9 @@ def test_reviewer_path_audit_covers_required_artifacts(tmp_path):
     assert result["summary"]["missing"] == 0
     assert result["summary"]["guide_missing"] == 0
     assert result["summary"]["checklist_missing"] == 0
+    assert any(row["path"] == "docs/artifact_guide.md" for row in result["coverage"])
+    assert any(row["path"] == "docs/experiment_protocol.md" for row in result["coverage"])
+    assert any(row["path"] == "docs/paper_outline.md" for row in result["coverage"])
     assert any(row["path"] == "docs/reviewer_path_audit.md" for row in result["coverage"])
     assert "Missing from reproducibility checklist: 0" in markdown
 

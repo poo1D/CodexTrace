@@ -11,6 +11,14 @@
     },
     {
       "covered": true,
+      "path": "docs/artifact_guide.md",
+      "present_in": [
+        "README.md",
+        "docs/reproducibility_checklist.md"
+      ]
+    },
+    {
+      "covered": true,
       "path": "docs/submission_package.md",
       "present_in": [
         "README.md",
@@ -48,6 +56,22 @@
       "present_in": [
         "README.md",
         "docs/artifact_guide.md",
+        "docs/reproducibility_checklist.md"
+      ]
+    },
+    {
+      "covered": true,
+      "path": "docs/paper_outline.md",
+      "present_in": [
+        "README.md",
+        "docs/reproducibility_checklist.md"
+      ]
+    },
+    {
+      "covered": true,
+      "path": "docs/experiment_protocol.md",
+      "present_in": [
+        "README.md",
         "docs/reproducibility_checklist.md"
       ]
     },
@@ -136,6 +160,6 @@
     "checklist_missing": 0,
     "guide_missing": 0,
     "missing": 0,
-    "required_files": 15
+    "required_files": 18
   }
 }
