@@ -61,9 +61,10 @@ Source: [RepairAgent: An Autonomous, LLM-Based Agent for Program Repair](https:/
 ## Trace-Based Agent Diagnosis
 
 AgentRx is close in spirit: it diagnoses failed AI-agent executions from
-trajectories and localizes critical failure steps. CodexTrace is narrower and
-more structural: it focuses on coding-agent JSONL traces, uses deterministic
-process rules, and reports benchmark-level baseline-vs-intervention metrics.
+execution trajectories and localizes critical failure steps. CodexTrace is
+narrower and more structural: it focuses on coding-agent JSONL traces, uses
+deterministic process rules, and reports benchmark-level
+baseline-vs-intervention metrics.
 
 Source: [AgentRx: Diagnosing AI Agent Failures from Execution Trajectories](https://www.microsoft.com/en-us/research/publication/agentrx-diagnosing-ai-agent-failures-from-execution-trajectories/)
 

@@ -448,6 +448,39 @@ def check_failure_taxonomy_audit_content(path: Path = Path("docs/failure_taxonom
     }
 
 
+def check_related_work_audit_content(path: Path = Path("docs/related_work_audit.md")) -> dict[str, Any]:
+    problems = []
+    try:
+        text = path.read_text(encoding="utf-8")
+    except FileNotFoundError:
+        return {
+            "name": "related work audit",
+            "ok": False,
+            "evidence": str(path),
+            "problems": ["missing related work audit"],
+        }
+
+    required_phrases = {
+        "ready": "Ready: yes",
+        "coverage count": "Topics covered: 6 / 6",
+        "swe bench": "software_engineering_benchmarks",
+        "coding agents": "coding_agents_and_interfaces",
+        "trajectory diagnosis": "trace_based_agent_diagnosis",
+        "alignment caveat": "not a full literature review",
+    }
+    for label, phrase in required_phrases.items():
+        if phrase not in text:
+            problems.append(f"missing {label}")
+
+    return {
+        "name": "related work audit",
+        "ok": not problems,
+        "evidence": str(path),
+        "detail": "related-work notes and paper draft cover the required positioning axes",
+        "problems": problems,
+    }
+
+
 def check_goal_completion_audit_content(path: Path = Path("docs/goal_completion_audit.md")) -> dict[str, Any]:
     problems = []
     try:
@@ -528,6 +561,7 @@ def build_report(selection_dir: Path, run_dir: Path) -> dict[str, Any]:
         check_reviewer_path_audit_content(),
         check_metric_coverage_audit_content(),
         check_failure_taxonomy_audit_content(),
+        check_related_work_audit_content(),
         check_goal_completion_audit_content(),
         check_verification_lift_next_experiment_content(),
         check_paper_draft_content(),

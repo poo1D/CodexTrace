@@ -1,0 +1,109 @@
+{
+  "summary": {
+    "covered_topic_count": 6,
+    "paper_draft_path": "docs/paper_draft.md",
+    "ready": true,
+    "related_work_path": "docs/related_work.md",
+    "topic_count": 6
+  },
+  "topics": [
+    {
+      "covered": true,
+      "paper_draft_covered": true,
+      "paper_draft_missing": [],
+      "paper_phrases": [
+        "SWE-bench",
+        "Final tests or issue-level success"
+      ],
+      "related_work_covered": true,
+      "related_work_missing": [],
+      "related_work_phrases": [
+        "SWE-bench",
+        "real GitHub issues"
+      ],
+      "topic": "software_engineering_benchmarks"
+    },
+    {
+      "covered": true,
+      "paper_draft_covered": true,
+      "paper_draft_missing": [],
+      "paper_phrases": [
+        "SWE-agent",
+        "OpenHands",
+        "OpenAI Codex CLI"
+      ],
+      "related_work_covered": true,
+      "related_work_missing": [],
+      "related_work_phrases": [
+        "SWE-agent",
+        "OpenHands",
+        "Codex CLI"
+      ],
+      "topic": "coding_agents_and_interfaces"
+    },
+    {
+      "covered": true,
+      "paper_draft_covered": true,
+      "paper_draft_missing": [],
+      "paper_phrases": [
+        "AgentBench",
+        "multi-turn agents"
+      ],
+      "related_work_covered": true,
+      "related_work_missing": [],
+      "related_work_phrases": [
+        "AgentBench",
+        "multi-turn settings"
+      ],
+      "topic": "general_agent_evaluation"
+    },
+    {
+      "covered": true,
+      "paper_draft_covered": true,
+      "paper_draft_missing": [],
+      "paper_phrases": [
+        "RepairAgent",
+        "token budgets"
+      ],
+      "related_work_covered": true,
+      "related_work_missing": [],
+      "related_work_phrases": [
+        "RepairAgent",
+        "token budgets"
+      ],
+      "topic": "program_repair_waste"
+    },
+    {
+      "covered": true,
+      "paper_draft_covered": true,
+      "paper_draft_missing": [],
+      "paper_phrases": [
+        "AgentRx",
+        "execution trajectories"
+      ],
+      "related_work_covered": true,
+      "related_work_missing": [],
+      "related_work_phrases": [
+        "AgentRx",
+        "execution trajectories"
+      ],
+      "topic": "trace_based_agent_diagnosis"
+    },
+    {
+      "covered": true,
+      "paper_draft_covered": true,
+      "paper_draft_missing": [],
+      "paper_phrases": [
+        "Table 1 summarizes the positioning",
+        "CodexTrace difference"
+      ],
+      "related_work_covered": true,
+      "related_work_missing": [],
+      "related_work_phrases": [
+        "Positioning Matrix",
+        "CodexTrace difference"
+      ],
+      "topic": "codextrace_positioning"
+    }
+  ]
+}

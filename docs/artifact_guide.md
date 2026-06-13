@@ -31,15 +31,16 @@ oracles for hidden semantic correctness.
 7. Check drift guards in `docs/claim_text_guard.md` and
    `docs/paper_number_guard.md`.
 8. Check failure-taxonomy coverage in `docs/failure_taxonomy_audit.md`.
-9. Check metric coverage in `docs/metric_coverage_audit.md`.
-10. Check claim-to-evidence mapping in `docs/reproducibility_checklist.md`.
-11. Run the offline demo:
+9. Check related-work positioning coverage in `docs/related_work_audit.md`.
+10. Check metric coverage in `docs/metric_coverage_audit.md`.
+11. Check claim-to-evidence mapping in `docs/reproducibility_checklist.md`.
+12. Run the offline demo:
 
 ```bash
 ./scripts/demo.sh
 ```
 
-12. Optionally open the visual replay UI:
+13. Optionally open the visual replay UI:
 
 ```bash
 cd web
@@ -54,6 +55,7 @@ npm run dev
 | RQ1: What failure modes are observable? | `docs/failure_taxonomy.md`, `docs/paper_draft.md` |
 | RQ2: Can trace rules detect failures? | `benchmark/hard/pilot/hard30-real/label-eval.md` |
 | Is the six-label taxonomy covered? | `docs/failure_taxonomy_audit.md` |
+| Is the related-work positioning covered? | `docs/related_work.md`, `docs/related_work_audit.md` |
 | RQ3: Do harness interventions help? | `docs/results_summary.md` RQ3 tables |
 | RQ4: Which signals explain failure? | `docs/results_summary.md` RQ4 trace-signal table |
 | Are all planned metrics reported? | `docs/metric_coverage_audit.md` |

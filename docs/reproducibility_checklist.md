@@ -27,6 +27,7 @@ The stored pilots can be inspected and aggregated without re-running Codex.
 | `docs/rq4_signal_audit.md` | Generated signal audit for observable process positives and hidden semantic boundaries. |
 | `docs/metric_coverage_audit.md` | Generated coverage audit for the metrics named in the experiment design. |
 | `docs/failure_taxonomy_audit.md` | Generated coverage audit for the six process-failure taxonomy labels. |
+| `docs/related_work_audit.md` | Generated coverage audit for related-work positioning axes. |
 | `docs/hard30_task_diagnosis.md` | Generated task-level hard30 diagnosis for double failures, intervention repairs/regressions, and largest waste deltas. |
 | `docs/paper_claim_audit.md` | Generated support/partial/unsupported audit for thesis-level paper claims. |
 | `docs/claim_text_guard.md` | Generated guard that checks paper-facing text for unsupported-claim drift. |
@@ -74,6 +75,7 @@ The stored pilots can be inspected and aggregated without re-running Codex.
 | `scripts/audit_reviewer_path.py` | Reviewer-path coverage guard for required paper artifacts. |
 | `scripts/audit_metric_coverage.py` | Checks that experiment-design metrics are collected, summarized, exported to CSV, and visible in aggregate Markdown. |
 | `scripts/audit_failure_taxonomy.py` | Checks that taxonomy labels are defined, mapped in the paper draft, and covered by detector fixtures. |
+| `scripts/audit_related_work.py` | Checks that related-work notes and the paper draft cover the required positioning axes. |
 | `scripts/audit_hard30_task_diagnosis.py` | Generates task-level hard30 failure-pattern and waste-delta diagnosis. |
 | `scripts/audit_submission_package.py` | Generates the reviewer-facing RQ-to-evidence submission package map. |
 | `scripts/check_submission_readiness.py` | Machine-readable gate for hard30 collection, finalization, labeling, and paper artifact readiness. |
@@ -137,6 +139,14 @@ Failure taxonomy coverage audit:
 PYTHONPATH=. python3 scripts/audit_failure_taxonomy.py \
   --json-output /tmp/failure-taxonomy-audit.json \
   --markdown-output /tmp/failure-taxonomy-audit.md
+```
+
+Related-work coverage audit:
+
+```bash
+PYTHONPATH=. python3 scripts/audit_related_work.py \
+  --json-output /tmp/related-work-audit.json \
+  --markdown-output /tmp/related-work-audit.md
 ```
 
 Hard 10-task aggregate:

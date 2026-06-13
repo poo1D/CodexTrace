@@ -17,6 +17,7 @@ from scripts.audit_paper_numbers import build_paper_number_guard, render_paper_n
 from scripts.audit_paper_claims import build_claim_audit, render_claim_audit_markdown
 from scripts.audit_process_stress_plan import audit_process_stress_plan
 from scripts.audit_reviewer_path import build_reviewer_path_audit, render_reviewer_path_audit_markdown
+from scripts.audit_related_work import build_related_work_audit, render_related_work_audit_markdown
 from scripts.audit_rq4_signals import build_rq4_signal_audit, render_rq4_signal_audit_markdown
 from scripts.audit_submission_package import build_submission_package, render_submission_package_markdown
 from scripts.audit_thesis_readiness import build_thesis_readiness, render_thesis_readiness_markdown
@@ -53,6 +54,7 @@ from scripts.check_submission_readiness import (
     check_goal_completion_audit_content,
     check_metric_coverage_audit_content,
     check_paper_number_guard_content,
+    check_related_work_audit_content,
     check_reviewer_path_audit_content,
     check_submission_package_content,
     check_verification_lift_next_experiment_content,
@@ -1264,6 +1266,24 @@ def test_failure_taxonomy_audit_covers_process_labels():
     assert "rule-level taxonomy coverage" in markdown
 
 
+def test_related_work_audit_covers_positioning_axes():
+    result = build_related_work_audit()
+    markdown = render_related_work_audit_markdown(result)
+
+    assert result["summary"]["ready"] is True
+    assert result["summary"]["covered_topic_count"] == 6
+    assert {row["topic"] for row in result["topics"]} == {
+        "software_engineering_benchmarks",
+        "coding_agents_and_interfaces",
+        "general_agent_evaluation",
+        "program_repair_waste",
+        "trace_based_agent_diagnosis",
+        "codextrace_positioning",
+    }
+    assert all(row["covered"] for row in result["topics"])
+    assert "not a full literature review" in markdown
+
+
 def test_build_results_summary_from_stored_pilots():
     result = build_results_summary(
         "benchmark/pilot/full30-real/runs.jsonl",
@@ -1526,6 +1546,7 @@ def test_paper_draft_contains_submission_polish_sections():
     assert "docs/submission_package.md" in text
     assert "docs/paper_number_guard.md" in text
     assert "docs/failure_taxonomy_audit.md" in text
+    assert "docs/related_work_audit.md" in text
 
 
 def test_reviewer_docs_surface_hard30_task_diagnosis():
@@ -1544,6 +1565,7 @@ def test_reviewer_docs_surface_hard30_task_diagnosis():
     assert "docs/paper_number_guard.md" in readme
     assert "docs/reviewer_path_audit.md" in readme
     assert "docs/failure_taxonomy_audit.md" in readme
+    assert "docs/related_work_audit.md" in readme
     assert "scripts/audit_hard30_task_diagnosis.py" in readme
     assert "scripts/run_benchmark_shards.py" in readme
     assert "scripts/merge_benchmark_shards.py" in readme
@@ -1555,6 +1577,7 @@ def test_reviewer_docs_surface_hard30_task_diagnosis():
     assert "scripts/audit_reviewer_path.py --markdown-output docs/reviewer_path_audit.md" in readme
     assert "scripts/audit_submission_package.py --markdown-output docs/submission_package.md" in readme
     assert "scripts/audit_failure_taxonomy.py --markdown-output docs/failure_taxonomy_audit.md" in readme
+    assert "scripts/audit_related_work.py --markdown-output docs/related_work_audit.md" in readme
     assert "scripts/audit_thesis_readiness.py --markdown-output docs/thesis_readiness.md" in readme
     assert "scripts/audit_claim_text_guard.py --markdown-output docs/claim_text_guard.md" in readme
     assert "docs/hard30_task_diagnosis.md" in guide
@@ -1562,6 +1585,7 @@ def test_reviewer_docs_surface_hard30_task_diagnosis():
     assert "docs/claim_text_guard.md" in guide
     assert "docs/paper_number_guard.md" in guide
     assert "docs/failure_taxonomy_audit.md" in guide
+    assert "docs/related_work_audit.md" in guide
     assert "| Which tasks get lost? |" in guide
     assert "| Which claims are safe to write? |" in guide
     assert "| Did paper text drift from evidence? |" in guide
@@ -1580,6 +1604,7 @@ def test_reviewer_docs_surface_hard30_task_diagnosis():
     assert "scripts/audit_paper_numbers.py" in checklist
     assert "scripts/audit_reviewer_path.py" in checklist
     assert "scripts/audit_failure_taxonomy.py" in checklist
+    assert "scripts/audit_related_work.py" in checklist
     assert "--markdown-output /tmp/hard30-task-diagnosis.md" in checklist
     assert "--output-dir /tmp/codextrace-verification-lift-v2-dry" in checklist
     assert "--status-json /tmp/verification-lift-v2-shard-status.json" in checklist
@@ -1691,6 +1716,8 @@ def test_submission_package_maps_rqs_to_safe_paper_claims():
     assert "docs/reviewer_path_audit.md" in package["required_files"]
     assert "docs/metric_coverage_audit.md" in package["required_files"]
     assert "docs/failure_taxonomy_audit.md" in package["required_files"]
+    assert "docs/related_work.md" in package["required_files"]
+    assert "docs/related_work_audit.md" in package["required_files"]
     assert [row["rq"] for row in package["rq_rows"]] == ["RQ1", "RQ2", "RQ3", "RQ4"]
     assert package["rq_rows"][2]["status"] == "supported"
     assert "ordinary verification-rate lift is unsupported" in package["rq_rows"][2]["claim_boundary"]
@@ -1699,6 +1726,7 @@ def test_submission_package_maps_rqs_to_safe_paper_claims():
     assert "## RQ-To-Evidence Map" in markdown
     assert "docs/hard30_task_diagnosis.md" in markdown
     assert "docs/failure_taxonomy_audit.md" in markdown
+    assert "docs/related_work_audit.md" in markdown
     assert "Unsupported Claims To Avoid" in markdown
 
 
@@ -1757,6 +1785,7 @@ def test_reviewer_path_audit_covers_required_artifacts(tmp_path):
     assert any(row["path"] == "docs/paper_outline.md" for row in result["coverage"])
     assert any(row["path"] == "docs/reviewer_path_audit.md" for row in result["coverage"])
     assert any(row["path"] == "docs/failure_taxonomy_audit.md" for row in result["coverage"])
+    assert any(row["path"] == "docs/related_work_audit.md" for row in result["coverage"])
     assert "Missing from reproducibility checklist: 0" in markdown
 
     package = tmp_path / "submission_package.json"
@@ -1800,6 +1829,18 @@ def test_submission_readiness_validates_failure_taxonomy_audit_content(tmp_path)
     assert "missing ready" in check["problems"]
     assert "missing coverage count" in check["problems"]
     assert "missing fixture f1" in check["problems"]
+
+
+def test_submission_readiness_validates_related_work_audit_content(tmp_path):
+    broken = tmp_path / "related_work_audit.md"
+    broken.write_text("# Related Work Coverage Audit\nReady: no\n", encoding="utf-8")
+
+    check = check_related_work_audit_content(broken)
+
+    assert check["ok"] is False
+    assert "missing ready" in check["problems"]
+    assert "missing coverage count" in check["problems"]
+    assert "missing swe bench" in check["problems"]
 
 
 def test_goal_completion_audit_keeps_original_goal_open():

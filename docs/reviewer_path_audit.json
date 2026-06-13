@@ -69,6 +69,24 @@
     },
     {
       "covered": true,
+      "path": "docs/related_work.md",
+      "present_in": [
+        "README.md",
+        "docs/artifact_guide.md",
+        "docs/reproducibility_checklist.md"
+      ]
+    },
+    {
+      "covered": true,
+      "path": "docs/related_work_audit.md",
+      "present_in": [
+        "README.md",
+        "docs/artifact_guide.md",
+        "docs/reproducibility_checklist.md"
+      ]
+    },
+    {
+      "covered": true,
       "path": "docs/experiment_protocol.md",
       "present_in": [
         "README.md",
@@ -178,6 +196,6 @@
     "checklist_missing": 0,
     "guide_missing": 0,
     "missing": 0,
-    "required_files": 20
+    "required_files": 22
   }
 }
