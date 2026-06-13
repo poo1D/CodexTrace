@@ -61,6 +61,11 @@
       "present": true
     },
     {
+      "id": "thesis_revision_decision",
+      "phrase": "scripts/audit_thesis_revision_decision.py",
+      "present": true
+    },
+    {
       "id": "paper_number_guard",
       "phrase": "scripts/audit_paper_numbers.py",
       "present": true
@@ -114,10 +119,10 @@
   "summary": {
     "bash_fence_count": 36,
     "checklist_path": "docs/reproducibility_checklist.md",
-    "covered_command_count": 22,
+    "covered_command_count": 23,
     "fence_count": 78,
     "fences_balanced": true,
     "ready": true,
-    "required_command_count": 22
+    "required_command_count": 23
   }
 }

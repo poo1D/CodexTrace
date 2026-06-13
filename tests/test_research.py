@@ -23,6 +23,7 @@ from scripts.audit_related_work import build_related_work_audit, render_related_
 from scripts.audit_reproducibility import build_reproducibility_audit, render_reproducibility_audit_markdown
 from scripts.audit_rq4_signals import build_rq4_signal_audit, render_rq4_signal_audit_markdown
 from scripts.audit_submission_package import build_submission_package, render_submission_package_markdown
+from scripts.audit_thesis_revision_decision import build_thesis_revision_decision, render_thesis_revision_decision_markdown
 from scripts.audit_thesis_readiness import build_thesis_readiness, render_thesis_readiness_markdown
 from scripts.audit_verification_ablation_plan import audit_verification_ablation_plan
 from scripts.audit_verification_lift_plan import audit_verification_lift_plan
@@ -63,6 +64,7 @@ from scripts.check_submission_readiness import (
     check_reproducibility_audit_content,
     check_reviewer_path_audit_content,
     check_submission_package_content,
+    check_thesis_revision_decision_content,
     check_verification_lift_next_experiment_content,
     render_report,
 )
@@ -1315,7 +1317,7 @@ def test_reproducibility_audit_covers_key_commands():
     markdown = render_reproducibility_audit_markdown(result)
 
     assert result["summary"]["ready"] is True
-    assert result["summary"]["covered_command_count"] == 22
+    assert result["summary"]["covered_command_count"] == 23
     assert result["summary"]["fences_balanced"] is True
     assert {row["id"] for row in result["commands"]} >= {
         "full30_aggregate",
@@ -1323,6 +1325,7 @@ def test_reproducibility_audit_covers_key_commands():
         "hard30_paper_report",
         "combined_summary",
         "headline_results",
+        "thesis_revision_decision",
         "submission_readiness_gate",
         "claim_text_guard",
     }
@@ -1433,6 +1436,27 @@ def test_headline_results_table_tracks_actual_evidence_boundaries():
     assert "Ordinary verification-rate lift supported: no" in markdown
     assert "no_verify_ablation_verification" in markdown
     assert "not an ordinary baseline" in markdown
+
+
+def test_thesis_revision_decision_records_boundary_result_reframe():
+    result = build_thesis_revision_decision()
+    markdown = render_thesis_revision_decision_markdown(result)
+    decisions = {row["id"]: row for row in result["decisions"]}
+
+    assert result["summary"]["ready"] is True
+    assert result["summary"]["decision"] == "revise_to_boundary_result_paper"
+    assert result["summary"]["ready_for_original_thesis"] is False
+    assert result["summary"]["ready_for_boundary_result_paper"] is True
+    assert result["summary"]["claim_revision_required"] is True
+    assert result["summary"]["additional_ordinary_baseline_experiment_required"] is False
+    assert result["summary"]["ordinary_verification_rate_lift_supported"] is False
+    assert decisions["verification_rate_lift"]["decision"] == "drop_as_finding"
+    assert decisions["no_verify_ablation"]["decision"] == "keep_as_mechanism_check"
+    assert decisions["waste_reduction"]["decision"] == "keep"
+    assert decisions["success_lift"]["decision"] == "qualify"
+    assert "Decision: revise_to_boundary_result_paper" in markdown
+    assert "Ordinary verification-rate lift supported: no" in markdown
+    assert "drops the ordinary verification-rate-lift finding" in markdown
 
 
 def test_build_results_summary_prefers_finalized_outputs(tmp_path):
@@ -1628,6 +1652,7 @@ def test_reviewer_docs_surface_hard30_task_diagnosis():
     assert "docs/hard30_task_diagnosis.md" in readme
     assert "docs/goal_completion_audit.md" in readme
     assert "docs/verification_lift_next_experiment.md" in readme
+    assert "docs/thesis_revision_decision.md" in readme
     assert "docs/verification_lift_v2_plan_audit.md" in readme
     assert "docs/headline_results.md" in readme
     assert "benchmark/verification-lift-v2/pilot/full-real" in readme
@@ -1645,6 +1670,7 @@ def test_reviewer_docs_surface_hard30_task_diagnosis():
     assert "scripts/merge_benchmark_shards.py" in readme
     assert "scripts/finalize_benchmark_pilot.py" in readme
     assert "scripts/audit_goal_completion.py --markdown-output docs/goal_completion_audit.md" in readme
+    assert "scripts/audit_thesis_revision_decision.py --markdown-output docs/thesis_revision_decision.md" in readme
     assert "scripts/audit_verification_lift_next_experiment.py --markdown-output docs/verification_lift_next_experiment.md" in readme
     assert "scripts/audit_verification_lift_v2_plan.py --markdown-output docs/verification_lift_v2_plan_audit.md" in readme
     assert "scripts/audit_headline_results.py --markdown-output docs/headline_results.md" in readme
@@ -1660,6 +1686,7 @@ def test_reviewer_docs_surface_hard30_task_diagnosis():
     assert "docs/hard30_task_diagnosis.md" in guide
     assert "docs/submission_package.md" in guide
     assert "docs/headline_results.md" in guide
+    assert "docs/thesis_revision_decision.md" in guide
     assert "docs/claim_text_guard.md" in guide
     assert "docs/paper_number_guard.md" in guide
     assert "docs/failure_taxonomy_audit.md" in guide
@@ -1678,6 +1705,7 @@ def test_reviewer_docs_surface_hard30_task_diagnosis():
     assert "scripts/merge_benchmark_shards.py" in checklist
     assert "scripts/finalize_benchmark_pilot.py" in checklist
     assert "scripts/audit_goal_completion.py" in checklist
+    assert "scripts/audit_thesis_revision_decision.py" in checklist
     assert "scripts/audit_verification_lift_next_experiment.py" in checklist
     assert "scripts/audit_verification_lift_v2_plan.py" in checklist
     assert "scripts/audit_headline_results.py" in checklist
@@ -1696,6 +1724,7 @@ def test_reviewer_docs_surface_hard30_task_diagnosis():
     assert "completed claim-closure retest" in checklist
     assert "repeated calls improve `8.62 -> 5.50`" in checklist
     assert "--markdown-output /tmp/headline-results.md" in checklist
+    assert "--markdown-output /tmp/thesis-revision-decision.md" in checklist
 
 
 def test_paper_outline_tracks_current_boundary_result():
@@ -1792,6 +1821,7 @@ def test_submission_package_maps_rqs_to_safe_paper_claims():
     assert "docs/artifact_guide.md" in package["required_files"]
     assert "docs/submission_package.md" in package["required_files"]
     assert "docs/goal_completion_audit.md" in package["required_files"]
+    assert "docs/thesis_revision_decision.md" in package["required_files"]
     assert "docs/verification_lift_next_experiment.md" in package["required_files"]
     assert "docs/verification_lift_v2_plan_audit.md" in package["required_files"]
     assert "docs/headline_results.md" in package["required_files"]
@@ -1818,6 +1848,7 @@ def test_submission_package_maps_rqs_to_safe_paper_claims():
     assert "docs/paper_structure_audit.md" in markdown
     assert "docs/reproducibility_audit.md" in markdown
     assert "docs/headline_results.md" in markdown
+    assert "docs/thesis_revision_decision.md" in markdown
     assert "Unsupported Claims To Avoid" in markdown
 
 
@@ -1843,6 +1874,18 @@ def test_submission_readiness_validates_headline_results_content(tmp_path):
     assert "missing ready" in check["problems"]
     assert "missing verification lift unsupported" in check["problems"]
     assert "missing not ordinary baseline" in check["problems"]
+
+
+def test_submission_readiness_validates_thesis_revision_decision_content(tmp_path):
+    broken = tmp_path / "thesis_revision_decision.md"
+    broken.write_text("# Thesis Revision Decision\nReady: no\n", encoding="utf-8")
+
+    check = check_thesis_revision_decision_content(broken)
+
+    assert check["ok"] is False
+    assert "missing ready" in check["problems"]
+    assert "missing decision" in check["problems"]
+    assert "missing drop finding" in check["problems"]
 
 
 def test_paper_number_guard_keeps_draft_numbers_in_sync(tmp_path):
@@ -1892,6 +1935,7 @@ def test_reviewer_path_audit_covers_required_artifacts(tmp_path):
     assert any(row["path"] == "docs/paper_structure_audit.md" for row in result["coverage"])
     assert any(row["path"] == "docs/reproducibility_audit.md" for row in result["coverage"])
     assert any(row["path"] == "docs/headline_results.md" for row in result["coverage"])
+    assert any(row["path"] == "docs/thesis_revision_decision.md" for row in result["coverage"])
     assert "Missing from reproducibility checklist: 0" in markdown
 
     package = tmp_path / "submission_package.json"

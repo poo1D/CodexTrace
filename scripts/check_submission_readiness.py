@@ -352,6 +352,42 @@ def check_headline_results_content(path: Path = Path("docs/headline_results.md")
     }
 
 
+def check_thesis_revision_decision_content(path: Path = Path("docs/thesis_revision_decision.md")) -> dict[str, Any]:
+    problems = []
+    try:
+        text = path.read_text(encoding="utf-8")
+    except FileNotFoundError:
+        return {
+            "name": "thesis revision decision",
+            "ok": False,
+            "evidence": str(path),
+            "problems": ["missing thesis revision decision"],
+        }
+
+    required_phrases = {
+        "ready": "Ready: yes",
+        "decision": "Decision: revise_to_boundary_result_paper",
+        "original thesis no": "Ready for original thesis: no",
+        "boundary paper yes": "Ready for boundary-result paper: yes",
+        "claim revision": "Claim revision required: yes",
+        "verification lift unsupported": "Ordinary verification-rate lift supported: no",
+        "drop finding": "drop_as_finding",
+        "mechanism check": "keep_as_mechanism_check",
+        "waste reduction": "waste_reduction",
+    }
+    for label, phrase in required_phrases.items():
+        if phrase not in text:
+            problems.append(f"missing {label}")
+
+    return {
+        "name": "thesis revision decision",
+        "ok": not problems,
+        "evidence": str(path),
+        "detail": "explicit decision to revise the original thesis into a boundary-result paper",
+        "problems": problems,
+    }
+
+
 def check_paper_number_guard_content(path: Path = Path("docs/paper_number_guard.md")) -> dict[str, Any]:
     problems = []
     try:
@@ -563,7 +599,7 @@ def check_reproducibility_audit_content(path: Path = Path("docs/reproducibility_
 
     required_phrases = {
         "ready": "Ready: yes",
-        "coverage count": "Commands covered: 22 / 22",
+        "coverage count": "Commands covered: 23 / 23",
         "balanced fences": "Markdown fences balanced: yes",
         "submission gate": "submission_readiness_gate",
         "scope caveat": "does not execute the full real Codex collection commands",
@@ -658,6 +694,7 @@ def build_report(selection_dir: Path, run_dir: Path) -> dict[str, Any]:
         check_exists(Path("docs/hard30_task_diagnosis.md"), "hard30 task diagnosis"),
         check_submission_package_content(),
         check_headline_results_content(),
+        check_thesis_revision_decision_content(),
         check_paper_number_guard_content(),
         check_reviewer_path_audit_content(),
         check_metric_coverage_audit_content(),
