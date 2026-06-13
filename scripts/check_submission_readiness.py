@@ -481,6 +481,39 @@ def check_related_work_audit_content(path: Path = Path("docs/related_work_audit.
     }
 
 
+def check_paper_structure_audit_content(path: Path = Path("docs/paper_structure_audit.md")) -> dict[str, Any]:
+    problems = []
+    try:
+        text = path.read_text(encoding="utf-8")
+    except FileNotFoundError:
+        return {
+            "name": "paper structure audit",
+            "ok": False,
+            "evidence": str(path),
+            "problems": ["missing paper structure audit"],
+        }
+
+    required_phrases = {
+        "ready": "Ready: yes",
+        "coverage count": "Sections covered: 10 / 10",
+        "rq results": "rq_results",
+        "boundary framing": "boundary_result_framing",
+        "artifact conclusion": "artifact_and_conclusion",
+        "scope caveat": "does not judge prose quality",
+    }
+    for label, phrase in required_phrases.items():
+        if phrase not in text:
+            problems.append(f"missing {label}")
+
+    return {
+        "name": "paper structure audit",
+        "ok": not problems,
+        "evidence": str(path),
+        "detail": "paper draft covers required sections, RQ blocks, and boundary-result framing",
+        "problems": problems,
+    }
+
+
 def check_goal_completion_audit_content(path: Path = Path("docs/goal_completion_audit.md")) -> dict[str, Any]:
     problems = []
     try:
@@ -562,6 +595,7 @@ def build_report(selection_dir: Path, run_dir: Path) -> dict[str, Any]:
         check_metric_coverage_audit_content(),
         check_failure_taxonomy_audit_content(),
         check_related_work_audit_content(),
+        check_paper_structure_audit_content(),
         check_goal_completion_audit_content(),
         check_verification_lift_next_experiment_content(),
         check_paper_draft_content(),

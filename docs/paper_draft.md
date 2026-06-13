@@ -484,6 +484,7 @@ are `docs/artifact_guide.md` for a short reviewer path,
 `docs/metric_coverage_audit.md` for experiment-metric coverage,
 `docs/failure_taxonomy_audit.md` for six-label taxonomy coverage,
 `docs/related_work_audit.md` for related-work positioning coverage,
+`docs/paper_structure_audit.md` for section/RQ coverage,
 `docs/paper_claim_audit.md`, `docs/claim_text_guard.md`, and
 `docs/paper_number_guard.md` for claim-support and numeric-drift guards, and
 `docs/reproducibility_checklist.md` for claim-to-evidence mapping and
@@ -507,5 +508,5 @@ generated result summary, see `docs/results_summary.md`. For claim-evidence
 mapping and reproduction commands, see `docs/reproducibility_checklist.md`.
 For safe claim framing and generated guard status, see
 `docs/submission_package.md`, `docs/failure_taxonomy_audit.md`,
-`docs/related_work_audit.md`, `docs/claim_text_guard.md`, and
-`docs/paper_number_guard.md`.
+`docs/related_work_audit.md`, `docs/paper_structure_audit.md`,
+`docs/claim_text_guard.md`, and `docs/paper_number_guard.md`.

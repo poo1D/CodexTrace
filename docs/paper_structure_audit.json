@@ -1,0 +1,129 @@
+{
+  "sections": [
+    {
+      "covered": true,
+      "id": "title_and_abstract",
+      "missing": [],
+      "required_phrases": [
+        "# When Coding Agents Get Lost",
+        "## Abstract",
+        "verification-rate-lift claim",
+        "hidden semantic edge-case failures"
+      ]
+    },
+    {
+      "covered": true,
+      "id": "introduction_and_rqs",
+      "missing": [],
+      "required_phrases": [
+        "## 1. Introduction",
+        "RQ1: What observable failure modes appear",
+        "RQ2: Can these failure modes be detected",
+        "RQ3: Do simple harness interventions improve success or reduce waste",
+        "RQ4: Which trace signals explain observable process failures"
+      ]
+    },
+    {
+      "covered": true,
+      "id": "related_work",
+      "missing": [],
+      "required_phrases": [
+        "## 2. Related Work",
+        "SWE-bench",
+        "SWE-agent",
+        "AgentRx",
+        "| Work line | Primary question | Typical evidence | CodexTrace difference |"
+      ]
+    },
+    {
+      "covered": true,
+      "id": "problem_and_taxonomy",
+      "missing": [],
+      "required_phrases": [
+        "## 3. Problem Definition",
+        "## 4. Failure Taxonomy",
+        "`verification_gap`",
+        "`sandbox_permission_deadlock`",
+        "`hidden_semantic_edge_case`"
+      ]
+    },
+    {
+      "covered": true,
+      "id": "method_and_schema",
+      "missing": [],
+      "required_phrases": [
+        "## 5. Method: CodexTrace",
+        "JSONL event parser",
+        "phase segmentation",
+        "| Schema object | Fields | Purpose |",
+        "| Taxonomy label | Implementation finding | Detector signal |"
+      ]
+    },
+    {
+      "covered": true,
+      "id": "benchmark_and_measurement",
+      "missing": [],
+      "required_phrases": [
+        "## 6. Benchmark",
+        "| Tier | Tasks | Runs | Baseline | Intervention | Outcome oracle | Primary use |",
+        "### Measurement",
+        "`time_to_first_test`",
+        "`failure_score`"
+      ]
+    },
+    {
+      "covered": true,
+      "id": "rq_results",
+      "missing": [],
+      "required_phrases": [
+        "## 7. Results",
+        "### RQ1: Failure Taxonomy Distribution",
+        "### RQ2: Detector Agreement",
+        "### RQ3: Baseline vs Intervention",
+        "### RQ4: Trace Signals By Outcome"
+      ]
+    },
+    {
+      "covered": true,
+      "id": "boundary_result_framing",
+      "missing": [],
+      "required_phrases": [
+        "verification-lift-v2 ordinary retest",
+        "no-verify ablation",
+        "not ordinary-baseline evidence",
+        "negative result for the verification-rate-lift claim",
+        "process-only trace rules cannot detect every correctness failure"
+      ]
+    },
+    {
+      "covered": true,
+      "id": "analysis_and_limitations",
+      "missing": [],
+      "required_phrases": [
+        "## 8. Analysis",
+        "## 9. Threats To Validity",
+        "pilot-scale benchmark",
+        "rule-based and intentionally interpretable, but incomplete",
+        "Larger repository tasks, repeated trials"
+      ]
+    },
+    {
+      "covered": true,
+      "id": "artifact_and_conclusion",
+      "missing": [],
+      "required_phrases": [
+        "## 10. Artifact Availability",
+        "docs/artifact_guide.md",
+        "docs/submission_package.md",
+        "## 11. Conclusion",
+        "strong task-level oracles"
+      ]
+    }
+  ],
+  "summary": {
+    "covered_section_count": 10,
+    "paper_draft_path": "docs/paper_draft.md",
+    "ready": true,
+    "section_count": 10
+  }
+}

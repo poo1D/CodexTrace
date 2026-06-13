@@ -14,6 +14,7 @@ from scripts.audit_claim_text_guard import audit_claim_text_guard, render_claim_
 from scripts.audit_goal_completion import build_goal_completion_audit, render_goal_completion_audit_markdown
 from scripts.audit_hard30_task_diagnosis import build_task_diagnosis, render_task_diagnosis_markdown
 from scripts.audit_paper_numbers import build_paper_number_guard, render_paper_number_guard_markdown
+from scripts.audit_paper_structure import build_paper_structure_audit, render_paper_structure_audit_markdown
 from scripts.audit_paper_claims import build_claim_audit, render_claim_audit_markdown
 from scripts.audit_process_stress_plan import audit_process_stress_plan
 from scripts.audit_reviewer_path import build_reviewer_path_audit, render_reviewer_path_audit_markdown
@@ -54,6 +55,7 @@ from scripts.check_submission_readiness import (
     check_goal_completion_audit_content,
     check_metric_coverage_audit_content,
     check_paper_number_guard_content,
+    check_paper_structure_audit_content,
     check_related_work_audit_content,
     check_reviewer_path_audit_content,
     check_submission_package_content,
@@ -1284,6 +1286,26 @@ def test_related_work_audit_covers_positioning_axes():
     assert "not a full literature review" in markdown
 
 
+def test_paper_structure_audit_covers_required_sections():
+    result = build_paper_structure_audit()
+    markdown = render_paper_structure_audit_markdown(result)
+
+    assert result["summary"]["ready"] is True
+    assert result["summary"]["covered_section_count"] == 10
+    assert {row["id"] for row in result["sections"]} >= {
+        "title_and_abstract",
+        "introduction_and_rqs",
+        "method_and_schema",
+        "benchmark_and_measurement",
+        "rq_results",
+        "boundary_result_framing",
+        "analysis_and_limitations",
+        "artifact_and_conclusion",
+    }
+    assert all(row["covered"] for row in result["sections"])
+    assert "does not judge prose quality" in markdown
+
+
 def test_build_results_summary_from_stored_pilots():
     result = build_results_summary(
         "benchmark/pilot/full30-real/runs.jsonl",
@@ -1547,6 +1569,7 @@ def test_paper_draft_contains_submission_polish_sections():
     assert "docs/paper_number_guard.md" in text
     assert "docs/failure_taxonomy_audit.md" in text
     assert "docs/related_work_audit.md" in text
+    assert "docs/paper_structure_audit.md" in text
 
 
 def test_reviewer_docs_surface_hard30_task_diagnosis():
@@ -1566,6 +1589,7 @@ def test_reviewer_docs_surface_hard30_task_diagnosis():
     assert "docs/reviewer_path_audit.md" in readme
     assert "docs/failure_taxonomy_audit.md" in readme
     assert "docs/related_work_audit.md" in readme
+    assert "docs/paper_structure_audit.md" in readme
     assert "scripts/audit_hard30_task_diagnosis.py" in readme
     assert "scripts/run_benchmark_shards.py" in readme
     assert "scripts/merge_benchmark_shards.py" in readme
@@ -1578,6 +1602,7 @@ def test_reviewer_docs_surface_hard30_task_diagnosis():
     assert "scripts/audit_submission_package.py --markdown-output docs/submission_package.md" in readme
     assert "scripts/audit_failure_taxonomy.py --markdown-output docs/failure_taxonomy_audit.md" in readme
     assert "scripts/audit_related_work.py --markdown-output docs/related_work_audit.md" in readme
+    assert "scripts/audit_paper_structure.py --markdown-output docs/paper_structure_audit.md" in readme
     assert "scripts/audit_thesis_readiness.py --markdown-output docs/thesis_readiness.md" in readme
     assert "scripts/audit_claim_text_guard.py --markdown-output docs/claim_text_guard.md" in readme
     assert "docs/hard30_task_diagnosis.md" in guide
@@ -1586,6 +1611,7 @@ def test_reviewer_docs_surface_hard30_task_diagnosis():
     assert "docs/paper_number_guard.md" in guide
     assert "docs/failure_taxonomy_audit.md" in guide
     assert "docs/related_work_audit.md" in guide
+    assert "docs/paper_structure_audit.md" in guide
     assert "| Which tasks get lost? |" in guide
     assert "| Which claims are safe to write? |" in guide
     assert "| Did paper text drift from evidence? |" in guide
@@ -1605,6 +1631,7 @@ def test_reviewer_docs_surface_hard30_task_diagnosis():
     assert "scripts/audit_reviewer_path.py" in checklist
     assert "scripts/audit_failure_taxonomy.py" in checklist
     assert "scripts/audit_related_work.py" in checklist
+    assert "scripts/audit_paper_structure.py" in checklist
     assert "--markdown-output /tmp/hard30-task-diagnosis.md" in checklist
     assert "--output-dir /tmp/codextrace-verification-lift-v2-dry" in checklist
     assert "--status-json /tmp/verification-lift-v2-shard-status.json" in checklist
@@ -1710,6 +1737,8 @@ def test_submission_package_maps_rqs_to_safe_paper_claims():
     assert "docs/goal_completion_audit.md" in package["required_files"]
     assert "docs/verification_lift_next_experiment.md" in package["required_files"]
     assert "docs/verification_lift_v2_plan_audit.md" in package["required_files"]
+    assert "docs/paper_draft.md" in package["required_files"]
+    assert "docs/paper_structure_audit.md" in package["required_files"]
     assert "docs/experiment_protocol.md" in package["required_files"]
     assert "docs/paper_outline.md" in package["required_files"]
     assert "docs/paper_number_guard.md" in package["required_files"]
@@ -1727,6 +1756,7 @@ def test_submission_package_maps_rqs_to_safe_paper_claims():
     assert "docs/hard30_task_diagnosis.md" in markdown
     assert "docs/failure_taxonomy_audit.md" in markdown
     assert "docs/related_work_audit.md" in markdown
+    assert "docs/paper_structure_audit.md" in markdown
     assert "Unsupported Claims To Avoid" in markdown
 
 
@@ -1786,6 +1816,7 @@ def test_reviewer_path_audit_covers_required_artifacts(tmp_path):
     assert any(row["path"] == "docs/reviewer_path_audit.md" for row in result["coverage"])
     assert any(row["path"] == "docs/failure_taxonomy_audit.md" for row in result["coverage"])
     assert any(row["path"] == "docs/related_work_audit.md" for row in result["coverage"])
+    assert any(row["path"] == "docs/paper_structure_audit.md" for row in result["coverage"])
     assert "Missing from reproducibility checklist: 0" in markdown
 
     package = tmp_path / "submission_package.json"
@@ -1841,6 +1872,18 @@ def test_submission_readiness_validates_related_work_audit_content(tmp_path):
     assert "missing ready" in check["problems"]
     assert "missing coverage count" in check["problems"]
     assert "missing swe bench" in check["problems"]
+
+
+def test_submission_readiness_validates_paper_structure_audit_content(tmp_path):
+    broken = tmp_path / "paper_structure_audit.md"
+    broken.write_text("# Paper Structure Audit\nReady: no\n", encoding="utf-8")
+
+    check = check_paper_structure_audit_content(broken)
+
+    assert check["ok"] is False
+    assert "missing ready" in check["problems"]
+    assert "missing coverage count" in check["problems"]
+    assert "missing boundary framing" in check["problems"]
 
 
 def test_goal_completion_audit_keeps_original_goal_open():
