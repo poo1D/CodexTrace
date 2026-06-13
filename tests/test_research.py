@@ -1308,6 +1308,7 @@ def test_build_results_summary_from_stored_pilots():
     assert "| verification-lift-v2 ordinary retest | 1.00 broad / 1.00 exact | 1.00 broad / 1.00 exact |" in markdown
     assert "| no-verify ablation | 0.00 broad / 0.00 exact | 1.00 broad / 1.00 exact |" in markdown
     assert "### Hard30 Pilot" in markdown
+    assert "| unresolved_error_rate | 0.00 | 0.00 | 0.00 |" in markdown
     assert "| avg_time_to_first_test |" in markdown
     assert "### Process-Stress Pilot" in markdown
     assert "### Verification-Lift Pilot" in markdown
@@ -1493,6 +1494,7 @@ def test_paper_draft_contains_submission_polish_sections():
     assert "| `verification_gap` | `verification_gap` |" in text
     assert "| `unrecovered_tool_error` | `command_failure_unhandled` |" in text
     assert "| Evidence slice | Baseline | Intervention | Interpretation |" in text
+    assert "| unresolved_error_rate | 0.00 | 0.00 | 0.00 |" in text
     assert "No model training, fine-tuning, embedding index, or GPU inference is used" in text
     assert "Trace diagnosis is less suited for proving semantic correctness" in text
     assert "docs/submission_package.md" in text

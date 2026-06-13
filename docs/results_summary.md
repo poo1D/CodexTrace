@@ -33,6 +33,7 @@ This generated summary consolidates the current paper-facing result tables.
 | success_rate | 1.00 | 1.00 | 0.00 |
 | verification_rate | 1.00 | 1.00 | 0.00 |
 | success_check_verification_rate | 1.00 | 1.00 | 0.00 |
+| unresolved_error_rate | 0.00 | 0.00 | 0.00 |
 | avg_repeated_tool_calls | 10.43 | 7 | -3.433 |
 | avg_command_failures | 0.5 | 0.2 | -0.3 |
 | avg_turn_count | 1 | 1 | 0 |
@@ -49,6 +50,7 @@ This generated summary consolidates the current paper-facing result tables.
 | success_rate | 0.70 | 0.80 | 0.10 |
 | verification_rate | 1.00 | 1.00 | 0.00 |
 | success_check_verification_rate | 1.00 | 1.00 | 0.00 |
+| unresolved_error_rate | 0.00 | 0.00 | 0.00 |
 | avg_repeated_tool_calls | 9.2 | 6.2 | -3 |
 | avg_turn_count | 1 | 1 | 0 |
 | avg_time_to_first_edit | 14.2 | 13.8 | -0.4 |
@@ -63,6 +65,7 @@ This generated summary consolidates the current paper-facing result tables.
 | success_rate | 0.50 | 0.50 | 0.00 |
 | verification_rate | 1.00 | 1.00 | 0.00 |
 | success_check_verification_rate | 1.00 | 1.00 | 0.00 |
+| unresolved_error_rate | 0.00 | 0.00 | 0.00 |
 | avg_repeated_tool_calls | 12.93 | 9.2 | -3.733 |
 | avg_command_failures | 0.3 | 0.1 | -0.2 |
 | avg_turn_count | 1 | 1 | 0 |
@@ -80,6 +83,7 @@ Paired hard30 deltas: token usage improves in 26/30 tasks, repeated tool calls i
 | success_rate | 0.92 | 0.92 | 0.00 |
 | verification_rate | 1.00 | 1.00 | 0.00 |
 | success_check_verification_rate | 1.00 | 1.00 | 0.00 |
+| unresolved_error_rate | 0.00 | 0.00 | 0.00 |
 | avg_repeated_tool_calls | 8.083 | 7.167 | -0.9166 |
 | avg_turn_count | 1 | 1 | 0 |
 | avg_time_to_first_edit | 15.25 | 15.83 | 0.5833 |
@@ -97,6 +101,7 @@ Paired process-stress deltas: token usage improves in 5/12 tasks, repeated tool 
 | success_rate | 0.88 | 0.88 | 0.00 |
 | verification_rate | 1.00 | 1.00 | 0.00 |
 | success_check_verification_rate | 1.00 | 1.00 | 0.00 |
+| unresolved_error_rate | 0.00 | 0.00 | 0.00 |
 | avg_repeated_tool_calls | 6.125 | 5.375 | -0.75 |
 | avg_turn_count | 1 | 1 | 0 |
 | avg_time_to_first_edit | 14.5 | 13.75 | -0.75 |
@@ -116,6 +121,7 @@ This ordinary-baseline retest is a negative result for verification-rate lift, w
 | success_rate | 0.88 | 0.88 | 0.00 |
 | verification_rate | 1.00 | 1.00 | 0.00 |
 | success_check_verification_rate | 1.00 | 1.00 | 0.00 |
+| unresolved_error_rate | 0.00 | 0.00 | 0.00 |
 | avg_repeated_tool_calls | 8.625 | 5.5 | -3.125 |
 | avg_turn_count | 1 | 1 | 0 |
 | avg_time_to_first_edit | 15.38 | 14 | -1.375 |
@@ -135,6 +141,7 @@ This auxiliary pilot uses an explicit no-verification baseline and should not be
 | success_rate | 0.75 | 0.75 | 0.00 |
 | verification_rate | 0.00 | 1.00 | 1.00 |
 | success_check_verification_rate | 0.00 | 1.00 | 1.00 |
+| unresolved_error_rate | 0.00 | 0.00 | 0.00 |
 | avg_repeated_tool_calls | 4 | 5.25 | 1.25 |
 | avg_turn_count | 1 | 1 | 0 |
 | avg_time_to_first_edit | 12.25 | 13.5 | 1.25 |

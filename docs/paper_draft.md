@@ -318,6 +318,7 @@ reduces several waste signals:
 | --- | ---: | ---: | ---: |
 | success_rate | 1.00 | 1.00 | 0.00 |
 | avg_repeated_tool_calls | 10.43 | 7.00 | -3.43 |
+| unresolved_error_rate | 0.00 | 0.00 | 0.00 |
 | avg_command_failures | 0.50 | 0.20 | -0.30 |
 | avg_recover_events | 2.07 | 0.40 | -1.67 |
 | avg_token_usage | 218.7k | 184.8k | -34.0k |
@@ -330,6 +331,7 @@ metrics:
 | --- | ---: | ---: | ---: |
 | success_rate | 0.70 | 0.80 | +0.10 |
 | verification_rate | 1.00 | 1.00 | 0.00 |
+| unresolved_error_rate | 0.00 | 0.00 | 0.00 |
 | avg_repeated_tool_calls | 9.20 | 6.20 | -3.00 |
 | avg_token_usage | 248.9k | 187.5k | -61.4k |
 | avg_verify_events | 7.30 | 3.70 | -3.60 |
@@ -340,6 +342,7 @@ On the hard30 tier, success stays flat but waste drops sharply:
 | --- | ---: | ---: | ---: |
 | success_rate | 0.50 | 0.50 | 0.00 |
 | verification_rate | 1.00 | 1.00 | 0.00 |
+| unresolved_error_rate | 0.00 | 0.00 | 0.00 |
 | avg_repeated_tool_calls | 12.93 | 9.20 | -3.73 |
 | avg_command_failures | 0.30 | 0.10 | -0.20 |
 | avg_token_usage | 355.0k | 256.3k | -98.7k |
