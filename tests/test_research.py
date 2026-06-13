@@ -1488,6 +1488,8 @@ def test_reviewer_docs_surface_hard30_task_diagnosis():
     assert "docs/verification_lift_next_experiment.md" in readme
     assert "docs/verification_lift_v2_plan_audit.md" in readme
     assert "benchmark/verification-lift-v2/pilot/full-real" in readme
+    assert "verification-lift-v2 | 8 | 16 | 2" in readme
+    assert "completed claim-closure retest" in readme
     assert "docs/submission_package.md" in readme
     assert "docs/paper_number_guard.md" in readme
     assert "docs/reviewer_path_audit.md" in readme
@@ -1512,6 +1514,8 @@ def test_reviewer_docs_surface_hard30_task_diagnosis():
     assert "| Did paper text drift from evidence? |" in guide
     assert "`HARD-050` repaired, `HARD-007` regressed" in guide
     assert "204-run benchmark" in guide
+    assert "| verification-lift-v2 | 8 | 16 | Ordinary-baseline verification-rate retest" in guide
+    assert "| verification-lift-v2 repeated tool calls | `8.62 -> 5.50` |" in guide
     assert "scripts/audit_hard30_task_diagnosis.py" in checklist
     assert "scripts/run_benchmark_shards.py" in checklist
     assert "scripts/merge_benchmark_shards.py" in checklist
@@ -1527,6 +1531,7 @@ def test_reviewer_docs_surface_hard30_task_diagnosis():
     assert "--status-json /tmp/verification-lift-v2-shard-status.json" in checklist
     assert "--preflight-json /tmp/verification-lift-v2-preflight.json" in checklist
     assert "benchmark/verification-lift-v2/pilot/full-real/aggregate.md" in checklist
+    assert "completed claim-closure retest" in checklist
     assert "repeated calls improve `8.62 -> 5.50`" in checklist
 
 
@@ -1556,6 +1561,9 @@ def test_experiment_protocol_maps_rqs_to_evidence():
     assert "docs/hard30_task_diagnosis.md" in text
     assert "one intervention repair (`HARD-050`), one intervention regression" in text
     assert "ordinary and weak-baseline verification rates are saturated" in normalized
+    assert "benchmark/verification-lift-v2/pilot/full-real" in text
+    assert "verification remain `1.00 -> 1.00` in both tiers" in text
+    assert "Future dataset extension:" in text
 
 
 def test_thesis_readiness_identifies_original_thesis_gaps():

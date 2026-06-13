@@ -64,6 +64,10 @@ The stored pilots currently include:
 | full30 | 30 | 60 | Measures process-waste reduction when outcomes are saturated. |
 | hard10 | 10 | 20 | Early hard-tier pilot with a small success-rate lift. |
 | hard30 | 30 | 60 | Paper-facing hard-tier artifact with hidden-grader failures and paired waste deltas. |
+| process-stress | 12 | 24 | Observable-process stress slice with flat success and lower waste. |
+| verification-lift | 8 | 16 | Weak-baseline verification-rate stress test; negative for verification lift. |
+| verification-lift-v2 | 8 | 16 | Ordinary-baseline verification-rate retest; negative for verification lift. |
+| verification-ablation | 4 | 8 | No-verify mechanism ablation; not ordinary-baseline evidence. |
 
 ## Reproduce Result Tables
 
@@ -104,6 +108,11 @@ PYTHONPATH=. python3 -m codex_trace.cli research paper-report \
 | hard30 token usage | `355.0k -> 256.3k` |
 | hard30 double-failure tasks | `14` |
 | hard30 repair/regression | `HARD-050` repaired, `HARD-007` regressed |
+| process-stress repeated tool calls | `8.08 -> 7.17` |
+| verification-lift-v2 verification | `100% -> 100%` |
+| verification-lift-v2 repeated tool calls | `8.62 -> 5.50` |
+| verification-lift-v2 token usage | `224.6k -> 185.5k` |
+| no-verify ablation verification | `0% -> 100%`, mechanism check only |
 | hidden semantic detector boundary | `TP=0`, `FP=0`, `FN=30` |
 | repetitive exploration detection | `TP=4`, `FP=0`, `FN=0` |
 

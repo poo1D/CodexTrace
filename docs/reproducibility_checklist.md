@@ -49,7 +49,7 @@ The stored pilots can be inspected and aggregated without re-running Codex.
 | `benchmark/verification-lift/tasks.jsonl` | Targeted 8-task verification-lift tier for the missing verification-rate claim. |
 | `benchmark/verification-lift/prompts/` | Weak-baseline and evidence-gated prompt templates for the verification-lift tier. |
 | `benchmark/verification-lift/pilot/full-real/` | 8-task / 16-run real verification-lift pilot with aggregate and manual labels. |
-| `benchmark/verification-lift-v2/tasks.jsonl` | Ordinary-baseline 8-task verification-lift v2 tier for the next claim-closing experiment. |
+| `benchmark/verification-lift-v2/tasks.jsonl` | Ordinary-baseline 8-task verification-lift v2 tier for the completed claim-closure retest. |
 | `benchmark/verification-lift-v2/prompts/` | Ordinary baseline and evidence-gated prompt templates for verification-lift v2. |
 | `benchmark/verification-lift-v2/pilot/full-real/` | 8-task / 16-run real ordinary-baseline verification-lift v2 pilot with aggregate and shard status. |
 | `benchmark/verification-ablation/tasks.jsonl` | Auxiliary 4-task no-verify ablation tier for harness-control evidence. |

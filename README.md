@@ -55,6 +55,7 @@ Current stored pilots:
 | hard30 | 30 | 60 | 30 | Intervention keeps success at `50% -> 50%` while reducing repeated tool calls `12.93 -> 9.20` and token usage `355.0k -> 256.3k`. |
 | process-stress | 12 | 24 | 2 | Intervention keeps success at `91.67% -> 91.67%` while reducing repeated tool calls `8.08 -> 7.17` and token usage `209.0k -> 185.1k`. |
 | verification-lift | 8 | 16 | 2 | Targeted stress test does not raise broad or exact success-check verification `100% -> 100%`, but reduces repeated tool calls `6.13 -> 5.38` and token usage `176.8k -> 172.2k`. |
+| verification-lift-v2 | 8 | 16 | 2 | Ordinary-baseline retest also keeps broad and exact success-check verification at `100% -> 100%`, while reducing repeated tool calls `8.62 -> 5.50` and token usage `224.6k -> 185.5k`. |
 | verification-ablation | 4 | 8 | 2 | Auxiliary no-verify baseline ablation lifts broad and exact success-check verification `0% -> 100%` and drops failure score `61.25 -> 0`, but is not an ordinary baseline. |
 
 The hard tier also exposes a trace-only detector boundary: all hard30 hidden
@@ -128,10 +129,10 @@ Key files:
 - `benchmark/prompts/baseline.txt`: baseline prompt template
 - `benchmark/prompts/intervention.txt`: harness-intervention prompt template
 - `benchmark/detector-fixtures/`: controlled JSONL traces covering the process-rule taxonomy
-- `benchmark/process-stress/tasks.jsonl`: materialized process-stress slice for closing original-thesis evidence gaps
+- `benchmark/process-stress/tasks.jsonl`: materialized process-stress slice for observable process-failure coverage
 - `benchmark/verification-lift/tasks.jsonl`: targeted verification-lift stress tier under a weak-baseline prompt contrast
 - `benchmark/verification-lift/prompts/`: verification-lift baseline/intervention prompt templates
-- `benchmark/verification-lift-v2/tasks.jsonl`: ordinary-baseline verification-lift v2 tier for the next claim-closing experiment
+- `benchmark/verification-lift-v2/tasks.jsonl`: ordinary-baseline verification-lift v2 tier for the completed claim-closure retest
 - `benchmark/verification-lift-v2/prompts/`: ordinary baseline and evidence-gated v2 prompt templates
 - `benchmark/verification-lift-v2/pilot/full-real`: 8-task / 16-run real ordinary-baseline verification-lift v2 pilot
 - `benchmark/verification-ablation/tasks.jsonl`: auxiliary no-verify baseline ablation tasks for harness-control evidence

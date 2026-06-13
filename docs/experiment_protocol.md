@@ -200,8 +200,16 @@ Current pilot status:
 - `benchmark/hard/pilot/hard10-real`: 10 hard tasks x 2 prompt conditions
 - `benchmark/hard/pilot/hard30-real`: 30 selected hard tasks x 2 prompt
   conditions
+- `benchmark/process-stress/pilot/full-real`: 12 process-stress tasks x 2
+  prompt conditions
+- `benchmark/verification-lift/pilot/full-real`: 8 weak-baseline
+  verification-lift tasks x 2 prompt conditions
+- `benchmark/verification-lift-v2/pilot/full-real`: 8 ordinary-baseline
+  verification-lift retest tasks x 2 prompt conditions
+- `benchmark/verification-ablation/pilot/full-real`: 4 no-verify ablation
+  tasks x 2 prompt conditions
 - The full 30-task pilot has 60/60 successful outcomes. It validates collection
-  and process-metric analysis, but a harder tier is still needed for
+  and process-metric analysis, and motivated the hard tier used for
   outcome-failure analysis.
 - The hard 10-task pilot has 15/20 successful outcomes. Baseline success is
   `0.7`, intervention success is `0.8`, repeated tool calls drop from
@@ -223,8 +231,19 @@ Current pilot status:
 - The hard30 task diagnosis identifies 14 tasks that fail under both prompts,
   one intervention repair (`HARD-050`), one intervention regression
   (`HARD-007`), and paired token/repeated-call improvements in 26 of 30 tasks.
+- The process-stress pilot keeps success flat at `0.9167 -> 0.9167`, while
+  repeated tool calls improve `8.08 -> 7.17` and token usage improves
+  `209.0k -> 185.1k`.
+- The verification-lift and verification-lift-v2 pilots are negative evidence
+  for ordinary verification-rate lift: broad and exact success-check
+  verification remain `1.00 -> 1.00` in both tiers. The v2 ordinary-baseline
+  retest still reduces repeated tool calls `8.62 -> 5.50` and token usage
+  `224.6k -> 185.5k`.
+- The no-verify ablation is a mechanism check only: broad and exact
+  success-check verification rise `0.00 -> 1.00`, but that is not
+  ordinary-baseline evidence.
 
-Required next dataset extension:
+Future dataset extension:
 
 - repeat the hard30 collection or selected hard30 tasks
 - include more observable process failures, not only hidden semantic failures
