@@ -323,6 +323,7 @@ def check_paper_number_guard_content(path: Path = Path("docs/paper_number_guard.
         "missing count": "Missing snippets: 0",
         "full30 failure-score check": "full30 failure-score row",
         "hard10 token check": "hard10 token row",
+        "verification lift v2 check": "verification-lift-v2 paragraph",
         "verification ablation check": "verification-ablation paragraph",
     }
     for label, phrase in required_phrases.items():

@@ -62,14 +62,14 @@
       "status": "satisfied"
     },
     {
-      "evidence": "verification is saturated in stored pilots: full30=1.00->1.00 (exact=1.00->1.00), hard10=1.00->1.00 (exact=1.00->1.00), hard30=1.00->1.00 (exact=1.00->1.00), process-stress=1.00->1.00 (exact=1.00->1.00), verification-lift=1.00->1.00 (exact=1.00->1.00).",
+      "evidence": "verification is saturated in stored pilots: full30=1.00->1.00 (exact=1.00->1.00), hard10=1.00->1.00 (exact=1.00->1.00), hard30=1.00->1.00 (exact=1.00->1.00), process-stress=1.00->1.00 (exact=1.00->1.00), verification-lift=1.00->1.00 (exact=1.00->1.00), verification-lift-v2=1.00->1.00 (exact=1.00->1.00).",
       "gap": "The ordinary and weak-baseline pilots are negative results; the no-verify ablation shows the harness can lift verification from 0.00 to 1.00, and exact success-check verification from 0.00 to 1.00, but this is not an ordinary-baseline result.",
       "id": "verification_lift",
       "requirement": "Show that harness intervention increases verification rate.",
       "status": "missing"
     },
     {
-      "evidence": "hard10 success delta=+0.10; hard30 success delta=+0.00; hard30 repeated calls delta=-3.73; token delta=-98656.8; paired improvements repeated=26/30, token=26/30; task diagnosis: double failures=14, repairs=1, regressions=1; process-stress success delta=+0.00, repeated calls=8.08->7.17, token usage=209.0k->185.1k; verification-lift success delta=+0.00, repeated calls=6.12->5.38, token usage=176.8k->172.2k.",
+      "evidence": "hard10 success delta=+0.10; hard30 success delta=+0.00; hard30 repeated calls delta=-3.73; token delta=-98656.8; paired improvements repeated=26/30, token=26/30; task diagnosis: double failures=14, repairs=1, regressions=1; process-stress success delta=+0.00, repeated calls=8.08->7.17, token usage=209.0k->185.1k; verification-lift success delta=+0.00, repeated calls=6.12->5.38, token usage=176.8k->172.2k; verification-lift-v2 success delta=+0.00, repeated calls=8.62->5.50, token usage=224.6k->185.5k.",
       "gap": "Repeat hard30 or add a process-stress tier if a stable success-rate lift is required.",
       "id": "success_or_waste",
       "requirement": "Show intervention improves success and/or reduces tool-call and token waste.",
@@ -158,5 +158,35 @@
     ],
     "name": "verification-lift tier",
     "purpose": "Directly test the missing verification-rate-lift claim under a prompt contrast where baseline verification is optional and intervention verification is evidence-gated."
+  },
+  "verification_lift_v2_experiment": {
+    "current_scaffold": {
+      "pilot": {
+        "baseline_failure_score": 0.0,
+        "baseline_repeated_calls": 8.625,
+        "baseline_success_check_verification_rate": 1.0,
+        "baseline_success_rate": 0.875,
+        "baseline_token_usage": 224632.5,
+        "baseline_verification_rate": 1.0,
+        "exists": true,
+        "intervention_failure_score": 0.0,
+        "intervention_repeated_calls": 5.5,
+        "intervention_success_check_verification_rate": 1.0,
+        "intervention_success_rate": 0.875,
+        "intervention_token_usage": 185467.25,
+        "intervention_verification_rate": 1.0,
+        "runs": 16,
+        "tasks": 8
+      },
+      "prompt_dir": "benchmark/verification-lift-v2/prompts",
+      "tasks": "benchmark/verification-lift-v2/tasks.jsonl"
+    },
+    "minimum_design": [
+      "The 8-task ordinary-baseline v2 pilot is complete and is a negative result for verification-rate lift.",
+      "Use it as stronger evidence that ordinary Codex baselines already verify on these small tasks.",
+      "Report the clear waste reduction separately from verification-rate lift."
+    ],
+    "name": "verification-lift-v2 tier",
+    "purpose": "Ordinary-baseline rerun of the missing verification-rate-lift claim."
   }
 }

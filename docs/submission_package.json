@@ -93,7 +93,7 @@
     {
       "action": "Do not claim verification-rate lift for current stored pilots; frame verification as saturated.",
       "claim": "Harness intervention increases verification rate.",
-      "evidence": "hard30 verification delta is +0.00 and exact success-check delta is +0.00; process-stress verification delta is +0.00 and exact success-check delta is +0.00; verification-lift verification delta is +0.00 and exact success-check delta is +0.00; stored ordinary/weak-baseline pilots are saturated.",
+      "evidence": "hard30 verification delta is +0.00 and exact success-check delta is +0.00; process-stress verification delta is +0.00 and exact success-check delta is +0.00; verification-lift verification delta is +0.00 and exact success-check delta is +0.00; verification-lift-v2 verification delta is +0.00 and exact success-check delta is +0.00; stored ordinary/weak-baseline pilots are saturated.",
       "status": "unsupported"
     },
     {

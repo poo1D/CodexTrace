@@ -3,7 +3,7 @@
 This generated guard checks that paper-draft numeric claims match stored aggregate artifacts.
 
 OK: yes
-Checked snippets: 9
+Checked snippets: 10
 Missing snippets: 0
 
 | Claim | Status | Expected snippet |
@@ -16,4 +16,5 @@ Missing snippets: 0
 | hard30 paired task counts | present | `token usage improves in 26 of 30 tasks, repeated tool calls improve in 26 of 30 tasks` |
 | process-stress paragraph | present | `flat at 0.92 -> 0.92, while repeated tool calls improve from 8.08 to 7.17 and token usage improves from 209.0k to 185.1k` |
 | verification-lift paragraph | present | `verification both remain 1.00 -> 1.00, success remains 0.88 -> 0.88, repeated` |
+| verification-lift-v2 paragraph | present | `verification-lift-v2 rerun also verifies every run: broad verification and exact visible-success-check verification both remain 1.00 -> 1.00, success remains 0.88 -> 0.88, repeated tool calls improve from 8.62 to 5.50, and token usage improves from 224.6k to 185.5k` |
 | verification-ablation paragraph | present | `verification both rise from 0.00 to 1.00 and failure score drops from 61.25 to 0.00` |

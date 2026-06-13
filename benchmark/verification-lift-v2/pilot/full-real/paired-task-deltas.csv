@@ -1,0 +1,9 @@
+task_id,baseline_outcome,intervention_outcome,success_delta,verification_delta,success_check_verification_delta,repeated_tool_call_delta,token_usage_delta,failure_score_delta
+VLV2-001,success,success,0,0,0,-4,-38723,0
+VLV2-002,failure,failure,0,0,0,-3,-38223,0
+VLV2-003,success,success,0,0,0,-1,-687,0
+VLV2-004,success,success,0,0,0,-5,-39904,0
+VLV2-005,success,success,0,0,0,0,-28,0
+VLV2-006,success,success,0,0,0,-3,-77665,0
+VLV2-007,success,success,0,0,0,-2,-1146,0
+VLV2-008,success,success,0,0,0,-7,-116946,0

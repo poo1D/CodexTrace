@@ -22,7 +22,7 @@ The stored pilots can be inspected and aggregated without re-running Codex.
 | --- | --- |
 | `docs/artifact_guide.md` | Fifteen-minute reviewer/interviewer walkthrough. |
 | `docs/paper_draft.md` | Result-driven workshop-style draft. |
-| `docs/results_summary.md` | Generated full30 + hard10 + hard30 + process-stress + verification-lift + verification-ablation result summary, including RQ4 trace-signal analysis. |
+| `docs/results_summary.md` | Generated full30 + hard10 + hard30 + process-stress + verification-lift + verification-lift-v2 + verification-ablation result summary, including RQ4 trace-signal analysis. |
 | `docs/rq4_signal_audit.md` | Generated signal audit for observable process positives and hidden semantic boundaries. |
 | `docs/hard30_task_diagnosis.md` | Generated task-level hard30 diagnosis for double failures, intervention repairs/regressions, and largest waste deltas. |
 | `docs/paper_claim_audit.md` | Generated support/partial/unsupported audit for thesis-level paper claims. |
@@ -51,6 +51,7 @@ The stored pilots can be inspected and aggregated without re-running Codex.
 | `benchmark/verification-lift/pilot/full-real/` | 8-task / 16-run real verification-lift pilot with aggregate and manual labels. |
 | `benchmark/verification-lift-v2/tasks.jsonl` | Ordinary-baseline 8-task verification-lift v2 tier for the next claim-closing experiment. |
 | `benchmark/verification-lift-v2/prompts/` | Ordinary baseline and evidence-gated prompt templates for verification-lift v2. |
+| `benchmark/verification-lift-v2/pilot/full-real/` | 8-task / 16-run real ordinary-baseline verification-lift v2 pilot with aggregate and shard status. |
 | `benchmark/verification-ablation/tasks.jsonl` | Auxiliary 4-task no-verify ablation tier for harness-control evidence. |
 | `benchmark/verification-ablation/prompts/` | No-verify baseline and evidence-gated prompt templates for the ablation tier. |
 | `benchmark/verification-ablation/pilot/full-real/` | 4-task / 8-run real verification-ablation pilot with aggregate and manual labels. |
@@ -287,6 +288,20 @@ PYTHONPATH=. python3 scripts/finalize_benchmark_pilot.py \
   --tasks benchmark/verification-lift-v2/tasks.jsonl
 ```
 
+Current verification-lift v2 pilot outputs:
+
+```bash
+PYTHONPATH=. python3 -m codex_trace.cli research aggregate \
+  benchmark/verification-lift-v2/pilot/full-real/runs.jsonl \
+  --markdown-output /tmp/verification-lift-v2-aggregate.md \
+  --json-output /tmp/verification-lift-v2-aggregate.json
+
+PYTHONPATH=. python3 -m codex_trace.cli research paper-report \
+  benchmark/verification-lift-v2/pilot/full-real/runs.jsonl \
+  --markdown-output /tmp/verification-lift-v2-paper-report.md \
+  --json-output /tmp/verification-lift-v2-paper-report.json
+```
+
 Current verification-lift pilot outputs:
 
 ```bash
@@ -356,11 +371,12 @@ PYTHONPATH=. python3 -m codex_trace.cli research paper-report \
 | Trace rules cover the process taxonomy on controlled fixtures. | `benchmark/detector-fixtures/label-eval.md` | Supported as a rule-level sanity check: 6 labels, micro-F1 `1.00`. |
 | RQ-to-evidence mapping is explicit. | `docs/experiment_protocol.md` | Each RQ is tied to a primary artifact, reproduction command, and acceptance evidence. |
 | Process signals explain observable process failures and detector boundaries. | `docs/rq4_signal_audit.md`, `benchmark/hard/pilot/hard30-real/paper-report-labeled.md` RQ4 tables | Supported as a boundary-style RQ4 result: hidden failures have broad and exact success-check verification rate 1.0 and unresolved error 0, while repetitive exploration and sandbox/permission positives have large token, repeated-call, failure-score, or recover-phase deltas. |
-| Original-thesis verification-rate lift is not yet supported. | `docs/thesis_readiness.md`, `docs/paper_claim_audit.md`, `benchmark/verification-lift/pilot/full-real/aggregate.md` | Missing: stored ordinary and weak-baseline pilots, including the targeted verification-lift pilot, have saturated broad and exact success-check verification rates `1.00 -> 1.00`. |
+| Original-thesis verification-rate lift is not yet supported. | `docs/thesis_readiness.md`, `docs/paper_claim_audit.md`, `benchmark/verification-lift/pilot/full-real/aggregate.md`, `benchmark/verification-lift-v2/pilot/full-real/aggregate.md` | Missing: stored ordinary and weak-baseline pilots, including the targeted verification-lift and verification-lift-v2 pilots, have saturated broad and exact success-check verification rates `1.00 -> 1.00`. |
 | Original-thesis process-rule recall is supported at rule level, with real-pilot limits. | `docs/thesis_readiness.md`, `benchmark/detector-fixtures/label-eval.md`, `benchmark/pilot/full30-real/process-label-eval.md` | Controlled fixtures cover all process labels; real pilots naturally expose only some observable process positives and hidden semantic boundaries. |
 | A process-stress tier is materialized for the missing evidence. | `benchmark/process-stress/tasks.jsonl`, `docs/process_stress_plan_audit.md` | Materialized: 12 tasks, at least two per target observable process label. |
 | A process-stress real pilot validates collection. | `benchmark/process-stress/pilot/full-real/aggregate.md` | 12 tasks, 24 runs; success `0.9167 -> 0.9167`, repeated calls `8.08 -> 7.17`, token usage `209.0k -> 185.1k`. |
 | A verification-lift tier tests the missing verification-rate claim. | `benchmark/verification-lift/pilot/full-real/aggregate.md`, `docs/thesis_readiness.md` | Negative result: 8 tasks, 16 runs; broad and exact success-check verification remain `1.00 -> 1.00`, repeated calls improve `6.13 -> 5.38`, token usage improves `176.8k -> 172.2k`. |
+| An ordinary-baseline verification-lift v2 tier retests the missing verification-rate claim. | `benchmark/verification-lift-v2/pilot/full-real/aggregate.md`, `docs/thesis_readiness.md` | Negative result for verification lift: 8 tasks, 16 runs; broad and exact success-check verification remain `1.00 -> 1.00`, repeated calls improve `8.62 -> 5.50`, token usage improves `224.6k -> 185.5k`. |
 | A no-verify ablation tests whether harness constraints can control verification behavior. | `benchmark/verification-ablation/pilot/full-real/aggregate.md`, `benchmark/verification-ablation/pilot/full-real/label-eval.md`, `docs/paper_claim_audit.md` | Supported only as a mechanism ablation: 4 tasks, 8 runs; broad and exact success-check verification rise `0.00 -> 1.00`, failure score drops `61.25 -> 0.00`, and detector labels recover `verification_gap` TP=4 and `premature_completion` TP=3. |
 | Current claims are pilot-scale, not broad SWE-bench-scale claims. | `docs/paper_draft.md`, `docs/experiment_protocol.md` | Stated explicitly in limitations. |
 

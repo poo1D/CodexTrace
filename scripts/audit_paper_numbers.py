@@ -12,6 +12,7 @@ DEFAULT_HARD10 = Path("benchmark/hard/pilot/hard10-real/aggregate.json")
 DEFAULT_HARD30 = Path("benchmark/hard/pilot/hard30-real/aggregate.json")
 DEFAULT_PROCESS_STRESS = Path("benchmark/process-stress/pilot/full-real/aggregate.json")
 DEFAULT_VERIFICATION_LIFT = Path("benchmark/verification-lift/pilot/full-real/aggregate.json")
+DEFAULT_VERIFICATION_LIFT_V2 = Path("benchmark/verification-lift-v2/pilot/full-real/aggregate.json")
 DEFAULT_VERIFICATION_ABLATION = Path("benchmark/verification-ablation/pilot/full-real/aggregate.json")
 DEFAULT_TASK_DIAGNOSIS = Path("docs/hard30_task_diagnosis.json")
 
@@ -23,6 +24,7 @@ def build_paper_number_guard(
     hard30_path: Path = DEFAULT_HARD30,
     process_stress_path: Path = DEFAULT_PROCESS_STRESS,
     verification_lift_path: Path = DEFAULT_VERIFICATION_LIFT,
+    verification_lift_v2_path: Path = DEFAULT_VERIFICATION_LIFT_V2,
     verification_ablation_path: Path = DEFAULT_VERIFICATION_ABLATION,
     task_diagnosis_path: Path = DEFAULT_TASK_DIAGNOSIS,
 ) -> dict[str, Any]:
@@ -32,6 +34,7 @@ def build_paper_number_guard(
     hard30 = _read_json(hard30_path)
     process_stress = _read_json(process_stress_path)
     verification_lift = _read_json(verification_lift_path)
+    verification_lift_v2 = _read_json(verification_lift_v2_path)
     verification_ablation = _read_json(verification_ablation_path)
     task_diagnosis = _read_json(task_diagnosis_path)
 
@@ -105,6 +108,20 @@ def build_paper_number_guard(
             ),
         ),
         _snippet(
+            "verification-lift-v2 paragraph",
+            (
+                f"verification-lift-v2 rerun also verifies every run: broad verification and exact visible-success-check "
+                f"verification both remain {_fmt2(verification_lift_v2['summary']['baseline']['verification_rate'])} -> "
+                f"{_fmt2(verification_lift_v2['summary']['intervention']['verification_rate'])}, success remains "
+                f"{_fmt2(verification_lift_v2['summary']['baseline']['success_rate'])} -> "
+                f"{_fmt2(verification_lift_v2['summary']['intervention']['success_rate'])}, repeated tool calls improve from "
+                f"{_fmt2(verification_lift_v2['summary']['baseline']['avg_repeated_tool_calls'])} to "
+                f"{_fmt2(verification_lift_v2['summary']['intervention']['avg_repeated_tool_calls'])}, and token usage improves from "
+                f"{_fmt_k(verification_lift_v2['summary']['baseline']['avg_token_usage'])} to "
+                f"{_fmt_k(verification_lift_v2['summary']['intervention']['avg_token_usage'])}"
+            ),
+        ),
+        _snippet(
             "verification-ablation paragraph",
             (
                 f"verification both rise from {_fmt2(verification_ablation['summary']['baseline']['verification_rate'])} to "
@@ -155,11 +172,30 @@ def render_paper_number_guard_markdown(result: dict[str, Any]) -> str:
 
 def main() -> int:
     parser = argparse.ArgumentParser(description="Guard paper-draft numeric claims against stored result artifacts.")
+    parser.add_argument("--paper-draft", type=Path, default=DEFAULT_PAPER_DRAFT)
+    parser.add_argument("--full30", type=Path, default=DEFAULT_FULL30)
+    parser.add_argument("--hard10", type=Path, default=DEFAULT_HARD10)
+    parser.add_argument("--hard30", type=Path, default=DEFAULT_HARD30)
+    parser.add_argument("--process-stress", type=Path, default=DEFAULT_PROCESS_STRESS)
+    parser.add_argument("--verification-lift", type=Path, default=DEFAULT_VERIFICATION_LIFT)
+    parser.add_argument("--verification-lift-v2", type=Path, default=DEFAULT_VERIFICATION_LIFT_V2)
+    parser.add_argument("--verification-ablation", type=Path, default=DEFAULT_VERIFICATION_ABLATION)
+    parser.add_argument("--task-diagnosis", type=Path, default=DEFAULT_TASK_DIAGNOSIS)
     parser.add_argument("--json-output", type=Path)
     parser.add_argument("--markdown-output", type=Path)
     args = parser.parse_args()
 
-    result = build_paper_number_guard()
+    result = build_paper_number_guard(
+        paper_draft_path=args.paper_draft,
+        full30_path=args.full30,
+        hard10_path=args.hard10,
+        hard30_path=args.hard30,
+        process_stress_path=args.process_stress,
+        verification_lift_path=args.verification_lift,
+        verification_lift_v2_path=args.verification_lift_v2,
+        verification_ablation_path=args.verification_ablation,
+        task_diagnosis_path=args.task_diagnosis,
+    )
     if args.json_output:
         args.json_output.parent.mkdir(parents=True, exist_ok=True)
         args.json_output.write_text(json.dumps(result, indent=2, sort_keys=True) + "\n", encoding="utf-8")

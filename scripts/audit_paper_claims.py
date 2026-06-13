@@ -14,6 +14,7 @@ DEFAULT_HARD30_REPORT = Path("benchmark/hard/pilot/hard30-real/paper-report-labe
 DEFAULT_HARD30_READINESS = Path("benchmark/hard/pilot/hard30-real/readiness.json")
 DEFAULT_PROCESS_STRESS_REPORT = Path("benchmark/process-stress/pilot/full-real/paper-report-labeled.json")
 DEFAULT_VERIFICATION_LIFT_REPORT = Path("benchmark/verification-lift/pilot/full-real/paper-report-labeled.json")
+DEFAULT_VERIFICATION_LIFT_V2_REPORT = Path("benchmark/verification-lift-v2/pilot/full-real/paper-report.json")
 DEFAULT_VERIFICATION_ABLATION_REPORT = Path("benchmark/verification-ablation/pilot/full-real/paper-report-labeled.json")
 DEFAULT_RQ4_SIGNAL_AUDIT = Path("docs/rq4_signal_audit.json")
 DEFAULT_HARD30_TASK_DIAGNOSIS = Path("docs/hard30_task_diagnosis.json")
@@ -28,6 +29,7 @@ def build_claim_audit(
     hard30_readiness_path: Path = DEFAULT_HARD30_READINESS,
     process_stress_report_path: Path = DEFAULT_PROCESS_STRESS_REPORT,
     verification_lift_report_path: Path = DEFAULT_VERIFICATION_LIFT_REPORT,
+    verification_lift_v2_report_path: Path = DEFAULT_VERIFICATION_LIFT_V2_REPORT,
     verification_ablation_report_path: Path = DEFAULT_VERIFICATION_ABLATION_REPORT,
     rq4_signal_audit_path: Path = DEFAULT_RQ4_SIGNAL_AUDIT,
     hard30_task_diagnosis_path: Path = DEFAULT_HARD30_TASK_DIAGNOSIS,
@@ -40,6 +42,7 @@ def build_claim_audit(
     readiness = _read_json(hard30_readiness_path)
     process_stress = _read_json(process_stress_report_path) if process_stress_report_path.exists() else None
     verification_lift = _read_json(verification_lift_report_path) if verification_lift_report_path.exists() else None
+    verification_lift_v2 = _read_json(verification_lift_v2_report_path) if verification_lift_v2_report_path.exists() else None
     verification_ablation = _read_json(verification_ablation_report_path) if verification_ablation_report_path.exists() else None
     rq4_signal_audit = _read_json(rq4_signal_audit_path) if rq4_signal_audit_path.exists() else {"summary": {"ready": False}}
     hard30_task_diagnosis = _read_json(hard30_task_diagnosis_path) if hard30_task_diagnosis_path.exists() else {"summary": {}}
@@ -114,6 +117,15 @@ def build_claim_audit(
     verification_lift_repeated_delta = float(verification_lift_deltas.get("avg_repeated_tool_calls", 0) or 0)
     verification_lift_token_delta = float(verification_lift_deltas.get("avg_token_usage", 0) or 0)
     verification_lift_hidden_fn = int(verification_lift_hidden.get("fn", 0) or 0)
+    verification_lift_v2_summary = verification_lift_v2["aggregate"]["summary"] if verification_lift_v2 else {}
+    verification_lift_v2_deltas = verification_lift_v2["aggregate"]["deltas"] if verification_lift_v2 else {}
+    verification_lift_v2_tasks = int(verification_lift_v2_summary.get("baseline", {}).get("n", 0) or 0)
+    verification_lift_v2_runs = len(verification_lift_v2["aggregate"]["runs"]) if verification_lift_v2 else 0
+    verification_lift_v2_failures = int(verification_lift_v2.get("outcome_counts", {}).get("failure", 0) or 0) if verification_lift_v2 else 0
+    verification_lift_v2_verification_delta = float(verification_lift_v2_deltas.get("verification_rate", 0) or 0)
+    verification_lift_v2_success_check_delta = float(verification_lift_v2_deltas.get("success_check_verification_rate", 0) or 0)
+    verification_lift_v2_repeated_delta = float(verification_lift_v2_deltas.get("avg_repeated_tool_calls", 0) or 0)
+    verification_lift_v2_token_delta = float(verification_lift_v2_deltas.get("avg_token_usage", 0) or 0)
     verification_ablation_summary = verification_ablation["aggregate"]["summary"] if verification_ablation else {}
     verification_ablation_deltas = verification_ablation["aggregate"]["deltas"] if verification_ablation else {}
     verification_ablation_tasks = int(verification_ablation_summary.get("baseline", {}).get("n", 0) or 0)
@@ -159,6 +171,7 @@ def build_claim_audit(
                 f"hard30 verification delta is {verification_delta:+.2f} and exact success-check delta is {success_check_verification_delta:+.2f}; "
                 f"process-stress verification delta is {process_stress_verification_delta:+.2f} and exact success-check delta is {process_stress_success_check_delta:+.2f}; "
                 f"verification-lift verification delta is {verification_lift_verification_delta:+.2f} and exact success-check delta is {verification_lift_success_check_delta:+.2f}; "
+                f"verification-lift-v2 verification delta is {verification_lift_v2_verification_delta:+.2f} and exact success-check delta is {verification_lift_v2_success_check_delta:+.2f}; "
                 "stored ordinary/weak-baseline pilots are saturated."
             ),
             "action": "Do not claim verification-rate lift for current stored pilots; frame verification as saturated.",
@@ -171,8 +184,8 @@ def build_claim_audit(
         },
         {
             "claim": "Harness intervention reduces repeated tool-call and token waste.",
-            "status": "supported" if repeated_delta < 0 and token_delta < 0 and process_stress_repeated_delta < 0 and process_stress_token_delta < 0 and verification_lift_repeated_delta < 0 and verification_lift_token_delta < 0 else "partial",
-            "evidence": f"hard30 repeated tool calls change {repeated_delta:+.2f}, token usage {token_delta:+.1f}; process-stress repeated tool calls change {process_stress_repeated_delta:+.2f}, token usage {process_stress_token_delta:+.1f}; verification-lift repeated tool calls change {verification_lift_repeated_delta:+.2f}, token usage {verification_lift_token_delta:+.1f}.",
+            "status": "supported" if repeated_delta < 0 and token_delta < 0 and process_stress_repeated_delta < 0 and process_stress_token_delta < 0 and verification_lift_repeated_delta < 0 and verification_lift_token_delta < 0 and verification_lift_v2_repeated_delta < 0 and verification_lift_v2_token_delta < 0 else "partial",
+            "evidence": f"hard30 repeated tool calls change {repeated_delta:+.2f}, token usage {token_delta:+.1f}; process-stress repeated tool calls change {process_stress_repeated_delta:+.2f}, token usage {process_stress_token_delta:+.1f}; verification-lift repeated tool calls change {verification_lift_repeated_delta:+.2f}, token usage {verification_lift_token_delta:+.1f}; verification-lift-v2 repeated tool calls change {verification_lift_v2_repeated_delta:+.2f}, token usage {verification_lift_v2_token_delta:+.1f}.",
             "action": "Use as the strongest current RQ3 result.",
         },
         {
@@ -239,6 +252,11 @@ def build_claim_audit(
             "verification_lift_failures": verification_lift_failures,
             "verification_lift_verification_delta": verification_lift_verification_delta,
             "verification_lift_success_check_delta": verification_lift_success_check_delta,
+            "verification_lift_v2_tasks": verification_lift_v2_tasks,
+            "verification_lift_v2_runs": verification_lift_v2_runs,
+            "verification_lift_v2_failures": verification_lift_v2_failures,
+            "verification_lift_v2_verification_delta": verification_lift_v2_verification_delta,
+            "verification_lift_v2_success_check_delta": verification_lift_v2_success_check_delta,
             "verification_ablation_tasks": verification_ablation_tasks,
             "verification_ablation_runs": verification_ablation_runs,
             "verification_ablation_failures": verification_ablation_failures,
@@ -275,6 +293,7 @@ def render_claim_audit_markdown(result: dict[str, Any]) -> str:
         f"- Controlled detector fixture labels: {summary['detector_fixture_labels']}, micro-F1={summary['detector_fixture_micro_f1']:.2f}",
         f"- Process-stress artifact: {summary['process_stress_tasks']} tasks, {summary['process_stress_runs']} runs, {summary['process_stress_failures']} failures, success delta={summary['process_stress_success_delta']:+.2f}",
         f"- Verification-lift artifact: {summary['verification_lift_tasks']} tasks, {summary['verification_lift_runs']} runs, {summary['verification_lift_failures']} failures, verification delta={summary['verification_lift_verification_delta']:+.2f}, exact success-check delta={summary['verification_lift_success_check_delta']:+.2f}",
+        f"- Verification-lift-v2 artifact: {summary['verification_lift_v2_tasks']} tasks, {summary['verification_lift_v2_runs']} runs, {summary['verification_lift_v2_failures']} failures, verification delta={summary['verification_lift_v2_verification_delta']:+.2f}, exact success-check delta={summary['verification_lift_v2_success_check_delta']:+.2f}",
         f"- Verification-ablation artifact: {summary['verification_ablation_tasks']} tasks, {summary['verification_ablation_runs']} runs, {summary['verification_ablation_failures']} failures, verification delta={summary['verification_ablation_verification_delta']:+.2f}, exact success-check delta={summary['verification_ablation_success_check_delta']:+.2f}",
         f"- RQ4 signal audit ready: {'yes' if summary['rq4_signal_audit_ready'] else 'no'}",
         "",
@@ -317,6 +336,7 @@ def main() -> int:
     parser.add_argument("--hard30-readiness", type=Path, default=DEFAULT_HARD30_READINESS)
     parser.add_argument("--process-stress-report", type=Path, default=DEFAULT_PROCESS_STRESS_REPORT)
     parser.add_argument("--verification-lift-report", type=Path, default=DEFAULT_VERIFICATION_LIFT_REPORT)
+    parser.add_argument("--verification-lift-v2-report", type=Path, default=DEFAULT_VERIFICATION_LIFT_V2_REPORT)
     parser.add_argument("--verification-ablation-report", type=Path, default=DEFAULT_VERIFICATION_ABLATION_REPORT)
     parser.add_argument("--rq4-signal-audit", type=Path, default=DEFAULT_RQ4_SIGNAL_AUDIT)
     parser.add_argument("--hard30-task-diagnosis", type=Path, default=DEFAULT_HARD30_TASK_DIAGNOSIS)
@@ -325,17 +345,18 @@ def main() -> int:
     args = parser.parse_args()
 
     result = build_claim_audit(
-        args.full30_aggregate,
-        args.full30_process_label_eval,
-        args.detector_fixture_eval,
-        args.hard10_aggregate,
-        args.hard30_report,
-        args.hard30_readiness,
-        args.process_stress_report,
-        args.verification_lift_report,
-        args.verification_ablation_report,
-        args.rq4_signal_audit,
-        args.hard30_task_diagnosis,
+        full30_aggregate_path=args.full30_aggregate,
+        full30_process_label_eval_path=args.full30_process_label_eval,
+        detector_fixture_eval_path=args.detector_fixture_eval,
+        hard10_aggregate_path=args.hard10_aggregate,
+        hard30_report_path=args.hard30_report,
+        hard30_readiness_path=args.hard30_readiness,
+        process_stress_report_path=args.process_stress_report,
+        verification_lift_report_path=args.verification_lift_report,
+        verification_lift_v2_report_path=args.verification_lift_v2_report,
+        verification_ablation_report_path=args.verification_ablation_report,
+        rq4_signal_audit_path=args.rq4_signal_audit,
+        hard30_task_diagnosis_path=args.hard30_task_diagnosis,
     )
     if args.json_output or args.markdown_output:
         write_claim_audit_outputs(result, args.json_output, args.markdown_output)

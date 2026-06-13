@@ -40,6 +40,17 @@
       "success_check_verification_delta": 0.0,
       "tasks": 8,
       "verification_delta": 0.0
+    },
+    "verification_lift_v2": {
+      "baseline_saturated": true,
+      "baseline_success_check_verification_rate": 1.0,
+      "baseline_verification_rate": 1.0,
+      "exists": true,
+      "intervention_success_check_verification_rate": 1.0,
+      "intervention_verification_rate": 1.0,
+      "success_check_verification_delta": 0.0,
+      "tasks": 8,
+      "verification_delta": 0.0
     }
   },
   "next_experiment_required": true,

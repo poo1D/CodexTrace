@@ -1,0 +1,145 @@
+{
+  "completed": [
+    "VLV2-001",
+    "VLV2-002",
+    "VLV2-003",
+    "VLV2-004",
+    "VLV2-005",
+    "VLV2-006",
+    "VLV2-007",
+    "VLV2-008"
+  ],
+  "completed_count": 8,
+  "expected_record_count": 16,
+  "failed": [],
+  "failed_count": 0,
+  "incomplete": [],
+  "incomplete_count": 0,
+  "missing": [],
+  "missing_count": 0,
+  "ready_to_merge": true,
+  "record_count": 16,
+  "shards": [
+    {
+      "complete": true,
+      "invalid_reasons": [],
+      "manifest_path": "benchmark/verification-lift-v2/pilot/full-real/shards/VLV2-001/runs.jsonl",
+      "metadata_path": "benchmark/verification-lift-v2/pilot/full-real/shards/VLV2-001/shard-run.json",
+      "prompt_types": [
+        "baseline",
+        "intervention"
+      ],
+      "record_count": 2,
+      "returncode": 0,
+      "stderr_path": "benchmark/verification-lift-v2/pilot/full-real/shards/VLV2-001/shard-run.stderr",
+      "stdout_path": "benchmark/verification-lift-v2/pilot/full-real/shards/VLV2-001/shard-run.stdout",
+      "task_id": "VLV2-001"
+    },
+    {
+      "complete": true,
+      "invalid_reasons": [],
+      "manifest_path": "benchmark/verification-lift-v2/pilot/full-real/shards/VLV2-002/runs.jsonl",
+      "metadata_path": "benchmark/verification-lift-v2/pilot/full-real/shards/VLV2-002/shard-run.json",
+      "prompt_types": [
+        "baseline",
+        "intervention"
+      ],
+      "record_count": 2,
+      "returncode": 0,
+      "stderr_path": "benchmark/verification-lift-v2/pilot/full-real/shards/VLV2-002/shard-run.stderr",
+      "stdout_path": "benchmark/verification-lift-v2/pilot/full-real/shards/VLV2-002/shard-run.stdout",
+      "task_id": "VLV2-002"
+    },
+    {
+      "complete": true,
+      "invalid_reasons": [],
+      "manifest_path": "benchmark/verification-lift-v2/pilot/full-real/shards/VLV2-003/runs.jsonl",
+      "metadata_path": "benchmark/verification-lift-v2/pilot/full-real/shards/VLV2-003/shard-run.json",
+      "prompt_types": [
+        "baseline",
+        "intervention"
+      ],
+      "record_count": 2,
+      "returncode": 0,
+      "stderr_path": "benchmark/verification-lift-v2/pilot/full-real/shards/VLV2-003/shard-run.stderr",
+      "stdout_path": "benchmark/verification-lift-v2/pilot/full-real/shards/VLV2-003/shard-run.stdout",
+      "task_id": "VLV2-003"
+    },
+    {
+      "complete": true,
+      "invalid_reasons": [],
+      "manifest_path": "benchmark/verification-lift-v2/pilot/full-real/shards/VLV2-004/runs.jsonl",
+      "metadata_path": "benchmark/verification-lift-v2/pilot/full-real/shards/VLV2-004/shard-run.json",
+      "prompt_types": [
+        "baseline",
+        "intervention"
+      ],
+      "record_count": 2,
+      "returncode": 0,
+      "stderr_path": "benchmark/verification-lift-v2/pilot/full-real/shards/VLV2-004/shard-run.stderr",
+      "stdout_path": "benchmark/verification-lift-v2/pilot/full-real/shards/VLV2-004/shard-run.stdout",
+      "task_id": "VLV2-004"
+    },
+    {
+      "complete": true,
+      "invalid_reasons": [],
+      "manifest_path": "benchmark/verification-lift-v2/pilot/full-real/shards/VLV2-005/runs.jsonl",
+      "metadata_path": "benchmark/verification-lift-v2/pilot/full-real/shards/VLV2-005/shard-run.json",
+      "prompt_types": [
+        "baseline",
+        "intervention"
+      ],
+      "record_count": 2,
+      "returncode": 0,
+      "stderr_path": "benchmark/verification-lift-v2/pilot/full-real/shards/VLV2-005/shard-run.stderr",
+      "stdout_path": "benchmark/verification-lift-v2/pilot/full-real/shards/VLV2-005/shard-run.stdout",
+      "task_id": "VLV2-005"
+    },
+    {
+      "complete": true,
+      "invalid_reasons": [],
+      "manifest_path": "benchmark/verification-lift-v2/pilot/full-real/shards/VLV2-006/runs.jsonl",
+      "metadata_path": "benchmark/verification-lift-v2/pilot/full-real/shards/VLV2-006/shard-run.json",
+      "prompt_types": [
+        "baseline",
+        "intervention"
+      ],
+      "record_count": 2,
+      "returncode": 0,
+      "stderr_path": "benchmark/verification-lift-v2/pilot/full-real/shards/VLV2-006/shard-run.stderr",
+      "stdout_path": "benchmark/verification-lift-v2/pilot/full-real/shards/VLV2-006/shard-run.stdout",
+      "task_id": "VLV2-006"
+    },
+    {
+      "complete": true,
+      "invalid_reasons": [],
+      "manifest_path": "benchmark/verification-lift-v2/pilot/full-real/shards/VLV2-007/runs.jsonl",
+      "metadata_path": "benchmark/verification-lift-v2/pilot/full-real/shards/VLV2-007/shard-run.json",
+      "prompt_types": [
+        "baseline",
+        "intervention"
+      ],
+      "record_count": 2,
+      "returncode": 0,
+      "stderr_path": "benchmark/verification-lift-v2/pilot/full-real/shards/VLV2-007/shard-run.stderr",
+      "stdout_path": "benchmark/verification-lift-v2/pilot/full-real/shards/VLV2-007/shard-run.stdout",
+      "task_id": "VLV2-007"
+    },
+    {
+      "complete": true,
+      "invalid_reasons": [],
+      "manifest_path": "benchmark/verification-lift-v2/pilot/full-real/shards/VLV2-008/runs.jsonl",
+      "metadata_path": "benchmark/verification-lift-v2/pilot/full-real/shards/VLV2-008/shard-run.json",
+      "prompt_types": [
+        "baseline",
+        "intervention"
+      ],
+      "record_count": 2,
+      "returncode": 0,
+      "stderr_path": "benchmark/verification-lift-v2/pilot/full-real/shards/VLV2-008/shard-run.stderr",
+      "stdout_path": "benchmark/verification-lift-v2/pilot/full-real/shards/VLV2-008/shard-run.stdout",
+      "task_id": "VLV2-008"
+    }
+  ],
+  "task_count": 8
+}

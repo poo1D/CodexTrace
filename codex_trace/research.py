@@ -591,6 +591,7 @@ def build_results_summary(
     process_stress_labels_path: str | Path | None = None,
     verification_lift_manifest_path: str | Path | None = None,
     verification_lift_labels_path: str | Path | None = None,
+    verification_lift_v2_manifest_path: str | Path | None = None,
     verification_ablation_manifest_path: str | Path | None = None,
     verification_ablation_labels_path: str | Path | None = None,
 ) -> dict[str, Any]:
@@ -658,6 +659,18 @@ def build_results_summary(
             "verification_lift_signal_by_outcome": verification_lift_report["signal_by_outcome"],
             "verification_lift_paired_task_summary": verification_lift_report["paired_task_summary"],
         })
+    if verification_lift_v2_manifest_path:
+        verification_lift_v2_report = (
+            _load_finalized_paper_report(verification_lift_v2_manifest_path, None)
+            or build_paper_report(verification_lift_v2_manifest_path)
+        )
+        result.update({
+            "verification_lift_v2": verification_lift_v2_report["aggregate"],
+            "verification_lift_v2_taxonomy_distribution": verification_lift_v2_report["taxonomy_distribution"],
+            "verification_lift_v2_outcome_counts": verification_lift_v2_report["outcome_counts"],
+            "verification_lift_v2_signal_by_outcome": verification_lift_v2_report["signal_by_outcome"],
+            "verification_lift_v2_paired_task_summary": verification_lift_v2_report["paired_task_summary"],
+        })
     if verification_ablation_manifest_path and verification_ablation_labels_path:
         verification_ablation_report = (
             _load_finalized_paper_report(verification_ablation_manifest_path, verification_ablation_labels_path)
@@ -698,6 +711,7 @@ def render_results_summary_markdown(result: dict[str, Any]) -> str:
     hard30 = result.get("hard30")
     process_stress = result.get("process_stress")
     verification_lift = result.get("verification_lift")
+    verification_lift_v2 = result.get("verification_lift_v2")
     verification_ablation = result.get("verification_ablation")
     hard_eval = result["hard10_label_evaluation"]
     hard_counts = result["hard10_outcome_counts"]
@@ -736,6 +750,12 @@ def render_results_summary_markdown(result: dict[str, Any]) -> str:
             f"| verification-lift | {verification_lift['summary']['baseline']['n']} | {len(verification_lift['runs'])} | "
             f"{verification_counts.get('failure', 0)} | Targeted verification-rate stress prompt contrast. |"
         )
+    if verification_lift_v2:
+        verification_v2_counts = result.get("verification_lift_v2_outcome_counts", {})
+        lines.append(
+            f"| verification-lift-v2 | {verification_lift_v2['summary']['baseline']['n']} | {len(verification_lift_v2['runs'])} | "
+            f"{verification_v2_counts.get('failure', 0)} | Ordinary-baseline verification-rate retest with real Codex traces. |"
+        )
     if verification_ablation:
         ablation_counts = result.get("verification_ablation_outcome_counts", {})
         lines.append(
@@ -771,6 +791,14 @@ def render_results_summary_markdown(result: dict[str, Any]) -> str:
             f"{_fmt_signal_metric('verification_rate', verification_lift['summary']['intervention']['verification_rate'])} broad / "
             f"{_fmt_signal_metric('success_check_verification_rate', verification_lift['summary']['intervention']['success_check_verification_rate'])} exact | "
             "Negative result for ordinary or weak-baseline verification-rate lift. |"
+        )
+    if verification_lift_v2:
+        lines.append(
+            f"| verification-lift-v2 ordinary retest | {_fmt_signal_metric('verification_rate', verification_lift_v2['summary']['baseline']['verification_rate'])} broad / "
+            f"{_fmt_signal_metric('success_check_verification_rate', verification_lift_v2['summary']['baseline']['success_check_verification_rate'])} exact | "
+            f"{_fmt_signal_metric('verification_rate', verification_lift_v2['summary']['intervention']['verification_rate'])} broad / "
+            f"{_fmt_signal_metric('success_check_verification_rate', verification_lift_v2['summary']['intervention']['success_check_verification_rate'])} exact | "
+            "Negative ordinary-baseline retest; waste still improves. |"
         )
     if verification_ablation:
         lines.append(
@@ -906,6 +934,43 @@ def render_results_summary_markdown(result: dict[str, Any]) -> str:
                 f"{success_check_row.get('improved', 0)}/{success_check_row.get('n', 0)} tasks, token usage improves in "
                 f"{token_row.get('improved', 0)}/{token_row.get('n', 0)} tasks, repeated tool calls improve in "
                 f"{repeated_row.get('improved', 0)}/{repeated_row.get('n', 0)} tasks."
+            ),
+        ])
+
+    if verification_lift_v2:
+        lines.extend([
+            "",
+            "### Verification-Lift-V2 Pilot",
+            "",
+            "This ordinary-baseline retest is a negative result for verification-rate lift, while still showing lower process waste under the intervention prompt.",
+            "",
+            "| Metric | Baseline | Intervention | Delta |",
+            "| --- | ---: | ---: | ---: |",
+        ])
+        _append_metric_rows(lines, verification_lift_v2, (
+            "success_rate",
+            "verification_rate",
+            "success_check_verification_rate",
+            "avg_repeated_tool_calls",
+            "avg_verify_events",
+            "avg_token_usage",
+            "avg_failure_score",
+        ))
+        paired = result.get("verification_lift_v2_paired_task_summary", {})
+        token_row = paired.get("token_usage_delta", {})
+        repeated_row = paired.get("repeated_tool_call_delta", {})
+        verification_row = paired.get("verification_delta", {})
+        success_check_row = paired.get("success_check_verification_delta", {})
+        success_row = paired.get("success_delta", {})
+        lines.extend([
+            "",
+            (
+                "Paired verification-lift-v2 deltas: verification improves in "
+                f"{verification_row.get('improved', 0)}/{verification_row.get('n', 0)} tasks, exact success-check verification improves in "
+                f"{success_check_row.get('improved', 0)}/{success_check_row.get('n', 0)} tasks, token usage improves in "
+                f"{token_row.get('improved', 0)}/{token_row.get('n', 0)} tasks, repeated tool calls improve in "
+                f"{repeated_row.get('improved', 0)}/{repeated_row.get('n', 0)} tasks, and success improves in "
+                f"{success_row.get('improved', 0)} task(s) while regressing in {success_row.get('regressed', 0)} task(s)."
             ),
         ])
 
@@ -1086,6 +1151,7 @@ def render_results_summary_markdown(result: dict[str, Any]) -> str:
         "| Intervention reduces waste on hard30. | hard30 repeated tool calls, command failures, token usage, and failure score improve. |" if hard30 else "",
         "| Process-stress intervention reduces token and repeated-call waste while success stays flat. | process-stress keeps success at 91.67% while reducing repeated tool calls and token usage. |" if process_stress else "",
         "| Verification-lift stress test does not support a verification-rate lift. | verification-lift verification remains 100% -> 100%, while repeated calls and token usage fall slightly. |" if verification_lift else "",
+        "| Verification-lift-v2 ordinary retest does not support a verification-rate lift. | verification-lift-v2 verification remains 100% -> 100%, while repeated calls and token usage fall. |" if verification_lift_v2 else "",
         f"| Trace-only process rules have a semantic boundary. | {boundary_name.lower()} label evaluation has {hidden_scores.get('fn', 0)} false negatives for `hidden_semantic_edge_case`, while detecting observed process positives such as `repetitive_exploration`. |",
         f"| RQ4 signal analysis explains the detector boundary. | {boundary_name.lower()} `verification_rate` and `unresolved_error` are equal for successful and failed runs. |",
         "| Strong task oracles remain necessary. | hard-tier failures are only visible through hidden graders, not process-rule findings. |",

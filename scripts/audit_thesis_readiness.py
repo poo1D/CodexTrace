@@ -16,6 +16,7 @@ DEFAULT_PROCESS_STRESS_AUDIT = Path("docs/process_stress_plan_audit.json")
 DEFAULT_PROCESS_STRESS_PILOT = Path("benchmark/process-stress/pilot/full-real/aggregate.json")
 DEFAULT_VERIFICATION_LIFT_AUDIT = Path("docs/verification_lift_plan_audit.json")
 DEFAULT_VERIFICATION_LIFT_PILOT = Path("benchmark/verification-lift/pilot/full-real/aggregate.json")
+DEFAULT_VERIFICATION_LIFT_V2_PILOT = Path("benchmark/verification-lift-v2/pilot/full-real/aggregate.json")
 DEFAULT_VERIFICATION_ABLATION_AUDIT = Path("docs/verification_ablation_plan_audit.json")
 DEFAULT_VERIFICATION_ABLATION_PILOT = Path("benchmark/verification-ablation/pilot/full-real/aggregate.json")
 DEFAULT_RQ4_SIGNAL_AUDIT = Path("docs/rq4_signal_audit.json")
@@ -34,6 +35,7 @@ def build_thesis_readiness(
     process_stress_pilot_path: Path = DEFAULT_PROCESS_STRESS_PILOT,
     verification_lift_audit_path: Path = DEFAULT_VERIFICATION_LIFT_AUDIT,
     verification_lift_pilot_path: Path = DEFAULT_VERIFICATION_LIFT_PILOT,
+    verification_lift_v2_pilot_path: Path = DEFAULT_VERIFICATION_LIFT_V2_PILOT,
     verification_ablation_audit_path: Path = DEFAULT_VERIFICATION_ABLATION_AUDIT,
     verification_ablation_pilot_path: Path = DEFAULT_VERIFICATION_ABLATION_PILOT,
     rq4_signal_audit_path: Path = DEFAULT_RQ4_SIGNAL_AUDIT,
@@ -50,6 +52,7 @@ def build_thesis_readiness(
     process_pilot = _read_json(process_stress_pilot_path) if process_stress_pilot_path.exists() else None
     verification_lift = _read_json(verification_lift_audit_path) if verification_lift_audit_path.exists() else {"ok": False, "task_count": 0}
     verification_lift_pilot = _read_json(verification_lift_pilot_path) if verification_lift_pilot_path.exists() else None
+    verification_lift_v2_pilot = _read_json(verification_lift_v2_pilot_path) if verification_lift_v2_pilot_path.exists() else None
     verification_ablation = _read_json(verification_ablation_audit_path) if verification_ablation_audit_path.exists() else {"ok": False, "task_count": 0}
     verification_ablation_pilot = _read_json(verification_ablation_pilot_path) if verification_ablation_pilot_path.exists() else None
     rq4_signal_audit = _read_json(rq4_signal_audit_path) if rq4_signal_audit_path.exists() else {"summary": {"ready": False}}
@@ -86,6 +89,7 @@ def build_thesis_readiness(
     hard30_token_delta = float(hard30_deltas.get("avg_token_usage", 0) or 0)
     process_pilot_summary = _process_pilot_summary(process_pilot)
     verification_lift_summary = _process_pilot_summary(verification_lift_pilot)
+    verification_lift_v2_summary = _process_pilot_summary(verification_lift_v2_pilot)
     verification_ablation_summary = _process_pilot_summary(verification_ablation_pilot)
     process_verification_evidence = ""
     verification_lift_evidence = ""
@@ -115,6 +119,18 @@ def build_thesis_readiness(
             f"repeated calls={verification_lift_summary['baseline_repeated_calls']:.2f}->{verification_lift_summary['intervention_repeated_calls']:.2f}, "
             f"token usage={verification_lift_summary['baseline_token_usage'] / 1000:.1f}k->{verification_lift_summary['intervention_token_usage'] / 1000:.1f}k"
         )
+    if verification_lift_v2_summary.get("exists"):
+        verification_lift_evidence += (
+            f", verification-lift-v2={verification_lift_v2_summary['baseline_verification_rate']:.2f}->"
+            f"{verification_lift_v2_summary['intervention_verification_rate']:.2f} "
+            f"(exact={verification_lift_v2_summary['baseline_success_check_verification_rate']:.2f}->"
+            f"{verification_lift_v2_summary['intervention_success_check_verification_rate']:.2f})"
+        )
+        verification_lift_waste_evidence += (
+            f"; verification-lift-v2 success delta={verification_lift_v2_summary['intervention_success_rate'] - verification_lift_v2_summary['baseline_success_rate']:+.2f}, "
+            f"repeated calls={verification_lift_v2_summary['baseline_repeated_calls']:.2f}->{verification_lift_v2_summary['intervention_repeated_calls']:.2f}, "
+            f"token usage={verification_lift_v2_summary['baseline_token_usage'] / 1000:.1f}k->{verification_lift_v2_summary['intervention_token_usage'] / 1000:.1f}k"
+        )
     elif verification_lift.get("ok"):
         verification_lift_evidence = (
             f"; verification-lift scaffold is ready with {int(verification_lift.get('task_count', 0) or 0)} task(s), but no real pilot aggregate yet"
@@ -129,6 +145,18 @@ def build_thesis_readiness(
         if verification_lift_summary.get("exists")
         else 0
     )
+    verification_lift_v2_delta = (
+        verification_lift_v2_summary["intervention_verification_rate"] - verification_lift_v2_summary["baseline_verification_rate"]
+        if verification_lift_v2_summary.get("exists")
+        else 0
+    )
+    verification_lift_v2_success_check_delta = (
+        verification_lift_v2_summary["intervention_success_check_verification_rate"] - verification_lift_v2_summary["baseline_success_check_verification_rate"]
+        if verification_lift_v2_summary.get("exists")
+        else 0
+    )
+    non_ablation_verification_delta = max(verification_lift_delta, verification_lift_v2_delta)
+    non_ablation_success_check_delta = max(verification_lift_success_check_delta, verification_lift_v2_success_check_delta)
     token_improved = int(hard30_paired["token_usage_delta"]["improved"])
     repeated_improved = int(hard30_paired["repeated_tool_call_delta"]["improved"])
     paired_n = int(hard30_paired["token_usage_delta"]["n"])
@@ -192,7 +220,7 @@ def build_thesis_readiness(
         {
             "id": "verification_lift",
             "requirement": "Show that harness intervention increases verification rate.",
-            "status": "satisfied" if verification_lift_delta > 0 and verification_lift_success_check_delta > 0 else "missing",
+            "status": "satisfied" if non_ablation_verification_delta > 0 and non_ablation_success_check_delta > 0 else "missing",
             "evidence": (
                 "verification is saturated in stored pilots: "
                 f"full30={full30_summary['baseline']['verification_rate']:.2f}->{full30_summary['intervention']['verification_rate']:.2f} "
@@ -204,7 +232,7 @@ def build_thesis_readiness(
                 f"{process_verification_evidence}{verification_lift_evidence}."
             ),
             "gap": (
-                "None for original thesis." if verification_lift_delta > 0 and verification_lift_success_check_delta > 0
+                "None for original thesis." if non_ablation_verification_delta > 0 and non_ablation_success_check_delta > 0
                 else (
                     "The ordinary and weak-baseline pilots are negative results; the no-verify ablation shows the harness can lift verification "
                     f"from {verification_ablation_summary.get('baseline_verification_rate', 0):.2f} to {verification_ablation_summary.get('intervention_verification_rate', 0):.2f}, "
@@ -292,6 +320,20 @@ def build_thesis_readiness(
                 "If preserving the original verification-lift claim, design a stronger ablation where baseline verification is genuinely absent.",
                 "Otherwise revise the thesis to claim robust waste reduction under already-saturated verification behavior.",
                 "Report the existing verification-lift pilot as an auxiliary stress result, not a replacement for the ordinary hard30 baseline.",
+            ],
+        },
+        "verification_lift_v2_experiment": {
+            "name": "verification-lift-v2 tier",
+            "purpose": "Ordinary-baseline rerun of the missing verification-rate-lift claim.",
+            "current_scaffold": {
+                "tasks": "benchmark/verification-lift-v2/tasks.jsonl",
+                "prompt_dir": "benchmark/verification-lift-v2/prompts",
+                "pilot": verification_lift_v2_summary,
+            },
+            "minimum_design": [
+                "The 8-task ordinary-baseline v2 pilot is complete and is a negative result for verification-rate lift.",
+                "Use it as stronger evidence that ordinary Codex baselines already verify on these small tasks.",
+                "Report the clear waste reduction separately from verification-rate lift.",
             ],
         },
         "verification_ablation_experiment": {
@@ -483,6 +525,7 @@ def main() -> int:
     parser.add_argument("--process-stress-pilot", type=Path, default=DEFAULT_PROCESS_STRESS_PILOT)
     parser.add_argument("--verification-lift-audit", type=Path, default=DEFAULT_VERIFICATION_LIFT_AUDIT)
     parser.add_argument("--verification-lift-pilot", type=Path, default=DEFAULT_VERIFICATION_LIFT_PILOT)
+    parser.add_argument("--verification-lift-v2-pilot", type=Path, default=DEFAULT_VERIFICATION_LIFT_V2_PILOT)
     parser.add_argument("--verification-ablation-audit", type=Path, default=DEFAULT_VERIFICATION_ABLATION_AUDIT)
     parser.add_argument("--verification-ablation-pilot", type=Path, default=DEFAULT_VERIFICATION_ABLATION_PILOT)
     parser.add_argument("--rq4-signal-audit", type=Path, default=DEFAULT_RQ4_SIGNAL_AUDIT)
@@ -493,21 +536,22 @@ def main() -> int:
     args = parser.parse_args()
 
     result = build_thesis_readiness(
-        args.full30_aggregate,
-        args.full30_process_label_eval,
-        args.detector_fixture_eval,
-        args.hard10_aggregate,
-        args.hard30_report,
-        args.hard30_readiness,
-        args.process_stress_audit,
-        args.process_stress_pilot,
-        args.verification_lift_audit,
-        args.verification_lift_pilot,
-        args.verification_ablation_audit,
-        args.verification_ablation_pilot,
-        args.rq4_signal_audit,
-        args.hard30_task_diagnosis,
-        args.taxonomy,
+        full30_aggregate_path=args.full30_aggregate,
+        full30_process_label_eval_path=args.full30_process_label_eval,
+        detector_fixture_eval_path=args.detector_fixture_eval,
+        hard10_aggregate_path=args.hard10_aggregate,
+        hard30_report_path=args.hard30_report,
+        hard30_readiness_path=args.hard30_readiness,
+        process_stress_audit_path=args.process_stress_audit,
+        process_stress_pilot_path=args.process_stress_pilot,
+        verification_lift_audit_path=args.verification_lift_audit,
+        verification_lift_pilot_path=args.verification_lift_pilot,
+        verification_lift_v2_pilot_path=args.verification_lift_v2_pilot,
+        verification_ablation_audit_path=args.verification_ablation_audit,
+        verification_ablation_pilot_path=args.verification_ablation_pilot,
+        rq4_signal_audit_path=args.rq4_signal_audit,
+        hard30_task_diagnosis_path=args.hard30_task_diagnosis,
+        taxonomy_path=args.taxonomy,
     )
     if args.json_output or args.markdown_output:
         write_thesis_readiness_outputs(result, args.json_output, args.markdown_output)

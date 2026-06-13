@@ -23,7 +23,7 @@ This generated map turns the current evidence into reviewer-facing paper claims.
 
 ## Unsupported Claims To Avoid
 
-- Harness intervention increases verification rate. Evidence: hard30 verification delta is +0.00 and exact success-check delta is +0.00; process-stress verification delta is +0.00 and exact success-check delta is +0.00; verification-lift verification delta is +0.00 and exact success-check delta is +0.00; stored ordinary/weak-baseline pilots are saturated. Action: Do not claim verification-rate lift for current stored pilots; frame verification as saturated.
+- Harness intervention increases verification rate. Evidence: hard30 verification delta is +0.00 and exact success-check delta is +0.00; process-stress verification delta is +0.00 and exact success-check delta is +0.00; verification-lift verification delta is +0.00 and exact success-check delta is +0.00; verification-lift-v2 verification delta is +0.00 and exact success-check delta is +0.00; stored ordinary/weak-baseline pilots are saturated. Action: Do not claim verification-rate lift for current stored pilots; frame verification as saturated.
 - Trace signals explain whether hidden semantic failures will fail. Evidence: hard30 verification-rate signal delta is +0.00; unresolved-error delta is +0.00. Action: Say process signals explain the detector boundary, not hidden correctness.
 
 ## Partial Claims Requiring Qualifiers

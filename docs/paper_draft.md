@@ -15,12 +15,13 @@ We introduce CodexTrace, an offline parser and diagnosis engine for
 `codex exec --json` traces. CodexTrace normalizes agent events into a stable
 schema, segments runs into phases, detects interpretable process-level failure
 patterns, and aggregates baseline-vs-intervention experiments. We evaluate the
-tool on six real Codex benchmark pilots: a 30-task seed benchmark with 60
+tool on seven real Codex benchmark pilots: a 30-task seed benchmark with 60
 runs, an early 10-task hard tier with 20 runs, a 30-task hard tier with 60
 runs and hidden edge-case graders, a 12-task process-stress tier, an 8-task
-verification-lift tier, and a 4-task no-verify ablation. The ordinary and
-weak-baseline pilots have saturated verification rates, so they do not support
-a verification-rate-lift claim. On the seed pilot, all runs succeed, but the
+verification-lift tier, an 8-task ordinary-baseline verification-lift-v2
+rerun, and a 4-task no-verify ablation. The ordinary and weak-baseline pilots
+have saturated verification rates, so they do not support a
+verification-rate-lift claim. On the seed pilot, all runs succeed, but the
 intervention reduces repeated tool calls from 10.43 to 7.00 and average token
 usage from 218.7k to 184.8k. On the hard30 tier, success rate stays flat at
 50%, but the intervention reduces repeated tool calls from 12.93 to 9.20,
@@ -200,6 +201,7 @@ and auxiliary stress tiers used to probe specific claims.
 | hard30 | 30 | 60 | ordinary prompt | evidence-gated prompt | hidden grader | paper-facing boundary and RQ3 artifact |
 | process-stress | 12 | 24 | ordinary prompt | evidence-gated prompt | hidden grader | observable-process stress slice |
 | verification-lift | 8 | 16 | weak optional-verification prompt | evidence-gated prompt | hidden grader | negative stress test for verification-rate lift |
+| verification-lift-v2 | 8 | 16 | ordinary prompt | evidence-gated prompt | hidden grader | negative ordinary-baseline retest for verification-rate lift |
 | verification-ablation | 4 | 8 | explicit no-verify prompt | evidence-gated prompt | hidden grader | mechanism ablation for harness-controlled verification |
 
 The seed tier contains 30 runnable coding tasks covering bug fixes, features,
@@ -284,6 +286,7 @@ conditions.
 | hard10 success | 0.70 | 0.80 | Pilot success lift; not stable enough alone for a broad claim. |
 | hard30 waste | 12.93 repeated calls / 355.0k tokens | 9.20 repeated calls / 256.3k tokens | Supported paired waste reduction with flat success. |
 | verification-lift stress | 1.00 broad / 1.00 exact | 1.00 broad / 1.00 exact | Negative result for ordinary or weak-baseline verification-rate lift. |
+| verification-lift-v2 ordinary retest | 1.00 broad / 1.00 exact | 1.00 broad / 1.00 exact | Negative ordinary-baseline retest; waste still improves. |
 | no-verify ablation | 0.00 broad / 0.00 exact | 1.00 broad / 1.00 exact | Mechanism check only; not an ordinary baseline. |
 
 On the 30-task seed pilot, success rate is already saturated, but intervention
@@ -329,7 +332,7 @@ that 14 tasks fail under both prompts, `HARD-050` is the single hard30 repair,
 `HARD-033`, where repeated tool calls drop by 15 and token usage drops by
 699.2k tokens.
 
-Three auxiliary pilots further test whether the original thesis should claim
+Four auxiliary pilots further test whether the original thesis should claim
 verification-rate lift. In the process-stress tier, success remains
 flat at 0.92 -> 0.92, while repeated tool calls improve from 8.08 to 7.17 and
 token usage improves from 209.0k to 185.1k. In the targeted verification-lift
@@ -337,8 +340,12 @@ tier, even a weak baseline prompt that permits skipped command execution still
 verifies every run: broad verification and exact visible-success-check
 verification both remain 1.00 -> 1.00, success remains 0.88 -> 0.88, repeated
 tool calls improve from 6.13 to 5.38, and token usage improves from 176.8k to
-172.2k. Finally, a no-verify ablation intentionally forbids the baseline from
-running tests while requiring the intervention to produce evidence. In that
+172.2k. The verification-lift-v2 rerun also verifies every run: broad
+verification and exact visible-success-check verification both remain 1.00 ->
+1.00, success remains 0.88 -> 0.88, repeated tool calls improve from 8.62 to
+5.50, and token usage improves from 224.6k to 185.5k. Finally, a no-verify
+ablation intentionally forbids the baseline from running tests while requiring
+the intervention to produce evidence. In that
 artificial setting, broad verification and exact visible-success-check
 verification both rise from 0.00 to 1.00 and failure score drops from 61.25 to
 0.00, while success stays flat at 0.75 -> 0.75 and token usage increases from
@@ -387,14 +394,14 @@ waste even when outcomes are saturated. The hard10 pilot creates genuine
 outcome failures and shows a small success-rate lift. The larger hard30 pilot
 keeps success flat but sharply reduces tool-call and token waste, while also
 revealing that process-only trace rules cannot detect every correctness
-failure. The process-stress and verification-lift pilots add a useful boundary:
-current Codex CLI behavior already verifies consistently, so the paper should
-not claim a verification-rate lift under ordinary or weak-baseline conditions;
-that remains true when verification is restricted to the task's exact visible
-success check. The no-verify ablation shows that an evidence-gated harness can
-force verification when the baseline is explicitly forbidden to verify, but
-that result belongs in the analysis as a mechanism check rather than a main
-outcome claim.
+failure. The process-stress, verification-lift, and verification-lift-v2
+pilots add a useful boundary: current Codex CLI behavior already verifies
+consistently, so the paper should not claim a verification-rate lift under
+ordinary or weak-baseline conditions; that remains true when verification is
+restricted to the task's exact visible success check. The no-verify ablation
+shows that an evidence-gated harness can force verification when the baseline
+is explicitly forbidden to verify, but that result belongs in the analysis as
+a mechanism check rather than a main outcome claim.
 
 This distinction matters for a practical coding-agent harness. Trace diagnosis
 is useful for asking questions such as:

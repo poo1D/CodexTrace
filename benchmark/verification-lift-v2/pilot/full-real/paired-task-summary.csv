@@ -1,0 +1,7 @@
+metric,n,improved,regressed,unchanged,avg_delta
+failure_score_delta,8,0,0,8,0.0
+repeated_tool_call_delta,8,7,0,1,-3.125
+success_check_verification_delta,8,0,0,8,0.0
+success_delta,8,0,0,8,0.0
+token_usage_delta,8,8,0,0,-39165.25
+verification_delta,8,0,0,8,0.0

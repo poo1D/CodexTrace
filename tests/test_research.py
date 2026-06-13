@@ -1240,6 +1240,7 @@ def test_build_results_summary_from_stored_pilots():
         "benchmark/process-stress/pilot/full-real/manual-labels.jsonl",
         "benchmark/verification-lift/pilot/full-real/runs.jsonl",
         "benchmark/verification-lift/pilot/full-real/manual-labels.jsonl",
+        "benchmark/verification-lift-v2/pilot/full-real/runs.jsonl",
         "benchmark/verification-ablation/pilot/full-real/runs.jsonl",
         "benchmark/verification-ablation/pilot/full-real/manual-labels.jsonl",
     )
@@ -1270,6 +1271,11 @@ def test_build_results_summary_from_stored_pilots():
     assert result["verification_lift"]["summary"]["baseline"]["verification_rate"] == 1
     assert result["verification_lift"]["deltas"]["success_check_verification_rate"] == 0
     assert result["verification_lift_label_evaluation"]["labels"]["hidden_semantic_edge_case"]["fn"] == 2
+    assert result["verification_lift_v2"]["summary"]["baseline"]["n"] == 8
+    assert result["verification_lift_v2"]["summary"]["baseline"]["verification_rate"] == 1
+    assert result["verification_lift_v2"]["deltas"]["success_check_verification_rate"] == 0
+    assert result["verification_lift_v2"]["summary"]["baseline"]["avg_repeated_tool_calls"] > result["verification_lift_v2"]["summary"]["intervention"]["avg_repeated_tool_calls"]
+    assert result["verification_lift_v2"]["summary"]["baseline"]["avg_token_usage"] > result["verification_lift_v2"]["summary"]["intervention"]["avg_token_usage"]
     assert result["verification_ablation"]["summary"]["baseline"]["n"] == 4
     assert result["verification_ablation"]["deltas"]["verification_rate"] == 1
     assert result["verification_ablation"]["deltas"]["success_check_verification_rate"] == 1
@@ -1279,10 +1285,12 @@ def test_build_results_summary_from_stored_pilots():
     assert "### Headline Result Snapshot" in markdown
     assert "| hard30 waste | 12.93 repeated calls / 355.0k tokens | 9.2 repeated calls / 256.3k tokens |" in markdown
     assert "| verification-lift stress | 1.00 broad / 1.00 exact | 1.00 broad / 1.00 exact |" in markdown
+    assert "| verification-lift-v2 ordinary retest | 1.00 broad / 1.00 exact | 1.00 broad / 1.00 exact |" in markdown
     assert "| no-verify ablation | 0.00 broad / 0.00 exact | 1.00 broad / 1.00 exact |" in markdown
     assert "### Hard30 Pilot" in markdown
     assert "### Process-Stress Pilot" in markdown
     assert "### Verification-Lift Pilot" in markdown
+    assert "### Verification-Lift-V2 Pilot" in markdown
     assert "### Verification Ablation Pilot" in markdown
     assert "### Full30 Process-Positive Detector Check" in markdown
     assert "### Controlled Detector Fixture Check" in markdown
@@ -1292,7 +1300,7 @@ def test_build_results_summary_from_stored_pilots():
     assert "repetitive_exploration" in markdown
     assert "30 false negatives" in markdown
     assert "2 trace-only false negatives" in markdown
-    assert "verification remains 100% -> 100%" in markdown
+    assert "verification-lift-v2 verification remains 100% -> 100%" in markdown
 
 
 def test_build_results_summary_prefers_finalized_outputs(tmp_path):
@@ -1479,6 +1487,7 @@ def test_reviewer_docs_surface_hard30_task_diagnosis():
     assert "docs/goal_completion_audit.md" in readme
     assert "docs/verification_lift_next_experiment.md" in readme
     assert "docs/verification_lift_v2_plan_audit.md" in readme
+    assert "benchmark/verification-lift-v2/pilot/full-real" in readme
     assert "docs/submission_package.md" in readme
     assert "docs/paper_number_guard.md" in readme
     assert "docs/reviewer_path_audit.md" in readme
@@ -1502,7 +1511,7 @@ def test_reviewer_docs_surface_hard30_task_diagnosis():
     assert "| Which claims are safe to write? |" in guide
     assert "| Did paper text drift from evidence? |" in guide
     assert "`HARD-050` repaired, `HARD-007` regressed" in guide
-    assert "188-run benchmark" in guide
+    assert "204-run benchmark" in guide
     assert "scripts/audit_hard30_task_diagnosis.py" in checklist
     assert "scripts/run_benchmark_shards.py" in checklist
     assert "scripts/merge_benchmark_shards.py" in checklist
@@ -1517,6 +1526,8 @@ def test_reviewer_docs_surface_hard30_task_diagnosis():
     assert "--output-dir /tmp/codextrace-verification-lift-v2-dry" in checklist
     assert "--status-json /tmp/verification-lift-v2-shard-status.json" in checklist
     assert "--preflight-json /tmp/verification-lift-v2-preflight.json" in checklist
+    assert "benchmark/verification-lift-v2/pilot/full-real/aggregate.md" in checklist
+    assert "repeated calls improve `8.62 -> 5.50`" in checklist
 
 
 def test_paper_outline_tracks_current_boundary_result():
@@ -1578,6 +1589,12 @@ def test_thesis_readiness_identifies_original_thesis_gaps():
     assert ablation_pilot["intervention_verification_rate"] == 1
     assert ablation_pilot["baseline_success_check_verification_rate"] == 0
     assert ablation_pilot["intervention_success_check_verification_rate"] == 1
+    v2_pilot = result["verification_lift_v2_experiment"]["current_scaffold"]["pilot"]
+    assert v2_pilot["tasks"] == 8
+    assert v2_pilot["runs"] == 16
+    assert v2_pilot["baseline_verification_rate"] == v2_pilot["intervention_verification_rate"]
+    assert v2_pilot["baseline_repeated_calls"] > v2_pilot["intervention_repeated_calls"]
+    assert v2_pilot["baseline_token_usage"] > v2_pilot["intervention_token_usage"]
     pilot = result["next_experiment"]["current_scaffold"]["pilot"]
     assert pilot["tasks"] == 12
     assert pilot["runs"] == 24
@@ -1605,6 +1622,7 @@ def test_submission_package_maps_rqs_to_safe_paper_claims():
     assert package["rq_rows"][2]["status"] == "supported"
     assert "ordinary verification-rate lift is unsupported" in package["rq_rows"][2]["claim_boundary"]
     assert any(row["claim"] == "Harness intervention increases verification rate." for row in package["unsupported_claims"])
+    assert "verification-lift-v2 verification delta is +0.00" in markdown
     assert "## RQ-To-Evidence Map" in markdown
     assert "docs/hard30_task_diagnosis.md" in markdown
     assert "Unsupported Claims To Avoid" in markdown
@@ -1627,10 +1645,11 @@ def test_paper_number_guard_keeps_draft_numbers_in_sync(tmp_path):
     markdown = render_paper_number_guard_markdown(result)
 
     assert result["ok"] is True
-    assert result["summary"]["checked"] == 9
+    assert result["summary"]["checked"] == 10
     assert result["summary"]["missing"] == 0
     assert "full30 failure-score row" in markdown
     assert "hard10 token row" in markdown
+    assert "verification-lift-v2 paragraph" in markdown
 
     stale = tmp_path / "paper_draft.md"
     stale.write_text("success rate stays flat at 50%\n", encoding="utf-8")
@@ -1706,6 +1725,10 @@ def test_verification_lift_next_experiment_audit_keeps_ablation_in_bounds():
     assert result["current_evidence"]["verification_lift"]["baseline_saturated"] is True
     assert result["current_evidence"]["verification_ablation"]["verification_delta"] == 1
     assert result["current_evidence"]["verification_ablation"]["success_check_verification_delta"] == 1
+    assert result["current_evidence"]["verification_lift_v2"]["exists"] is True
+    assert result["current_evidence"]["verification_lift_v2"]["verification_delta"] == 0
+    assert result["current_evidence"]["verification_lift_v2"]["success_check_verification_delta"] == 0
+    assert result["current_evidence"]["verification_lift_v2"]["baseline_saturated"] is True
     assert result["prompt_constraints"]["ablation_baseline_forbids_verification"] is True
     assert result["planned_v2_scaffold"]["ready"] is True
     assert result["planned_v2_scaffold"]["task_count"] == 8

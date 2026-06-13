@@ -11,6 +11,7 @@ This generated summary consolidates the current paper-facing result tables.
 | hard30 | 30 | 60 | 30 | Submission-ready hard-tier hidden-grader artifact. |
 | process-stress | 12 | 24 | 2 | Failure-mode stress tasks with real Codex traces. |
 | verification-lift | 8 | 16 | 2 | Targeted verification-rate stress prompt contrast. |
+| verification-lift-v2 | 8 | 16 | 2 | Ordinary-baseline verification-rate retest with real Codex traces. |
 | verification-ablation | 4 | 8 | 2 | Auxiliary no-verify baseline ablation, not an ordinary baseline. |
 
 ## RQ3 Baseline vs Intervention
@@ -22,6 +23,7 @@ This generated summary consolidates the current paper-facing result tables.
 | hard10 success | 0.70 | 0.80 | Pilot success lift; not stable enough alone for a broad claim. |
 | hard30 waste | 12.93 repeated calls / 355.0k tokens | 9.2 repeated calls / 256.3k tokens | Supported paired waste reduction with flat success. |
 | verification-lift stress | 1.00 broad / 1.00 exact | 1.00 broad / 1.00 exact | Negative result for ordinary or weak-baseline verification-rate lift. |
+| verification-lift-v2 ordinary retest | 1.00 broad / 1.00 exact | 1.00 broad / 1.00 exact | Negative ordinary-baseline retest; waste still improves. |
 | no-verify ablation | 0.00 broad / 0.00 exact | 1.00 broad / 1.00 exact | Mechanism check only; not an ordinary baseline. |
 
 ### Full30 Seed Pilot
@@ -89,6 +91,22 @@ Paired process-stress deltas: token usage improves in 5/12 tasks, repeated tool 
 | avg_failure_score | 0 | 0 | 0 |
 
 Paired verification-lift deltas: verification improves in 0/8 tasks, exact success-check verification improves in 0/8 tasks, token usage improves in 5/8 tasks, repeated tool calls improve in 5/8 tasks.
+
+### Verification-Lift-V2 Pilot
+
+This ordinary-baseline retest is a negative result for verification-rate lift, while still showing lower process waste under the intervention prompt.
+
+| Metric | Baseline | Intervention | Delta |
+| --- | ---: | ---: | ---: |
+| success_rate | 0.88 | 0.88 | 0.00 |
+| verification_rate | 1.00 | 1.00 | 0.00 |
+| success_check_verification_rate | 1.00 | 1.00 | 0.00 |
+| avg_repeated_tool_calls | 8.625 | 5.5 | -3.125 |
+| avg_verify_events | 5.875 | 2 | -3.875 |
+| avg_token_usage | 224.6k | 185.5k | -39.2k |
+| avg_failure_score | 0 | 0 | 0 |
+
+Paired verification-lift-v2 deltas: verification improves in 0/8 tasks, exact success-check verification improves in 0/8 tasks, token usage improves in 8/8 tasks, repeated tool calls improve in 7/8 tasks, and success improves in 0 task(s) while regressing in 0 task(s).
 
 ### Verification Ablation Pilot
 
@@ -196,6 +214,7 @@ Interpretation: `verification_rate` and `unresolved_error` do not separate hidde
 | Intervention reduces waste on hard30. | hard30 repeated tool calls, command failures, token usage, and failure score improve. |
 | Process-stress intervention reduces token and repeated-call waste while success stays flat. | process-stress keeps success at 91.67% while reducing repeated tool calls and token usage. |
 | Verification-lift stress test does not support a verification-rate lift. | verification-lift verification remains 100% -> 100%, while repeated calls and token usage fall slightly. |
+| Verification-lift-v2 ordinary retest does not support a verification-rate lift. | verification-lift-v2 verification remains 100% -> 100%, while repeated calls and token usage fall. |
 | Trace-only process rules have a semantic boundary. | hard30 label evaluation has 30 false negatives for `hidden_semantic_edge_case`, while detecting observed process positives such as `repetitive_exploration`. |
 | RQ4 signal analysis explains the detector boundary. | hard30 `verification_rate` and `unresolved_error` are equal for successful and failed runs. |
 | Strong task oracles remain necessary. | hard-tier failures are only visible through hidden graders, not process-rule findings. |

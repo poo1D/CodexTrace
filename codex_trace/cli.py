@@ -89,6 +89,7 @@ def main(argv: list[str] | None = None) -> int:
     summary_cmd.add_argument("--process-stress-labels", type=Path, default=Path("benchmark/process-stress/pilot/full-real/manual-labels.jsonl"))
     summary_cmd.add_argument("--verification-lift-manifest", type=Path, default=Path("benchmark/verification-lift/pilot/full-real/runs.jsonl"))
     summary_cmd.add_argument("--verification-lift-labels", type=Path, default=Path("benchmark/verification-lift/pilot/full-real/manual-labels.jsonl"))
+    summary_cmd.add_argument("--verification-lift-v2-manifest", type=Path, default=Path("benchmark/verification-lift-v2/pilot/full-real/runs.jsonl"))
     summary_cmd.add_argument("--verification-ablation-manifest", type=Path, default=Path("benchmark/verification-ablation/pilot/full-real/runs.jsonl"))
     summary_cmd.add_argument("--verification-ablation-labels", type=Path, default=Path("benchmark/verification-ablation/pilot/full-real/manual-labels.jsonl"))
     summary_cmd.add_argument("--json-output", type=Path)
@@ -171,6 +172,7 @@ def main(argv: list[str] | None = None) -> int:
         process_stress_labels = args.process_stress_labels if args.process_stress_labels.exists() else None
         verification_lift_manifest = args.verification_lift_manifest if args.verification_lift_manifest.exists() else None
         verification_lift_labels = args.verification_lift_labels if args.verification_lift_labels.exists() else None
+        verification_lift_v2_manifest = args.verification_lift_v2_manifest if args.verification_lift_v2_manifest.exists() else None
         verification_ablation_manifest = args.verification_ablation_manifest if args.verification_ablation_manifest.exists() else None
         verification_ablation_labels = args.verification_ablation_labels if args.verification_ablation_labels.exists() else None
         result = build_results_summary(
@@ -186,6 +188,7 @@ def main(argv: list[str] | None = None) -> int:
             process_stress_labels,
             verification_lift_manifest,
             verification_lift_labels,
+            verification_lift_v2_manifest,
             verification_ablation_manifest,
             verification_ablation_labels,
         )

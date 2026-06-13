@@ -7,6 +7,7 @@ from typing import Any
 
 
 DEFAULT_VERIFICATION_LIFT_AGGREGATE = Path("benchmark/verification-lift/pilot/full-real/aggregate.json")
+DEFAULT_VERIFICATION_LIFT_V2_AGGREGATE = Path("benchmark/verification-lift-v2/pilot/full-real/aggregate.json")
 DEFAULT_VERIFICATION_ABLATION_AGGREGATE = Path("benchmark/verification-ablation/pilot/full-real/aggregate.json")
 DEFAULT_VERIFICATION_LIFT_BASELINE = Path("benchmark/verification-lift/prompts/baseline.txt")
 DEFAULT_VERIFICATION_ABLATION_BASELINE = Path("benchmark/verification-ablation/prompts/baseline.txt")
@@ -33,6 +34,7 @@ def _contains_any(text: str, phrases: list[str]) -> bool:
 
 def build_verification_lift_next_experiment_audit(
     verification_lift_aggregate_path: Path = DEFAULT_VERIFICATION_LIFT_AGGREGATE,
+    verification_lift_v2_aggregate_path: Path = DEFAULT_VERIFICATION_LIFT_V2_AGGREGATE,
     verification_ablation_aggregate_path: Path = DEFAULT_VERIFICATION_ABLATION_AGGREGATE,
     verification_lift_baseline_path: Path = DEFAULT_VERIFICATION_LIFT_BASELINE,
     verification_ablation_baseline_path: Path = DEFAULT_VERIFICATION_ABLATION_BASELINE,
@@ -40,6 +42,7 @@ def build_verification_lift_next_experiment_audit(
     verification_lift_v2_audit_path: Path = DEFAULT_VERIFICATION_LIFT_V2_AUDIT,
 ) -> dict[str, Any]:
     lift = _read_json(verification_lift_aggregate_path)
+    lift_v2 = _read_json(verification_lift_v2_aggregate_path) if verification_lift_v2_aggregate_path.exists() else None
     ablation = _read_json(verification_ablation_aggregate_path)
     thesis = _read_json(thesis_readiness_path)
     v2_audit = _read_json(verification_lift_v2_audit_path) if verification_lift_v2_audit_path.exists() else {}
@@ -49,6 +52,8 @@ def build_verification_lift_next_experiment_audit(
 
     lift_broad_delta = _rate_delta(lift, "verification_rate")
     lift_exact_delta = _rate_delta(lift, "success_check_verification_rate")
+    lift_v2_broad_delta = _rate_delta(lift_v2, "verification_rate") if lift_v2 else 0.0
+    lift_v2_exact_delta = _rate_delta(lift_v2, "success_check_verification_rate") if lift_v2 else 0.0
     ablation_broad_delta = _rate_delta(ablation, "verification_rate")
     ablation_exact_delta = _rate_delta(ablation, "success_check_verification_rate")
     lift_baseline_saturated = (
@@ -75,8 +80,8 @@ def build_verification_lift_next_experiment_audit(
 
     original_verification_lift_closed = (
         requirements["verification_lift"]["status"] == "satisfied"
-        and lift_broad_delta > 0
-        and lift_exact_delta > 0
+        and max(lift_broad_delta, lift_v2_broad_delta) > 0
+        and max(lift_exact_delta, lift_v2_exact_delta) > 0
     )
     next_experiment_required = not original_verification_lift_closed
     acceptance_gates = [
@@ -125,6 +130,24 @@ def build_verification_lift_next_experiment_audit(
                 "success_check_verification_delta": ablation_exact_delta,
                 "baseline_is_no_verify_ablation": ablation_is_no_verify,
             },
+            "verification_lift_v2": (
+                {
+                    "exists": True,
+                    "tasks": int(lift_v2["summary"]["baseline"]["n"]),
+                    "baseline_verification_rate": _summary_rate(lift_v2, "baseline", "verification_rate"),
+                    "intervention_verification_rate": _summary_rate(lift_v2, "intervention", "verification_rate"),
+                    "verification_delta": lift_v2_broad_delta,
+                    "baseline_success_check_verification_rate": _summary_rate(lift_v2, "baseline", "success_check_verification_rate"),
+                    "intervention_success_check_verification_rate": _summary_rate(lift_v2, "intervention", "success_check_verification_rate"),
+                    "success_check_verification_delta": lift_v2_exact_delta,
+                    "baseline_saturated": (
+                        _summary_rate(lift_v2, "baseline", "verification_rate") >= 1
+                        and _summary_rate(lift_v2, "baseline", "success_check_verification_rate") >= 1
+                    ),
+                }
+                if lift_v2
+                else {"exists": False}
+            ),
             "thesis_requirement_status": requirements["verification_lift"]["status"],
         },
         "prompt_constraints": {
@@ -148,6 +171,7 @@ def build_verification_lift_next_experiment_audit(
 
 def render_verification_lift_next_experiment_markdown(result: dict[str, Any]) -> str:
     lift = result["current_evidence"]["verification_lift"]
+    lift_v2 = result["current_evidence"]["verification_lift_v2"]
     ablation = result["current_evidence"]["verification_ablation"]
     planned = result["planned_v2_scaffold"]
     lines = [
@@ -171,6 +195,14 @@ def render_verification_lift_next_experiment_markdown(result: dict[str, Any]) ->
             f"{lift['intervention_verification_rate']:.2f} | {lift['verification_delta']:.2f} | "
             f"{lift['success_check_verification_delta']:.2f} | weak-baseline pilot is saturated |"
         ),
+    ]
+    if lift_v2.get("exists"):
+        lines.append(
+            f"| verification-lift-v2 | {lift_v2['tasks']} | {lift_v2['baseline_verification_rate']:.2f} | "
+            f"{lift_v2['intervention_verification_rate']:.2f} | {lift_v2['verification_delta']:.2f} | "
+            f"{lift_v2['success_check_verification_delta']:.2f} | ordinary-baseline pilot is saturated |"
+        )
+    lines.extend([
         (
             f"| verification-ablation | {ablation['tasks']} | {ablation['baseline_verification_rate']:.2f} | "
             f"{ablation['intervention_verification_rate']:.2f} | {ablation['verification_delta']:.2f} | "
@@ -196,7 +228,7 @@ def render_verification_lift_next_experiment_markdown(result: dict[str, Any]) ->
         "",
         "## Acceptance Gates",
         "",
-    ]
+    ])
     for gate in result["acceptance_gates"]:
         lines.append(f"- `{gate['id']}`: {gate['gate']} Rationale: {gate['rationale']}")
     return "\n".join(lines) + "\n"

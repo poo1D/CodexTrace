@@ -14,6 +14,7 @@ This generated audit records whether current evidence closes the original ordina
 | Tier | Tasks | Baseline verification | Intervention verification | Broad delta | Exact success-check delta | Interpretation |
 | --- | --- | --- | --- | --- | --- | --- |
 | verification-lift | 8 | 1.00 | 1.00 | 0.00 | 0.00 | weak-baseline pilot is saturated |
+| verification-lift-v2 | 8 | 1.00 | 1.00 | 0.00 | 0.00 | ordinary-baseline pilot is saturated |
 | verification-ablation | 4 | 0.00 | 1.00 | 1.00 | 1.00 | mechanism ablation only |
 
 ## Prompt Constraints

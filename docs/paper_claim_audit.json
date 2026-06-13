@@ -21,7 +21,7 @@
     {
       "action": "Do not claim verification-rate lift for current stored pilots; frame verification as saturated.",
       "claim": "Harness intervention increases verification rate.",
-      "evidence": "hard30 verification delta is +0.00 and exact success-check delta is +0.00; process-stress verification delta is +0.00 and exact success-check delta is +0.00; verification-lift verification delta is +0.00 and exact success-check delta is +0.00; stored ordinary/weak-baseline pilots are saturated.",
+      "evidence": "hard30 verification delta is +0.00 and exact success-check delta is +0.00; process-stress verification delta is +0.00 and exact success-check delta is +0.00; verification-lift verification delta is +0.00 and exact success-check delta is +0.00; verification-lift-v2 verification delta is +0.00 and exact success-check delta is +0.00; stored ordinary/weak-baseline pilots are saturated.",
       "status": "unsupported"
     },
     {
@@ -33,7 +33,7 @@
     {
       "action": "Use as the strongest current RQ3 result.",
       "claim": "Harness intervention reduces repeated tool-call and token waste.",
-      "evidence": "hard30 repeated tool calls change -3.73, token usage -98656.8; process-stress repeated tool calls change -0.92, token usage -23868.4; verification-lift repeated tool calls change -0.75, token usage -4661.8.",
+      "evidence": "hard30 repeated tool calls change -3.73, token usage -98656.8; process-stress repeated tool calls change -0.92, token usage -23868.4; verification-lift repeated tool calls change -0.75, token usage -4661.8; verification-lift-v2 repeated tool calls change -3.12, token usage -39165.2.",
       "status": "supported"
     },
     {
@@ -104,6 +104,11 @@
     "verification_lift_runs": 16,
     "verification_lift_success_check_delta": 0.0,
     "verification_lift_tasks": 8,
+    "verification_lift_v2_failures": 2,
+    "verification_lift_v2_runs": 16,
+    "verification_lift_v2_success_check_delta": 0.0,
+    "verification_lift_v2_tasks": 8,
+    "verification_lift_v2_verification_delta": 0.0,
     "verification_lift_verification_delta": 0.0
   }
 }

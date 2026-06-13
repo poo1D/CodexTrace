@@ -1,0 +1,27 @@
+{
+  "command": [
+    "/Applications/Xcode.app/Contents/Developer/usr/bin/python3",
+    "-m",
+    "codex_trace.cli",
+    "research",
+    "run",
+    "--tasks",
+    "benchmark/verification-lift-v2/tasks.jsonl",
+    "--prompt-dir",
+    "benchmark/verification-lift-v2/prompts",
+    "--output-dir",
+    "benchmark/verification-lift-v2/pilot/full-real/shards/VLV2-006",
+    "--task-id",
+    "VLV2-006",
+    "--codex-bin",
+    "codex",
+    "--sandbox",
+    "workspace-write",
+    "--timeout-seconds",
+    "600"
+  ],
+  "returncode": 0,
+  "stderr_path": "benchmark/verification-lift-v2/pilot/full-real/shards/VLV2-006/shard-run.stderr",
+  "stdout_path": "benchmark/verification-lift-v2/pilot/full-real/shards/VLV2-006/shard-run.stdout",
+  "task_id": "VLV2-006"
+}

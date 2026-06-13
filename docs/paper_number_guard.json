@@ -44,13 +44,18 @@
       "text": "verification both remain 1.00 -> 1.00, success remains 0.88 -> 0.88, repeated"
     },
     {
+      "name": "verification-lift-v2 paragraph",
+      "present": true,
+      "text": "verification-lift-v2 rerun also verifies every run: broad verification and exact visible-success-check verification both remain 1.00 -> 1.00, success remains 0.88 -> 0.88, repeated tool calls improve from 8.62 to 5.50, and token usage improves from 224.6k to 185.5k"
+    },
+    {
       "name": "verification-ablation paragraph",
       "present": true,
       "text": "verification both rise from 0.00 to 1.00 and failure score drops from 61.25 to 0.00"
     }
   ],
   "summary": {
-    "checked": 9,
+    "checked": 10,
     "missing": 0
   }
 }

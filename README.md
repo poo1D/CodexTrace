@@ -133,6 +133,7 @@ Key files:
 - `benchmark/verification-lift/prompts/`: verification-lift baseline/intervention prompt templates
 - `benchmark/verification-lift-v2/tasks.jsonl`: ordinary-baseline verification-lift v2 tier for the next claim-closing experiment
 - `benchmark/verification-lift-v2/prompts/`: ordinary baseline and evidence-gated v2 prompt templates
+- `benchmark/verification-lift-v2/pilot/full-real`: 8-task / 16-run real ordinary-baseline verification-lift v2 pilot
 - `benchmark/verification-ablation/tasks.jsonl`: auxiliary no-verify baseline ablation tasks for harness-control evidence
 - `benchmark/verification-ablation/prompts/`: no-verify baseline and evidence-gated prompt templates
 - `scripts/materialize_process_stress_fixtures.py`: rebuilds the process-stress fixture repositories
@@ -163,7 +164,7 @@ Key files:
 - `docs/paper_outline.md`: paper outline and experiment plan
 - `docs/reproducibility_checklist.md`: claim-evidence map and reproduction commands
 - `docs/submission_package.md`: generated RQ-to-evidence map for safe paper submission claims
-- `docs/results_summary.md`: generated full30 + hard10 + hard30 + process-stress + verification-lift + verification-ablation result summary, including RQ4 trace-signal analysis
+- `docs/results_summary.md`: generated full30 + hard10 + hard30 + process-stress + verification-lift + verification-lift-v2 + verification-ablation result summary, including RQ4 trace-signal analysis
 - `docs/rq4_signal_audit.md`: generated signal audit for observable process failures and hidden semantic boundaries
 - `docs/hard30_task_diagnosis.md`: generated task-level hard30 diagnosis for double failures, repairs, regressions, and waste deltas
 - `docs/process_stress_plan_audit.md`: generated coverage audit for the materialized process-stress tier
@@ -176,6 +177,7 @@ Key files:
 - `benchmark/pilot/full30-real`: 30-task / 60-run real pilot
 - `benchmark/process-stress/pilot/full-real`: 12-task / 24-run real pilot for the process-stress tier
 - `benchmark/verification-lift/pilot/full-real`: 8-task / 16-run real pilot for the verification-lift tier
+- `benchmark/verification-lift-v2/pilot/full-real`: 8-task / 16-run real ordinary-baseline verification-lift v2 pilot
 - `benchmark/verification-ablation/pilot/full-real`: 4-task / 8-run real no-verify ablation pilot
 - `benchmark/hard/pilot/hard10-real`: 10-task / 20-run hard-tier pilot with outcome failures
 - `benchmark/hard/pilot/hard30-real`: 30-task / 60-run hard-tier pilot with hidden-grader failures and paper tables
@@ -334,7 +336,7 @@ Findings:
 ## CV Bullets
 
 - Built `CodexTrace`, a GPU-free Agent Harness research tool that parses `codex exec --json` event streams into normalized traces and detects process failures such as missing verification, unrecovered command errors, repeated tool use, and sandbox blocks.
-- Designed and collected a 188-run Codex trace benchmark across seed, hard, process-stress, verification-lift, and no-verify ablation tiers, comparing baseline prompts with verification-focused harness interventions.
+- Designed and collected a 204-run Codex trace benchmark across seed, hard, process-stress, verification-lift, verification-lift-v2, and no-verify ablation tiers, comparing baseline prompts with verification-focused harness interventions.
 - Measured intervention effects on real Codex runs: hard30 repeated tool calls dropped `12.93 -> 9.20`, hard30 token usage dropped `355.0k -> 256.3k`, and paired tasks improved on token usage in `26/30` cases.
 - Shipped a reproducible research artifact with hidden-grader fixtures, manual-label evaluation, generated paper tables, a TypeScript replay UI, Python CLI, and GitHub Actions CI.
 
