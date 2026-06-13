@@ -220,6 +220,9 @@ def check_paper_draft_content(path: Path = Path("docs/paper_draft.md")) -> dict[
         "dataset construction table": "| Tier | Tasks | Runs | Baseline | Intervention | Outcome oracle | Primary use |",
         "trace schema table": "| Schema object | Fields | Purpose |",
         "detector rule mapping": "| Taxonomy label | Implementation finding | Detector signal |",
+        "measurement table": "| Metric | Measurement |",
+        "metric coverage link": "docs/metric_coverage_audit.md",
+        "time-to-first-test definition": "`time_to_first_test`",
         "gpu-free method note": "No model training, fine-tuning, embedding index, or GPU inference is used",
         "process-vs-semantic limitation": "Trace diagnosis is less suited for proving semantic correctness",
     }

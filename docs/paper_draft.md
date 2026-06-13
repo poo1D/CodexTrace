@@ -218,6 +218,28 @@ current paper-facing hard30 artifact selects 30 of these tasks and stores 60
 real baseline/intervention runs. These tasks are designed to create outcome
 failures even when visible tests pass.
 
+### Measurement
+
+The experiment design tracks both final outcomes and process-level waste. Each
+metric is computed from the normalized trace plus the run manifest outcome
+field; the generated `docs/metric_coverage_audit.md` checks that all metrics in
+this table are present in run rows, CSV exports, baseline/intervention
+summaries, and aggregate Markdown.
+
+| Metric | Measurement |
+| --- | --- |
+| `success_rate` | Mean of binary run success labels from the external outcome oracle. |
+| `verification_rate` | Share of runs with at least one test, build, lint, type-check, or equivalent verification command. |
+| `unresolved_error_rate` | Share of runs with a failed command that is not followed by recovery or verification evidence. |
+| `repeated_tool_call_count` | Count of repeated shell/search/read-style commands after the first occurrence. |
+| `retry_count` | Count of commands retried after a previous failure of the same normalized command. |
+| `turn_count` | Count of completed agent turns in the normalized trace. |
+| `token_usage` | Input plus output token usage reported by the Codex JSONL stream when present. |
+| `command_failure_count` | Count of command events with non-zero exit status. |
+| `time_to_first_edit` | Event index of the first file-change event. |
+| `time_to_first_test` | Event index of the first verification command; undefined runs are excluded from group averages. |
+| `failure_score` | Weighted deterministic score over detector findings, used as a compact process-risk measure. |
+
 ## 7. Results
 
 ### RQ1: Failure Taxonomy Distribution
@@ -435,6 +457,7 @@ to inspect the pilot artifact without rerunning Codex. The main entry points
 are `docs/artifact_guide.md` for a short reviewer path,
 `docs/results_summary.md` for generated RQ tables,
 `docs/submission_package.md` for safe RQ-to-evidence claim framing,
+`docs/metric_coverage_audit.md` for experiment-metric coverage,
 `docs/paper_claim_audit.md`, `docs/claim_text_guard.md`, and
 `docs/paper_number_guard.md` for claim-support and numeric-drift guards, and
 `docs/reproducibility_checklist.md` for claim-to-evidence mapping and
