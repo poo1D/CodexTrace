@@ -1532,12 +1532,16 @@ def test_reviewer_docs_surface_hard30_task_diagnosis():
 
 def test_paper_outline_tracks_current_boundary_result():
     outline = Path("docs/paper_outline.md").read_text(encoding="utf-8")
+    normalized = " ".join(outline.split())
 
-    assert "A task-level hard30 diagnosis identifies 14 double-failure" in outline
-    assert "one intervention repair (`HARD-050`)" in outline
-    assert "one intervention regression" in outline
-    assert "task-level waste delta" in outline
-    assert "verification is saturated" in outline
+    assert "A task-level hard30 diagnosis identifies 14 double-failure" in normalized
+    assert "one intervention repair (`HARD-050`)" in normalized
+    assert "one intervention regression" in normalized
+    assert "task-level waste delta" in normalized
+    assert "verification is saturated" in normalized
+    assert "verification-lift-v2" in normalized
+    assert "negative evidence for a verification-rate-lift claim" in normalized
+    assert "repeated tool calls improve 8.62 -> 5.50" in normalized
 
 
 def test_experiment_protocol_maps_rqs_to_evidence():

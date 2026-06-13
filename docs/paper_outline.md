@@ -13,16 +13,19 @@ and diagnosis engine for `codex exec --json` traces. CodexTrace normalizes agent
 events, detects process-level failure patterns, and compares baseline prompts
 against simple harness interventions. Across a 30-task seed pilot, a 10-task
 hard pilot, a 30-task hard-tier artifact with hidden graders, and auxiliary
-process-stress / verification-lift / no-verify ablation pilots, intervention
-primarily reduces token and tool-call waste; it improves success in the hard10
-pilot but not in the larger hard30 pilot. The no-verify ablation shows harness
-constraints can force verification only under an artificial baseline condition,
-not under the ordinary Codex baseline. The hard30 labels also expose a boundary
-result: trace-only process rules detect reviewed repetitive exploration
-positives but miss hidden semantic edge-case failures whose visible process
-traces look clean. A task-level hard30 diagnosis identifies 14 double-failure
-tasks, one intervention repair (`HARD-050`), one intervention regression
-(`HARD-007`), and the largest token-waste reduction (`HARD-033`).
+process-stress / verification-lift / verification-lift-v2 / no-verify
+ablation pilots, intervention primarily reduces token and tool-call waste; it
+improves success in the hard10 pilot but not in the larger hard30 pilot. The
+ordinary and weak-baseline verification-lift pilots remain saturated at
+1.00 -> 1.00, so they are negative evidence for a verification-rate-lift
+claim. The no-verify ablation shows harness constraints can force verification
+only under an artificial baseline condition, not under the ordinary Codex
+baseline. The hard30 labels also expose a boundary result: trace-only process
+rules detect reviewed repetitive exploration positives but miss hidden semantic
+edge-case failures whose visible process traces look clean. A task-level
+hard30 diagnosis identifies 14 double-failure tasks, one intervention repair
+(`HARD-050`), one intervention regression (`HARD-007`), and the largest
+token-waste reduction (`HARD-033`).
 
 ## 1. Introduction
 
@@ -166,6 +169,9 @@ Candidate signals:
   claim a verification-rate lift; the targeted verification-lift pilot also
   stays saturated at 1.00 -> 1.00 for both broad verification and exact visible
   success-check verification
+- the ordinary-baseline verification-lift-v2 retest also remains saturated at
+  1.00 -> 1.00, while repeated tool calls improve 8.62 -> 5.50 and token usage
+  improves 224.6k -> 185.5k
 - the no-verify verification-ablation pilot is a mechanism check only:
   broad and exact success-check verification rise 0.00 -> 1.00 and failure
   score drops 61.25 -> 0.00, but it is not ordinary-baseline evidence

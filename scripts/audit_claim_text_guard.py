@@ -41,6 +41,15 @@ REQUIRED_CAVEATS = (
         description="Paper draft should present verification-lift as a negative result and frame RQ4 around the process/semantic boundary.",
     ),
     RequiredCaveat(
+        path=Path("docs/paper_outline.md"),
+        phrases=(
+            "verification-lift-v2",
+            "negative evidence for a verification-rate-lift claim",
+            "not under the ordinary Codex baseline",
+        ),
+        description="Paper outline should include the v2 ordinary-baseline negative result and preserve the ablation boundary.",
+    ),
+    RequiredCaveat(
         path=Path("docs/results_summary.md"),
         phrases=("does not support a verification-rate lift", "not an ordinary baseline"),
         description="Generated results summary should preserve the verification-lift boundary and no-verify ablation qualifier.",
