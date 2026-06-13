@@ -261,6 +261,9 @@ def check_experiment_protocol_content(path: Path = Path("docs/experiment_protoco
         "verification boundary": "Ordinary and weak-baseline verification rates are saturated",
         "task diagnosis mapping": "docs/hard30_task_diagnosis.md",
         "task repair/regression evidence": "one intervention repair (`HARD-050`), one intervention regression",
+        "average turn count metric": "avg_turn_count",
+        "time-to-first average metrics": "avg_time_to_first_test",
+        "metric coverage command": "scripts/audit_metric_coverage.py",
     }
     for label, phrase in required_phrases.items():
         if " ".join(phrase.lower().split()) not in normalized:

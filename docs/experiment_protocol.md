@@ -114,6 +114,9 @@ Group-level metrics:
 - `avg_repeated_tool_calls`
 - `avg_retry_count`
 - `avg_command_failures`
+- `avg_turn_count`
+- `avg_time_to_first_edit`
+- `avg_time_to_first_test`
 - `avg_recover_events`
 - `avg_verify_events`
 - `avg_token_usage`
@@ -159,6 +162,14 @@ codex-trace research paper-report benchmark/runs.example.jsonl \
   --labels benchmark/labels.example.jsonl \
   --json-output reports/example-paper-report.json \
   --markdown-output reports/example-paper-report.md
+```
+
+Audit coverage for the experiment-design metrics:
+
+```bash
+python3 scripts/audit_metric_coverage.py \
+  --json-output reports/metric-coverage-audit.json \
+  --markdown-output reports/metric-coverage-audit.md
 ```
 
 ## RQ-To-Evidence Map
