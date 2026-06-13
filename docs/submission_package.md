@@ -56,3 +56,4 @@ This generated map turns the current evidence into reviewer-facing paper claims.
 - `docs/rq4_signal_audit.md`
 - `docs/hard30_task_diagnosis.md`
 - `docs/reproducibility_checklist.md`
+- `docs/reproducibility_audit.md`

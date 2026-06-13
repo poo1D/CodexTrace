@@ -196,6 +196,15 @@
         "README.md",
         "docs/artifact_guide.md"
       ]
+    },
+    {
+      "covered": true,
+      "path": "docs/reproducibility_audit.md",
+      "present_in": [
+        "README.md",
+        "docs/artifact_guide.md",
+        "docs/reproducibility_checklist.md"
+      ]
     }
   ],
   "guide_missing": [],
@@ -205,6 +214,6 @@
     "checklist_missing": 0,
     "guide_missing": 0,
     "missing": 0,
-    "required_files": 23
+    "required_files": 24
   }
 }

@@ -74,6 +74,7 @@ boundary-style signal audit, `docs/metric_coverage_audit.md` for experiment
 metric coverage, `docs/failure_taxonomy_audit.md` for six-label taxonomy
 coverage, `docs/related_work_audit.md` for related-work positioning coverage,
 `docs/paper_structure_audit.md` for paper-section/RQ coverage,
+`docs/reproducibility_audit.md` for reproducibility-command coverage,
 `docs/hard30_task_diagnosis.md` for task-level
 hard30 repairs/regressions and double failures, `docs/thesis_readiness.md` for
 the original-thesis gap audit, and `docs/reproducibility_checklist.md` for
@@ -158,6 +159,7 @@ Key files:
 - `scripts/audit_failure_taxonomy.py`: checks six-label taxonomy coverage across docs, paper mapping, and detector fixtures
 - `scripts/audit_related_work.py`: checks related-work coverage across bibliography notes and the paper draft
 - `scripts/audit_paper_structure.py`: checks paper draft section, RQ, and boundary-result coverage
+- `scripts/audit_reproducibility.py`: checks reproducibility checklist command coverage and Markdown fence balance
 - `scripts/audit_submission_package.py`: generates the RQ-to-evidence submission package map
 - `docs/artifact_guide.md`: 15-minute reviewer/interviewer walkthrough
 - `docs/experiment_protocol.md`: collection and labeling protocol
@@ -179,6 +181,7 @@ Key files:
 - `docs/failure_taxonomy_audit.md`: generated coverage audit for the six process-failure taxonomy labels
 - `docs/related_work_audit.md`: generated coverage audit for related-work positioning axes
 - `docs/paper_structure_audit.md`: generated coverage audit for paper sections, RQ result blocks, and boundary framing
+- `docs/reproducibility_audit.md`: generated coverage audit for reproduction commands and checklist Markdown structure
 - `docs/hard30_task_diagnosis.md`: generated task-level hard30 diagnosis for double failures, repairs, regressions, and waste deltas
 - `docs/process_stress_plan_audit.md`: generated coverage audit for the materialized process-stress tier
 - `docs/verification_lift_plan_audit.md`: generated coverage audit for the targeted verification-lift tier
@@ -272,6 +275,7 @@ PYTHONPATH=. python3 scripts/audit_submission_package.py --markdown-output docs/
 PYTHONPATH=. python3 scripts/audit_failure_taxonomy.py --markdown-output docs/failure_taxonomy_audit.md
 PYTHONPATH=. python3 scripts/audit_related_work.py --markdown-output docs/related_work_audit.md
 PYTHONPATH=. python3 scripts/audit_paper_structure.py --markdown-output docs/paper_structure_audit.md
+PYTHONPATH=. python3 scripts/audit_reproducibility.py --markdown-output docs/reproducibility_audit.md
 ```
 
 The current draft in `docs/paper_draft.md` reports the seed, hard10, hard30,

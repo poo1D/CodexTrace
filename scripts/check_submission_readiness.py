@@ -514,6 +514,38 @@ def check_paper_structure_audit_content(path: Path = Path("docs/paper_structure_
     }
 
 
+def check_reproducibility_audit_content(path: Path = Path("docs/reproducibility_audit.md")) -> dict[str, Any]:
+    problems = []
+    try:
+        text = path.read_text(encoding="utf-8")
+    except FileNotFoundError:
+        return {
+            "name": "reproducibility audit",
+            "ok": False,
+            "evidence": str(path),
+            "problems": ["missing reproducibility audit"],
+        }
+
+    required_phrases = {
+        "ready": "Ready: yes",
+        "coverage count": "Commands covered: 21 / 21",
+        "balanced fences": "Markdown fences balanced: yes",
+        "submission gate": "submission_readiness_gate",
+        "scope caveat": "does not execute the full real Codex collection commands",
+    }
+    for label, phrase in required_phrases.items():
+        if phrase not in text:
+            problems.append(f"missing {label}")
+
+    return {
+        "name": "reproducibility audit",
+        "ok": not problems,
+        "evidence": str(path),
+        "detail": "reproducibility checklist contains required commands and balanced Markdown fences",
+        "problems": problems,
+    }
+
+
 def check_goal_completion_audit_content(path: Path = Path("docs/goal_completion_audit.md")) -> dict[str, Any]:
     problems = []
     try:
@@ -596,6 +628,7 @@ def build_report(selection_dir: Path, run_dir: Path) -> dict[str, Any]:
         check_failure_taxonomy_audit_content(),
         check_related_work_audit_content(),
         check_paper_structure_audit_content(),
+        check_reproducibility_audit_content(),
         check_goal_completion_audit_content(),
         check_verification_lift_next_experiment_content(),
         check_paper_draft_content(),

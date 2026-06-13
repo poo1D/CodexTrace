@@ -122,6 +122,7 @@ def build_submission_package() -> dict[str, Any]:
             "docs/rq4_signal_audit.md",
             "docs/hard30_task_diagnosis.md",
             "docs/reproducibility_checklist.md",
+            "docs/reproducibility_audit.md",
         ],
     }
 

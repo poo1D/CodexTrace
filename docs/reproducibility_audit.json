@@ -1,0 +1,118 @@
+{
+  "commands": [
+    {
+      "id": "full30_aggregate",
+      "phrase": "codex_trace.cli research aggregate \\\n  benchmark/pilot/full30-real/runs.jsonl",
+      "present": true
+    },
+    {
+      "id": "controlled_fixture_eval",
+      "phrase": "benchmark/detector-fixtures/runs.jsonl \\\n  benchmark/detector-fixtures/labels.jsonl",
+      "present": true
+    },
+    {
+      "id": "rq4_signal_audit",
+      "phrase": "scripts/audit_rq4_signals.py",
+      "present": true
+    },
+    {
+      "id": "metric_coverage_audit",
+      "phrase": "scripts/audit_metric_coverage.py",
+      "present": true
+    },
+    {
+      "id": "failure_taxonomy_audit",
+      "phrase": "scripts/audit_failure_taxonomy.py",
+      "present": true
+    },
+    {
+      "id": "related_work_audit",
+      "phrase": "scripts/audit_related_work.py",
+      "present": true
+    },
+    {
+      "id": "paper_structure_audit",
+      "phrase": "scripts/audit_paper_structure.py",
+      "present": true
+    },
+    {
+      "id": "hard30_paper_report",
+      "phrase": "codex_trace.cli research paper-report \\\n  benchmark/hard/pilot/hard30-real/runs.jsonl",
+      "present": true
+    },
+    {
+      "id": "hard30_task_diagnosis",
+      "phrase": "scripts/audit_hard30_task_diagnosis.py",
+      "present": true
+    },
+    {
+      "id": "combined_summary",
+      "phrase": "codex_trace.cli research summary",
+      "present": true
+    },
+    {
+      "id": "thesis_readiness",
+      "phrase": "scripts/audit_thesis_readiness.py",
+      "present": true
+    },
+    {
+      "id": "goal_completion",
+      "phrase": "scripts/audit_goal_completion.py",
+      "present": true
+    },
+    {
+      "id": "paper_number_guard",
+      "phrase": "scripts/audit_paper_numbers.py",
+      "present": true
+    },
+    {
+      "id": "reviewer_path_audit",
+      "phrase": "scripts/audit_reviewer_path.py",
+      "present": true
+    },
+    {
+      "id": "submission_package",
+      "phrase": "scripts/audit_submission_package.py",
+      "present": true
+    },
+    {
+      "id": "verification_lift_v2_collection",
+      "phrase": "scripts/run_benchmark_shards.py",
+      "present": true
+    },
+    {
+      "id": "verification_lift_v2_finalize",
+      "phrase": "scripts/finalize_benchmark_pilot.py",
+      "present": true
+    },
+    {
+      "id": "verification_ablation_outputs",
+      "phrase": "benchmark/verification-ablation/pilot/full-real/runs.jsonl",
+      "present": true
+    },
+    {
+      "id": "submission_readiness_gate",
+      "phrase": "scripts/check_submission_readiness.py",
+      "present": true
+    },
+    {
+      "id": "paper_claim_audit",
+      "phrase": "scripts/audit_paper_claims.py",
+      "present": true
+    },
+    {
+      "id": "claim_text_guard",
+      "phrase": "scripts/audit_claim_text_guard.py",
+      "present": true
+    }
+  ],
+  "summary": {
+    "bash_fence_count": 36,
+    "checklist_path": "docs/reproducibility_checklist.md",
+    "covered_command_count": 21,
+    "fence_count": 78,
+    "fences_balanced": true,
+    "ready": true,
+    "required_command_count": 21
+  }
+}
