@@ -288,8 +288,8 @@ def build_thesis_readiness(
         },
         "requirements": requirements,
         "next_experiment": {
-            "name": "process-stress tier",
-            "purpose": "Close unsupported original-thesis claims about verification lift and broader process-rule recall.",
+            "name": "optional process-stress expansion",
+            "purpose": "Future extension for broader natural process-positive coverage; the current boundary-result paper no longer depends on another verification-lift run.",
             "current_scaffold": {
                 "tasks": "benchmark/process-stress/tasks.jsonl",
                 "audit": str(process_stress_audit_path),
@@ -298,10 +298,11 @@ def build_thesis_readiness(
                 "pilot": process_pilot_summary,
             },
             "minimum_design": [
+                "Use only if expanding beyond the current boundary paper or seeking more natural process-positive labels.",
                 "10-15 tasks whose visible success checks are weak enough that baseline may skip or under-run verification.",
                 "At least two tasks each targeting verification_gap, unrecovered_tool_error, premature_completion, context_drift, repetitive_exploration, and sandbox_permission_deadlock.",
                 "Baseline/intervention Codex JSONL traces with manual process labels for every failure and high-waste success.",
-                "Acceptance gate: process-label recall >= 0.70 on observable labels, plus verification-rate or verification-depth improvement under intervention.",
+                "Acceptance gate for future expansion: process-label recall >= 0.70 on observable labels, plus verification-depth improvement if verification rate remains saturated.",
             ],
         },
         "verification_lift_experiment": {
@@ -440,6 +441,38 @@ def render_thesis_readiness_markdown(result: dict[str, Any]) -> str:
             "",
         ])
     for item in verification_experiment["minimum_design"]:
+        lines.append(f"- {item}")
+    verification_v2_experiment = result["verification_lift_v2_experiment"]
+    verification_v2_scaffold = verification_v2_experiment["current_scaffold"]
+    verification_v2_pilot = verification_v2_scaffold.get("pilot") or {}
+    lines.extend([
+        "",
+        "## Verification-Lift-V2 Experiment",
+        "",
+        f"Name: `{verification_v2_experiment['name']}`",
+        "",
+        verification_v2_experiment["purpose"],
+        "",
+        (
+            f"Current scaffold: tasks in `{verification_v2_scaffold['tasks']}` with prompts in "
+            f"`{verification_v2_scaffold['prompt_dir']}`."
+        ),
+        "",
+    ])
+    if verification_v2_pilot.get("exists"):
+        lines.extend([
+            (
+                "Current verification-lift-v2 pilot: "
+                f"{verification_v2_pilot['tasks']} task(s), {verification_v2_pilot['runs']} run(s), "
+                f"verification {verification_v2_pilot['baseline_verification_rate']:.2f}->{verification_v2_pilot['intervention_verification_rate']:.2f}, "
+                f"exact success-check {verification_v2_pilot['baseline_success_check_verification_rate']:.2f}->{verification_v2_pilot['intervention_success_check_verification_rate']:.2f}, "
+                f"success {verification_v2_pilot['baseline_success_rate']:.2f}->{verification_v2_pilot['intervention_success_rate']:.2f}, "
+                f"repeated calls {verification_v2_pilot['baseline_repeated_calls']:.2f}->{verification_v2_pilot['intervention_repeated_calls']:.2f}, "
+                f"token usage {verification_v2_pilot['baseline_token_usage'] / 1000:.1f}k->{verification_v2_pilot['intervention_token_usage'] / 1000:.1f}k."
+            ),
+            "",
+        ])
+    for item in verification_v2_experiment["minimum_design"]:
         lines.append(f"- {item}")
     ablation_experiment = result["verification_ablation_experiment"]
     ablation_scaffold = ablation_experiment["current_scaffold"]

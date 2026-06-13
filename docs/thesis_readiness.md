@@ -25,18 +25,19 @@ This audit maps the original thesis objective to the current repository evidence
 
 ## Next Experiment
 
-Name: `process-stress tier`
+Name: `optional process-stress expansion`
 
-Close unsupported original-thesis claims about verification lift and broader process-rule recall.
+Future extension for broader natural process-positive coverage; the current boundary-result paper no longer depends on another verification-lift run.
 
 Current scaffold: 12 materialized tasks in `benchmark/process-stress/tasks.jsonl`; audit ready=yes.
 
 Current process-stress pilot: 12 task(s), 24 run(s), success 0.92->0.92, verification 1.00->1.00, exact success-check 1.00->1.00, repeated calls 8.08->7.17, token usage 209.0k->185.1k.
 
+- Use only if expanding beyond the current boundary paper or seeking more natural process-positive labels.
 - 10-15 tasks whose visible success checks are weak enough that baseline may skip or under-run verification.
 - At least two tasks each targeting verification_gap, unrecovered_tool_error, premature_completion, context_drift, repetitive_exploration, and sandbox_permission_deadlock.
 - Baseline/intervention Codex JSONL traces with manual process labels for every failure and high-waste success.
-- Acceptance gate: process-label recall >= 0.70 on observable labels, plus verification-rate or verification-depth improvement under intervention.
+- Acceptance gate for future expansion: process-label recall >= 0.70 on observable labels, plus verification-depth improvement if verification rate remains saturated.
 
 ## Verification-Lift Experiment
 
@@ -52,6 +53,20 @@ Current verification-lift pilot: 8 task(s), 16 run(s), verification 1.00->1.00, 
 - If preserving the original verification-lift claim, design a stronger ablation where baseline verification is genuinely absent.
 - Otherwise revise the thesis to claim robust waste reduction under already-saturated verification behavior.
 - Report the existing verification-lift pilot as an auxiliary stress result, not a replacement for the ordinary hard30 baseline.
+
+## Verification-Lift-V2 Experiment
+
+Name: `verification-lift-v2 tier`
+
+Ordinary-baseline rerun of the missing verification-rate-lift claim.
+
+Current scaffold: tasks in `benchmark/verification-lift-v2/tasks.jsonl` with prompts in `benchmark/verification-lift-v2/prompts`.
+
+Current verification-lift-v2 pilot: 8 task(s), 16 run(s), verification 1.00->1.00, exact success-check 1.00->1.00, success 0.88->0.88, repeated calls 8.62->5.50, token usage 224.6k->185.5k.
+
+- The 8-task ordinary-baseline v2 pilot is complete and is a negative result for verification-rate lift.
+- Use it as stronger evidence that ordinary Codex baselines already verify on these small tasks.
+- Report the clear waste reduction separately from verification-rate lift.
 
 ## Verification Ablation Experiment
 

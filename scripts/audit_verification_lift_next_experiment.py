@@ -83,7 +83,14 @@ def build_verification_lift_next_experiment_audit(
         and max(lift_broad_delta, lift_v2_broad_delta) > 0
         and max(lift_exact_delta, lift_v2_exact_delta) > 0
     )
-    next_experiment_required = not original_verification_lift_closed
+    v2_collected = bool(lift_v2)
+    v2_baseline_saturated = bool(
+        lift_v2
+        and _summary_rate(lift_v2, "baseline", "verification_rate") >= 1
+        and _summary_rate(lift_v2, "baseline", "success_check_verification_rate") >= 1
+    )
+    additional_ordinary_baseline_experiment_required = not original_verification_lift_closed and not v2_collected
+    claim_revision_required = not original_verification_lift_closed and v2_collected
     acceptance_gates = [
         {
             "id": "ordinary_baseline",
@@ -108,9 +115,15 @@ def build_verification_lift_next_experiment_audit(
     ]
     return {
         "ok": True,
-        "status": "next_experiment_required" if next_experiment_required else "original_claim_closed",
+        "status": (
+            "original_claim_closed" if original_verification_lift_closed
+            else "claim_revision_required" if claim_revision_required
+            else "next_experiment_required"
+        ),
         "original_verification_lift_closed": original_verification_lift_closed,
-        "next_experiment_required": next_experiment_required,
+        "next_experiment_required": additional_ordinary_baseline_experiment_required,
+        "additional_ordinary_baseline_experiment_required": additional_ordinary_baseline_experiment_required,
+        "claim_revision_required": claim_revision_required,
         "current_evidence": {
             "verification_lift": {
                 "tasks": int(lift["summary"]["baseline"]["n"]),
@@ -140,10 +153,7 @@ def build_verification_lift_next_experiment_audit(
                     "baseline_success_check_verification_rate": _summary_rate(lift_v2, "baseline", "success_check_verification_rate"),
                     "intervention_success_check_verification_rate": _summary_rate(lift_v2, "intervention", "success_check_verification_rate"),
                     "success_check_verification_delta": lift_v2_exact_delta,
-                    "baseline_saturated": (
-                        _summary_rate(lift_v2, "baseline", "verification_rate") >= 1
-                        and _summary_rate(lift_v2, "baseline", "success_check_verification_rate") >= 1
-                    ),
+                    "baseline_saturated": v2_baseline_saturated,
                 }
                 if lift_v2
                 else {"exists": False}
@@ -159,6 +169,7 @@ def build_verification_lift_next_experiment_audit(
         "planned_v2_scaffold": {
             "exists": bool(v2_audit),
             "ready": bool(v2_audit.get("ok")),
+            "pilot_collected": v2_collected,
             "task_count": int(v2_audit.get("task_count", 0) or 0),
             "materialized_count": int(v2_audit.get("materialized_count", 0) or 0),
             "baseline_prompt_is_ordinary": bool(v2_audit.get("baseline_prompt_is_ordinary")),
@@ -183,7 +194,8 @@ def render_verification_lift_next_experiment_markdown(result: dict[str, Any]) ->
         "",
         f"- OK: {'yes' if result['ok'] else 'no'}",
         f"- Original verification-lift claim closed: {'yes' if result['original_verification_lift_closed'] else 'no'}",
-        f"- Next experiment required: {'yes' if result['next_experiment_required'] else 'no'}",
+        f"- Additional ordinary-baseline experiment required: {'yes' if result['additional_ordinary_baseline_experiment_required'] else 'no'}",
+        f"- Claim revision required: {'yes' if result['claim_revision_required'] else 'no'}",
         "- No-verify ablation cannot close the ordinary-baseline claim.",
         "",
         "## Current Evidence",
@@ -220,6 +232,7 @@ def render_verification_lift_next_experiment_markdown(result: dict[str, Any]) ->
         "",
         f"- Exists: {'yes' if planned['exists'] else 'no'}",
         f"- Ready: {'yes' if planned['ready'] else 'no'}",
+        f"- Pilot collected: {'yes' if planned['pilot_collected'] else 'no'}",
         f"- Tasks: {planned['task_count']}",
         f"- Materialized fixtures: {planned['materialized_count']}",
         f"- Baseline prompt is ordinary: {'yes' if planned['baseline_prompt_is_ordinary'] else 'no'}",

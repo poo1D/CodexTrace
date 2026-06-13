@@ -8,7 +8,7 @@ This generated audit checks the active original objective against current reposi
 - Boundary-result paper ready: yes
 - Should mark active goal complete: no
 - Blocking items: 1
-- Next decision: Run a stronger ordinary-baseline verification-lift experiment if preserving the original thesis; otherwise revise the thesis to a boundary-result paper centered on waste reduction and trace-diagnosis limits.
+- Next decision: Revise the thesis to a boundary-result paper centered on waste reduction and trace-diagnosis limits; the ordinary-baseline verification-lift-v2 retest is complete and remains saturated.
 
 ## Requirement Audit
 

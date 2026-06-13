@@ -6,7 +6,8 @@ This generated audit records whether current evidence closes the original ordina
 
 - OK: yes
 - Original verification-lift claim closed: no
-- Next experiment required: yes
+- Additional ordinary-baseline experiment required: no
+- Claim revision required: yes
 - No-verify ablation cannot close the ordinary-baseline claim.
 
 ## Current Evidence
@@ -28,6 +29,7 @@ This generated audit records whether current evidence closes the original ordina
 
 - Exists: yes
 - Ready: yes
+- Pilot collected: yes
 - Tasks: 8
 - Materialized fixtures: 8
 - Baseline prompt is ordinary: yes

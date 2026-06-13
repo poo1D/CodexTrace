@@ -388,7 +388,7 @@ def check_goal_completion_audit_content(path: Path = Path("docs/goal_completion_
         "boundary ready": "Boundary-result paper ready: yes",
         "do not complete": "Should mark active goal complete: no",
         "verification blocker": "verification_lift",
-        "next decision": "Run a stronger ordinary-baseline verification-lift experiment",
+        "next decision": "Revise the thesis to a boundary-result paper",
     }
     for label, phrase in required_phrases.items():
         if phrase not in text:
@@ -417,7 +417,8 @@ def check_verification_lift_next_experiment_content(path: Path = Path("docs/veri
 
     required_phrases = {
         "original claim still open": "Original verification-lift claim closed: no",
-        "next experiment required": "Next experiment required: yes",
+        "claim revision required": "Claim revision required: yes",
+        "no additional ordinary experiment": "Additional ordinary-baseline experiment required: no",
         "ablation boundary": "No-verify ablation cannot close the ordinary-baseline claim",
         "v2 scaffold": "## Planned Ordinary-Baseline V2 Scaffold",
         "v2 ready": "Ready: yes",
@@ -432,7 +433,7 @@ def check_verification_lift_next_experiment_content(path: Path = Path("docs/veri
         "name": "verification-lift next experiment audit",
         "ok": not problems,
         "evidence": str(path),
-        "detail": "records the ordinary-baseline experiment gate needed to close verification lift",
+        "detail": "records ordinary-baseline verification-lift claim closure and thesis-revision status",
         "problems": problems,
     }
 

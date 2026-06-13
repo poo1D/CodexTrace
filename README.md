@@ -141,7 +141,7 @@ Key files:
 - `scripts/audit_verification_lift_plan.py`: checks verification-lift task, prompt, and fixture readiness
 - `scripts/audit_verification_lift_v2_plan.py`: checks the ordinary-baseline verification-lift v2 scaffold
 - `scripts/audit_verification_ablation_plan.py`: checks verification-ablation task, prompt, and fixture readiness
-- `scripts/audit_verification_lift_next_experiment.py`: records the ordinary-baseline experiment gate still needed to close verification lift
+- `scripts/audit_verification_lift_next_experiment.py`: records whether ordinary-baseline verification-lift evidence closes the claim or requires thesis revision
 - `scripts/run_benchmark_shards.py`: resumable per-task benchmark collection runner for tiers such as verification-lift v2
 - `scripts/merge_benchmark_shards.py`: merges generic per-task shard manifests into one pilot `runs.jsonl`
 - `scripts/finalize_benchmark_pilot.py`: preflights and finalizes non-hard30 pilot outputs such as verification-lift v2
@@ -157,7 +157,7 @@ Key files:
 - `docs/paper_claim_audit.md`: generated support/partial/unsupported audit for thesis-level claims
 - `docs/claim_text_guard.md`: generated guard that checks paper-facing text for unsupported-claim drift
 - `docs/goal_completion_audit.md`: generated audit showing original-goal completion status and blocking evidence gaps
-- `docs/verification_lift_next_experiment.md`: generated audit for the next ordinary-baseline verification-lift experiment gate
+- `docs/verification_lift_next_experiment.md`: generated audit for ordinary-baseline verification-lift claim closure and thesis-revision status
 - `docs/paper_number_guard.md`: generated guard that checks paper-draft numeric claims against stored artifacts
 - `docs/reviewer_path_audit.md`: generated guard that checks reviewer-path coverage for required paper artifacts
 - `docs/paper_draft.md`: result-driven workshop-style paper draft

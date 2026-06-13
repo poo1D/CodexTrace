@@ -1571,8 +1571,10 @@ def test_thesis_readiness_identifies_original_thesis_gaps():
     assert "controlled detector fixtures cover 6 labels" in markdown
     assert "task diagnosis: double failures=14, repairs=1, regressions=1" in markdown
     assert "Boundary-style RQ4 is supported" in markdown
-    assert "process-stress tier" in markdown
+    assert "optional process-stress expansion" in markdown
     assert "verification-lift tier" in markdown
+    assert "Verification-Lift-V2 Experiment" in markdown
+    assert "Current verification-lift-v2 pilot" in markdown
     assert "verification is saturated" in markdown
     assert result["next_experiment"]["current_scaffold"]["ready"] is True
     assert result["verification_lift_experiment"]["current_scaffold"]["ready"] is True
@@ -1710,7 +1712,8 @@ def test_goal_completion_audit_keeps_original_goal_open():
     assert result["summary"]["blocking_items"] == 1
     assert result["blocking_items"][0]["id"] == "verification_lift"
     assert "Should mark active goal complete: no" in markdown
-    assert "Run a stronger ordinary-baseline verification-lift experiment" in markdown
+    assert "Revise the thesis to a boundary-result paper" in markdown
+    assert "verification-lift-v2 retest is complete and remains saturated" in markdown
 
 
 def test_verification_lift_next_experiment_audit_keeps_ablation_in_bounds():
@@ -1719,7 +1722,9 @@ def test_verification_lift_next_experiment_audit_keeps_ablation_in_bounds():
 
     assert result["ok"] is True
     assert result["original_verification_lift_closed"] is False
-    assert result["next_experiment_required"] is True
+    assert result["next_experiment_required"] is False
+    assert result["additional_ordinary_baseline_experiment_required"] is False
+    assert result["claim_revision_required"] is True
     assert result["current_evidence"]["verification_lift"]["verification_delta"] == 0
     assert result["current_evidence"]["verification_lift"]["success_check_verification_delta"] == 0
     assert result["current_evidence"]["verification_lift"]["baseline_saturated"] is True
@@ -1731,11 +1736,14 @@ def test_verification_lift_next_experiment_audit_keeps_ablation_in_bounds():
     assert result["current_evidence"]["verification_lift_v2"]["baseline_saturated"] is True
     assert result["prompt_constraints"]["ablation_baseline_forbids_verification"] is True
     assert result["planned_v2_scaffold"]["ready"] is True
+    assert result["planned_v2_scaffold"]["pilot_collected"] is True
     assert result["planned_v2_scaffold"]["task_count"] == 8
     assert result["planned_v2_scaffold"]["baseline_prompt_is_ordinary"] is True
     assert result["planned_v2_scaffold"]["intervention_is_evidence_gated"] is True
     assert any(gate["id"] == "ordinary_baseline" for gate in result["acceptance_gates"])
     assert "No-verify ablation cannot close the ordinary-baseline claim" in markdown
+    assert "Additional ordinary-baseline experiment required: no" in markdown
+    assert "Claim revision required: yes" in markdown
     assert "Planned Ordinary-Baseline V2 Scaffold" in markdown
 
 
@@ -1747,7 +1755,8 @@ def test_submission_readiness_validates_verification_lift_next_experiment_conten
 
     assert check["ok"] is False
     assert "missing original claim still open" in check["problems"]
-    assert "missing next experiment required" in check["problems"]
+    assert "missing claim revision required" in check["problems"]
+    assert "missing no additional ordinary experiment" in check["problems"]
 
 
 def test_submission_readiness_validates_goal_completion_audit_content(tmp_path):

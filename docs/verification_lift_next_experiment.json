@@ -21,6 +21,8 @@
       "rationale": "If the non-ablation baseline remains saturated, keep the paper framed as a boundary result."
     }
   ],
+  "additional_ordinary_baseline_experiment_required": false,
+  "claim_revision_required": true,
   "current_evidence": {
     "thesis_requirement_status": "missing",
     "verification_ablation": {
@@ -53,7 +55,7 @@
       "verification_delta": 0.0
     }
   },
-  "next_experiment_required": true,
+  "next_experiment_required": false,
   "ok": true,
   "original_verification_lift_closed": false,
   "planned_v2_scaffold": {
@@ -62,6 +64,7 @@
     "exists": true,
     "intervention_is_evidence_gated": true,
     "materialized_count": 8,
+    "pilot_collected": true,
     "ready": true,
     "task_count": 8
   },
@@ -71,5 +74,5 @@
     "no_verify_ablation_disallowed_for_original_claim": true,
     "ordinary_baseline_required": true
   },
-  "status": "next_experiment_required"
+  "status": "claim_revision_required"
 }

@@ -24,13 +24,14 @@
       "tasks": "benchmark/process-stress/tasks.jsonl"
     },
     "minimum_design": [
+      "Use only if expanding beyond the current boundary paper or seeking more natural process-positive labels.",
       "10-15 tasks whose visible success checks are weak enough that baseline may skip or under-run verification.",
       "At least two tasks each targeting verification_gap, unrecovered_tool_error, premature_completion, context_drift, repetitive_exploration, and sandbox_permission_deadlock.",
       "Baseline/intervention Codex JSONL traces with manual process labels for every failure and high-waste success.",
-      "Acceptance gate: process-label recall >= 0.70 on observable labels, plus verification-rate or verification-depth improvement under intervention."
+      "Acceptance gate for future expansion: process-label recall >= 0.70 on observable labels, plus verification-depth improvement if verification rate remains saturated."
     ],
-    "name": "process-stress tier",
-    "purpose": "Close unsupported original-thesis claims about verification lift and broader process-rule recall."
+    "name": "optional process-stress expansion",
+    "purpose": "Future extension for broader natural process-positive coverage; the current boundary-result paper no longer depends on another verification-lift run."
   },
   "requirements": [
     {

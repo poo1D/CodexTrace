@@ -76,8 +76,8 @@ def build_goal_completion_audit() -> dict[str, Any]:
         and claim_rows["Harness intervention increases verification rate."]["status"] == "unsupported"
     )
     next_decision = (
-        "Run a stronger ordinary-baseline verification-lift experiment if preserving the original thesis; "
-        "otherwise revise the thesis to a boundary-result paper centered on waste reduction and trace-diagnosis limits."
+        "Revise the thesis to a boundary-result paper centered on waste reduction and trace-diagnosis limits; "
+        "the ordinary-baseline verification-lift-v2 retest is complete and remains saturated."
     )
     return {
         "summary": {

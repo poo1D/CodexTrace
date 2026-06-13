@@ -63,7 +63,7 @@
     "blocking_items": 1,
     "boundary_result_paper_ready": true,
     "items": 7,
-    "next_decision": "Run a stronger ordinary-baseline verification-lift experiment if preserving the original thesis; otherwise revise the thesis to a boundary-result paper centered on waste reduction and trace-diagnosis limits.",
+    "next_decision": "Revise the thesis to a boundary-result paper centered on waste reduction and trace-diagnosis limits; the ordinary-baseline verification-lift-v2 retest is complete and remains saturated.",
     "original_goal_complete": false,
     "should_mark_goal_complete": false
   }
