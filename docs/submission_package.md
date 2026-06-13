@@ -45,6 +45,7 @@ This generated map turns the current evidence into reviewer-facing paper claims.
 - `docs/claim_text_guard.md`
 - `docs/paper_number_guard.md`
 - `docs/reviewer_path_audit.md`
+- `docs/metric_coverage_audit.md`
 - `docs/results_summary.md`
 - `docs/paper_claim_audit.md`
 - `docs/thesis_readiness.md`

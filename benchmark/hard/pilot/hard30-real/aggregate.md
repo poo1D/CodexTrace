@@ -11,6 +11,9 @@
 | avg_repeated_tool_calls | 12.93 | 9.2 | -3.733 |
 | avg_retry_count | 0.2 | 0 | -0.2 |
 | avg_command_failures | 0.3 | 0.1 | -0.2 |
+| avg_turn_count | 1 | 1 | 0 |
+| avg_time_to_first_edit | 16.27 | 15.3 | -0.9667 |
+| avg_time_to_first_test | 20.73 | 18.83 | -1.9 |
 | avg_recover_events | 1.2 | 0.8333 | -0.3667 |
 | avg_verify_events | 10.7 | 6.767 | -3.933 |
 | avg_token_usage | 3.55e+05 | 2.563e+05 | -9.866e+04 |

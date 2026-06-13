@@ -35,6 +35,9 @@ This generated summary consolidates the current paper-facing result tables.
 | success_check_verification_rate | 1.00 | 1.00 | 0.00 |
 | avg_repeated_tool_calls | 10.43 | 7 | -3.433 |
 | avg_command_failures | 0.5 | 0.2 | -0.3 |
+| avg_turn_count | 1 | 1 | 0 |
+| avg_time_to_first_edit | 15.87 | 14.8 | -1.067 |
+| avg_time_to_first_test | 15.9 | 15.23 | -0.6667 |
 | avg_recover_events | 2.067 | 0.4 | -1.667 |
 | avg_token_usage | 218.7k | 184.8k | -34.0k |
 | avg_failure_score | 4.167 | 1 | -3.167 |
@@ -47,6 +50,9 @@ This generated summary consolidates the current paper-facing result tables.
 | verification_rate | 1.00 | 1.00 | 0.00 |
 | success_check_verification_rate | 1.00 | 1.00 | 0.00 |
 | avg_repeated_tool_calls | 9.2 | 6.2 | -3 |
+| avg_turn_count | 1 | 1 | 0 |
+| avg_time_to_first_edit | 14.2 | 13.8 | -0.4 |
+| avg_time_to_first_test | 19 | 17.4 | -1.6 |
 | avg_token_usage | 248.9k | 187.5k | -61.4k |
 | avg_verify_events | 7.3 | 3.7 | -3.6 |
 
@@ -59,6 +65,9 @@ This generated summary consolidates the current paper-facing result tables.
 | success_check_verification_rate | 1.00 | 1.00 | 0.00 |
 | avg_repeated_tool_calls | 12.93 | 9.2 | -3.733 |
 | avg_command_failures | 0.3 | 0.1 | -0.2 |
+| avg_turn_count | 1 | 1 | 0 |
+| avg_time_to_first_edit | 16.27 | 15.3 | -0.9667 |
+| avg_time_to_first_test | 20.73 | 18.83 | -1.9 |
 | avg_token_usage | 355.0k | 256.3k | -98.7k |
 | avg_failure_score | 3.5 | 1.167 | -2.333 |
 
@@ -72,6 +81,9 @@ Paired hard30 deltas: token usage improves in 26/30 tasks, repeated tool calls i
 | verification_rate | 1.00 | 1.00 | 0.00 |
 | success_check_verification_rate | 1.00 | 1.00 | 0.00 |
 | avg_repeated_tool_calls | 8.083 | 7.167 | -0.9166 |
+| avg_turn_count | 1 | 1 | 0 |
+| avg_time_to_first_edit | 15.25 | 15.83 | 0.5833 |
+| avg_time_to_first_test | 16.58 | 15.83 | -0.75 |
 | avg_recover_events | 1.25 | 0.8333 | -0.4167 |
 | avg_token_usage | 209.0k | 185.1k | -23.9k |
 | avg_failure_score | 1.25 | 1.25 | 0 |
@@ -86,6 +98,9 @@ Paired process-stress deltas: token usage improves in 5/12 tasks, repeated tool 
 | verification_rate | 1.00 | 1.00 | 0.00 |
 | success_check_verification_rate | 1.00 | 1.00 | 0.00 |
 | avg_repeated_tool_calls | 6.125 | 5.375 | -0.75 |
+| avg_turn_count | 1 | 1 | 0 |
+| avg_time_to_first_edit | 14.5 | 13.75 | -0.75 |
+| avg_time_to_first_test | 17.5 | 16.75 | -0.75 |
 | avg_verify_events | 2.625 | 2.125 | -0.5 |
 | avg_token_usage | 176.8k | 172.2k | -4.7k |
 | avg_failure_score | 0 | 0 | 0 |
@@ -102,6 +117,9 @@ This ordinary-baseline retest is a negative result for verification-rate lift, w
 | verification_rate | 1.00 | 1.00 | 0.00 |
 | success_check_verification_rate | 1.00 | 1.00 | 0.00 |
 | avg_repeated_tool_calls | 8.625 | 5.5 | -3.125 |
+| avg_turn_count | 1 | 1 | 0 |
+| avg_time_to_first_edit | 15.38 | 14 | -1.375 |
+| avg_time_to_first_test | 19 | 17 | -2 |
 | avg_verify_events | 5.875 | 2 | -3.875 |
 | avg_token_usage | 224.6k | 185.5k | -39.2k |
 | avg_failure_score | 0 | 0 | 0 |
@@ -118,6 +136,9 @@ This auxiliary pilot uses an explicit no-verification baseline and should not be
 | verification_rate | 0.00 | 1.00 | 1.00 |
 | success_check_verification_rate | 0.00 | 1.00 | 1.00 |
 | avg_repeated_tool_calls | 4 | 5.25 | 1.25 |
+| avg_turn_count | 1 | 1 | 0 |
+| avg_time_to_first_edit | 12.25 | 13.5 | 1.25 |
+| avg_time_to_first_test | 0 | 16.5 | 16.5 |
 | avg_verify_events | 0 | 2 | 2 |
 | avg_token_usage | 145.8k | 172.1k | 26.3k |
 | avg_failure_score | 61.25 | 0 | -61.25 |

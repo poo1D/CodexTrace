@@ -15,6 +15,9 @@ No failure tags were observed in these runs.
 | avg_repeated_tool_calls | 8.625 | 5.5 | -3.125 |
 | avg_retry_count | 0 | 0 | 0 |
 | avg_command_failures | 0 | 0 | 0 |
+| avg_turn_count | 1 | 1 | 0 |
+| avg_time_to_first_edit | 15.38 | 14 | -1.375 |
+| avg_time_to_first_test | 19 | 17 | -2 |
 | avg_token_usage | 2.246e+05 | 1.855e+05 | -3.917e+04 |
 | avg_failure_score | 0 | 0 | 0 |
 | avg_recover_events | 0 | 0 | 0 |

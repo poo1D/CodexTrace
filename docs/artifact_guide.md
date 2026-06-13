@@ -30,14 +30,15 @@ oracles for hidden semantic correctness.
 6. Check thesis-level support status in `docs/paper_claim_audit.md`.
 7. Check drift guards in `docs/claim_text_guard.md` and
    `docs/paper_number_guard.md`.
-8. Check claim-to-evidence mapping in `docs/reproducibility_checklist.md`.
-9. Run the offline demo:
+8. Check metric coverage in `docs/metric_coverage_audit.md`.
+9. Check claim-to-evidence mapping in `docs/reproducibility_checklist.md`.
+10. Run the offline demo:
 
 ```bash
 ./scripts/demo.sh
 ```
 
-10. Optionally open the visual replay UI:
+11. Optionally open the visual replay UI:
 
 ```bash
 cd web
@@ -53,6 +54,7 @@ npm run dev
 | RQ2: Can trace rules detect failures? | `benchmark/hard/pilot/hard30-real/label-eval.md` |
 | RQ3: Do harness interventions help? | `docs/results_summary.md` RQ3 tables |
 | RQ4: Which signals explain failure? | `docs/results_summary.md` RQ4 trace-signal table |
+| Are all planned metrics reported? | `docs/metric_coverage_audit.md` |
 | Which tasks get lost? | `docs/hard30_task_diagnosis.md` |
 | Which claims are safe to write? | `docs/submission_package.md`, `docs/paper_claim_audit.md` |
 | Did paper text drift from evidence? | `docs/claim_text_guard.md`, `docs/paper_number_guard.md` |

@@ -29,6 +29,9 @@ Micro F1: 0.875; Macro F1: 0.6667.
 | avg_repeated_tool_calls | 4 | 5.25 | 1.25 |
 | avg_retry_count | 0 | 0 | 0 |
 | avg_command_failures | 0 | 0 | 0 |
+| avg_turn_count | 1 | 1 | 0 |
+| avg_time_to_first_edit | 12.25 | 13.5 | 1.25 |
+| avg_time_to_first_test | 0 | 16.5 | 16.5 |
 | avg_token_usage | 1.458e+05 | 1.721e+05 | 2.632e+04 |
 | avg_failure_score | 61.25 | 0 | -61.25 |
 | avg_recover_events | 0 | 0 | 0 |

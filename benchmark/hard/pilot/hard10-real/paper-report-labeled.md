@@ -25,6 +25,9 @@ Micro F1: 0; Macro F1: 0.
 | avg_repeated_tool_calls | 9.2 | 6.2 | -3 |
 | avg_retry_count | 0 | 0 | 0 |
 | avg_command_failures | 0 | 0 | 0 |
+| avg_turn_count | 1 | 1 | 0 |
+| avg_time_to_first_edit | 14.2 | 13.8 | -0.4 |
+| avg_time_to_first_test | 19 | 17.4 | -1.6 |
 | avg_token_usage | 2.489e+05 | 1.875e+05 | -6.145e+04 |
 | avg_failure_score | 0 | 0 | 0 |
 | avg_recover_events | 0 | 0 | 0 |

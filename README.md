@@ -70,7 +70,8 @@ checks, not real-pilot outcome evidence.
 See `docs/artifact_guide.md` for the reviewer-facing walkthrough,
 `docs/results_summary.md` for the generated result summary and RQ4
 trace-signal analysis, `docs/rq4_signal_audit.md` for the generated
-boundary-style signal audit, `docs/hard30_task_diagnosis.md` for task-level
+boundary-style signal audit, `docs/metric_coverage_audit.md` for experiment
+metric coverage, `docs/hard30_task_diagnosis.md` for task-level
 hard30 repairs/regressions and double failures, `docs/thesis_readiness.md` for
 the original-thesis gap audit, and `docs/reproducibility_checklist.md` for
 claim-to-evidence mapping.
@@ -150,6 +151,7 @@ Key files:
 - `scripts/audit_goal_completion.py`: checks original-goal completion status against current evidence
 - `scripts/audit_paper_numbers.py`: checks paper-draft numeric claims against stored aggregate artifacts
 - `scripts/audit_reviewer_path.py`: checks required reviewer files are discoverable from paper-facing entry points
+- `scripts/audit_metric_coverage.py`: checks planned experiment metrics across run rows, summaries, CSV, and aggregate Markdown
 - `scripts/audit_submission_package.py`: generates the RQ-to-evidence submission package map
 - `docs/artifact_guide.md`: 15-minute reviewer/interviewer walkthrough
 - `docs/experiment_protocol.md`: collection and labeling protocol
@@ -167,6 +169,7 @@ Key files:
 - `docs/submission_package.md`: generated RQ-to-evidence map for safe paper submission claims
 - `docs/results_summary.md`: generated full30 + hard10 + hard30 + process-stress + verification-lift + verification-lift-v2 + verification-ablation result summary, including RQ4 trace-signal analysis
 - `docs/rq4_signal_audit.md`: generated signal audit for observable process failures and hidden semantic boundaries
+- `docs/metric_coverage_audit.md`: generated coverage audit for the experiment-design metrics
 - `docs/hard30_task_diagnosis.md`: generated task-level hard30 diagnosis for double failures, repairs, regressions, and waste deltas
 - `docs/process_stress_plan_audit.md`: generated coverage audit for the materialized process-stress tier
 - `docs/verification_lift_plan_audit.md`: generated coverage audit for the targeted verification-lift tier

@@ -2,8 +2,12 @@ from __future__ import annotations
 
 import argparse
 import json
+import sys
 from pathlib import Path
 from typing import Any
+
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT))
 
 from scripts.audit_paper_claims import build_claim_audit
 from scripts.audit_thesis_readiness import build_thesis_readiness
@@ -105,6 +109,7 @@ def build_submission_package() -> dict[str, Any]:
             "docs/claim_text_guard.md",
             "docs/paper_number_guard.md",
             "docs/reviewer_path_audit.md",
+            "docs/metric_coverage_audit.md",
             "docs/results_summary.md",
             "docs/paper_claim_audit.md",
             "docs/thesis_readiness.md",

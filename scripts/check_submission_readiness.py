@@ -371,6 +371,39 @@ def check_reviewer_path_audit_content(path: Path = Path("docs/reviewer_path_audi
     }
 
 
+def check_metric_coverage_audit_content(path: Path = Path("docs/metric_coverage_audit.md")) -> dict[str, Any]:
+    problems = []
+    try:
+        text = path.read_text(encoding="utf-8")
+    except FileNotFoundError:
+        return {
+            "name": "metric coverage audit",
+            "ok": False,
+            "evidence": str(path),
+            "problems": ["missing metric coverage audit"],
+        }
+
+    required_phrases = {
+        "ready": "Ready: yes",
+        "coverage count": "Metrics covered: 11 / 11",
+        "time to first edit": "time_to_first_edit",
+        "time to first test": "time_to_first_test",
+        "turn count": "turn_count",
+        "summary key": "avg_time_to_first_test",
+    }
+    for label, phrase in required_phrases.items():
+        if phrase not in text:
+            problems.append(f"missing {label}")
+
+    return {
+        "name": "metric coverage audit",
+        "ok": not problems,
+        "evidence": str(path),
+        "detail": "all experiment-design metrics are checked across run, CSV, summary, and Markdown outputs",
+        "problems": problems,
+    }
+
+
 def check_goal_completion_audit_content(path: Path = Path("docs/goal_completion_audit.md")) -> dict[str, Any]:
     problems = []
     try:
@@ -449,6 +482,7 @@ def build_report(selection_dir: Path, run_dir: Path) -> dict[str, Any]:
         check_submission_package_content(),
         check_paper_number_guard_content(),
         check_reviewer_path_audit_content(),
+        check_metric_coverage_audit_content(),
         check_goal_completion_audit_content(),
         check_verification_lift_next_experiment_content(),
         check_paper_draft_content(),

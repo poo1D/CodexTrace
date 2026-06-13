@@ -315,6 +315,9 @@ def render_aggregate_markdown(result: dict[str, Any]) -> str:
         "avg_repeated_tool_calls",
         "avg_retry_count",
         "avg_command_failures",
+        "avg_turn_count",
+        "avg_time_to_first_edit",
+        "avg_time_to_first_test",
         "avg_recover_events",
         "avg_verify_events",
         "avg_token_usage",
@@ -477,6 +480,9 @@ def render_paper_report_markdown(result: dict[str, Any]) -> str:
         "avg_repeated_tool_calls",
         "avg_retry_count",
         "avg_command_failures",
+        "avg_turn_count",
+        "avg_time_to_first_edit",
+        "avg_time_to_first_test",
         "avg_token_usage",
         "avg_failure_score",
         "avg_recover_events",
@@ -821,6 +827,9 @@ def render_results_summary_markdown(result: dict[str, Any]) -> str:
         "success_check_verification_rate",
         "avg_repeated_tool_calls",
         "avg_command_failures",
+        "avg_turn_count",
+        "avg_time_to_first_edit",
+        "avg_time_to_first_test",
         "avg_recover_events",
         "avg_token_usage",
         "avg_failure_score",
@@ -838,6 +847,9 @@ def render_results_summary_markdown(result: dict[str, Any]) -> str:
         "verification_rate",
         "success_check_verification_rate",
         "avg_repeated_tool_calls",
+        "avg_turn_count",
+        "avg_time_to_first_edit",
+        "avg_time_to_first_test",
         "avg_token_usage",
         "avg_verify_events",
     ))
@@ -856,6 +868,9 @@ def render_results_summary_markdown(result: dict[str, Any]) -> str:
             "success_check_verification_rate",
             "avg_repeated_tool_calls",
             "avg_command_failures",
+            "avg_turn_count",
+            "avg_time_to_first_edit",
+            "avg_time_to_first_test",
             "avg_token_usage",
             "avg_failure_score",
         ))
@@ -886,6 +901,9 @@ def render_results_summary_markdown(result: dict[str, Any]) -> str:
             "verification_rate",
             "success_check_verification_rate",
             "avg_repeated_tool_calls",
+            "avg_turn_count",
+            "avg_time_to_first_edit",
+            "avg_time_to_first_test",
             "avg_recover_events",
             "avg_token_usage",
             "avg_failure_score",
@@ -917,6 +935,9 @@ def render_results_summary_markdown(result: dict[str, Any]) -> str:
             "verification_rate",
             "success_check_verification_rate",
             "avg_repeated_tool_calls",
+            "avg_turn_count",
+            "avg_time_to_first_edit",
+            "avg_time_to_first_test",
             "avg_verify_events",
             "avg_token_usage",
             "avg_failure_score",
@@ -952,6 +973,9 @@ def render_results_summary_markdown(result: dict[str, Any]) -> str:
             "verification_rate",
             "success_check_verification_rate",
             "avg_repeated_tool_calls",
+            "avg_turn_count",
+            "avg_time_to_first_edit",
+            "avg_time_to_first_test",
             "avg_verify_events",
             "avg_token_usage",
             "avg_failure_score",
@@ -989,6 +1013,9 @@ def render_results_summary_markdown(result: dict[str, Any]) -> str:
             "verification_rate",
             "success_check_verification_rate",
             "avg_repeated_tool_calls",
+            "avg_turn_count",
+            "avg_time_to_first_edit",
+            "avg_time_to_first_test",
             "avg_verify_events",
             "avg_token_usage",
             "avg_failure_score",
@@ -1556,6 +1583,8 @@ def _summarize_group(rows: list[dict[str, Any]]) -> dict[str, Any]:
         "avg_token_usage": _mean(rows, "token_usage"),
         "avg_failure_score": _mean(rows, "failure_score"),
         "avg_turn_count": _mean(rows, "turn_count"),
+        "avg_time_to_first_edit": _mean_present(rows, "time_to_first_edit"),
+        "avg_time_to_first_test": _mean_present(rows, "time_to_first_test"),
         "avg_inspect_events": _mean(rows, "phase_inspect_events"),
         "avg_edit_events": _mean(rows, "phase_edit_events"),
         "avg_verify_events": _mean(rows, "phase_verify_events"),
@@ -1574,6 +1603,11 @@ def _deltas(baseline: dict[str, Any], intervention: dict[str, Any]) -> dict[str,
 
 def _mean(rows: list[dict[str, Any]], key: str) -> float:
     return round(mean(float(row.get(key, 0) or 0) for row in rows), 4)
+
+
+def _mean_present(rows: list[dict[str, Any]], key: str) -> float:
+    values = [float(row[key]) for row in rows if row.get(key) is not None]
+    return round(mean(values), 4) if values else 0
 
 
 def _fmt(value: Any) -> str:

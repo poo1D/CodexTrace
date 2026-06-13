@@ -8,6 +8,7 @@ from scripts.finalize_benchmark_pilot import (
     render_preflight as render_benchmark_pilot_preflight,
 )
 from scripts.audit_manual_labels import audit_manual_labels, render_audit
+from scripts.audit_metric_coverage import build_metric_coverage_audit, render_metric_coverage_audit_markdown
 from scripts.audit_claim_text_guard import audit_claim_text_guard, render_claim_text_guard_markdown
 from scripts.audit_goal_completion import build_goal_completion_audit, render_goal_completion_audit_markdown
 from scripts.audit_hard30_task_diagnosis import build_task_diagnosis, render_task_diagnosis_markdown
@@ -48,6 +49,7 @@ from scripts.run_hard30_shards import (
 from scripts.check_submission_readiness import (
     build_report,
     check_goal_completion_audit_content,
+    check_metric_coverage_audit_content,
     check_paper_number_guard_content,
     check_reviewer_path_audit_content,
     check_submission_package_content,
@@ -1207,6 +1209,9 @@ def test_build_paper_report_tables():
     markdown = render_paper_report_markdown(result)
 
     assert result["aggregate"]["summary"]["baseline"]["success_rate"] == 0
+    assert "avg_turn_count" in result["aggregate"]["summary"]["baseline"]
+    assert "avg_time_to_first_edit" in result["aggregate"]["summary"]["baseline"]
+    assert "avg_time_to_first_test" in result["aggregate"]["summary"]["baseline"]
     assert result["detector_evaluation"]["summary"]["micro_f1"] == 1
     assert result["outcome_counts"]["failure"] == 2
     assert result["taxonomy_distribution"][0]["count"] == 2
@@ -1223,7 +1228,19 @@ def test_build_paper_report_tables():
     assert "### Paired Task Summary" in markdown
     assert "## RQ4 Trace Signals By Outcome" in markdown
     assert "## RQ4 Trace Signals By Manual Label" in markdown
+    assert "| avg_time_to_first_test |" in markdown
     assert "Outcome counts: failure=2, success=2, unknown=0." in markdown
+
+
+def test_metric_coverage_audit_covers_experiment_design_metrics():
+    result = build_metric_coverage_audit(Path("benchmark/runs.example.jsonl"))
+    markdown = render_metric_coverage_audit_markdown(result)
+
+    assert result["summary"]["ready"] is True
+    assert result["summary"]["covered_metric_count"] == 11
+    assert all(row["covered"] for row in result["metrics"])
+    assert "time_to_first_test" in markdown
+    assert "avg_time_to_first_test" in markdown
 
 
 def test_build_results_summary_from_stored_pilots():
@@ -1260,6 +1277,9 @@ def test_build_results_summary_from_stored_pilots():
     assert result["hard10"]["summary"]["baseline"]["success_rate"] == 0.7
     assert result["hard30"]["summary"]["baseline"]["n"] == 30
     assert result["hard30"]["summary"]["baseline"]["success_rate"] == 0.5
+    assert "avg_turn_count" in result["hard30"]["summary"]["baseline"]
+    assert "avg_time_to_first_edit" in result["hard30"]["summary"]["baseline"]
+    assert "avg_time_to_first_test" in result["hard30"]["summary"]["baseline"]
     assert result["hard10_label_evaluation"]["labels"]["hidden_semantic_edge_case"]["fn"] == 5
     assert result["hard30_label_evaluation"]["labels"]["hidden_semantic_edge_case"]["fn"] == 30
     assert result["hard30_label_evaluation"]["labels"]["repetitive_exploration"]["tp"] == 4
@@ -1288,6 +1308,7 @@ def test_build_results_summary_from_stored_pilots():
     assert "| verification-lift-v2 ordinary retest | 1.00 broad / 1.00 exact | 1.00 broad / 1.00 exact |" in markdown
     assert "| no-verify ablation | 0.00 broad / 0.00 exact | 1.00 broad / 1.00 exact |" in markdown
     assert "### Hard30 Pilot" in markdown
+    assert "| avg_time_to_first_test |" in markdown
     assert "### Process-Stress Pilot" in markdown
     assert "### Verification-Lift Pilot" in markdown
     assert "### Verification-Lift-V2 Pilot" in markdown
@@ -1635,6 +1656,7 @@ def test_submission_package_maps_rqs_to_safe_paper_claims():
     assert "docs/paper_outline.md" in package["required_files"]
     assert "docs/paper_number_guard.md" in package["required_files"]
     assert "docs/reviewer_path_audit.md" in package["required_files"]
+    assert "docs/metric_coverage_audit.md" in package["required_files"]
     assert [row["rq"] for row in package["rq_rows"]] == ["RQ1", "RQ2", "RQ3", "RQ4"]
     assert package["rq_rows"][2]["status"] == "supported"
     assert "ordinary verification-rate lift is unsupported" in package["rq_rows"][2]["claim_boundary"]
@@ -1718,6 +1740,18 @@ def test_submission_readiness_validates_reviewer_path_audit_content(tmp_path):
     assert check["ok"] is False
     assert "missing ok" in check["problems"]
     assert "missing checklist coverage" in check["problems"]
+
+
+def test_submission_readiness_validates_metric_coverage_audit_content(tmp_path):
+    broken = tmp_path / "metric_coverage_audit.md"
+    broken.write_text("# Metric Coverage Audit\nReady: no\n", encoding="utf-8")
+
+    check = check_metric_coverage_audit_content(broken)
+
+    assert check["ok"] is False
+    assert "missing ready" in check["problems"]
+    assert "missing coverage count" in check["problems"]
+    assert "missing time to first test" in check["problems"]
 
 
 def test_goal_completion_audit_keeps_original_goal_open():
