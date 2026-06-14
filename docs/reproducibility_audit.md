@@ -5,9 +5,9 @@ This generated audit checks that the reviewer-facing reproducibility checklist c
 ## Summary
 
 - Ready: yes
-- Commands covered: 44 / 44
+- Commands covered: 45 / 45
 - Markdown fences balanced: yes
-- Bash command blocks: 55
+- Bash command blocks: 56
 - Checklist: `docs/reproducibility_checklist.md`
 
 ## Command Coverage
@@ -49,6 +49,7 @@ This generated audit checks that the reviewer-facing reproducibility checklist c
 | paper_number_guard | yes |
 | reviewer_path_audit | yes |
 | benchmark_trace_artifact | yes |
+| label_provenance_audit | yes |
 | submission_package | yes |
 | headline_results | yes |
 | verification_ablation_plan | yes |

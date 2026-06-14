@@ -30,6 +30,7 @@ The stored pilots can be inspected and aggregated without re-running Codex.
 | `docs/rq4_signal_audit.md` | Generated signal audit for observable process positives and hidden semantic boundaries. |
 | `docs/metric_coverage_audit.md` | Generated coverage audit for the metrics named in the experiment design. |
 | `docs/benchmark_trace_artifact.md` | Generated audit for hard30 task/run/trace/outcome/manual-label completeness. |
+| `docs/label_provenance_audit.md` | Generated audit for hard30 label-file provenance and evaluation consistency. |
 | `docs/paired_effects_audit.md` | Generated paired effect-size and uncertainty audit for RQ3 intervention deltas. |
 | `docs/demo_audit.md` | Generated audit for the reviewer-facing offline demo script. |
 | `docs/web_artifact_audit.md` | Generated audit for the committed static Web replay artifact. |
@@ -101,6 +102,7 @@ The stored pilots can be inspected and aggregated without re-running Codex.
 | `scripts/audit_paper_numbers.py` | Numeric guard for paper-draft values copied from generated result artifacts. |
 | `scripts/audit_reviewer_path.py` | Reviewer-path coverage guard for required paper artifacts. |
 | `scripts/audit_benchmark_trace_artifact.py` | Checks hard30 task/run/trace/outcome/manual-label completeness. |
+| `scripts/audit_label_provenance.py` | Checks hard30 label template, manual-label, and label-evaluation consistency. |
 | `scripts/audit_metric_coverage.py` | Checks that experiment-design metrics are collected, summarized, exported to CSV, and visible in aggregate Markdown. |
 | `scripts/audit_paired_effects.py` | Computes task-paired effect sizes, sign tests, and bootstrap CIs for RQ3 deltas. |
 | `scripts/audit_demo.py` | Runs the offline demo script and checks generated JSON/Markdown diagnosis artifacts. |
@@ -355,6 +357,14 @@ RQ table consistency audit:
 PYTHONPATH=. python3 scripts/audit_rq_table_consistency.py \
   --json-output /tmp/rq-table-consistency-audit.json \
   --markdown-output /tmp/rq-table-consistency-audit.md
+```
+
+Label provenance audit:
+
+```bash
+PYTHONPATH=. python3 scripts/audit_label_provenance.py \
+  --json-output /tmp/label-provenance-audit.json \
+  --markdown-output /tmp/label-provenance-audit.md
 ```
 
 Reproducibility checklist audit:

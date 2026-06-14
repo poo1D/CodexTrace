@@ -176,6 +176,11 @@
       "present": true
     },
     {
+      "id": "label_provenance_audit",
+      "phrase": "scripts/audit_label_provenance.py",
+      "present": true
+    },
+    {
       "id": "submission_package",
       "phrase": "scripts/audit_submission_package.py",
       "present": true
@@ -222,12 +227,12 @@
     }
   ],
   "summary": {
-    "bash_fence_count": 55,
+    "bash_fence_count": 56,
     "checklist_path": "docs/reproducibility_checklist.md",
-    "covered_command_count": 44,
-    "fence_count": 116,
+    "covered_command_count": 45,
+    "fence_count": 118,
     "fences_balanced": true,
     "ready": true,
-    "required_command_count": 44
+    "required_command_count": 45
   }
 }

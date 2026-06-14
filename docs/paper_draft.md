@@ -527,6 +527,8 @@ decision,
 `docs/metric_coverage_audit.md` for experiment-metric coverage,
 `docs/benchmark_trace_artifact.md` for hard30 task/run/trace/manual-label
 completeness,
+`docs/label_provenance_audit.md` for hard30 label-file provenance and
+evaluation consistency,
 `docs/paired_effects_audit.md` for paired RQ3 effect-size and uncertainty
 evidence,
 `docs/demo_audit.md` for the reviewer-facing offline demo smoke path,

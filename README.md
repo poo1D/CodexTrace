@@ -75,7 +75,8 @@ boundary-result thesis decision, `docs/validity_threats.md` for validity
 threat mapping, `docs/rq4_signal_audit.md` for the generated
 boundary-style signal audit, `docs/metric_coverage_audit.md` for experiment
 metric coverage, `docs/benchmark_trace_artifact.md` for hard30 task/run/trace
-pair completeness, `docs/paired_effects_audit.md` for paired RQ3 effect-size
+pair completeness, `docs/label_provenance_audit.md` for hard30 label
+template/manual-label/evaluation consistency, `docs/paired_effects_audit.md` for paired RQ3 effect-size
 and uncertainty evidence, `docs/demo_audit.md` for the offline demo smoke path,
 `docs/web_artifact_audit.md` for the static Web replay artifact,
 `docs/cli_surface_audit.md` for offline CLI coverage,
@@ -176,6 +177,7 @@ Key files:
 - `scripts/audit_paper_numbers.py`: checks paper-draft numeric claims against stored aggregate artifacts
 - `scripts/audit_reviewer_path.py`: checks required reviewer files are discoverable from paper-facing entry points
 - `scripts/audit_benchmark_trace_artifact.py`: checks hard30 task/run/trace/outcome/manual-label completeness
+- `scripts/audit_label_provenance.py`: checks hard30 label template, manual-label, and label-evaluation consistency
 - `scripts/audit_metric_coverage.py`: checks planned experiment metrics across run rows, summaries, CSV, and aggregate Markdown
 - `scripts/audit_paired_effects.py`: computes task-paired effect sizes, sign tests, and bootstrap CIs for RQ3 deltas
 - `scripts/audit_demo.py`: runs the offline demo script and checks generated JSON/Markdown diagnosis artifacts
@@ -214,6 +216,7 @@ Key files:
 - `docs/paper_number_guard.md`: generated guard that checks paper-draft numeric claims against stored artifacts
 - `docs/reviewer_path_audit.md`: generated guard that checks reviewer-path coverage for required paper artifacts
 - `docs/benchmark_trace_artifact.md`: generated audit for hard30 task/run/trace/outcome/manual-label completeness
+- `docs/label_provenance_audit.md`: generated audit for hard30 label-file provenance and evaluation consistency
 - `docs/paper_draft.md`: result-driven workshop-style paper draft
 - `docs/paper_outline.md`: paper outline and experiment plan
 - `docs/paired_effects_audit.md`: generated paired effect-size and uncertainty audit for RQ3 waste-reduction claims
@@ -244,6 +247,7 @@ Key files:
 - `docs/method_pipeline_audit.md`: generated audit for method pipeline source/CLI smoke coverage
 - `docs/paper_structure_audit.md`: generated coverage audit for paper sections, RQ result blocks, and boundary framing
 - `docs/rq_table_consistency_audit.md`: generated audit for paper RQ result-table consistency with hard30 report artifacts
+- `docs/label_provenance_audit.md`: generated audit for hard30 label-file provenance and evaluation consistency
 - `docs/reproducibility_audit.md`: generated coverage audit for reproduction commands and checklist Markdown structure
 - `docs/hard30_task_diagnosis.md`: generated task-level hard30 diagnosis for double failures, repairs, regressions, and waste deltas
 - `docs/process_stress_plan_audit.md`: generated coverage audit for the materialized process-stress tier
@@ -361,6 +365,7 @@ PYTHONPATH=. python3 scripts/audit_paper_contributions.py --markdown-output docs
 PYTHONPATH=. python3 scripts/audit_method_pipeline.py --markdown-output docs/method_pipeline_audit.md
 PYTHONPATH=. python3 scripts/audit_paper_structure.py --markdown-output docs/paper_structure_audit.md
 PYTHONPATH=. python3 scripts/audit_rq_table_consistency.py --markdown-output docs/rq_table_consistency_audit.md
+PYTHONPATH=. python3 scripts/audit_label_provenance.py --markdown-output docs/label_provenance_audit.md
 PYTHONPATH=. python3 scripts/audit_reproducibility.py --markdown-output docs/reproducibility_audit.md
 ```
 

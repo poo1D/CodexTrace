@@ -1,0 +1,89 @@
+{
+  "eval_summary_matches": {
+    "labels": true,
+    "macro_f1": true,
+    "micro_f1": true,
+    "micro_precision": true,
+    "micro_recall": true
+  },
+  "extra_manual_keys": [],
+  "extra_template_keys": [],
+  "field_coverage": [
+    {
+      "covered": true,
+      "field": "task_id",
+      "manual_present": true,
+      "template_present": true
+    },
+    {
+      "covered": true,
+      "field": "prompt_type",
+      "manual_present": true,
+      "template_present": true
+    },
+    {
+      "covered": true,
+      "field": "outcome",
+      "manual_present": true,
+      "template_present": true
+    },
+    {
+      "covered": true,
+      "field": "trace_path",
+      "manual_present": true,
+      "template_present": true
+    },
+    {
+      "covered": true,
+      "field": "failure_score",
+      "manual_present": true,
+      "template_present": true
+    },
+    {
+      "covered": true,
+      "field": "failure_tags",
+      "manual_present": true,
+      "template_present": true
+    },
+    {
+      "covered": true,
+      "field": "suggested_tags",
+      "manual_present": true,
+      "template_present": true
+    },
+    {
+      "covered": true,
+      "field": "notes",
+      "manual_present": true,
+      "template_present": true
+    }
+  ],
+  "missing_manual_keys": [],
+  "missing_template_keys": [],
+  "outcome_counts": {
+    "failure": 30,
+    "success": 30
+  },
+  "outcome_mismatches": [],
+  "summary": {
+    "covered_field_count": 8,
+    "eval_labels_match": true,
+    "eval_summary_key_count": 5,
+    "eval_summary_match_count": 5,
+    "failure_label_count": 30,
+    "failure_note_count": 30,
+    "field_count": 8,
+    "labeled_failure_count": 30,
+    "manual_label_count": 60,
+    "ready": true,
+    "run_count": 60,
+    "run_dir": "benchmark/hard/pilot/hard30-real",
+    "template_label_count": 60
+  },
+  "tag_counts": {
+    "hidden_semantic_edge_case": 30,
+    "repetitive_exploration": 4
+  },
+  "trace_mismatches": [],
+  "unknown_tags": []
+}
