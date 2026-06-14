@@ -526,6 +526,7 @@ decision,
 `docs/metric_coverage_audit.md` for experiment-metric coverage,
 `docs/paired_effects_audit.md` for paired RQ3 effect-size and uncertainty
 evidence,
+`docs/demo_audit.md` for the reviewer-facing offline demo smoke path,
 `docs/cli_surface_audit.md` for offline CLI coverage,
 `docs/schema_field_audit.md` for Run/Step schema-field mapping,
 `docs/parser_event_coverage.md` for JSONL parser event coverage,
@@ -566,7 +567,8 @@ claim-evidence mapping, validity threats, and reproduction commands, see
 `docs/validity_threats.md` and `docs/reproducibility_checklist.md`.
 For safe claim framing and generated guard status, see
 `docs/submission_package.md`, `docs/failure_taxonomy_audit.md`,
-`docs/paired_effects_audit.md`, `docs/cli_surface_audit.md`,
+`docs/paired_effects_audit.md`, `docs/demo_audit.md`,
+`docs/cli_surface_audit.md`,
 `docs/schema_field_audit.md`,
 `docs/parser_event_coverage.md`,
 `docs/failure_node_traceability.md`,

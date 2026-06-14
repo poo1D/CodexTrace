@@ -1,0 +1,51 @@
+{
+  "expected_findings": {
+    "command_failure_unhandled": true,
+    "premature_completion": true,
+    "repeated_search_or_read": true,
+    "sandbox_or_permission_block": true,
+    "verification_gap": true
+  },
+  "finding_codes": [
+    "command_failure_unhandled",
+    "premature_completion",
+    "repeated_search_or_read",
+    "sandbox_or_permission_block",
+    "verification_gap"
+  ],
+  "output_checks": {
+    "diagnosis_object": true,
+    "event_ids": true,
+    "json_report": true,
+    "markdown_report": true,
+    "markdown_title": true
+  },
+  "stderr": "",
+  "stdout_checks": {
+    "demo_header": true,
+    "json_step": true,
+    "markdown_step": true,
+    "preview": true,
+    "visual_replay_hint": true
+  },
+  "stdout_tail": [
+    "- Evidence:",
+    "  - e0007 command: npm install exit_code=1",
+    "",
+    "",
+    "Run the visual replay:",
+    "  scripts/demo.sh demo/failing-codex-trace.jsonl --update-ui",
+    "  cd web && npm install && npm run dev",
+    "  open the printed Vite URL, usually http://localhost:5173"
+  ],
+  "summary": {
+    "covered_finding_count": 5,
+    "exit_code": 0,
+    "expected_finding_count": 5,
+    "findings_with_event_ids": 5,
+    "output_checks": 5,
+    "ready": true,
+    "script": "scripts/demo.sh",
+    "stdout_checks": 5
+  }
+}

@@ -228,6 +228,7 @@ def check_paper_draft_content(path: Path = Path("docs/paper_draft.md")) -> dict[
         "measurement table": "| Metric | Measurement |",
         "metric coverage link": "docs/metric_coverage_audit.md",
         "paired effects audit link": "docs/paired_effects_audit.md",
+        "demo audit link": "docs/demo_audit.md",
         "cli surface audit link": "docs/cli_surface_audit.md",
         "schema field audit link": "docs/schema_field_audit.md",
         "parser event audit link": "docs/parser_event_coverage.md",
@@ -630,6 +631,40 @@ def check_paired_effects_audit_content(path: Path = Path("docs/paired_effects_au
         "ok": not problems,
         "evidence": str(path),
         "detail": "task-paired effect sizes, bootstrap CIs, and sign tests support RQ3 waste deltas",
+        "problems": problems,
+    }
+
+
+def check_demo_audit_content(path: Path = Path("docs/demo_audit.md")) -> dict[str, Any]:
+    problems = []
+    try:
+        text = path.read_text(encoding="utf-8")
+    except FileNotFoundError:
+        return {
+            "name": "demo audit",
+            "ok": False,
+            "evidence": str(path),
+            "problems": ["missing demo audit"],
+        }
+
+    required_phrases = {
+        "ready": "Ready: yes",
+        "finding coverage": "Expected findings covered: 5 / 5",
+        "event ids": "Findings with event IDs: 5 / 5",
+        "json report": "`json_report` | yes",
+        "markdown report": "`markdown_report` | yes",
+        "sandbox finding": "`sandbox_or_permission_block` | yes",
+        "web ui caveat": "does not start the optional Web UI",
+    }
+    for label, phrase in required_phrases.items():
+        if phrase not in text:
+            problems.append(f"missing {label}")
+
+    return {
+        "name": "demo audit",
+        "ok": not problems,
+        "evidence": str(path),
+        "detail": "offline demo script emits traceable JSON and Markdown diagnosis reports",
         "problems": problems,
     }
 
@@ -1143,7 +1178,7 @@ def check_reproducibility_audit_content(path: Path = Path("docs/reproducibility_
 
     required_phrases = {
         "ready": "Ready: yes",
-        "coverage count": "Commands covered: 38 / 38",
+        "coverage count": "Commands covered: 39 / 39",
         "balanced fences": "Markdown fences balanced: yes",
         "submission gate": "submission_readiness_gate",
         "scope caveat": "does not execute the full real Codex collection commands",
@@ -1274,6 +1309,7 @@ def build_report(selection_dir: Path, run_dir: Path) -> dict[str, Any]:
         check_reviewer_path_audit_content(),
         check_metric_coverage_audit_content(),
         check_paired_effects_audit_content(),
+        check_demo_audit_content(),
         check_cli_surface_audit_content(),
         check_schema_field_audit_content(),
         check_parser_event_coverage_content(),
