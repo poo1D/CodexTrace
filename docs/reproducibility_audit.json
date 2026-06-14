@@ -31,6 +31,11 @@
       "present": true
     },
     {
+      "id": "cli_surface_audit",
+      "phrase": "scripts/audit_cli_surface.py",
+      "present": true
+    },
+    {
       "id": "schema_field_audit",
       "phrase": "scripts/audit_schema_fields.py",
       "present": true
@@ -182,12 +187,12 @@
     }
   ],
   "summary": {
-    "bash_fence_count": 47,
+    "bash_fence_count": 48,
     "checklist_path": "docs/reproducibility_checklist.md",
-    "covered_command_count": 36,
-    "fence_count": 100,
+    "covered_command_count": 37,
+    "fence_count": 102,
     "fences_balanced": true,
     "ready": true,
-    "required_command_count": 36
+    "required_command_count": 37
   }
 }

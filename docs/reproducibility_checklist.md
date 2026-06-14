@@ -29,6 +29,7 @@ The stored pilots can be inspected and aggregated without re-running Codex.
 | `docs/validity_threats.md` | Generated validity-threat map with evidence, mitigations, and safe wording. |
 | `docs/rq4_signal_audit.md` | Generated signal audit for observable process positives and hidden semantic boundaries. |
 | `docs/metric_coverage_audit.md` | Generated coverage audit for the metrics named in the experiment design. |
+| `docs/cli_surface_audit.md` | Generated audit for offline CLI command surface coverage. |
 | `docs/schema_field_audit.md` | Generated audit mapping paper-facing Run/Step schema fields to implementation sources. |
 | `docs/parser_event_coverage.md` | Generated audit for synthetic JSONL parser event-kind and phase coverage. |
 | `docs/failure_node_traceability.md` | Generated audit for diagnosis finding event-ID traceability into reports and UI highlights. |
@@ -93,6 +94,7 @@ The stored pilots can be inspected and aggregated without re-running Codex.
 | `scripts/audit_paper_numbers.py` | Numeric guard for paper-draft values copied from generated result artifacts. |
 | `scripts/audit_reviewer_path.py` | Reviewer-path coverage guard for required paper artifacts. |
 | `scripts/audit_metric_coverage.py` | Checks that experiment-design metrics are collected, summarized, exported to CSV, and visible in aggregate Markdown. |
+| `scripts/audit_cli_surface.py` | Smoke-tests offline CLI entry points for trace, diagnosis, aggregate, label, paper-report, summary, and dry-run artifacts. |
 | `scripts/audit_schema_fields.py` | Checks that paper-facing Run/Step schema fields are represented in parser, schema, and research outputs. |
 | `scripts/audit_parser_event_coverage.py` | Checks synthetic JSONL event-kind, usage, file, tool, and phase coverage for the parser. |
 | `scripts/audit_failure_node_traceability.py` | Checks that diagnosis findings carry event IDs through JSON, Markdown, and Web UI highlight paths. |
@@ -179,6 +181,14 @@ Metric coverage audit:
 PYTHONPATH=. python3 scripts/audit_metric_coverage.py \
   --json-output /tmp/metric-coverage-audit.json \
   --markdown-output /tmp/metric-coverage-audit.md
+```
+
+CLI surface audit:
+
+```bash
+PYTHONPATH=. python3 scripts/audit_cli_surface.py \
+  --json-output /tmp/cli-surface-audit.json \
+  --markdown-output /tmp/cli-surface-audit.md
 ```
 
 Schema field audit:

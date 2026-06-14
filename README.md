@@ -74,7 +74,8 @@ headline table, `docs/thesis_revision_decision.md` for the explicit
 boundary-result thesis decision, `docs/validity_threats.md` for validity
 threat mapping, `docs/rq4_signal_audit.md` for the generated
 boundary-style signal audit, `docs/metric_coverage_audit.md` for experiment
-metric coverage, `docs/schema_field_audit.md` for Run/Step schema-field
+metric coverage, `docs/cli_surface_audit.md` for offline CLI coverage,
+`docs/schema_field_audit.md` for Run/Step schema-field
 mapping, `docs/parser_event_coverage.md` for JSONL parser event coverage,
 `docs/failure_node_traceability.md` for diagnosis-node traceability,
 `docs/failure_taxonomy_audit.md` for six-label taxonomy
@@ -168,6 +169,7 @@ Key files:
 - `scripts/audit_paper_numbers.py`: checks paper-draft numeric claims against stored aggregate artifacts
 - `scripts/audit_reviewer_path.py`: checks required reviewer files are discoverable from paper-facing entry points
 - `scripts/audit_metric_coverage.py`: checks planned experiment metrics across run rows, summaries, CSV, and aggregate Markdown
+- `scripts/audit_cli_surface.py`: smoke-tests offline CLI entry points for trace, diagnosis, and research artifact generation
 - `scripts/audit_schema_fields.py`: checks paper-facing Run/Step schema fields against parser, schema, and research outputs
 - `scripts/audit_parser_event_coverage.py`: checks synthetic JSONL event-kind and phase coverage for the parser
 - `scripts/audit_failure_node_traceability.py`: checks diagnosis finding event IDs through JSON, Markdown, and Web UI highlights
@@ -204,6 +206,7 @@ Key files:
 - `docs/results_summary.md`: generated full30 + hard10 + hard30 + process-stress + verification-lift + verification-lift-v2 + verification-ablation result summary, including RQ4 trace-signal analysis
 - `docs/rq4_signal_audit.md`: generated signal audit for observable process failures and hidden semantic boundaries
 - `docs/metric_coverage_audit.md`: generated coverage audit for the experiment-design metrics
+- `docs/cli_surface_audit.md`: generated audit for offline CLI command surface coverage
 - `docs/schema_field_audit.md`: generated audit for paper-facing Run/Step schema-field mapping
 - `docs/parser_event_coverage.md`: generated audit for JSONL parser event-kind and phase coverage
 - `docs/failure_node_traceability.md`: generated audit for diagnosis finding event-ID traceability
@@ -315,6 +318,7 @@ PYTHONPATH=. python3 scripts/audit_reviewer_path.py --markdown-output docs/revie
 PYTHONPATH=. python3 scripts/audit_submission_package.py --markdown-output docs/submission_package.md
 PYTHONPATH=. python3 scripts/audit_detector_evaluation.py --markdown-output docs/detector_evaluation_audit.md
 PYTHONPATH=. python3 scripts/audit_rule_implementation.py --markdown-output docs/rule_implementation_audit.md
+PYTHONPATH=. python3 scripts/audit_cli_surface.py --markdown-output docs/cli_surface_audit.md
 PYTHONPATH=. python3 scripts/audit_schema_fields.py --markdown-output docs/schema_field_audit.md
 PYTHONPATH=. python3 scripts/audit_parser_event_coverage.py --markdown-output docs/parser_event_coverage.md
 PYTHONPATH=. python3 scripts/audit_failure_node_traceability.py --markdown-output docs/failure_node_traceability.md

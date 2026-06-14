@@ -1,0 +1,173 @@
+{
+  "commands": [
+    {
+      "covered": true,
+      "exit_code": 0,
+      "expected_phrases": [
+        "events",
+        "thread_id"
+      ],
+      "expected_present": true,
+      "id": "collect",
+      "output_present": true,
+      "outputs": [
+        "trace.json"
+      ],
+      "stderr": ""
+    },
+    {
+      "covered": true,
+      "exit_code": 0,
+      "expected_phrases": [
+        "diagnosis",
+        "event_ids"
+      ],
+      "expected_present": true,
+      "id": "diagnose_json",
+      "output_present": true,
+      "outputs": [
+        "diagnosis.json"
+      ],
+      "stderr": ""
+    },
+    {
+      "covered": true,
+      "exit_code": 0,
+      "expected_phrases": [
+        "Fix an off-by-one bug",
+        "Complete the task with your normal coding workflow"
+      ],
+      "expected_present": true,
+      "id": "research_prompt",
+      "output_present": true,
+      "outputs": [],
+      "stderr": ""
+    },
+    {
+      "covered": true,
+      "exit_code": 0,
+      "expected_phrases": [
+        "summary",
+        "taxonomy_tags"
+      ],
+      "expected_present": true,
+      "id": "research_aggregate",
+      "output_present": true,
+      "outputs": [
+        "aggregate.json",
+        "aggregate.md",
+        "runs.csv"
+      ],
+      "stderr": ""
+    },
+    {
+      "covered": true,
+      "exit_code": 0,
+      "expected_phrases": [
+        "failure_tags",
+        "task_id"
+      ],
+      "expected_present": true,
+      "id": "research_label_template",
+      "output_present": true,
+      "outputs": [
+        "labels.jsonl"
+      ],
+      "stderr": ""
+    },
+    {
+      "covered": true,
+      "exit_code": 0,
+      "expected_phrases": [
+        "micro_f1",
+        "Label Evaluation"
+      ],
+      "expected_present": true,
+      "id": "research_evaluate_labels",
+      "output_present": true,
+      "outputs": [
+        "label-eval.json",
+        "label-eval.md"
+      ],
+      "stderr": ""
+    },
+    {
+      "covered": true,
+      "exit_code": 0,
+      "expected_phrases": [
+        "RQ3 Baseline vs Intervention",
+        "paired_task_summary"
+      ],
+      "expected_present": true,
+      "id": "research_paper_report",
+      "output_present": true,
+      "outputs": [
+        "paper-report.json",
+        "paper-report.md"
+      ],
+      "stderr": ""
+    },
+    {
+      "covered": true,
+      "exit_code": 0,
+      "expected_phrases": [
+        "hard30",
+        "RQ4"
+      ],
+      "expected_present": true,
+      "id": "research_summary",
+      "output_present": true,
+      "outputs": [
+        "summary.json",
+        "summary.md"
+      ],
+      "stderr": ""
+    },
+    {
+      "covered": true,
+      "exit_code": 0,
+      "expected_phrases": [
+        "not_run",
+        "trace_path"
+      ],
+      "expected_present": true,
+      "id": "research_run_dry",
+      "output_present": true,
+      "outputs": [
+        "smoke-dry/runs.jsonl"
+      ],
+      "stderr": ""
+    }
+  ],
+  "doc_checks": {
+    "checklist_aggregate": true,
+    "checklist_summary": true,
+    "readme_collect": true,
+    "readme_diagnose": true,
+    "readme_research_aggregate": true,
+    "readme_research_run": true
+  },
+  "subcommand_checks": {
+    "collect": true,
+    "diagnose": true,
+    "research_aggregate": true,
+    "research_evaluate_labels": true,
+    "research_label_template": true,
+    "research_paper_report": true,
+    "research_prompt": true,
+    "research_run": true,
+    "research_summary": true
+  },
+  "summary": {
+    "cli_path": "codex_trace/cli.py",
+    "command_count": 9,
+    "covered_command_count": 9,
+    "covered_doc_check_count": 6,
+    "covered_subcommand_count": 9,
+    "doc_check_count": 6,
+    "readme_path": "README.md",
+    "ready": true,
+    "repro_checklist_path": "docs/reproducibility_checklist.md",
+    "subcommand_count": 9
+  }
+}

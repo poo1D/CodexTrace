@@ -227,6 +227,7 @@ def check_paper_draft_content(path: Path = Path("docs/paper_draft.md")) -> dict[
         "detector rule mapping": "| Taxonomy label | Implementation finding | Detector signal |",
         "measurement table": "| Metric | Measurement |",
         "metric coverage link": "docs/metric_coverage_audit.md",
+        "cli surface audit link": "docs/cli_surface_audit.md",
         "schema field audit link": "docs/schema_field_audit.md",
         "parser event audit link": "docs/parser_event_coverage.md",
         "failure node audit link": "docs/failure_node_traceability.md",
@@ -592,6 +593,42 @@ def check_metric_coverage_audit_content(path: Path = Path("docs/metric_coverage_
         "ok": not problems,
         "evidence": str(path),
         "detail": "all experiment-design metrics are checked across run, CSV, summary, and Markdown outputs",
+        "problems": problems,
+    }
+
+
+def check_cli_surface_audit_content(path: Path = Path("docs/cli_surface_audit.md")) -> dict[str, Any]:
+    problems = []
+    try:
+        text = path.read_text(encoding="utf-8")
+    except FileNotFoundError:
+        return {
+            "name": "cli surface audit",
+            "ok": False,
+            "evidence": str(path),
+            "problems": ["missing cli surface audit"],
+        }
+
+    required_phrases = {
+        "ready": "Ready: yes",
+        "command coverage": "CLI commands covered: 9 / 9",
+        "subcommand coverage": "Parser subcommands present: 9 / 9",
+        "doc coverage": "Documentation checks covered: 6 / 6",
+        "diagnose": "`diagnose_json`",
+        "aggregate": "`research_aggregate`",
+        "summary": "`research_summary`",
+        "dry run": "`research_run_dry`",
+        "live collection caveat": "does not execute live Codex collection",
+    }
+    for label, phrase in required_phrases.items():
+        if phrase not in text:
+            problems.append(f"missing {label}")
+
+    return {
+        "name": "cli surface audit",
+        "ok": not problems,
+        "evidence": str(path),
+        "detail": "offline CLI entry points regenerate representative trace, diagnosis, and research artifacts",
         "problems": problems,
     }
 
@@ -1069,7 +1106,7 @@ def check_reproducibility_audit_content(path: Path = Path("docs/reproducibility_
 
     required_phrases = {
         "ready": "Ready: yes",
-        "coverage count": "Commands covered: 36 / 36",
+        "coverage count": "Commands covered: 37 / 37",
         "balanced fences": "Markdown fences balanced: yes",
         "submission gate": "submission_readiness_gate",
         "scope caveat": "does not execute the full real Codex collection commands",
@@ -1199,6 +1236,7 @@ def build_report(selection_dir: Path, run_dir: Path) -> dict[str, Any]:
         check_paper_number_guard_content(),
         check_reviewer_path_audit_content(),
         check_metric_coverage_audit_content(),
+        check_cli_surface_audit_content(),
         check_schema_field_audit_content(),
         check_parser_event_coverage_content(),
         check_failure_node_traceability_content(),
