@@ -39,6 +39,7 @@ def build_submission_package() -> dict[str, Any]:
             "status": claims_by_name["Trace-based process rules detect most failure processes."]["status"],
             "claim_boundary": "Supported for rule fixtures and observed process positives; not supported for hidden semantic failures.",
             "primary_evidence": [
+                "docs/detector_evaluation_audit.md",
                 "docs/failure_taxonomy_audit.md",
                 "benchmark/detector-fixtures/label-eval.md",
                 "benchmark/hard/pilot/hard30-real/label-eval.md",
@@ -123,6 +124,7 @@ def build_submission_package() -> dict[str, Any]:
             "docs/paper_number_guard.md",
             "docs/reviewer_path_audit.md",
             "docs/metric_coverage_audit.md",
+            "docs/detector_evaluation_audit.md",
             "docs/phase_coverage_audit.md",
             "docs/task_category_coverage.md",
             "docs/harness_protocol_audit.md",

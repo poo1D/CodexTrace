@@ -1,0 +1,173 @@
+{
+  "controlled_fixture_labels": [
+    {
+      "f1": 1.0,
+      "fn": 0,
+      "fp": 0,
+      "label": "verification_gap",
+      "precision": 1.0,
+      "recall": 1.0,
+      "tp": 2
+    },
+    {
+      "f1": 1.0,
+      "fn": 0,
+      "fp": 0,
+      "label": "unrecovered_tool_error",
+      "precision": 1.0,
+      "recall": 1.0,
+      "tp": 2
+    },
+    {
+      "f1": 1.0,
+      "fn": 0,
+      "fp": 0,
+      "label": "repetitive_exploration",
+      "precision": 1.0,
+      "recall": 1.0,
+      "tp": 1
+    },
+    {
+      "f1": 1.0,
+      "fn": 0,
+      "fp": 0,
+      "label": "context_drift",
+      "precision": 1.0,
+      "recall": 1.0,
+      "tp": 1
+    },
+    {
+      "f1": 1.0,
+      "fn": 0,
+      "fp": 0,
+      "label": "premature_completion",
+      "precision": 1.0,
+      "recall": 1.0,
+      "tp": 1
+    },
+    {
+      "f1": 1.0,
+      "fn": 0,
+      "fp": 0,
+      "label": "sandbox_permission_deadlock",
+      "precision": 1.0,
+      "recall": 1.0,
+      "tp": 1
+    }
+  ],
+  "false_positive_boundaries": [
+    {
+      "f1": 0.0,
+      "fn": 0,
+      "fp": 2,
+      "label": "repetitive_exploration",
+      "precision": 0.0,
+      "recall": 0.0,
+      "slice": "full30_process",
+      "tp": 0
+    }
+  ],
+  "hidden_semantic_boundaries": [
+    {
+      "f1": 0.0,
+      "fn": 30,
+      "fp": 0,
+      "label": "hidden_semantic_edge_case",
+      "precision": 0.0,
+      "recall": 0.0,
+      "slice": "hard30",
+      "tp": 0
+    },
+    {
+      "f1": 0.0,
+      "fn": 2,
+      "fp": 0,
+      "label": "hidden_semantic_edge_case",
+      "precision": 0.0,
+      "recall": 0.0,
+      "slice": "process_stress",
+      "tp": 0
+    },
+    {
+      "f1": 0.0,
+      "fn": 2,
+      "fp": 0,
+      "label": "hidden_semantic_edge_case",
+      "precision": 0.0,
+      "recall": 0.0,
+      "slice": "verification_lift",
+      "tp": 0
+    },
+    {
+      "f1": 0.0,
+      "fn": 2,
+      "fp": 0,
+      "label": "hidden_semantic_edge_case",
+      "precision": 0.0,
+      "recall": 0.0,
+      "slice": "verification_ablation",
+      "tp": 0
+    }
+  ],
+  "observable_process_positives": [
+    {
+      "f1": 1.0,
+      "fn": 0,
+      "fp": 0,
+      "label": "repetitive_exploration",
+      "precision": 1.0,
+      "recall": 1.0,
+      "slice": "hard30",
+      "tp": 4
+    },
+    {
+      "f1": 1.0,
+      "fn": 0,
+      "fp": 0,
+      "label": "sandbox_permission_deadlock",
+      "precision": 1.0,
+      "recall": 1.0,
+      "slice": "full30_process",
+      "tp": 1
+    },
+    {
+      "f1": 1.0,
+      "fn": 0,
+      "fp": 0,
+      "label": "verification_gap",
+      "precision": 1.0,
+      "recall": 1.0,
+      "slice": "verification_ablation",
+      "tp": 4
+    },
+    {
+      "f1": 1.0,
+      "fn": 0,
+      "fp": 0,
+      "label": "premature_completion",
+      "precision": 1.0,
+      "recall": 1.0,
+      "slice": "verification_ablation",
+      "tp": 3
+    }
+  ],
+  "sources": {
+    "fixture_eval": "benchmark/detector-fixtures/label-eval.json",
+    "full30_process_eval": "benchmark/pilot/full30-real/process-label-eval.json",
+    "hard30_eval": "benchmark/hard/pilot/hard30-real/label-eval.json",
+    "process_stress_eval": "benchmark/process-stress/pilot/full-real/label-eval.json",
+    "verification_ablation_eval": "benchmark/verification-ablation/pilot/full-real/label-eval.json",
+    "verification_lift_eval": "benchmark/verification-lift/pilot/full-real/label-eval.json"
+  },
+  "summary": {
+    "ablation_premature_completion_tp": 3,
+    "ablation_verification_gap_tp": 4,
+    "controlled_label_count": 6,
+    "controlled_micro_f1": 1.0,
+    "full30_sandbox_tp": 1,
+    "hard30_repetitive_tp": 4,
+    "hidden_semantic_fn_total": 36,
+    "ready": true,
+    "target_label_count": 6
+  }
+}

@@ -11,6 +11,11 @@
       "present": true
     },
     {
+      "id": "detector_evaluation_audit",
+      "phrase": "scripts/audit_detector_evaluation.py",
+      "present": true
+    },
+    {
       "id": "rq4_signal_audit",
       "phrase": "scripts/audit_rq4_signals.py",
       "present": true
@@ -157,12 +162,12 @@
     }
   ],
   "summary": {
-    "bash_fence_count": 42,
+    "bash_fence_count": 43,
     "checklist_path": "docs/reproducibility_checklist.md",
-    "covered_command_count": 31,
-    "fence_count": 90,
+    "covered_command_count": 32,
+    "fence_count": 92,
     "fences_balanced": true,
     "ready": true,
-    "required_command_count": 31
+    "required_command_count": 32
   }
 }

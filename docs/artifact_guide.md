@@ -35,25 +35,27 @@ oracles for hidden semantic correctness.
    `docs/paper_number_guard.md`.
 11. Check no-verify ablation scaffold coverage in
    `docs/verification_ablation_plan_audit.md`.
-12. Check phase segmentation coverage in `docs/phase_coverage_audit.md`.
-13. Check task-category coverage in `docs/task_category_coverage.md`.
-14. Check harness protocol coverage in `docs/harness_protocol_audit.md`.
-15. Check failure-taxonomy coverage in `docs/failure_taxonomy_audit.md`.
-16. Check related-work positioning coverage in `docs/related_work_audit.md`.
-17. Check paper reference discoverability in `docs/bibliography_audit.md`.
-18. Check abstract-level evidence coverage in `docs/paper_abstract_audit.md`.
-19. Check contribution-claim coverage in `docs/paper_contribution_audit.md`.
-20. Check paper structure and RQ coverage in `docs/paper_structure_audit.md`.
-21. Check metric coverage in `docs/metric_coverage_audit.md`.
-22. Check reproduction command coverage in `docs/reproducibility_audit.md`.
-23. Check claim-to-evidence mapping in `docs/reproducibility_checklist.md`.
-24. Run the offline demo:
+12. Check detector precision/recall evidence in
+   `docs/detector_evaluation_audit.md`.
+13. Check phase segmentation coverage in `docs/phase_coverage_audit.md`.
+14. Check task-category coverage in `docs/task_category_coverage.md`.
+15. Check harness protocol coverage in `docs/harness_protocol_audit.md`.
+16. Check failure-taxonomy coverage in `docs/failure_taxonomy_audit.md`.
+17. Check related-work positioning coverage in `docs/related_work_audit.md`.
+18. Check paper reference discoverability in `docs/bibliography_audit.md`.
+19. Check abstract-level evidence coverage in `docs/paper_abstract_audit.md`.
+20. Check contribution-claim coverage in `docs/paper_contribution_audit.md`.
+21. Check paper structure and RQ coverage in `docs/paper_structure_audit.md`.
+22. Check metric coverage in `docs/metric_coverage_audit.md`.
+23. Check reproduction command coverage in `docs/reproducibility_audit.md`.
+24. Check claim-to-evidence mapping in `docs/reproducibility_checklist.md`.
+25. Run the offline demo:
 
 ```bash
 ./scripts/demo.sh
 ```
 
-25. Optionally open the visual replay UI:
+26. Optionally open the visual replay UI:
 
 ```bash
 cd web
@@ -67,6 +69,7 @@ npm run dev
 | --- | --- |
 | RQ1: What failure modes are observable? | `docs/failure_taxonomy.md`, `docs/paper_draft.md` |
 | RQ2: Can trace rules detect failures? | `benchmark/hard/pilot/hard30-real/label-eval.md` |
+| Is detector evaluation evidence consolidated? | `docs/detector_evaluation_audit.md` |
 | Is the no-verify ablation scaffold ready? | `docs/verification_ablation_plan_audit.md` |
 | Is phase segmentation covered? | `docs/phase_coverage_audit.md` |
 | Do benchmark tasks cover the planned task types? | `docs/task_category_coverage.md` |

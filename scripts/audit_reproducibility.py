@@ -21,6 +21,7 @@ REQUIRED_COMMANDS = (
         "id": "controlled_fixture_eval",
         "phrase": "benchmark/detector-fixtures/runs.jsonl \\\n  benchmark/detector-fixtures/labels.jsonl",
     },
+    {"id": "detector_evaluation_audit", "phrase": "scripts/audit_detector_evaluation.py"},
     {"id": "rq4_signal_audit", "phrase": "scripts/audit_rq4_signals.py"},
     {"id": "metric_coverage_audit", "phrase": "scripts/audit_metric_coverage.py"},
     {"id": "phase_coverage_audit", "phrase": "scripts/audit_phase_coverage.py"},

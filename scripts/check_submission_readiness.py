@@ -629,6 +629,41 @@ def check_rq4_signal_audit_content(path: Path = Path("docs/rq4_signal_audit.md")
     }
 
 
+def check_detector_evaluation_audit_content(path: Path = Path("docs/detector_evaluation_audit.md")) -> dict[str, Any]:
+    problems = []
+    try:
+        text = path.read_text(encoding="utf-8")
+    except FileNotFoundError:
+        return {
+            "name": "detector evaluation audit",
+            "ok": False,
+            "evidence": str(path),
+            "problems": ["missing detector evaluation audit"],
+        }
+
+    required_phrases = {
+        "ready": "Ready: yes",
+        "controlled coverage": "Controlled process labels covered: 6 / 6",
+        "controlled f1": "Controlled detector micro-F1: 1",
+        "hard30 repetitive": "Hard30 repetitive_exploration TP: 4",
+        "full30 sandbox": "Full30 sandbox_permission_deadlock TP: 1",
+        "ablation verification": "Verification-ablation verification_gap TP: 4",
+        "hidden semantic": "Hidden semantic false negatives: 36",
+        "boundary interpretation": "do not detect hidden semantic correctness failures",
+    }
+    for label, phrase in required_phrases.items():
+        if phrase not in text:
+            problems.append(f"missing {label}")
+
+    return {
+        "name": "detector evaluation audit",
+        "ok": not problems,
+        "evidence": str(path),
+        "detail": "detector precision/recall evidence is consolidated for RQ2 boundary claims",
+        "problems": problems,
+    }
+
+
 def check_failure_taxonomy_audit_content(path: Path = Path("docs/failure_taxonomy_audit.md")) -> dict[str, Any]:
     problems = []
     try:
@@ -889,7 +924,7 @@ def check_reproducibility_audit_content(path: Path = Path("docs/reproducibility_
 
     required_phrases = {
         "ready": "Ready: yes",
-        "coverage count": "Commands covered: 31 / 31",
+        "coverage count": "Commands covered: 32 / 32",
         "balanced fences": "Markdown fences balanced: yes",
         "submission gate": "submission_readiness_gate",
         "scope caveat": "does not execute the full real Codex collection commands",
@@ -1019,6 +1054,7 @@ def build_report(selection_dir: Path, run_dir: Path) -> dict[str, Any]:
         check_paper_number_guard_content(),
         check_reviewer_path_audit_content(),
         check_metric_coverage_audit_content(),
+        check_detector_evaluation_audit_content(),
         check_rq4_signal_audit_content(),
         check_phase_coverage_audit_content(),
         check_task_category_coverage_content(),

@@ -165,6 +165,7 @@ Key files:
 - `scripts/audit_paper_numbers.py`: checks paper-draft numeric claims against stored aggregate artifacts
 - `scripts/audit_reviewer_path.py`: checks required reviewer files are discoverable from paper-facing entry points
 - `scripts/audit_metric_coverage.py`: checks planned experiment metrics across run rows, summaries, CSV, and aggregate Markdown
+- `scripts/audit_detector_evaluation.py`: consolidates detector precision/recall evidence for RQ2 boundary claims
 - `scripts/audit_phase_coverage.py`: checks phase segmentation coverage across schema, paper text, run rows, and RQ4 signals
 - `scripts/audit_task_category_coverage.py`: checks benchmark task-category coverage across seed, hard, and hard30 manifests
 - `scripts/audit_harness_protocol.py`: checks intervention prompt templates and protocol coverage for the harness constraints
@@ -196,6 +197,7 @@ Key files:
 - `docs/results_summary.md`: generated full30 + hard10 + hard30 + process-stress + verification-lift + verification-lift-v2 + verification-ablation result summary, including RQ4 trace-signal analysis
 - `docs/rq4_signal_audit.md`: generated signal audit for observable process failures and hidden semantic boundaries
 - `docs/metric_coverage_audit.md`: generated coverage audit for the experiment-design metrics
+- `docs/detector_evaluation_audit.md`: generated audit for detector precision/recall evidence
 - `docs/phase_coverage_audit.md`: generated audit for phase segmentation coverage
 - `docs/task_category_coverage.md`: generated audit for benchmark task-category coverage
 - `docs/harness_protocol_audit.md`: generated audit for intervention prompt/protocol coverage
@@ -300,6 +302,7 @@ PYTHONPATH=. python3 scripts/audit_headline_results.py --markdown-output docs/he
 PYTHONPATH=. python3 scripts/audit_paper_numbers.py --markdown-output docs/paper_number_guard.md
 PYTHONPATH=. python3 scripts/audit_reviewer_path.py --markdown-output docs/reviewer_path_audit.md
 PYTHONPATH=. python3 scripts/audit_submission_package.py --markdown-output docs/submission_package.md
+PYTHONPATH=. python3 scripts/audit_detector_evaluation.py --markdown-output docs/detector_evaluation_audit.md
 PYTHONPATH=. python3 scripts/audit_phase_coverage.py --markdown-output docs/phase_coverage_audit.md
 PYTHONPATH=. python3 scripts/audit_task_category_coverage.py --markdown-output docs/task_category_coverage.md
 PYTHONPATH=. python3 scripts/audit_harness_protocol.py --markdown-output docs/harness_protocol_audit.md
