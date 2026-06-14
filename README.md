@@ -74,7 +74,8 @@ headline table, `docs/thesis_revision_decision.md` for the explicit
 boundary-result thesis decision, `docs/validity_threats.md` for validity
 threat mapping, `docs/rq4_signal_audit.md` for the generated
 boundary-style signal audit, `docs/metric_coverage_audit.md` for experiment
-metric coverage, `docs/paired_effects_audit.md` for paired RQ3 effect-size
+metric coverage, `docs/benchmark_trace_artifact.md` for hard30 task/run/trace
+pair completeness, `docs/paired_effects_audit.md` for paired RQ3 effect-size
 and uncertainty evidence, `docs/demo_audit.md` for the offline demo smoke path,
 `docs/web_artifact_audit.md` for the static Web replay artifact,
 `docs/cli_surface_audit.md` for offline CLI coverage,
@@ -172,6 +173,7 @@ Key files:
 - `scripts/audit_validity_threats.py`: generates the validity-threat mapping for safe paper wording
 - `scripts/audit_paper_numbers.py`: checks paper-draft numeric claims against stored aggregate artifacts
 - `scripts/audit_reviewer_path.py`: checks required reviewer files are discoverable from paper-facing entry points
+- `scripts/audit_benchmark_trace_artifact.py`: checks hard30 task/run/trace/outcome/manual-label completeness
 - `scripts/audit_metric_coverage.py`: checks planned experiment metrics across run rows, summaries, CSV, and aggregate Markdown
 - `scripts/audit_paired_effects.py`: computes task-paired effect sizes, sign tests, and bootstrap CIs for RQ3 deltas
 - `scripts/audit_demo.py`: runs the offline demo script and checks generated JSON/Markdown diagnosis artifacts
@@ -207,6 +209,7 @@ Key files:
 - `docs/headline_results.md`: generated compact actual headline table replacing the expected-results sketch
 - `docs/paper_number_guard.md`: generated guard that checks paper-draft numeric claims against stored artifacts
 - `docs/reviewer_path_audit.md`: generated guard that checks reviewer-path coverage for required paper artifacts
+- `docs/benchmark_trace_artifact.md`: generated audit for hard30 task/run/trace/outcome/manual-label completeness
 - `docs/paper_draft.md`: result-driven workshop-style paper draft
 - `docs/paper_outline.md`: paper outline and experiment plan
 - `docs/paired_effects_audit.md`: generated paired effect-size and uncertainty audit for RQ3 waste-reduction claims
@@ -217,6 +220,7 @@ Key files:
 - `docs/submission_package.md`: generated RQ-to-evidence map for safe paper submission claims
 - `docs/results_summary.md`: generated full30 + hard10 + hard30 + process-stress + verification-lift + verification-lift-v2 + verification-ablation result summary, including RQ4 trace-signal analysis
 - `docs/rq4_signal_audit.md`: generated signal audit for observable process failures and hidden semantic boundaries
+- `docs/benchmark_trace_artifact.md`: generated audit for hard30 task/run/trace/outcome/manual-label completeness
 - `docs/metric_coverage_audit.md`: generated coverage audit for the experiment-design metrics
 - `docs/cli_surface_audit.md`: generated audit for offline CLI command surface coverage
 - `docs/ci_surface_audit.md`: generated audit for CI, packaging, readiness-gate, and local task-runner coverage
@@ -328,6 +332,7 @@ PYTHONPATH=. python3 scripts/audit_verification_ablation_plan.py --markdown-outp
 PYTHONPATH=. python3 scripts/audit_headline_results.py --markdown-output docs/headline_results.md
 PYTHONPATH=. python3 scripts/audit_paper_numbers.py --markdown-output docs/paper_number_guard.md
 PYTHONPATH=. python3 scripts/audit_reviewer_path.py --markdown-output docs/reviewer_path_audit.md
+PYTHONPATH=. python3 scripts/audit_benchmark_trace_artifact.py --markdown-output docs/benchmark_trace_artifact.md
 PYTHONPATH=. python3 scripts/audit_submission_package.py --markdown-output docs/submission_package.md
 PYTHONPATH=. python3 scripts/audit_detector_evaluation.py --markdown-output docs/detector_evaluation_audit.md
 PYTHONPATH=. python3 scripts/audit_rule_implementation.py --markdown-output docs/rule_implementation_audit.md

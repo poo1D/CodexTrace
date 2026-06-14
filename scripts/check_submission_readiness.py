@@ -227,6 +227,7 @@ def check_paper_draft_content(path: Path = Path("docs/paper_draft.md")) -> dict[
         "detector rule mapping": "| Taxonomy label | Implementation finding | Detector signal |",
         "measurement table": "| Metric | Measurement |",
         "metric coverage link": "docs/metric_coverage_audit.md",
+        "benchmark trace artifact link": "docs/benchmark_trace_artifact.md",
         "paired effects audit link": "docs/paired_effects_audit.md",
         "demo audit link": "docs/demo_audit.md",
         "web artifact audit link": "docs/web_artifact_audit.md",
@@ -598,6 +599,42 @@ def check_metric_coverage_audit_content(path: Path = Path("docs/metric_coverage_
         "ok": not problems,
         "evidence": str(path),
         "detail": "all experiment-design metrics are checked across run, CSV, summary, and Markdown outputs",
+        "problems": problems,
+    }
+
+
+def check_benchmark_trace_artifact_content(path: Path = Path("docs/benchmark_trace_artifact.md")) -> dict[str, Any]:
+    problems = []
+    try:
+        text = path.read_text(encoding="utf-8")
+    except FileNotFoundError:
+        return {
+            "name": "benchmark trace artifact audit",
+            "ok": False,
+            "evidence": str(path),
+            "problems": ["missing benchmark trace artifact audit"],
+        }
+
+    required_phrases = {
+        "ready": "Ready: yes",
+        "task coverage": "Tasks covered: 30 / 30",
+        "run coverage": "Run rows covered: 60 / 60",
+        "paired tasks": "Paired baseline/intervention tasks: 30 / 30",
+        "trace coverage": "Codex JSONL traces covered: 60 / 60",
+        "outcome coverage": "Outcome rows with grader results: 60 / 60",
+        "label coverage": "Manual label rows: 60 / 60",
+        "missing run keys": "Missing run keys: 0",
+        "rerun caveat": "does not rerun Codex or hidden graders",
+    }
+    for label, phrase in required_phrases.items():
+        if phrase not in text:
+            problems.append(f"missing {label}")
+
+    return {
+        "name": "benchmark trace artifact audit",
+        "ok": not problems,
+        "evidence": str(path),
+        "detail": "hard30 task, run, trace, outcome, and manual-label records are paired and complete",
         "problems": problems,
     }
 
@@ -1250,7 +1287,7 @@ def check_reproducibility_audit_content(path: Path = Path("docs/reproducibility_
 
     required_phrases = {
         "ready": "Ready: yes",
-        "coverage count": "Commands covered: 41 / 41",
+        "coverage count": "Commands covered: 42 / 42",
         "balanced fences": "Markdown fences balanced: yes",
         "submission gate": "submission_readiness_gate",
         "scope caveat": "does not execute the full real Codex collection commands",
@@ -1379,6 +1416,7 @@ def build_report(selection_dir: Path, run_dir: Path) -> dict[str, Any]:
         check_validity_threats_content(),
         check_paper_number_guard_content(),
         check_reviewer_path_audit_content(),
+        check_benchmark_trace_artifact_content(),
         check_metric_coverage_audit_content(),
         check_paired_effects_audit_content(),
         check_demo_audit_content(),

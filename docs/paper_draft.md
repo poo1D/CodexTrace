@@ -524,6 +524,8 @@ decision,
 `docs/validity_threats.md` for validity threats and safe wording,
 `docs/submission_package.md` for safe RQ-to-evidence claim framing,
 `docs/metric_coverage_audit.md` for experiment-metric coverage,
+`docs/benchmark_trace_artifact.md` for hard30 task/run/trace/manual-label
+completeness,
 `docs/paired_effects_audit.md` for paired RQ3 effect-size and uncertainty
 evidence,
 `docs/demo_audit.md` for the reviewer-facing offline demo smoke path,
@@ -569,6 +571,7 @@ claim-evidence mapping, validity threats, and reproduction commands, see
 `docs/validity_threats.md` and `docs/reproducibility_checklist.md`.
 For safe claim framing and generated guard status, see
 `docs/submission_package.md`, `docs/failure_taxonomy_audit.md`,
+`docs/benchmark_trace_artifact.md`,
 `docs/paired_effects_audit.md`, `docs/demo_audit.md`,
 `docs/web_artifact_audit.md`, `docs/cli_surface_audit.md`,
 `docs/ci_surface_audit.md`,

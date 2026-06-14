@@ -54,6 +54,7 @@ REQUIRED_COMMANDS = (
     {"id": "validity_threats", "phrase": "scripts/audit_validity_threats.py"},
     {"id": "paper_number_guard", "phrase": "scripts/audit_paper_numbers.py"},
     {"id": "reviewer_path_audit", "phrase": "scripts/audit_reviewer_path.py"},
+    {"id": "benchmark_trace_artifact", "phrase": "scripts/audit_benchmark_trace_artifact.py"},
     {"id": "submission_package", "phrase": "scripts/audit_submission_package.py"},
     {"id": "headline_results", "phrase": "scripts/audit_headline_results.py"},
     {"id": "verification_ablation_plan", "phrase": "scripts/audit_verification_ablation_plan.py"},

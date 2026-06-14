@@ -10,6 +10,10 @@ from scripts.finalize_benchmark_pilot import (
 from scripts.audit_manual_labels import audit_manual_labels, render_audit
 from scripts.audit_failure_taxonomy import build_failure_taxonomy_audit, render_failure_taxonomy_audit_markdown
 from scripts.audit_metric_coverage import build_metric_coverage_audit, render_metric_coverage_audit_markdown
+from scripts.audit_benchmark_trace_artifact import (
+    build_benchmark_trace_artifact_audit,
+    render_benchmark_trace_artifact_markdown,
+)
 from scripts.audit_paired_effects import build_paired_effects_audit, render_paired_effects_markdown
 from scripts.audit_demo import build_demo_audit, render_demo_audit_markdown
 from scripts.audit_web_artifact import build_web_artifact_audit, render_web_artifact_markdown
@@ -79,6 +83,7 @@ from scripts.check_submission_readiness import (
     check_goal_completion_audit_content,
     check_headline_results_content,
     check_metric_coverage_audit_content,
+    check_benchmark_trace_artifact_content,
     check_paired_effects_audit_content,
     check_demo_audit_content,
     check_web_artifact_audit_content,
@@ -1370,6 +1375,25 @@ def test_ci_surface_audit_covers_ci_packaging_and_readiness_gate():
     assert "does not execute GitHub Actions itself" in markdown
 
 
+def test_benchmark_trace_artifact_audit_covers_hard30_pairs_and_traces():
+    result = build_benchmark_trace_artifact_audit()
+    markdown = render_benchmark_trace_artifact_markdown(result)
+
+    assert result["summary"]["ready"] is True
+    assert result["summary"]["task_count"] == 30
+    assert result["summary"]["unique_task_count"] == 30
+    assert result["summary"]["run_count"] == 60
+    assert result["summary"]["paired_task_count"] == 30
+    assert result["summary"]["trace_count"] == 60
+    assert result["summary"]["nonempty_trace_count"] == 60
+    assert result["summary"]["label_count"] == 60
+    assert result["summary"]["outcome_rows_with_grader_count"] == 60
+    assert result["missing_run_keys"] == []
+    assert result["missing_label_keys"] == []
+    assert result["summary"]["trace_event_lines"] > 0
+    assert "does not rerun Codex or hidden graders" in markdown
+
+
 def test_schema_field_audit_maps_paper_schema_to_code():
     result = build_schema_field_audit()
     markdown = render_schema_field_audit_markdown(result)
@@ -1541,7 +1565,7 @@ def test_reproducibility_audit_covers_key_commands():
     markdown = render_reproducibility_audit_markdown(result)
 
     assert result["summary"]["ready"] is True
-    assert result["summary"]["covered_command_count"] == 41
+    assert result["summary"]["covered_command_count"] == 42
     assert result["summary"]["fences_balanced"] is True
     assert {row["id"] for row in result["commands"]} >= {
         "full30_aggregate",
@@ -1553,6 +1577,7 @@ def test_reproducibility_audit_covers_key_commands():
         "web_artifact_audit",
         "cli_surface_audit",
         "ci_surface_audit",
+        "benchmark_trace_artifact",
         "schema_field_audit",
         "parser_event_coverage",
         "failure_node_traceability",
@@ -1996,6 +2021,7 @@ def test_paper_draft_contains_submission_polish_sections():
     assert "## References" in text
     assert "docs/paper_structure_audit.md" in text
     assert "docs/reproducibility_audit.md" in text
+    assert "docs/benchmark_trace_artifact.md" in text
     assert "docs/paired_effects_audit.md" in text
     assert "docs/demo_audit.md" in text
     assert "docs/web_artifact_audit.md" in text
@@ -2028,6 +2054,7 @@ def test_reviewer_docs_surface_hard30_task_diagnosis():
     assert "docs/submission_package.md" in readme
     assert "docs/paper_number_guard.md" in readme
     assert "docs/reviewer_path_audit.md" in readme
+    assert "docs/benchmark_trace_artifact.md" in readme
     assert "docs/detector_evaluation_audit.md" in readme
     assert "docs/rule_implementation_audit.md" in readme
     assert "docs/paired_effects_audit.md" in readme
@@ -2062,6 +2089,7 @@ def test_reviewer_docs_surface_hard30_task_diagnosis():
     assert "scripts/audit_headline_results.py --markdown-output docs/headline_results.md" in readme
     assert "scripts/audit_paper_numbers.py --markdown-output docs/paper_number_guard.md" in readme
     assert "scripts/audit_reviewer_path.py --markdown-output docs/reviewer_path_audit.md" in readme
+    assert "scripts/audit_benchmark_trace_artifact.py --markdown-output docs/benchmark_trace_artifact.md" in readme
     assert "scripts/audit_submission_package.py --markdown-output docs/submission_package.md" in readme
     assert "scripts/audit_detector_evaluation.py --markdown-output docs/detector_evaluation_audit.md" in readme
     assert "scripts/audit_rule_implementation.py --markdown-output docs/rule_implementation_audit.md" in readme
@@ -2094,6 +2122,7 @@ def test_reviewer_docs_surface_hard30_task_diagnosis():
     assert "docs/verification_ablation_plan_audit.md" in guide
     assert "docs/detector_evaluation_audit.md" in guide
     assert "docs/rule_implementation_audit.md" in guide
+    assert "docs/benchmark_trace_artifact.md" in guide
     assert "docs/paired_effects_audit.md" in guide
     assert "docs/demo_audit.md" in guide
     assert "docs/web_artifact_audit.md" in guide
@@ -2133,6 +2162,7 @@ def test_reviewer_docs_surface_hard30_task_diagnosis():
     assert "scripts/audit_submission_package.py" in checklist
     assert "scripts/audit_paper_numbers.py" in checklist
     assert "scripts/audit_reviewer_path.py" in checklist
+    assert "scripts/audit_benchmark_trace_artifact.py" in checklist
     assert "scripts/audit_detector_evaluation.py" in checklist
     assert "scripts/audit_rule_implementation.py" in checklist
     assert "scripts/audit_paired_effects.py" in checklist
@@ -2158,6 +2188,7 @@ def test_reviewer_docs_surface_hard30_task_diagnosis():
     assert "--markdown-output /tmp/verification-ablation-plan-audit.md" in checklist
     assert "--markdown-output /tmp/detector-evaluation-audit.md" in checklist
     assert "--markdown-output /tmp/rule-implementation-audit.md" in checklist
+    assert "--markdown-output /tmp/benchmark-trace-artifact.md" in checklist
     assert "--markdown-output /tmp/paired-effects-audit.md" in checklist
     assert "--markdown-output /tmp/demo-audit.md" in checklist
     assert "--markdown-output /tmp/web-artifact-audit.md" in checklist
@@ -2288,6 +2319,7 @@ def test_submission_package_maps_rqs_to_safe_paper_claims():
     assert "docs/paper_outline.md" in package["required_files"]
     assert "docs/paper_number_guard.md" in package["required_files"]
     assert "docs/reviewer_path_audit.md" in package["required_files"]
+    assert "docs/benchmark_trace_artifact.md" in package["required_files"]
     assert "docs/metric_coverage_audit.md" in package["required_files"]
     assert "docs/paired_effects_audit.md" in package["required_files"]
     assert "docs/demo_audit.md" in package["required_files"]
@@ -2317,6 +2349,7 @@ def test_submission_package_maps_rqs_to_safe_paper_claims():
     assert "docs/hard30_task_diagnosis.md" in markdown
     assert "docs/detector_evaluation_audit.md" in markdown
     assert "docs/rule_implementation_audit.md" in markdown
+    assert "docs/benchmark_trace_artifact.md" in markdown
     assert "docs/paired_effects_audit.md" in markdown
     assert "docs/demo_audit.md" in markdown
     assert "docs/web_artifact_audit.md" in markdown
@@ -2589,6 +2622,19 @@ def test_submission_readiness_validates_ci_surface_audit_content(tmp_path):
     assert "missing ci coverage" in check["problems"]
     assert "missing packaging coverage" in check["problems"]
     assert "missing actions caveat" in check["problems"]
+
+
+def test_submission_readiness_validates_benchmark_trace_artifact_content(tmp_path):
+    broken = tmp_path / "benchmark_trace_artifact.md"
+    broken.write_text("# Benchmark Trace Artifact Audit\nReady: no\n", encoding="utf-8")
+
+    check = check_benchmark_trace_artifact_content(broken)
+
+    assert check["ok"] is False
+    assert "missing ready" in check["problems"]
+    assert "missing task coverage" in check["problems"]
+    assert "missing trace coverage" in check["problems"]
+    assert "missing rerun caveat" in check["problems"]
 
 
 def test_submission_readiness_validates_parser_event_coverage_content(tmp_path):
