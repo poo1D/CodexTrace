@@ -1,0 +1,104 @@
+{
+  "rules": [
+    {
+      "alias_present": true,
+      "covered": true,
+      "finding_code": "verification_gap",
+      "finding_code_present": true,
+      "implementation_markers_present": true,
+      "label": "verification_gap",
+      "markers": [
+        "_post_edit_verification_count",
+        "post_edit_verification_commands"
+      ],
+      "paper_present": true,
+      "scope": "direct",
+      "taxonomy_present": true
+    },
+    {
+      "alias_present": true,
+      "covered": true,
+      "finding_code": "command_failure_unhandled",
+      "finding_code_present": true,
+      "implementation_markers_present": true,
+      "label": "unrecovered_tool_error",
+      "markers": [
+        "_unresolved_failed_commands",
+        "_similar_command"
+      ],
+      "paper_present": true,
+      "scope": "direct",
+      "taxonomy_present": true
+    },
+    {
+      "alias_present": true,
+      "covered": true,
+      "finding_code": "repeated_search_or_read",
+      "finding_code_present": true,
+      "implementation_markers_present": true,
+      "label": "repetitive_exploration",
+      "markers": [
+        "_repeated_searches",
+        "_repeated_tool_call_volume"
+      ],
+      "paper_present": true,
+      "scope": "direct",
+      "taxonomy_present": true
+    },
+    {
+      "alias_present": true,
+      "covered": true,
+      "finding_code": "long_context_no_progress",
+      "finding_code_present": true,
+      "implementation_markers_present": true,
+      "label": "context_drift",
+      "markers": [
+        "_long_context_no_progress",
+        "input_tokens"
+      ],
+      "paper_present": true,
+      "scope": "v1_proxy",
+      "taxonomy_present": true
+    },
+    {
+      "alias_present": true,
+      "covered": true,
+      "finding_code": "premature_completion",
+      "finding_code_present": true,
+      "implementation_markers_present": true,
+      "label": "premature_completion",
+      "markers": [
+        "_premature_completion_events",
+        "completion_words"
+      ],
+      "paper_present": true,
+      "scope": "direct",
+      "taxonomy_present": true
+    },
+    {
+      "alias_present": true,
+      "covered": true,
+      "finding_code": "sandbox_or_permission_block",
+      "finding_code_present": true,
+      "implementation_markers_present": true,
+      "label": "sandbox_permission_deadlock",
+      "markers": [
+        "SANDBOX_WORDS",
+        "_sandbox_events"
+      ],
+      "paper_present": true,
+      "scope": "direct",
+      "taxonomy_present": true
+    }
+  ],
+  "summary": {
+    "context_proxy_disclosed": true,
+    "covered_rule_count": 6,
+    "diagnose_path": "codex_trace/diagnose.py",
+    "paper_draft_path": "docs/paper_draft.md",
+    "ready": true,
+    "research_path": "codex_trace/research.py",
+    "rule_count": 6,
+    "taxonomy_path": "docs/failure_taxonomy.md"
+  }
+}

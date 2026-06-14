@@ -28,6 +28,7 @@ from scripts.audit_paper_contributions import build_paper_contribution_audit, re
 from scripts.audit_reviewer_path import build_reviewer_path_audit, render_reviewer_path_audit_markdown
 from scripts.audit_related_work import build_related_work_audit, render_related_work_audit_markdown
 from scripts.audit_reproducibility import build_reproducibility_audit, render_reproducibility_audit_markdown
+from scripts.audit_rule_implementation import build_rule_implementation_audit, render_rule_implementation_markdown
 from scripts.audit_rq4_signals import build_rq4_signal_audit, render_rq4_signal_audit_markdown
 from scripts.audit_submission_package import build_submission_package, render_submission_package_markdown
 from scripts.audit_thesis_revision_decision import build_thesis_revision_decision, render_thesis_revision_decision_markdown
@@ -79,6 +80,7 @@ from scripts.check_submission_readiness import (
     check_related_work_audit_content,
     check_reproducibility_audit_content,
     check_reviewer_path_audit_content,
+    check_rule_implementation_audit_content,
     check_submission_package_content,
     check_thesis_revision_decision_content,
     check_validity_threats_content,
@@ -1398,12 +1400,13 @@ def test_reproducibility_audit_covers_key_commands():
     markdown = render_reproducibility_audit_markdown(result)
 
     assert result["summary"]["ready"] is True
-    assert result["summary"]["covered_command_count"] == 32
+    assert result["summary"]["covered_command_count"] == 33
     assert result["summary"]["fences_balanced"] is True
     assert {row["id"] for row in result["commands"]} >= {
         "full30_aggregate",
         "controlled_fixture_eval",
         "detector_evaluation_audit",
+        "rule_implementation_audit",
         "phase_coverage_audit",
         "task_category_coverage_audit",
         "harness_protocol_audit",
@@ -1421,6 +1424,23 @@ def test_reproducibility_audit_covers_key_commands():
     }
     assert all(row["present"] for row in result["commands"])
     assert "does not execute the full real Codex collection commands" in markdown
+
+
+def test_rule_implementation_audit_maps_taxonomy_to_diagnosis_rules():
+    result = build_rule_implementation_audit()
+    markdown = render_rule_implementation_markdown(result)
+    rules = {row["label"]: row for row in result["rules"]}
+
+    assert result["summary"]["ready"] is True
+    assert result["summary"]["covered_rule_count"] == 6
+    assert result["summary"]["context_proxy_disclosed"] is True
+    assert rules["verification_gap"]["finding_code"] == "verification_gap"
+    assert rules["unrecovered_tool_error"]["finding_code"] == "command_failure_unhandled"
+    assert rules["context_drift"]["finding_code"] == "long_context_no_progress"
+    assert rules["context_drift"]["scope"] == "v1_proxy"
+    assert all(row["covered"] for row in result["rules"])
+    assert "Rules covered: 6 / 6" in markdown
+    assert "not a full semantic task-keyword drift detector" in markdown
 
 
 def test_detector_evaluation_audit_consolidates_rq2_evidence():
@@ -1852,6 +1872,7 @@ def test_reviewer_docs_surface_hard30_task_diagnosis():
     assert "docs/paper_number_guard.md" in readme
     assert "docs/reviewer_path_audit.md" in readme
     assert "docs/detector_evaluation_audit.md" in readme
+    assert "docs/rule_implementation_audit.md" in readme
     assert "docs/task_category_coverage.md" in readme
     assert "docs/harness_protocol_audit.md" in readme
     assert "docs/failure_taxonomy_audit.md" in readme
@@ -1878,6 +1899,7 @@ def test_reviewer_docs_surface_hard30_task_diagnosis():
     assert "scripts/audit_reviewer_path.py --markdown-output docs/reviewer_path_audit.md" in readme
     assert "scripts/audit_submission_package.py --markdown-output docs/submission_package.md" in readme
     assert "scripts/audit_detector_evaluation.py --markdown-output docs/detector_evaluation_audit.md" in readme
+    assert "scripts/audit_rule_implementation.py --markdown-output docs/rule_implementation_audit.md" in readme
     assert "scripts/audit_task_category_coverage.py --markdown-output docs/task_category_coverage.md" in readme
     assert "scripts/audit_harness_protocol.py --markdown-output docs/harness_protocol_audit.md" in readme
     assert "scripts/audit_failure_taxonomy.py --markdown-output docs/failure_taxonomy_audit.md" in readme
@@ -1898,6 +1920,7 @@ def test_reviewer_docs_surface_hard30_task_diagnosis():
     assert "docs/paper_number_guard.md" in guide
     assert "docs/verification_ablation_plan_audit.md" in guide
     assert "docs/detector_evaluation_audit.md" in guide
+    assert "docs/rule_implementation_audit.md" in guide
     assert "docs/task_category_coverage.md" in guide
     assert "docs/harness_protocol_audit.md" in guide
     assert "docs/failure_taxonomy_audit.md" in guide
@@ -1930,6 +1953,7 @@ def test_reviewer_docs_surface_hard30_task_diagnosis():
     assert "scripts/audit_paper_numbers.py" in checklist
     assert "scripts/audit_reviewer_path.py" in checklist
     assert "scripts/audit_detector_evaluation.py" in checklist
+    assert "scripts/audit_rule_implementation.py" in checklist
     assert "scripts/audit_task_category_coverage.py" in checklist
     assert "scripts/audit_harness_protocol.py" in checklist
     assert "scripts/audit_failure_taxonomy.py" in checklist
@@ -1944,6 +1968,7 @@ def test_reviewer_docs_surface_hard30_task_diagnosis():
     assert "--preflight-json /tmp/verification-lift-v2-preflight.json" in checklist
     assert "--markdown-output /tmp/verification-ablation-plan-audit.md" in checklist
     assert "--markdown-output /tmp/detector-evaluation-audit.md" in checklist
+    assert "--markdown-output /tmp/rule-implementation-audit.md" in checklist
     assert "benchmark/verification-lift-v2/pilot/full-real/aggregate.md" in checklist
     assert "completed claim-closure retest" in checklist
     assert "repeated calls improve `8.62 -> 5.50`" in checklist
@@ -2068,6 +2093,7 @@ def test_submission_package_maps_rqs_to_safe_paper_claims():
     assert "docs/reviewer_path_audit.md" in package["required_files"]
     assert "docs/metric_coverage_audit.md" in package["required_files"]
     assert "docs/detector_evaluation_audit.md" in package["required_files"]
+    assert "docs/rule_implementation_audit.md" in package["required_files"]
     assert "docs/rq4_signal_audit.md" in package["required_files"]
     assert "docs/phase_coverage_audit.md" in package["required_files"]
     assert "docs/task_category_coverage.md" in package["required_files"]
@@ -2085,6 +2111,7 @@ def test_submission_package_maps_rqs_to_safe_paper_claims():
     assert "## RQ-To-Evidence Map" in markdown
     assert "docs/hard30_task_diagnosis.md" in markdown
     assert "docs/detector_evaluation_audit.md" in markdown
+    assert "docs/rule_implementation_audit.md" in markdown
     assert "docs/verification_ablation_plan_audit.md" in markdown
     assert "docs/task_category_coverage.md" in markdown
     assert "docs/harness_protocol_audit.md" in markdown
@@ -2218,6 +2245,7 @@ def test_reviewer_path_audit_covers_required_artifacts(tmp_path):
     assert any(row["path"] == "docs/paper_outline.md" for row in result["coverage"])
     assert any(row["path"] == "docs/reviewer_path_audit.md" for row in result["coverage"])
     assert any(row["path"] == "docs/detector_evaluation_audit.md" for row in result["coverage"])
+    assert any(row["path"] == "docs/rule_implementation_audit.md" for row in result["coverage"])
     assert any(row["path"] == "docs/verification_ablation_plan_audit.md" for row in result["coverage"])
     assert any(row["path"] == "docs/phase_coverage_audit.md" for row in result["coverage"])
     assert any(row["path"] == "docs/task_category_coverage.md" for row in result["coverage"])
@@ -2276,6 +2304,19 @@ def test_submission_readiness_validates_detector_evaluation_audit_content(tmp_pa
     assert "missing controlled coverage" in check["problems"]
     assert "missing hard30 repetitive" in check["problems"]
     assert "missing hidden semantic" in check["problems"]
+
+
+def test_submission_readiness_validates_rule_implementation_audit_content(tmp_path):
+    broken = tmp_path / "rule_implementation_audit.md"
+    broken.write_text("# Rule Implementation Audit\nReady: no\n", encoding="utf-8")
+
+    check = check_rule_implementation_audit_content(broken)
+
+    assert check["ok"] is False
+    assert "missing ready" in check["problems"]
+    assert "missing coverage count" in check["problems"]
+    assert "missing context proxy" in check["problems"]
+    assert "missing semantic caveat" in check["problems"]
 
 
 def test_submission_readiness_validates_rq4_signal_audit_content(tmp_path):

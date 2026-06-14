@@ -28,6 +28,7 @@ def build_submission_package() -> dict[str, Any]:
             "primary_evidence": [
                 "docs/failure_taxonomy.md",
                 "docs/failure_taxonomy_audit.md",
+                "docs/rule_implementation_audit.md",
                 "benchmark/detector-fixtures/label-eval.md",
                 "docs/results_summary.md",
             ],
@@ -125,6 +126,7 @@ def build_submission_package() -> dict[str, Any]:
             "docs/reviewer_path_audit.md",
             "docs/metric_coverage_audit.md",
             "docs/detector_evaluation_audit.md",
+            "docs/rule_implementation_audit.md",
             "docs/phase_coverage_audit.md",
             "docs/task_category_coverage.md",
             "docs/harness_protocol_audit.md",
