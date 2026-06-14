@@ -26,25 +26,26 @@ oracles for hidden semantic correctness.
 3. Inspect generated results in `docs/results_summary.md`.
 4. Inspect the compact actual headline table in `docs/headline_results.md`.
 5. Inspect the thesis revision decision in `docs/thesis_revision_decision.md`.
-6. Inspect task-level hard30 repairs, regressions, and double failures in
+6. Inspect validity threats and safe wording in `docs/validity_threats.md`.
+7. Inspect task-level hard30 repairs, regressions, and double failures in
    `docs/hard30_task_diagnosis.md`.
-7. Check safe paper-claim framing in `docs/submission_package.md`.
-8. Check thesis-level support status in `docs/paper_claim_audit.md`.
-9. Check drift guards in `docs/claim_text_guard.md` and
+8. Check safe paper-claim framing in `docs/submission_package.md`.
+9. Check thesis-level support status in `docs/paper_claim_audit.md`.
+10. Check drift guards in `docs/claim_text_guard.md` and
    `docs/paper_number_guard.md`.
-10. Check failure-taxonomy coverage in `docs/failure_taxonomy_audit.md`.
-11. Check related-work positioning coverage in `docs/related_work_audit.md`.
-12. Check paper structure and RQ coverage in `docs/paper_structure_audit.md`.
-13. Check metric coverage in `docs/metric_coverage_audit.md`.
-14. Check reproduction command coverage in `docs/reproducibility_audit.md`.
-15. Check claim-to-evidence mapping in `docs/reproducibility_checklist.md`.
-16. Run the offline demo:
+11. Check failure-taxonomy coverage in `docs/failure_taxonomy_audit.md`.
+12. Check related-work positioning coverage in `docs/related_work_audit.md`.
+13. Check paper structure and RQ coverage in `docs/paper_structure_audit.md`.
+14. Check metric coverage in `docs/metric_coverage_audit.md`.
+15. Check reproduction command coverage in `docs/reproducibility_audit.md`.
+16. Check claim-to-evidence mapping in `docs/reproducibility_checklist.md`.
+17. Run the offline demo:
 
 ```bash
 ./scripts/demo.sh
 ```
 
-17. Optionally open the visual replay UI:
+18. Optionally open the visual replay UI:
 
 ```bash
 cd web
@@ -64,6 +65,7 @@ npm run dev
 | RQ3: Do harness interventions help? | `docs/results_summary.md` RQ3 tables |
 | What headline table should the paper use? | `docs/headline_results.md` |
 | How should the original thesis be revised? | `docs/thesis_revision_decision.md` |
+| What validity threats constrain the claims? | `docs/validity_threats.md` |
 | RQ4: Which signals explain failure? | `docs/results_summary.md` RQ4 trace-signal table |
 | Are all planned metrics reported? | `docs/metric_coverage_audit.md` |
 | Are reproduction commands complete? | `docs/reproducibility_checklist.md`, `docs/reproducibility_audit.md` |

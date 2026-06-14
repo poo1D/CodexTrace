@@ -388,6 +388,43 @@ def check_thesis_revision_decision_content(path: Path = Path("docs/thesis_revisi
     }
 
 
+def check_validity_threats_content(path: Path = Path("docs/validity_threats.md")) -> dict[str, Any]:
+    problems = []
+    try:
+        text = path.read_text(encoding="utf-8")
+    except FileNotFoundError:
+        return {
+            "name": "validity threats audit",
+            "ok": False,
+            "evidence": str(path),
+            "problems": ["missing validity threats audit"],
+        }
+
+    required_phrases = {
+        "ready": "Ready: yes",
+        "coverage": "Threats covered: 7 / 7",
+        "internal validity": "internal_validity",
+        "construct validity": "construct_validity",
+        "external validity": "external_validity",
+        "conclusion validity": "conclusion_validity",
+        "detector validity": "detector_validity",
+        "ablation validity": "ablation_validity",
+        "reproducibility validity": "reproducibility_validity",
+        "verification boundary": "Ordinary verification-rate lift supported: no",
+    }
+    for label, phrase in required_phrases.items():
+        if phrase not in text:
+            problems.append(f"missing {label}")
+
+    return {
+        "name": "validity threats audit",
+        "ok": not problems,
+        "evidence": str(path),
+        "detail": "paper validity threats are mapped to evidence, mitigations, and safe wording",
+        "problems": problems,
+    }
+
+
 def check_paper_number_guard_content(path: Path = Path("docs/paper_number_guard.md")) -> dict[str, Any]:
     problems = []
     try:
@@ -599,7 +636,7 @@ def check_reproducibility_audit_content(path: Path = Path("docs/reproducibility_
 
     required_phrases = {
         "ready": "Ready: yes",
-        "coverage count": "Commands covered: 23 / 23",
+        "coverage count": "Commands covered: 24 / 24",
         "balanced fences": "Markdown fences balanced: yes",
         "submission gate": "submission_readiness_gate",
         "scope caveat": "does not execute the full real Codex collection commands",
@@ -695,6 +732,7 @@ def build_report(selection_dir: Path, run_dir: Path) -> dict[str, Any]:
         check_submission_package_content(),
         check_headline_results_content(),
         check_thesis_revision_decision_content(),
+        check_validity_threats_content(),
         check_paper_number_guard_content(),
         check_reviewer_path_audit_content(),
         check_metric_coverage_audit_content(),

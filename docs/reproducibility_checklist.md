@@ -26,6 +26,7 @@ The stored pilots can be inspected and aggregated without re-running Codex.
 | `docs/results_summary.md` | Generated full30 + hard10 + hard30 + process-stress + verification-lift + verification-lift-v2 + verification-ablation result summary, including RQ4 trace-signal analysis. |
 | `docs/headline_results.md` | Generated compact actual headline table replacing the expected-results sketch. |
 | `docs/thesis_revision_decision.md` | Generated decision memo for revising the original thesis into a boundary-result paper. |
+| `docs/validity_threats.md` | Generated validity-threat map with evidence, mitigations, and safe wording. |
 | `docs/rq4_signal_audit.md` | Generated signal audit for observable process positives and hidden semantic boundaries. |
 | `docs/metric_coverage_audit.md` | Generated coverage audit for the metrics named in the experiment design. |
 | `docs/failure_taxonomy_audit.md` | Generated coverage audit for the six process-failure taxonomy labels. |
@@ -74,6 +75,7 @@ The stored pilots can be inspected and aggregated without re-running Codex.
 | `scripts/audit_claim_text_guard.py` | Text-level guard against reintroducing unsupported verification-lift or hidden-semantic claims. |
 | `scripts/audit_goal_completion.py` | Goal-level completion audit for the original objective and boundary-result paper state. |
 | `scripts/audit_thesis_revision_decision.py` | Generates the explicit thesis-revision decision memo. |
+| `scripts/audit_validity_threats.py` | Generates validity-threat mapping for safe paper wording. |
 | `scripts/audit_verification_lift_next_experiment.py` | Claim-closure audit for the unresolved ordinary-baseline verification-lift claim. |
 | `scripts/audit_headline_results.py` | Generates the compact headline-results table and verification-lift boundary note. |
 | `scripts/audit_verification_lift_v2_plan.py` | Plan audit for the ordinary-baseline verification-lift v2 scaffold. |
@@ -263,6 +265,10 @@ PYTHONPATH=. python3 scripts/audit_goal_completion.py \
 PYTHONPATH=. python3 scripts/audit_thesis_revision_decision.py \
   --markdown-output /tmp/thesis-revision-decision.md \
   --json-output /tmp/thesis-revision-decision.json
+
+PYTHONPATH=. python3 scripts/audit_validity_threats.py \
+  --markdown-output /tmp/validity-threats.md \
+  --json-output /tmp/validity-threats.json
 
 PYTHONPATH=. python3 scripts/audit_verification_lift_next_experiment.py \
   --markdown-output /tmp/verification-lift-next-experiment.md \

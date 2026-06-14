@@ -471,7 +471,9 @@ intentionally interpretable, but incomplete. Manual labels for hidden semantic
 failures are based on hidden grader outcomes and qualitative inspection of
 failure messages. Larger repository tasks, repeated trials, richer process
 failure labels, and lightweight semantic checks are needed before making
-broader claims.
+broader claims. The generated validity map in `docs/validity_threats.md`
+separates internal, construct, external, conclusion, detector, ablation, and
+reproducibility threats, and ties each one to evidence and safe paper wording.
 
 ## 10. Artifact Availability
 
@@ -483,6 +485,7 @@ are `docs/artifact_guide.md` for a short reviewer path,
 `docs/headline_results.md` for the compact actual headline table,
 `docs/thesis_revision_decision.md` for the explicit boundary-result thesis
 decision,
+`docs/validity_threats.md` for validity threats and safe wording,
 `docs/submission_package.md` for safe RQ-to-evidence claim framing,
 `docs/metric_coverage_audit.md` for experiment-metric coverage,
 `docs/failure_taxonomy_audit.md` for six-label taxonomy coverage,
@@ -510,8 +513,9 @@ lightweight semantic checks can recover hidden edge-case failures.
 For a reviewer-facing walkthrough, see `docs/artifact_guide.md`. For the
 generated result summary and compact headline table, see
 `docs/results_summary.md` and `docs/headline_results.md`. For the explicit
-thesis-revision decision, see `docs/thesis_revision_decision.md`. For claim-evidence
-mapping and reproduction commands, see `docs/reproducibility_checklist.md`.
+thesis-revision decision, see `docs/thesis_revision_decision.md`. For
+claim-evidence mapping, validity threats, and reproduction commands, see
+`docs/validity_threats.md` and `docs/reproducibility_checklist.md`.
 For safe claim framing and generated guard status, see
 `docs/submission_package.md`, `docs/failure_taxonomy_audit.md`,
 `docs/related_work_audit.md`, `docs/paper_structure_audit.md`,

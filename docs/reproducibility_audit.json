@@ -66,6 +66,11 @@
       "present": true
     },
     {
+      "id": "validity_threats",
+      "phrase": "scripts/audit_validity_threats.py",
+      "present": true
+    },
+    {
       "id": "paper_number_guard",
       "phrase": "scripts/audit_paper_numbers.py",
       "present": true
@@ -119,10 +124,10 @@
   "summary": {
     "bash_fence_count": 36,
     "checklist_path": "docs/reproducibility_checklist.md",
-    "covered_command_count": 23,
+    "covered_command_count": 24,
     "fence_count": 78,
     "fences_balanced": true,
     "ready": true,
-    "required_command_count": 23
+    "required_command_count": 24
   }
 }

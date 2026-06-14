@@ -71,7 +71,8 @@ See `docs/artifact_guide.md` for the reviewer-facing walkthrough,
 `docs/results_summary.md` for the generated result summary and RQ4
 trace-signal analysis, `docs/headline_results.md` for the compact actual
 headline table, `docs/thesis_revision_decision.md` for the explicit
-boundary-result thesis decision, `docs/rq4_signal_audit.md` for the generated
+boundary-result thesis decision, `docs/validity_threats.md` for validity
+threat mapping, `docs/rq4_signal_audit.md` for the generated
 boundary-style signal audit, `docs/metric_coverage_audit.md` for experiment
 metric coverage, `docs/failure_taxonomy_audit.md` for six-label taxonomy
 coverage, `docs/related_work_audit.md` for related-work positioning coverage,
@@ -157,6 +158,7 @@ Key files:
 - `scripts/audit_claim_text_guard.py`: checks paper-facing docs for unsupported verification-lift or hidden-semantic overclaims
 - `scripts/audit_goal_completion.py`: checks original-goal completion status against current evidence
 - `scripts/audit_thesis_revision_decision.py`: generates the explicit original-thesis revision decision memo
+- `scripts/audit_validity_threats.py`: generates the validity-threat mapping for safe paper wording
 - `scripts/audit_paper_numbers.py`: checks paper-draft numeric claims against stored aggregate artifacts
 - `scripts/audit_reviewer_path.py`: checks required reviewer files are discoverable from paper-facing entry points
 - `scripts/audit_metric_coverage.py`: checks planned experiment metrics across run rows, summaries, CSV, and aggregate Markdown
@@ -173,6 +175,7 @@ Key files:
 - `docs/claim_text_guard.md`: generated guard that checks paper-facing text for unsupported-claim drift
 - `docs/goal_completion_audit.md`: generated audit showing original-goal completion status and blocking evidence gaps
 - `docs/thesis_revision_decision.md`: generated decision memo for revising the original thesis into a boundary-result paper
+- `docs/validity_threats.md`: generated validity-threat map with evidence, mitigations, and safe wording
 - `docs/verification_lift_next_experiment.md`: generated audit for ordinary-baseline verification-lift claim closure and thesis-revision status
 - `docs/headline_results.md`: generated compact actual headline table replacing the expected-results sketch
 - `docs/paper_number_guard.md`: generated guard that checks paper-draft numeric claims against stored artifacts
@@ -274,6 +277,7 @@ PYTHONPATH=. python3 scripts/audit_thesis_readiness.py --markdown-output docs/th
 PYTHONPATH=. python3 scripts/audit_claim_text_guard.py --markdown-output docs/claim_text_guard.md
 PYTHONPATH=. python3 scripts/audit_goal_completion.py --markdown-output docs/goal_completion_audit.md
 PYTHONPATH=. python3 scripts/audit_thesis_revision_decision.py --markdown-output docs/thesis_revision_decision.md
+PYTHONPATH=. python3 scripts/audit_validity_threats.py --markdown-output docs/validity_threats.md
 PYTHONPATH=. python3 scripts/audit_verification_lift_next_experiment.py --markdown-output docs/verification_lift_next_experiment.md
 PYTHONPATH=. python3 scripts/audit_verification_lift_v2_plan.py --markdown-output docs/verification_lift_v2_plan_audit.md
 PYTHONPATH=. python3 scripts/audit_headline_results.py --markdown-output docs/headline_results.md

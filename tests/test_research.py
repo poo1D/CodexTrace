@@ -25,6 +25,7 @@ from scripts.audit_rq4_signals import build_rq4_signal_audit, render_rq4_signal_
 from scripts.audit_submission_package import build_submission_package, render_submission_package_markdown
 from scripts.audit_thesis_revision_decision import build_thesis_revision_decision, render_thesis_revision_decision_markdown
 from scripts.audit_thesis_readiness import build_thesis_readiness, render_thesis_readiness_markdown
+from scripts.audit_validity_threats import build_validity_threats_audit, render_validity_threats_markdown
 from scripts.audit_verification_ablation_plan import audit_verification_ablation_plan
 from scripts.audit_verification_lift_plan import audit_verification_lift_plan
 from scripts.audit_verification_lift_v2_plan import audit_verification_lift_v2_plan
@@ -65,6 +66,7 @@ from scripts.check_submission_readiness import (
     check_reviewer_path_audit_content,
     check_submission_package_content,
     check_thesis_revision_decision_content,
+    check_validity_threats_content,
     check_verification_lift_next_experiment_content,
     render_report,
 )
@@ -1317,7 +1319,7 @@ def test_reproducibility_audit_covers_key_commands():
     markdown = render_reproducibility_audit_markdown(result)
 
     assert result["summary"]["ready"] is True
-    assert result["summary"]["covered_command_count"] == 23
+    assert result["summary"]["covered_command_count"] == 24
     assert result["summary"]["fences_balanced"] is True
     assert {row["id"] for row in result["commands"]} >= {
         "full30_aggregate",
@@ -1326,6 +1328,7 @@ def test_reproducibility_audit_covers_key_commands():
         "combined_summary",
         "headline_results",
         "thesis_revision_decision",
+        "validity_threats",
         "submission_readiness_gate",
         "claim_text_guard",
     }
@@ -1457,6 +1460,25 @@ def test_thesis_revision_decision_records_boundary_result_reframe():
     assert "Decision: revise_to_boundary_result_paper" in markdown
     assert "Ordinary verification-rate lift supported: no" in markdown
     assert "drops the ordinary verification-rate-lift finding" in markdown
+
+
+def test_validity_threats_audit_maps_boundary_paper_limits():
+    result = build_validity_threats_audit()
+    markdown = render_validity_threats_markdown(result)
+    threats = {row["id"]: row for row in result["threats"]}
+
+    assert result["summary"]["ready"] is True
+    assert result["summary"]["covered_count"] == 7
+    assert result["summary"]["required_count"] == 7
+    assert result["summary"]["boundary_decision"] == "revise_to_boundary_result_paper"
+    assert result["summary"]["ordinary_verification_rate_lift_supported"] is False
+    assert threats["construct_validity"]["paper_language"] == "Verification-rate lift is a negative boundary result, not a supported headline claim."
+    assert threats["ablation_validity"]["paper_language"] == "No-verify ablation is not ordinary-baseline evidence."
+    assert threats["external_validity"]["paper_language"] == "Results are pilot-scale and Codex-CLI-specific."
+    assert "Threats covered: 7 / 7" in markdown
+    assert "internal_validity" in markdown
+    assert "construct_validity" in markdown
+    assert "conclusion_validity" in markdown
 
 
 def test_build_results_summary_prefers_finalized_outputs(tmp_path):
@@ -1653,6 +1675,7 @@ def test_reviewer_docs_surface_hard30_task_diagnosis():
     assert "docs/goal_completion_audit.md" in readme
     assert "docs/verification_lift_next_experiment.md" in readme
     assert "docs/thesis_revision_decision.md" in readme
+    assert "docs/validity_threats.md" in readme
     assert "docs/verification_lift_v2_plan_audit.md" in readme
     assert "docs/headline_results.md" in readme
     assert "benchmark/verification-lift-v2/pilot/full-real" in readme
@@ -1671,6 +1694,7 @@ def test_reviewer_docs_surface_hard30_task_diagnosis():
     assert "scripts/finalize_benchmark_pilot.py" in readme
     assert "scripts/audit_goal_completion.py --markdown-output docs/goal_completion_audit.md" in readme
     assert "scripts/audit_thesis_revision_decision.py --markdown-output docs/thesis_revision_decision.md" in readme
+    assert "scripts/audit_validity_threats.py --markdown-output docs/validity_threats.md" in readme
     assert "scripts/audit_verification_lift_next_experiment.py --markdown-output docs/verification_lift_next_experiment.md" in readme
     assert "scripts/audit_verification_lift_v2_plan.py --markdown-output docs/verification_lift_v2_plan_audit.md" in readme
     assert "scripts/audit_headline_results.py --markdown-output docs/headline_results.md" in readme
@@ -1687,6 +1711,7 @@ def test_reviewer_docs_surface_hard30_task_diagnosis():
     assert "docs/submission_package.md" in guide
     assert "docs/headline_results.md" in guide
     assert "docs/thesis_revision_decision.md" in guide
+    assert "docs/validity_threats.md" in guide
     assert "docs/claim_text_guard.md" in guide
     assert "docs/paper_number_guard.md" in guide
     assert "docs/failure_taxonomy_audit.md" in guide
@@ -1706,6 +1731,7 @@ def test_reviewer_docs_surface_hard30_task_diagnosis():
     assert "scripts/finalize_benchmark_pilot.py" in checklist
     assert "scripts/audit_goal_completion.py" in checklist
     assert "scripts/audit_thesis_revision_decision.py" in checklist
+    assert "scripts/audit_validity_threats.py" in checklist
     assert "scripts/audit_verification_lift_next_experiment.py" in checklist
     assert "scripts/audit_verification_lift_v2_plan.py" in checklist
     assert "scripts/audit_headline_results.py" in checklist
@@ -1725,6 +1751,7 @@ def test_reviewer_docs_surface_hard30_task_diagnosis():
     assert "repeated calls improve `8.62 -> 5.50`" in checklist
     assert "--markdown-output /tmp/headline-results.md" in checklist
     assert "--markdown-output /tmp/thesis-revision-decision.md" in checklist
+    assert "--markdown-output /tmp/validity-threats.md" in checklist
 
 
 def test_paper_outline_tracks_current_boundary_result():
@@ -1822,6 +1849,7 @@ def test_submission_package_maps_rqs_to_safe_paper_claims():
     assert "docs/submission_package.md" in package["required_files"]
     assert "docs/goal_completion_audit.md" in package["required_files"]
     assert "docs/thesis_revision_decision.md" in package["required_files"]
+    assert "docs/validity_threats.md" in package["required_files"]
     assert "docs/verification_lift_next_experiment.md" in package["required_files"]
     assert "docs/verification_lift_v2_plan_audit.md" in package["required_files"]
     assert "docs/headline_results.md" in package["required_files"]
@@ -1849,6 +1877,7 @@ def test_submission_package_maps_rqs_to_safe_paper_claims():
     assert "docs/reproducibility_audit.md" in markdown
     assert "docs/headline_results.md" in markdown
     assert "docs/thesis_revision_decision.md" in markdown
+    assert "docs/validity_threats.md" in markdown
     assert "Unsupported Claims To Avoid" in markdown
 
 
@@ -1886,6 +1915,18 @@ def test_submission_readiness_validates_thesis_revision_decision_content(tmp_pat
     assert "missing ready" in check["problems"]
     assert "missing decision" in check["problems"]
     assert "missing drop finding" in check["problems"]
+
+
+def test_submission_readiness_validates_validity_threats_content(tmp_path):
+    broken = tmp_path / "validity_threats.md"
+    broken.write_text("# Validity Threats Audit\nReady: no\n", encoding="utf-8")
+
+    check = check_validity_threats_content(broken)
+
+    assert check["ok"] is False
+    assert "missing ready" in check["problems"]
+    assert "missing coverage" in check["problems"]
+    assert "missing construct validity" in check["problems"]
 
 
 def test_paper_number_guard_keeps_draft_numbers_in_sync(tmp_path):
@@ -1936,6 +1977,7 @@ def test_reviewer_path_audit_covers_required_artifacts(tmp_path):
     assert any(row["path"] == "docs/reproducibility_audit.md" for row in result["coverage"])
     assert any(row["path"] == "docs/headline_results.md" for row in result["coverage"])
     assert any(row["path"] == "docs/thesis_revision_decision.md" for row in result["coverage"])
+    assert any(row["path"] == "docs/validity_threats.md" for row in result["coverage"])
     assert "Missing from reproducibility checklist: 0" in markdown
 
     package = tmp_path / "submission_package.json"
