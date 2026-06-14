@@ -1287,10 +1287,12 @@ def test_related_work_audit_covers_positioning_axes():
     markdown = render_related_work_audit_markdown(result)
 
     assert result["summary"]["ready"] is True
-    assert result["summary"]["covered_topic_count"] == 6
+    assert result["summary"]["covered_topic_count"] == 8
     assert {row["topic"] for row in result["topics"]} == {
         "software_engineering_benchmarks",
+        "multi_turn_degradation",
         "coding_agents_and_interfaces",
+        "tool_use_agents_and_feedback",
         "general_agent_evaluation",
         "program_repair_waste",
         "trace_based_agent_diagnosis",
@@ -1533,12 +1535,16 @@ def test_bibliography_audit_covers_related_work_sources():
 
     assert result["summary"]["ready"] is True
     assert result["summary"]["paper_has_references"] is True
-    assert result["summary"]["covered_reference_count"] == 8
-    assert result["summary"]["reference_count"] == 8
+    assert result["summary"]["covered_reference_count"] == 12
+    assert result["summary"]["reference_count"] == 12
     assert refs["swe_bench"]["covered"] is True
+    assert refs["llms_get_lost"]["covered"] is True
+    assert refs["react"]["covered"] is True
+    assert refs["toolformer"]["covered"] is True
+    assert refs["reflexion"]["covered"] is True
     assert refs["codex_cli_repo"]["covered"] is True
     assert refs["agentrx"]["covered"] is True
-    assert "References covered: 8 / 8" in markdown
+    assert "References covered: 12 / 12" in markdown
     assert "does not replace venue-specific citation formatting" in markdown
 
 

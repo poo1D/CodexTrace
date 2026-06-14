@@ -5,7 +5,7 @@ This generated audit checks that the compact related-work notes and paper draft 
 ## Summary
 
 - Ready: yes
-- Topics covered: 6 / 6
+- Topics covered: 8 / 8
 - Related-work notes: `docs/related_work.md`
 - Paper draft: `docs/paper_draft.md`
 
@@ -14,7 +14,9 @@ This generated audit checks that the compact related-work notes and paper draft 
 | Topic | Related-work notes | Paper draft | Covered |
 | --- | --- | --- | --- |
 | software_engineering_benchmarks | yes | yes | yes |
+| multi_turn_degradation | yes | yes | yes |
 | coding_agents_and_interfaces | yes | yes | yes |
+| tool_use_agents_and_feedback | yes | yes | yes |
 | general_agent_evaluation | yes | yes | yes |
 | program_repair_waste | yes | yes | yes |
 | trace_based_agent_diagnosis | yes | yes | yes |

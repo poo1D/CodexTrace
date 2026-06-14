@@ -37,9 +37,12 @@ REQUIRED_SECTIONS = (
         "phrases": (
             "## 2. Related Work",
             "SWE-bench",
+            "LLMs Get Lost In Multi-Turn Conversation",
             "SWE-agent",
+            "Toolformer",
             "AgentRx",
             "| Work line | Primary question | Typical evidence | CodexTrace difference |",
+            "| Tool-use agent methods | How should an agent reason, act, call tools, or reflect? |",
         ),
     },
     {

@@ -20,9 +20,19 @@ REQUIRED_TOPICS = (
         "paper_phrases": ("SWE-bench", "Final tests or issue-level success"),
     },
     {
+        "topic": "multi_turn_degradation",
+        "related_work_phrases": ("LLMs Get Lost In Multi-Turn Conversation", "fail to recover"),
+        "paper_phrases": ("LLMs Get Lost In Multi-Turn Conversation", "early assumptions shape later answers"),
+    },
+    {
         "topic": "coding_agents_and_interfaces",
         "related_work_phrases": ("SWE-agent", "OpenHands", "Codex CLI"),
         "paper_phrases": ("SWE-agent", "OpenHands", "OpenAI Codex CLI"),
+    },
+    {
+        "topic": "tool_use_agents_and_feedback",
+        "related_work_phrases": ("ReAct", "Toolformer", "Reflexion"),
+        "paper_phrases": ("ReAct", "Toolformer", "Reflexion"),
     },
     {
         "topic": "general_agent_evaluation",

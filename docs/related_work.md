@@ -14,6 +14,18 @@ be learned from the process that led to the outcome.
 
 Source: [SWE-bench: Can Language Models Resolve Real-World GitHub Issues?](https://arxiv.org/abs/2310.06770)
 
+## Multi-Turn Degradation
+
+LLMs Get Lost In Multi-Turn Conversation studies how model performance drops
+when tasks unfold across turns rather than arriving as a single fully specified
+instruction. It reports that models can make early assumptions, prematurely
+attempt final answers, and then fail to recover. CodexTrace studies a narrower
+software-engineering version of this problem: when a coding run unfolds through
+inspection, tool calls, edits, verification, and recovery, process failures can
+be visible before the final task outcome.
+
+Source: [LLMs Get Lost In Multi-Turn Conversation](https://arxiv.org/abs/2505.06120)
+
 ## Coding Agents and Agent-Computer Interfaces
 
 SWE-agent shows that the interface between a language model and a computer can
@@ -41,6 +53,22 @@ Sources:
 
 - [OpenAI Codex CLI - Getting Started](https://help.openai.com/en/articles/11096431)
 - [openai/codex GitHub repository](https://github.com/openai/codex)
+
+## Tool-Use Agents and Feedback Loops
+
+ReAct interleaves reasoning traces and actions, showing how an LLM can gather
+information through external environments while maintaining a trajectory that
+humans can inspect. Toolformer studies how language models can learn to call
+external tools such as search, calculators, and calendars. Reflexion studies
+agents that use feedback and verbal reflection across attempts. CodexTrace is
+not a new tool-use policy or learning method; it is an offline process
+diagnostic layer for traces already produced by a coding-agent harness.
+
+Sources:
+
+- [ReAct: Synergizing Reasoning and Acting in Language Models](https://arxiv.org/abs/2210.03629)
+- [Toolformer: Language Models Can Teach Themselves to Use Tools](https://arxiv.org/abs/2302.04761)
+- [Reflexion: Language Agents with Verbal Reinforcement Learning](https://arxiv.org/abs/2303.11366)
 
 ## General Agent Evaluation
 
@@ -79,6 +107,8 @@ CodexTrace sits between software-engineering benchmarks and agent observability:
 - Unlike broad agent-evaluation benchmarks, it focuses on coding-specific
   process failures such as verification gaps, command recovery, repeated
   repository exploration, and sandbox friction.
+- Unlike tool-use and reflection methods, it does not teach an agent when to
+  call tools or how to learn from feedback; it diagnoses the resulting trace.
 - Unlike LLM-as-judge trajectory diagnosis, its first version uses deterministic
   rules to keep findings auditable and cheap to run.
 
@@ -88,5 +118,6 @@ CodexTrace sits between software-engineering benchmarks and agent observability:
 | --- | --- | --- | --- |
 | SWE-bench-style benchmarks | Did the patch solve a real issue? | Final tests or issue-level success | Keeps outcome labels, but analyzes how the run unfolded. |
 | Coding-agent frameworks | Which interface lets agents edit and test code? | Agent success under a tool interface | Does not propose a new interface; diagnoses traces from an existing one. |
+| Tool-use agent methods | How should an agent reason, act, call tools, or reflect? | Improved action policies or feedback loops | Does not train or prompt a new policy; audits completed coding traces. |
 | General agent benchmarks | Can agents act in multi-turn environments? | Task score across environments | Narrows to coding traces and software-process failure modes. |
 | Trajectory diagnosis | Where did an agent execution fail? | Failure localization over trajectories | Uses deterministic coding-specific rules and aggregate intervention metrics. |

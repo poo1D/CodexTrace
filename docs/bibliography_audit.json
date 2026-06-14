@@ -12,6 +12,16 @@
     },
     {
       "covered": true,
+      "id": "llms_get_lost",
+      "paper_has_title": true,
+      "paper_has_url": true,
+      "related_work_has_title": true,
+      "related_work_has_url": true,
+      "title": "LLMs Get Lost In Multi-Turn Conversation",
+      "url": "https://arxiv.org/abs/2505.06120"
+    },
+    {
+      "covered": true,
       "id": "swe_agent",
       "paper_has_title": true,
       "paper_has_url": true,
@@ -52,6 +62,36 @@
     },
     {
       "covered": true,
+      "id": "react",
+      "paper_has_title": true,
+      "paper_has_url": true,
+      "related_work_has_title": true,
+      "related_work_has_url": true,
+      "title": "ReAct: Synergizing Reasoning and Acting in Language Models",
+      "url": "https://arxiv.org/abs/2210.03629"
+    },
+    {
+      "covered": true,
+      "id": "toolformer",
+      "paper_has_title": true,
+      "paper_has_url": true,
+      "related_work_has_title": true,
+      "related_work_has_url": true,
+      "title": "Toolformer: Language Models Can Teach Themselves to Use Tools",
+      "url": "https://arxiv.org/abs/2302.04761"
+    },
+    {
+      "covered": true,
+      "id": "reflexion",
+      "paper_has_title": true,
+      "paper_has_url": true,
+      "related_work_has_title": true,
+      "related_work_has_url": true,
+      "title": "Reflexion: Language Agents with Verbal Reinforcement Learning",
+      "url": "https://arxiv.org/abs/2303.11366"
+    },
+    {
+      "covered": true,
       "id": "agentbench",
       "paper_has_title": true,
       "paper_has_url": true,
@@ -82,11 +122,11 @@
     }
   ],
   "summary": {
-    "covered_reference_count": 8,
+    "covered_reference_count": 12,
     "paper_draft_path": "docs/paper_draft.md",
     "paper_has_references": true,
     "ready": true,
-    "reference_count": 8,
+    "reference_count": 12,
     "related_work_path": "docs/related_work.md"
   }
 }

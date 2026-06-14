@@ -20,6 +20,11 @@ REQUIRED_REFERENCES = (
         "url": "https://arxiv.org/abs/2310.06770",
     },
     {
+        "id": "llms_get_lost",
+        "title": "LLMs Get Lost In Multi-Turn Conversation",
+        "url": "https://arxiv.org/abs/2505.06120",
+    },
+    {
         "id": "swe_agent",
         "title": "SWE-agent: Agent-Computer Interfaces Enable Automated Software Engineering",
         "url": "https://arxiv.org/abs/2405.15793",
@@ -38,6 +43,21 @@ REQUIRED_REFERENCES = (
         "id": "codex_cli_repo",
         "title": "openai/codex GitHub repository",
         "url": "https://github.com/openai/codex",
+    },
+    {
+        "id": "react",
+        "title": "ReAct: Synergizing Reasoning and Acting in Language Models",
+        "url": "https://arxiv.org/abs/2210.03629",
+    },
+    {
+        "id": "toolformer",
+        "title": "Toolformer: Language Models Can Teach Themselves to Use Tools",
+        "url": "https://arxiv.org/abs/2302.04761",
+    },
+    {
+        "id": "reflexion",
+        "title": "Reflexion: Language Agents with Verbal Reinforcement Learning",
+        "url": "https://arxiv.org/abs/2303.11366",
     },
     {
         "id": "agentbench",

@@ -83,6 +83,13 @@ can resolve real GitHub issues by editing repositories and passing tests. This
 work is complementary: CodexTrace keeps task outcome labels, but treats the
 agent trace itself as a first-class evaluation object.
 
+Multi-turn evaluation work such as
+[LLMs Get Lost In Multi-Turn Conversation](https://arxiv.org/abs/2505.06120)
+shows that models can become less reliable when tasks unfold across multiple
+turns and early assumptions shape later answers. CodexTrace narrows that
+concern to coding-agent tool-use loops, where the intermediate states are
+observable as commands, file edits, verification attempts, and recovery steps.
+
 Coding-agent systems and interfaces such as
 [SWE-agent](https://arxiv.org/abs/2405.15793),
 [OpenHands](https://arxiv.org/abs/2407.16741), and the
@@ -91,6 +98,14 @@ agents act through developer-like tools: shell commands, file edits, tests, and
 repository navigation. CodexTrace does not propose a new agent interface; it
 analyzes whether an existing harness produces observable process failures and
 whether a simple prompt-level intervention changes those traces.
+
+Tool-use and feedback-loop methods such as
+[ReAct](https://arxiv.org/abs/2210.03629),
+[Toolformer](https://arxiv.org/abs/2302.04761), and
+[Reflexion](https://arxiv.org/abs/2303.11366) study how language models can
+reason, act, call tools, and incorporate feedback. CodexTrace is orthogonal:
+it does not train or prompt a new action policy, but audits the completed trace
+produced by an existing coding-agent harness.
 
 General agent-evaluation work such as
 [AgentBench](https://arxiv.org/abs/2308.03688) evaluates multi-turn agents in
@@ -116,6 +131,7 @@ to explain observable tool-use failures and quantify harness interventions.
 | --- | --- | --- | --- |
 | SWE-bench-style benchmarks | Did the patch solve a real issue? | Final tests or issue-level success | Keeps outcome labels, but analyzes how the run unfolded. |
 | Coding-agent frameworks | Which interface lets agents edit and test code? | Agent success under a tool interface | Does not propose a new interface; diagnoses traces from an existing one. |
+| Tool-use agent methods | How should an agent reason, act, call tools, or reflect? | Improved action policies or feedback loops | Does not train or prompt a new policy; audits completed coding traces. |
 | General agent benchmarks | Can agents act in multi-turn environments? | Task score across environments | Narrows to coding traces and software-process failure modes. |
 | Trajectory diagnosis | Where did an agent execution fail? | Failure localization over trajectories | Uses deterministic coding-specific rules and aggregate intervention metrics. |
 
@@ -548,10 +564,14 @@ For safe claim framing and generated guard status, see
 ## References
 
 1. [SWE-bench: Can Language Models Resolve Real-World GitHub Issues?](https://arxiv.org/abs/2310.06770)
-2. [SWE-agent: Agent-Computer Interfaces Enable Automated Software Engineering](https://arxiv.org/abs/2405.15793)
-3. [OpenHands: An Open Platform for AI Software Developers as Generalist Agents](https://arxiv.org/abs/2407.16741)
-4. [OpenAI Codex CLI - Getting Started](https://help.openai.com/en/articles/11096431)
-5. [openai/codex GitHub repository](https://github.com/openai/codex)
-6. [AgentBench: Evaluating LLMs as Agents](https://arxiv.org/abs/2308.03688)
-7. [RepairAgent: An Autonomous, LLM-Based Agent for Program Repair](https://arxiv.org/abs/2403.17134)
-8. [AgentRx: Diagnosing AI Agent Failures from Execution Trajectories](https://www.microsoft.com/en-us/research/publication/agentrx-diagnosing-ai-agent-failures-from-execution-trajectories/)
+2. [LLMs Get Lost In Multi-Turn Conversation](https://arxiv.org/abs/2505.06120)
+3. [SWE-agent: Agent-Computer Interfaces Enable Automated Software Engineering](https://arxiv.org/abs/2405.15793)
+4. [OpenHands: An Open Platform for AI Software Developers as Generalist Agents](https://arxiv.org/abs/2407.16741)
+5. [OpenAI Codex CLI - Getting Started](https://help.openai.com/en/articles/11096431)
+6. [openai/codex GitHub repository](https://github.com/openai/codex)
+7. [ReAct: Synergizing Reasoning and Acting in Language Models](https://arxiv.org/abs/2210.03629)
+8. [Toolformer: Language Models Can Teach Themselves to Use Tools](https://arxiv.org/abs/2302.04761)
+9. [Reflexion: Language Agents with Verbal Reinforcement Learning](https://arxiv.org/abs/2303.11366)
+10. [AgentBench: Evaluating LLMs as Agents](https://arxiv.org/abs/2308.03688)
+11. [RepairAgent: An Autonomous, LLM-Based Agent for Program Repair](https://arxiv.org/abs/2403.17134)
+12. [AgentRx: Diagnosing AI Agent Failures from Execution Trajectories](https://www.microsoft.com/en-us/research/publication/agentrx-diagnosing-ai-agent-failures-from-execution-trajectories/)

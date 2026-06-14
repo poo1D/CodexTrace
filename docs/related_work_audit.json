@@ -1,10 +1,10 @@
 {
   "summary": {
-    "covered_topic_count": 6,
+    "covered_topic_count": 8,
     "paper_draft_path": "docs/paper_draft.md",
     "ready": true,
     "related_work_path": "docs/related_work.md",
-    "topic_count": 6
+    "topic_count": 8
   },
   "topics": [
     {
@@ -28,6 +28,22 @@
       "paper_draft_covered": true,
       "paper_draft_missing": [],
       "paper_phrases": [
+        "LLMs Get Lost In Multi-Turn Conversation",
+        "early assumptions shape later answers"
+      ],
+      "related_work_covered": true,
+      "related_work_missing": [],
+      "related_work_phrases": [
+        "LLMs Get Lost In Multi-Turn Conversation",
+        "fail to recover"
+      ],
+      "topic": "multi_turn_degradation"
+    },
+    {
+      "covered": true,
+      "paper_draft_covered": true,
+      "paper_draft_missing": [],
+      "paper_phrases": [
         "SWE-agent",
         "OpenHands",
         "OpenAI Codex CLI"
@@ -40,6 +56,24 @@
         "Codex CLI"
       ],
       "topic": "coding_agents_and_interfaces"
+    },
+    {
+      "covered": true,
+      "paper_draft_covered": true,
+      "paper_draft_missing": [],
+      "paper_phrases": [
+        "ReAct",
+        "Toolformer",
+        "Reflexion"
+      ],
+      "related_work_covered": true,
+      "related_work_missing": [],
+      "related_work_phrases": [
+        "ReAct",
+        "Toolformer",
+        "Reflexion"
+      ],
+      "topic": "tool_use_agents_and_feedback"
     },
     {
       "covered": true,

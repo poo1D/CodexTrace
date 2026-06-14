@@ -640,9 +640,11 @@ def check_related_work_audit_content(path: Path = Path("docs/related_work_audit.
 
     required_phrases = {
         "ready": "Ready: yes",
-        "coverage count": "Topics covered: 6 / 6",
+        "coverage count": "Topics covered: 8 / 8",
         "swe bench": "software_engineering_benchmarks",
+        "multi-turn degradation": "multi_turn_degradation",
         "coding agents": "coding_agents_and_interfaces",
+        "tool-use agents": "tool_use_agents_and_feedback",
         "trajectory diagnosis": "trace_based_agent_diagnosis",
         "alignment caveat": "not a full literature review",
     }
@@ -674,8 +676,10 @@ def check_bibliography_audit_content(path: Path = Path("docs/bibliography_audit.
     required_phrases = {
         "ready": "Ready: yes",
         "references section": "Paper has References section: yes",
-        "coverage count": "References covered: 8 / 8",
+        "coverage count": "References covered: 12 / 12",
         "swe bench": "swe_bench",
+        "multi-turn degradation": "llms_get_lost",
+        "tool use": "toolformer",
         "codex cli": "codex_cli_repo",
         "trajectory diagnosis": "agentrx",
         "scope caveat": "does not replace venue-specific citation formatting",
