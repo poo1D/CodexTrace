@@ -76,6 +76,7 @@ threat mapping, `docs/rq4_signal_audit.md` for the generated
 boundary-style signal audit, `docs/metric_coverage_audit.md` for experiment
 metric coverage, `docs/failure_taxonomy_audit.md` for six-label taxonomy
 coverage, `docs/related_work_audit.md` for related-work positioning coverage,
+`docs/bibliography_audit.md` for paper reference discoverability,
 `docs/paper_abstract_audit.md` for abstract-level claim coverage,
 `docs/paper_contribution_audit.md` for contribution-claim coverage,
 `docs/paper_structure_audit.md` for paper-section/RQ coverage,
@@ -166,6 +167,7 @@ Key files:
 - `scripts/audit_metric_coverage.py`: checks planned experiment metrics across run rows, summaries, CSV, and aggregate Markdown
 - `scripts/audit_failure_taxonomy.py`: checks six-label taxonomy coverage across docs, paper mapping, and detector fixtures
 - `scripts/audit_related_work.py`: checks related-work coverage across bibliography notes and the paper draft
+- `scripts/audit_bibliography.py`: checks paper reference discoverability across the draft and related-work notes
 - `scripts/audit_paper_abstract.py`: checks abstract-level evidence coverage and overclaim boundaries
 - `scripts/audit_paper_contributions.py`: checks contribution claims against current evidence boundaries
 - `scripts/audit_paper_structure.py`: checks paper draft section, RQ, and boundary-result coverage
@@ -193,6 +195,7 @@ Key files:
 - `docs/metric_coverage_audit.md`: generated coverage audit for the experiment-design metrics
 - `docs/failure_taxonomy_audit.md`: generated coverage audit for the six process-failure taxonomy labels
 - `docs/related_work_audit.md`: generated coverage audit for related-work positioning axes
+- `docs/bibliography_audit.md`: generated audit for reference discoverability across paper and notes
 - `docs/paper_abstract_audit.md`: generated audit for abstract-level evidence coverage and overclaim boundaries
 - `docs/paper_contribution_audit.md`: generated audit for evidence-backed contribution claims
 - `docs/paper_structure_audit.md`: generated coverage audit for paper sections, RQ result blocks, and boundary framing
@@ -292,6 +295,7 @@ PYTHONPATH=. python3 scripts/audit_reviewer_path.py --markdown-output docs/revie
 PYTHONPATH=. python3 scripts/audit_submission_package.py --markdown-output docs/submission_package.md
 PYTHONPATH=. python3 scripts/audit_failure_taxonomy.py --markdown-output docs/failure_taxonomy_audit.md
 PYTHONPATH=. python3 scripts/audit_related_work.py --markdown-output docs/related_work_audit.md
+PYTHONPATH=. python3 scripts/audit_bibliography.py --markdown-output docs/bibliography_audit.md
 PYTHONPATH=. python3 scripts/audit_paper_abstract.py --markdown-output docs/paper_abstract_audit.md
 PYTHONPATH=. python3 scripts/audit_paper_contributions.py --markdown-output docs/paper_contribution_audit.md
 PYTHONPATH=. python3 scripts/audit_paper_structure.py --markdown-output docs/paper_structure_audit.md

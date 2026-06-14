@@ -5,7 +5,7 @@ This generated audit checks that the paper draft covers the required sections, R
 ## Summary
 
 - Ready: yes
-- Sections covered: 10 / 10
+- Sections covered: 11 / 11
 - Paper draft: `docs/paper_draft.md`
 
 ## Section Coverage
@@ -22,5 +22,6 @@ This generated audit checks that the paper draft covers the required sections, R
 | boundary_result_framing | yes | - |
 | analysis_and_limitations | yes | - |
 | artifact_and_conclusion | yes | - |
+| references | yes | - |
 
 Interpretation: this audit verifies structural and claim-boundary coverage. It does not judge prose quality, novelty, or venue fit.

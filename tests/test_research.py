@@ -10,6 +10,7 @@ from scripts.finalize_benchmark_pilot import (
 from scripts.audit_manual_labels import audit_manual_labels, render_audit
 from scripts.audit_failure_taxonomy import build_failure_taxonomy_audit, render_failure_taxonomy_audit_markdown
 from scripts.audit_metric_coverage import build_metric_coverage_audit, render_metric_coverage_audit_markdown
+from scripts.audit_bibliography import build_bibliography_audit, render_bibliography_audit_markdown
 from scripts.audit_claim_text_guard import audit_claim_text_guard, render_claim_text_guard_markdown
 from scripts.audit_goal_completion import build_goal_completion_audit, render_goal_completion_audit_markdown
 from scripts.audit_hard30_task_diagnosis import build_task_diagnosis, render_task_diagnosis_markdown
@@ -63,6 +64,7 @@ from scripts.check_submission_readiness import (
     check_metric_coverage_audit_content,
     check_paper_number_guard_content,
     check_paper_abstract_audit_content,
+    check_bibliography_audit_content,
     check_paper_contribution_audit_content,
     check_paper_structure_audit_content,
     check_related_work_audit_content,
@@ -1303,7 +1305,7 @@ def test_paper_structure_audit_covers_required_sections():
     markdown = render_paper_structure_audit_markdown(result)
 
     assert result["summary"]["ready"] is True
-    assert result["summary"]["covered_section_count"] == 10
+    assert result["summary"]["covered_section_count"] == 11
     assert {row["id"] for row in result["sections"]} >= {
         "title_and_abstract",
         "introduction_and_rqs",
@@ -1313,6 +1315,7 @@ def test_paper_structure_audit_covers_required_sections():
         "boundary_result_framing",
         "analysis_and_limitations",
         "artifact_and_conclusion",
+        "references",
     }
     assert all(row["covered"] for row in result["sections"])
     assert "does not judge prose quality" in markdown
@@ -1323,11 +1326,12 @@ def test_reproducibility_audit_covers_key_commands():
     markdown = render_reproducibility_audit_markdown(result)
 
     assert result["summary"]["ready"] is True
-    assert result["summary"]["covered_command_count"] == 26
+    assert result["summary"]["covered_command_count"] == 27
     assert result["summary"]["fences_balanced"] is True
     assert {row["id"] for row in result["commands"]} >= {
         "full30_aggregate",
         "controlled_fixture_eval",
+        "bibliography_audit",
         "paper_abstract_audit",
         "paper_contribution_audit",
         "hard30_paper_report",
@@ -1522,6 +1526,22 @@ def test_paper_contribution_audit_covers_supported_contributions():
     assert "no_verification_lift_contribution" in markdown
 
 
+def test_bibliography_audit_covers_related_work_sources():
+    result = build_bibliography_audit()
+    markdown = render_bibliography_audit_markdown(result)
+    refs = {row["id"]: row for row in result["references"]}
+
+    assert result["summary"]["ready"] is True
+    assert result["summary"]["paper_has_references"] is True
+    assert result["summary"]["covered_reference_count"] == 8
+    assert result["summary"]["reference_count"] == 8
+    assert refs["swe_bench"]["covered"] is True
+    assert refs["codex_cli_repo"]["covered"] is True
+    assert refs["agentrx"]["covered"] is True
+    assert "References covered: 8 / 8" in markdown
+    assert "does not replace venue-specific citation formatting" in markdown
+
+
 def test_build_results_summary_prefers_finalized_outputs(tmp_path):
     full_dir = tmp_path / "full30"
     hard_dir = tmp_path / "hard10"
@@ -1703,6 +1723,8 @@ def test_paper_draft_contains_submission_polish_sections():
     assert "docs/paper_number_guard.md" in text
     assert "docs/failure_taxonomy_audit.md" in text
     assert "docs/related_work_audit.md" in text
+    assert "docs/bibliography_audit.md" in text
+    assert "## References" in text
     assert "docs/paper_structure_audit.md" in text
     assert "docs/reproducibility_audit.md" in text
 
@@ -1729,6 +1751,7 @@ def test_reviewer_docs_surface_hard30_task_diagnosis():
     assert "docs/reviewer_path_audit.md" in readme
     assert "docs/failure_taxonomy_audit.md" in readme
     assert "docs/related_work_audit.md" in readme
+    assert "docs/bibliography_audit.md" in readme
     assert "docs/paper_structure_audit.md" in readme
     assert "docs/reproducibility_audit.md" in readme
     assert "scripts/audit_hard30_task_diagnosis.py" in readme
@@ -1748,6 +1771,7 @@ def test_reviewer_docs_surface_hard30_task_diagnosis():
     assert "scripts/audit_submission_package.py --markdown-output docs/submission_package.md" in readme
     assert "scripts/audit_failure_taxonomy.py --markdown-output docs/failure_taxonomy_audit.md" in readme
     assert "scripts/audit_related_work.py --markdown-output docs/related_work_audit.md" in readme
+    assert "scripts/audit_bibliography.py --markdown-output docs/bibliography_audit.md" in readme
     assert "scripts/audit_paper_structure.py --markdown-output docs/paper_structure_audit.md" in readme
     assert "scripts/audit_reproducibility.py --markdown-output docs/reproducibility_audit.md" in readme
     assert "scripts/audit_thesis_readiness.py --markdown-output docs/thesis_readiness.md" in readme
@@ -1763,6 +1787,7 @@ def test_reviewer_docs_surface_hard30_task_diagnosis():
     assert "docs/paper_number_guard.md" in guide
     assert "docs/failure_taxonomy_audit.md" in guide
     assert "docs/related_work_audit.md" in guide
+    assert "docs/bibliography_audit.md" in guide
     assert "docs/paper_structure_audit.md" in guide
     assert "docs/reproducibility_audit.md" in guide
     assert "| Which tasks get lost? |" in guide
@@ -1789,6 +1814,7 @@ def test_reviewer_docs_surface_hard30_task_diagnosis():
     assert "scripts/audit_reviewer_path.py" in checklist
     assert "scripts/audit_failure_taxonomy.py" in checklist
     assert "scripts/audit_related_work.py" in checklist
+    assert "scripts/audit_bibliography.py" in checklist
     assert "scripts/audit_paper_structure.py" in checklist
     assert "scripts/audit_reproducibility.py" in checklist
     assert "--markdown-output /tmp/hard30-task-diagnosis.md" in checklist
@@ -1803,6 +1829,7 @@ def test_reviewer_docs_surface_hard30_task_diagnosis():
     assert "--markdown-output /tmp/validity-threats.md" in checklist
     assert "--markdown-output /tmp/paper-abstract-audit.md" in checklist
     assert "--markdown-output /tmp/paper-contribution-audit.md" in checklist
+    assert "--markdown-output /tmp/bibliography-audit.md" in checklist
 
 
 def test_paper_outline_tracks_current_boundary_result():
@@ -1916,6 +1943,7 @@ def test_submission_package_maps_rqs_to_safe_paper_claims():
     assert "docs/failure_taxonomy_audit.md" in package["required_files"]
     assert "docs/related_work.md" in package["required_files"]
     assert "docs/related_work_audit.md" in package["required_files"]
+    assert "docs/bibliography_audit.md" in package["required_files"]
     assert "docs/reproducibility_audit.md" in package["required_files"]
     assert [row["rq"] for row in package["rq_rows"]] == ["RQ1", "RQ2", "RQ3", "RQ4"]
     assert package["rq_rows"][2]["status"] == "supported"
@@ -1926,6 +1954,7 @@ def test_submission_package_maps_rqs_to_safe_paper_claims():
     assert "docs/hard30_task_diagnosis.md" in markdown
     assert "docs/failure_taxonomy_audit.md" in markdown
     assert "docs/related_work_audit.md" in markdown
+    assert "docs/bibliography_audit.md" in markdown
     assert "docs/paper_structure_audit.md" in markdown
     assert "docs/reproducibility_audit.md" in markdown
     assert "docs/headline_results.md" in markdown
@@ -2052,6 +2081,7 @@ def test_reviewer_path_audit_covers_required_artifacts(tmp_path):
     assert any(row["path"] == "docs/reviewer_path_audit.md" for row in result["coverage"])
     assert any(row["path"] == "docs/failure_taxonomy_audit.md" for row in result["coverage"])
     assert any(row["path"] == "docs/related_work_audit.md" for row in result["coverage"])
+    assert any(row["path"] == "docs/bibliography_audit.md" for row in result["coverage"])
     assert any(row["path"] == "docs/paper_structure_audit.md" for row in result["coverage"])
     assert any(row["path"] == "docs/reproducibility_audit.md" for row in result["coverage"])
     assert any(row["path"] == "docs/headline_results.md" for row in result["coverage"])
@@ -2114,6 +2144,18 @@ def test_submission_readiness_validates_related_work_audit_content(tmp_path):
     assert "missing ready" in check["problems"]
     assert "missing coverage count" in check["problems"]
     assert "missing swe bench" in check["problems"]
+
+
+def test_submission_readiness_validates_bibliography_audit_content(tmp_path):
+    broken = tmp_path / "bibliography_audit.md"
+    broken.write_text("# Bibliography Audit\nReady: no\n", encoding="utf-8")
+
+    check = check_bibliography_audit_content(broken)
+
+    assert check["ok"] is False
+    assert "missing ready" in check["problems"]
+    assert "missing references section" in check["problems"]
+    assert "missing coverage count" in check["problems"]
 
 
 def test_submission_readiness_validates_paper_structure_audit_content(tmp_path):

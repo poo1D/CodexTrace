@@ -1,0 +1,92 @@
+{
+  "references": [
+    {
+      "covered": true,
+      "id": "swe_bench",
+      "paper_has_title": true,
+      "paper_has_url": true,
+      "related_work_has_title": true,
+      "related_work_has_url": true,
+      "title": "SWE-bench: Can Language Models Resolve Real-World GitHub Issues?",
+      "url": "https://arxiv.org/abs/2310.06770"
+    },
+    {
+      "covered": true,
+      "id": "swe_agent",
+      "paper_has_title": true,
+      "paper_has_url": true,
+      "related_work_has_title": true,
+      "related_work_has_url": true,
+      "title": "SWE-agent: Agent-Computer Interfaces Enable Automated Software Engineering",
+      "url": "https://arxiv.org/abs/2405.15793"
+    },
+    {
+      "covered": true,
+      "id": "openhands",
+      "paper_has_title": true,
+      "paper_has_url": true,
+      "related_work_has_title": true,
+      "related_work_has_url": true,
+      "title": "OpenHands: An Open Platform for AI Software Developers as Generalist Agents",
+      "url": "https://arxiv.org/abs/2407.16741"
+    },
+    {
+      "covered": true,
+      "id": "codex_cli_help",
+      "paper_has_title": true,
+      "paper_has_url": true,
+      "related_work_has_title": true,
+      "related_work_has_url": true,
+      "title": "OpenAI Codex CLI - Getting Started",
+      "url": "https://help.openai.com/en/articles/11096431"
+    },
+    {
+      "covered": true,
+      "id": "codex_cli_repo",
+      "paper_has_title": true,
+      "paper_has_url": true,
+      "related_work_has_title": true,
+      "related_work_has_url": true,
+      "title": "openai/codex GitHub repository",
+      "url": "https://github.com/openai/codex"
+    },
+    {
+      "covered": true,
+      "id": "agentbench",
+      "paper_has_title": true,
+      "paper_has_url": true,
+      "related_work_has_title": true,
+      "related_work_has_url": true,
+      "title": "AgentBench: Evaluating LLMs as Agents",
+      "url": "https://arxiv.org/abs/2308.03688"
+    },
+    {
+      "covered": true,
+      "id": "repairagent",
+      "paper_has_title": true,
+      "paper_has_url": true,
+      "related_work_has_title": true,
+      "related_work_has_url": true,
+      "title": "RepairAgent: An Autonomous, LLM-Based Agent for Program Repair",
+      "url": "https://arxiv.org/abs/2403.17134"
+    },
+    {
+      "covered": true,
+      "id": "agentrx",
+      "paper_has_title": true,
+      "paper_has_url": true,
+      "related_work_has_title": true,
+      "related_work_has_url": true,
+      "title": "AgentRx: Diagnosing AI Agent Failures from Execution Trajectories",
+      "url": "https://www.microsoft.com/en-us/research/publication/agentrx-diagnosing-ai-agent-failures-from-execution-trajectories/"
+    }
+  ],
+  "summary": {
+    "covered_reference_count": 8,
+    "paper_draft_path": "docs/paper_draft.md",
+    "paper_has_references": true,
+    "ready": true,
+    "reference_count": 8,
+    "related_work_path": "docs/related_work.md"
+  }
+}

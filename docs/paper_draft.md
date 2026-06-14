@@ -508,6 +508,7 @@ decision,
 `docs/metric_coverage_audit.md` for experiment-metric coverage,
 `docs/failure_taxonomy_audit.md` for six-label taxonomy coverage,
 `docs/related_work_audit.md` for related-work positioning coverage,
+`docs/bibliography_audit.md` for reference discoverability,
 `docs/paper_abstract_audit.md` for abstract-level evidence coverage,
 `docs/paper_contribution_audit.md` for contribution-claim coverage,
 `docs/paper_structure_audit.md` for section/RQ coverage,
@@ -538,7 +539,19 @@ claim-evidence mapping, validity threats, and reproduction commands, see
 `docs/validity_threats.md` and `docs/reproducibility_checklist.md`.
 For safe claim framing and generated guard status, see
 `docs/submission_package.md`, `docs/failure_taxonomy_audit.md`,
-`docs/related_work_audit.md`, `docs/paper_abstract_audit.md`,
+`docs/related_work_audit.md`, `docs/bibliography_audit.md`,
+`docs/paper_abstract_audit.md`,
 `docs/paper_contribution_audit.md`, `docs/paper_structure_audit.md`,
 `docs/reproducibility_audit.md`, `docs/claim_text_guard.md`, and
 `docs/paper_number_guard.md`.
+
+## References
+
+1. [SWE-bench: Can Language Models Resolve Real-World GitHub Issues?](https://arxiv.org/abs/2310.06770)
+2. [SWE-agent: Agent-Computer Interfaces Enable Automated Software Engineering](https://arxiv.org/abs/2405.15793)
+3. [OpenHands: An Open Platform for AI Software Developers as Generalist Agents](https://arxiv.org/abs/2407.16741)
+4. [OpenAI Codex CLI - Getting Started](https://help.openai.com/en/articles/11096431)
+5. [openai/codex GitHub repository](https://github.com/openai/codex)
+6. [AgentBench: Evaluating LLMs as Agents](https://arxiv.org/abs/2308.03688)
+7. [RepairAgent: An Autonomous, LLM-Based Agent for Program Repair](https://arxiv.org/abs/2403.17134)
+8. [AgentRx: Diagnosing AI Agent Failures from Execution Trajectories](https://www.microsoft.com/en-us/research/publication/agentrx-diagnosing-ai-agent-failures-from-execution-trajectories/)

@@ -228,6 +228,7 @@ def check_paper_draft_content(path: Path = Path("docs/paper_draft.md")) -> dict[
         "measurement table": "| Metric | Measurement |",
         "metric coverage link": "docs/metric_coverage_audit.md",
         "contribution block": "Our contributions are:",
+        "references section": "## References",
         "time-to-first-test definition": "`time_to_first_test`",
         "gpu-free method note": "No model training, fine-tuning, embedding index, or GPU inference is used",
         "process-vs-semantic limitation": "Trace diagnosis is less suited for proving semantic correctness",
@@ -658,6 +659,40 @@ def check_related_work_audit_content(path: Path = Path("docs/related_work_audit.
     }
 
 
+def check_bibliography_audit_content(path: Path = Path("docs/bibliography_audit.md")) -> dict[str, Any]:
+    problems = []
+    try:
+        text = path.read_text(encoding="utf-8")
+    except FileNotFoundError:
+        return {
+            "name": "bibliography audit",
+            "ok": False,
+            "evidence": str(path),
+            "problems": ["missing bibliography audit"],
+        }
+
+    required_phrases = {
+        "ready": "Ready: yes",
+        "references section": "Paper has References section: yes",
+        "coverage count": "References covered: 8 / 8",
+        "swe bench": "swe_bench",
+        "codex cli": "codex_cli_repo",
+        "trajectory diagnosis": "agentrx",
+        "scope caveat": "does not replace venue-specific citation formatting",
+    }
+    for label, phrase in required_phrases.items():
+        if phrase not in text:
+            problems.append(f"missing {label}")
+
+    return {
+        "name": "bibliography audit",
+        "ok": not problems,
+        "evidence": str(path),
+        "detail": "paper references are discoverable from both the draft and related-work notes",
+        "problems": problems,
+    }
+
+
 def check_paper_structure_audit_content(path: Path = Path("docs/paper_structure_audit.md")) -> dict[str, Any]:
     problems = []
     try:
@@ -672,8 +707,9 @@ def check_paper_structure_audit_content(path: Path = Path("docs/paper_structure_
 
     required_phrases = {
         "ready": "Ready: yes",
-        "coverage count": "Sections covered: 10 / 10",
+        "coverage count": "Sections covered: 11 / 11",
         "rq results": "rq_results",
+        "references": "references",
         "boundary framing": "boundary_result_framing",
         "artifact conclusion": "artifact_and_conclusion",
         "scope caveat": "does not judge prose quality",
@@ -705,7 +741,7 @@ def check_reproducibility_audit_content(path: Path = Path("docs/reproducibility_
 
     required_phrases = {
         "ready": "Ready: yes",
-        "coverage count": "Commands covered: 26 / 26",
+        "coverage count": "Commands covered: 27 / 27",
         "balanced fences": "Markdown fences balanced: yes",
         "submission gate": "submission_readiness_gate",
         "scope caveat": "does not execute the full real Codex collection commands",
@@ -807,6 +843,7 @@ def build_report(selection_dir: Path, run_dir: Path) -> dict[str, Any]:
         check_metric_coverage_audit_content(),
         check_failure_taxonomy_audit_content(),
         check_related_work_audit_content(),
+        check_bibliography_audit_content(),
         check_paper_abstract_audit_content(),
         check_paper_contribution_audit_content(),
         check_paper_structure_audit_content(),

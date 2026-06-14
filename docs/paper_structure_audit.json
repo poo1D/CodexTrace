@@ -118,12 +118,22 @@
         "## 11. Conclusion",
         "strong task-level oracles"
       ]
+    },
+    {
+      "covered": true,
+      "id": "references",
+      "missing": [],
+      "required_phrases": [
+        "## References",
+        "SWE-bench: Can Language Models Resolve Real-World GitHub Issues?",
+        "AgentRx: Diagnosing AI Agent Failures from Execution Trajectories"
+      ]
     }
   ],
   "summary": {
-    "covered_section_count": 10,
+    "covered_section_count": 11,
     "paper_draft_path": "docs/paper_draft.md",
     "ready": true,
-    "section_count": 10
+    "section_count": 11
   }
 }

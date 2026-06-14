@@ -31,6 +31,11 @@
       "present": true
     },
     {
+      "id": "bibliography_audit",
+      "phrase": "scripts/audit_bibliography.py",
+      "present": true
+    },
+    {
       "id": "paper_abstract_audit",
       "phrase": "scripts/audit_paper_abstract.py",
       "present": true
@@ -132,12 +137,12 @@
     }
   ],
   "summary": {
-    "bash_fence_count": 38,
+    "bash_fence_count": 39,
     "checklist_path": "docs/reproducibility_checklist.md",
-    "covered_command_count": 26,
-    "fence_count": 82,
+    "covered_command_count": 27,
+    "fence_count": 84,
     "fences_balanced": true,
     "ready": true,
-    "required_command_count": 26
+    "required_command_count": 27
   }
 }

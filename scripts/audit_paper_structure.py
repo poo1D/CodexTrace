@@ -112,6 +112,14 @@ REQUIRED_SECTIONS = (
             "strong task-level oracles",
         ),
     },
+    {
+        "id": "references",
+        "phrases": (
+            "## References",
+            "SWE-bench: Can Language Models Resolve Real-World GitHub Issues?",
+            "AgentRx: Diagnosing AI Agent Failures from Execution Trajectories",
+        ),
+    },
 )
 
 
