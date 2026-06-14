@@ -39,25 +39,26 @@ oracles for hidden semantic correctness.
    `docs/detector_evaluation_audit.md`.
 13. Check diagnosis-rule implementation coverage in
    `docs/rule_implementation_audit.md`.
-14. Check phase segmentation coverage in `docs/phase_coverage_audit.md`.
-15. Check task-category coverage in `docs/task_category_coverage.md`.
-16. Check harness protocol coverage in `docs/harness_protocol_audit.md`.
-17. Check failure-taxonomy coverage in `docs/failure_taxonomy_audit.md`.
-18. Check related-work positioning coverage in `docs/related_work_audit.md`.
-19. Check paper reference discoverability in `docs/bibliography_audit.md`.
-20. Check abstract-level evidence coverage in `docs/paper_abstract_audit.md`.
-21. Check contribution-claim coverage in `docs/paper_contribution_audit.md`.
-22. Check paper structure and RQ coverage in `docs/paper_structure_audit.md`.
-23. Check metric coverage in `docs/metric_coverage_audit.md`.
-24. Check reproduction command coverage in `docs/reproducibility_audit.md`.
-25. Check claim-to-evidence mapping in `docs/reproducibility_checklist.md`.
-26. Run the offline demo:
+14. Check Run/Step schema-field mapping in `docs/schema_field_audit.md`.
+15. Check phase segmentation coverage in `docs/phase_coverage_audit.md`.
+16. Check task-category coverage in `docs/task_category_coverage.md`.
+17. Check harness protocol coverage in `docs/harness_protocol_audit.md`.
+18. Check failure-taxonomy coverage in `docs/failure_taxonomy_audit.md`.
+19. Check related-work positioning coverage in `docs/related_work_audit.md`.
+20. Check paper reference discoverability in `docs/bibliography_audit.md`.
+21. Check abstract-level evidence coverage in `docs/paper_abstract_audit.md`.
+22. Check contribution-claim coverage in `docs/paper_contribution_audit.md`.
+23. Check paper structure and RQ coverage in `docs/paper_structure_audit.md`.
+24. Check metric coverage in `docs/metric_coverage_audit.md`.
+25. Check reproduction command coverage in `docs/reproducibility_audit.md`.
+26. Check claim-to-evidence mapping in `docs/reproducibility_checklist.md`.
+27. Run the offline demo:
 
 ```bash
 ./scripts/demo.sh
 ```
 
-27. Optionally open the visual replay UI:
+28. Optionally open the visual replay UI:
 
 ```bash
 cd web
@@ -74,6 +75,7 @@ npm run dev
 | Is detector evaluation evidence consolidated? | `docs/detector_evaluation_audit.md` |
 | Are diagnosis rules implemented for each taxonomy label? | `docs/rule_implementation_audit.md` |
 | Is the no-verify ablation scaffold ready? | `docs/verification_ablation_plan_audit.md` |
+| Is the normalized trace schema mapped to code? | `docs/schema_field_audit.md` |
 | Is phase segmentation covered? | `docs/phase_coverage_audit.md` |
 | Do benchmark tasks cover the planned task types? | `docs/task_category_coverage.md` |
 | Do intervention prompts encode the harness protocol? | `docs/harness_protocol_audit.md` |

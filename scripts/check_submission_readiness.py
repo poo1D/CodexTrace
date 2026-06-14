@@ -227,6 +227,7 @@ def check_paper_draft_content(path: Path = Path("docs/paper_draft.md")) -> dict[
         "detector rule mapping": "| Taxonomy label | Implementation finding | Detector signal |",
         "measurement table": "| Metric | Measurement |",
         "metric coverage link": "docs/metric_coverage_audit.md",
+        "schema field audit link": "docs/schema_field_audit.md",
         "contribution block": "Our contributions are:",
         "references section": "## References",
         "time-to-first-test definition": "`time_to_first_test`",
@@ -589,6 +590,42 @@ def check_metric_coverage_audit_content(path: Path = Path("docs/metric_coverage_
         "ok": not problems,
         "evidence": str(path),
         "detail": "all experiment-design metrics are checked across run, CSV, summary, and Markdown outputs",
+        "problems": problems,
+    }
+
+
+def check_schema_field_audit_content(path: Path = Path("docs/schema_field_audit.md")) -> dict[str, Any]:
+    problems = []
+    try:
+        text = path.read_text(encoding="utf-8")
+    except FileNotFoundError:
+        return {
+            "name": "schema field audit",
+            "ok": False,
+            "evidence": str(path),
+            "problems": ["missing schema field audit"],
+        }
+
+    required_phrases = {
+        "ready": "Ready: yes",
+        "run coverage": "Run fields covered: 4 / 4",
+        "step coverage": "Step fields covered: 11 / 11",
+        "run task id": "`Run.task_id`",
+        "step file paths": "`Step.file_paths`",
+        "failure tags": "`Step.failure_tags`",
+        "trace event": "TraceEvent",
+        "run record": "RunRecord",
+        "representational mapping": "schema mapping is representational",
+    }
+    for label, phrase in required_phrases.items():
+        if phrase not in text:
+            problems.append(f"missing {label}")
+
+    return {
+        "name": "schema field audit",
+        "ok": not problems,
+        "evidence": str(path),
+        "detail": "paper-facing Run/Step schema fields map to parser, schema, and research outputs",
         "problems": problems,
     }
 
@@ -958,7 +995,7 @@ def check_reproducibility_audit_content(path: Path = Path("docs/reproducibility_
 
     required_phrases = {
         "ready": "Ready: yes",
-        "coverage count": "Commands covered: 33 / 33",
+        "coverage count": "Commands covered: 34 / 34",
         "balanced fences": "Markdown fences balanced: yes",
         "submission gate": "submission_readiness_gate",
         "scope caveat": "does not execute the full real Codex collection commands",
@@ -1088,6 +1125,7 @@ def build_report(selection_dir: Path, run_dir: Path) -> dict[str, Any]:
         check_paper_number_guard_content(),
         check_reviewer_path_audit_content(),
         check_metric_coverage_audit_content(),
+        check_schema_field_audit_content(),
         check_detector_evaluation_audit_content(),
         check_rule_implementation_audit_content(),
         check_rq4_signal_audit_content(),

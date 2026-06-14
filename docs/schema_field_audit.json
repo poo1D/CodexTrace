@@ -1,0 +1,272 @@
+{
+  "run_fields": [
+    {
+      "covered": true,
+      "field": "Run.task_id",
+      "implementation": "RunRecord.task_id and run manifest rows",
+      "implementation_present": true,
+      "markers": [
+        "task_id: str",
+        "item[\"task_id\"]"
+      ],
+      "markers_present": [
+        "task_id: str",
+        "item[\"task_id\"]"
+      ],
+      "paper_present": true,
+      "scope": "direct"
+    },
+    {
+      "covered": true,
+      "field": "Run.prompt_type",
+      "implementation": "RunRecord.prompt_type and PROMPT_TYPES",
+      "implementation_present": true,
+      "markers": [
+        "prompt_type: str",
+        "PROMPT_TYPES"
+      ],
+      "markers_present": [
+        "prompt_type: str",
+        "PROMPT_TYPES"
+      ],
+      "paper_present": true,
+      "scope": "direct"
+    },
+    {
+      "covered": true,
+      "field": "Run.outcome",
+      "implementation": "RunRecord.outcome and finalized run rows",
+      "implementation_present": true,
+      "markers": [
+        "outcome: str = \"unknown\"",
+        "\"outcome\": outcome"
+      ],
+      "markers_present": [
+        "outcome: str = \"unknown\"",
+        "\"outcome\": outcome"
+      ],
+      "paper_present": true,
+      "scope": "direct"
+    },
+    {
+      "covered": true,
+      "field": "Run.usage",
+      "implementation": "Trace.usage from turn.completed plus aggregate token_usage",
+      "implementation_present": true,
+      "markers": [
+        "usage: dict[str, Any]",
+        "payload.get(\"usage\")",
+        "\"token_usage\""
+      ],
+      "markers_present": [
+        "usage: dict[str, Any]",
+        "payload.get(\"usage\")",
+        "\"token_usage\""
+      ],
+      "paper_present": true,
+      "scope": "trace_level"
+    }
+  ],
+  "step_fields": [
+    {
+      "covered": true,
+      "field": "Step.timestamp",
+      "implementation": "TraceEvent.timestamp",
+      "implementation_present": true,
+      "markers": [
+        "timestamp: str | None",
+        "\"timestamp\": self.timestamp"
+      ],
+      "markers_present": [
+        "timestamp: str | None",
+        "\"timestamp\": self.timestamp"
+      ],
+      "paper_present": true,
+      "scope": "direct"
+    },
+    {
+      "covered": true,
+      "field": "Step.event_type",
+      "implementation": "TraceEvent.kind plus TraceEvent.raw_type",
+      "implementation_present": true,
+      "markers": [
+        "kind: EventKind",
+        "raw_type: str"
+      ],
+      "markers_present": [
+        "kind: EventKind",
+        "raw_type: str"
+      ],
+      "paper_present": true,
+      "scope": "direct"
+    },
+    {
+      "covered": true,
+      "field": "Step.content",
+      "implementation": "TraceEvent.title and TraceEvent.detail",
+      "implementation_present": true,
+      "markers": [
+        "title: str",
+        "detail: str"
+      ],
+      "markers_present": [
+        "title: str",
+        "detail: str"
+      ],
+      "paper_present": true,
+      "scope": "direct"
+    },
+    {
+      "covered": true,
+      "field": "Step.tool_name",
+      "implementation": "MCP tool name normalized into TraceEvent.title with metadata retained",
+      "implementation_present": true,
+      "markers": [
+        "item_type in {\"mcp_tool_call\", \"tool_call\", \"function_call\"}",
+        "item.get(\"name\") or item.get(\"tool_name\")"
+      ],
+      "markers_present": [
+        "item_type in {\"mcp_tool_call\", \"tool_call\", \"function_call\"}",
+        "item.get(\"name\") or item.get(\"tool_name\")"
+      ],
+      "paper_present": true,
+      "scope": "representational"
+    },
+    {
+      "covered": true,
+      "field": "Step.command",
+      "implementation": "TraceEvent.command",
+      "implementation_present": true,
+      "markers": [
+        "command: str | None",
+        "item.get(\"command\")"
+      ],
+      "markers_present": [
+        "command: str | None",
+        "item.get(\"command\")"
+      ],
+      "paper_present": true,
+      "scope": "direct"
+    },
+    {
+      "covered": true,
+      "field": "Step.status",
+      "implementation": "TraceEvent.status plus command exit_code",
+      "implementation_present": true,
+      "markers": [
+        "status: str",
+        "_status(payload)",
+        "exit_code"
+      ],
+      "markers_present": [
+        "status: str",
+        "_status(payload)",
+        "exit_code"
+      ],
+      "paper_present": true,
+      "scope": "direct"
+    },
+    {
+      "covered": true,
+      "field": "Step.error",
+      "implementation": "error events, failed statuses, and failed command detail",
+      "implementation_present": true,
+      "markers": [
+        "raw_type == \"error\"",
+        "\"failed\"",
+        "event_status"
+      ],
+      "markers_present": [
+        "raw_type == \"error\"",
+        "\"failed\"",
+        "event_status"
+      ],
+      "paper_present": true,
+      "scope": "representational"
+    },
+    {
+      "covered": true,
+      "field": "Step.file_paths",
+      "implementation": "TraceEvent.files from file_change events",
+      "implementation_present": true,
+      "markers": [
+        "files: list[str]",
+        "_extract_files",
+        "\"files\": self.files"
+      ],
+      "markers_present": [
+        "files: list[str]",
+        "_extract_files",
+        "\"files\": self.files"
+      ],
+      "paper_present": true,
+      "scope": "alias"
+    },
+    {
+      "covered": true,
+      "field": "Step.token_usage",
+      "implementation": "Trace.usage and turn-event usage detail, surfaced as run-level token_usage metrics",
+      "implementation_present": true,
+      "markers": [
+        "trace.usage",
+        "_usage_detail",
+        "\"token_usage\""
+      ],
+      "markers_present": [
+        "trace.usage",
+        "_usage_detail",
+        "\"token_usage\""
+      ],
+      "paper_present": true,
+      "scope": "trace_level"
+    },
+    {
+      "covered": true,
+      "field": "Step.phase",
+      "implementation": "TraceEvent.phase assigned by assign_phases",
+      "implementation_present": true,
+      "markers": [
+        "phase: EventPhase",
+        "assign_phases",
+        "\"phase\": self.phase"
+      ],
+      "markers_present": [
+        "phase: EventPhase",
+        "assign_phases",
+        "\"phase\": self.phase"
+      ],
+      "paper_present": true,
+      "scope": "direct"
+    },
+    {
+      "covered": true,
+      "field": "Step.failure_tags",
+      "implementation": "diagnosis findings and manual-label failure_tags",
+      "implementation_present": true,
+      "markers": [
+        "TAXONOMY_ALIASES",
+        "evaluate_detector_labels",
+        "failure_tags"
+      ],
+      "markers_present": [
+        "TAXONOMY_ALIASES",
+        "evaluate_detector_labels",
+        "failure_tags"
+      ],
+      "paper_present": true,
+      "scope": "derived"
+    }
+  ],
+  "summary": {
+    "paper_draft_path": "docs/paper_draft.md",
+    "parser_path": "codex_trace/parser.py",
+    "ready": true,
+    "representational_mapping_count": 6,
+    "research_path": "codex_trace/research.py",
+    "run_field_count": 4,
+    "run_fields_covered": 4,
+    "schema_path": "codex_trace/schema.py",
+    "step_field_count": 11,
+    "step_fields_covered": 11
+  }
+}
