@@ -58,6 +58,7 @@ This generated map turns the current evidence into reviewer-facing paper claims.
 - `docs/metric_coverage_audit.md`
 - `docs/paired_effects_audit.md`
 - `docs/demo_audit.md`
+- `docs/web_artifact_audit.md`
 - `docs/cli_surface_audit.md`
 - `docs/schema_field_audit.md`
 - `docs/parser_event_coverage.md`

@@ -31,6 +31,7 @@ The stored pilots can be inspected and aggregated without re-running Codex.
 | `docs/metric_coverage_audit.md` | Generated coverage audit for the metrics named in the experiment design. |
 | `docs/paired_effects_audit.md` | Generated paired effect-size and uncertainty audit for RQ3 intervention deltas. |
 | `docs/demo_audit.md` | Generated audit for the reviewer-facing offline demo script. |
+| `docs/web_artifact_audit.md` | Generated audit for the committed static Web replay artifact. |
 | `docs/cli_surface_audit.md` | Generated audit for offline CLI command surface coverage. |
 | `docs/schema_field_audit.md` | Generated audit mapping paper-facing Run/Step schema fields to implementation sources. |
 | `docs/parser_event_coverage.md` | Generated audit for synthetic JSONL parser event-kind and phase coverage. |
@@ -98,6 +99,7 @@ The stored pilots can be inspected and aggregated without re-running Codex.
 | `scripts/audit_metric_coverage.py` | Checks that experiment-design metrics are collected, summarized, exported to CSV, and visible in aggregate Markdown. |
 | `scripts/audit_paired_effects.py` | Computes task-paired effect sizes, sign tests, and bootstrap CIs for RQ3 deltas. |
 | `scripts/audit_demo.py` | Runs the offline demo script and checks generated JSON/Markdown diagnosis artifacts. |
+| `scripts/audit_web_artifact.py` | Checks the committed Web replay fixture and event-ID highlight source path. |
 | `scripts/audit_cli_surface.py` | Smoke-tests offline CLI entry points for trace, diagnosis, aggregate, label, paper-report, summary, and dry-run artifacts. |
 | `scripts/audit_schema_fields.py` | Checks that paper-facing Run/Step schema fields are represented in parser, schema, and research outputs. |
 | `scripts/audit_parser_event_coverage.py` | Checks synthetic JSONL event-kind, usage, file, tool, and phase coverage for the parser. |
@@ -201,6 +203,14 @@ Offline demo audit:
 PYTHONPATH=. python3 scripts/audit_demo.py \
   --json-output /tmp/demo-audit.json \
   --markdown-output /tmp/demo-audit.md
+```
+
+Web artifact audit:
+
+```bash
+PYTHONPATH=. python3 scripts/audit_web_artifact.py \
+  --json-output /tmp/web-artifact-audit.json \
+  --markdown-output /tmp/web-artifact-audit.md
 ```
 
 CLI surface audit:

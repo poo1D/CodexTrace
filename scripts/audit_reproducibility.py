@@ -27,6 +27,7 @@ REQUIRED_COMMANDS = (
     {"id": "metric_coverage_audit", "phrase": "scripts/audit_metric_coverage.py"},
     {"id": "paired_effects_audit", "phrase": "scripts/audit_paired_effects.py"},
     {"id": "demo_audit", "phrase": "scripts/audit_demo.py"},
+    {"id": "web_artifact_audit", "phrase": "scripts/audit_web_artifact.py"},
     {"id": "cli_surface_audit", "phrase": "scripts/audit_cli_surface.py"},
     {"id": "schema_field_audit", "phrase": "scripts/audit_schema_fields.py"},
     {"id": "parser_event_coverage", "phrase": "scripts/audit_parser_event_coverage.py"},

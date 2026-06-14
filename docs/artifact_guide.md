@@ -42,29 +42,30 @@ oracles for hidden semantic correctness.
 14. Check paired RQ3 effect-size evidence in
    `docs/paired_effects_audit.md`.
 15. Check offline demo coverage in `docs/demo_audit.md`.
-16. Check offline CLI coverage in `docs/cli_surface_audit.md`.
-17. Check Run/Step schema-field mapping in `docs/schema_field_audit.md`.
-18. Check parser event coverage in `docs/parser_event_coverage.md`.
-19. Check diagnosis-node traceability in `docs/failure_node_traceability.md`.
-20. Check phase segmentation coverage in `docs/phase_coverage_audit.md`.
-21. Check task-category coverage in `docs/task_category_coverage.md`.
-22. Check harness protocol coverage in `docs/harness_protocol_audit.md`.
-23. Check failure-taxonomy coverage in `docs/failure_taxonomy_audit.md`.
-24. Check related-work positioning coverage in `docs/related_work_audit.md`.
-25. Check paper reference discoverability in `docs/bibliography_audit.md`.
-26. Check abstract-level evidence coverage in `docs/paper_abstract_audit.md`.
-27. Check contribution-claim coverage in `docs/paper_contribution_audit.md`.
-28. Check paper structure and RQ coverage in `docs/paper_structure_audit.md`.
-29. Check metric coverage in `docs/metric_coverage_audit.md`.
-30. Check reproduction command coverage in `docs/reproducibility_audit.md`.
-31. Check claim-to-evidence mapping in `docs/reproducibility_checklist.md`.
-32. Run the offline demo:
+16. Check Web replay artifact coverage in `docs/web_artifact_audit.md`.
+17. Check offline CLI coverage in `docs/cli_surface_audit.md`.
+18. Check Run/Step schema-field mapping in `docs/schema_field_audit.md`.
+19. Check parser event coverage in `docs/parser_event_coverage.md`.
+20. Check diagnosis-node traceability in `docs/failure_node_traceability.md`.
+21. Check phase segmentation coverage in `docs/phase_coverage_audit.md`.
+22. Check task-category coverage in `docs/task_category_coverage.md`.
+23. Check harness protocol coverage in `docs/harness_protocol_audit.md`.
+24. Check failure-taxonomy coverage in `docs/failure_taxonomy_audit.md`.
+25. Check related-work positioning coverage in `docs/related_work_audit.md`.
+26. Check paper reference discoverability in `docs/bibliography_audit.md`.
+27. Check abstract-level evidence coverage in `docs/paper_abstract_audit.md`.
+28. Check contribution-claim coverage in `docs/paper_contribution_audit.md`.
+29. Check paper structure and RQ coverage in `docs/paper_structure_audit.md`.
+30. Check metric coverage in `docs/metric_coverage_audit.md`.
+31. Check reproduction command coverage in `docs/reproducibility_audit.md`.
+32. Check claim-to-evidence mapping in `docs/reproducibility_checklist.md`.
+33. Run the offline demo:
 
 ```bash
 ./scripts/demo.sh
 ```
 
-33. Optionally open the visual replay UI:
+34. Optionally open the visual replay UI:
 
 ```bash
 cd web
@@ -97,6 +98,7 @@ npm run dev
 | RQ3: Do harness interventions help? | `docs/results_summary.md` RQ3 tables |
 | Are RQ3 deltas task-paired with uncertainty? | `docs/paired_effects_audit.md` |
 | Does the offline demo path work? | `docs/demo_audit.md` |
+| Is the committed Web replay artifact current? | `docs/web_artifact_audit.md` |
 | What headline table should the paper use? | `docs/headline_results.md` |
 | How should the original thesis be revised? | `docs/thesis_revision_decision.md` |
 | What validity threats constrain the claims? | `docs/validity_threats.md` |

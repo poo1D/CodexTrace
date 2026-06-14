@@ -300,7 +300,10 @@
           "`rg \"calculate_total\"` repeated 2 times"
         ],
         "recommendation": "Summarize discovered facts after each exploration pass and switch from broad search to targeted file reads.",
-        "event_ids": []
+        "event_ids": [
+          "e0003",
+          "e0004"
+        ]
       },
       {
         "code": "sandbox_or_permission_block",

@@ -1,0 +1,90 @@
+{
+  "findings": [
+    {
+      "actual_event_ids": [
+        "e0005",
+        "e0007"
+      ],
+      "code": "command_failure_unhandled",
+      "event_ids_match": true,
+      "expected_event_ids": [
+        "e0005",
+        "e0007"
+      ],
+      "present": true
+    },
+    {
+      "actual_event_ids": [
+        "e0006"
+      ],
+      "code": "verification_gap",
+      "event_ids_match": true,
+      "expected_event_ids": [
+        "e0006"
+      ],
+      "present": true
+    },
+    {
+      "actual_event_ids": [
+        "e0008"
+      ],
+      "code": "premature_completion",
+      "event_ids_match": true,
+      "expected_event_ids": [
+        "e0008"
+      ],
+      "present": true
+    },
+    {
+      "actual_event_ids": [
+        "e0003",
+        "e0004"
+      ],
+      "code": "repeated_search_or_read",
+      "event_ids_match": true,
+      "expected_event_ids": [
+        "e0003",
+        "e0004"
+      ],
+      "present": true
+    },
+    {
+      "actual_event_ids": [
+        "e0007"
+      ],
+      "code": "sandbox_or_permission_block",
+      "event_ids_match": true,
+      "expected_event_ids": [
+        "e0007"
+      ],
+      "present": true
+    }
+  ],
+  "report_checks": {
+    "event_count": true,
+    "failure_score": true,
+    "finding_count": true,
+    "finding_event_ids": true,
+    "usage": true
+  },
+  "source_checks": {
+    "fallback_report": true,
+    "fetch_report": true,
+    "finding_event_flatmap": true,
+    "highlighted_class": true,
+    "highlighted_style": true,
+    "react_dependency": true,
+    "responsive_css": true,
+    "root_mount": true,
+    "vite_build_script": true
+  },
+  "summary": {
+    "covered_findings": 5,
+    "expected_findings": 5,
+    "ready": true,
+    "report_checks": 5,
+    "source_checks": 9,
+    "trace": "demo/failing-codex-trace.jsonl",
+    "web_report": "web/public/report.json"
+  }
+}
