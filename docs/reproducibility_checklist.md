@@ -30,6 +30,7 @@ The stored pilots can be inspected and aggregated without re-running Codex.
 | `docs/rq4_signal_audit.md` | Generated signal audit for observable process positives and hidden semantic boundaries. |
 | `docs/metric_coverage_audit.md` | Generated coverage audit for the metrics named in the experiment design. |
 | `docs/task_category_coverage.md` | Generated audit for benchmark task-category coverage. |
+| `docs/harness_protocol_audit.md` | Generated audit for intervention prompt/protocol coverage. |
 | `docs/failure_taxonomy_audit.md` | Generated coverage audit for the six process-failure taxonomy labels. |
 | `docs/related_work_audit.md` | Generated coverage audit for related-work positioning axes. |
 | `docs/bibliography_audit.md` | Generated audit for reference discoverability across paper and notes. |
@@ -87,6 +88,7 @@ The stored pilots can be inspected and aggregated without re-running Codex.
 | `scripts/audit_reviewer_path.py` | Reviewer-path coverage guard for required paper artifacts. |
 | `scripts/audit_metric_coverage.py` | Checks that experiment-design metrics are collected, summarized, exported to CSV, and visible in aggregate Markdown. |
 | `scripts/audit_task_category_coverage.py` | Checks benchmark task-category coverage across seed, hard, and hard30 manifests. |
+| `scripts/audit_harness_protocol.py` | Checks intervention prompt templates and experiment protocol coverage for the harness constraints. |
 | `scripts/audit_failure_taxonomy.py` | Checks that taxonomy labels are defined, mapped in the paper draft, and covered by detector fixtures. |
 | `scripts/audit_related_work.py` | Checks that related-work notes and the paper draft cover the required positioning axes. |
 | `scripts/audit_bibliography.py` | Checks that paper references are discoverable from the draft and related-work notes. |
@@ -157,6 +159,14 @@ Task-category coverage audit:
 PYTHONPATH=. python3 scripts/audit_task_category_coverage.py \
   --json-output /tmp/task-category-coverage.json \
   --markdown-output /tmp/task-category-coverage.md
+```
+
+Harness protocol audit:
+
+```bash
+PYTHONPATH=. python3 scripts/audit_harness_protocol.py \
+  --json-output /tmp/harness-protocol-audit.json \
+  --markdown-output /tmp/harness-protocol-audit.md
 ```
 
 Failure taxonomy coverage audit:

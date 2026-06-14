@@ -661,6 +661,43 @@ def check_task_category_coverage_content(path: Path = Path("docs/task_category_c
     }
 
 
+def check_harness_protocol_audit_content(path: Path = Path("docs/harness_protocol_audit.md")) -> dict[str, Any]:
+    problems = []
+    try:
+        text = path.read_text(encoding="utf-8")
+    except FileNotFoundError:
+        return {
+            "name": "harness protocol audit",
+            "ok": False,
+            "evidence": str(path),
+            "problems": ["missing harness protocol audit"],
+        }
+
+    required_phrases = {
+        "ready": "Ready: yes",
+        "prompt coverage": "Intervention prompts covered: 4 / 4",
+        "rule count": "Harness rules per prompt: 5",
+        "protocol coverage": "Protocol rules covered: 5 / 5",
+        "inspect first": "inspect_first",
+        "minimal edit": "minimal_edit",
+        "verification": "post_edit_verification",
+        "failure diagnosis": "failure_diagnosis_before_retry",
+        "finish evidence": "finish_with_evidence",
+        "scope caveat": "does not prove that every model run obeyed each instruction",
+    }
+    for label, phrase in required_phrases.items():
+        if phrase not in text:
+            problems.append(f"missing {label}")
+
+    return {
+        "name": "harness protocol audit",
+        "ok": not problems,
+        "evidence": str(path),
+        "detail": "intervention prompt templates and experiment protocol cover the harness constraints",
+        "problems": problems,
+    }
+
+
 def check_related_work_audit_content(path: Path = Path("docs/related_work_audit.md")) -> dict[str, Any]:
     problems = []
     try:
@@ -780,7 +817,7 @@ def check_reproducibility_audit_content(path: Path = Path("docs/reproducibility_
 
     required_phrases = {
         "ready": "Ready: yes",
-        "coverage count": "Commands covered: 28 / 28",
+        "coverage count": "Commands covered: 29 / 29",
         "balanced fences": "Markdown fences balanced: yes",
         "submission gate": "submission_readiness_gate",
         "scope caveat": "does not execute the full real Codex collection commands",
@@ -881,6 +918,7 @@ def build_report(selection_dir: Path, run_dir: Path) -> dict[str, Any]:
         check_reviewer_path_audit_content(),
         check_metric_coverage_audit_content(),
         check_task_category_coverage_content(),
+        check_harness_protocol_audit_content(),
         check_failure_taxonomy_audit_content(),
         check_related_work_audit_content(),
         check_bibliography_audit_content(),

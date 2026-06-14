@@ -1,0 +1,231 @@
+{
+  "prompts": [
+    {
+      "covered": true,
+      "covered_rule_count": 5,
+      "path": "benchmark/prompts/intervention.txt",
+      "rule_count": 5,
+      "rules": [
+        {
+          "accepted_phrases": [
+            "Inspect first",
+            "Inspect the smallest relevant files"
+          ],
+          "covered": true,
+          "id": "inspect_first"
+        },
+        {
+          "accepted_phrases": [
+            "intended minimal edit",
+            "minimal edit that satisfies"
+          ],
+          "covered": true,
+          "id": "minimal_edit"
+        },
+        {
+          "accepted_phrases": [
+            "Run a focused verification command after the edit",
+            "Run the visible success check after editing"
+          ],
+          "covered": true,
+          "id": "post_edit_verification"
+        },
+        {
+          "accepted_phrases": [
+            "diagnose the cause before retrying",
+            "diagnose the failure before retrying"
+          ],
+          "covered": true,
+          "id": "failure_diagnosis_before_retry"
+        },
+        {
+          "accepted_phrases": [
+            "Finish only after citing concrete evidence",
+            "Finish only after citing the final verification command"
+          ],
+          "covered": true,
+          "id": "finish_with_evidence"
+        }
+      ]
+    },
+    {
+      "covered": true,
+      "covered_rule_count": 5,
+      "path": "benchmark/verification-lift/prompts/intervention.txt",
+      "rule_count": 5,
+      "rules": [
+        {
+          "accepted_phrases": [
+            "Inspect first",
+            "Inspect the smallest relevant files"
+          ],
+          "covered": true,
+          "id": "inspect_first"
+        },
+        {
+          "accepted_phrases": [
+            "intended minimal edit",
+            "minimal edit that satisfies"
+          ],
+          "covered": true,
+          "id": "minimal_edit"
+        },
+        {
+          "accepted_phrases": [
+            "Run a focused verification command after the edit",
+            "Run the visible success check after editing"
+          ],
+          "covered": true,
+          "id": "post_edit_verification"
+        },
+        {
+          "accepted_phrases": [
+            "diagnose the cause before retrying",
+            "diagnose the failure before retrying"
+          ],
+          "covered": true,
+          "id": "failure_diagnosis_before_retry"
+        },
+        {
+          "accepted_phrases": [
+            "Finish only after citing concrete evidence",
+            "Finish only after citing the final verification command"
+          ],
+          "covered": true,
+          "id": "finish_with_evidence"
+        }
+      ]
+    },
+    {
+      "covered": true,
+      "covered_rule_count": 5,
+      "path": "benchmark/verification-lift-v2/prompts/intervention.txt",
+      "rule_count": 5,
+      "rules": [
+        {
+          "accepted_phrases": [
+            "Inspect first",
+            "Inspect the smallest relevant files"
+          ],
+          "covered": true,
+          "id": "inspect_first"
+        },
+        {
+          "accepted_phrases": [
+            "intended minimal edit",
+            "minimal edit that satisfies"
+          ],
+          "covered": true,
+          "id": "minimal_edit"
+        },
+        {
+          "accepted_phrases": [
+            "Run a focused verification command after the edit",
+            "Run the visible success check after editing"
+          ],
+          "covered": true,
+          "id": "post_edit_verification"
+        },
+        {
+          "accepted_phrases": [
+            "diagnose the cause before retrying",
+            "diagnose the failure before retrying"
+          ],
+          "covered": true,
+          "id": "failure_diagnosis_before_retry"
+        },
+        {
+          "accepted_phrases": [
+            "Finish only after citing concrete evidence",
+            "Finish only after citing the final verification command"
+          ],
+          "covered": true,
+          "id": "finish_with_evidence"
+        }
+      ]
+    },
+    {
+      "covered": true,
+      "covered_rule_count": 5,
+      "path": "benchmark/verification-ablation/prompts/intervention.txt",
+      "rule_count": 5,
+      "rules": [
+        {
+          "accepted_phrases": [
+            "Inspect first",
+            "Inspect the smallest relevant files"
+          ],
+          "covered": true,
+          "id": "inspect_first"
+        },
+        {
+          "accepted_phrases": [
+            "intended minimal edit",
+            "minimal edit that satisfies"
+          ],
+          "covered": true,
+          "id": "minimal_edit"
+        },
+        {
+          "accepted_phrases": [
+            "Run a focused verification command after the edit",
+            "Run the visible success check after editing"
+          ],
+          "covered": true,
+          "id": "post_edit_verification"
+        },
+        {
+          "accepted_phrases": [
+            "diagnose the cause before retrying",
+            "diagnose the failure before retrying"
+          ],
+          "covered": true,
+          "id": "failure_diagnosis_before_retry"
+        },
+        {
+          "accepted_phrases": [
+            "Finish only after citing concrete evidence",
+            "Finish only after citing the final verification command"
+          ],
+          "covered": true,
+          "id": "finish_with_evidence"
+        }
+      ]
+    }
+  ],
+  "protocol_rules": [
+    {
+      "covered": true,
+      "id": "inspect_first",
+      "phrase": "inspect first"
+    },
+    {
+      "covered": true,
+      "id": "minimal_edit",
+      "phrase": "minimal edit"
+    },
+    {
+      "covered": true,
+      "id": "post_edit_verification",
+      "phrase": "run post-edit verification"
+    },
+    {
+      "covered": true,
+      "id": "failure_diagnosis_before_retry",
+      "phrase": "diagnose before retrying failed commands"
+    },
+    {
+      "covered": true,
+      "id": "finish_with_evidence",
+      "phrase": "finish only with evidence"
+    }
+  ],
+  "summary": {
+    "covered_prompt_count": 4,
+    "prompt_count": 4,
+    "protocol_path": "docs/experiment_protocol.md",
+    "protocol_rule_count": 5,
+    "ready": true,
+    "rule_count": 5
+  }
+}

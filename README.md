@@ -166,6 +166,7 @@ Key files:
 - `scripts/audit_reviewer_path.py`: checks required reviewer files are discoverable from paper-facing entry points
 - `scripts/audit_metric_coverage.py`: checks planned experiment metrics across run rows, summaries, CSV, and aggregate Markdown
 - `scripts/audit_task_category_coverage.py`: checks benchmark task-category coverage across seed, hard, and hard30 manifests
+- `scripts/audit_harness_protocol.py`: checks intervention prompt templates and protocol coverage for the harness constraints
 - `scripts/audit_failure_taxonomy.py`: checks six-label taxonomy coverage across docs, paper mapping, and detector fixtures
 - `scripts/audit_related_work.py`: checks related-work coverage across bibliography notes and the paper draft
 - `scripts/audit_bibliography.py`: checks paper reference discoverability across the draft and related-work notes
@@ -195,6 +196,7 @@ Key files:
 - `docs/rq4_signal_audit.md`: generated signal audit for observable process failures and hidden semantic boundaries
 - `docs/metric_coverage_audit.md`: generated coverage audit for the experiment-design metrics
 - `docs/task_category_coverage.md`: generated audit for benchmark task-category coverage
+- `docs/harness_protocol_audit.md`: generated audit for intervention prompt/protocol coverage
 - `docs/failure_taxonomy_audit.md`: generated coverage audit for the six process-failure taxonomy labels
 - `docs/related_work_audit.md`: generated coverage audit for related-work positioning axes
 - `docs/bibliography_audit.md`: generated audit for reference discoverability across paper and notes
@@ -296,6 +298,7 @@ PYTHONPATH=. python3 scripts/audit_paper_numbers.py --markdown-output docs/paper
 PYTHONPATH=. python3 scripts/audit_reviewer_path.py --markdown-output docs/reviewer_path_audit.md
 PYTHONPATH=. python3 scripts/audit_submission_package.py --markdown-output docs/submission_package.md
 PYTHONPATH=. python3 scripts/audit_task_category_coverage.py --markdown-output docs/task_category_coverage.md
+PYTHONPATH=. python3 scripts/audit_harness_protocol.py --markdown-output docs/harness_protocol_audit.md
 PYTHONPATH=. python3 scripts/audit_failure_taxonomy.py --markdown-output docs/failure_taxonomy_audit.md
 PYTHONPATH=. python3 scripts/audit_related_work.py --markdown-output docs/related_work_audit.md
 PYTHONPATH=. python3 scripts/audit_bibliography.py --markdown-output docs/bibliography_audit.md

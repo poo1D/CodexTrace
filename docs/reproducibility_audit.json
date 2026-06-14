@@ -26,6 +26,11 @@
       "present": true
     },
     {
+      "id": "harness_protocol_audit",
+      "phrase": "scripts/audit_harness_protocol.py",
+      "present": true
+    },
+    {
       "id": "failure_taxonomy_audit",
       "phrase": "scripts/audit_failure_taxonomy.py",
       "present": true
@@ -142,12 +147,12 @@
     }
   ],
   "summary": {
-    "bash_fence_count": 40,
+    "bash_fence_count": 41,
     "checklist_path": "docs/reproducibility_checklist.md",
-    "covered_command_count": 28,
-    "fence_count": 86,
+    "covered_command_count": 29,
+    "fence_count": 88,
     "fences_balanced": true,
     "ready": true,
-    "required_command_count": 28
+    "required_command_count": 29
   }
 }
