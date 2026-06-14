@@ -227,6 +227,7 @@ def check_paper_draft_content(path: Path = Path("docs/paper_draft.md")) -> dict[
         "detector rule mapping": "| Taxonomy label | Implementation finding | Detector signal |",
         "measurement table": "| Metric | Measurement |",
         "metric coverage link": "docs/metric_coverage_audit.md",
+        "paired effects audit link": "docs/paired_effects_audit.md",
         "cli surface audit link": "docs/cli_surface_audit.md",
         "schema field audit link": "docs/schema_field_audit.md",
         "parser event audit link": "docs/parser_event_coverage.md",
@@ -343,6 +344,7 @@ def check_experiment_protocol_content(path: Path = Path("docs/experiment_protoco
         "average turn count metric": "avg_turn_count",
         "time-to-first average metrics": "avg_time_to_first_test",
         "metric coverage command": "scripts/audit_metric_coverage.py",
+        "paired effects command": "scripts/audit_paired_effects.py",
     }
     for label, phrase in required_phrases.items():
         if " ".join(phrase.lower().split()) not in normalized:
@@ -593,6 +595,41 @@ def check_metric_coverage_audit_content(path: Path = Path("docs/metric_coverage_
         "ok": not problems,
         "evidence": str(path),
         "detail": "all experiment-design metrics are checked across run, CSV, summary, and Markdown outputs",
+        "problems": problems,
+    }
+
+
+def check_paired_effects_audit_content(path: Path = Path("docs/paired_effects_audit.md")) -> dict[str, Any]:
+    problems = []
+    try:
+        text = path.read_text(encoding="utf-8")
+    except FileNotFoundError:
+        return {
+            "name": "paired effects audit",
+            "ok": False,
+            "evidence": str(path),
+            "problems": ["missing paired effects audit"],
+        }
+
+    required_phrases = {
+        "ready": "Ready: yes",
+        "study coverage": "Studies covered: 7 / 7",
+        "hard30 paired tasks": "Hard30 paired tasks: 30",
+        "repeated delta": "Hard30 repeated tool-call delta: -3.733",
+        "token delta": "Hard30 token-usage delta: -98.7k",
+        "verification delta": "Hard30 verification delta: 0",
+        "bootstrap caveat": "not population-level significance claims",
+        "sign test": "Sign p",
+    }
+    for label, phrase in required_phrases.items():
+        if phrase not in text:
+            problems.append(f"missing {label}")
+
+    return {
+        "name": "paired effects audit",
+        "ok": not problems,
+        "evidence": str(path),
+        "detail": "task-paired effect sizes, bootstrap CIs, and sign tests support RQ3 waste deltas",
         "problems": problems,
     }
 
@@ -1106,7 +1143,7 @@ def check_reproducibility_audit_content(path: Path = Path("docs/reproducibility_
 
     required_phrases = {
         "ready": "Ready: yes",
-        "coverage count": "Commands covered: 37 / 37",
+        "coverage count": "Commands covered: 38 / 38",
         "balanced fences": "Markdown fences balanced: yes",
         "submission gate": "submission_readiness_gate",
         "scope caveat": "does not execute the full real Codex collection commands",
@@ -1236,6 +1273,7 @@ def build_report(selection_dir: Path, run_dir: Path) -> dict[str, Any]:
         check_paper_number_guard_content(),
         check_reviewer_path_audit_content(),
         check_metric_coverage_audit_content(),
+        check_paired_effects_audit_content(),
         check_cli_surface_audit_content(),
         check_schema_field_audit_content(),
         check_parser_event_coverage_content(),

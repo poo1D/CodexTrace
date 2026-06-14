@@ -29,6 +29,7 @@ The stored pilots can be inspected and aggregated without re-running Codex.
 | `docs/validity_threats.md` | Generated validity-threat map with evidence, mitigations, and safe wording. |
 | `docs/rq4_signal_audit.md` | Generated signal audit for observable process positives and hidden semantic boundaries. |
 | `docs/metric_coverage_audit.md` | Generated coverage audit for the metrics named in the experiment design. |
+| `docs/paired_effects_audit.md` | Generated paired effect-size and uncertainty audit for RQ3 intervention deltas. |
 | `docs/cli_surface_audit.md` | Generated audit for offline CLI command surface coverage. |
 | `docs/schema_field_audit.md` | Generated audit mapping paper-facing Run/Step schema fields to implementation sources. |
 | `docs/parser_event_coverage.md` | Generated audit for synthetic JSONL parser event-kind and phase coverage. |
@@ -94,6 +95,7 @@ The stored pilots can be inspected and aggregated without re-running Codex.
 | `scripts/audit_paper_numbers.py` | Numeric guard for paper-draft values copied from generated result artifacts. |
 | `scripts/audit_reviewer_path.py` | Reviewer-path coverage guard for required paper artifacts. |
 | `scripts/audit_metric_coverage.py` | Checks that experiment-design metrics are collected, summarized, exported to CSV, and visible in aggregate Markdown. |
+| `scripts/audit_paired_effects.py` | Computes task-paired effect sizes, sign tests, and bootstrap CIs for RQ3 deltas. |
 | `scripts/audit_cli_surface.py` | Smoke-tests offline CLI entry points for trace, diagnosis, aggregate, label, paper-report, summary, and dry-run artifacts. |
 | `scripts/audit_schema_fields.py` | Checks that paper-facing Run/Step schema fields are represented in parser, schema, and research outputs. |
 | `scripts/audit_parser_event_coverage.py` | Checks synthetic JSONL event-kind, usage, file, tool, and phase coverage for the parser. |
@@ -181,6 +183,14 @@ Metric coverage audit:
 PYTHONPATH=. python3 scripts/audit_metric_coverage.py \
   --json-output /tmp/metric-coverage-audit.json \
   --markdown-output /tmp/metric-coverage-audit.md
+```
+
+Paired effects audit:
+
+```bash
+PYTHONPATH=. python3 scripts/audit_paired_effects.py \
+  --json-output /tmp/paired-effects-audit.json \
+  --markdown-output /tmp/paired-effects-audit.md
 ```
 
 CLI surface audit:

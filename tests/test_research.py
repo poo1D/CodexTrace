@@ -10,6 +10,7 @@ from scripts.finalize_benchmark_pilot import (
 from scripts.audit_manual_labels import audit_manual_labels, render_audit
 from scripts.audit_failure_taxonomy import build_failure_taxonomy_audit, render_failure_taxonomy_audit_markdown
 from scripts.audit_metric_coverage import build_metric_coverage_audit, render_metric_coverage_audit_markdown
+from scripts.audit_paired_effects import build_paired_effects_audit, render_paired_effects_markdown
 from scripts.audit_cli_surface import build_cli_surface_audit, render_cli_surface_markdown
 from scripts.audit_schema_fields import build_schema_field_audit, render_schema_field_audit_markdown
 from scripts.audit_parser_event_coverage import build_parser_event_coverage_audit, render_parser_event_coverage_markdown
@@ -75,6 +76,7 @@ from scripts.check_submission_readiness import (
     check_goal_completion_audit_content,
     check_headline_results_content,
     check_metric_coverage_audit_content,
+    check_paired_effects_audit_content,
     check_cli_surface_audit_content,
     check_schema_field_audit_content,
     check_parser_event_coverage_content,
@@ -1287,6 +1289,22 @@ def test_metric_coverage_audit_covers_experiment_design_metrics():
     assert "avg_time_to_first_test" in markdown
 
 
+def test_paired_effects_audit_quantifies_rq3_waste_deltas():
+    result = build_paired_effects_audit(bootstrap_samples=200)
+    markdown = render_paired_effects_markdown(result)
+    hard30 = {row["metric"]: row for row in result["metrics"] if row["study"] == "hard30"}
+
+    assert result["summary"]["ready"] is True
+    assert result["summary"]["study_count"] == 7
+    assert result["summary"]["hard30_paired_tasks"] == 30
+    assert hard30["repeated_tool_call_delta"]["avg_delta"] < 0
+    assert hard30["repeated_tool_call_delta"]["ci_high"] < 0
+    assert hard30["token_usage_delta"]["avg_delta"] < 0
+    assert hard30["token_usage_delta"]["ci_high"] < 0
+    assert hard30["verification_delta"]["avg_delta"] == 0
+    assert "not population-level significance claims" in markdown
+
+
 def test_cli_surface_audit_covers_offline_entrypoints():
     result = build_cli_surface_audit()
     markdown = render_cli_surface_markdown(result)
@@ -1474,13 +1492,14 @@ def test_reproducibility_audit_covers_key_commands():
     markdown = render_reproducibility_audit_markdown(result)
 
     assert result["summary"]["ready"] is True
-    assert result["summary"]["covered_command_count"] == 37
+    assert result["summary"]["covered_command_count"] == 38
     assert result["summary"]["fences_balanced"] is True
     assert {row["id"] for row in result["commands"]} >= {
         "full30_aggregate",
         "controlled_fixture_eval",
         "detector_evaluation_audit",
         "rule_implementation_audit",
+        "paired_effects_audit",
         "cli_surface_audit",
         "schema_field_audit",
         "parser_event_coverage",
@@ -1925,6 +1944,7 @@ def test_paper_draft_contains_submission_polish_sections():
     assert "## References" in text
     assert "docs/paper_structure_audit.md" in text
     assert "docs/reproducibility_audit.md" in text
+    assert "docs/paired_effects_audit.md" in text
     assert "docs/cli_surface_audit.md" in text
     assert "docs/schema_field_audit.md" in text
     assert "docs/parser_event_coverage.md" in text
@@ -1955,6 +1975,7 @@ def test_reviewer_docs_surface_hard30_task_diagnosis():
     assert "docs/reviewer_path_audit.md" in readme
     assert "docs/detector_evaluation_audit.md" in readme
     assert "docs/rule_implementation_audit.md" in readme
+    assert "docs/paired_effects_audit.md" in readme
     assert "docs/cli_surface_audit.md" in readme
     assert "docs/schema_field_audit.md" in readme
     assert "docs/parser_event_coverage.md" in readme
@@ -1986,6 +2007,7 @@ def test_reviewer_docs_surface_hard30_task_diagnosis():
     assert "scripts/audit_submission_package.py --markdown-output docs/submission_package.md" in readme
     assert "scripts/audit_detector_evaluation.py --markdown-output docs/detector_evaluation_audit.md" in readme
     assert "scripts/audit_rule_implementation.py --markdown-output docs/rule_implementation_audit.md" in readme
+    assert "scripts/audit_paired_effects.py --markdown-output docs/paired_effects_audit.md" in readme
     assert "scripts/audit_cli_surface.py --markdown-output docs/cli_surface_audit.md" in readme
     assert "scripts/audit_schema_fields.py --markdown-output docs/schema_field_audit.md" in readme
     assert "scripts/audit_parser_event_coverage.py --markdown-output docs/parser_event_coverage.md" in readme
@@ -2011,6 +2033,7 @@ def test_reviewer_docs_surface_hard30_task_diagnosis():
     assert "docs/verification_ablation_plan_audit.md" in guide
     assert "docs/detector_evaluation_audit.md" in guide
     assert "docs/rule_implementation_audit.md" in guide
+    assert "docs/paired_effects_audit.md" in guide
     assert "docs/cli_surface_audit.md" in guide
     assert "docs/schema_field_audit.md" in guide
     assert "docs/parser_event_coverage.md" in guide
@@ -2048,6 +2071,7 @@ def test_reviewer_docs_surface_hard30_task_diagnosis():
     assert "scripts/audit_reviewer_path.py" in checklist
     assert "scripts/audit_detector_evaluation.py" in checklist
     assert "scripts/audit_rule_implementation.py" in checklist
+    assert "scripts/audit_paired_effects.py" in checklist
     assert "scripts/audit_cli_surface.py" in checklist
     assert "scripts/audit_schema_fields.py" in checklist
     assert "scripts/audit_parser_event_coverage.py" in checklist
@@ -2067,6 +2091,7 @@ def test_reviewer_docs_surface_hard30_task_diagnosis():
     assert "--markdown-output /tmp/verification-ablation-plan-audit.md" in checklist
     assert "--markdown-output /tmp/detector-evaluation-audit.md" in checklist
     assert "--markdown-output /tmp/rule-implementation-audit.md" in checklist
+    assert "--markdown-output /tmp/paired-effects-audit.md" in checklist
     assert "--markdown-output /tmp/cli-surface-audit.md" in checklist
     assert "--markdown-output /tmp/schema-field-audit.md" in checklist
     assert "--markdown-output /tmp/parser-event-coverage.md" in checklist
@@ -2194,6 +2219,7 @@ def test_submission_package_maps_rqs_to_safe_paper_claims():
     assert "docs/paper_number_guard.md" in package["required_files"]
     assert "docs/reviewer_path_audit.md" in package["required_files"]
     assert "docs/metric_coverage_audit.md" in package["required_files"]
+    assert "docs/paired_effects_audit.md" in package["required_files"]
     assert "docs/cli_surface_audit.md" in package["required_files"]
     assert "docs/schema_field_audit.md" in package["required_files"]
     assert "docs/parser_event_coverage.md" in package["required_files"]
@@ -2218,6 +2244,7 @@ def test_submission_package_maps_rqs_to_safe_paper_claims():
     assert "docs/hard30_task_diagnosis.md" in markdown
     assert "docs/detector_evaluation_audit.md" in markdown
     assert "docs/rule_implementation_audit.md" in markdown
+    assert "docs/paired_effects_audit.md" in markdown
     assert "docs/verification_ablation_plan_audit.md" in markdown
     assert "docs/task_category_coverage.md" in markdown
     assert "docs/harness_protocol_audit.md" in markdown
@@ -2357,6 +2384,7 @@ def test_reviewer_path_audit_covers_required_artifacts(tmp_path):
     assert any(row["path"] == "docs/detector_evaluation_audit.md" for row in result["coverage"])
     assert any(row["path"] == "docs/rule_implementation_audit.md" for row in result["coverage"])
     assert any(row["path"] == "docs/verification_ablation_plan_audit.md" for row in result["coverage"])
+    assert any(row["path"] == "docs/paired_effects_audit.md" for row in result["coverage"])
     assert any(row["path"] == "docs/cli_surface_audit.md" for row in result["coverage"])
     assert any(row["path"] == "docs/schema_field_audit.md" for row in result["coverage"])
     assert any(row["path"] == "docs/parser_event_coverage.md" for row in result["coverage"])
@@ -2405,6 +2433,19 @@ def test_submission_readiness_validates_metric_coverage_audit_content(tmp_path):
     assert "missing ready" in check["problems"]
     assert "missing coverage count" in check["problems"]
     assert "missing time to first test" in check["problems"]
+
+
+def test_submission_readiness_validates_paired_effects_audit_content(tmp_path):
+    broken = tmp_path / "paired_effects_audit.md"
+    broken.write_text("# Paired Effects Audit\nReady: no\n", encoding="utf-8")
+
+    check = check_paired_effects_audit_content(broken)
+
+    assert check["ok"] is False
+    assert "missing ready" in check["problems"]
+    assert "missing study coverage" in check["problems"]
+    assert "missing hard30 paired tasks" in check["problems"]
+    assert "missing bootstrap caveat" in check["problems"]
 
 
 def test_submission_readiness_validates_schema_field_audit_content(tmp_path):

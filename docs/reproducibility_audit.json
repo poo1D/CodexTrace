@@ -31,6 +31,11 @@
       "present": true
     },
     {
+      "id": "paired_effects_audit",
+      "phrase": "scripts/audit_paired_effects.py",
+      "present": true
+    },
+    {
       "id": "cli_surface_audit",
       "phrase": "scripts/audit_cli_surface.py",
       "present": true
@@ -187,12 +192,12 @@
     }
   ],
   "summary": {
-    "bash_fence_count": 48,
+    "bash_fence_count": 49,
     "checklist_path": "docs/reproducibility_checklist.md",
-    "covered_command_count": 37,
-    "fence_count": 102,
+    "covered_command_count": 38,
+    "fence_count": 104,
     "fences_balanced": true,
     "ready": true,
-    "required_command_count": 37
+    "required_command_count": 38
   }
 }

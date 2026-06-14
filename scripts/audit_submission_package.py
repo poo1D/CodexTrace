@@ -55,6 +55,7 @@ def build_submission_package() -> dict[str, Any]:
             "claim_boundary": "Waste reduction is supported; success lift is pilot-qualified; ordinary verification-rate lift is unsupported.",
             "primary_evidence": [
                 "docs/results_summary.md",
+                "docs/paired_effects_audit.md",
                 "docs/hard30_task_diagnosis.md",
                 "docs/paper_claim_audit.md",
                 "docs/verification_ablation_plan_audit.md",
@@ -125,6 +126,7 @@ def build_submission_package() -> dict[str, Any]:
             "docs/paper_number_guard.md",
             "docs/reviewer_path_audit.md",
             "docs/metric_coverage_audit.md",
+            "docs/paired_effects_audit.md",
             "docs/cli_surface_audit.md",
             "docs/schema_field_audit.md",
             "docs/parser_event_coverage.md",

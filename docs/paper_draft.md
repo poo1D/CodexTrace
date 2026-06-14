@@ -279,7 +279,9 @@ The experiment design tracks both final outcomes and process-level waste. Each
 metric is computed from the normalized trace plus the run manifest outcome
 field; the generated `docs/metric_coverage_audit.md` checks that all metrics in
 this table are present in run rows, CSV exports, baseline/intervention
-summaries, and aggregate Markdown.
+summaries, and aggregate Markdown. The generated
+`docs/paired_effects_audit.md` then computes task-paired deltas, sign tests,
+and bootstrap confidence intervals for the RQ3 intervention effects.
 
 | Metric | Measurement |
 | --- | --- |
@@ -522,6 +524,8 @@ decision,
 `docs/validity_threats.md` for validity threats and safe wording,
 `docs/submission_package.md` for safe RQ-to-evidence claim framing,
 `docs/metric_coverage_audit.md` for experiment-metric coverage,
+`docs/paired_effects_audit.md` for paired RQ3 effect-size and uncertainty
+evidence,
 `docs/cli_surface_audit.md` for offline CLI coverage,
 `docs/schema_field_audit.md` for Run/Step schema-field mapping,
 `docs/parser_event_coverage.md` for JSONL parser event coverage,
@@ -562,7 +566,8 @@ claim-evidence mapping, validity threats, and reproduction commands, see
 `docs/validity_threats.md` and `docs/reproducibility_checklist.md`.
 For safe claim framing and generated guard status, see
 `docs/submission_package.md`, `docs/failure_taxonomy_audit.md`,
-`docs/cli_surface_audit.md`, `docs/schema_field_audit.md`,
+`docs/paired_effects_audit.md`, `docs/cli_surface_audit.md`,
+`docs/schema_field_audit.md`,
 `docs/parser_event_coverage.md`,
 `docs/failure_node_traceability.md`,
 `docs/phase_coverage_audit.md`,

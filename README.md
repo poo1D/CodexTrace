@@ -74,7 +74,8 @@ headline table, `docs/thesis_revision_decision.md` for the explicit
 boundary-result thesis decision, `docs/validity_threats.md` for validity
 threat mapping, `docs/rq4_signal_audit.md` for the generated
 boundary-style signal audit, `docs/metric_coverage_audit.md` for experiment
-metric coverage, `docs/cli_surface_audit.md` for offline CLI coverage,
+metric coverage, `docs/paired_effects_audit.md` for paired RQ3 effect-size
+and uncertainty evidence, `docs/cli_surface_audit.md` for offline CLI coverage,
 `docs/schema_field_audit.md` for Run/Step schema-field
 mapping, `docs/parser_event_coverage.md` for JSONL parser event coverage,
 `docs/failure_node_traceability.md` for diagnosis-node traceability,
@@ -169,6 +170,7 @@ Key files:
 - `scripts/audit_paper_numbers.py`: checks paper-draft numeric claims against stored aggregate artifacts
 - `scripts/audit_reviewer_path.py`: checks required reviewer files are discoverable from paper-facing entry points
 - `scripts/audit_metric_coverage.py`: checks planned experiment metrics across run rows, summaries, CSV, and aggregate Markdown
+- `scripts/audit_paired_effects.py`: computes task-paired effect sizes, sign tests, and bootstrap CIs for RQ3 deltas
 - `scripts/audit_cli_surface.py`: smoke-tests offline CLI entry points for trace, diagnosis, and research artifact generation
 - `scripts/audit_schema_fields.py`: checks paper-facing Run/Step schema fields against parser, schema, and research outputs
 - `scripts/audit_parser_event_coverage.py`: checks synthetic JSONL event-kind and phase coverage for the parser
@@ -201,6 +203,7 @@ Key files:
 - `docs/reviewer_path_audit.md`: generated guard that checks reviewer-path coverage for required paper artifacts
 - `docs/paper_draft.md`: result-driven workshop-style paper draft
 - `docs/paper_outline.md`: paper outline and experiment plan
+- `docs/paired_effects_audit.md`: generated paired effect-size and uncertainty audit for RQ3 waste-reduction claims
 - `docs/reproducibility_checklist.md`: claim-evidence map and reproduction commands
 - `docs/submission_package.md`: generated RQ-to-evidence map for safe paper submission claims
 - `docs/results_summary.md`: generated full30 + hard10 + hard30 + process-stress + verification-lift + verification-lift-v2 + verification-ablation result summary, including RQ4 trace-signal analysis
@@ -318,6 +321,7 @@ PYTHONPATH=. python3 scripts/audit_reviewer_path.py --markdown-output docs/revie
 PYTHONPATH=. python3 scripts/audit_submission_package.py --markdown-output docs/submission_package.md
 PYTHONPATH=. python3 scripts/audit_detector_evaluation.py --markdown-output docs/detector_evaluation_audit.md
 PYTHONPATH=. python3 scripts/audit_rule_implementation.py --markdown-output docs/rule_implementation_audit.md
+PYTHONPATH=. python3 scripts/audit_paired_effects.py --markdown-output docs/paired_effects_audit.md
 PYTHONPATH=. python3 scripts/audit_cli_surface.py --markdown-output docs/cli_surface_audit.md
 PYTHONPATH=. python3 scripts/audit_schema_fields.py --markdown-output docs/schema_field_audit.md
 PYTHONPATH=. python3 scripts/audit_parser_event_coverage.py --markdown-output docs/parser_event_coverage.md

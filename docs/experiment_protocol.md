@@ -172,13 +172,21 @@ python3 scripts/audit_metric_coverage.py \
   --markdown-output reports/metric-coverage-audit.md
 ```
 
+Audit paired effect sizes and uncertainty for RQ3:
+
+```bash
+python3 scripts/audit_paired_effects.py \
+  --json-output reports/paired-effects-audit.json \
+  --markdown-output reports/paired-effects-audit.md
+```
+
 ## RQ-To-Evidence Map
 
 | RQ | Primary artifact | Reproduction command | Acceptance evidence |
 | --- | --- | --- | --- |
 | RQ1 failure modes | `docs/failure_taxonomy.md`, `benchmark/*/manual-labels.jsonl` | `codex-trace research paper-report ... --labels ...` | Taxonomy distribution and manual-label counts identify which failure modes appear. |
 | RQ2 trace-only detection | `benchmark/detector-fixtures/label-eval.md`, hard/process paper reports | `codex-trace research evaluate-labels MANIFEST LABELS` | Per-label precision/recall/F1 show detected process positives and hidden-semantic false negatives. |
-| RQ3 intervention effect | `docs/results_summary.md`, `paired-task-summary.csv`, `docs/hard30_task_diagnosis.md` | `codex-trace research summary --markdown-output docs/results_summary.md`; `python3 scripts/audit_hard30_task_diagnosis.py ...` | Baseline/intervention deltas, paired task summaries, and task-level diagnosis show success, verification, waste, token changes, repairs, and regressions. |
+| RQ3 intervention effect | `docs/results_summary.md`, `docs/paired_effects_audit.md`, `paired-task-summary.csv`, `docs/hard30_task_diagnosis.md` | `codex-trace research summary --markdown-output docs/results_summary.md`; `python3 scripts/audit_paired_effects.py ...`; `python3 scripts/audit_hard30_task_diagnosis.py ...` | Baseline/intervention deltas, paired task summaries, bootstrap CIs, sign tests, and task-level diagnosis show success, verification, waste, token changes, repairs, and regressions. |
 | RQ4 explanatory signals | `docs/rq4_signal_audit.md`, `paper-report-labeled.json` | `python3 scripts/audit_rq4_signals.py ...` | Signal means/deltas separate observable process positives and document the hidden-semantic boundary. |
 
 The current evidence should be read with these boundaries:
