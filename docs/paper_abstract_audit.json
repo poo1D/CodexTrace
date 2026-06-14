@@ -1,0 +1,89 @@
+{
+  "abstract": "Coding agents increasingly solve software tasks by inspecting repositories,\ncalling tools, editing files, running commands, and producing final summaries.\nHowever, most evaluations reduce this process to a final success or failure\nlabel. This hides a useful class of failures that happen inside the tool-use\nloop: missing verification, unrecovered tool errors, repetitive exploration,\ncontext drift, premature completion, and sandbox or permission deadlocks.\n\nWe introduce CodexTrace, an offline parser and diagnosis engine for\n`codex exec --json` traces. CodexTrace normalizes agent events into a stable\nschema, segments runs into phases, detects interpretable process-level failure\npatterns, and aggregates baseline-vs-intervention experiments. We evaluate the\ntool on seven real Codex benchmark pilots: a 30-task seed benchmark with 60\nruns, an early 10-task hard tier with 20 runs, a 30-task hard tier with 60\nruns and hidden edge-case graders, a 12-task process-stress tier, an 8-task\nverification-lift tier, an 8-task ordinary-baseline verification-lift-v2\nrerun, and a 4-task no-verify ablation. The ordinary and weak-baseline pilots\nhave saturated verification rates, so they do not support a\nverification-rate-lift claim. On the seed pilot, all runs succeed, but the\nintervention reduces repeated tool calls from 10.43 to 7.00 and average token\nusage from 218.7k to 184.8k. On the hard30 tier, success rate stays flat at\n50%, but the intervention reduces repeated tool calls from 12.93 to 9.20,\naverage token usage from 355.0k to 256.3k, and failure score from 3.50 to\n1.17.\nA manual-label analysis also shows a boundary of trace-only diagnosis: 30\nhidden semantic edge-case failures are missed by deterministic process rules\nbecause their visible process traces often look clean. These results suggest\nthat trace-based diagnosis is useful for exposing observable process failures\nand measuring harness interventions, but it should be paired with strong\nsemantic oracles for hidden correctness failures.",
+  "checks": [
+    {
+      "expected": "We introduce CodexTrace",
+      "id": "codextrace_system",
+      "passed": true
+    },
+    {
+      "expected": "offline parser and diagnosis engine",
+      "id": "offline_parser",
+      "passed": true
+    },
+    {
+      "expected": "seven real Codex benchmark pilots",
+      "id": "seven_pilots",
+      "passed": true
+    },
+    {
+      "expected": "do not support a verification-rate-lift claim",
+      "id": "verification_negative",
+      "passed": true
+    },
+    {
+      "expected": "10.43 to 7.00",
+      "id": "full30_waste",
+      "passed": true
+    },
+    {
+      "expected": "218.7k to 184.8k",
+      "id": "full30_tokens",
+      "passed": true
+    },
+    {
+      "expected": "success rate stays flat at 50%",
+      "id": "hard30_success_flat",
+      "passed": true
+    },
+    {
+      "expected": "12.93 to 9.20",
+      "id": "hard30_repeated_calls",
+      "passed": true
+    },
+    {
+      "expected": "355.0k to 256.3k",
+      "id": "hard30_tokens",
+      "passed": true
+    },
+    {
+      "expected": "3.50 to 1.17",
+      "id": "hard30_failure_score",
+      "passed": true
+    },
+    {
+      "expected": "30 hidden semantic edge-case failures",
+      "id": "hidden_semantic_boundary",
+      "passed": true
+    },
+    {
+      "expected": "strong semantic oracles",
+      "id": "semantic_oracles",
+      "passed": true
+    },
+    {
+      "expected": "observable process failures",
+      "id": "process_failures",
+      "passed": true
+    },
+    {
+      "expected": "no unqualified verification-rate lift claim",
+      "id": "no_unqualified_verification_lift",
+      "passed": true
+    },
+    {
+      "expected": "no trace-only hidden-correctness claim",
+      "id": "no_hidden_correctness_claim",
+      "passed": true
+    }
+  ],
+  "missing": [],
+  "summary": {
+    "abstract_word_count": 287,
+    "checks": 15,
+    "missing": 0,
+    "paper_draft": "docs/paper_draft.md",
+    "passed": 15,
+    "ready": true
+  }
+}

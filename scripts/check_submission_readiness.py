@@ -244,6 +244,40 @@ def check_paper_draft_content(path: Path = Path("docs/paper_draft.md")) -> dict[
     }
 
 
+def check_paper_abstract_audit_content(path: Path = Path("docs/paper_abstract_audit.md")) -> dict[str, Any]:
+    problems = []
+    try:
+        text = path.read_text(encoding="utf-8")
+    except FileNotFoundError:
+        return {
+            "name": "paper abstract audit",
+            "ok": False,
+            "evidence": str(path),
+            "problems": ["missing paper abstract audit"],
+        }
+
+    required_phrases = {
+        "ready": "Ready: yes",
+        "coverage": "Checks passed: 15 / 15",
+        "verification negative": "verification_negative",
+        "hard30 waste": "hard30_repeated_calls",
+        "hidden semantic boundary": "hidden_semantic_boundary",
+        "semantic oracles": "semantic_oracles",
+        "no overclaim": "no_unqualified_verification_lift",
+    }
+    for label, phrase in required_phrases.items():
+        if phrase not in text:
+            problems.append(f"missing {label}")
+
+    return {
+        "name": "paper abstract audit",
+        "ok": not problems,
+        "evidence": str(path),
+        "detail": "paper abstract covers supported boundary-result claims and avoids verification-rate overclaim",
+        "problems": problems,
+    }
+
+
 def check_experiment_protocol_content(path: Path = Path("docs/experiment_protocol.md")) -> dict[str, Any]:
     problems = []
     try:
@@ -636,7 +670,7 @@ def check_reproducibility_audit_content(path: Path = Path("docs/reproducibility_
 
     required_phrases = {
         "ready": "Ready: yes",
-        "coverage count": "Commands covered: 24 / 24",
+        "coverage count": "Commands covered: 25 / 25",
         "balanced fences": "Markdown fences balanced: yes",
         "submission gate": "submission_readiness_gate",
         "scope caveat": "does not execute the full real Codex collection commands",
@@ -738,6 +772,7 @@ def build_report(selection_dir: Path, run_dir: Path) -> dict[str, Any]:
         check_metric_coverage_audit_content(),
         check_failure_taxonomy_audit_content(),
         check_related_work_audit_content(),
+        check_paper_abstract_audit_content(),
         check_paper_structure_audit_content(),
         check_reproducibility_audit_content(),
         check_goal_completion_audit_content(),

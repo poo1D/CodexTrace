@@ -25,6 +25,7 @@ REQUIRED_COMMANDS = (
     {"id": "metric_coverage_audit", "phrase": "scripts/audit_metric_coverage.py"},
     {"id": "failure_taxonomy_audit", "phrase": "scripts/audit_failure_taxonomy.py"},
     {"id": "related_work_audit", "phrase": "scripts/audit_related_work.py"},
+    {"id": "paper_abstract_audit", "phrase": "scripts/audit_paper_abstract.py"},
     {"id": "paper_structure_audit", "phrase": "scripts/audit_paper_structure.py"},
     {
         "id": "hard30_paper_report",
