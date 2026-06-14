@@ -36,6 +36,11 @@
       "present": true
     },
     {
+      "id": "parser_event_coverage",
+      "phrase": "scripts/audit_parser_event_coverage.py",
+      "present": true
+    },
+    {
       "id": "failure_node_traceability",
       "phrase": "scripts/audit_failure_node_traceability.py",
       "present": true
@@ -177,12 +182,12 @@
     }
   ],
   "summary": {
-    "bash_fence_count": 46,
+    "bash_fence_count": 47,
     "checklist_path": "docs/reproducibility_checklist.md",
-    "covered_command_count": 35,
-    "fence_count": 98,
+    "covered_command_count": 36,
+    "fence_count": 100,
     "fences_balanced": true,
     "ready": true,
-    "required_command_count": 35
+    "required_command_count": 36
   }
 }

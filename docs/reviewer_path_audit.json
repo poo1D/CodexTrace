@@ -211,6 +211,15 @@
     },
     {
       "covered": true,
+      "path": "docs/parser_event_coverage.md",
+      "present_in": [
+        "README.md",
+        "docs/artifact_guide.md",
+        "docs/reproducibility_checklist.md"
+      ]
+    },
+    {
+      "covered": true,
       "path": "docs/failure_node_traceability.md",
       "present_in": [
         "README.md",
@@ -340,6 +349,6 @@
     "checklist_missing": 0,
     "guide_missing": 0,
     "missing": 0,
-    "required_files": 38
+    "required_files": 39
   }
 }

@@ -523,6 +523,7 @@ decision,
 `docs/submission_package.md` for safe RQ-to-evidence claim framing,
 `docs/metric_coverage_audit.md` for experiment-metric coverage,
 `docs/schema_field_audit.md` for Run/Step schema-field mapping,
+`docs/parser_event_coverage.md` for JSONL parser event coverage,
 `docs/failure_node_traceability.md` for diagnosis-node traceability,
 `docs/phase_coverage_audit.md` for phase-segmentation coverage,
 `docs/task_category_coverage.md` for benchmark task-category coverage,
@@ -560,7 +561,8 @@ claim-evidence mapping, validity threats, and reproduction commands, see
 `docs/validity_threats.md` and `docs/reproducibility_checklist.md`.
 For safe claim framing and generated guard status, see
 `docs/submission_package.md`, `docs/failure_taxonomy_audit.md`,
-`docs/schema_field_audit.md`, `docs/failure_node_traceability.md`,
+`docs/schema_field_audit.md`, `docs/parser_event_coverage.md`,
+`docs/failure_node_traceability.md`,
 `docs/phase_coverage_audit.md`,
 `docs/task_category_coverage.md`,
 `docs/harness_protocol_audit.md`,

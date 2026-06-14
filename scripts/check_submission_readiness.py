@@ -228,6 +228,7 @@ def check_paper_draft_content(path: Path = Path("docs/paper_draft.md")) -> dict[
         "measurement table": "| Metric | Measurement |",
         "metric coverage link": "docs/metric_coverage_audit.md",
         "schema field audit link": "docs/schema_field_audit.md",
+        "parser event audit link": "docs/parser_event_coverage.md",
         "failure node audit link": "docs/failure_node_traceability.md",
         "contribution block": "Our contributions are:",
         "references section": "## References",
@@ -627,6 +628,42 @@ def check_schema_field_audit_content(path: Path = Path("docs/schema_field_audit.
         "ok": not problems,
         "evidence": str(path),
         "detail": "paper-facing Run/Step schema fields map to parser, schema, and research outputs",
+        "problems": problems,
+    }
+
+
+def check_parser_event_coverage_content(path: Path = Path("docs/parser_event_coverage.md")) -> dict[str, Any]:
+    problems = []
+    try:
+        text = path.read_text(encoding="utf-8")
+    except FileNotFoundError:
+        return {
+            "name": "parser event coverage audit",
+            "ok": False,
+            "evidence": str(path),
+            "problems": ["missing parser event coverage audit"],
+        }
+
+    required_phrases = {
+        "ready": "Ready: yes",
+        "event kind coverage": "Event kinds covered: 11 / 11",
+        "phase coverage": "Phases covered: 7 / 7",
+        "source markers": "Parser source markers covered: 11 / 11",
+        "mcp tool": "`mcp_tool`",
+        "unknown event": "`unknown`",
+        "usage check": "`usage_input_tokens` | yes",
+        "file paths": "`file_paths` | yes",
+        "future caveat": "does not claim compatibility with every future Codex JSONL variant",
+    }
+    for label, phrase in required_phrases.items():
+        if phrase not in text:
+            problems.append(f"missing {label}")
+
+    return {
+        "name": "parser event coverage audit",
+        "ok": not problems,
+        "evidence": str(path),
+        "detail": "JSONL parser event-kind and phase branches are covered by a synthetic trace audit",
         "problems": problems,
     }
 
@@ -1032,7 +1069,7 @@ def check_reproducibility_audit_content(path: Path = Path("docs/reproducibility_
 
     required_phrases = {
         "ready": "Ready: yes",
-        "coverage count": "Commands covered: 35 / 35",
+        "coverage count": "Commands covered: 36 / 36",
         "balanced fences": "Markdown fences balanced: yes",
         "submission gate": "submission_readiness_gate",
         "scope caveat": "does not execute the full real Codex collection commands",
@@ -1163,6 +1200,7 @@ def build_report(selection_dir: Path, run_dir: Path) -> dict[str, Any]:
         check_reviewer_path_audit_content(),
         check_metric_coverage_audit_content(),
         check_schema_field_audit_content(),
+        check_parser_event_coverage_content(),
         check_failure_node_traceability_content(),
         check_detector_evaluation_audit_content(),
         check_rule_implementation_audit_content(),

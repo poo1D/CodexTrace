@@ -126,6 +126,7 @@ def build_submission_package() -> dict[str, Any]:
             "docs/reviewer_path_audit.md",
             "docs/metric_coverage_audit.md",
             "docs/schema_field_audit.md",
+            "docs/parser_event_coverage.md",
             "docs/failure_node_traceability.md",
             "docs/detector_evaluation_audit.md",
             "docs/rule_implementation_audit.md",

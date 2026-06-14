@@ -1,0 +1,167 @@
+{
+  "feature_checks": {
+    "failed_command_status": true,
+    "file_paths": true,
+    "mcp_tool_name": true,
+    "paper_pipeline_mentions_parser": true,
+    "paper_schema_mentions_event_type": true,
+    "schema_event_kind_literal": true,
+    "thread_id": true,
+    "usage_input_tokens": true,
+    "usage_output_tokens": true,
+    "web_search_query": true
+  },
+  "kinds": [
+    {
+      "event_count": 1,
+      "kind": "thread",
+      "present": true
+    },
+    {
+      "event_count": 2,
+      "kind": "turn",
+      "present": true
+    },
+    {
+      "event_count": 2,
+      "kind": "agent_message",
+      "present": true
+    },
+    {
+      "event_count": 1,
+      "kind": "reasoning",
+      "present": true
+    },
+    {
+      "event_count": 3,
+      "kind": "command",
+      "present": true
+    },
+    {
+      "event_count": 1,
+      "kind": "file_change",
+      "present": true
+    },
+    {
+      "event_count": 1,
+      "kind": "mcp_tool",
+      "present": true
+    },
+    {
+      "event_count": 1,
+      "kind": "web_search",
+      "present": true
+    },
+    {
+      "event_count": 1,
+      "kind": "plan",
+      "present": true
+    },
+    {
+      "event_count": 1,
+      "kind": "error",
+      "present": true
+    },
+    {
+      "event_count": 2,
+      "kind": "unknown",
+      "present": true
+    }
+  ],
+  "phases": [
+    {
+      "event_count": 4,
+      "phase": "setup",
+      "present": true
+    },
+    {
+      "event_count": 3,
+      "phase": "inspect",
+      "present": true
+    },
+    {
+      "event_count": 1,
+      "phase": "edit",
+      "present": true
+    },
+    {
+      "event_count": 2,
+      "phase": "verify",
+      "present": true
+    },
+    {
+      "event_count": 3,
+      "phase": "recover",
+      "present": true
+    },
+    {
+      "event_count": 2,
+      "phase": "complete",
+      "present": true
+    },
+    {
+      "event_count": 1,
+      "phase": "other",
+      "present": true
+    }
+  ],
+  "source_markers": [
+    {
+      "marker": "thread.",
+      "present": true
+    },
+    {
+      "marker": "turn.",
+      "present": true
+    },
+    {
+      "marker": "agent_message",
+      "present": true
+    },
+    {
+      "marker": "reasoning",
+      "present": true
+    },
+    {
+      "marker": "command_execution",
+      "present": true
+    },
+    {
+      "marker": "file_change",
+      "present": true
+    },
+    {
+      "marker": "mcp_tool_call",
+      "present": true
+    },
+    {
+      "marker": "web_search",
+      "present": true
+    },
+    {
+      "marker": "plan_update",
+      "present": true
+    },
+    {
+      "marker": "raw_type == \"error\"",
+      "present": true
+    },
+    {
+      "marker": "unknown",
+      "present": true
+    }
+  ],
+  "summary": {
+    "covered_kind_count": 11,
+    "covered_phase_count": 7,
+    "covered_source_marker_count": 11,
+    "event_count": 16,
+    "kind_count": 11,
+    "paper_draft_path": "docs/paper_draft.md",
+    "parser_path": "codex_trace/parser.py",
+    "phase_count": 7,
+    "ready": true,
+    "schema_path": "codex_trace/schema.py",
+    "source_marker_count": 11
+  }
+}
