@@ -593,6 +593,42 @@ def check_metric_coverage_audit_content(path: Path = Path("docs/metric_coverage_
     }
 
 
+def check_rq4_signal_audit_content(path: Path = Path("docs/rq4_signal_audit.md")) -> dict[str, Any]:
+    problems = []
+    try:
+        text = path.read_text(encoding="utf-8")
+    except FileNotFoundError:
+        return {
+            "name": "rq4 signal audit",
+            "ok": False,
+            "evidence": str(path),
+            "problems": ["missing rq4 signal audit"],
+        }
+
+    required_phrases = {
+        "ready": "Ready for boundary-style RQ4 claim: yes",
+        "fixture labels": "Detector-fixture labels with top signals: 6",
+        "hidden semantic boundary": "Hidden Semantic Boundary",
+        "verification boundary": "Hard30 hidden semantic verification delta: +0.00",
+        "unresolved error boundary": "Hard30 hidden semantic unresolved-error delta: +0.00",
+        "repetitive exploration": "Hard30 Repetitive Exploration",
+        "sandbox permission": "Full30 Sandbox/Permission",
+        "recover phase": "phase_recover_events",
+        "boundary interpretation": "hidden semantic failures can look procedurally clean",
+    }
+    for label, phrase in required_phrases.items():
+        if phrase not in text:
+            problems.append(f"missing {label}")
+
+    return {
+        "name": "rq4 signal audit",
+        "ok": not problems,
+        "evidence": str(path),
+        "detail": "trace signals explain observable process positives and the hidden-semantic boundary",
+        "problems": problems,
+    }
+
+
 def check_failure_taxonomy_audit_content(path: Path = Path("docs/failure_taxonomy_audit.md")) -> dict[str, Any]:
     problems = []
     try:
@@ -953,6 +989,7 @@ def build_report(selection_dir: Path, run_dir: Path) -> dict[str, Any]:
         check_paper_number_guard_content(),
         check_reviewer_path_audit_content(),
         check_metric_coverage_audit_content(),
+        check_rq4_signal_audit_content(),
         check_phase_coverage_audit_content(),
         check_task_category_coverage_content(),
         check_harness_protocol_audit_content(),

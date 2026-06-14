@@ -66,6 +66,7 @@ from scripts.check_submission_readiness import (
     check_headline_results_content,
     check_metric_coverage_audit_content,
     check_phase_coverage_audit_content,
+    check_rq4_signal_audit_content,
     check_task_category_coverage_content,
     check_harness_protocol_audit_content,
     check_paper_number_guard_content,
@@ -939,6 +940,7 @@ def test_submission_readiness_accepts_complete_synthetic_artifact(tmp_path):
     assert report["blocking"] == []
     assert report["next_actions"] == []
     assert "Ready: yes" in markdown
+    assert "| rq4 signal audit | pass | `docs/rq4_signal_audit.md` |" in markdown
     assert "submission-ready hard30 artifact" in report["positioning"]
     paper_check = next(check for check in report["checks"] if check["name"] == "paper draft content")
     assert paper_check["ok"] is True
@@ -2032,6 +2034,7 @@ def test_submission_package_maps_rqs_to_safe_paper_claims():
     assert "docs/paper_number_guard.md" in package["required_files"]
     assert "docs/reviewer_path_audit.md" in package["required_files"]
     assert "docs/metric_coverage_audit.md" in package["required_files"]
+    assert "docs/rq4_signal_audit.md" in package["required_files"]
     assert "docs/phase_coverage_audit.md" in package["required_files"]
     assert "docs/task_category_coverage.md" in package["required_files"]
     assert "docs/harness_protocol_audit.md" in package["required_files"]
@@ -2054,6 +2057,7 @@ def test_submission_package_maps_rqs_to_safe_paper_claims():
     assert "docs/bibliography_audit.md" in markdown
     assert "docs/paper_structure_audit.md" in markdown
     assert "docs/reproducibility_audit.md" in markdown
+    assert "docs/rq4_signal_audit.md" in markdown
     assert "docs/phase_coverage_audit.md" in markdown
     assert "docs/headline_results.md" in markdown
     assert "docs/thesis_revision_decision.md" in markdown
@@ -2221,6 +2225,19 @@ def test_submission_readiness_validates_metric_coverage_audit_content(tmp_path):
     assert "missing ready" in check["problems"]
     assert "missing coverage count" in check["problems"]
     assert "missing time to first test" in check["problems"]
+
+
+def test_submission_readiness_validates_rq4_signal_audit_content(tmp_path):
+    broken = tmp_path / "rq4_signal_audit.md"
+    broken.write_text("# RQ4 Signal Audit\nReady: no\n", encoding="utf-8")
+
+    check = check_rq4_signal_audit_content(broken)
+
+    assert check["ok"] is False
+    assert "missing ready" in check["problems"]
+    assert "missing fixture labels" in check["problems"]
+    assert "missing hidden semantic boundary" in check["problems"]
+    assert "missing recover phase" in check["problems"]
 
 
 def test_submission_readiness_validates_phase_coverage_audit_content(tmp_path):
