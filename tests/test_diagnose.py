@@ -1,5 +1,6 @@
 from codex_trace.diagnose import diagnose
 from codex_trace.parser import parse_jsonl
+from codex_trace.report import render_markdown
 
 
 def finding_codes(trace_path):
@@ -7,13 +8,24 @@ def finding_codes(trace_path):
 
 
 def test_detects_required_failure_modes():
-    codes = finding_codes("demo/failing-codex-trace.jsonl")
+    diagnosis = diagnose(parse_jsonl("demo/failing-codex-trace.jsonl"))
+    codes = {finding.code for finding in diagnosis.findings}
 
     assert "command_failure_unhandled" in codes
     assert "verification_gap" in codes
     assert "premature_completion" in codes
     assert "repeated_search_or_read" in codes
     assert "sandbox_or_permission_block" in codes
+    assert all(finding.event_ids for finding in diagnosis.findings)
+
+
+def test_markdown_report_lists_finding_event_ids():
+    trace = parse_jsonl("demo/failing-codex-trace.jsonl")
+    markdown = render_markdown(trace, diagnose(trace))
+
+    assert "- Event IDs: `e0005`, `e0007`" in markdown
+    assert "- Event IDs: `e0006`" in markdown
+    assert "- Event IDs: `e0003`, `e0004`" in markdown
 
 
 def test_detects_verification_gap_when_changed_without_tests():

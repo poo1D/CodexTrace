@@ -30,6 +30,7 @@ The stored pilots can be inspected and aggregated without re-running Codex.
 | `docs/rq4_signal_audit.md` | Generated signal audit for observable process positives and hidden semantic boundaries. |
 | `docs/metric_coverage_audit.md` | Generated coverage audit for the metrics named in the experiment design. |
 | `docs/schema_field_audit.md` | Generated audit mapping paper-facing Run/Step schema fields to implementation sources. |
+| `docs/failure_node_traceability.md` | Generated audit for diagnosis finding event-ID traceability into reports and UI highlights. |
 | `docs/detector_evaluation_audit.md` | Generated detector precision/recall audit for RQ2 boundary claims. |
 | `docs/rule_implementation_audit.md` | Generated audit for taxonomy-label to diagnosis-rule implementation coverage. |
 | `docs/phase_coverage_audit.md` | Generated audit for phase segmentation coverage across schema, paper text, run rows, and RQ4 signals. |
@@ -92,6 +93,7 @@ The stored pilots can be inspected and aggregated without re-running Codex.
 | `scripts/audit_reviewer_path.py` | Reviewer-path coverage guard for required paper artifacts. |
 | `scripts/audit_metric_coverage.py` | Checks that experiment-design metrics are collected, summarized, exported to CSV, and visible in aggregate Markdown. |
 | `scripts/audit_schema_fields.py` | Checks that paper-facing Run/Step schema fields are represented in parser, schema, and research outputs. |
+| `scripts/audit_failure_node_traceability.py` | Checks that diagnosis findings carry event IDs through JSON, Markdown, and Web UI highlight paths. |
 | `scripts/audit_detector_evaluation.py` | Consolidates detector precision/recall evidence for RQ2 boundary claims. |
 | `scripts/audit_rule_implementation.py` | Checks taxonomy labels against implemented diagnosis rules and paper-label aliases. |
 | `scripts/audit_phase_coverage.py` | Checks phase segmentation coverage across schema, paper text, run rows, and RQ4 signals. |
@@ -183,6 +185,14 @@ Schema field audit:
 PYTHONPATH=. python3 scripts/audit_schema_fields.py \
   --json-output /tmp/schema-field-audit.json \
   --markdown-output /tmp/schema-field-audit.md
+```
+
+Failure-node traceability audit:
+
+```bash
+PYTHONPATH=. python3 scripts/audit_failure_node_traceability.py \
+  --json-output /tmp/failure-node-traceability.json \
+  --markdown-output /tmp/failure-node-traceability.md
 ```
 
 Phase coverage audit:

@@ -228,6 +228,7 @@ def check_paper_draft_content(path: Path = Path("docs/paper_draft.md")) -> dict[
         "measurement table": "| Metric | Measurement |",
         "metric coverage link": "docs/metric_coverage_audit.md",
         "schema field audit link": "docs/schema_field_audit.md",
+        "failure node audit link": "docs/failure_node_traceability.md",
         "contribution block": "Our contributions are:",
         "references section": "## References",
         "time-to-first-test definition": "`time_to_first_test`",
@@ -630,6 +631,42 @@ def check_schema_field_audit_content(path: Path = Path("docs/schema_field_audit.
     }
 
 
+def check_failure_node_traceability_content(path: Path = Path("docs/failure_node_traceability.md")) -> dict[str, Any]:
+    problems = []
+    try:
+        text = path.read_text(encoding="utf-8")
+    except FileNotFoundError:
+        return {
+            "name": "failure node traceability audit",
+            "ok": False,
+            "evidence": str(path),
+            "problems": ["missing failure node traceability audit"],
+        }
+
+    required_phrases = {
+        "ready": "Ready: yes",
+        "expected findings": "Expected demo findings present: 5 / 5",
+        "finding event ids": "Findings with event IDs: 5 / 5",
+        "json event ids": "JSON findings with event IDs: 5 / 5",
+        "markdown event ids": "Markdown Event IDs lines: 5 / 5",
+        "highlighted nodes": "Highlighted event nodes:",
+        "web highlight": "`web_highlight_class` | yes",
+        "repeated search": "`repeated_search_or_read`",
+        "boundary caveat": "does not claim that hidden semantic failures have visible failure nodes",
+    }
+    for label, phrase in required_phrases.items():
+        if phrase not in text:
+            problems.append(f"missing {label}")
+
+    return {
+        "name": "failure node traceability audit",
+        "ok": not problems,
+        "evidence": str(path),
+        "detail": "diagnosis findings carry event IDs through JSON, Markdown, and Web UI highlight paths",
+        "problems": problems,
+    }
+
+
 def check_rq4_signal_audit_content(path: Path = Path("docs/rq4_signal_audit.md")) -> dict[str, Any]:
     problems = []
     try:
@@ -995,7 +1032,7 @@ def check_reproducibility_audit_content(path: Path = Path("docs/reproducibility_
 
     required_phrases = {
         "ready": "Ready: yes",
-        "coverage count": "Commands covered: 34 / 34",
+        "coverage count": "Commands covered: 35 / 35",
         "balanced fences": "Markdown fences balanced: yes",
         "submission gate": "submission_readiness_gate",
         "scope caveat": "does not execute the full real Codex collection commands",
@@ -1126,6 +1163,7 @@ def build_report(selection_dir: Path, run_dir: Path) -> dict[str, Any]:
         check_reviewer_path_audit_content(),
         check_metric_coverage_audit_content(),
         check_schema_field_audit_content(),
+        check_failure_node_traceability_content(),
         check_detector_evaluation_audit_content(),
         check_rule_implementation_audit_content(),
         check_rq4_signal_audit_content(),

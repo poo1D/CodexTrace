@@ -57,6 +57,7 @@ This generated map turns the current evidence into reviewer-facing paper claims.
 - `docs/reviewer_path_audit.md`
 - `docs/metric_coverage_audit.md`
 - `docs/schema_field_audit.md`
+- `docs/failure_node_traceability.md`
 - `docs/detector_evaluation_audit.md`
 - `docs/rule_implementation_audit.md`
 - `docs/phase_coverage_audit.md`

@@ -1,0 +1,93 @@
+{
+  "findings": [
+    {
+      "code": "command_failure_unhandled",
+      "covered": true,
+      "event_id_count": 2,
+      "event_ids": [
+        "e0005",
+        "e0007"
+      ],
+      "evidence_count": 2,
+      "has_recommendation": true,
+      "missing_event_ids": [],
+      "severity": "high"
+    },
+    {
+      "code": "verification_gap",
+      "covered": true,
+      "event_id_count": 1,
+      "event_ids": [
+        "e0006"
+      ],
+      "evidence_count": 1,
+      "has_recommendation": true,
+      "missing_event_ids": [],
+      "severity": "high"
+    },
+    {
+      "code": "premature_completion",
+      "covered": true,
+      "event_id_count": 1,
+      "event_ids": [
+        "e0008"
+      ],
+      "evidence_count": 1,
+      "has_recommendation": true,
+      "missing_event_ids": [],
+      "severity": "high"
+    },
+    {
+      "code": "repeated_search_or_read",
+      "covered": true,
+      "event_id_count": 2,
+      "event_ids": [
+        "e0003",
+        "e0004"
+      ],
+      "evidence_count": 1,
+      "has_recommendation": true,
+      "missing_event_ids": [],
+      "severity": "medium"
+    },
+    {
+      "code": "sandbox_or_permission_block",
+      "covered": true,
+      "event_id_count": 1,
+      "event_ids": [
+        "e0007"
+      ],
+      "evidence_count": 1,
+      "has_recommendation": true,
+      "missing_event_ids": [],
+      "severity": "medium"
+    }
+  ],
+  "highlighted_event_ids": [
+    "e0003",
+    "e0004",
+    "e0005",
+    "e0006",
+    "e0007",
+    "e0008"
+  ],
+  "source_checks": {
+    "diagnose_event_ids": true,
+    "markdown_event_ids": true,
+    "schema_event_ids": true,
+    "web_flatmap_event_ids": true,
+    "web_highlight_class": true,
+    "web_highlight_style": true
+  },
+  "summary": {
+    "expected_demo_findings": 5,
+    "expected_demo_findings_present": 5,
+    "finding_count": 5,
+    "findings_with_event_ids": 5,
+    "highlighted_event_count": 6,
+    "json_event_id_findings": 5,
+    "markdown_event_id_lines": 5,
+    "ready": true,
+    "trace": "demo/failing-codex-trace.jsonl"
+  }
+}

@@ -49,22 +49,29 @@ def diagnose(trace: Trace) -> Diagnosis:
 
     repeated = _repeated_searches(trace.events)
     if repeated:
+        repeated_event_ids = _event_ids_for_repeated_commands(
+            trace.events,
+            {command for command, _ in repeated},
+        )
         findings.append(Finding(
             code="repeated_search_or_read",
             title="Repeated search/read commands suggest inefficient exploration",
             severity="medium",
             evidence=[f"`{cmd}` repeated {count} times" for cmd, count in repeated],
             recommendation="Summarize discovered facts after each exploration pass and switch from broad search to targeted file reads.",
+            event_ids=repeated_event_ids,
         ))
 
     repeated_volume = _repeated_tool_call_volume(trace.events)
     if repeated_volume and not repeated:
+        repeated_event_ids = _event_ids_for_repeated_command_volume(trace.events)
         findings.append(Finding(
             code="repeated_search_or_read",
             title="High repeated tool-call volume suggests inefficient exploration",
             severity="medium",
             evidence=repeated_volume,
             recommendation="Checkpoint what has already been learned, then switch to a narrower edit/verification loop instead of repeating the same commands.",
+            event_ids=repeated_event_ids,
         ))
 
     sandbox_events = _sandbox_events(trace.events)
@@ -79,21 +86,29 @@ def diagnose(trace: Trace) -> Diagnosis:
         ))
 
     if _long_context_no_progress(trace, metrics):
+        context_event_ids = [
+            event.id
+            for event in trace.events
+            if event.kind in {"command", "agent_message", "reasoning", "turn"}
+        ]
         findings.append(Finding(
             code="long_context_no_progress",
             title="High context usage with weak implementation progress",
             severity="medium",
             evidence=[f"input_tokens={metrics['input_tokens']}, command_events={metrics['command_events']}, file_change_events={metrics['file_change_events']}"],
             recommendation="Introduce a compact task state, explicit next action, and stop condition before adding more context.",
+            event_ids=context_event_ids,
         ))
 
     if any(event.status == "failed" and event.kind == "turn" for event in trace.events):
+        failed_turns = [event for event in trace.events if event.status == "failed" and event.kind == "turn"]
         findings.append(Finding(
             code="turn_failed",
             title="Codex turn failed",
             severity="high",
-            evidence=[_event_label(event) for event in trace.events if event.status == "failed" and event.kind == "turn"],
+            evidence=[_event_label(event) for event in failed_turns],
             recommendation="Inspect the last successful tool event before the failed turn and resume from that narrower state.",
+            event_ids=[event.id for event in failed_turns],
         ))
 
     score = _score(findings, metrics)
@@ -154,6 +169,24 @@ def _repeated_tool_call_volume(events: list[TraceEvent], threshold: int = 20) ->
         if count > 1
     ]
     return [f"{repeated_total} repeated command invocation(s) across the trace."] + top_repeats
+
+
+def _event_ids_for_repeated_commands(events: list[TraceEvent], repeated_commands: set[str]) -> list[str]:
+    return [
+        event.id
+        for event in events
+        if event.kind == "command" and _normalize_command(event.command or "") in repeated_commands
+    ]
+
+
+def _event_ids_for_repeated_command_volume(events: list[TraceEvent]) -> list[str]:
+    commands = [
+        _normalize_command(event.command or "")
+        for event in events
+        if event.kind == "command" and event.command
+    ]
+    repeated_commands = {command for command, count in Counter(commands).items() if count > 1}
+    return _event_ids_for_repeated_commands(events, repeated_commands)
 
 
 def _sandbox_events(events: list[TraceEvent]) -> list[TraceEvent]:

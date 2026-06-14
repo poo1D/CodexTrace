@@ -75,7 +75,8 @@ boundary-result thesis decision, `docs/validity_threats.md` for validity
 threat mapping, `docs/rq4_signal_audit.md` for the generated
 boundary-style signal audit, `docs/metric_coverage_audit.md` for experiment
 metric coverage, `docs/schema_field_audit.md` for Run/Step schema-field
-mapping, `docs/failure_taxonomy_audit.md` for six-label taxonomy
+mapping, `docs/failure_node_traceability.md` for diagnosis-node traceability,
+`docs/failure_taxonomy_audit.md` for six-label taxonomy
 coverage, `docs/related_work_audit.md` for related-work positioning coverage,
 `docs/bibliography_audit.md` for paper reference discoverability,
 `docs/paper_abstract_audit.md` for abstract-level claim coverage,
@@ -167,6 +168,7 @@ Key files:
 - `scripts/audit_reviewer_path.py`: checks required reviewer files are discoverable from paper-facing entry points
 - `scripts/audit_metric_coverage.py`: checks planned experiment metrics across run rows, summaries, CSV, and aggregate Markdown
 - `scripts/audit_schema_fields.py`: checks paper-facing Run/Step schema fields against parser, schema, and research outputs
+- `scripts/audit_failure_node_traceability.py`: checks diagnosis finding event IDs through JSON, Markdown, and Web UI highlights
 - `scripts/audit_detector_evaluation.py`: consolidates detector precision/recall evidence for RQ2 boundary claims
 - `scripts/audit_rule_implementation.py`: checks taxonomy labels against implemented diagnosis rules and label aliases
 - `scripts/audit_phase_coverage.py`: checks phase segmentation coverage across schema, paper text, run rows, and RQ4 signals
@@ -201,6 +203,7 @@ Key files:
 - `docs/rq4_signal_audit.md`: generated signal audit for observable process failures and hidden semantic boundaries
 - `docs/metric_coverage_audit.md`: generated coverage audit for the experiment-design metrics
 - `docs/schema_field_audit.md`: generated audit for paper-facing Run/Step schema-field mapping
+- `docs/failure_node_traceability.md`: generated audit for diagnosis finding event-ID traceability
 - `docs/detector_evaluation_audit.md`: generated audit for detector precision/recall evidence
 - `docs/rule_implementation_audit.md`: generated audit for implemented diagnosis-rule coverage
 - `docs/phase_coverage_audit.md`: generated audit for phase segmentation coverage
@@ -310,6 +313,7 @@ PYTHONPATH=. python3 scripts/audit_submission_package.py --markdown-output docs/
 PYTHONPATH=. python3 scripts/audit_detector_evaluation.py --markdown-output docs/detector_evaluation_audit.md
 PYTHONPATH=. python3 scripts/audit_rule_implementation.py --markdown-output docs/rule_implementation_audit.md
 PYTHONPATH=. python3 scripts/audit_schema_fields.py --markdown-output docs/schema_field_audit.md
+PYTHONPATH=. python3 scripts/audit_failure_node_traceability.py --markdown-output docs/failure_node_traceability.md
 PYTHONPATH=. python3 scripts/audit_phase_coverage.py --markdown-output docs/phase_coverage_audit.md
 PYTHONPATH=. python3 scripts/audit_task_category_coverage.py --markdown-output docs/task_category_coverage.md
 PYTHONPATH=. python3 scripts/audit_harness_protocol.py --markdown-output docs/harness_protocol_audit.md

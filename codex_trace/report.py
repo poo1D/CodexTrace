@@ -40,6 +40,7 @@ def render_markdown(trace: Trace, diagnosis: Diagnosis) -> str:
             f"- Code: `{finding.code}`",
             f"- Severity: `{finding.severity}`",
             f"- Recommendation: {finding.recommendation}",
+            f"- Event IDs: {_format_event_ids(finding.event_ids)}",
             "- Evidence:",
         ])
         for evidence in finding.evidence:
@@ -52,3 +53,7 @@ def render_markdown(trace: Trace, diagnosis: Diagnosis) -> str:
         lines.append(f"- `{event.id}` **{event.kind}** `{event.phase}` `{event.status}`: {event.title}{detail}")
 
     return "\n".join(lines).rstrip() + "\n"
+
+
+def _format_event_ids(event_ids: list[str]) -> str:
+    return ", ".join(f"`{event_id}`" for event_id in event_ids) if event_ids else "-"

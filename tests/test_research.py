@@ -11,6 +11,10 @@ from scripts.audit_manual_labels import audit_manual_labels, render_audit
 from scripts.audit_failure_taxonomy import build_failure_taxonomy_audit, render_failure_taxonomy_audit_markdown
 from scripts.audit_metric_coverage import build_metric_coverage_audit, render_metric_coverage_audit_markdown
 from scripts.audit_schema_fields import build_schema_field_audit, render_schema_field_audit_markdown
+from scripts.audit_failure_node_traceability import (
+    build_failure_node_traceability_audit,
+    render_failure_node_traceability_markdown,
+)
 from scripts.audit_phase_coverage import build_phase_coverage_audit, render_phase_coverage_markdown
 from scripts.audit_task_category_coverage import build_task_category_coverage_audit, render_task_category_coverage_markdown
 from scripts.audit_harness_protocol import build_harness_protocol_audit, render_harness_protocol_markdown
@@ -70,6 +74,7 @@ from scripts.check_submission_readiness import (
     check_headline_results_content,
     check_metric_coverage_audit_content,
     check_schema_field_audit_content,
+    check_failure_node_traceability_content,
     check_phase_coverage_audit_content,
     check_rq4_signal_audit_content,
     check_task_category_coverage_content,
@@ -1294,6 +1299,21 @@ def test_schema_field_audit_maps_paper_schema_to_code():
     assert "schema mapping is representational" in markdown
 
 
+def test_failure_node_traceability_audit_covers_report_and_ui_path():
+    result = build_failure_node_traceability_audit()
+    markdown = render_failure_node_traceability_markdown(result)
+    finding_rows = {row["code"]: row for row in result["findings"]}
+
+    assert result["summary"]["ready"] is True
+    assert result["summary"]["expected_demo_findings_present"] == 5
+    assert result["summary"]["findings_with_event_ids"] == 5
+    assert result["summary"]["json_event_id_findings"] == 5
+    assert result["summary"]["markdown_event_id_lines"] == 5
+    assert result["source_checks"]["web_highlight_class"] is True
+    assert finding_rows["repeated_search_or_read"]["event_id_count"] == 2
+    assert "does not claim that hidden semantic failures have visible failure nodes" in markdown
+
+
 def test_failure_taxonomy_audit_covers_process_labels():
     result = build_failure_taxonomy_audit()
     markdown = render_failure_taxonomy_audit_markdown(result)
@@ -1418,7 +1438,7 @@ def test_reproducibility_audit_covers_key_commands():
     markdown = render_reproducibility_audit_markdown(result)
 
     assert result["summary"]["ready"] is True
-    assert result["summary"]["covered_command_count"] == 34
+    assert result["summary"]["covered_command_count"] == 35
     assert result["summary"]["fences_balanced"] is True
     assert {row["id"] for row in result["commands"]} >= {
         "full30_aggregate",
@@ -1426,6 +1446,7 @@ def test_reproducibility_audit_covers_key_commands():
         "detector_evaluation_audit",
         "rule_implementation_audit",
         "schema_field_audit",
+        "failure_node_traceability",
         "phase_coverage_audit",
         "task_category_coverage_audit",
         "harness_protocol_audit",
@@ -1867,6 +1888,7 @@ def test_paper_draft_contains_submission_polish_sections():
     assert "docs/paper_structure_audit.md" in text
     assert "docs/reproducibility_audit.md" in text
     assert "docs/schema_field_audit.md" in text
+    assert "docs/failure_node_traceability.md" in text
     assert "docs/phase_coverage_audit.md" in text
 
 
@@ -1894,6 +1916,7 @@ def test_reviewer_docs_surface_hard30_task_diagnosis():
     assert "docs/detector_evaluation_audit.md" in readme
     assert "docs/rule_implementation_audit.md" in readme
     assert "docs/schema_field_audit.md" in readme
+    assert "docs/failure_node_traceability.md" in readme
     assert "docs/task_category_coverage.md" in readme
     assert "docs/harness_protocol_audit.md" in readme
     assert "docs/failure_taxonomy_audit.md" in readme
@@ -1922,6 +1945,7 @@ def test_reviewer_docs_surface_hard30_task_diagnosis():
     assert "scripts/audit_detector_evaluation.py --markdown-output docs/detector_evaluation_audit.md" in readme
     assert "scripts/audit_rule_implementation.py --markdown-output docs/rule_implementation_audit.md" in readme
     assert "scripts/audit_schema_fields.py --markdown-output docs/schema_field_audit.md" in readme
+    assert "scripts/audit_failure_node_traceability.py --markdown-output docs/failure_node_traceability.md" in readme
     assert "scripts/audit_task_category_coverage.py --markdown-output docs/task_category_coverage.md" in readme
     assert "scripts/audit_harness_protocol.py --markdown-output docs/harness_protocol_audit.md" in readme
     assert "scripts/audit_failure_taxonomy.py --markdown-output docs/failure_taxonomy_audit.md" in readme
@@ -1944,6 +1968,7 @@ def test_reviewer_docs_surface_hard30_task_diagnosis():
     assert "docs/detector_evaluation_audit.md" in guide
     assert "docs/rule_implementation_audit.md" in guide
     assert "docs/schema_field_audit.md" in guide
+    assert "docs/failure_node_traceability.md" in guide
     assert "docs/task_category_coverage.md" in guide
     assert "docs/harness_protocol_audit.md" in guide
     assert "docs/failure_taxonomy_audit.md" in guide
@@ -1978,6 +2003,7 @@ def test_reviewer_docs_surface_hard30_task_diagnosis():
     assert "scripts/audit_detector_evaluation.py" in checklist
     assert "scripts/audit_rule_implementation.py" in checklist
     assert "scripts/audit_schema_fields.py" in checklist
+    assert "scripts/audit_failure_node_traceability.py" in checklist
     assert "scripts/audit_task_category_coverage.py" in checklist
     assert "scripts/audit_harness_protocol.py" in checklist
     assert "scripts/audit_failure_taxonomy.py" in checklist
@@ -1994,6 +2020,7 @@ def test_reviewer_docs_surface_hard30_task_diagnosis():
     assert "--markdown-output /tmp/detector-evaluation-audit.md" in checklist
     assert "--markdown-output /tmp/rule-implementation-audit.md" in checklist
     assert "--markdown-output /tmp/schema-field-audit.md" in checklist
+    assert "--markdown-output /tmp/failure-node-traceability.md" in checklist
     assert "benchmark/verification-lift-v2/pilot/full-real/aggregate.md" in checklist
     assert "completed claim-closure retest" in checklist
     assert "repeated calls improve `8.62 -> 5.50`" in checklist
@@ -2118,6 +2145,7 @@ def test_submission_package_maps_rqs_to_safe_paper_claims():
     assert "docs/reviewer_path_audit.md" in package["required_files"]
     assert "docs/metric_coverage_audit.md" in package["required_files"]
     assert "docs/schema_field_audit.md" in package["required_files"]
+    assert "docs/failure_node_traceability.md" in package["required_files"]
     assert "docs/detector_evaluation_audit.md" in package["required_files"]
     assert "docs/rule_implementation_audit.md" in package["required_files"]
     assert "docs/rq4_signal_audit.md" in package["required_files"]
@@ -2148,6 +2176,7 @@ def test_submission_package_maps_rqs_to_safe_paper_claims():
     assert "docs/reproducibility_audit.md" in markdown
     assert "docs/rq4_signal_audit.md" in markdown
     assert "docs/schema_field_audit.md" in markdown
+    assert "docs/failure_node_traceability.md" in markdown
     assert "docs/phase_coverage_audit.md" in markdown
     assert "docs/headline_results.md" in markdown
     assert "docs/thesis_revision_decision.md" in markdown
@@ -2275,6 +2304,7 @@ def test_reviewer_path_audit_covers_required_artifacts(tmp_path):
     assert any(row["path"] == "docs/rule_implementation_audit.md" for row in result["coverage"])
     assert any(row["path"] == "docs/verification_ablation_plan_audit.md" for row in result["coverage"])
     assert any(row["path"] == "docs/schema_field_audit.md" for row in result["coverage"])
+    assert any(row["path"] == "docs/failure_node_traceability.md" for row in result["coverage"])
     assert any(row["path"] == "docs/phase_coverage_audit.md" for row in result["coverage"])
     assert any(row["path"] == "docs/task_category_coverage.md" for row in result["coverage"])
     assert any(row["path"] == "docs/harness_protocol_audit.md" for row in result["coverage"])
@@ -2332,6 +2362,19 @@ def test_submission_readiness_validates_schema_field_audit_content(tmp_path):
     assert "missing run coverage" in check["problems"]
     assert "missing step coverage" in check["problems"]
     assert "missing failure tags" in check["problems"]
+
+
+def test_submission_readiness_validates_failure_node_traceability_content(tmp_path):
+    broken = tmp_path / "failure_node_traceability.md"
+    broken.write_text("# Failure Node Traceability Audit\nReady: no\n", encoding="utf-8")
+
+    check = check_failure_node_traceability_content(broken)
+
+    assert check["ok"] is False
+    assert "missing ready" in check["problems"]
+    assert "missing expected findings" in check["problems"]
+    assert "missing finding event ids" in check["problems"]
+    assert "missing web highlight" in check["problems"]
 
 
 def test_submission_readiness_validates_detector_evaluation_audit_content(tmp_path):
