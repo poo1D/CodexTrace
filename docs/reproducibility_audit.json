@@ -116,6 +116,11 @@
       "present": true
     },
     {
+      "id": "method_pipeline_audit",
+      "phrase": "scripts/audit_method_pipeline.py",
+      "present": true
+    },
+    {
       "id": "hard30_paper_report",
       "phrase": "codex_trace.cli research paper-report \\\n  benchmark/hard/pilot/hard30-real/runs.jsonl",
       "present": true
@@ -212,12 +217,12 @@
     }
   ],
   "summary": {
-    "bash_fence_count": 53,
+    "bash_fence_count": 54,
     "checklist_path": "docs/reproducibility_checklist.md",
-    "covered_command_count": 42,
-    "fence_count": 112,
+    "covered_command_count": 43,
+    "fence_count": 114,
     "fences_balanced": true,
     "ready": true,
-    "required_command_count": 42
+    "required_command_count": 43
   }
 }

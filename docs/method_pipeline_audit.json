@@ -1,0 +1,126 @@
+{
+  "cli_checks": {
+    "aggregate_command": true,
+    "collect_command": true,
+    "diagnose_command": true,
+    "paper_report_command": true
+  },
+  "smoke": {
+    "checks": [
+      {
+        "covered": true,
+        "id": "collect_normalized_trace"
+      },
+      {
+        "covered": true,
+        "id": "collect_phase_segmentation"
+      },
+      {
+        "covered": true,
+        "id": "diagnose_failure_patterns"
+      },
+      {
+        "covered": true,
+        "id": "diagnose_event_ids"
+      },
+      {
+        "covered": true,
+        "id": "aggregate_baseline_intervention"
+      },
+      {
+        "covered": true,
+        "id": "aggregate_report_output"
+      }
+    ],
+    "ready": true,
+    "summary": {
+      "check_count": 6,
+      "covered_check_count": 6
+    }
+  },
+  "stages": [
+    {
+      "covered": true,
+      "id": "jsonl_event_parser",
+      "paper_present": true,
+      "source_path": "codex_trace/parser.py",
+      "source_phrases": [
+        "def parse_jsonl",
+        "def parse_lines",
+        "_event_from_payload"
+      ],
+      "source_present": true
+    },
+    {
+      "covered": true,
+      "id": "normalized_trace_schema",
+      "paper_present": true,
+      "source_path": "codex_trace/schema.py",
+      "source_phrases": [
+        "class TraceEvent",
+        "class Trace",
+        "to_dict"
+      ],
+      "source_present": true
+    },
+    {
+      "covered": true,
+      "id": "phase_segmentation",
+      "paper_present": true,
+      "source_path": "codex_trace/parser.py",
+      "source_phrases": [
+        "def assign_phases",
+        "def _infer_event_phase",
+        "is_verification_command"
+      ],
+      "source_present": true
+    },
+    {
+      "covered": true,
+      "id": "failure_pattern_detector",
+      "paper_present": true,
+      "source_path": "codex_trace/diagnose.py",
+      "source_phrases": [
+        "def diagnose",
+        "verification_gap",
+        "command_failure_unhandled"
+      ],
+      "source_present": true
+    },
+    {
+      "covered": true,
+      "id": "diagnosis_report",
+      "paper_present": true,
+      "source_path": "codex_trace/report.py",
+      "source_phrases": [
+        "def render_markdown",
+        "def render_json",
+        "Event IDs"
+      ],
+      "source_present": true
+    },
+    {
+      "covered": true,
+      "id": "baseline_vs_intervention_comparison",
+      "paper_present": true,
+      "source_path": "codex_trace/research.py",
+      "source_phrases": [
+        "def aggregate_runs",
+        "PROMPT_TYPES",
+        "baseline",
+        "intervention"
+      ],
+      "source_present": true
+    }
+  ],
+  "summary": {
+    "cli_check_count": 4,
+    "covered_cli_check_count": 4,
+    "covered_smoke_check_count": 6,
+    "covered_stage_count": 6,
+    "paper_path": "docs/paper_draft.md",
+    "ready": true,
+    "smoke_check_count": 6,
+    "stage_count": 6
+  }
+}

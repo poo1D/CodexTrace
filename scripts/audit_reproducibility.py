@@ -42,6 +42,7 @@ REQUIRED_COMMANDS = (
     {"id": "paper_abstract_audit", "phrase": "scripts/audit_paper_abstract.py"},
     {"id": "paper_contribution_audit", "phrase": "scripts/audit_paper_contributions.py"},
     {"id": "paper_structure_audit", "phrase": "scripts/audit_paper_structure.py"},
+    {"id": "method_pipeline_audit", "phrase": "scripts/audit_method_pipeline.py"},
     {
         "id": "hard30_paper_report",
         "phrase": "codex_trace.cli research paper-report \\\n  benchmark/hard/pilot/hard30-real/runs.jsonl",

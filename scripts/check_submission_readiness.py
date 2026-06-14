@@ -233,6 +233,7 @@ def check_paper_draft_content(path: Path = Path("docs/paper_draft.md")) -> dict[
         "web artifact audit link": "docs/web_artifact_audit.md",
         "cli surface audit link": "docs/cli_surface_audit.md",
         "ci surface audit link": "docs/ci_surface_audit.md",
+        "method pipeline audit link": "docs/method_pipeline_audit.md",
         "schema field audit link": "docs/schema_field_audit.md",
         "parser event audit link": "docs/parser_event_coverage.md",
         "failure node audit link": "docs/failure_node_traceability.md",
@@ -1273,6 +1274,42 @@ def check_paper_structure_audit_content(path: Path = Path("docs/paper_structure_
     }
 
 
+def check_method_pipeline_audit_content(path: Path = Path("docs/method_pipeline_audit.md")) -> dict[str, Any]:
+    problems = []
+    try:
+        text = path.read_text(encoding="utf-8")
+    except FileNotFoundError:
+        return {
+            "name": "method pipeline audit",
+            "ok": False,
+            "evidence": str(path),
+            "problems": ["missing method pipeline audit"],
+        }
+
+    required_phrases = {
+        "ready": "Ready: yes",
+        "stage coverage": "Pipeline stages covered: 6 / 6",
+        "cli coverage": "CLI method commands covered: 4 / 4",
+        "smoke coverage": "Smoke checks covered: 6 / 6",
+        "parser stage": "`jsonl_event_parser`",
+        "detector stage": "`failure_pattern_detector`",
+        "comparison stage": "`baseline_vs_intervention_comparison`",
+        "aggregate smoke": "`aggregate_baseline_intervention`",
+        "live collection caveat": "does not execute live Codex collection",
+    }
+    for label, phrase in required_phrases.items():
+        if phrase not in text:
+            problems.append(f"missing {label}")
+
+    return {
+        "name": "method pipeline audit",
+        "ok": not problems,
+        "evidence": str(path),
+        "detail": "paper method pipeline maps to source code and offline CLI smoke outputs",
+        "problems": problems,
+    }
+
+
 def check_reproducibility_audit_content(path: Path = Path("docs/reproducibility_audit.md")) -> dict[str, Any]:
     problems = []
     try:
@@ -1287,7 +1324,7 @@ def check_reproducibility_audit_content(path: Path = Path("docs/reproducibility_
 
     required_phrases = {
         "ready": "Ready: yes",
-        "coverage count": "Commands covered: 42 / 42",
+        "coverage count": "Commands covered: 43 / 43",
         "balanced fences": "Markdown fences balanced: yes",
         "submission gate": "submission_readiness_gate",
         "scope caveat": "does not execute the full real Codex collection commands",
@@ -1438,6 +1475,7 @@ def build_report(selection_dir: Path, run_dir: Path) -> dict[str, Any]:
         check_paper_abstract_audit_content(),
         check_paper_contribution_audit_content(),
         check_paper_structure_audit_content(),
+        check_method_pipeline_audit_content(),
         check_reproducibility_audit_content(),
         check_goal_completion_audit_content(),
         check_verification_lift_next_experiment_content(),

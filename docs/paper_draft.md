@@ -543,6 +543,7 @@ evidence,
 `docs/bibliography_audit.md` for reference discoverability,
 `docs/paper_abstract_audit.md` for abstract-level evidence coverage,
 `docs/paper_contribution_audit.md` for contribution-claim coverage,
+`docs/method_pipeline_audit.md` for method pipeline source/CLI coverage,
 `docs/paper_structure_audit.md` for section/RQ coverage,
 `docs/reproducibility_audit.md` for reproduction-command coverage,
 `docs/paper_claim_audit.md`, `docs/claim_text_guard.md`, and
@@ -583,7 +584,8 @@ For safe claim framing and generated guard status, see
 `docs/harness_protocol_audit.md`,
 `docs/related_work_audit.md`, `docs/bibliography_audit.md`,
 `docs/paper_abstract_audit.md`,
-`docs/paper_contribution_audit.md`, `docs/paper_structure_audit.md`,
+`docs/paper_contribution_audit.md`, `docs/method_pipeline_audit.md`,
+`docs/paper_structure_audit.md`,
 `docs/reproducibility_audit.md`, `docs/claim_text_guard.md`, and
 `docs/paper_number_guard.md`.
 
