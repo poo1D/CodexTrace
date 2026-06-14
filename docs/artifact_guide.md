@@ -60,16 +60,17 @@ oracles for hidden semantic correctness.
 30. Check abstract-level evidence coverage in `docs/paper_abstract_audit.md`.
 31. Check contribution-claim coverage in `docs/paper_contribution_audit.md`.
 32. Check paper structure and RQ coverage in `docs/paper_structure_audit.md`.
-33. Check metric coverage in `docs/metric_coverage_audit.md`.
-34. Check reproduction command coverage in `docs/reproducibility_audit.md`.
-35. Check claim-to-evidence mapping in `docs/reproducibility_checklist.md`.
-36. Run the offline demo:
+33. Check RQ result-table consistency in `docs/rq_table_consistency_audit.md`.
+34. Check metric coverage in `docs/metric_coverage_audit.md`.
+35. Check reproduction command coverage in `docs/reproducibility_audit.md`.
+36. Check claim-to-evidence mapping in `docs/reproducibility_checklist.md`.
+37. Run the offline demo:
 
 ```bash
 ./scripts/demo.sh
 ```
 
-37. Optionally open the visual replay UI:
+38. Optionally open the visual replay UI:
 
 ```bash
 cd web
@@ -101,6 +102,7 @@ npm run dev
 | Are the contribution claims evidence-backed? | `docs/paper_contribution_audit.md` |
 | Does the method pipeline map to source and CLI outputs? | `docs/method_pipeline_audit.md` |
 | Does the paper draft cover the required structure? | `docs/paper_draft.md`, `docs/paper_structure_audit.md` |
+| Do RQ result tables match generated artifacts? | `docs/rq_table_consistency_audit.md` |
 | RQ3: Do harness interventions help? | `docs/results_summary.md` RQ3 tables |
 | Are RQ3 deltas task-paired with uncertainty? | `docs/paired_effects_audit.md` |
 | Does the offline demo path work? | `docs/demo_audit.md` |

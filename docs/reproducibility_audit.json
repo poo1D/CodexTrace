@@ -121,6 +121,11 @@
       "present": true
     },
     {
+      "id": "rq_table_consistency_audit",
+      "phrase": "scripts/audit_rq_table_consistency.py",
+      "present": true
+    },
+    {
       "id": "hard30_paper_report",
       "phrase": "codex_trace.cli research paper-report \\\n  benchmark/hard/pilot/hard30-real/runs.jsonl",
       "present": true
@@ -217,12 +222,12 @@
     }
   ],
   "summary": {
-    "bash_fence_count": 54,
+    "bash_fence_count": 55,
     "checklist_path": "docs/reproducibility_checklist.md",
-    "covered_command_count": 43,
-    "fence_count": 114,
+    "covered_command_count": 44,
+    "fence_count": 116,
     "fences_balanced": true,
     "ready": true,
-    "required_command_count": 43
+    "required_command_count": 44
   }
 }

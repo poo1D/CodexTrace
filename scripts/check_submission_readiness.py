@@ -234,6 +234,7 @@ def check_paper_draft_content(path: Path = Path("docs/paper_draft.md")) -> dict[
         "cli surface audit link": "docs/cli_surface_audit.md",
         "ci surface audit link": "docs/ci_surface_audit.md",
         "method pipeline audit link": "docs/method_pipeline_audit.md",
+        "rq table consistency audit link": "docs/rq_table_consistency_audit.md",
         "schema field audit link": "docs/schema_field_audit.md",
         "parser event audit link": "docs/parser_event_coverage.md",
         "failure node audit link": "docs/failure_node_traceability.md",
@@ -1310,6 +1311,41 @@ def check_method_pipeline_audit_content(path: Path = Path("docs/method_pipeline_
     }
 
 
+def check_rq_table_consistency_audit_content(path: Path = Path("docs/rq_table_consistency_audit.md")) -> dict[str, Any]:
+    problems = []
+    try:
+        text = path.read_text(encoding="utf-8")
+    except FileNotFoundError:
+        return {
+            "name": "rq table consistency audit",
+            "ok": False,
+            "evidence": str(path),
+            "problems": ["missing rq table consistency audit"],
+        }
+
+    required_phrases = {
+        "ready": "Ready: yes",
+        "rq coverage": "RQs covered: 4 / 4",
+        "table coverage": "Table checks covered: 10 / 10",
+        "rq1 distribution": "`hidden_semantic_distribution`",
+        "rq2 boundary": "`hidden_semantic_detector_boundary`",
+        "rq3 waste": "`hard30_waste_reduction`",
+        "rq4 unresolved": "`unresolved_error_boundary`",
+        "drift caveat": "does not add new statistical evidence",
+    }
+    for label, phrase in required_phrases.items():
+        if phrase not in text:
+            problems.append(f"missing {label}")
+
+    return {
+        "name": "rq table consistency audit",
+        "ok": not problems,
+        "evidence": str(path),
+        "detail": "paper RQ result tables match generated hard30 paper-report artifacts",
+        "problems": problems,
+    }
+
+
 def check_reproducibility_audit_content(path: Path = Path("docs/reproducibility_audit.md")) -> dict[str, Any]:
     problems = []
     try:
@@ -1324,7 +1360,7 @@ def check_reproducibility_audit_content(path: Path = Path("docs/reproducibility_
 
     required_phrases = {
         "ready": "Ready: yes",
-        "coverage count": "Commands covered: 43 / 43",
+        "coverage count": "Commands covered: 44 / 44",
         "balanced fences": "Markdown fences balanced: yes",
         "submission gate": "submission_readiness_gate",
         "scope caveat": "does not execute the full real Codex collection commands",
@@ -1476,6 +1512,7 @@ def build_report(selection_dir: Path, run_dir: Path) -> dict[str, Any]:
         check_paper_contribution_audit_content(),
         check_paper_structure_audit_content(),
         check_method_pipeline_audit_content(),
+        check_rq_table_consistency_audit_content(),
         check_reproducibility_audit_content(),
         check_goal_completion_audit_content(),
         check_verification_lift_next_experiment_content(),

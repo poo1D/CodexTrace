@@ -1,0 +1,123 @@
+{
+  "checks": [
+    {
+      "covered": true,
+      "expected": "hard30 hidden_semantic_edge_case count is 30",
+      "id": "hidden_semantic_distribution",
+      "paper_present": true,
+      "paper_snippet": "| hard30 | `hidden_semantic_edge_case` | 30 | `HARD-001/baseline` |",
+      "report_present": true,
+      "report_snippet": "| hidden_semantic_edge_case | 30 | 88.24 | HARD-001/baseline |",
+      "rq": "RQ1",
+      "value_ok": true
+    },
+    {
+      "covered": true,
+      "expected": "hard30 repetitive_exploration count is 4",
+      "id": "repetitive_distribution",
+      "paper_present": true,
+      "paper_snippet": "| hard30 | `repetitive_exploration` | 4 | `HARD-011/baseline` |",
+      "report_present": true,
+      "report_snippet": "| repetitive_exploration | 4 | 11.76 | HARD-011/baseline |",
+      "rq": "RQ1",
+      "value_ok": true
+    },
+    {
+      "covered": true,
+      "expected": "hidden semantic labels are trace-only false negatives",
+      "id": "hidden_semantic_detector_boundary",
+      "paper_present": true,
+      "paper_snippet": "| `hidden_semantic_edge_case` | 0 | 0 | 30 | 0 | 0 | 0 |",
+      "report_present": true,
+      "report_snippet": "| hidden_semantic_edge_case | 0 | 0 | 30 | 0 | 0 | 0 |",
+      "rq": "RQ2",
+      "value_ok": true
+    },
+    {
+      "covered": true,
+      "expected": "repetitive exploration positives are detected",
+      "id": "repetitive_detector_positive",
+      "paper_present": true,
+      "paper_snippet": "| `repetitive_exploration` | 4 | 0 | 0 | 1 | 1 | 1 |",
+      "report_present": true,
+      "report_snippet": "| repetitive_exploration | 4 | 0 | 0 | 1 | 1 | 1 |",
+      "rq": "RQ2",
+      "value_ok": true
+    },
+    {
+      "covered": true,
+      "expected": "hard30 success is flat at 0.50 -> 0.50",
+      "id": "hard30_flat_success",
+      "paper_present": true,
+      "paper_snippet": "| success_rate | 0.50 | 0.50 | 0.00 |",
+      "report_present": true,
+      "report_snippet": "| success_rate | 0.5 | 0.5 | 0 |",
+      "rq": "RQ3",
+      "value_ok": true
+    },
+    {
+      "covered": true,
+      "expected": "hard30 repeated tool calls drop 12.93 -> 9.20",
+      "id": "hard30_waste_reduction",
+      "paper_present": true,
+      "paper_snippet": "| hard30 waste | 12.93 repeated calls / 355.0k tokens | 9.20 repeated calls / 256.3k tokens |",
+      "report_present": true,
+      "report_snippet": "| avg_repeated_tool_calls | 12.93 | 9.2 | -3.733 |",
+      "rq": "RQ3",
+      "value_ok": true
+    },
+    {
+      "covered": true,
+      "expected": "token usage improves in 26 of 30 paired tasks",
+      "id": "paired_token_improvement",
+      "paper_present": true,
+      "paper_snippet": "token usage improves in 26 of 30 tasks",
+      "report_present": true,
+      "report_snippet": "| token usage | 26 | 4 | 0 | -9.866e+04 |",
+      "rq": "RQ3",
+      "value_ok": true
+    },
+    {
+      "covered": true,
+      "expected": "hard30 has 30 failures and 30 successes",
+      "id": "outcome_counts",
+      "paper_present": true,
+      "paper_snippet": "The hard30 artifact contains 30 failed and 30 successful runs.",
+      "report_present": true,
+      "report_snippet": "Outcome counts: failure=30, success=30, unknown=0.",
+      "rq": "RQ4",
+      "value_ok": true
+    },
+    {
+      "covered": true,
+      "expected": "verification_rate does not separate hard30 success and failure",
+      "id": "verification_signal_boundary",
+      "paper_present": true,
+      "paper_snippet": "| verification_rate | 1.00 | 1.00 | 0.00 |",
+      "report_present": true,
+      "report_snippet": "| verification_rate | 1 | 1 | 0 |",
+      "rq": "RQ4",
+      "value_ok": true
+    },
+    {
+      "covered": true,
+      "expected": "unresolved_error does not separate hard30 success and failure",
+      "id": "unresolved_error_boundary",
+      "paper_present": true,
+      "paper_snippet": "| unresolved_error | 0 | 0 | 0 |",
+      "report_present": true,
+      "report_snippet": "| unresolved_error | 0 | 0 | 0 |",
+      "rq": "RQ4",
+      "value_ok": true
+    }
+  ],
+  "summary": {
+    "check_count": 10,
+    "covered_check_count": 10,
+    "hard30_report_json": "benchmark/hard/pilot/hard30-real/paper-report-labeled.json",
+    "hard30_report_md": "benchmark/hard/pilot/hard30-real/paper-report-labeled.md",
+    "paper_path": "docs/paper_draft.md",
+    "ready": true,
+    "rq_count": 4
+  }
+}

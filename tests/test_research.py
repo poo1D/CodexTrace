@@ -45,6 +45,10 @@ from scripts.audit_reviewer_path import build_reviewer_path_audit, render_review
 from scripts.audit_related_work import build_related_work_audit, render_related_work_audit_markdown
 from scripts.audit_reproducibility import build_reproducibility_audit, render_reproducibility_audit_markdown
 from scripts.audit_rule_implementation import build_rule_implementation_audit, render_rule_implementation_markdown
+from scripts.audit_rq_table_consistency import (
+    build_rq_table_consistency_audit,
+    render_rq_table_consistency_markdown,
+)
 from scripts.audit_rq4_signals import build_rq4_signal_audit, render_rq4_signal_audit_markdown
 from scripts.audit_submission_package import build_submission_package, render_submission_package_markdown
 from scripts.audit_thesis_revision_decision import build_thesis_revision_decision, render_thesis_revision_decision_markdown
@@ -107,6 +111,7 @@ from scripts.check_submission_readiness import (
     check_reproducibility_audit_content,
     check_reviewer_path_audit_content,
     check_rule_implementation_audit_content,
+    check_rq_table_consistency_audit_content,
     check_submission_package_content,
     check_thesis_revision_decision_content,
     check_validity_threats_content,
@@ -1588,7 +1593,7 @@ def test_reproducibility_audit_covers_key_commands():
     markdown = render_reproducibility_audit_markdown(result)
 
     assert result["summary"]["ready"] is True
-    assert result["summary"]["covered_command_count"] == 43
+    assert result["summary"]["covered_command_count"] == 44
     assert result["summary"]["fences_balanced"] is True
     assert {row["id"] for row in result["commands"]} >= {
         "full30_aggregate",
@@ -1611,6 +1616,7 @@ def test_reproducibility_audit_covers_key_commands():
         "paper_abstract_audit",
         "paper_contribution_audit",
         "method_pipeline_audit",
+        "rq_table_consistency_audit",
         "hard30_paper_report",
         "combined_summary",
         "headline_results",
@@ -1622,6 +1628,18 @@ def test_reproducibility_audit_covers_key_commands():
     }
     assert all(row["present"] for row in result["commands"])
     assert "does not execute the full real Codex collection commands" in markdown
+
+
+def test_rq_table_consistency_audit_guards_paper_result_tables():
+    result = build_rq_table_consistency_audit()
+    markdown = render_rq_table_consistency_markdown(result)
+
+    assert result["summary"]["ready"] is True
+    assert result["summary"]["covered_check_count"] == 10
+    assert result["summary"]["check_count"] == 10
+    assert {row["rq"] for row in result["checks"]} == {"RQ1", "RQ2", "RQ3", "RQ4"}
+    assert all(row["covered"] for row in result["checks"])
+    assert "does not add new statistical evidence" in markdown
 
 
 def test_rule_implementation_audit_maps_taxonomy_to_diagnosis_rules():
@@ -2045,6 +2063,7 @@ def test_paper_draft_contains_submission_polish_sections():
     assert "## References" in text
     assert "docs/paper_structure_audit.md" in text
     assert "docs/method_pipeline_audit.md" in text
+    assert "docs/rq_table_consistency_audit.md" in text
     assert "docs/reproducibility_audit.md" in text
     assert "docs/benchmark_trace_artifact.md" in text
     assert "docs/paired_effects_audit.md" in text
@@ -2099,6 +2118,7 @@ def test_reviewer_docs_surface_hard30_task_diagnosis():
     assert "docs/paper_structure_audit.md" in readme
     assert "docs/reproducibility_audit.md" in readme
     assert "docs/phase_coverage_audit.md" in readme
+    assert "docs/rq_table_consistency_audit.md" in readme
     assert "scripts/audit_hard30_task_diagnosis.py" in readme
     assert "scripts/run_benchmark_shards.py" in readme
     assert "scripts/merge_benchmark_shards.py" in readme
@@ -2134,6 +2154,7 @@ def test_reviewer_docs_surface_hard30_task_diagnosis():
     assert "scripts/audit_related_work.py --markdown-output docs/related_work_audit.md" in readme
     assert "scripts/audit_bibliography.py --markdown-output docs/bibliography_audit.md" in readme
     assert "scripts/audit_paper_structure.py --markdown-output docs/paper_structure_audit.md" in readme
+    assert "scripts/audit_rq_table_consistency.py --markdown-output docs/rq_table_consistency_audit.md" in readme
     assert "scripts/audit_reproducibility.py --markdown-output docs/reproducibility_audit.md" in readme
     assert "scripts/audit_thesis_readiness.py --markdown-output docs/thesis_readiness.md" in readme
     assert "scripts/audit_claim_text_guard.py --markdown-output docs/claim_text_guard.md" in readme
@@ -2167,6 +2188,7 @@ def test_reviewer_docs_surface_hard30_task_diagnosis():
     assert "docs/paper_structure_audit.md" in guide
     assert "docs/reproducibility_audit.md" in guide
     assert "docs/phase_coverage_audit.md" in guide
+    assert "docs/rq_table_consistency_audit.md" in guide
     assert "| Which tasks get lost? |" in guide
     assert "| Which claims are safe to write? |" in guide
     assert "| Did paper text drift from evidence? |" in guide
@@ -2208,6 +2230,7 @@ def test_reviewer_docs_surface_hard30_task_diagnosis():
     assert "scripts/audit_related_work.py" in checklist
     assert "scripts/audit_bibliography.py" in checklist
     assert "scripts/audit_paper_structure.py" in checklist
+    assert "scripts/audit_rq_table_consistency.py" in checklist
     assert "scripts/audit_reproducibility.py" in checklist
     assert "scripts/audit_phase_coverage.py" in checklist
     assert "--markdown-output /tmp/hard30-task-diagnosis.md" in checklist
@@ -2223,6 +2246,7 @@ def test_reviewer_docs_surface_hard30_task_diagnosis():
     assert "--markdown-output /tmp/web-artifact-audit.md" in checklist
     assert "--markdown-output /tmp/cli-surface-audit.md" in checklist
     assert "--markdown-output /tmp/ci-surface-audit.md" in checklist
+    assert "--markdown-output /tmp/rq-table-consistency-audit.md" in checklist
     assert "--markdown-output /tmp/schema-field-audit.md" in checklist
     assert "--markdown-output /tmp/parser-event-coverage.md" in checklist
     assert "--markdown-output /tmp/failure-node-traceability.md" in checklist
@@ -2345,6 +2369,7 @@ def test_submission_package_maps_rqs_to_safe_paper_claims():
     assert "docs/paper_abstract_audit.md" in package["required_files"]
     assert "docs/paper_contribution_audit.md" in package["required_files"]
     assert "docs/method_pipeline_audit.md" in package["required_files"]
+    assert "docs/rq_table_consistency_audit.md" in package["required_files"]
     assert "docs/paper_structure_audit.md" in package["required_files"]
     assert "docs/experiment_protocol.md" in package["required_files"]
     assert "docs/paper_outline.md" in package["required_files"]
@@ -2405,6 +2430,7 @@ def test_submission_package_maps_rqs_to_safe_paper_claims():
     assert "docs/paper_abstract_audit.md" in markdown
     assert "docs/paper_contribution_audit.md" in markdown
     assert "docs/method_pipeline_audit.md" in markdown
+    assert "docs/rq_table_consistency_audit.md" in markdown
     assert "Unsupported Claims To Avoid" in markdown
 
 
@@ -2680,6 +2706,19 @@ def test_submission_readiness_validates_method_pipeline_audit_content(tmp_path):
     assert "missing stage coverage" in check["problems"]
     assert "missing smoke coverage" in check["problems"]
     assert "missing live collection caveat" in check["problems"]
+
+
+def test_submission_readiness_validates_rq_table_consistency_audit_content(tmp_path):
+    broken = tmp_path / "rq_table_consistency_audit.md"
+    broken.write_text("# RQ Table Consistency Audit\nReady: no\n", encoding="utf-8")
+
+    check = check_rq_table_consistency_audit_content(broken)
+
+    assert check["ok"] is False
+    assert "missing ready" in check["problems"]
+    assert "missing rq coverage" in check["problems"]
+    assert "missing table coverage" in check["problems"]
+    assert "missing drift caveat" in check["problems"]
 
 
 def test_submission_readiness_validates_parser_event_coverage_content(tmp_path):

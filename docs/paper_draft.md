@@ -442,8 +442,9 @@ and a positive result for the narrower waste-reduction claim.
 On the hard30 tier, the process signals do not strongly separate successful
 runs from hidden semantic failures. Failure and success runs both have
 verification rate 1.0, exact visible-success-check verification rate 1.0, and
-unresolved error 0. Repeated tool calls and token usage are also close across
-outcomes, and failure score is higher for successful runs than failed runs.
+unresolved error 0. The hard30 artifact contains 30 failed and 30 successful
+runs. Repeated tool calls and token usage are also close across outcomes, and
+failure score is higher for successful runs than failed runs.
 This supports the RQ2 boundary result: when visible tests are incomplete, a run
 can look procedurally sound while still failing a hidden oracle.
 
@@ -545,6 +546,7 @@ evidence,
 `docs/paper_contribution_audit.md` for contribution-claim coverage,
 `docs/method_pipeline_audit.md` for method pipeline source/CLI coverage,
 `docs/paper_structure_audit.md` for section/RQ coverage,
+`docs/rq_table_consistency_audit.md` for RQ result-table consistency,
 `docs/reproducibility_audit.md` for reproduction-command coverage,
 `docs/paper_claim_audit.md`, `docs/claim_text_guard.md`, and
 `docs/paper_number_guard.md` for claim-support and numeric-drift guards, and
@@ -586,6 +588,7 @@ For safe claim framing and generated guard status, see
 `docs/paper_abstract_audit.md`,
 `docs/paper_contribution_audit.md`, `docs/method_pipeline_audit.md`,
 `docs/paper_structure_audit.md`,
+`docs/rq_table_consistency_audit.md`,
 `docs/reproducibility_audit.md`, `docs/claim_text_guard.md`, and
 `docs/paper_number_guard.md`.
 

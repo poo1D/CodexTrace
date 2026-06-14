@@ -90,6 +90,7 @@ coverage, `docs/related_work_audit.md` for related-work positioning coverage,
 `docs/paper_contribution_audit.md` for contribution-claim coverage,
 `docs/method_pipeline_audit.md` for method pipeline source/CLI coverage,
 `docs/paper_structure_audit.md` for paper-section/RQ coverage,
+`docs/rq_table_consistency_audit.md` for RQ result-table drift checks,
 `docs/reproducibility_audit.md` for reproducibility-command coverage,
 `docs/hard30_task_diagnosis.md` for task-level
 hard30 repairs/regressions and double failures, `docs/thesis_readiness.md` for
@@ -196,6 +197,7 @@ Key files:
 - `scripts/audit_paper_contributions.py`: checks contribution claims against current evidence boundaries
 - `scripts/audit_method_pipeline.py`: checks method pipeline mapping to source and offline CLI smoke outputs
 - `scripts/audit_paper_structure.py`: checks paper draft section, RQ, and boundary-result coverage
+- `scripts/audit_rq_table_consistency.py`: checks paper RQ result tables against generated hard30 report artifacts
 - `scripts/audit_reproducibility.py`: checks reproducibility checklist command coverage and Markdown fence balance
 - `scripts/audit_submission_package.py`: generates the RQ-to-evidence submission package map
 - `docs/artifact_guide.md`: 15-minute reviewer/interviewer walkthrough
@@ -241,6 +243,7 @@ Key files:
 - `docs/paper_contribution_audit.md`: generated audit for evidence-backed contribution claims
 - `docs/method_pipeline_audit.md`: generated audit for method pipeline source/CLI smoke coverage
 - `docs/paper_structure_audit.md`: generated coverage audit for paper sections, RQ result blocks, and boundary framing
+- `docs/rq_table_consistency_audit.md`: generated audit for paper RQ result-table consistency with hard30 report artifacts
 - `docs/reproducibility_audit.md`: generated coverage audit for reproduction commands and checklist Markdown structure
 - `docs/hard30_task_diagnosis.md`: generated task-level hard30 diagnosis for double failures, repairs, regressions, and waste deltas
 - `docs/process_stress_plan_audit.md`: generated coverage audit for the materialized process-stress tier
@@ -357,6 +360,7 @@ PYTHONPATH=. python3 scripts/audit_paper_abstract.py --markdown-output docs/pape
 PYTHONPATH=. python3 scripts/audit_paper_contributions.py --markdown-output docs/paper_contribution_audit.md
 PYTHONPATH=. python3 scripts/audit_method_pipeline.py --markdown-output docs/method_pipeline_audit.md
 PYTHONPATH=. python3 scripts/audit_paper_structure.py --markdown-output docs/paper_structure_audit.md
+PYTHONPATH=. python3 scripts/audit_rq_table_consistency.py --markdown-output docs/rq_table_consistency_audit.md
 PYTHONPATH=. python3 scripts/audit_reproducibility.py --markdown-output docs/reproducibility_audit.md
 ```
 

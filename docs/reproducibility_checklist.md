@@ -50,6 +50,7 @@ The stored pilots can be inspected and aggregated without re-running Codex.
 | `docs/paper_contribution_audit.md` | Generated audit for evidence-backed contribution claims. |
 | `docs/method_pipeline_audit.md` | Generated audit for method pipeline source mapping and offline CLI smoke coverage. |
 | `docs/paper_structure_audit.md` | Generated coverage audit for paper sections, RQ result blocks, and boundary-result framing. |
+| `docs/rq_table_consistency_audit.md` | Generated audit for paper RQ result-table consistency with hard30 report artifacts. |
 | `docs/reproducibility_audit.md` | Generated coverage audit for reproduction commands and Markdown fence balance. |
 | `docs/hard30_task_diagnosis.md` | Generated task-level hard30 diagnosis for double failures, intervention repairs/regressions, and largest waste deltas. |
 | `docs/paper_claim_audit.md` | Generated support/partial/unsupported audit for thesis-level paper claims. |
@@ -121,6 +122,7 @@ The stored pilots can be inspected and aggregated without re-running Codex.
 | `scripts/audit_paper_contributions.py` | Checks contribution claims against current evidence boundaries. |
 | `scripts/audit_method_pipeline.py` | Checks the paper method pipeline against source code and offline CLI smoke outputs. |
 | `scripts/audit_paper_structure.py` | Checks that the paper draft covers required sections, RQ blocks, and boundary-result framing. |
+| `scripts/audit_rq_table_consistency.py` | Checks paper RQ result tables against generated hard30 report artifacts. |
 | `scripts/audit_reproducibility.py` | Checks that this checklist contains required reproduction commands and balanced Markdown fences. |
 | `scripts/audit_hard30_task_diagnosis.py` | Generates task-level hard30 failure-pattern and waste-delta diagnosis. |
 | `scripts/audit_submission_package.py` | Generates the reviewer-facing RQ-to-evidence submission package map. |
@@ -345,6 +347,14 @@ Paper structure audit:
 PYTHONPATH=. python3 scripts/audit_paper_structure.py \
   --json-output /tmp/paper-structure-audit.json \
   --markdown-output /tmp/paper-structure-audit.md
+```
+
+RQ table consistency audit:
+
+```bash
+PYTHONPATH=. python3 scripts/audit_rq_table_consistency.py \
+  --json-output /tmp/rq-table-consistency-audit.json \
+  --markdown-output /tmp/rq-table-consistency-audit.md
 ```
 
 Reproducibility checklist audit:
