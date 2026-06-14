@@ -626,6 +626,41 @@ def check_failure_taxonomy_audit_content(path: Path = Path("docs/failure_taxonom
     }
 
 
+def check_task_category_coverage_content(path: Path = Path("docs/task_category_coverage.md")) -> dict[str, Any]:
+    problems = []
+    try:
+        text = path.read_text(encoding="utf-8")
+    except FileNotFoundError:
+        return {
+            "name": "task category coverage audit",
+            "ok": False,
+            "evidence": str(path),
+            "problems": ["missing task category coverage audit"],
+        }
+
+    required_phrases = {
+        "ready": "Ready: yes",
+        "seed coverage": "Seed design categories covered: 7 / 7",
+        "seed tasks": "Seed tasks: 30",
+        "hard30 tasks": "Hard30 selected tasks: 30",
+        "bug fix": "`bug_fix`",
+        "test writing": "`test_writing`",
+        "multi-turn change": "`multi_turn_change`",
+        "interpretation": "seed benchmark covers all task categories named in the original design",
+    }
+    for label, phrase in required_phrases.items():
+        if phrase not in text:
+            problems.append(f"missing {label}")
+
+    return {
+        "name": "task category coverage audit",
+        "ok": not problems,
+        "evidence": str(path),
+        "detail": "benchmark manifests cover the task categories named in the experiment design",
+        "problems": problems,
+    }
+
+
 def check_related_work_audit_content(path: Path = Path("docs/related_work_audit.md")) -> dict[str, Any]:
     problems = []
     try:
@@ -745,7 +780,7 @@ def check_reproducibility_audit_content(path: Path = Path("docs/reproducibility_
 
     required_phrases = {
         "ready": "Ready: yes",
-        "coverage count": "Commands covered: 27 / 27",
+        "coverage count": "Commands covered: 28 / 28",
         "balanced fences": "Markdown fences balanced: yes",
         "submission gate": "submission_readiness_gate",
         "scope caveat": "does not execute the full real Codex collection commands",
@@ -845,6 +880,7 @@ def build_report(selection_dir: Path, run_dir: Path) -> dict[str, Any]:
         check_paper_number_guard_content(),
         check_reviewer_path_audit_content(),
         check_metric_coverage_audit_content(),
+        check_task_category_coverage_content(),
         check_failure_taxonomy_audit_content(),
         check_related_work_audit_content(),
         check_bibliography_audit_content(),

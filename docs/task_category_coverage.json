@@ -1,0 +1,133 @@
+{
+  "required_categories": [
+    {
+      "category": "bug_fix",
+      "hard30_count": 4,
+      "hard30_covered": true,
+      "hard_count": 7,
+      "hard_covered": true,
+      "seed_count": 5,
+      "seed_covered": true
+    },
+    {
+      "category": "feature",
+      "hard30_count": 4,
+      "hard30_covered": true,
+      "hard_count": 8,
+      "hard_covered": true,
+      "seed_count": 5,
+      "seed_covered": true
+    },
+    {
+      "category": "test_writing",
+      "hard30_count": 0,
+      "hard30_covered": false,
+      "hard_count": 0,
+      "hard_covered": false,
+      "seed_count": 5,
+      "seed_covered": true
+    },
+    {
+      "category": "refactor",
+      "hard30_count": 1,
+      "hard30_covered": true,
+      "hard_count": 4,
+      "hard_covered": true,
+      "seed_count": 5,
+      "seed_covered": true
+    },
+    {
+      "category": "ci_failure",
+      "hard30_count": 2,
+      "hard30_covered": true,
+      "hard_count": 3,
+      "hard_covered": true,
+      "seed_count": 5,
+      "seed_covered": true
+    },
+    {
+      "category": "error_localization",
+      "hard30_count": 2,
+      "hard30_covered": true,
+      "hard_count": 4,
+      "hard_covered": true,
+      "seed_count": 2,
+      "seed_covered": true
+    },
+    {
+      "category": "multi_turn_change",
+      "hard30_count": 3,
+      "hard30_covered": true,
+      "hard_count": 7,
+      "hard_covered": true,
+      "seed_count": 3,
+      "seed_covered": true
+    }
+  ],
+  "summary": {
+    "hard30_category_count": 12,
+    "hard30_minimum_ready": true,
+    "hard30_task_count": 30,
+    "hard_task_count": 50,
+    "missing_category_rows": 0,
+    "ready": true,
+    "required_design_categories": 7,
+    "seed_design_ready": true,
+    "seed_required_categories_covered": 7,
+    "seed_task_count": 30
+  },
+  "tiers": {
+    "hard": {
+      "category_counts": {
+        "bug_fix": 7,
+        "ci_failure": 3,
+        "data_migration": 2,
+        "dependency_friction": 3,
+        "error_localization": 4,
+        "error_recovery": 3,
+        "feature": 8,
+        "multi_turn_change": 7,
+        "multi_turn_tool_debug": 3,
+        "refactor": 4,
+        "sandbox_friction": 1,
+        "stateful_regression": 5
+      },
+      "missing_category": [],
+      "path": "benchmark/hard/tasks.jsonl",
+      "task_count": 50
+    },
+    "hard30": {
+      "category_counts": {
+        "bug_fix": 4,
+        "ci_failure": 2,
+        "data_migration": 1,
+        "dependency_friction": 3,
+        "error_localization": 2,
+        "error_recovery": 3,
+        "feature": 4,
+        "multi_turn_change": 3,
+        "multi_turn_tool_debug": 2,
+        "refactor": 1,
+        "sandbox_friction": 1,
+        "stateful_regression": 4
+      },
+      "missing_category": [],
+      "path": "benchmark/hard/pilot/hard30-selection/tasks.jsonl",
+      "task_count": 30
+    },
+    "seed": {
+      "category_counts": {
+        "bug_fix": 5,
+        "ci_failure": 5,
+        "error_localization": 2,
+        "feature": 5,
+        "multi_turn_change": 3,
+        "refactor": 5,
+        "test_writing": 5
+      },
+      "missing_category": [],
+      "path": "benchmark/tasks.jsonl",
+      "task_count": 30
+    }
+  }
+}

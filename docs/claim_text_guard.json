@@ -1,12 +1,12 @@
 {
   "files": [
     {
-      "line_count": 402,
+      "line_count": 405,
       "path": "README.md",
       "problems": []
     },
     {
-      "line_count": 577,
+      "line_count": 579,
       "path": "docs/paper_draft.md",
       "problems": []
     },
@@ -21,7 +21,7 @@
       "problems": []
     },
     {
-      "line_count": 638,
+      "line_count": 648,
       "path": "docs/reproducibility_checklist.md",
       "problems": []
     }

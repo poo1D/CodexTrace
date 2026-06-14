@@ -10,6 +10,7 @@ from scripts.finalize_benchmark_pilot import (
 from scripts.audit_manual_labels import audit_manual_labels, render_audit
 from scripts.audit_failure_taxonomy import build_failure_taxonomy_audit, render_failure_taxonomy_audit_markdown
 from scripts.audit_metric_coverage import build_metric_coverage_audit, render_metric_coverage_audit_markdown
+from scripts.audit_task_category_coverage import build_task_category_coverage_audit, render_task_category_coverage_markdown
 from scripts.audit_bibliography import build_bibliography_audit, render_bibliography_audit_markdown
 from scripts.audit_claim_text_guard import audit_claim_text_guard, render_claim_text_guard_markdown
 from scripts.audit_goal_completion import build_goal_completion_audit, render_goal_completion_audit_markdown
@@ -62,6 +63,7 @@ from scripts.check_submission_readiness import (
     check_goal_completion_audit_content,
     check_headline_results_content,
     check_metric_coverage_audit_content,
+    check_task_category_coverage_content,
     check_paper_number_guard_content,
     check_paper_abstract_audit_content,
     check_bibliography_audit_content,
@@ -1282,6 +1284,24 @@ def test_failure_taxonomy_audit_covers_process_labels():
     assert "rule-level taxonomy coverage" in markdown
 
 
+def test_task_category_coverage_audit_covers_experiment_design_categories():
+    result = build_task_category_coverage_audit()
+    markdown = render_task_category_coverage_markdown(result)
+    rows = {row["category"]: row for row in result["required_categories"]}
+
+    assert result["summary"]["ready"] is True
+    assert result["summary"]["seed_required_categories_covered"] == 7
+    assert result["summary"]["required_design_categories"] == 7
+    assert result["summary"]["seed_task_count"] == 30
+    assert result["summary"]["hard30_task_count"] == 30
+    assert rows["bug_fix"]["seed_count"] == 5
+    assert rows["test_writing"]["seed_count"] == 5
+    assert rows["multi_turn_change"]["seed_count"] == 3
+    assert rows["test_writing"]["hard30_count"] == 0
+    assert "Seed design categories covered: 7 / 7" in markdown
+    assert "not required to preserve every seed category one-for-one" in markdown
+
+
 def test_related_work_audit_covers_positioning_axes():
     result = build_related_work_audit()
     markdown = render_related_work_audit_markdown(result)
@@ -1328,11 +1348,12 @@ def test_reproducibility_audit_covers_key_commands():
     markdown = render_reproducibility_audit_markdown(result)
 
     assert result["summary"]["ready"] is True
-    assert result["summary"]["covered_command_count"] == 27
+    assert result["summary"]["covered_command_count"] == 28
     assert result["summary"]["fences_balanced"] is True
     assert {row["id"] for row in result["commands"]} >= {
         "full30_aggregate",
         "controlled_fixture_eval",
+        "task_category_coverage_audit",
         "bibliography_audit",
         "paper_abstract_audit",
         "paper_contribution_audit",
@@ -1727,6 +1748,7 @@ def test_paper_draft_contains_submission_polish_sections():
     assert "Trace diagnosis is less suited for proving semantic correctness" in text
     assert "docs/submission_package.md" in text
     assert "docs/paper_number_guard.md" in text
+    assert "docs/task_category_coverage.md" in text
     assert "docs/failure_taxonomy_audit.md" in text
     assert "docs/related_work_audit.md" in text
     assert "docs/bibliography_audit.md" in text
@@ -1755,6 +1777,7 @@ def test_reviewer_docs_surface_hard30_task_diagnosis():
     assert "docs/submission_package.md" in readme
     assert "docs/paper_number_guard.md" in readme
     assert "docs/reviewer_path_audit.md" in readme
+    assert "docs/task_category_coverage.md" in readme
     assert "docs/failure_taxonomy_audit.md" in readme
     assert "docs/related_work_audit.md" in readme
     assert "docs/bibliography_audit.md" in readme
@@ -1775,6 +1798,7 @@ def test_reviewer_docs_surface_hard30_task_diagnosis():
     assert "scripts/audit_paper_numbers.py --markdown-output docs/paper_number_guard.md" in readme
     assert "scripts/audit_reviewer_path.py --markdown-output docs/reviewer_path_audit.md" in readme
     assert "scripts/audit_submission_package.py --markdown-output docs/submission_package.md" in readme
+    assert "scripts/audit_task_category_coverage.py --markdown-output docs/task_category_coverage.md" in readme
     assert "scripts/audit_failure_taxonomy.py --markdown-output docs/failure_taxonomy_audit.md" in readme
     assert "scripts/audit_related_work.py --markdown-output docs/related_work_audit.md" in readme
     assert "scripts/audit_bibliography.py --markdown-output docs/bibliography_audit.md" in readme
@@ -1791,6 +1815,7 @@ def test_reviewer_docs_surface_hard30_task_diagnosis():
     assert "docs/paper_contribution_audit.md" in guide
     assert "docs/claim_text_guard.md" in guide
     assert "docs/paper_number_guard.md" in guide
+    assert "docs/task_category_coverage.md" in guide
     assert "docs/failure_taxonomy_audit.md" in guide
     assert "docs/related_work_audit.md" in guide
     assert "docs/bibliography_audit.md" in guide
@@ -1818,6 +1843,7 @@ def test_reviewer_docs_surface_hard30_task_diagnosis():
     assert "scripts/audit_submission_package.py" in checklist
     assert "scripts/audit_paper_numbers.py" in checklist
     assert "scripts/audit_reviewer_path.py" in checklist
+    assert "scripts/audit_task_category_coverage.py" in checklist
     assert "scripts/audit_failure_taxonomy.py" in checklist
     assert "scripts/audit_related_work.py" in checklist
     assert "scripts/audit_bibliography.py" in checklist
@@ -1835,6 +1861,7 @@ def test_reviewer_docs_surface_hard30_task_diagnosis():
     assert "--markdown-output /tmp/validity-threats.md" in checklist
     assert "--markdown-output /tmp/paper-abstract-audit.md" in checklist
     assert "--markdown-output /tmp/paper-contribution-audit.md" in checklist
+    assert "--markdown-output /tmp/task-category-coverage.md" in checklist
     assert "--markdown-output /tmp/bibliography-audit.md" in checklist
 
 
@@ -1946,6 +1973,7 @@ def test_submission_package_maps_rqs_to_safe_paper_claims():
     assert "docs/paper_number_guard.md" in package["required_files"]
     assert "docs/reviewer_path_audit.md" in package["required_files"]
     assert "docs/metric_coverage_audit.md" in package["required_files"]
+    assert "docs/task_category_coverage.md" in package["required_files"]
     assert "docs/failure_taxonomy_audit.md" in package["required_files"]
     assert "docs/related_work.md" in package["required_files"]
     assert "docs/related_work_audit.md" in package["required_files"]
@@ -1958,6 +1986,7 @@ def test_submission_package_maps_rqs_to_safe_paper_claims():
     assert "verification-lift-v2 verification delta is +0.00" in markdown
     assert "## RQ-To-Evidence Map" in markdown
     assert "docs/hard30_task_diagnosis.md" in markdown
+    assert "docs/task_category_coverage.md" in markdown
     assert "docs/failure_taxonomy_audit.md" in markdown
     assert "docs/related_work_audit.md" in markdown
     assert "docs/bibliography_audit.md" in markdown
@@ -2085,6 +2114,7 @@ def test_reviewer_path_audit_covers_required_artifacts(tmp_path):
     assert any(row["path"] == "docs/experiment_protocol.md" for row in result["coverage"])
     assert any(row["path"] == "docs/paper_outline.md" for row in result["coverage"])
     assert any(row["path"] == "docs/reviewer_path_audit.md" for row in result["coverage"])
+    assert any(row["path"] == "docs/task_category_coverage.md" for row in result["coverage"])
     assert any(row["path"] == "docs/failure_taxonomy_audit.md" for row in result["coverage"])
     assert any(row["path"] == "docs/related_work_audit.md" for row in result["coverage"])
     assert any(row["path"] == "docs/bibliography_audit.md" for row in result["coverage"])
@@ -2126,6 +2156,18 @@ def test_submission_readiness_validates_metric_coverage_audit_content(tmp_path):
     assert "missing ready" in check["problems"]
     assert "missing coverage count" in check["problems"]
     assert "missing time to first test" in check["problems"]
+
+
+def test_submission_readiness_validates_task_category_coverage_content(tmp_path):
+    broken = tmp_path / "task_category_coverage.md"
+    broken.write_text("# Task Category Coverage Audit\nReady: no\n", encoding="utf-8")
+
+    check = check_task_category_coverage_content(broken)
+
+    assert check["ok"] is False
+    assert "missing ready" in check["problems"]
+    assert "missing seed coverage" in check["problems"]
+    assert "missing multi-turn change" in check["problems"]
 
 
 def test_submission_readiness_validates_failure_taxonomy_audit_content(tmp_path):
