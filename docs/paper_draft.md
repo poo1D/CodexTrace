@@ -522,6 +522,7 @@ decision,
 `docs/validity_threats.md` for validity threats and safe wording,
 `docs/submission_package.md` for safe RQ-to-evidence claim framing,
 `docs/metric_coverage_audit.md` for experiment-metric coverage,
+`docs/phase_coverage_audit.md` for phase-segmentation coverage,
 `docs/task_category_coverage.md` for benchmark task-category coverage,
 `docs/harness_protocol_audit.md` for intervention prompt/protocol coverage,
 `docs/failure_taxonomy_audit.md` for six-label taxonomy coverage,
@@ -557,7 +558,8 @@ claim-evidence mapping, validity threats, and reproduction commands, see
 `docs/validity_threats.md` and `docs/reproducibility_checklist.md`.
 For safe claim framing and generated guard status, see
 `docs/submission_package.md`, `docs/failure_taxonomy_audit.md`,
-`docs/task_category_coverage.md`, `docs/harness_protocol_audit.md`,
+`docs/phase_coverage_audit.md`, `docs/task_category_coverage.md`,
+`docs/harness_protocol_audit.md`,
 `docs/related_work_audit.md`, `docs/bibliography_audit.md`,
 `docs/paper_abstract_audit.md`,
 `docs/paper_contribution_audit.md`, `docs/paper_structure_audit.md`,

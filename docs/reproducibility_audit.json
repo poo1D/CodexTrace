@@ -21,6 +21,11 @@
       "present": true
     },
     {
+      "id": "phase_coverage_audit",
+      "phrase": "scripts/audit_phase_coverage.py",
+      "present": true
+    },
+    {
       "id": "task_category_coverage_audit",
       "phrase": "scripts/audit_task_category_coverage.py",
       "present": true
@@ -147,12 +152,12 @@
     }
   ],
   "summary": {
-    "bash_fence_count": 41,
+    "bash_fence_count": 42,
     "checklist_path": "docs/reproducibility_checklist.md",
-    "covered_command_count": 29,
-    "fence_count": 88,
+    "covered_command_count": 30,
+    "fence_count": 90,
     "fences_balanced": true,
     "ready": true,
-    "required_command_count": 29
+    "required_command_count": 30
   }
 }

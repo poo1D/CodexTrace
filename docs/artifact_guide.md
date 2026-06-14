@@ -33,24 +33,25 @@ oracles for hidden semantic correctness.
 9. Check thesis-level support status in `docs/paper_claim_audit.md`.
 10. Check drift guards in `docs/claim_text_guard.md` and
    `docs/paper_number_guard.md`.
-11. Check task-category coverage in `docs/task_category_coverage.md`.
-12. Check harness protocol coverage in `docs/harness_protocol_audit.md`.
-13. Check failure-taxonomy coverage in `docs/failure_taxonomy_audit.md`.
-14. Check related-work positioning coverage in `docs/related_work_audit.md`.
-15. Check paper reference discoverability in `docs/bibliography_audit.md`.
-16. Check abstract-level evidence coverage in `docs/paper_abstract_audit.md`.
-17. Check contribution-claim coverage in `docs/paper_contribution_audit.md`.
-18. Check paper structure and RQ coverage in `docs/paper_structure_audit.md`.
-19. Check metric coverage in `docs/metric_coverage_audit.md`.
-20. Check reproduction command coverage in `docs/reproducibility_audit.md`.
-21. Check claim-to-evidence mapping in `docs/reproducibility_checklist.md`.
-22. Run the offline demo:
+11. Check phase segmentation coverage in `docs/phase_coverage_audit.md`.
+12. Check task-category coverage in `docs/task_category_coverage.md`.
+13. Check harness protocol coverage in `docs/harness_protocol_audit.md`.
+14. Check failure-taxonomy coverage in `docs/failure_taxonomy_audit.md`.
+15. Check related-work positioning coverage in `docs/related_work_audit.md`.
+16. Check paper reference discoverability in `docs/bibliography_audit.md`.
+17. Check abstract-level evidence coverage in `docs/paper_abstract_audit.md`.
+18. Check contribution-claim coverage in `docs/paper_contribution_audit.md`.
+19. Check paper structure and RQ coverage in `docs/paper_structure_audit.md`.
+20. Check metric coverage in `docs/metric_coverage_audit.md`.
+21. Check reproduction command coverage in `docs/reproducibility_audit.md`.
+22. Check claim-to-evidence mapping in `docs/reproducibility_checklist.md`.
+23. Run the offline demo:
 
 ```bash
 ./scripts/demo.sh
 ```
 
-23. Optionally open the visual replay UI:
+24. Optionally open the visual replay UI:
 
 ```bash
 cd web
@@ -64,6 +65,7 @@ npm run dev
 | --- | --- |
 | RQ1: What failure modes are observable? | `docs/failure_taxonomy.md`, `docs/paper_draft.md` |
 | RQ2: Can trace rules detect failures? | `benchmark/hard/pilot/hard30-real/label-eval.md` |
+| Is phase segmentation covered? | `docs/phase_coverage_audit.md` |
 | Do benchmark tasks cover the planned task types? | `docs/task_category_coverage.md` |
 | Do intervention prompts encode the harness protocol? | `docs/harness_protocol_audit.md` |
 | Is the six-label taxonomy covered? | `docs/failure_taxonomy_audit.md` |

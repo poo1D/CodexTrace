@@ -29,6 +29,7 @@ The stored pilots can be inspected and aggregated without re-running Codex.
 | `docs/validity_threats.md` | Generated validity-threat map with evidence, mitigations, and safe wording. |
 | `docs/rq4_signal_audit.md` | Generated signal audit for observable process positives and hidden semantic boundaries. |
 | `docs/metric_coverage_audit.md` | Generated coverage audit for the metrics named in the experiment design. |
+| `docs/phase_coverage_audit.md` | Generated audit for phase segmentation coverage across schema, paper text, run rows, and RQ4 signals. |
 | `docs/task_category_coverage.md` | Generated audit for benchmark task-category coverage. |
 | `docs/harness_protocol_audit.md` | Generated audit for intervention prompt/protocol coverage. |
 | `docs/failure_taxonomy_audit.md` | Generated coverage audit for the six process-failure taxonomy labels. |
@@ -87,6 +88,7 @@ The stored pilots can be inspected and aggregated without re-running Codex.
 | `scripts/audit_paper_numbers.py` | Numeric guard for paper-draft values copied from generated result artifacts. |
 | `scripts/audit_reviewer_path.py` | Reviewer-path coverage guard for required paper artifacts. |
 | `scripts/audit_metric_coverage.py` | Checks that experiment-design metrics are collected, summarized, exported to CSV, and visible in aggregate Markdown. |
+| `scripts/audit_phase_coverage.py` | Checks phase segmentation coverage across schema, paper text, run rows, and RQ4 signals. |
 | `scripts/audit_task_category_coverage.py` | Checks benchmark task-category coverage across seed, hard, and hard30 manifests. |
 | `scripts/audit_harness_protocol.py` | Checks intervention prompt templates and experiment protocol coverage for the harness constraints. |
 | `scripts/audit_failure_taxonomy.py` | Checks that taxonomy labels are defined, mapped in the paper draft, and covered by detector fixtures. |
@@ -151,6 +153,14 @@ Metric coverage audit:
 PYTHONPATH=. python3 scripts/audit_metric_coverage.py \
   --json-output /tmp/metric-coverage-audit.json \
   --markdown-output /tmp/metric-coverage-audit.md
+```
+
+Phase coverage audit:
+
+```bash
+PYTHONPATH=. python3 scripts/audit_phase_coverage.py \
+  --json-output /tmp/phase-coverage-audit.json \
+  --markdown-output /tmp/phase-coverage-audit.md
 ```
 
 Task-category coverage audit:

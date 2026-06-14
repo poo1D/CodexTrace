@@ -1,0 +1,77 @@
+{
+  "phases": [
+    {
+      "covered": true,
+      "paper_draft": true,
+      "phase": "setup",
+      "rq4_signal": false,
+      "run_key": "phase_setup_events",
+      "run_level": true,
+      "schema": true
+    },
+    {
+      "covered": true,
+      "paper_draft": true,
+      "phase": "inspect",
+      "rq4_signal": true,
+      "run_key": "phase_inspect_events",
+      "run_level": true,
+      "schema": true
+    },
+    {
+      "covered": true,
+      "paper_draft": true,
+      "phase": "edit",
+      "rq4_signal": true,
+      "run_key": "phase_edit_events",
+      "run_level": true,
+      "schema": true
+    },
+    {
+      "covered": true,
+      "paper_draft": true,
+      "phase": "verify",
+      "rq4_signal": true,
+      "run_key": "phase_verify_events",
+      "run_level": true,
+      "schema": true
+    },
+    {
+      "covered": true,
+      "paper_draft": true,
+      "phase": "recover",
+      "rq4_signal": true,
+      "run_key": "phase_recover_events",
+      "run_level": true,
+      "schema": true
+    },
+    {
+      "covered": true,
+      "paper_draft": true,
+      "phase": "complete",
+      "rq4_signal": false,
+      "run_key": "phase_complete_events",
+      "run_level": true,
+      "schema": true
+    },
+    {
+      "covered": true,
+      "paper_draft": true,
+      "phase": "other",
+      "rq4_signal": false,
+      "run_key": "phase_other_events",
+      "run_level": true,
+      "schema": true
+    }
+  ],
+  "summary": {
+    "covered_phase_count": 7,
+    "manifest": "benchmark/hard/pilot/hard30-real/runs.jsonl",
+    "paper_draft": "docs/paper_draft.md",
+    "phase_count": 7,
+    "ready": true,
+    "results_summary": "docs/results_summary.json",
+    "rq4_core_signal_count": 4,
+    "rq4_core_signal_expected": 4
+  }
+}

@@ -661,6 +661,42 @@ def check_task_category_coverage_content(path: Path = Path("docs/task_category_c
     }
 
 
+def check_phase_coverage_audit_content(path: Path = Path("docs/phase_coverage_audit.md")) -> dict[str, Any]:
+    problems = []
+    try:
+        text = path.read_text(encoding="utf-8")
+    except FileNotFoundError:
+        return {
+            "name": "phase coverage audit",
+            "ok": False,
+            "evidence": str(path),
+            "problems": ["missing phase coverage audit"],
+        }
+
+    required_phrases = {
+        "ready": "Ready: yes",
+        "phase coverage": "Phases covered: 7 / 7",
+        "rq4 signals": "RQ4 core phase signals: 4 / 4",
+        "inspect": "`inspect`",
+        "edit": "`edit`",
+        "verify": "`verify`",
+        "recover": "`recover`",
+        "run key": "`phase_verify_events`",
+        "interpretation": "all phases must exist in the schema, paper draft, and run-level hard30 rows",
+    }
+    for label, phrase in required_phrases.items():
+        if phrase not in text:
+            problems.append(f"missing {label}")
+
+    return {
+        "name": "phase coverage audit",
+        "ok": not problems,
+        "evidence": str(path),
+        "detail": "phase segmentation is covered by schema, paper text, run rows, and RQ4 signals",
+        "problems": problems,
+    }
+
+
 def check_harness_protocol_audit_content(path: Path = Path("docs/harness_protocol_audit.md")) -> dict[str, Any]:
     problems = []
     try:
@@ -817,7 +853,7 @@ def check_reproducibility_audit_content(path: Path = Path("docs/reproducibility_
 
     required_phrases = {
         "ready": "Ready: yes",
-        "coverage count": "Commands covered: 29 / 29",
+        "coverage count": "Commands covered: 30 / 30",
         "balanced fences": "Markdown fences balanced: yes",
         "submission gate": "submission_readiness_gate",
         "scope caveat": "does not execute the full real Codex collection commands",
@@ -917,6 +953,7 @@ def build_report(selection_dir: Path, run_dir: Path) -> dict[str, Any]:
         check_paper_number_guard_content(),
         check_reviewer_path_audit_content(),
         check_metric_coverage_audit_content(),
+        check_phase_coverage_audit_content(),
         check_task_category_coverage_content(),
         check_harness_protocol_audit_content(),
         check_failure_taxonomy_audit_content(),

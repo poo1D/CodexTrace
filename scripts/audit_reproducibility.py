@@ -23,6 +23,7 @@ REQUIRED_COMMANDS = (
     },
     {"id": "rq4_signal_audit", "phrase": "scripts/audit_rq4_signals.py"},
     {"id": "metric_coverage_audit", "phrase": "scripts/audit_metric_coverage.py"},
+    {"id": "phase_coverage_audit", "phrase": "scripts/audit_phase_coverage.py"},
     {"id": "task_category_coverage_audit", "phrase": "scripts/audit_task_category_coverage.py"},
     {"id": "harness_protocol_audit", "phrase": "scripts/audit_harness_protocol.py"},
     {"id": "failure_taxonomy_audit", "phrase": "scripts/audit_failure_taxonomy.py"},
