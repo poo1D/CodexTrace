@@ -227,6 +227,7 @@ def check_paper_draft_content(path: Path = Path("docs/paper_draft.md")) -> dict[
         "detector rule mapping": "| Taxonomy label | Implementation finding | Detector signal |",
         "measurement table": "| Metric | Measurement |",
         "metric coverage link": "docs/metric_coverage_audit.md",
+        "contribution block": "Our contributions are:",
         "time-to-first-test definition": "`time_to_first_test`",
         "gpu-free method note": "No model training, fine-tuning, embedding index, or GPU inference is used",
         "process-vs-semantic limitation": "Trace diagnosis is less suited for proving semantic correctness",
@@ -274,6 +275,40 @@ def check_paper_abstract_audit_content(path: Path = Path("docs/paper_abstract_au
         "ok": not problems,
         "evidence": str(path),
         "detail": "paper abstract covers supported boundary-result claims and avoids verification-rate overclaim",
+        "problems": problems,
+    }
+
+
+def check_paper_contribution_audit_content(path: Path = Path("docs/paper_contribution_audit.md")) -> dict[str, Any]:
+    problems = []
+    try:
+        text = path.read_text(encoding="utf-8")
+    except FileNotFoundError:
+        return {
+            "name": "paper contribution audit",
+            "ok": False,
+            "evidence": str(path),
+            "problems": ["missing paper contribution audit"],
+        }
+
+    required_phrases = {
+        "ready": "Ready: yes",
+        "coverage": "Checks passed: 9 / 9",
+        "taxonomy": "taxonomy_contribution",
+        "benchmark": "benchmark_contribution",
+        "codextrace": "codextrace_contribution",
+        "empirical boundary": "empirical_boundary_contribution",
+        "verification boundary": "no_verification_lift_contribution",
+    }
+    for label, phrase in required_phrases.items():
+        if phrase not in text:
+            problems.append(f"missing {label}")
+
+    return {
+        "name": "paper contribution audit",
+        "ok": not problems,
+        "evidence": str(path),
+        "detail": "paper contribution claims match supported boundary-result evidence",
         "problems": problems,
     }
 
@@ -670,7 +705,7 @@ def check_reproducibility_audit_content(path: Path = Path("docs/reproducibility_
 
     required_phrases = {
         "ready": "Ready: yes",
-        "coverage count": "Commands covered: 25 / 25",
+        "coverage count": "Commands covered: 26 / 26",
         "balanced fences": "Markdown fences balanced: yes",
         "submission gate": "submission_readiness_gate",
         "scope caveat": "does not execute the full real Codex collection commands",
@@ -773,6 +808,7 @@ def build_report(selection_dir: Path, run_dir: Path) -> dict[str, Any]:
         check_failure_taxonomy_audit_content(),
         check_related_work_audit_content(),
         check_paper_abstract_audit_content(),
+        check_paper_contribution_audit_content(),
         check_paper_structure_audit_content(),
         check_reproducibility_audit_content(),
         check_goal_completion_audit_content(),

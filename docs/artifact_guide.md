@@ -36,17 +36,18 @@ oracles for hidden semantic correctness.
 11. Check failure-taxonomy coverage in `docs/failure_taxonomy_audit.md`.
 12. Check related-work positioning coverage in `docs/related_work_audit.md`.
 13. Check abstract-level evidence coverage in `docs/paper_abstract_audit.md`.
-14. Check paper structure and RQ coverage in `docs/paper_structure_audit.md`.
-15. Check metric coverage in `docs/metric_coverage_audit.md`.
-16. Check reproduction command coverage in `docs/reproducibility_audit.md`.
-17. Check claim-to-evidence mapping in `docs/reproducibility_checklist.md`.
-18. Run the offline demo:
+14. Check contribution-claim coverage in `docs/paper_contribution_audit.md`.
+15. Check paper structure and RQ coverage in `docs/paper_structure_audit.md`.
+16. Check metric coverage in `docs/metric_coverage_audit.md`.
+17. Check reproduction command coverage in `docs/reproducibility_audit.md`.
+18. Check claim-to-evidence mapping in `docs/reproducibility_checklist.md`.
+19. Run the offline demo:
 
 ```bash
 ./scripts/demo.sh
 ```
 
-19. Optionally open the visual replay UI:
+20. Optionally open the visual replay UI:
 
 ```bash
 cd web
@@ -63,6 +64,7 @@ npm run dev
 | Is the six-label taxonomy covered? | `docs/failure_taxonomy_audit.md` |
 | Is the related-work positioning covered? | `docs/related_work.md`, `docs/related_work_audit.md` |
 | Does the abstract match the evidence boundary? | `docs/paper_abstract_audit.md` |
+| Are the contribution claims evidence-backed? | `docs/paper_contribution_audit.md` |
 | Does the paper draft cover the required structure? | `docs/paper_draft.md`, `docs/paper_structure_audit.md` |
 | RQ3: Do harness interventions help? | `docs/results_summary.md` RQ3 tables |
 | What headline table should the paper use? | `docs/headline_results.md` |

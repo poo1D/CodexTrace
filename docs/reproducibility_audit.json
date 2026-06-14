@@ -36,6 +36,11 @@
       "present": true
     },
     {
+      "id": "paper_contribution_audit",
+      "phrase": "scripts/audit_paper_contributions.py",
+      "present": true
+    },
+    {
       "id": "paper_structure_audit",
       "phrase": "scripts/audit_paper_structure.py",
       "present": true
@@ -127,12 +132,12 @@
     }
   ],
   "summary": {
-    "bash_fence_count": 37,
+    "bash_fence_count": 38,
     "checklist_path": "docs/reproducibility_checklist.md",
-    "covered_command_count": 25,
-    "fence_count": 80,
+    "covered_command_count": 26,
+    "fence_count": 82,
     "fences_balanced": true,
     "ready": true,
-    "required_command_count": 25
+    "required_command_count": 26
   }
 }

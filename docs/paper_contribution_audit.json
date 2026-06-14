@@ -1,0 +1,57 @@
+{
+  "checks": [
+    {
+      "expected": "Our contributions are:",
+      "id": "contribution_section",
+      "passed": true
+    },
+    {
+      "expected": "six-label process-failure taxonomy",
+      "id": "taxonomy_contribution",
+      "passed": true
+    },
+    {
+      "expected": "Codex JSONL trace benchmark",
+      "id": "benchmark_contribution",
+      "passed": true
+    },
+    {
+      "expected": "offline parser and diagnosis engine",
+      "id": "codextrace_contribution",
+      "passed": true
+    },
+    {
+      "expected": "boundary-result empirical analysis",
+      "id": "empirical_boundary_contribution",
+      "passed": true
+    },
+    {
+      "expected": "tool-call and token waste",
+      "id": "waste_reduction",
+      "passed": true
+    },
+    {
+      "expected": "does not support an ordinary verification-rate lift",
+      "id": "verification_negative",
+      "passed": true
+    },
+    {
+      "expected": "strong task-level oracles",
+      "id": "semantic_oracle_boundary",
+      "passed": true
+    },
+    {
+      "expected": "no contribution claims ordinary verification-rate lift",
+      "id": "no_verification_lift_contribution",
+      "passed": true
+    }
+  ],
+  "missing": [],
+  "summary": {
+    "checks": 9,
+    "missing": 0,
+    "paper_draft": "docs/paper_draft.md",
+    "passed": 9,
+    "ready": true
+  }
+}

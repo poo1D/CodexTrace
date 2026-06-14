@@ -57,6 +57,24 @@ We ask four research questions:
 - RQ4: Which trace signals explain observable process failures, and where do
   they fail to explain hidden semantic outcomes?
 
+Our contributions are:
+
+- A six-label process-failure taxonomy for multi-turn coding-agent traces:
+  verification gaps, unrecovered tool errors, repetitive exploration, context
+  drift, premature completion, and sandbox or permission deadlocks.
+- A Codex JSONL trace benchmark with baseline and intervention runs across
+  seed, hard, process-stress, verification-lift, and ablation tiers, including
+  hidden-grader outcomes and manual diagnostic labels.
+- CodexTrace, a GPU-free offline parser and diagnosis engine that normalizes
+  traces, segments phases, applies interpretable failure detectors, and
+  produces paper-ready JSON, CSV, and Markdown reports.
+- A boundary-result empirical analysis showing that simple harness constraints
+  reduce tool-call and token waste, while the stored ordinary and weak-baseline
+  pilots do not support an ordinary verification-rate lift; this negative
+  result means the current evidence does not support an ordinary
+  verification-rate lift, and hidden semantic failures still require strong
+  task-level oracles.
+
 ## 2. Related Work
 
 Software-engineering benchmarks such as
@@ -491,6 +509,7 @@ decision,
 `docs/failure_taxonomy_audit.md` for six-label taxonomy coverage,
 `docs/related_work_audit.md` for related-work positioning coverage,
 `docs/paper_abstract_audit.md` for abstract-level evidence coverage,
+`docs/paper_contribution_audit.md` for contribution-claim coverage,
 `docs/paper_structure_audit.md` for section/RQ coverage,
 `docs/reproducibility_audit.md` for reproduction-command coverage,
 `docs/paper_claim_audit.md`, `docs/claim_text_guard.md`, and
@@ -520,6 +539,6 @@ claim-evidence mapping, validity threats, and reproduction commands, see
 For safe claim framing and generated guard status, see
 `docs/submission_package.md`, `docs/failure_taxonomy_audit.md`,
 `docs/related_work_audit.md`, `docs/paper_abstract_audit.md`,
-`docs/paper_structure_audit.md`,
+`docs/paper_contribution_audit.md`, `docs/paper_structure_audit.md`,
 `docs/reproducibility_audit.md`, `docs/claim_text_guard.md`, and
 `docs/paper_number_guard.md`.

@@ -32,6 +32,7 @@ The stored pilots can be inspected and aggregated without re-running Codex.
 | `docs/failure_taxonomy_audit.md` | Generated coverage audit for the six process-failure taxonomy labels. |
 | `docs/related_work_audit.md` | Generated coverage audit for related-work positioning axes. |
 | `docs/paper_abstract_audit.md` | Generated audit for abstract-level evidence coverage and overclaim boundaries. |
+| `docs/paper_contribution_audit.md` | Generated audit for evidence-backed contribution claims. |
 | `docs/paper_structure_audit.md` | Generated coverage audit for paper sections, RQ result blocks, and boundary-result framing. |
 | `docs/reproducibility_audit.md` | Generated coverage audit for reproduction commands and Markdown fence balance. |
 | `docs/hard30_task_diagnosis.md` | Generated task-level hard30 diagnosis for double failures, intervention repairs/regressions, and largest waste deltas. |
@@ -86,6 +87,7 @@ The stored pilots can be inspected and aggregated without re-running Codex.
 | `scripts/audit_failure_taxonomy.py` | Checks that taxonomy labels are defined, mapped in the paper draft, and covered by detector fixtures. |
 | `scripts/audit_related_work.py` | Checks that related-work notes and the paper draft cover the required positioning axes. |
 | `scripts/audit_paper_abstract.py` | Checks the abstract for supported evidence coverage and overclaim boundaries. |
+| `scripts/audit_paper_contributions.py` | Checks contribution claims against current evidence boundaries. |
 | `scripts/audit_paper_structure.py` | Checks that the paper draft covers required sections, RQ blocks, and boundary-result framing. |
 | `scripts/audit_reproducibility.py` | Checks that this checklist contains required reproduction commands and balanced Markdown fences. |
 | `scripts/audit_hard30_task_diagnosis.py` | Generates task-level hard30 failure-pattern and waste-delta diagnosis. |
@@ -167,6 +169,14 @@ Paper abstract audit:
 PYTHONPATH=. python3 scripts/audit_paper_abstract.py \
   --json-output /tmp/paper-abstract-audit.json \
   --markdown-output /tmp/paper-abstract-audit.md
+```
+
+Paper contribution audit:
+
+```bash
+PYTHONPATH=. python3 scripts/audit_paper_contributions.py \
+  --json-output /tmp/paper-contribution-audit.json \
+  --markdown-output /tmp/paper-contribution-audit.md
 ```
 
 Paper structure audit:
