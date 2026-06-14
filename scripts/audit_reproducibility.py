@@ -46,6 +46,7 @@ REQUIRED_COMMANDS = (
     {"id": "reviewer_path_audit", "phrase": "scripts/audit_reviewer_path.py"},
     {"id": "submission_package", "phrase": "scripts/audit_submission_package.py"},
     {"id": "headline_results", "phrase": "scripts/audit_headline_results.py"},
+    {"id": "verification_ablation_plan", "phrase": "scripts/audit_verification_ablation_plan.py"},
     {"id": "verification_lift_v2_collection", "phrase": "scripts/run_benchmark_shards.py"},
     {"id": "verification_lift_v2_finalize", "phrase": "scripts/finalize_benchmark_pilot.py"},
     {

@@ -22,6 +22,7 @@
     "docs/validity_threats.md",
     "docs/verification_lift_next_experiment.md",
     "docs/verification_lift_v2_plan_audit.md",
+    "docs/verification_ablation_plan_audit.md",
     "docs/headline_results.md",
     "docs/paper_draft.md",
     "docs/paper_abstract_audit.md",
@@ -81,7 +82,8 @@
       "primary_evidence": [
         "docs/results_summary.md",
         "docs/hard30_task_diagnosis.md",
-        "docs/paper_claim_audit.md"
+        "docs/paper_claim_audit.md",
+        "docs/verification_ablation_plan_audit.md"
       ],
       "question": "Do harness interventions reduce failures or waste?",
       "rq": "RQ3",

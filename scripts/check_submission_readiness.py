@@ -889,7 +889,7 @@ def check_reproducibility_audit_content(path: Path = Path("docs/reproducibility_
 
     required_phrases = {
         "ready": "Ready: yes",
-        "coverage count": "Commands covered: 30 / 30",
+        "coverage count": "Commands covered: 31 / 31",
         "balanced fences": "Markdown fences balanced: yes",
         "submission gate": "submission_readiness_gate",
         "scope caveat": "does not execute the full real Codex collection commands",
@@ -974,6 +974,36 @@ def check_verification_lift_next_experiment_content(path: Path = Path("docs/veri
     }
 
 
+def check_verification_ablation_plan_audit_content(path: Path = Path("docs/verification_ablation_plan_audit.md")) -> dict[str, Any]:
+    problems = []
+    try:
+        text = path.read_text(encoding="utf-8")
+    except FileNotFoundError:
+        return {
+            "name": "verification-ablation plan audit",
+            "ok": False,
+            "evidence": str(path),
+            "problems": ["missing verification-ablation plan audit"],
+        }
+
+    required_phrases = {
+        "ready": "Ready: yes",
+        "task count": "Task count: 4",
+        "materialized fixtures": "Materialized fixtures: 4",
+    }
+    for label, phrase in required_phrases.items():
+        if phrase not in text:
+            problems.append(f"missing {label}")
+
+    return {
+        "name": "verification-ablation plan audit",
+        "ok": not problems,
+        "evidence": str(path),
+        "detail": "no-verify ablation task, prompt, and fixture scaffold is ready for mechanism-check evidence",
+        "problems": problems,
+    }
+
+
 def build_report(selection_dir: Path, run_dir: Path) -> dict[str, Any]:
     checks = [
         check_hard30_selection(selection_dir),
@@ -1002,6 +1032,7 @@ def build_report(selection_dir: Path, run_dir: Path) -> dict[str, Any]:
         check_reproducibility_audit_content(),
         check_goal_completion_audit_content(),
         check_verification_lift_next_experiment_content(),
+        check_verification_ablation_plan_audit_content(),
         check_paper_draft_content(),
         check_experiment_protocol_content(),
         check_exists(Path("docs/reproducibility_checklist.md"), "reproducibility checklist"),

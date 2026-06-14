@@ -121,6 +121,11 @@
       "present": true
     },
     {
+      "id": "verification_ablation_plan",
+      "phrase": "scripts/audit_verification_ablation_plan.py",
+      "present": true
+    },
+    {
       "id": "verification_lift_v2_collection",
       "phrase": "scripts/run_benchmark_shards.py",
       "present": true
@@ -154,10 +159,10 @@
   "summary": {
     "bash_fence_count": 42,
     "checklist_path": "docs/reproducibility_checklist.md",
-    "covered_command_count": 30,
+    "covered_command_count": 31,
     "fence_count": 90,
     "fences_balanced": true,
     "ready": true,
-    "required_command_count": 30
+    "required_command_count": 31
   }
 }

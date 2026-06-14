@@ -80,6 +80,7 @@ from scripts.check_submission_readiness import (
     check_submission_package_content,
     check_thesis_revision_decision_content,
     check_validity_threats_content,
+    check_verification_ablation_plan_audit_content,
     check_verification_lift_next_experiment_content,
     render_report,
 )
@@ -1395,7 +1396,7 @@ def test_reproducibility_audit_covers_key_commands():
     markdown = render_reproducibility_audit_markdown(result)
 
     assert result["summary"]["ready"] is True
-    assert result["summary"]["covered_command_count"] == 30
+    assert result["summary"]["covered_command_count"] == 31
     assert result["summary"]["fences_balanced"] is True
     assert {row["id"] for row in result["commands"]} >= {
         "full30_aggregate",
@@ -1409,6 +1410,7 @@ def test_reproducibility_audit_covers_key_commands():
         "hard30_paper_report",
         "combined_summary",
         "headline_results",
+        "verification_ablation_plan",
         "thesis_revision_decision",
         "validity_threats",
         "submission_readiness_gate",
@@ -1821,6 +1823,7 @@ def test_reviewer_docs_surface_hard30_task_diagnosis():
     assert "docs/paper_abstract_audit.md" in readme
     assert "docs/paper_contribution_audit.md" in readme
     assert "docs/verification_lift_v2_plan_audit.md" in readme
+    assert "docs/verification_ablation_plan_audit.md" in readme
     assert "docs/headline_results.md" in readme
     assert "benchmark/verification-lift-v2/pilot/full-real" in readme
     assert "verification-lift-v2 | 8 | 16 | 2" in readme
@@ -1847,6 +1850,7 @@ def test_reviewer_docs_surface_hard30_task_diagnosis():
     assert "scripts/audit_paper_contributions.py --markdown-output docs/paper_contribution_audit.md" in readme
     assert "scripts/audit_verification_lift_next_experiment.py --markdown-output docs/verification_lift_next_experiment.md" in readme
     assert "scripts/audit_verification_lift_v2_plan.py --markdown-output docs/verification_lift_v2_plan_audit.md" in readme
+    assert "scripts/audit_verification_ablation_plan.py --markdown-output docs/verification_ablation_plan_audit.md" in readme
     assert "scripts/audit_phase_coverage.py --markdown-output docs/phase_coverage_audit.md" in readme
     assert "scripts/audit_headline_results.py --markdown-output docs/headline_results.md" in readme
     assert "scripts/audit_paper_numbers.py --markdown-output docs/paper_number_guard.md" in readme
@@ -1870,6 +1874,7 @@ def test_reviewer_docs_surface_hard30_task_diagnosis():
     assert "docs/paper_contribution_audit.md" in guide
     assert "docs/claim_text_guard.md" in guide
     assert "docs/paper_number_guard.md" in guide
+    assert "docs/verification_ablation_plan_audit.md" in guide
     assert "docs/task_category_coverage.md" in guide
     assert "docs/harness_protocol_audit.md" in guide
     assert "docs/failure_taxonomy_audit.md" in guide
@@ -1896,6 +1901,7 @@ def test_reviewer_docs_surface_hard30_task_diagnosis():
     assert "scripts/audit_paper_contributions.py" in checklist
     assert "scripts/audit_verification_lift_next_experiment.py" in checklist
     assert "scripts/audit_verification_lift_v2_plan.py" in checklist
+    assert "scripts/audit_verification_ablation_plan.py" in checklist
     assert "scripts/audit_headline_results.py" in checklist
     assert "scripts/audit_submission_package.py" in checklist
     assert "scripts/audit_paper_numbers.py" in checklist
@@ -1912,6 +1918,7 @@ def test_reviewer_docs_surface_hard30_task_diagnosis():
     assert "--output-dir /tmp/codextrace-verification-lift-v2-dry" in checklist
     assert "--status-json /tmp/verification-lift-v2-shard-status.json" in checklist
     assert "--preflight-json /tmp/verification-lift-v2-preflight.json" in checklist
+    assert "--markdown-output /tmp/verification-ablation-plan-audit.md" in checklist
     assert "benchmark/verification-lift-v2/pilot/full-real/aggregate.md" in checklist
     assert "completed claim-closure retest" in checklist
     assert "repeated calls improve `8.62 -> 5.50`" in checklist
@@ -2024,6 +2031,7 @@ def test_submission_package_maps_rqs_to_safe_paper_claims():
     assert "docs/validity_threats.md" in package["required_files"]
     assert "docs/verification_lift_next_experiment.md" in package["required_files"]
     assert "docs/verification_lift_v2_plan_audit.md" in package["required_files"]
+    assert "docs/verification_ablation_plan_audit.md" in package["required_files"]
     assert "docs/headline_results.md" in package["required_files"]
     assert "docs/paper_draft.md" in package["required_files"]
     assert "docs/paper_abstract_audit.md" in package["required_files"]
@@ -2050,6 +2058,7 @@ def test_submission_package_maps_rqs_to_safe_paper_claims():
     assert "verification-lift-v2 verification delta is +0.00" in markdown
     assert "## RQ-To-Evidence Map" in markdown
     assert "docs/hard30_task_diagnosis.md" in markdown
+    assert "docs/verification_ablation_plan_audit.md" in markdown
     assert "docs/task_category_coverage.md" in markdown
     assert "docs/harness_protocol_audit.md" in markdown
     assert "docs/failure_taxonomy_audit.md" in markdown
@@ -2181,6 +2190,7 @@ def test_reviewer_path_audit_covers_required_artifacts(tmp_path):
     assert any(row["path"] == "docs/experiment_protocol.md" for row in result["coverage"])
     assert any(row["path"] == "docs/paper_outline.md" for row in result["coverage"])
     assert any(row["path"] == "docs/reviewer_path_audit.md" for row in result["coverage"])
+    assert any(row["path"] == "docs/verification_ablation_plan_audit.md" for row in result["coverage"])
     assert any(row["path"] == "docs/phase_coverage_audit.md" for row in result["coverage"])
     assert any(row["path"] == "docs/task_category_coverage.md" for row in result["coverage"])
     assert any(row["path"] == "docs/harness_protocol_audit.md" for row in result["coverage"])
@@ -2392,6 +2402,18 @@ def test_submission_readiness_validates_verification_lift_next_experiment_conten
     assert "missing original claim still open" in check["problems"]
     assert "missing claim revision required" in check["problems"]
     assert "missing no additional ordinary experiment" in check["problems"]
+
+
+def test_submission_readiness_validates_verification_ablation_plan_audit_content(tmp_path):
+    broken = tmp_path / "verification_ablation_plan_audit.md"
+    broken.write_text("# Verification Ablation Plan Audit\nReady: no\n", encoding="utf-8")
+
+    check = check_verification_ablation_plan_audit_content(broken)
+
+    assert check["ok"] is False
+    assert "missing ready" in check["problems"]
+    assert "missing task count" in check["problems"]
+    assert "missing materialized fixtures" in check["problems"]
 
 
 def test_submission_readiness_validates_goal_completion_audit_content(tmp_path):

@@ -70,6 +70,15 @@
     },
     {
       "covered": true,
+      "path": "docs/verification_ablation_plan_audit.md",
+      "present_in": [
+        "README.md",
+        "docs/artifact_guide.md",
+        "docs/reproducibility_checklist.md"
+      ]
+    },
+    {
+      "covered": true,
       "path": "docs/headline_results.md",
       "present_in": [
         "README.md",
@@ -295,6 +304,6 @@
     "checklist_missing": 0,
     "guide_missing": 0,
     "missing": 0,
-    "required_files": 33
+    "required_files": 34
   }
 }

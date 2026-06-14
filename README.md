@@ -295,6 +295,7 @@ PYTHONPATH=. python3 scripts/audit_thesis_revision_decision.py --markdown-output
 PYTHONPATH=. python3 scripts/audit_validity_threats.py --markdown-output docs/validity_threats.md
 PYTHONPATH=. python3 scripts/audit_verification_lift_next_experiment.py --markdown-output docs/verification_lift_next_experiment.md
 PYTHONPATH=. python3 scripts/audit_verification_lift_v2_plan.py --markdown-output docs/verification_lift_v2_plan_audit.md
+PYTHONPATH=. python3 scripts/audit_verification_ablation_plan.py --markdown-output docs/verification_ablation_plan_audit.md
 PYTHONPATH=. python3 scripts/audit_headline_results.py --markdown-output docs/headline_results.md
 PYTHONPATH=. python3 scripts/audit_paper_numbers.py --markdown-output docs/paper_number_guard.md
 PYTHONPATH=. python3 scripts/audit_reviewer_path.py --markdown-output docs/reviewer_path_audit.md
