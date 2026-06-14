@@ -1,0 +1,134 @@
+{
+  "ci_checks": [
+    {
+      "description": "checks out repository sources",
+      "id": "checkout",
+      "phrase": "actions/checkout@v5",
+      "present": true
+    },
+    {
+      "description": "installs the Python runtime",
+      "id": "setup_python",
+      "phrase": "actions/setup-python@v5",
+      "present": true
+    },
+    {
+      "description": "pins CI to Python 3.12",
+      "id": "python_312",
+      "phrase": "python-version: \"3.12\"",
+      "present": true
+    },
+    {
+      "description": "installs package and dev dependencies",
+      "id": "editable_dev_install",
+      "phrase": "pip install -e \".[dev]\"",
+      "present": true
+    },
+    {
+      "description": "runs Python tests",
+      "id": "pytest",
+      "phrase": "run: pytest",
+      "present": true
+    },
+    {
+      "description": "runs the paper artifact readiness gate",
+      "id": "submission_readiness",
+      "phrase": "PYTHONPATH=. python3 scripts/check_submission_readiness.py",
+      "present": true
+    },
+    {
+      "description": "installs the Node runtime",
+      "id": "setup_node",
+      "phrase": "actions/setup-node@v4",
+      "present": true
+    },
+    {
+      "description": "pins CI to Node 22",
+      "id": "node_22",
+      "phrase": "node-version: \"22\"",
+      "present": true
+    },
+    {
+      "description": "installs Web UI dependencies",
+      "id": "web_install",
+      "phrase": "run: npm install\n        working-directory: web",
+      "present": true
+    },
+    {
+      "description": "builds the Web replay artifact",
+      "id": "web_build",
+      "phrase": "run: npm run build\n        working-directory: web",
+      "present": true
+    }
+  ],
+  "make_checks": [
+    {
+      "description": "local pytest target",
+      "id": "test",
+      "phrase": "test:",
+      "present": true
+    },
+    {
+      "description": "offline demo target",
+      "id": "demo",
+      "phrase": "demo:",
+      "present": true
+    },
+    {
+      "description": "local Web build target",
+      "id": "web_build",
+      "phrase": "web-build:",
+      "present": true
+    }
+  ],
+  "packaging_checks": [
+    {
+      "description": "declares the package name",
+      "id": "project_name",
+      "phrase": "name = \"codex-trace\"",
+      "present": true
+    },
+    {
+      "description": "declares supported Python versions",
+      "id": "python_requirement",
+      "phrase": "requires-python = \">=3.10\"",
+      "present": true
+    },
+    {
+      "description": "exposes pytest through the dev extra",
+      "id": "dev_extra_pytest",
+      "phrase": "dev = [\"pytest>=8.0\"]",
+      "present": true
+    },
+    {
+      "description": "installs the codex-trace CLI entry point",
+      "id": "console_script",
+      "phrase": "codex-trace = \"codex_trace.cli:main\"",
+      "present": true
+    },
+    {
+      "description": "declares a setuptools build backend",
+      "id": "build_backend",
+      "phrase": "build-backend = \"setuptools.build_meta\"",
+      "present": true
+    },
+    {
+      "description": "keeps tests importable from repository root",
+      "id": "pytest_pythonpath",
+      "phrase": "pythonpath = [\".\"]",
+      "present": true
+    }
+  ],
+  "summary": {
+    "ci_check_count": 10,
+    "ci_path": ".github/workflows/ci.yml",
+    "covered_ci_check_count": 10,
+    "covered_make_check_count": 3,
+    "covered_packaging_check_count": 6,
+    "make_check_count": 3,
+    "makefile_path": "Makefile",
+    "packaging_check_count": 6,
+    "pyproject_path": "pyproject.toml",
+    "ready": true
+  }
+}

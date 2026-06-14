@@ -14,6 +14,7 @@ jobs:
           python-version: "3.12"
       - run: pip install -e ".[dev]"
       - run: pytest
+      - run: PYTHONPATH=. python3 scripts/check_submission_readiness.py
       - uses: actions/setup-node@v4
         with:
           node-version: "22"

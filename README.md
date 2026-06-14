@@ -78,6 +78,7 @@ metric coverage, `docs/paired_effects_audit.md` for paired RQ3 effect-size
 and uncertainty evidence, `docs/demo_audit.md` for the offline demo smoke path,
 `docs/web_artifact_audit.md` for the static Web replay artifact,
 `docs/cli_surface_audit.md` for offline CLI coverage,
+`docs/ci_surface_audit.md` for CI/readiness/packaging coverage,
 `docs/schema_field_audit.md` for Run/Step schema-field
 mapping, `docs/parser_event_coverage.md` for JSONL parser event coverage,
 `docs/failure_node_traceability.md` for diagnosis-node traceability,
@@ -176,6 +177,7 @@ Key files:
 - `scripts/audit_demo.py`: runs the offline demo script and checks generated JSON/Markdown diagnosis artifacts
 - `scripts/audit_web_artifact.py`: checks the committed Web replay fixture and event-ID highlight source path
 - `scripts/audit_cli_surface.py`: smoke-tests offline CLI entry points for trace, diagnosis, and research artifact generation
+- `scripts/audit_ci_surface.py`: checks CI, packaging, readiness-gate, and local task-runner coverage
 - `scripts/audit_schema_fields.py`: checks paper-facing Run/Step schema fields against parser, schema, and research outputs
 - `scripts/audit_parser_event_coverage.py`: checks synthetic JSONL event-kind and phase coverage for the parser
 - `scripts/audit_failure_node_traceability.py`: checks diagnosis finding event IDs through JSON, Markdown, and Web UI highlights
@@ -210,12 +212,14 @@ Key files:
 - `docs/paired_effects_audit.md`: generated paired effect-size and uncertainty audit for RQ3 waste-reduction claims
 - `docs/demo_audit.md`: generated audit for the reviewer-facing offline demo script
 - `docs/web_artifact_audit.md`: generated audit for the committed static Web replay artifact
+- `docs/ci_surface_audit.md`: generated audit for CI, packaging, readiness-gate, and local task-runner coverage
 - `docs/reproducibility_checklist.md`: claim-evidence map and reproduction commands
 - `docs/submission_package.md`: generated RQ-to-evidence map for safe paper submission claims
 - `docs/results_summary.md`: generated full30 + hard10 + hard30 + process-stress + verification-lift + verification-lift-v2 + verification-ablation result summary, including RQ4 trace-signal analysis
 - `docs/rq4_signal_audit.md`: generated signal audit for observable process failures and hidden semantic boundaries
 - `docs/metric_coverage_audit.md`: generated coverage audit for the experiment-design metrics
 - `docs/cli_surface_audit.md`: generated audit for offline CLI command surface coverage
+- `docs/ci_surface_audit.md`: generated audit for CI, packaging, readiness-gate, and local task-runner coverage
 - `docs/schema_field_audit.md`: generated audit for paper-facing Run/Step schema-field mapping
 - `docs/parser_event_coverage.md`: generated audit for JSONL parser event-kind and phase coverage
 - `docs/failure_node_traceability.md`: generated audit for diagnosis finding event-ID traceability
@@ -331,6 +335,7 @@ PYTHONPATH=. python3 scripts/audit_paired_effects.py --markdown-output docs/pair
 PYTHONPATH=. python3 scripts/audit_demo.py --markdown-output docs/demo_audit.md
 PYTHONPATH=. python3 scripts/audit_web_artifact.py --markdown-output docs/web_artifact_audit.md
 PYTHONPATH=. python3 scripts/audit_cli_surface.py --markdown-output docs/cli_surface_audit.md
+PYTHONPATH=. python3 scripts/audit_ci_surface.py --markdown-output docs/ci_surface_audit.md
 PYTHONPATH=. python3 scripts/audit_schema_fields.py --markdown-output docs/schema_field_audit.md
 PYTHONPATH=. python3 scripts/audit_parser_event_coverage.py --markdown-output docs/parser_event_coverage.md
 PYTHONPATH=. python3 scripts/audit_failure_node_traceability.py --markdown-output docs/failure_node_traceability.md

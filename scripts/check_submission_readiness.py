@@ -231,6 +231,7 @@ def check_paper_draft_content(path: Path = Path("docs/paper_draft.md")) -> dict[
         "demo audit link": "docs/demo_audit.md",
         "web artifact audit link": "docs/web_artifact_audit.md",
         "cli surface audit link": "docs/cli_surface_audit.md",
+        "ci surface audit link": "docs/ci_surface_audit.md",
         "schema field audit link": "docs/schema_field_audit.md",
         "parser event audit link": "docs/parser_event_coverage.md",
         "failure node audit link": "docs/failure_node_traceability.md",
@@ -741,6 +742,41 @@ def check_cli_surface_audit_content(path: Path = Path("docs/cli_surface_audit.md
     }
 
 
+def check_ci_surface_audit_content(path: Path = Path("docs/ci_surface_audit.md")) -> dict[str, Any]:
+    problems = []
+    try:
+        text = path.read_text(encoding="utf-8")
+    except FileNotFoundError:
+        return {
+            "name": "ci surface audit",
+            "ok": False,
+            "evidence": str(path),
+            "problems": ["missing ci surface audit"],
+        }
+
+    required_phrases = {
+        "ready": "Ready: yes",
+        "ci coverage": "CI checks covered: 10 / 10",
+        "packaging coverage": "Packaging checks covered: 6 / 6",
+        "makefile coverage": "Makefile checks covered: 3 / 3",
+        "submission readiness": "`submission_readiness`",
+        "web build": "`web_build`",
+        "console script": "`console_script`",
+        "actions caveat": "does not execute GitHub Actions itself",
+    }
+    for label, phrase in required_phrases.items():
+        if phrase not in text:
+            problems.append(f"missing {label}")
+
+    return {
+        "name": "ci surface audit",
+        "ok": not problems,
+        "evidence": str(path),
+        "detail": "CI, packaging, and local task declarations cover tests, readiness, and Web build gates",
+        "problems": problems,
+    }
+
+
 def check_schema_field_audit_content(path: Path = Path("docs/schema_field_audit.md")) -> dict[str, Any]:
     problems = []
     try:
@@ -1214,7 +1250,7 @@ def check_reproducibility_audit_content(path: Path = Path("docs/reproducibility_
 
     required_phrases = {
         "ready": "Ready: yes",
-        "coverage count": "Commands covered: 40 / 40",
+        "coverage count": "Commands covered: 41 / 41",
         "balanced fences": "Markdown fences balanced: yes",
         "submission gate": "submission_readiness_gate",
         "scope caveat": "does not execute the full real Codex collection commands",
@@ -1348,6 +1384,7 @@ def build_report(selection_dir: Path, run_dir: Path) -> dict[str, Any]:
         check_demo_audit_content(),
         check_web_artifact_audit_content(),
         check_cli_surface_audit_content(),
+        check_ci_surface_audit_content(),
         check_schema_field_audit_content(),
         check_parser_event_coverage_content(),
         check_failure_node_traceability_content(),

@@ -14,6 +14,7 @@ from scripts.audit_paired_effects import build_paired_effects_audit, render_pair
 from scripts.audit_demo import build_demo_audit, render_demo_audit_markdown
 from scripts.audit_web_artifact import build_web_artifact_audit, render_web_artifact_markdown
 from scripts.audit_cli_surface import build_cli_surface_audit, render_cli_surface_markdown
+from scripts.audit_ci_surface import build_ci_surface_audit, render_ci_surface_markdown
 from scripts.audit_schema_fields import build_schema_field_audit, render_schema_field_audit_markdown
 from scripts.audit_parser_event_coverage import build_parser_event_coverage_audit, render_parser_event_coverage_markdown
 from scripts.audit_failure_node_traceability import (
@@ -82,6 +83,7 @@ from scripts.check_submission_readiness import (
     check_demo_audit_content,
     check_web_artifact_audit_content,
     check_cli_surface_audit_content,
+    check_ci_surface_audit_content,
     check_schema_field_audit_content,
     check_parser_event_coverage_content,
     check_failure_node_traceability_content,
@@ -1352,6 +1354,22 @@ def test_cli_surface_audit_covers_offline_entrypoints():
     assert "does not execute live Codex collection" in markdown
 
 
+def test_ci_surface_audit_covers_ci_packaging_and_readiness_gate():
+    result = build_ci_surface_audit()
+    markdown = render_ci_surface_markdown(result)
+    ci_checks = {row["id"]: row for row in result["ci_checks"]}
+    packaging_checks = {row["id"]: row for row in result["packaging_checks"]}
+
+    assert result["summary"]["ready"] is True
+    assert result["summary"]["covered_ci_check_count"] == 10
+    assert result["summary"]["covered_packaging_check_count"] == 6
+    assert result["summary"]["covered_make_check_count"] == 3
+    assert ci_checks["submission_readiness"]["present"] is True
+    assert ci_checks["web_build"]["present"] is True
+    assert packaging_checks["console_script"]["present"] is True
+    assert "does not execute GitHub Actions itself" in markdown
+
+
 def test_schema_field_audit_maps_paper_schema_to_code():
     result = build_schema_field_audit()
     markdown = render_schema_field_audit_markdown(result)
@@ -1523,7 +1541,7 @@ def test_reproducibility_audit_covers_key_commands():
     markdown = render_reproducibility_audit_markdown(result)
 
     assert result["summary"]["ready"] is True
-    assert result["summary"]["covered_command_count"] == 40
+    assert result["summary"]["covered_command_count"] == 41
     assert result["summary"]["fences_balanced"] is True
     assert {row["id"] for row in result["commands"]} >= {
         "full30_aggregate",
@@ -1534,6 +1552,7 @@ def test_reproducibility_audit_covers_key_commands():
         "demo_audit",
         "web_artifact_audit",
         "cli_surface_audit",
+        "ci_surface_audit",
         "schema_field_audit",
         "parser_event_coverage",
         "failure_node_traceability",
@@ -1981,6 +2000,7 @@ def test_paper_draft_contains_submission_polish_sections():
     assert "docs/demo_audit.md" in text
     assert "docs/web_artifact_audit.md" in text
     assert "docs/cli_surface_audit.md" in text
+    assert "docs/ci_surface_audit.md" in text
     assert "docs/schema_field_audit.md" in text
     assert "docs/parser_event_coverage.md" in text
     assert "docs/failure_node_traceability.md" in text
@@ -2014,6 +2034,7 @@ def test_reviewer_docs_surface_hard30_task_diagnosis():
     assert "docs/demo_audit.md" in readme
     assert "docs/web_artifact_audit.md" in readme
     assert "docs/cli_surface_audit.md" in readme
+    assert "docs/ci_surface_audit.md" in readme
     assert "docs/schema_field_audit.md" in readme
     assert "docs/parser_event_coverage.md" in readme
     assert "docs/failure_node_traceability.md" in readme
@@ -2048,6 +2069,7 @@ def test_reviewer_docs_surface_hard30_task_diagnosis():
     assert "scripts/audit_demo.py --markdown-output docs/demo_audit.md" in readme
     assert "scripts/audit_web_artifact.py --markdown-output docs/web_artifact_audit.md" in readme
     assert "scripts/audit_cli_surface.py --markdown-output docs/cli_surface_audit.md" in readme
+    assert "scripts/audit_ci_surface.py --markdown-output docs/ci_surface_audit.md" in readme
     assert "scripts/audit_schema_fields.py --markdown-output docs/schema_field_audit.md" in readme
     assert "scripts/audit_parser_event_coverage.py --markdown-output docs/parser_event_coverage.md" in readme
     assert "scripts/audit_failure_node_traceability.py --markdown-output docs/failure_node_traceability.md" in readme
@@ -2076,6 +2098,7 @@ def test_reviewer_docs_surface_hard30_task_diagnosis():
     assert "docs/demo_audit.md" in guide
     assert "docs/web_artifact_audit.md" in guide
     assert "docs/cli_surface_audit.md" in guide
+    assert "docs/ci_surface_audit.md" in guide
     assert "docs/schema_field_audit.md" in guide
     assert "docs/parser_event_coverage.md" in guide
     assert "docs/failure_node_traceability.md" in guide
@@ -2116,6 +2139,7 @@ def test_reviewer_docs_surface_hard30_task_diagnosis():
     assert "scripts/audit_demo.py" in checklist
     assert "scripts/audit_web_artifact.py" in checklist
     assert "scripts/audit_cli_surface.py" in checklist
+    assert "scripts/audit_ci_surface.py" in checklist
     assert "scripts/audit_schema_fields.py" in checklist
     assert "scripts/audit_parser_event_coverage.py" in checklist
     assert "scripts/audit_failure_node_traceability.py" in checklist
@@ -2138,6 +2162,7 @@ def test_reviewer_docs_surface_hard30_task_diagnosis():
     assert "--markdown-output /tmp/demo-audit.md" in checklist
     assert "--markdown-output /tmp/web-artifact-audit.md" in checklist
     assert "--markdown-output /tmp/cli-surface-audit.md" in checklist
+    assert "--markdown-output /tmp/ci-surface-audit.md" in checklist
     assert "--markdown-output /tmp/schema-field-audit.md" in checklist
     assert "--markdown-output /tmp/parser-event-coverage.md" in checklist
     assert "--markdown-output /tmp/failure-node-traceability.md" in checklist
@@ -2268,6 +2293,7 @@ def test_submission_package_maps_rqs_to_safe_paper_claims():
     assert "docs/demo_audit.md" in package["required_files"]
     assert "docs/web_artifact_audit.md" in package["required_files"]
     assert "docs/cli_surface_audit.md" in package["required_files"]
+    assert "docs/ci_surface_audit.md" in package["required_files"]
     assert "docs/schema_field_audit.md" in package["required_files"]
     assert "docs/parser_event_coverage.md" in package["required_files"]
     assert "docs/failure_node_traceability.md" in package["required_files"]
@@ -2304,6 +2330,7 @@ def test_submission_package_maps_rqs_to_safe_paper_claims():
     assert "docs/reproducibility_audit.md" in markdown
     assert "docs/rq4_signal_audit.md" in markdown
     assert "docs/cli_surface_audit.md" in markdown
+    assert "docs/ci_surface_audit.md" in markdown
     assert "docs/schema_field_audit.md" in markdown
     assert "docs/parser_event_coverage.md" in markdown
     assert "docs/failure_node_traceability.md" in markdown
@@ -2549,6 +2576,19 @@ def test_submission_readiness_validates_cli_surface_audit_content(tmp_path):
     assert "missing command coverage" in check["problems"]
     assert "missing subcommand coverage" in check["problems"]
     assert "missing live collection caveat" in check["problems"]
+
+
+def test_submission_readiness_validates_ci_surface_audit_content(tmp_path):
+    broken = tmp_path / "ci_surface_audit.md"
+    broken.write_text("# CI Surface Audit\nReady: no\n", encoding="utf-8")
+
+    check = check_ci_surface_audit_content(broken)
+
+    assert check["ok"] is False
+    assert "missing ready" in check["problems"]
+    assert "missing ci coverage" in check["problems"]
+    assert "missing packaging coverage" in check["problems"]
+    assert "missing actions caveat" in check["problems"]
 
 
 def test_submission_readiness_validates_parser_event_coverage_content(tmp_path):
