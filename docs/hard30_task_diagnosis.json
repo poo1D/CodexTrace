@@ -1,4 +1,138 @@
 {
+  "category_diagnosis": [
+    {
+      "avg_repeated_tool_call_delta": -3.0,
+      "avg_token_usage_delta": -37251.0,
+      "category": "bug_fix",
+      "double_failure_count": 1,
+      "intervention_regression_count": 0,
+      "intervention_repair_count": 0,
+      "repeated_call_improved_count": 3,
+      "task_count": 4,
+      "token_improved_count": 3
+    },
+    {
+      "avg_repeated_tool_call_delta": -4.5,
+      "avg_token_usage_delta": -73964.5,
+      "category": "ci_failure",
+      "double_failure_count": 1,
+      "intervention_regression_count": 0,
+      "intervention_repair_count": 0,
+      "repeated_call_improved_count": 2,
+      "task_count": 2,
+      "token_improved_count": 2
+    },
+    {
+      "avg_repeated_tool_call_delta": -4.0,
+      "avg_token_usage_delta": -118044.0,
+      "category": "data_migration",
+      "double_failure_count": 1,
+      "intervention_regression_count": 0,
+      "intervention_repair_count": 0,
+      "repeated_call_improved_count": 1,
+      "task_count": 1,
+      "token_improved_count": 1
+    },
+    {
+      "avg_repeated_tool_call_delta": -4.666666666666667,
+      "avg_token_usage_delta": -70390.66666666667,
+      "category": "dependency_friction",
+      "double_failure_count": 3,
+      "intervention_regression_count": 0,
+      "intervention_repair_count": 0,
+      "repeated_call_improved_count": 3,
+      "task_count": 3,
+      "token_improved_count": 2
+    },
+    {
+      "avg_repeated_tool_call_delta": -2.5,
+      "avg_token_usage_delta": -48111.5,
+      "category": "error_localization",
+      "double_failure_count": 1,
+      "intervention_regression_count": 0,
+      "intervention_repair_count": 0,
+      "repeated_call_improved_count": 2,
+      "task_count": 2,
+      "token_improved_count": 2
+    },
+    {
+      "avg_repeated_tool_call_delta": -9.333333333333334,
+      "avg_token_usage_delta": -360171.0,
+      "category": "error_recovery",
+      "double_failure_count": 1,
+      "intervention_regression_count": 0,
+      "intervention_repair_count": 0,
+      "repeated_call_improved_count": 3,
+      "task_count": 3,
+      "token_improved_count": 3
+    },
+    {
+      "avg_repeated_tool_call_delta": -4.0,
+      "avg_token_usage_delta": -128940.0,
+      "category": "feature",
+      "double_failure_count": 1,
+      "intervention_regression_count": 0,
+      "intervention_repair_count": 0,
+      "repeated_call_improved_count": 4,
+      "task_count": 4,
+      "token_improved_count": 4
+    },
+    {
+      "avg_repeated_tool_call_delta": -4.333333333333333,
+      "avg_token_usage_delta": -147431.33333333334,
+      "category": "multi_turn_change",
+      "double_failure_count": 2,
+      "intervention_regression_count": 0,
+      "intervention_repair_count": 1,
+      "repeated_call_improved_count": 2,
+      "task_count": 3,
+      "token_improved_count": 3
+    },
+    {
+      "avg_repeated_tool_call_delta": 3.0,
+      "avg_token_usage_delta": 96024.0,
+      "category": "multi_turn_tool_debug",
+      "double_failure_count": 0,
+      "intervention_regression_count": 0,
+      "intervention_repair_count": 0,
+      "repeated_call_improved_count": 0,
+      "task_count": 2,
+      "token_improved_count": 0
+    },
+    {
+      "avg_repeated_tool_call_delta": -2.0,
+      "avg_token_usage_delta": -72244.0,
+      "category": "refactor",
+      "double_failure_count": 0,
+      "intervention_regression_count": 1,
+      "intervention_repair_count": 0,
+      "repeated_call_improved_count": 1,
+      "task_count": 1,
+      "token_improved_count": 1
+    },
+    {
+      "avg_repeated_tool_call_delta": -4.0,
+      "avg_token_usage_delta": -76225.0,
+      "category": "sandbox_friction",
+      "double_failure_count": 0,
+      "intervention_regression_count": 0,
+      "intervention_repair_count": 0,
+      "repeated_call_improved_count": 1,
+      "task_count": 1,
+      "token_improved_count": 1
+    },
+    {
+      "avg_repeated_tool_call_delta": -2.75,
+      "avg_token_usage_delta": -60585.75,
+      "category": "stateful_regression",
+      "double_failure_count": 3,
+      "intervention_regression_count": 0,
+      "intervention_repair_count": 0,
+      "repeated_call_improved_count": 4,
+      "task_count": 4,
+      "token_improved_count": 4
+    }
+  ],
   "double_failures": [
     {
       "baseline_outcome": "failure",

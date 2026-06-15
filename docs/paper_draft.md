@@ -493,9 +493,15 @@ waste even when outcomes are saturated. The hard10 pilot creates genuine
 outcome failures and shows a small success-rate lift. The larger hard30 pilot
 keeps success flat but sharply reduces tool-call and token waste, while also
 revealing that process-only trace rules cannot detect every correctness
-failure. The process-stress, verification-lift, and verification-lift-v2
-pilots add a useful boundary: current Codex CLI behavior already verifies
-consistently, so the paper should not claim a verification-rate lift under
+failure. The category-level hard30 diagnosis shows where agents most often get
+lost in this pilot: all three `dependency_friction` tasks double-fail, three of
+four `stateful_regression` tasks double-fail, and the only repair is a
+`multi_turn_change` task. The intervention reduces token and repeated-call
+waste in most categories, but the two `multi_turn_tool_debug` tasks are the
+clearest waste regressions. The process-stress, verification-lift, and
+verification-lift-v2 pilots add a useful boundary: current Codex CLI behavior
+already verifies consistently, so the paper should not claim a
+verification-rate lift under
 ordinary or weak-baseline conditions; that remains true when verification is
 restricted to the task's exact visible success check. The no-verify ablation
 shows that an evidence-gated harness can force verification when the baseline

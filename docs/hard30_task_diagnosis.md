@@ -21,6 +21,23 @@ This generated audit answers which hard30 tasks are easiest for the agent to get
 | intervention_regressed | 1 |
 | intervention_repaired | 1 |
 
+## Category-Level Diagnosis
+
+| Category | Tasks | Both failed | Repairs | Regressions | Token improved | Repeated-call improved | Avg token delta | Avg repeated-call delta |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| bug_fix | 4 | 1 | 0 | 0 | 3 | 3 | -37.3k | -3 |
+| ci_failure | 2 | 1 | 0 | 0 | 2 | 2 | -74.0k | -4.5 |
+| data_migration | 1 | 1 | 0 | 0 | 1 | 1 | -118.0k | -4 |
+| dependency_friction | 3 | 3 | 0 | 0 | 2 | 3 | -70.4k | -4.667 |
+| error_localization | 2 | 1 | 0 | 0 | 2 | 2 | -48.1k | -2.5 |
+| error_recovery | 3 | 1 | 0 | 0 | 3 | 3 | -360.2k | -9.333 |
+| feature | 4 | 1 | 0 | 0 | 4 | 4 | -128.9k | -4 |
+| multi_turn_change | 3 | 2 | 1 | 0 | 3 | 2 | -147.4k | -4.333 |
+| multi_turn_tool_debug | 2 | 0 | 0 | 0 | 0 | 0 | 96.0k | 3 |
+| refactor | 1 | 0 | 0 | 1 | 1 | 1 | -72.2k | -2 |
+| sandbox_friction | 1 | 0 | 0 | 0 | 1 | 1 | -76.2k | -4 |
+| stateful_regression | 4 | 3 | 0 | 0 | 4 | 4 | -60.6k | -2.75 |
+
 ## Double-Failure Tasks
 
 | Task | Category | Repo | Tags | Repeated-call delta | Token delta |

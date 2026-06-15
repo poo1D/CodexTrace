@@ -114,6 +114,7 @@ from scripts.check_submission_readiness import (
     check_detector_evaluation_audit_content,
     check_goal_completion_audit_content,
     check_headline_results_content,
+    check_hard30_task_diagnosis_content,
     check_metric_coverage_audit_content,
     check_benchmark_trace_artifact_content,
     check_paired_effects_audit_content,
@@ -2161,9 +2162,16 @@ def test_hard30_task_diagnosis_identifies_lost_tasks_and_waste_patterns():
     assert result["summary"]["intervention_repair_count"] == 1
     assert result["summary"]["intervention_regression_count"] == 1
     assert result["summary"]["token_improved_count"] == 26
+    categories = {row["category"]: row for row in result["category_diagnosis"]}
+    assert categories["dependency_friction"]["double_failure_count"] == 3
+    assert categories["multi_turn_change"]["intervention_repair_count"] == 1
+    assert categories["refactor"]["intervention_regression_count"] == 1
+    assert categories["error_recovery"]["token_improved_count"] == 3
     assert result["intervention_repairs"][0]["task_id"] == "HARD-050"
     assert result["intervention_regressions"][0]["task_id"] == "HARD-007"
     assert result["top_waste_reductions"][0]["task_id"] == "HARD-033"
+    assert "## Category-Level Diagnosis" in markdown
+    assert "| dependency_friction | 3 | 3 | 0 | 0 |" in markdown
     assert "## Double-Failure Tasks" in markdown
     assert "HARD-050" in markdown
     assert "HARD-007" in markdown
@@ -2963,6 +2971,18 @@ def test_submission_readiness_validates_metric_coverage_audit_content(tmp_path):
     assert "missing ready" in check["problems"]
     assert "missing coverage count" in check["problems"]
     assert "missing time to first test" in check["problems"]
+
+
+def test_submission_readiness_validates_hard30_task_diagnosis_content(tmp_path):
+    broken = tmp_path / "hard30_task_diagnosis.md"
+    broken.write_text("# Hard30 Task Diagnosis\nTasks: 30\n", encoding="utf-8")
+
+    check = check_hard30_task_diagnosis_content(broken)
+
+    assert check["ok"] is False
+    assert "missing double failures" in check["problems"]
+    assert "missing category diagnosis" in check["problems"]
+    assert "missing dependency friction" in check["problems"]
 
 
 def test_submission_readiness_validates_paired_effects_audit_content(tmp_path):

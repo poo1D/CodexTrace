@@ -404,6 +404,44 @@ def check_experiment_protocol_content(path: Path = Path("docs/experiment_protoco
     }
 
 
+def check_hard30_task_diagnosis_content(path: Path = Path("docs/hard30_task_diagnosis.md")) -> dict[str, Any]:
+    problems = []
+    try:
+        text = path.read_text(encoding="utf-8")
+    except FileNotFoundError:
+        return {
+            "name": "hard30 task diagnosis",
+            "ok": False,
+            "evidence": str(path),
+            "problems": ["missing hard30 task diagnosis"],
+        }
+
+    required_phrases = {
+        "tasks": "Tasks: 30",
+        "double failures": "Both failed: 14",
+        "repair": "Intervention repaired: 1",
+        "regression": "Intervention regressed: 1",
+        "token improved": "Token usage improved: 26/30",
+        "repeated improved": "Repeated tool calls improved: 26/30",
+        "category diagnosis": "Category-Level Diagnosis",
+        "dependency friction": "| dependency_friction | 3 | 3 | 0 | 0 |",
+        "repair task": "HARD-050",
+        "regression task": "HARD-007",
+        "interpretation": "dominated by hidden semantic double failures",
+    }
+    for label, phrase in required_phrases.items():
+        if phrase not in text:
+            problems.append(f"missing {label}")
+
+    return {
+        "name": "hard30 task diagnosis",
+        "ok": not problems,
+        "evidence": str(path),
+        "detail": "task and category-level hard30 diagnosis for losses, repairs, regressions, and waste deltas",
+        "problems": problems,
+    }
+
+
 def check_submission_package_content(path: Path = Path("docs/submission_package.md")) -> dict[str, Any]:
     problems = []
     try:
@@ -1806,7 +1844,7 @@ def build_report(selection_dir: Path, run_dir: Path) -> dict[str, Any]:
         check_hard30_outputs(run_dir),
         check_manual_labels(run_dir),
         check_hard30_report_content(run_dir),
-        check_exists(Path("docs/hard30_task_diagnosis.md"), "hard30 task diagnosis"),
+        check_hard30_task_diagnosis_content(),
         check_submission_package_content(),
         check_headline_results_content(),
         check_thesis_revision_decision_content(),

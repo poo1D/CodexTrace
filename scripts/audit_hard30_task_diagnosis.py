@@ -34,6 +34,7 @@ def build_task_diagnosis(
     category_counts: Counter[str] = Counter()
     failure_pattern_counts: Counter[str] = Counter()
     label_counts: Counter[str] = Counter()
+    rows_by_category: dict[str, list[dict[str, Any]]] = defaultdict(list)
 
     for task_id in sorted(tasks):
         task = tasks[task_id]
@@ -66,6 +67,7 @@ def build_task_diagnosis(
             "token_usage_delta": _to_int(delta["token_usage_delta"]),
             "failure_score_delta": _to_int(delta["failure_score_delta"]),
         })
+        rows_by_category[category].append(rows[-1])
 
     double_failures = [row for row in rows if row["failure_pattern"] == "both_failed"]
     intervention_repairs = [row for row in rows if row["failure_pattern"] == "intervention_repaired"]
@@ -85,6 +87,7 @@ def build_task_diagnosis(
             "token_improved_count": sum(1 for row in rows if row["token_usage_delta"] < 0),
             "repeated_call_improved_count": sum(1 for row in rows if row["repeated_tool_call_delta"] < 0),
         },
+        "category_diagnosis": _category_diagnosis(rows_by_category),
         "double_failures": double_failures,
         "intervention_repairs": intervention_repairs,
         "intervention_regressions": intervention_regressions,
@@ -119,6 +122,21 @@ def render_task_diagnosis_markdown(result: dict[str, Any]) -> str:
     ]
     for pattern, count in summary["failure_pattern_counts"].items():
         lines.append(f"| {pattern} | {count} |")
+
+    lines.extend([
+        "",
+        "## Category-Level Diagnosis",
+        "",
+        "| Category | Tasks | Both failed | Repairs | Regressions | Token improved | Repeated-call improved | Avg token delta | Avg repeated-call delta |",
+        "| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |",
+    ])
+    for row in result["category_diagnosis"]:
+        lines.append(
+            f"| {row['category']} | {row['task_count']} | {row['double_failure_count']} | "
+            f"{row['intervention_repair_count']} | {row['intervention_regression_count']} | "
+            f"{row['token_improved_count']} | {row['repeated_call_improved_count']} | "
+            f"{_fmt(row['avg_token_usage_delta'])} | {_fmt(row['avg_repeated_tool_call_delta'])} |"
+        )
 
     lines.extend([
         "",
@@ -230,6 +248,31 @@ def _waste_row(row: dict[str, Any]) -> str:
         f"| {row['task_id']} | {row['failure_pattern']} | {row['category']} | {row['repo_hint']} | "
         f"{row['repeated_tool_call_delta']} | {row['token_usage_delta']} | {row['failure_score_delta']} |"
     )
+
+
+def _category_diagnosis(rows_by_category: dict[str, list[dict[str, Any]]]) -> list[dict[str, Any]]:
+    output = []
+    for category, rows in sorted(rows_by_category.items()):
+        output.append({
+            "category": category,
+            "task_count": len(rows),
+            "double_failure_count": sum(1 for row in rows if row["failure_pattern"] == "both_failed"),
+            "intervention_repair_count": sum(1 for row in rows if row["failure_pattern"] == "intervention_repaired"),
+            "intervention_regression_count": sum(1 for row in rows if row["failure_pattern"] == "intervention_regressed"),
+            "token_improved_count": sum(1 for row in rows if row["token_usage_delta"] < 0),
+            "repeated_call_improved_count": sum(1 for row in rows if row["repeated_tool_call_delta"] < 0),
+            "avg_token_usage_delta": sum(row["token_usage_delta"] for row in rows) / len(rows),
+            "avg_repeated_tool_call_delta": sum(row["repeated_tool_call_delta"] for row in rows) / len(rows),
+        })
+    return output
+
+
+def _fmt(value: Any) -> str:
+    if isinstance(value, float):
+        if abs(value) >= 1000:
+            return f"{value / 1000:.1f}k"
+        return f"{value:.4g}"
+    return str(value)
 
 
 def main() -> int:
