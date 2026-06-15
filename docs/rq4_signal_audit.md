@@ -9,6 +9,7 @@ This generated audit summarizes which trace signals explain observable process l
 - Hard30 hidden semantic verification delta: +0.00
 - Hard30 hidden semantic exact success-check delta: +0.00
 - Hard30 hidden semantic unresolved-error delta: +0.00
+- Expected label-signal checks passed: 6 / 6
 
 ## Hidden Semantic Boundary
 
@@ -52,5 +53,16 @@ This generated audit summarizes which trace signals explain observable process l
 | sandbox_permission_deadlock | token_usage | -4.3k |
 | unrecovered_tool_error | token_usage | -4.2k |
 | verification_gap | token_usage | -2.9k |
+
+## Expected Label-Signal Checks
+
+| Label | Expected signals | Non-zero expected signals | Status |
+| --- | --- | ---: | --- |
+| context_drift | phase_inspect_events, token_usage, failure_score | 3 / 3 | pass |
+| premature_completion | failure_score, phase_edit_events, time_to_first_edit | 3 / 3 | pass |
+| repetitive_exploration | repeated_tool_call_count, phase_inspect_events, failure_score | 3 / 3 | pass |
+| sandbox_permission_deadlock | unresolved_error, command_failure_count, phase_recover_events | 3 / 3 | pass |
+| unrecovered_tool_error | unresolved_error, command_failure_count, phase_recover_events | 3 / 3 | pass |
+| verification_gap | failure_score, phase_edit_events, time_to_first_test | 3 / 3 | pass |
 
 Interpretation: RQ4 is best framed as a boundary result. Process signals explain observable process failures such as repeated exploration and sandbox friction, but hidden semantic failures can look procedurally clean.

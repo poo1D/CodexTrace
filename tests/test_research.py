@@ -3448,10 +3448,21 @@ def test_rq4_signal_audit_explains_boundary_and_process_signals():
     assert result["hard30_hidden_boundary"]["success_check_verification_delta_success_minus_failure"] == 0
     assert result["hard30_hidden_boundary"]["unresolved_error_delta_success_minus_failure"] == 0
     assert result["summary"]["detector_fixture_label_count"] == 6
+    assert result["summary"]["detector_fixture_expected_signal_failures"] == 0
+    assert result["summary"]["detector_fixture_expected_signal_checks"] == 6
     assert result["hard30_repetitive_exploration_top_signals"][0]["signal"] == "token_usage"
     assert any(row["signal"] == "repeated_tool_call_count" for row in result["hard30_repetitive_exploration_top_signals"])
     assert any(row["signal"] == "phase_recover_events" for row in result["full30_sandbox_permission_top_signals"])
+    expected_checks = {
+        row["label"]: row
+        for row in result["detector_fixture_expected_signal_checks"]
+    }
+    assert expected_checks["repetitive_exploration"]["nonzero_expected_signals"] >= 2
+    assert expected_checks["sandbox_permission_deadlock"]["nonzero_expected_signals"] == 3
+    assert expected_checks["verification_gap"]["passed"] is True
     assert "Hidden Semantic Boundary" in markdown
+    assert "Expected Label-Signal Checks" in markdown
+    assert "Expected label-signal checks passed: 6 / 6" in markdown
 
 
 def test_process_stress_fixtures_start_failing_visible_checks():

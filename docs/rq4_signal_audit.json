@@ -1,4 +1,72 @@
 {
+  "detector_fixture_expected_signal_checks": [
+    {
+      "available_expected_signals": 3,
+      "expected_signals": [
+        "phase_inspect_events",
+        "token_usage",
+        "failure_score"
+      ],
+      "label": "context_drift",
+      "nonzero_expected_signals": 3,
+      "passed": true
+    },
+    {
+      "available_expected_signals": 3,
+      "expected_signals": [
+        "failure_score",
+        "phase_edit_events",
+        "time_to_first_edit"
+      ],
+      "label": "premature_completion",
+      "nonzero_expected_signals": 3,
+      "passed": true
+    },
+    {
+      "available_expected_signals": 3,
+      "expected_signals": [
+        "repeated_tool_call_count",
+        "phase_inspect_events",
+        "failure_score"
+      ],
+      "label": "repetitive_exploration",
+      "nonzero_expected_signals": 3,
+      "passed": true
+    },
+    {
+      "available_expected_signals": 3,
+      "expected_signals": [
+        "unresolved_error",
+        "command_failure_count",
+        "phase_recover_events"
+      ],
+      "label": "sandbox_permission_deadlock",
+      "nonzero_expected_signals": 3,
+      "passed": true
+    },
+    {
+      "available_expected_signals": 3,
+      "expected_signals": [
+        "unresolved_error",
+        "command_failure_count",
+        "phase_recover_events"
+      ],
+      "label": "unrecovered_tool_error",
+      "nonzero_expected_signals": 3,
+      "passed": true
+    },
+    {
+      "available_expected_signals": 3,
+      "expected_signals": [
+        "failure_score",
+        "phase_edit_events",
+        "time_to_first_test"
+      ],
+      "label": "verification_gap",
+      "nonzero_expected_signals": 3,
+      "passed": true
+    }
+  ],
   "detector_fixture_top_signals_by_label": {
     "context_drift": [
       {
@@ -249,6 +317,8 @@
     }
   ],
   "summary": {
+    "detector_fixture_expected_signal_checks": 6,
+    "detector_fixture_expected_signal_failures": 0,
     "detector_fixture_label_count": 6,
     "full30_sandbox_top_signal_count": 5,
     "hard30_hidden_boundary": {

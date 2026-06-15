@@ -466,8 +466,12 @@ are 32 versus 1.23, command failures are 5 versus 0.35, and token usage is
 529.2k versus 201.8k. The strongest current evidence for intervention is
 therefore not failure-score separation on hidden semantic failures; it is
 outcome improvement and reduced process waste under the intervention prompt.
-The generated full signal tables are kept in `docs/results_summary.md` and
-`docs/rq4_signal_audit.md`.
+The controlled detector fixtures add a label-specific interpretation check:
+all six taxonomy labels move on their expected signals, such as repeated calls
+for `repetitive_exploration`, recover-phase and command-failure signals for
+sandbox or unrecovered-error cases, and edit/test-timing signals for
+`verification_gap`. The generated full signal tables are kept in
+`docs/results_summary.md` and `docs/rq4_signal_audit.md`.
 
 ## 8. Analysis
 

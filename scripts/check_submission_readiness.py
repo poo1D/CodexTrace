@@ -1259,6 +1259,9 @@ def check_rq4_signal_audit_content(path: Path = Path("docs/rq4_signal_audit.md")
         "repetitive exploration": "Hard30 Repetitive Exploration",
         "sandbox permission": "Full30 Sandbox/Permission",
         "recover phase": "phase_recover_events",
+        "expected signal checks": "Expected label-signal checks passed: 6 / 6",
+        "expected signal table": "Expected Label-Signal Checks",
+        "verification gap signal": "verification_gap | failure_score, phase_edit_events, time_to_first_test",
         "boundary interpretation": "hidden semantic failures can look procedurally clean",
     }
     for label, phrase in required_phrases.items():
