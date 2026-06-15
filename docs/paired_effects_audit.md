@@ -43,4 +43,14 @@ This generated audit computes task-paired baseline-to-intervention effects for t
 | verification_lift_v2 | non_ablation_pilot | 8 | 0 | 0 | -3.125 | -39.2k | 7 | 8 |
 | verification_ablation | auxiliary_ablation | 4 | 0 | 1 | 1.25 | 26.3k | 0 | 1 |
 
+## RQ3 Claim Boundary Verdicts
+
+| Claim | Verdict | Evidence | Safe wording |
+| --- | --- | --- | --- |
+| Harness intervention reduces tool-call and token waste. | `supported` | 6/6 non-ablation studies reduce repeated calls; 6/6 reduce token usage. Hard30 repeated delta=-3.733, token delta=-98.7k. | Use as the primary RQ3 result and keep it task-paired. |
+| Harness intervention improves hard30 success rate. | `unsupported` | Hard30 success delta=0. | Report hard30 success as flat, with one repair and one regression. |
+| Harness intervention improves success in at least one pilot slice. | `pilot-qualified` | Hard10 success delta=0.1. | State that success improved only in the early hard10 pilot. |
+| Harness intervention improves ordinary-baseline verification rate. | `unsupported` | Hard30 verification delta=0. | Do not claim ordinary verification-rate lift; report verification saturation. |
+| No-verify ablation shows harness control over verification behavior. | `mechanism-check-only` | No-verify ablation verification delta=1. | Use only as a mechanism check, not as ordinary-baseline evidence. |
+
 Interpretation: this audit supports the RQ3 waste-reduction claim with paired task evidence. Bootstrap intervals describe the current task sample only; they are not population-level significance claims.

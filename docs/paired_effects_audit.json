@@ -1,4 +1,36 @@
 {
+  "claim_boundaries": [
+    {
+      "claim": "Harness intervention reduces tool-call and token waste.",
+      "evidence": "6/6 non-ablation studies reduce repeated calls; 6/6 reduce token usage. Hard30 repeated delta=-3.733, token delta=-98.7k.",
+      "safe_wording": "Use as the primary RQ3 result and keep it task-paired.",
+      "verdict": "supported"
+    },
+    {
+      "claim": "Harness intervention improves hard30 success rate.",
+      "evidence": "Hard30 success delta=0.",
+      "safe_wording": "Report hard30 success as flat, with one repair and one regression.",
+      "verdict": "unsupported"
+    },
+    {
+      "claim": "Harness intervention improves success in at least one pilot slice.",
+      "evidence": "Hard10 success delta=0.1.",
+      "safe_wording": "State that success improved only in the early hard10 pilot.",
+      "verdict": "pilot-qualified"
+    },
+    {
+      "claim": "Harness intervention improves ordinary-baseline verification rate.",
+      "evidence": "Hard30 verification delta=0.",
+      "safe_wording": "Do not claim ordinary verification-rate lift; report verification saturation.",
+      "verdict": "unsupported"
+    },
+    {
+      "claim": "No-verify ablation shows harness control over verification behavior.",
+      "evidence": "No-verify ablation verification delta=1.",
+      "safe_wording": "Use only as a mechanism check, not as ordinary-baseline evidence.",
+      "verdict": "mechanism-check-only"
+    }
+  ],
   "metrics": [
     {
       "avg_delta": 0.0,

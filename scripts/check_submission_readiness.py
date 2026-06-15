@@ -1050,6 +1050,11 @@ def check_paired_effects_audit_content(path: Path = Path("docs/paired_effects_au
         "repeated delta": "Hard30 repeated tool-call delta: -3.733",
         "token delta": "Hard30 token-usage delta: -98.7k",
         "verification delta": "Hard30 verification delta: 0",
+        "rq3 claim verdicts": "RQ3 Claim Boundary Verdicts",
+        "waste supported": "Harness intervention reduces tool-call and token waste. | `supported`",
+        "hard30 success unsupported": "Report hard30 success as flat, with one repair and one regression.",
+        "verification unsupported": "Do not claim ordinary verification-rate lift; report verification saturation.",
+        "ablation mechanism": "Use only as a mechanism check, not as ordinary-baseline evidence.",
         "bootstrap caveat": "not population-level significance claims",
         "sign test": "Sign p",
     }

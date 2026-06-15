@@ -96,6 +96,7 @@ def build_paired_effects_audit(
         and hard30["token_usage_delta"]["ci_high"] < 0
         and hard30["verification_delta"]["avg_delta"] == 0
     )
+    claim_boundaries = _claim_boundaries(study_rows, hard30)
     return {
         "summary": {
             "ready": ready,
@@ -119,6 +120,7 @@ def build_paired_effects_audit(
             ],
             "hard30_verification_avg_delta": hard30["verification_delta"]["avg_delta"],
         },
+        "claim_boundaries": claim_boundaries,
         "studies": study_rows,
         "metrics": metric_rows,
     }
@@ -179,6 +181,18 @@ def render_paired_effects_markdown(result: dict[str, Any]) -> str:
             f"| {row['study']} | {row['role']} | {row['paired_task_count']} | {_fmt(row['success_avg_delta'])} | "
             f"{_fmt(row['verification_avg_delta'])} | {_fmt(row['repeated_tool_call_avg_delta'])} | "
             f"{_fmt(row['token_usage_avg_delta'])} | {row['repeated_tool_call_improved']} | {row['token_usage_improved']} |"
+        )
+
+    lines.extend([
+        "",
+        "## RQ3 Claim Boundary Verdicts",
+        "",
+        "| Claim | Verdict | Evidence | Safe wording |",
+        "| --- | --- | --- | --- |",
+    ])
+    for row in result["claim_boundaries"]:
+        lines.append(
+            f"| {row['claim']} | `{row['verdict']}` | {row['evidence']} | {row['safe_wording']} |"
         )
 
     lines.extend([
@@ -244,6 +258,55 @@ def _metric_effect(
         "ci_high": ci_high,
         "sign_test_p": _two_sided_sign_test_p(improved, regressed),
     }
+
+
+def _claim_boundaries(
+    study_rows: list[dict[str, Any]],
+    hard30: dict[str, dict[str, Any]],
+) -> list[dict[str, str]]:
+    hard10 = next(row for row in study_rows if row["study"] == "hard10")
+    hard30_study = next(row for row in study_rows if row["study"] == "hard30")
+    no_verify = next(row for row in study_rows if row["study"] == "verification_ablation")
+    non_ablation_rows = [row for row in study_rows if row["role"] == "non_ablation_pilot"]
+    lower_repeated = sum(row["repeated_tool_call_avg_delta"] < 0 for row in non_ablation_rows)
+    lower_tokens = sum(row["token_usage_avg_delta"] < 0 for row in non_ablation_rows)
+    return [
+        {
+            "claim": "Harness intervention reduces tool-call and token waste.",
+            "verdict": "supported",
+            "evidence": (
+                f"{lower_repeated}/{len(non_ablation_rows)} non-ablation studies reduce repeated calls; "
+                f"{lower_tokens}/{len(non_ablation_rows)} reduce token usage. "
+                f"Hard30 repeated delta={_fmt(hard30['repeated_tool_call_delta']['avg_delta'])}, "
+                f"token delta={_fmt(hard30['token_usage_delta']['avg_delta'])}."
+            ),
+            "safe_wording": "Use as the primary RQ3 result and keep it task-paired.",
+        },
+        {
+            "claim": "Harness intervention improves hard30 success rate.",
+            "verdict": "unsupported",
+            "evidence": f"Hard30 success delta={_fmt(hard30_study['success_avg_delta'])}.",
+            "safe_wording": "Report hard30 success as flat, with one repair and one regression.",
+        },
+        {
+            "claim": "Harness intervention improves success in at least one pilot slice.",
+            "verdict": "pilot-qualified",
+            "evidence": f"Hard10 success delta={_fmt(hard10['success_avg_delta'])}.",
+            "safe_wording": "State that success improved only in the early hard10 pilot.",
+        },
+        {
+            "claim": "Harness intervention improves ordinary-baseline verification rate.",
+            "verdict": "unsupported",
+            "evidence": f"Hard30 verification delta={_fmt(hard30_study['verification_avg_delta'])}.",
+            "safe_wording": "Do not claim ordinary verification-rate lift; report verification saturation.",
+        },
+        {
+            "claim": "No-verify ablation shows harness control over verification behavior.",
+            "verdict": "mechanism-check-only",
+            "evidence": f"No-verify ablation verification delta={_fmt(no_verify['verification_avg_delta'])}.",
+            "safe_wording": "Use only as a mechanism check, not as ordinary-baseline evidence.",
+        },
+    ]
 
 
 def _bootstrap_mean_ci(values: list[float], samples: int, seed: int) -> tuple[float, float]:

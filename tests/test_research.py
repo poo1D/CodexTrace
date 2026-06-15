@@ -1402,6 +1402,12 @@ def test_paired_effects_audit_quantifies_rq3_waste_deltas():
     studies = {row["study"]: row for row in result["studies"]}
     assert studies["hard30"]["role"] == "non_ablation_pilot"
     assert studies["verification_ablation"]["role"] == "auxiliary_ablation"
+    claim_boundaries = {row["claim"]: row for row in result["claim_boundaries"]}
+    assert claim_boundaries["Harness intervention reduces tool-call and token waste."]["verdict"] == "supported"
+    assert claim_boundaries["Harness intervention improves hard30 success rate."]["verdict"] == "unsupported"
+    assert claim_boundaries["Harness intervention improves success in at least one pilot slice."]["verdict"] == "pilot-qualified"
+    assert claim_boundaries["Harness intervention improves ordinary-baseline verification rate."]["verdict"] == "unsupported"
+    assert claim_boundaries["No-verify ablation shows harness control over verification behavior."]["verdict"] == "mechanism-check-only"
     assert hard30["repeated_tool_call_delta"]["avg_delta"] < 0
     assert hard30["repeated_tool_call_delta"]["ci_high"] < 0
     assert hard30["token_usage_delta"]["avg_delta"] < 0
@@ -1410,6 +1416,10 @@ def test_paired_effects_audit_quantifies_rq3_waste_deltas():
     assert "Non-ablation studies with lower repeated calls: 6 / 6" in markdown
     assert "Non-ablation studies with lower token usage: 6 / 6" in markdown
     assert "| verification_ablation | auxiliary_ablation |" in markdown
+    assert "RQ3 Claim Boundary Verdicts" in markdown
+    assert "Use as the primary RQ3 result and keep it task-paired" in markdown
+    assert "Do not claim ordinary verification-rate lift; report verification saturation" in markdown
+    assert "Use only as a mechanism check, not as ordinary-baseline evidence" in markdown
     assert "not population-level significance claims" in markdown
 
 
@@ -3222,6 +3232,11 @@ def test_submission_readiness_validates_paired_effects_audit_content(tmp_path):
     assert "missing non-ablation repeated" in check["problems"]
     assert "missing non-ablation token" in check["problems"]
     assert "missing ablation role" in check["problems"]
+    assert "missing rq3 claim verdicts" in check["problems"]
+    assert "missing waste supported" in check["problems"]
+    assert "missing hard30 success unsupported" in check["problems"]
+    assert "missing verification unsupported" in check["problems"]
+    assert "missing ablation mechanism" in check["problems"]
     assert "missing bootstrap caveat" in check["problems"]
 
 
