@@ -903,6 +903,10 @@ def check_benchmark_trace_artifact_content(path: Path = Path("docs/benchmark_tra
         "trace sidecars": "Trace sidecar bundles: 60 / 60",
         "outcome coverage": "Outcome rows with grader results: 60 / 60",
         "label coverage": "Manual label rows: 60 / 60",
+        "prompt balance ready": "Prompt-type balance ready: yes",
+        "prompt balance table": "## Prompt-Type Balance",
+        "baseline balance": "| `baseline` | 30 | 30 | 30 | 30 | 30 | yes |",
+        "intervention balance": "| `intervention` | 30 | 30 | 30 | 30 | 30 | yes |",
         "missing run keys": "Missing run keys: 0",
         "rerun caveat": "does not rerun Codex or hidden graders",
     }

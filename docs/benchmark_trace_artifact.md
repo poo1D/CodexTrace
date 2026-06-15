@@ -18,6 +18,7 @@ This generated audit checks that the paper-facing hard30 benchmark has paired ba
 - Outcome rows with grader results: 60 / 60
 - Manual label rows: 60 / 60
 - Labeled failure rows: 30
+- Prompt-type balance ready: yes
 - Tasks manifest: `benchmark/hard/pilot/hard30-selection/tasks.jsonl`
 - Run manifest: `benchmark/hard/pilot/hard30-real/runs.jsonl`
 - Manual labels: `benchmark/hard/pilot/hard30-real/manual-labels.jsonl`
@@ -45,6 +46,13 @@ This generated audit checks that the paper-facing hard30 benchmark has paired ba
 | --- | ---: |
 | `failure` | 30 |
 | `success` | 30 |
+
+## Prompt-Type Balance
+
+| Prompt type | Run rows | Nonempty traces | Parseable traces | Outcome rows | Label rows | Balanced |
+| --- | ---: | ---: | ---: | ---: | ---: | --- |
+| `baseline` | 30 | 30 | 30 | 30 | 30 | yes |
+| `intervention` | 30 | 30 | 30 | 30 | 30 | yes |
 
 ## Consistency Checks
 

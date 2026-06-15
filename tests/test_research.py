@@ -1478,12 +1478,29 @@ def test_benchmark_trace_artifact_audit_covers_hard30_pairs_and_traces():
     assert result["summary"]["trace_sidecar_count"] == 60
     assert result["summary"]["label_count"] == 60
     assert result["summary"]["outcome_rows_with_grader_count"] == 60
+    assert result["summary"]["prompt_type_balance_ready"] is True
+    prompt_balance = {row["prompt_type"]: row for row in result["prompt_type_balance"]}
+    assert prompt_balance["baseline"]["run_rows"] == 30
+    assert prompt_balance["baseline"]["nonempty_traces"] == 30
+    assert prompt_balance["baseline"]["parseable_traces"] == 30
+    assert prompt_balance["baseline"]["outcome_rows"] == 30
+    assert prompt_balance["baseline"]["label_rows"] == 30
+    assert prompt_balance["baseline"]["balanced"] is True
+    assert prompt_balance["intervention"]["run_rows"] == 30
+    assert prompt_balance["intervention"]["nonempty_traces"] == 30
+    assert prompt_balance["intervention"]["parseable_traces"] == 30
+    assert prompt_balance["intervention"]["outcome_rows"] == 30
+    assert prompt_balance["intervention"]["label_rows"] == 30
+    assert prompt_balance["intervention"]["balanced"] is True
     assert result["missing_run_keys"] == []
     assert result["missing_label_keys"] == []
     assert result["summary"]["trace_event_lines"] > 0
     assert result["summary"]["parsed_trace_events"] > 0
     assert "Parseable traces: 60 / 60" in markdown
     assert "Trace sidecar bundles: 60 / 60" in markdown
+    assert "Prompt-type balance ready: yes" in markdown
+    assert "| `baseline` | 30 | 30 | 30 | 30 | 30 | yes |" in markdown
+    assert "| `intervention` | 30 | 30 | 30 | 30 | 30 | yes |" in markdown
     assert "does not rerun Codex or hidden graders" in markdown
 
 
@@ -3236,6 +3253,10 @@ def test_submission_readiness_validates_benchmark_trace_artifact_content(tmp_pat
     assert "missing trace coverage" in check["problems"]
     assert "missing parseable traces" in check["problems"]
     assert "missing trace sidecars" in check["problems"]
+    assert "missing prompt balance ready" in check["problems"]
+    assert "missing prompt balance table" in check["problems"]
+    assert "missing baseline balance" in check["problems"]
+    assert "missing intervention balance" in check["problems"]
     assert "missing rerun caveat" in check["problems"]
 
 

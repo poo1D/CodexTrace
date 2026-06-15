@@ -21,6 +21,26 @@
     "failure": 30,
     "success": 30
   },
+  "prompt_type_balance": [
+    {
+      "balanced": true,
+      "label_rows": 30,
+      "nonempty_traces": 30,
+      "outcome_rows": 30,
+      "parseable_traces": 30,
+      "prompt_type": "baseline",
+      "run_rows": 30
+    },
+    {
+      "balanced": true,
+      "label_rows": 30,
+      "nonempty_traces": 30,
+      "outcome_rows": 30,
+      "parseable_traces": 30,
+      "prompt_type": "intervention",
+      "run_rows": 30
+    }
+  ],
   "summary": {
     "diagnosed_trace_count": 60,
     "label_count": 60,
@@ -32,6 +52,7 @@
     "paired_task_count": 30,
     "parseable_trace_count": 60,
     "parsed_trace_events": 2074,
+    "prompt_type_balance_ready": true,
     "ready": true,
     "run_count": 60,
     "run_dir": "benchmark/hard/pilot/hard30-real",

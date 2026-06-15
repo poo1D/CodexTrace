@@ -87,6 +87,11 @@ def build_benchmark_trace_artifact_audit(
     ]
     category_counts = Counter(str(row.get("category", "")) for row in tasks)
     outcome_counts = Counter(str(row.get("outcome", "")) for row in runs)
+    run_prompt_counts = Counter(str(row.get("prompt_type", "")) for row in runs)
+    label_prompt_counts = Counter(str(row.get("prompt_type", "")) for row in labels)
+    trace_prompt_counts = Counter(row["prompt_type"] for row in trace_rows if row["nonempty"])
+    parseable_prompt_counts = Counter(row["prompt_type"] for row in trace_rows if row["parseable"])
+    outcome_prompt_counts = Counter(str(row.get("prompt_type", "")) for row in outcome_rows)
 
     paired_task_ids = sorted(
         task_id for task_id in task_id_set
@@ -118,10 +123,44 @@ def build_benchmark_trace_artifact_audit(
         and not extra_label_keys
         and all(row.get("outcome") != "failure" or row.get("failure_tags") for row in labels)
     )
+    prompt_type_balance_ready = all(
+        run_prompt_counts[prompt_type] == 30
+        and trace_prompt_counts[prompt_type] == 30
+        and parseable_prompt_counts[prompt_type] == 30
+        and outcome_prompt_counts[prompt_type] == 30
+        and label_prompt_counts[prompt_type] == 30
+        for prompt_type in PROMPT_TYPES
+    )
+    prompt_type_balance = [
+        {
+            "prompt_type": prompt_type,
+            "run_rows": run_prompt_counts[prompt_type],
+            "nonempty_traces": trace_prompt_counts[prompt_type],
+            "parseable_traces": parseable_prompt_counts[prompt_type],
+            "outcome_rows": outcome_prompt_counts[prompt_type],
+            "label_rows": label_prompt_counts[prompt_type],
+            "balanced": (
+                run_prompt_counts[prompt_type] == 30
+                and trace_prompt_counts[prompt_type] == 30
+                and parseable_prompt_counts[prompt_type] == 30
+                and outcome_prompt_counts[prompt_type] == 30
+                and label_prompt_counts[prompt_type] == 30
+            ),
+        }
+        for prompt_type in PROMPT_TYPES
+    ]
 
     return {
         "summary": {
-            "ready": task_rows_ready and run_rows_ready and trace_rows_ready and trace_parse_ready and trace_sidecars_ready and label_rows_ready,
+            "ready": (
+                task_rows_ready
+                and run_rows_ready
+                and trace_rows_ready
+                and trace_parse_ready
+                and trace_sidecars_ready
+                and label_rows_ready
+                and prompt_type_balance_ready
+            ),
             "task_count": len(tasks),
             "unique_task_count": len(task_id_set),
             "run_count": len(runs),
@@ -142,6 +181,7 @@ def build_benchmark_trace_artifact_audit(
             "trace_parse_ready": trace_parse_ready,
             "trace_sidecars_ready": trace_sidecars_ready,
             "label_rows_ready": label_rows_ready,
+            "prompt_type_balance_ready": prompt_type_balance_ready,
             "tasks_path": str(tasks_path),
             "runs_path": str(runs_path),
             "labels_path": str(labels_path),
@@ -149,6 +189,7 @@ def build_benchmark_trace_artifact_audit(
         },
         "category_counts": dict(sorted(category_counts.items())),
         "outcome_counts": dict(sorted(outcome_counts.items())),
+        "prompt_type_balance": prompt_type_balance,
         "missing_run_keys": _render_keys(missing_run_keys),
         "extra_run_keys": _render_keys(extra_run_keys),
         "missing_label_keys": _render_keys(missing_label_keys),
@@ -180,6 +221,7 @@ def render_benchmark_trace_artifact_markdown(result: dict[str, Any]) -> str:
         f"- Outcome rows with grader results: {summary['outcome_rows_with_grader_count']} / 60",
         f"- Manual label rows: {summary['label_count']} / 60",
         f"- Labeled failure rows: {summary['labeled_failure_count']}",
+        f"- Prompt-type balance ready: {'yes' if summary['prompt_type_balance_ready'] else 'no'}",
         f"- Tasks manifest: `{summary['tasks_path']}`",
         f"- Run manifest: `{summary['runs_path']}`",
         f"- Manual labels: `{summary['labels_path']}`",
@@ -201,6 +243,20 @@ def render_benchmark_trace_artifact_markdown(result: dict[str, Any]) -> str:
     ])
     for outcome, count in result["outcome_counts"].items():
         lines.append(f"| `{outcome}` | {count} |")
+
+    lines.extend([
+        "",
+        "## Prompt-Type Balance",
+        "",
+        "| Prompt type | Run rows | Nonempty traces | Parseable traces | Outcome rows | Label rows | Balanced |",
+        "| --- | ---: | ---: | ---: | ---: | ---: | --- |",
+    ])
+    for row in result["prompt_type_balance"]:
+        lines.append(
+            f"| `{row['prompt_type']}` | {row['run_rows']} | {row['nonempty_traces']} | "
+            f"{row['parseable_traces']} | {row['outcome_rows']} | {row['label_rows']} | "
+            f"{'yes' if row['balanced'] else 'no'} |"
+        )
 
     lines.extend([
         "",
