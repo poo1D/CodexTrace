@@ -1389,6 +1389,11 @@ def check_rq4_signal_audit_content(path: Path = Path("docs/rq4_signal_audit.md")
         "verification gap signal": "verification_gap | failure_score, phase_edit_events, time_to_first_test",
         "verification detail": "| verification_gap | time_to_first_test |",
         "sandbox detail": "| sandbox_permission_deadlock | phase_recover_events |",
+        "rq4 signal verdicts": "RQ4 Signal Verdicts",
+        "controlled signal verdict": "Use expected signal checks as rule-level process-signal evidence.",
+        "real process signal boundary": "Claim explanation for reviewed observable process positives, not all outcomes.",
+        "hidden semantic unsupported": "Trace signals predict hidden semantic outcome failures. | `unsupported`",
+        "task oracle pairing": "Keep token/failure-score claims process-scoped and pair them with task oracles.",
         "boundary interpretation": "hidden semantic failures can look procedurally clean",
     }
     for label, phrase in required_phrases.items():

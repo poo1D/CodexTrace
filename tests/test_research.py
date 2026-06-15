@@ -3479,6 +3479,9 @@ def test_submission_readiness_validates_rq4_signal_audit_content(tmp_path):
     assert "missing expected signal detail" in check["problems"]
     assert "missing verification detail" in check["problems"]
     assert "missing sandbox detail" in check["problems"]
+    assert "missing rq4 signal verdicts" in check["problems"]
+    assert "missing hidden semantic unsupported" in check["problems"]
+    assert "missing task oracle pairing" in check["problems"]
 
 
 def test_submission_readiness_validates_phase_coverage_audit_content(tmp_path):
@@ -3799,9 +3802,17 @@ def test_rq4_signal_audit_explains_boundary_and_process_signals():
     assert expected_checks["repetitive_exploration"]["nonzero_expected_signals"] >= 2
     assert expected_checks["sandbox_permission_deadlock"]["nonzero_expected_signals"] == 3
     assert expected_checks["verification_gap"]["passed"] is True
+    signal_verdicts = {row["claim"]: row for row in result["signal_verdicts"]}
+    assert signal_verdicts["Trace signals explain controlled observable process labels."]["verdict"] == "supported"
+    assert signal_verdicts["Trace signals explain observed real process positives."]["verdict"] == "supported-with-boundary"
+    assert signal_verdicts["Trace signals predict hidden semantic outcome failures."]["verdict"] == "unsupported"
+    assert signal_verdicts["Failure score or token usage alone ranks hidden correctness."]["verdict"] == "unsupported"
     assert "Hidden Semantic Boundary" in markdown
     assert "Expected Label-Signal Checks" in markdown
     assert "Expected Signal Detail" in markdown
+    assert "RQ4 Signal Verdicts" in markdown
+    assert "Claim explanation for reviewed observable process positives, not all outcomes" in markdown
+    assert "Keep token/failure-score claims process-scoped and pair them with task oracles" in markdown
     assert "| verification_gap | time_to_first_test |" in markdown
     assert "| sandbox_permission_deadlock | phase_recover_events |" in markdown
     assert "Expected label-signal checks passed: 6 / 6" in markdown

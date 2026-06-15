@@ -67,6 +67,12 @@ def build_rq4_signal_audit(
         and len(fixture_top) >= 6
         and all(row["passed"] for row in fixture_expected)
     )
+    signal_verdicts = _signal_verdicts(
+        hidden_boundary=hidden_boundary,
+        expected_checks=fixture_expected,
+        hard30_repetitive=hard30_repetitive,
+        full30_sandbox=full30_sandbox,
+    )
     return {
         "summary": {
             "ready": ready,
@@ -77,6 +83,7 @@ def build_rq4_signal_audit(
             "detector_fixture_expected_signal_checks": len(fixture_expected),
             "detector_fixture_expected_signal_failures": len([row for row in fixture_expected if not row["passed"]]),
         },
+        "signal_verdicts": signal_verdicts,
         "hard30_hidden_boundary": hidden_boundary,
         "hard30_repetitive_exploration_top_signals": hard30_repetitive,
         "full30_sandbox_permission_top_signals": full30_sandbox,
@@ -168,6 +175,17 @@ def render_rq4_signal_audit_markdown(result: dict[str, Any]) -> str:
         )
     lines.extend([
         "",
+        "## RQ4 Signal Verdicts",
+        "",
+        "| Claim | Verdict | Evidence | Safe wording |",
+        "| --- | --- | --- | --- |",
+    ])
+    for row in result["signal_verdicts"]:
+        lines.append(
+            f"| {row['claim']} | `{row['verdict']}` | {row['evidence']} | {row['safe_wording']} |"
+        )
+    lines.extend([
+        "",
         "Interpretation: RQ4 is best framed as a boundary result. Process signals explain observable process failures such as repeated exploration and sandbox friction, but hidden semantic failures can look procedurally clean.",
     ])
     return "\n".join(lines) + "\n"
@@ -233,6 +251,57 @@ def _expected_label_signal_details(rows: list[dict[str, Any]]) -> list[dict[str,
                 "available": bool(row),
             })
     return details
+
+
+def _signal_verdicts(
+    *,
+    hidden_boundary: dict[str, Any],
+    expected_checks: list[dict[str, Any]],
+    hard30_repetitive: list[dict[str, Any]],
+    full30_sandbox: list[dict[str, Any]],
+) -> list[dict[str, str]]:
+    passed_checks = sum(1 for row in expected_checks if row["passed"])
+    core_hidden_deltas = (
+        hidden_boundary["verification_delta_success_minus_failure"],
+        hidden_boundary["success_check_verification_delta_success_minus_failure"],
+        hidden_boundary["unresolved_error_delta_success_minus_failure"],
+    )
+    return [
+        {
+            "claim": "Trace signals explain controlled observable process labels.",
+            "verdict": "supported",
+            "evidence": f"{passed_checks}/{len(expected_checks)} expected label-signal checks pass.",
+            "safe_wording": "Use expected signal checks as rule-level process-signal evidence.",
+        },
+        {
+            "claim": "Trace signals explain observed real process positives.",
+            "verdict": "supported-with-boundary",
+            "evidence": (
+                f"Hard30 repetitive_exploration top signals={len(hard30_repetitive)}; "
+                f"full30 sandbox_permission_deadlock top signals={len(full30_sandbox)}."
+            ),
+            "safe_wording": "Claim explanation for reviewed observable process positives, not all outcomes.",
+        },
+        {
+            "claim": "Trace signals predict hidden semantic outcome failures.",
+            "verdict": "unsupported",
+            "evidence": (
+                "Hard30 hidden semantic deltas for verification, exact success-check verification, "
+                f"and unresolved_error are {core_hidden_deltas[0]:+.2f}, {core_hidden_deltas[1]:+.2f}, "
+                f"{core_hidden_deltas[2]:+.2f}."
+            ),
+            "safe_wording": "State that hidden semantic failures can look procedurally clean.",
+        },
+        {
+            "claim": "Failure score or token usage alone ranks hidden correctness.",
+            "verdict": "unsupported",
+            "evidence": (
+                f"Hard30 hidden semantic token delta={hidden_boundary['token_usage_delta_success_minus_failure']:+.1f}; "
+                f"failure-score delta={hidden_boundary['failure_score_delta_success_minus_failure']:+.2f}."
+            ),
+            "safe_wording": "Keep token/failure-score claims process-scoped and pair them with task oracles.",
+        },
+    ]
 
 
 def _signal_row(row: dict[str, Any]) -> str:
