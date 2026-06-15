@@ -3,6 +3,7 @@
     {
       "covered_metric_count": 11,
       "expected_metric_count": 11,
+      "expected_prompt_summary_count": 22,
       "manifest": "benchmark/pilot/full30-real/runs.jsonl",
       "metrics": [
         {
@@ -145,11 +146,169 @@
           "run_count": 60
         }
       ],
+      "prompt_summary_covered_count": 22,
+      "prompt_summary_metrics": [
+        {
+          "covered": true,
+          "manifest": "benchmark/pilot/full30-real/runs.jsonl",
+          "metric": "success_rate",
+          "prompt_type": "baseline",
+          "summary_key": "success_rate"
+        },
+        {
+          "covered": true,
+          "manifest": "benchmark/pilot/full30-real/runs.jsonl",
+          "metric": "verification_rate",
+          "prompt_type": "baseline",
+          "summary_key": "verification_rate"
+        },
+        {
+          "covered": true,
+          "manifest": "benchmark/pilot/full30-real/runs.jsonl",
+          "metric": "unresolved_error_rate",
+          "prompt_type": "baseline",
+          "summary_key": "unresolved_error_rate"
+        },
+        {
+          "covered": true,
+          "manifest": "benchmark/pilot/full30-real/runs.jsonl",
+          "metric": "repeated_tool_call_count",
+          "prompt_type": "baseline",
+          "summary_key": "avg_repeated_tool_calls"
+        },
+        {
+          "covered": true,
+          "manifest": "benchmark/pilot/full30-real/runs.jsonl",
+          "metric": "retry_count",
+          "prompt_type": "baseline",
+          "summary_key": "avg_retry_count"
+        },
+        {
+          "covered": true,
+          "manifest": "benchmark/pilot/full30-real/runs.jsonl",
+          "metric": "turn_count",
+          "prompt_type": "baseline",
+          "summary_key": "avg_turn_count"
+        },
+        {
+          "covered": true,
+          "manifest": "benchmark/pilot/full30-real/runs.jsonl",
+          "metric": "token_usage",
+          "prompt_type": "baseline",
+          "summary_key": "avg_token_usage"
+        },
+        {
+          "covered": true,
+          "manifest": "benchmark/pilot/full30-real/runs.jsonl",
+          "metric": "command_failure_count",
+          "prompt_type": "baseline",
+          "summary_key": "avg_command_failures"
+        },
+        {
+          "covered": true,
+          "manifest": "benchmark/pilot/full30-real/runs.jsonl",
+          "metric": "time_to_first_edit",
+          "prompt_type": "baseline",
+          "summary_key": "avg_time_to_first_edit"
+        },
+        {
+          "covered": true,
+          "manifest": "benchmark/pilot/full30-real/runs.jsonl",
+          "metric": "time_to_first_test",
+          "prompt_type": "baseline",
+          "summary_key": "avg_time_to_first_test"
+        },
+        {
+          "covered": true,
+          "manifest": "benchmark/pilot/full30-real/runs.jsonl",
+          "metric": "failure_score",
+          "prompt_type": "baseline",
+          "summary_key": "avg_failure_score"
+        },
+        {
+          "covered": true,
+          "manifest": "benchmark/pilot/full30-real/runs.jsonl",
+          "metric": "success_rate",
+          "prompt_type": "intervention",
+          "summary_key": "success_rate"
+        },
+        {
+          "covered": true,
+          "manifest": "benchmark/pilot/full30-real/runs.jsonl",
+          "metric": "verification_rate",
+          "prompt_type": "intervention",
+          "summary_key": "verification_rate"
+        },
+        {
+          "covered": true,
+          "manifest": "benchmark/pilot/full30-real/runs.jsonl",
+          "metric": "unresolved_error_rate",
+          "prompt_type": "intervention",
+          "summary_key": "unresolved_error_rate"
+        },
+        {
+          "covered": true,
+          "manifest": "benchmark/pilot/full30-real/runs.jsonl",
+          "metric": "repeated_tool_call_count",
+          "prompt_type": "intervention",
+          "summary_key": "avg_repeated_tool_calls"
+        },
+        {
+          "covered": true,
+          "manifest": "benchmark/pilot/full30-real/runs.jsonl",
+          "metric": "retry_count",
+          "prompt_type": "intervention",
+          "summary_key": "avg_retry_count"
+        },
+        {
+          "covered": true,
+          "manifest": "benchmark/pilot/full30-real/runs.jsonl",
+          "metric": "turn_count",
+          "prompt_type": "intervention",
+          "summary_key": "avg_turn_count"
+        },
+        {
+          "covered": true,
+          "manifest": "benchmark/pilot/full30-real/runs.jsonl",
+          "metric": "token_usage",
+          "prompt_type": "intervention",
+          "summary_key": "avg_token_usage"
+        },
+        {
+          "covered": true,
+          "manifest": "benchmark/pilot/full30-real/runs.jsonl",
+          "metric": "command_failure_count",
+          "prompt_type": "intervention",
+          "summary_key": "avg_command_failures"
+        },
+        {
+          "covered": true,
+          "manifest": "benchmark/pilot/full30-real/runs.jsonl",
+          "metric": "time_to_first_edit",
+          "prompt_type": "intervention",
+          "summary_key": "avg_time_to_first_edit"
+        },
+        {
+          "covered": true,
+          "manifest": "benchmark/pilot/full30-real/runs.jsonl",
+          "metric": "time_to_first_test",
+          "prompt_type": "intervention",
+          "summary_key": "avg_time_to_first_test"
+        },
+        {
+          "covered": true,
+          "manifest": "benchmark/pilot/full30-real/runs.jsonl",
+          "metric": "failure_score",
+          "prompt_type": "intervention",
+          "summary_key": "avg_failure_score"
+        }
+      ],
       "ready": true
     },
     {
       "covered_metric_count": 11,
       "expected_metric_count": 11,
+      "expected_prompt_summary_count": 22,
       "manifest": "benchmark/hard/pilot/hard10-real/runs.jsonl",
       "metrics": [
         {
@@ -292,11 +451,169 @@
           "run_count": 20
         }
       ],
+      "prompt_summary_covered_count": 22,
+      "prompt_summary_metrics": [
+        {
+          "covered": true,
+          "manifest": "benchmark/hard/pilot/hard10-real/runs.jsonl",
+          "metric": "success_rate",
+          "prompt_type": "baseline",
+          "summary_key": "success_rate"
+        },
+        {
+          "covered": true,
+          "manifest": "benchmark/hard/pilot/hard10-real/runs.jsonl",
+          "metric": "verification_rate",
+          "prompt_type": "baseline",
+          "summary_key": "verification_rate"
+        },
+        {
+          "covered": true,
+          "manifest": "benchmark/hard/pilot/hard10-real/runs.jsonl",
+          "metric": "unresolved_error_rate",
+          "prompt_type": "baseline",
+          "summary_key": "unresolved_error_rate"
+        },
+        {
+          "covered": true,
+          "manifest": "benchmark/hard/pilot/hard10-real/runs.jsonl",
+          "metric": "repeated_tool_call_count",
+          "prompt_type": "baseline",
+          "summary_key": "avg_repeated_tool_calls"
+        },
+        {
+          "covered": true,
+          "manifest": "benchmark/hard/pilot/hard10-real/runs.jsonl",
+          "metric": "retry_count",
+          "prompt_type": "baseline",
+          "summary_key": "avg_retry_count"
+        },
+        {
+          "covered": true,
+          "manifest": "benchmark/hard/pilot/hard10-real/runs.jsonl",
+          "metric": "turn_count",
+          "prompt_type": "baseline",
+          "summary_key": "avg_turn_count"
+        },
+        {
+          "covered": true,
+          "manifest": "benchmark/hard/pilot/hard10-real/runs.jsonl",
+          "metric": "token_usage",
+          "prompt_type": "baseline",
+          "summary_key": "avg_token_usage"
+        },
+        {
+          "covered": true,
+          "manifest": "benchmark/hard/pilot/hard10-real/runs.jsonl",
+          "metric": "command_failure_count",
+          "prompt_type": "baseline",
+          "summary_key": "avg_command_failures"
+        },
+        {
+          "covered": true,
+          "manifest": "benchmark/hard/pilot/hard10-real/runs.jsonl",
+          "metric": "time_to_first_edit",
+          "prompt_type": "baseline",
+          "summary_key": "avg_time_to_first_edit"
+        },
+        {
+          "covered": true,
+          "manifest": "benchmark/hard/pilot/hard10-real/runs.jsonl",
+          "metric": "time_to_first_test",
+          "prompt_type": "baseline",
+          "summary_key": "avg_time_to_first_test"
+        },
+        {
+          "covered": true,
+          "manifest": "benchmark/hard/pilot/hard10-real/runs.jsonl",
+          "metric": "failure_score",
+          "prompt_type": "baseline",
+          "summary_key": "avg_failure_score"
+        },
+        {
+          "covered": true,
+          "manifest": "benchmark/hard/pilot/hard10-real/runs.jsonl",
+          "metric": "success_rate",
+          "prompt_type": "intervention",
+          "summary_key": "success_rate"
+        },
+        {
+          "covered": true,
+          "manifest": "benchmark/hard/pilot/hard10-real/runs.jsonl",
+          "metric": "verification_rate",
+          "prompt_type": "intervention",
+          "summary_key": "verification_rate"
+        },
+        {
+          "covered": true,
+          "manifest": "benchmark/hard/pilot/hard10-real/runs.jsonl",
+          "metric": "unresolved_error_rate",
+          "prompt_type": "intervention",
+          "summary_key": "unresolved_error_rate"
+        },
+        {
+          "covered": true,
+          "manifest": "benchmark/hard/pilot/hard10-real/runs.jsonl",
+          "metric": "repeated_tool_call_count",
+          "prompt_type": "intervention",
+          "summary_key": "avg_repeated_tool_calls"
+        },
+        {
+          "covered": true,
+          "manifest": "benchmark/hard/pilot/hard10-real/runs.jsonl",
+          "metric": "retry_count",
+          "prompt_type": "intervention",
+          "summary_key": "avg_retry_count"
+        },
+        {
+          "covered": true,
+          "manifest": "benchmark/hard/pilot/hard10-real/runs.jsonl",
+          "metric": "turn_count",
+          "prompt_type": "intervention",
+          "summary_key": "avg_turn_count"
+        },
+        {
+          "covered": true,
+          "manifest": "benchmark/hard/pilot/hard10-real/runs.jsonl",
+          "metric": "token_usage",
+          "prompt_type": "intervention",
+          "summary_key": "avg_token_usage"
+        },
+        {
+          "covered": true,
+          "manifest": "benchmark/hard/pilot/hard10-real/runs.jsonl",
+          "metric": "command_failure_count",
+          "prompt_type": "intervention",
+          "summary_key": "avg_command_failures"
+        },
+        {
+          "covered": true,
+          "manifest": "benchmark/hard/pilot/hard10-real/runs.jsonl",
+          "metric": "time_to_first_edit",
+          "prompt_type": "intervention",
+          "summary_key": "avg_time_to_first_edit"
+        },
+        {
+          "covered": true,
+          "manifest": "benchmark/hard/pilot/hard10-real/runs.jsonl",
+          "metric": "time_to_first_test",
+          "prompt_type": "intervention",
+          "summary_key": "avg_time_to_first_test"
+        },
+        {
+          "covered": true,
+          "manifest": "benchmark/hard/pilot/hard10-real/runs.jsonl",
+          "metric": "failure_score",
+          "prompt_type": "intervention",
+          "summary_key": "avg_failure_score"
+        }
+      ],
       "ready": true
     },
     {
       "covered_metric_count": 11,
       "expected_metric_count": 11,
+      "expected_prompt_summary_count": 22,
       "manifest": "benchmark/hard/pilot/hard30-real/runs.jsonl",
       "metrics": [
         {
@@ -439,11 +756,169 @@
           "run_count": 60
         }
       ],
+      "prompt_summary_covered_count": 22,
+      "prompt_summary_metrics": [
+        {
+          "covered": true,
+          "manifest": "benchmark/hard/pilot/hard30-real/runs.jsonl",
+          "metric": "success_rate",
+          "prompt_type": "baseline",
+          "summary_key": "success_rate"
+        },
+        {
+          "covered": true,
+          "manifest": "benchmark/hard/pilot/hard30-real/runs.jsonl",
+          "metric": "verification_rate",
+          "prompt_type": "baseline",
+          "summary_key": "verification_rate"
+        },
+        {
+          "covered": true,
+          "manifest": "benchmark/hard/pilot/hard30-real/runs.jsonl",
+          "metric": "unresolved_error_rate",
+          "prompt_type": "baseline",
+          "summary_key": "unresolved_error_rate"
+        },
+        {
+          "covered": true,
+          "manifest": "benchmark/hard/pilot/hard30-real/runs.jsonl",
+          "metric": "repeated_tool_call_count",
+          "prompt_type": "baseline",
+          "summary_key": "avg_repeated_tool_calls"
+        },
+        {
+          "covered": true,
+          "manifest": "benchmark/hard/pilot/hard30-real/runs.jsonl",
+          "metric": "retry_count",
+          "prompt_type": "baseline",
+          "summary_key": "avg_retry_count"
+        },
+        {
+          "covered": true,
+          "manifest": "benchmark/hard/pilot/hard30-real/runs.jsonl",
+          "metric": "turn_count",
+          "prompt_type": "baseline",
+          "summary_key": "avg_turn_count"
+        },
+        {
+          "covered": true,
+          "manifest": "benchmark/hard/pilot/hard30-real/runs.jsonl",
+          "metric": "token_usage",
+          "prompt_type": "baseline",
+          "summary_key": "avg_token_usage"
+        },
+        {
+          "covered": true,
+          "manifest": "benchmark/hard/pilot/hard30-real/runs.jsonl",
+          "metric": "command_failure_count",
+          "prompt_type": "baseline",
+          "summary_key": "avg_command_failures"
+        },
+        {
+          "covered": true,
+          "manifest": "benchmark/hard/pilot/hard30-real/runs.jsonl",
+          "metric": "time_to_first_edit",
+          "prompt_type": "baseline",
+          "summary_key": "avg_time_to_first_edit"
+        },
+        {
+          "covered": true,
+          "manifest": "benchmark/hard/pilot/hard30-real/runs.jsonl",
+          "metric": "time_to_first_test",
+          "prompt_type": "baseline",
+          "summary_key": "avg_time_to_first_test"
+        },
+        {
+          "covered": true,
+          "manifest": "benchmark/hard/pilot/hard30-real/runs.jsonl",
+          "metric": "failure_score",
+          "prompt_type": "baseline",
+          "summary_key": "avg_failure_score"
+        },
+        {
+          "covered": true,
+          "manifest": "benchmark/hard/pilot/hard30-real/runs.jsonl",
+          "metric": "success_rate",
+          "prompt_type": "intervention",
+          "summary_key": "success_rate"
+        },
+        {
+          "covered": true,
+          "manifest": "benchmark/hard/pilot/hard30-real/runs.jsonl",
+          "metric": "verification_rate",
+          "prompt_type": "intervention",
+          "summary_key": "verification_rate"
+        },
+        {
+          "covered": true,
+          "manifest": "benchmark/hard/pilot/hard30-real/runs.jsonl",
+          "metric": "unresolved_error_rate",
+          "prompt_type": "intervention",
+          "summary_key": "unresolved_error_rate"
+        },
+        {
+          "covered": true,
+          "manifest": "benchmark/hard/pilot/hard30-real/runs.jsonl",
+          "metric": "repeated_tool_call_count",
+          "prompt_type": "intervention",
+          "summary_key": "avg_repeated_tool_calls"
+        },
+        {
+          "covered": true,
+          "manifest": "benchmark/hard/pilot/hard30-real/runs.jsonl",
+          "metric": "retry_count",
+          "prompt_type": "intervention",
+          "summary_key": "avg_retry_count"
+        },
+        {
+          "covered": true,
+          "manifest": "benchmark/hard/pilot/hard30-real/runs.jsonl",
+          "metric": "turn_count",
+          "prompt_type": "intervention",
+          "summary_key": "avg_turn_count"
+        },
+        {
+          "covered": true,
+          "manifest": "benchmark/hard/pilot/hard30-real/runs.jsonl",
+          "metric": "token_usage",
+          "prompt_type": "intervention",
+          "summary_key": "avg_token_usage"
+        },
+        {
+          "covered": true,
+          "manifest": "benchmark/hard/pilot/hard30-real/runs.jsonl",
+          "metric": "command_failure_count",
+          "prompt_type": "intervention",
+          "summary_key": "avg_command_failures"
+        },
+        {
+          "covered": true,
+          "manifest": "benchmark/hard/pilot/hard30-real/runs.jsonl",
+          "metric": "time_to_first_edit",
+          "prompt_type": "intervention",
+          "summary_key": "avg_time_to_first_edit"
+        },
+        {
+          "covered": true,
+          "manifest": "benchmark/hard/pilot/hard30-real/runs.jsonl",
+          "metric": "time_to_first_test",
+          "prompt_type": "intervention",
+          "summary_key": "avg_time_to_first_test"
+        },
+        {
+          "covered": true,
+          "manifest": "benchmark/hard/pilot/hard30-real/runs.jsonl",
+          "metric": "failure_score",
+          "prompt_type": "intervention",
+          "summary_key": "avg_failure_score"
+        }
+      ],
       "ready": true
     },
     {
       "covered_metric_count": 11,
       "expected_metric_count": 11,
+      "expected_prompt_summary_count": 22,
       "manifest": "benchmark/process-stress/pilot/full-real/runs.jsonl",
       "metrics": [
         {
@@ -586,11 +1061,169 @@
           "run_count": 24
         }
       ],
+      "prompt_summary_covered_count": 22,
+      "prompt_summary_metrics": [
+        {
+          "covered": true,
+          "manifest": "benchmark/process-stress/pilot/full-real/runs.jsonl",
+          "metric": "success_rate",
+          "prompt_type": "baseline",
+          "summary_key": "success_rate"
+        },
+        {
+          "covered": true,
+          "manifest": "benchmark/process-stress/pilot/full-real/runs.jsonl",
+          "metric": "verification_rate",
+          "prompt_type": "baseline",
+          "summary_key": "verification_rate"
+        },
+        {
+          "covered": true,
+          "manifest": "benchmark/process-stress/pilot/full-real/runs.jsonl",
+          "metric": "unresolved_error_rate",
+          "prompt_type": "baseline",
+          "summary_key": "unresolved_error_rate"
+        },
+        {
+          "covered": true,
+          "manifest": "benchmark/process-stress/pilot/full-real/runs.jsonl",
+          "metric": "repeated_tool_call_count",
+          "prompt_type": "baseline",
+          "summary_key": "avg_repeated_tool_calls"
+        },
+        {
+          "covered": true,
+          "manifest": "benchmark/process-stress/pilot/full-real/runs.jsonl",
+          "metric": "retry_count",
+          "prompt_type": "baseline",
+          "summary_key": "avg_retry_count"
+        },
+        {
+          "covered": true,
+          "manifest": "benchmark/process-stress/pilot/full-real/runs.jsonl",
+          "metric": "turn_count",
+          "prompt_type": "baseline",
+          "summary_key": "avg_turn_count"
+        },
+        {
+          "covered": true,
+          "manifest": "benchmark/process-stress/pilot/full-real/runs.jsonl",
+          "metric": "token_usage",
+          "prompt_type": "baseline",
+          "summary_key": "avg_token_usage"
+        },
+        {
+          "covered": true,
+          "manifest": "benchmark/process-stress/pilot/full-real/runs.jsonl",
+          "metric": "command_failure_count",
+          "prompt_type": "baseline",
+          "summary_key": "avg_command_failures"
+        },
+        {
+          "covered": true,
+          "manifest": "benchmark/process-stress/pilot/full-real/runs.jsonl",
+          "metric": "time_to_first_edit",
+          "prompt_type": "baseline",
+          "summary_key": "avg_time_to_first_edit"
+        },
+        {
+          "covered": true,
+          "manifest": "benchmark/process-stress/pilot/full-real/runs.jsonl",
+          "metric": "time_to_first_test",
+          "prompt_type": "baseline",
+          "summary_key": "avg_time_to_first_test"
+        },
+        {
+          "covered": true,
+          "manifest": "benchmark/process-stress/pilot/full-real/runs.jsonl",
+          "metric": "failure_score",
+          "prompt_type": "baseline",
+          "summary_key": "avg_failure_score"
+        },
+        {
+          "covered": true,
+          "manifest": "benchmark/process-stress/pilot/full-real/runs.jsonl",
+          "metric": "success_rate",
+          "prompt_type": "intervention",
+          "summary_key": "success_rate"
+        },
+        {
+          "covered": true,
+          "manifest": "benchmark/process-stress/pilot/full-real/runs.jsonl",
+          "metric": "verification_rate",
+          "prompt_type": "intervention",
+          "summary_key": "verification_rate"
+        },
+        {
+          "covered": true,
+          "manifest": "benchmark/process-stress/pilot/full-real/runs.jsonl",
+          "metric": "unresolved_error_rate",
+          "prompt_type": "intervention",
+          "summary_key": "unresolved_error_rate"
+        },
+        {
+          "covered": true,
+          "manifest": "benchmark/process-stress/pilot/full-real/runs.jsonl",
+          "metric": "repeated_tool_call_count",
+          "prompt_type": "intervention",
+          "summary_key": "avg_repeated_tool_calls"
+        },
+        {
+          "covered": true,
+          "manifest": "benchmark/process-stress/pilot/full-real/runs.jsonl",
+          "metric": "retry_count",
+          "prompt_type": "intervention",
+          "summary_key": "avg_retry_count"
+        },
+        {
+          "covered": true,
+          "manifest": "benchmark/process-stress/pilot/full-real/runs.jsonl",
+          "metric": "turn_count",
+          "prompt_type": "intervention",
+          "summary_key": "avg_turn_count"
+        },
+        {
+          "covered": true,
+          "manifest": "benchmark/process-stress/pilot/full-real/runs.jsonl",
+          "metric": "token_usage",
+          "prompt_type": "intervention",
+          "summary_key": "avg_token_usage"
+        },
+        {
+          "covered": true,
+          "manifest": "benchmark/process-stress/pilot/full-real/runs.jsonl",
+          "metric": "command_failure_count",
+          "prompt_type": "intervention",
+          "summary_key": "avg_command_failures"
+        },
+        {
+          "covered": true,
+          "manifest": "benchmark/process-stress/pilot/full-real/runs.jsonl",
+          "metric": "time_to_first_edit",
+          "prompt_type": "intervention",
+          "summary_key": "avg_time_to_first_edit"
+        },
+        {
+          "covered": true,
+          "manifest": "benchmark/process-stress/pilot/full-real/runs.jsonl",
+          "metric": "time_to_first_test",
+          "prompt_type": "intervention",
+          "summary_key": "avg_time_to_first_test"
+        },
+        {
+          "covered": true,
+          "manifest": "benchmark/process-stress/pilot/full-real/runs.jsonl",
+          "metric": "failure_score",
+          "prompt_type": "intervention",
+          "summary_key": "avg_failure_score"
+        }
+      ],
       "ready": true
     },
     {
       "covered_metric_count": 11,
       "expected_metric_count": 11,
+      "expected_prompt_summary_count": 22,
       "manifest": "benchmark/verification-lift/pilot/full-real/runs.jsonl",
       "metrics": [
         {
@@ -733,11 +1366,169 @@
           "run_count": 16
         }
       ],
+      "prompt_summary_covered_count": 22,
+      "prompt_summary_metrics": [
+        {
+          "covered": true,
+          "manifest": "benchmark/verification-lift/pilot/full-real/runs.jsonl",
+          "metric": "success_rate",
+          "prompt_type": "baseline",
+          "summary_key": "success_rate"
+        },
+        {
+          "covered": true,
+          "manifest": "benchmark/verification-lift/pilot/full-real/runs.jsonl",
+          "metric": "verification_rate",
+          "prompt_type": "baseline",
+          "summary_key": "verification_rate"
+        },
+        {
+          "covered": true,
+          "manifest": "benchmark/verification-lift/pilot/full-real/runs.jsonl",
+          "metric": "unresolved_error_rate",
+          "prompt_type": "baseline",
+          "summary_key": "unresolved_error_rate"
+        },
+        {
+          "covered": true,
+          "manifest": "benchmark/verification-lift/pilot/full-real/runs.jsonl",
+          "metric": "repeated_tool_call_count",
+          "prompt_type": "baseline",
+          "summary_key": "avg_repeated_tool_calls"
+        },
+        {
+          "covered": true,
+          "manifest": "benchmark/verification-lift/pilot/full-real/runs.jsonl",
+          "metric": "retry_count",
+          "prompt_type": "baseline",
+          "summary_key": "avg_retry_count"
+        },
+        {
+          "covered": true,
+          "manifest": "benchmark/verification-lift/pilot/full-real/runs.jsonl",
+          "metric": "turn_count",
+          "prompt_type": "baseline",
+          "summary_key": "avg_turn_count"
+        },
+        {
+          "covered": true,
+          "manifest": "benchmark/verification-lift/pilot/full-real/runs.jsonl",
+          "metric": "token_usage",
+          "prompt_type": "baseline",
+          "summary_key": "avg_token_usage"
+        },
+        {
+          "covered": true,
+          "manifest": "benchmark/verification-lift/pilot/full-real/runs.jsonl",
+          "metric": "command_failure_count",
+          "prompt_type": "baseline",
+          "summary_key": "avg_command_failures"
+        },
+        {
+          "covered": true,
+          "manifest": "benchmark/verification-lift/pilot/full-real/runs.jsonl",
+          "metric": "time_to_first_edit",
+          "prompt_type": "baseline",
+          "summary_key": "avg_time_to_first_edit"
+        },
+        {
+          "covered": true,
+          "manifest": "benchmark/verification-lift/pilot/full-real/runs.jsonl",
+          "metric": "time_to_first_test",
+          "prompt_type": "baseline",
+          "summary_key": "avg_time_to_first_test"
+        },
+        {
+          "covered": true,
+          "manifest": "benchmark/verification-lift/pilot/full-real/runs.jsonl",
+          "metric": "failure_score",
+          "prompt_type": "baseline",
+          "summary_key": "avg_failure_score"
+        },
+        {
+          "covered": true,
+          "manifest": "benchmark/verification-lift/pilot/full-real/runs.jsonl",
+          "metric": "success_rate",
+          "prompt_type": "intervention",
+          "summary_key": "success_rate"
+        },
+        {
+          "covered": true,
+          "manifest": "benchmark/verification-lift/pilot/full-real/runs.jsonl",
+          "metric": "verification_rate",
+          "prompt_type": "intervention",
+          "summary_key": "verification_rate"
+        },
+        {
+          "covered": true,
+          "manifest": "benchmark/verification-lift/pilot/full-real/runs.jsonl",
+          "metric": "unresolved_error_rate",
+          "prompt_type": "intervention",
+          "summary_key": "unresolved_error_rate"
+        },
+        {
+          "covered": true,
+          "manifest": "benchmark/verification-lift/pilot/full-real/runs.jsonl",
+          "metric": "repeated_tool_call_count",
+          "prompt_type": "intervention",
+          "summary_key": "avg_repeated_tool_calls"
+        },
+        {
+          "covered": true,
+          "manifest": "benchmark/verification-lift/pilot/full-real/runs.jsonl",
+          "metric": "retry_count",
+          "prompt_type": "intervention",
+          "summary_key": "avg_retry_count"
+        },
+        {
+          "covered": true,
+          "manifest": "benchmark/verification-lift/pilot/full-real/runs.jsonl",
+          "metric": "turn_count",
+          "prompt_type": "intervention",
+          "summary_key": "avg_turn_count"
+        },
+        {
+          "covered": true,
+          "manifest": "benchmark/verification-lift/pilot/full-real/runs.jsonl",
+          "metric": "token_usage",
+          "prompt_type": "intervention",
+          "summary_key": "avg_token_usage"
+        },
+        {
+          "covered": true,
+          "manifest": "benchmark/verification-lift/pilot/full-real/runs.jsonl",
+          "metric": "command_failure_count",
+          "prompt_type": "intervention",
+          "summary_key": "avg_command_failures"
+        },
+        {
+          "covered": true,
+          "manifest": "benchmark/verification-lift/pilot/full-real/runs.jsonl",
+          "metric": "time_to_first_edit",
+          "prompt_type": "intervention",
+          "summary_key": "avg_time_to_first_edit"
+        },
+        {
+          "covered": true,
+          "manifest": "benchmark/verification-lift/pilot/full-real/runs.jsonl",
+          "metric": "time_to_first_test",
+          "prompt_type": "intervention",
+          "summary_key": "avg_time_to_first_test"
+        },
+        {
+          "covered": true,
+          "manifest": "benchmark/verification-lift/pilot/full-real/runs.jsonl",
+          "metric": "failure_score",
+          "prompt_type": "intervention",
+          "summary_key": "avg_failure_score"
+        }
+      ],
       "ready": true
     },
     {
       "covered_metric_count": 11,
       "expected_metric_count": 11,
+      "expected_prompt_summary_count": 22,
       "manifest": "benchmark/verification-lift-v2/pilot/full-real/runs.jsonl",
       "metrics": [
         {
@@ -880,11 +1671,169 @@
           "run_count": 16
         }
       ],
+      "prompt_summary_covered_count": 22,
+      "prompt_summary_metrics": [
+        {
+          "covered": true,
+          "manifest": "benchmark/verification-lift-v2/pilot/full-real/runs.jsonl",
+          "metric": "success_rate",
+          "prompt_type": "baseline",
+          "summary_key": "success_rate"
+        },
+        {
+          "covered": true,
+          "manifest": "benchmark/verification-lift-v2/pilot/full-real/runs.jsonl",
+          "metric": "verification_rate",
+          "prompt_type": "baseline",
+          "summary_key": "verification_rate"
+        },
+        {
+          "covered": true,
+          "manifest": "benchmark/verification-lift-v2/pilot/full-real/runs.jsonl",
+          "metric": "unresolved_error_rate",
+          "prompt_type": "baseline",
+          "summary_key": "unresolved_error_rate"
+        },
+        {
+          "covered": true,
+          "manifest": "benchmark/verification-lift-v2/pilot/full-real/runs.jsonl",
+          "metric": "repeated_tool_call_count",
+          "prompt_type": "baseline",
+          "summary_key": "avg_repeated_tool_calls"
+        },
+        {
+          "covered": true,
+          "manifest": "benchmark/verification-lift-v2/pilot/full-real/runs.jsonl",
+          "metric": "retry_count",
+          "prompt_type": "baseline",
+          "summary_key": "avg_retry_count"
+        },
+        {
+          "covered": true,
+          "manifest": "benchmark/verification-lift-v2/pilot/full-real/runs.jsonl",
+          "metric": "turn_count",
+          "prompt_type": "baseline",
+          "summary_key": "avg_turn_count"
+        },
+        {
+          "covered": true,
+          "manifest": "benchmark/verification-lift-v2/pilot/full-real/runs.jsonl",
+          "metric": "token_usage",
+          "prompt_type": "baseline",
+          "summary_key": "avg_token_usage"
+        },
+        {
+          "covered": true,
+          "manifest": "benchmark/verification-lift-v2/pilot/full-real/runs.jsonl",
+          "metric": "command_failure_count",
+          "prompt_type": "baseline",
+          "summary_key": "avg_command_failures"
+        },
+        {
+          "covered": true,
+          "manifest": "benchmark/verification-lift-v2/pilot/full-real/runs.jsonl",
+          "metric": "time_to_first_edit",
+          "prompt_type": "baseline",
+          "summary_key": "avg_time_to_first_edit"
+        },
+        {
+          "covered": true,
+          "manifest": "benchmark/verification-lift-v2/pilot/full-real/runs.jsonl",
+          "metric": "time_to_first_test",
+          "prompt_type": "baseline",
+          "summary_key": "avg_time_to_first_test"
+        },
+        {
+          "covered": true,
+          "manifest": "benchmark/verification-lift-v2/pilot/full-real/runs.jsonl",
+          "metric": "failure_score",
+          "prompt_type": "baseline",
+          "summary_key": "avg_failure_score"
+        },
+        {
+          "covered": true,
+          "manifest": "benchmark/verification-lift-v2/pilot/full-real/runs.jsonl",
+          "metric": "success_rate",
+          "prompt_type": "intervention",
+          "summary_key": "success_rate"
+        },
+        {
+          "covered": true,
+          "manifest": "benchmark/verification-lift-v2/pilot/full-real/runs.jsonl",
+          "metric": "verification_rate",
+          "prompt_type": "intervention",
+          "summary_key": "verification_rate"
+        },
+        {
+          "covered": true,
+          "manifest": "benchmark/verification-lift-v2/pilot/full-real/runs.jsonl",
+          "metric": "unresolved_error_rate",
+          "prompt_type": "intervention",
+          "summary_key": "unresolved_error_rate"
+        },
+        {
+          "covered": true,
+          "manifest": "benchmark/verification-lift-v2/pilot/full-real/runs.jsonl",
+          "metric": "repeated_tool_call_count",
+          "prompt_type": "intervention",
+          "summary_key": "avg_repeated_tool_calls"
+        },
+        {
+          "covered": true,
+          "manifest": "benchmark/verification-lift-v2/pilot/full-real/runs.jsonl",
+          "metric": "retry_count",
+          "prompt_type": "intervention",
+          "summary_key": "avg_retry_count"
+        },
+        {
+          "covered": true,
+          "manifest": "benchmark/verification-lift-v2/pilot/full-real/runs.jsonl",
+          "metric": "turn_count",
+          "prompt_type": "intervention",
+          "summary_key": "avg_turn_count"
+        },
+        {
+          "covered": true,
+          "manifest": "benchmark/verification-lift-v2/pilot/full-real/runs.jsonl",
+          "metric": "token_usage",
+          "prompt_type": "intervention",
+          "summary_key": "avg_token_usage"
+        },
+        {
+          "covered": true,
+          "manifest": "benchmark/verification-lift-v2/pilot/full-real/runs.jsonl",
+          "metric": "command_failure_count",
+          "prompt_type": "intervention",
+          "summary_key": "avg_command_failures"
+        },
+        {
+          "covered": true,
+          "manifest": "benchmark/verification-lift-v2/pilot/full-real/runs.jsonl",
+          "metric": "time_to_first_edit",
+          "prompt_type": "intervention",
+          "summary_key": "avg_time_to_first_edit"
+        },
+        {
+          "covered": true,
+          "manifest": "benchmark/verification-lift-v2/pilot/full-real/runs.jsonl",
+          "metric": "time_to_first_test",
+          "prompt_type": "intervention",
+          "summary_key": "avg_time_to_first_test"
+        },
+        {
+          "covered": true,
+          "manifest": "benchmark/verification-lift-v2/pilot/full-real/runs.jsonl",
+          "metric": "failure_score",
+          "prompt_type": "intervention",
+          "summary_key": "avg_failure_score"
+        }
+      ],
       "ready": true
     },
     {
       "covered_metric_count": 11,
       "expected_metric_count": 11,
+      "expected_prompt_summary_count": 22,
       "manifest": "benchmark/verification-ablation/pilot/full-real/runs.jsonl",
       "metrics": [
         {
@@ -1025,6 +1974,163 @@
           "missing_count": 4,
           "present_count": 4,
           "run_count": 8
+        }
+      ],
+      "prompt_summary_covered_count": 22,
+      "prompt_summary_metrics": [
+        {
+          "covered": true,
+          "manifest": "benchmark/verification-ablation/pilot/full-real/runs.jsonl",
+          "metric": "success_rate",
+          "prompt_type": "baseline",
+          "summary_key": "success_rate"
+        },
+        {
+          "covered": true,
+          "manifest": "benchmark/verification-ablation/pilot/full-real/runs.jsonl",
+          "metric": "verification_rate",
+          "prompt_type": "baseline",
+          "summary_key": "verification_rate"
+        },
+        {
+          "covered": true,
+          "manifest": "benchmark/verification-ablation/pilot/full-real/runs.jsonl",
+          "metric": "unresolved_error_rate",
+          "prompt_type": "baseline",
+          "summary_key": "unresolved_error_rate"
+        },
+        {
+          "covered": true,
+          "manifest": "benchmark/verification-ablation/pilot/full-real/runs.jsonl",
+          "metric": "repeated_tool_call_count",
+          "prompt_type": "baseline",
+          "summary_key": "avg_repeated_tool_calls"
+        },
+        {
+          "covered": true,
+          "manifest": "benchmark/verification-ablation/pilot/full-real/runs.jsonl",
+          "metric": "retry_count",
+          "prompt_type": "baseline",
+          "summary_key": "avg_retry_count"
+        },
+        {
+          "covered": true,
+          "manifest": "benchmark/verification-ablation/pilot/full-real/runs.jsonl",
+          "metric": "turn_count",
+          "prompt_type": "baseline",
+          "summary_key": "avg_turn_count"
+        },
+        {
+          "covered": true,
+          "manifest": "benchmark/verification-ablation/pilot/full-real/runs.jsonl",
+          "metric": "token_usage",
+          "prompt_type": "baseline",
+          "summary_key": "avg_token_usage"
+        },
+        {
+          "covered": true,
+          "manifest": "benchmark/verification-ablation/pilot/full-real/runs.jsonl",
+          "metric": "command_failure_count",
+          "prompt_type": "baseline",
+          "summary_key": "avg_command_failures"
+        },
+        {
+          "covered": true,
+          "manifest": "benchmark/verification-ablation/pilot/full-real/runs.jsonl",
+          "metric": "time_to_first_edit",
+          "prompt_type": "baseline",
+          "summary_key": "avg_time_to_first_edit"
+        },
+        {
+          "covered": true,
+          "manifest": "benchmark/verification-ablation/pilot/full-real/runs.jsonl",
+          "metric": "time_to_first_test",
+          "prompt_type": "baseline",
+          "summary_key": "avg_time_to_first_test"
+        },
+        {
+          "covered": true,
+          "manifest": "benchmark/verification-ablation/pilot/full-real/runs.jsonl",
+          "metric": "failure_score",
+          "prompt_type": "baseline",
+          "summary_key": "avg_failure_score"
+        },
+        {
+          "covered": true,
+          "manifest": "benchmark/verification-ablation/pilot/full-real/runs.jsonl",
+          "metric": "success_rate",
+          "prompt_type": "intervention",
+          "summary_key": "success_rate"
+        },
+        {
+          "covered": true,
+          "manifest": "benchmark/verification-ablation/pilot/full-real/runs.jsonl",
+          "metric": "verification_rate",
+          "prompt_type": "intervention",
+          "summary_key": "verification_rate"
+        },
+        {
+          "covered": true,
+          "manifest": "benchmark/verification-ablation/pilot/full-real/runs.jsonl",
+          "metric": "unresolved_error_rate",
+          "prompt_type": "intervention",
+          "summary_key": "unresolved_error_rate"
+        },
+        {
+          "covered": true,
+          "manifest": "benchmark/verification-ablation/pilot/full-real/runs.jsonl",
+          "metric": "repeated_tool_call_count",
+          "prompt_type": "intervention",
+          "summary_key": "avg_repeated_tool_calls"
+        },
+        {
+          "covered": true,
+          "manifest": "benchmark/verification-ablation/pilot/full-real/runs.jsonl",
+          "metric": "retry_count",
+          "prompt_type": "intervention",
+          "summary_key": "avg_retry_count"
+        },
+        {
+          "covered": true,
+          "manifest": "benchmark/verification-ablation/pilot/full-real/runs.jsonl",
+          "metric": "turn_count",
+          "prompt_type": "intervention",
+          "summary_key": "avg_turn_count"
+        },
+        {
+          "covered": true,
+          "manifest": "benchmark/verification-ablation/pilot/full-real/runs.jsonl",
+          "metric": "token_usage",
+          "prompt_type": "intervention",
+          "summary_key": "avg_token_usage"
+        },
+        {
+          "covered": true,
+          "manifest": "benchmark/verification-ablation/pilot/full-real/runs.jsonl",
+          "metric": "command_failure_count",
+          "prompt_type": "intervention",
+          "summary_key": "avg_command_failures"
+        },
+        {
+          "covered": true,
+          "manifest": "benchmark/verification-ablation/pilot/full-real/runs.jsonl",
+          "metric": "time_to_first_edit",
+          "prompt_type": "intervention",
+          "summary_key": "avg_time_to_first_edit"
+        },
+        {
+          "covered": true,
+          "manifest": "benchmark/verification-ablation/pilot/full-real/runs.jsonl",
+          "metric": "time_to_first_test",
+          "prompt_type": "intervention",
+          "summary_key": "avg_time_to_first_test"
+        },
+        {
+          "covered": true,
+          "manifest": "benchmark/verification-ablation/pilot/full-real/runs.jsonl",
+          "metric": "failure_score",
+          "prompt_type": "intervention",
+          "summary_key": "avg_failure_score"
         }
       ],
       "ready": true
@@ -1993,15 +3099,1097 @@
       "run_count": 8
     }
   ],
+  "prompt_summary_metrics": [
+    {
+      "covered": true,
+      "manifest": "benchmark/pilot/full30-real/runs.jsonl",
+      "metric": "success_rate",
+      "prompt_type": "baseline",
+      "summary_key": "success_rate"
+    },
+    {
+      "covered": true,
+      "manifest": "benchmark/pilot/full30-real/runs.jsonl",
+      "metric": "verification_rate",
+      "prompt_type": "baseline",
+      "summary_key": "verification_rate"
+    },
+    {
+      "covered": true,
+      "manifest": "benchmark/pilot/full30-real/runs.jsonl",
+      "metric": "unresolved_error_rate",
+      "prompt_type": "baseline",
+      "summary_key": "unresolved_error_rate"
+    },
+    {
+      "covered": true,
+      "manifest": "benchmark/pilot/full30-real/runs.jsonl",
+      "metric": "repeated_tool_call_count",
+      "prompt_type": "baseline",
+      "summary_key": "avg_repeated_tool_calls"
+    },
+    {
+      "covered": true,
+      "manifest": "benchmark/pilot/full30-real/runs.jsonl",
+      "metric": "retry_count",
+      "prompt_type": "baseline",
+      "summary_key": "avg_retry_count"
+    },
+    {
+      "covered": true,
+      "manifest": "benchmark/pilot/full30-real/runs.jsonl",
+      "metric": "turn_count",
+      "prompt_type": "baseline",
+      "summary_key": "avg_turn_count"
+    },
+    {
+      "covered": true,
+      "manifest": "benchmark/pilot/full30-real/runs.jsonl",
+      "metric": "token_usage",
+      "prompt_type": "baseline",
+      "summary_key": "avg_token_usage"
+    },
+    {
+      "covered": true,
+      "manifest": "benchmark/pilot/full30-real/runs.jsonl",
+      "metric": "command_failure_count",
+      "prompt_type": "baseline",
+      "summary_key": "avg_command_failures"
+    },
+    {
+      "covered": true,
+      "manifest": "benchmark/pilot/full30-real/runs.jsonl",
+      "metric": "time_to_first_edit",
+      "prompt_type": "baseline",
+      "summary_key": "avg_time_to_first_edit"
+    },
+    {
+      "covered": true,
+      "manifest": "benchmark/pilot/full30-real/runs.jsonl",
+      "metric": "time_to_first_test",
+      "prompt_type": "baseline",
+      "summary_key": "avg_time_to_first_test"
+    },
+    {
+      "covered": true,
+      "manifest": "benchmark/pilot/full30-real/runs.jsonl",
+      "metric": "failure_score",
+      "prompt_type": "baseline",
+      "summary_key": "avg_failure_score"
+    },
+    {
+      "covered": true,
+      "manifest": "benchmark/pilot/full30-real/runs.jsonl",
+      "metric": "success_rate",
+      "prompt_type": "intervention",
+      "summary_key": "success_rate"
+    },
+    {
+      "covered": true,
+      "manifest": "benchmark/pilot/full30-real/runs.jsonl",
+      "metric": "verification_rate",
+      "prompt_type": "intervention",
+      "summary_key": "verification_rate"
+    },
+    {
+      "covered": true,
+      "manifest": "benchmark/pilot/full30-real/runs.jsonl",
+      "metric": "unresolved_error_rate",
+      "prompt_type": "intervention",
+      "summary_key": "unresolved_error_rate"
+    },
+    {
+      "covered": true,
+      "manifest": "benchmark/pilot/full30-real/runs.jsonl",
+      "metric": "repeated_tool_call_count",
+      "prompt_type": "intervention",
+      "summary_key": "avg_repeated_tool_calls"
+    },
+    {
+      "covered": true,
+      "manifest": "benchmark/pilot/full30-real/runs.jsonl",
+      "metric": "retry_count",
+      "prompt_type": "intervention",
+      "summary_key": "avg_retry_count"
+    },
+    {
+      "covered": true,
+      "manifest": "benchmark/pilot/full30-real/runs.jsonl",
+      "metric": "turn_count",
+      "prompt_type": "intervention",
+      "summary_key": "avg_turn_count"
+    },
+    {
+      "covered": true,
+      "manifest": "benchmark/pilot/full30-real/runs.jsonl",
+      "metric": "token_usage",
+      "prompt_type": "intervention",
+      "summary_key": "avg_token_usage"
+    },
+    {
+      "covered": true,
+      "manifest": "benchmark/pilot/full30-real/runs.jsonl",
+      "metric": "command_failure_count",
+      "prompt_type": "intervention",
+      "summary_key": "avg_command_failures"
+    },
+    {
+      "covered": true,
+      "manifest": "benchmark/pilot/full30-real/runs.jsonl",
+      "metric": "time_to_first_edit",
+      "prompt_type": "intervention",
+      "summary_key": "avg_time_to_first_edit"
+    },
+    {
+      "covered": true,
+      "manifest": "benchmark/pilot/full30-real/runs.jsonl",
+      "metric": "time_to_first_test",
+      "prompt_type": "intervention",
+      "summary_key": "avg_time_to_first_test"
+    },
+    {
+      "covered": true,
+      "manifest": "benchmark/pilot/full30-real/runs.jsonl",
+      "metric": "failure_score",
+      "prompt_type": "intervention",
+      "summary_key": "avg_failure_score"
+    },
+    {
+      "covered": true,
+      "manifest": "benchmark/hard/pilot/hard10-real/runs.jsonl",
+      "metric": "success_rate",
+      "prompt_type": "baseline",
+      "summary_key": "success_rate"
+    },
+    {
+      "covered": true,
+      "manifest": "benchmark/hard/pilot/hard10-real/runs.jsonl",
+      "metric": "verification_rate",
+      "prompt_type": "baseline",
+      "summary_key": "verification_rate"
+    },
+    {
+      "covered": true,
+      "manifest": "benchmark/hard/pilot/hard10-real/runs.jsonl",
+      "metric": "unresolved_error_rate",
+      "prompt_type": "baseline",
+      "summary_key": "unresolved_error_rate"
+    },
+    {
+      "covered": true,
+      "manifest": "benchmark/hard/pilot/hard10-real/runs.jsonl",
+      "metric": "repeated_tool_call_count",
+      "prompt_type": "baseline",
+      "summary_key": "avg_repeated_tool_calls"
+    },
+    {
+      "covered": true,
+      "manifest": "benchmark/hard/pilot/hard10-real/runs.jsonl",
+      "metric": "retry_count",
+      "prompt_type": "baseline",
+      "summary_key": "avg_retry_count"
+    },
+    {
+      "covered": true,
+      "manifest": "benchmark/hard/pilot/hard10-real/runs.jsonl",
+      "metric": "turn_count",
+      "prompt_type": "baseline",
+      "summary_key": "avg_turn_count"
+    },
+    {
+      "covered": true,
+      "manifest": "benchmark/hard/pilot/hard10-real/runs.jsonl",
+      "metric": "token_usage",
+      "prompt_type": "baseline",
+      "summary_key": "avg_token_usage"
+    },
+    {
+      "covered": true,
+      "manifest": "benchmark/hard/pilot/hard10-real/runs.jsonl",
+      "metric": "command_failure_count",
+      "prompt_type": "baseline",
+      "summary_key": "avg_command_failures"
+    },
+    {
+      "covered": true,
+      "manifest": "benchmark/hard/pilot/hard10-real/runs.jsonl",
+      "metric": "time_to_first_edit",
+      "prompt_type": "baseline",
+      "summary_key": "avg_time_to_first_edit"
+    },
+    {
+      "covered": true,
+      "manifest": "benchmark/hard/pilot/hard10-real/runs.jsonl",
+      "metric": "time_to_first_test",
+      "prompt_type": "baseline",
+      "summary_key": "avg_time_to_first_test"
+    },
+    {
+      "covered": true,
+      "manifest": "benchmark/hard/pilot/hard10-real/runs.jsonl",
+      "metric": "failure_score",
+      "prompt_type": "baseline",
+      "summary_key": "avg_failure_score"
+    },
+    {
+      "covered": true,
+      "manifest": "benchmark/hard/pilot/hard10-real/runs.jsonl",
+      "metric": "success_rate",
+      "prompt_type": "intervention",
+      "summary_key": "success_rate"
+    },
+    {
+      "covered": true,
+      "manifest": "benchmark/hard/pilot/hard10-real/runs.jsonl",
+      "metric": "verification_rate",
+      "prompt_type": "intervention",
+      "summary_key": "verification_rate"
+    },
+    {
+      "covered": true,
+      "manifest": "benchmark/hard/pilot/hard10-real/runs.jsonl",
+      "metric": "unresolved_error_rate",
+      "prompt_type": "intervention",
+      "summary_key": "unresolved_error_rate"
+    },
+    {
+      "covered": true,
+      "manifest": "benchmark/hard/pilot/hard10-real/runs.jsonl",
+      "metric": "repeated_tool_call_count",
+      "prompt_type": "intervention",
+      "summary_key": "avg_repeated_tool_calls"
+    },
+    {
+      "covered": true,
+      "manifest": "benchmark/hard/pilot/hard10-real/runs.jsonl",
+      "metric": "retry_count",
+      "prompt_type": "intervention",
+      "summary_key": "avg_retry_count"
+    },
+    {
+      "covered": true,
+      "manifest": "benchmark/hard/pilot/hard10-real/runs.jsonl",
+      "metric": "turn_count",
+      "prompt_type": "intervention",
+      "summary_key": "avg_turn_count"
+    },
+    {
+      "covered": true,
+      "manifest": "benchmark/hard/pilot/hard10-real/runs.jsonl",
+      "metric": "token_usage",
+      "prompt_type": "intervention",
+      "summary_key": "avg_token_usage"
+    },
+    {
+      "covered": true,
+      "manifest": "benchmark/hard/pilot/hard10-real/runs.jsonl",
+      "metric": "command_failure_count",
+      "prompt_type": "intervention",
+      "summary_key": "avg_command_failures"
+    },
+    {
+      "covered": true,
+      "manifest": "benchmark/hard/pilot/hard10-real/runs.jsonl",
+      "metric": "time_to_first_edit",
+      "prompt_type": "intervention",
+      "summary_key": "avg_time_to_first_edit"
+    },
+    {
+      "covered": true,
+      "manifest": "benchmark/hard/pilot/hard10-real/runs.jsonl",
+      "metric": "time_to_first_test",
+      "prompt_type": "intervention",
+      "summary_key": "avg_time_to_first_test"
+    },
+    {
+      "covered": true,
+      "manifest": "benchmark/hard/pilot/hard10-real/runs.jsonl",
+      "metric": "failure_score",
+      "prompt_type": "intervention",
+      "summary_key": "avg_failure_score"
+    },
+    {
+      "covered": true,
+      "manifest": "benchmark/hard/pilot/hard30-real/runs.jsonl",
+      "metric": "success_rate",
+      "prompt_type": "baseline",
+      "summary_key": "success_rate"
+    },
+    {
+      "covered": true,
+      "manifest": "benchmark/hard/pilot/hard30-real/runs.jsonl",
+      "metric": "verification_rate",
+      "prompt_type": "baseline",
+      "summary_key": "verification_rate"
+    },
+    {
+      "covered": true,
+      "manifest": "benchmark/hard/pilot/hard30-real/runs.jsonl",
+      "metric": "unresolved_error_rate",
+      "prompt_type": "baseline",
+      "summary_key": "unresolved_error_rate"
+    },
+    {
+      "covered": true,
+      "manifest": "benchmark/hard/pilot/hard30-real/runs.jsonl",
+      "metric": "repeated_tool_call_count",
+      "prompt_type": "baseline",
+      "summary_key": "avg_repeated_tool_calls"
+    },
+    {
+      "covered": true,
+      "manifest": "benchmark/hard/pilot/hard30-real/runs.jsonl",
+      "metric": "retry_count",
+      "prompt_type": "baseline",
+      "summary_key": "avg_retry_count"
+    },
+    {
+      "covered": true,
+      "manifest": "benchmark/hard/pilot/hard30-real/runs.jsonl",
+      "metric": "turn_count",
+      "prompt_type": "baseline",
+      "summary_key": "avg_turn_count"
+    },
+    {
+      "covered": true,
+      "manifest": "benchmark/hard/pilot/hard30-real/runs.jsonl",
+      "metric": "token_usage",
+      "prompt_type": "baseline",
+      "summary_key": "avg_token_usage"
+    },
+    {
+      "covered": true,
+      "manifest": "benchmark/hard/pilot/hard30-real/runs.jsonl",
+      "metric": "command_failure_count",
+      "prompt_type": "baseline",
+      "summary_key": "avg_command_failures"
+    },
+    {
+      "covered": true,
+      "manifest": "benchmark/hard/pilot/hard30-real/runs.jsonl",
+      "metric": "time_to_first_edit",
+      "prompt_type": "baseline",
+      "summary_key": "avg_time_to_first_edit"
+    },
+    {
+      "covered": true,
+      "manifest": "benchmark/hard/pilot/hard30-real/runs.jsonl",
+      "metric": "time_to_first_test",
+      "prompt_type": "baseline",
+      "summary_key": "avg_time_to_first_test"
+    },
+    {
+      "covered": true,
+      "manifest": "benchmark/hard/pilot/hard30-real/runs.jsonl",
+      "metric": "failure_score",
+      "prompt_type": "baseline",
+      "summary_key": "avg_failure_score"
+    },
+    {
+      "covered": true,
+      "manifest": "benchmark/hard/pilot/hard30-real/runs.jsonl",
+      "metric": "success_rate",
+      "prompt_type": "intervention",
+      "summary_key": "success_rate"
+    },
+    {
+      "covered": true,
+      "manifest": "benchmark/hard/pilot/hard30-real/runs.jsonl",
+      "metric": "verification_rate",
+      "prompt_type": "intervention",
+      "summary_key": "verification_rate"
+    },
+    {
+      "covered": true,
+      "manifest": "benchmark/hard/pilot/hard30-real/runs.jsonl",
+      "metric": "unresolved_error_rate",
+      "prompt_type": "intervention",
+      "summary_key": "unresolved_error_rate"
+    },
+    {
+      "covered": true,
+      "manifest": "benchmark/hard/pilot/hard30-real/runs.jsonl",
+      "metric": "repeated_tool_call_count",
+      "prompt_type": "intervention",
+      "summary_key": "avg_repeated_tool_calls"
+    },
+    {
+      "covered": true,
+      "manifest": "benchmark/hard/pilot/hard30-real/runs.jsonl",
+      "metric": "retry_count",
+      "prompt_type": "intervention",
+      "summary_key": "avg_retry_count"
+    },
+    {
+      "covered": true,
+      "manifest": "benchmark/hard/pilot/hard30-real/runs.jsonl",
+      "metric": "turn_count",
+      "prompt_type": "intervention",
+      "summary_key": "avg_turn_count"
+    },
+    {
+      "covered": true,
+      "manifest": "benchmark/hard/pilot/hard30-real/runs.jsonl",
+      "metric": "token_usage",
+      "prompt_type": "intervention",
+      "summary_key": "avg_token_usage"
+    },
+    {
+      "covered": true,
+      "manifest": "benchmark/hard/pilot/hard30-real/runs.jsonl",
+      "metric": "command_failure_count",
+      "prompt_type": "intervention",
+      "summary_key": "avg_command_failures"
+    },
+    {
+      "covered": true,
+      "manifest": "benchmark/hard/pilot/hard30-real/runs.jsonl",
+      "metric": "time_to_first_edit",
+      "prompt_type": "intervention",
+      "summary_key": "avg_time_to_first_edit"
+    },
+    {
+      "covered": true,
+      "manifest": "benchmark/hard/pilot/hard30-real/runs.jsonl",
+      "metric": "time_to_first_test",
+      "prompt_type": "intervention",
+      "summary_key": "avg_time_to_first_test"
+    },
+    {
+      "covered": true,
+      "manifest": "benchmark/hard/pilot/hard30-real/runs.jsonl",
+      "metric": "failure_score",
+      "prompt_type": "intervention",
+      "summary_key": "avg_failure_score"
+    },
+    {
+      "covered": true,
+      "manifest": "benchmark/process-stress/pilot/full-real/runs.jsonl",
+      "metric": "success_rate",
+      "prompt_type": "baseline",
+      "summary_key": "success_rate"
+    },
+    {
+      "covered": true,
+      "manifest": "benchmark/process-stress/pilot/full-real/runs.jsonl",
+      "metric": "verification_rate",
+      "prompt_type": "baseline",
+      "summary_key": "verification_rate"
+    },
+    {
+      "covered": true,
+      "manifest": "benchmark/process-stress/pilot/full-real/runs.jsonl",
+      "metric": "unresolved_error_rate",
+      "prompt_type": "baseline",
+      "summary_key": "unresolved_error_rate"
+    },
+    {
+      "covered": true,
+      "manifest": "benchmark/process-stress/pilot/full-real/runs.jsonl",
+      "metric": "repeated_tool_call_count",
+      "prompt_type": "baseline",
+      "summary_key": "avg_repeated_tool_calls"
+    },
+    {
+      "covered": true,
+      "manifest": "benchmark/process-stress/pilot/full-real/runs.jsonl",
+      "metric": "retry_count",
+      "prompt_type": "baseline",
+      "summary_key": "avg_retry_count"
+    },
+    {
+      "covered": true,
+      "manifest": "benchmark/process-stress/pilot/full-real/runs.jsonl",
+      "metric": "turn_count",
+      "prompt_type": "baseline",
+      "summary_key": "avg_turn_count"
+    },
+    {
+      "covered": true,
+      "manifest": "benchmark/process-stress/pilot/full-real/runs.jsonl",
+      "metric": "token_usage",
+      "prompt_type": "baseline",
+      "summary_key": "avg_token_usage"
+    },
+    {
+      "covered": true,
+      "manifest": "benchmark/process-stress/pilot/full-real/runs.jsonl",
+      "metric": "command_failure_count",
+      "prompt_type": "baseline",
+      "summary_key": "avg_command_failures"
+    },
+    {
+      "covered": true,
+      "manifest": "benchmark/process-stress/pilot/full-real/runs.jsonl",
+      "metric": "time_to_first_edit",
+      "prompt_type": "baseline",
+      "summary_key": "avg_time_to_first_edit"
+    },
+    {
+      "covered": true,
+      "manifest": "benchmark/process-stress/pilot/full-real/runs.jsonl",
+      "metric": "time_to_first_test",
+      "prompt_type": "baseline",
+      "summary_key": "avg_time_to_first_test"
+    },
+    {
+      "covered": true,
+      "manifest": "benchmark/process-stress/pilot/full-real/runs.jsonl",
+      "metric": "failure_score",
+      "prompt_type": "baseline",
+      "summary_key": "avg_failure_score"
+    },
+    {
+      "covered": true,
+      "manifest": "benchmark/process-stress/pilot/full-real/runs.jsonl",
+      "metric": "success_rate",
+      "prompt_type": "intervention",
+      "summary_key": "success_rate"
+    },
+    {
+      "covered": true,
+      "manifest": "benchmark/process-stress/pilot/full-real/runs.jsonl",
+      "metric": "verification_rate",
+      "prompt_type": "intervention",
+      "summary_key": "verification_rate"
+    },
+    {
+      "covered": true,
+      "manifest": "benchmark/process-stress/pilot/full-real/runs.jsonl",
+      "metric": "unresolved_error_rate",
+      "prompt_type": "intervention",
+      "summary_key": "unresolved_error_rate"
+    },
+    {
+      "covered": true,
+      "manifest": "benchmark/process-stress/pilot/full-real/runs.jsonl",
+      "metric": "repeated_tool_call_count",
+      "prompt_type": "intervention",
+      "summary_key": "avg_repeated_tool_calls"
+    },
+    {
+      "covered": true,
+      "manifest": "benchmark/process-stress/pilot/full-real/runs.jsonl",
+      "metric": "retry_count",
+      "prompt_type": "intervention",
+      "summary_key": "avg_retry_count"
+    },
+    {
+      "covered": true,
+      "manifest": "benchmark/process-stress/pilot/full-real/runs.jsonl",
+      "metric": "turn_count",
+      "prompt_type": "intervention",
+      "summary_key": "avg_turn_count"
+    },
+    {
+      "covered": true,
+      "manifest": "benchmark/process-stress/pilot/full-real/runs.jsonl",
+      "metric": "token_usage",
+      "prompt_type": "intervention",
+      "summary_key": "avg_token_usage"
+    },
+    {
+      "covered": true,
+      "manifest": "benchmark/process-stress/pilot/full-real/runs.jsonl",
+      "metric": "command_failure_count",
+      "prompt_type": "intervention",
+      "summary_key": "avg_command_failures"
+    },
+    {
+      "covered": true,
+      "manifest": "benchmark/process-stress/pilot/full-real/runs.jsonl",
+      "metric": "time_to_first_edit",
+      "prompt_type": "intervention",
+      "summary_key": "avg_time_to_first_edit"
+    },
+    {
+      "covered": true,
+      "manifest": "benchmark/process-stress/pilot/full-real/runs.jsonl",
+      "metric": "time_to_first_test",
+      "prompt_type": "intervention",
+      "summary_key": "avg_time_to_first_test"
+    },
+    {
+      "covered": true,
+      "manifest": "benchmark/process-stress/pilot/full-real/runs.jsonl",
+      "metric": "failure_score",
+      "prompt_type": "intervention",
+      "summary_key": "avg_failure_score"
+    },
+    {
+      "covered": true,
+      "manifest": "benchmark/verification-lift/pilot/full-real/runs.jsonl",
+      "metric": "success_rate",
+      "prompt_type": "baseline",
+      "summary_key": "success_rate"
+    },
+    {
+      "covered": true,
+      "manifest": "benchmark/verification-lift/pilot/full-real/runs.jsonl",
+      "metric": "verification_rate",
+      "prompt_type": "baseline",
+      "summary_key": "verification_rate"
+    },
+    {
+      "covered": true,
+      "manifest": "benchmark/verification-lift/pilot/full-real/runs.jsonl",
+      "metric": "unresolved_error_rate",
+      "prompt_type": "baseline",
+      "summary_key": "unresolved_error_rate"
+    },
+    {
+      "covered": true,
+      "manifest": "benchmark/verification-lift/pilot/full-real/runs.jsonl",
+      "metric": "repeated_tool_call_count",
+      "prompt_type": "baseline",
+      "summary_key": "avg_repeated_tool_calls"
+    },
+    {
+      "covered": true,
+      "manifest": "benchmark/verification-lift/pilot/full-real/runs.jsonl",
+      "metric": "retry_count",
+      "prompt_type": "baseline",
+      "summary_key": "avg_retry_count"
+    },
+    {
+      "covered": true,
+      "manifest": "benchmark/verification-lift/pilot/full-real/runs.jsonl",
+      "metric": "turn_count",
+      "prompt_type": "baseline",
+      "summary_key": "avg_turn_count"
+    },
+    {
+      "covered": true,
+      "manifest": "benchmark/verification-lift/pilot/full-real/runs.jsonl",
+      "metric": "token_usage",
+      "prompt_type": "baseline",
+      "summary_key": "avg_token_usage"
+    },
+    {
+      "covered": true,
+      "manifest": "benchmark/verification-lift/pilot/full-real/runs.jsonl",
+      "metric": "command_failure_count",
+      "prompt_type": "baseline",
+      "summary_key": "avg_command_failures"
+    },
+    {
+      "covered": true,
+      "manifest": "benchmark/verification-lift/pilot/full-real/runs.jsonl",
+      "metric": "time_to_first_edit",
+      "prompt_type": "baseline",
+      "summary_key": "avg_time_to_first_edit"
+    },
+    {
+      "covered": true,
+      "manifest": "benchmark/verification-lift/pilot/full-real/runs.jsonl",
+      "metric": "time_to_first_test",
+      "prompt_type": "baseline",
+      "summary_key": "avg_time_to_first_test"
+    },
+    {
+      "covered": true,
+      "manifest": "benchmark/verification-lift/pilot/full-real/runs.jsonl",
+      "metric": "failure_score",
+      "prompt_type": "baseline",
+      "summary_key": "avg_failure_score"
+    },
+    {
+      "covered": true,
+      "manifest": "benchmark/verification-lift/pilot/full-real/runs.jsonl",
+      "metric": "success_rate",
+      "prompt_type": "intervention",
+      "summary_key": "success_rate"
+    },
+    {
+      "covered": true,
+      "manifest": "benchmark/verification-lift/pilot/full-real/runs.jsonl",
+      "metric": "verification_rate",
+      "prompt_type": "intervention",
+      "summary_key": "verification_rate"
+    },
+    {
+      "covered": true,
+      "manifest": "benchmark/verification-lift/pilot/full-real/runs.jsonl",
+      "metric": "unresolved_error_rate",
+      "prompt_type": "intervention",
+      "summary_key": "unresolved_error_rate"
+    },
+    {
+      "covered": true,
+      "manifest": "benchmark/verification-lift/pilot/full-real/runs.jsonl",
+      "metric": "repeated_tool_call_count",
+      "prompt_type": "intervention",
+      "summary_key": "avg_repeated_tool_calls"
+    },
+    {
+      "covered": true,
+      "manifest": "benchmark/verification-lift/pilot/full-real/runs.jsonl",
+      "metric": "retry_count",
+      "prompt_type": "intervention",
+      "summary_key": "avg_retry_count"
+    },
+    {
+      "covered": true,
+      "manifest": "benchmark/verification-lift/pilot/full-real/runs.jsonl",
+      "metric": "turn_count",
+      "prompt_type": "intervention",
+      "summary_key": "avg_turn_count"
+    },
+    {
+      "covered": true,
+      "manifest": "benchmark/verification-lift/pilot/full-real/runs.jsonl",
+      "metric": "token_usage",
+      "prompt_type": "intervention",
+      "summary_key": "avg_token_usage"
+    },
+    {
+      "covered": true,
+      "manifest": "benchmark/verification-lift/pilot/full-real/runs.jsonl",
+      "metric": "command_failure_count",
+      "prompt_type": "intervention",
+      "summary_key": "avg_command_failures"
+    },
+    {
+      "covered": true,
+      "manifest": "benchmark/verification-lift/pilot/full-real/runs.jsonl",
+      "metric": "time_to_first_edit",
+      "prompt_type": "intervention",
+      "summary_key": "avg_time_to_first_edit"
+    },
+    {
+      "covered": true,
+      "manifest": "benchmark/verification-lift/pilot/full-real/runs.jsonl",
+      "metric": "time_to_first_test",
+      "prompt_type": "intervention",
+      "summary_key": "avg_time_to_first_test"
+    },
+    {
+      "covered": true,
+      "manifest": "benchmark/verification-lift/pilot/full-real/runs.jsonl",
+      "metric": "failure_score",
+      "prompt_type": "intervention",
+      "summary_key": "avg_failure_score"
+    },
+    {
+      "covered": true,
+      "manifest": "benchmark/verification-lift-v2/pilot/full-real/runs.jsonl",
+      "metric": "success_rate",
+      "prompt_type": "baseline",
+      "summary_key": "success_rate"
+    },
+    {
+      "covered": true,
+      "manifest": "benchmark/verification-lift-v2/pilot/full-real/runs.jsonl",
+      "metric": "verification_rate",
+      "prompt_type": "baseline",
+      "summary_key": "verification_rate"
+    },
+    {
+      "covered": true,
+      "manifest": "benchmark/verification-lift-v2/pilot/full-real/runs.jsonl",
+      "metric": "unresolved_error_rate",
+      "prompt_type": "baseline",
+      "summary_key": "unresolved_error_rate"
+    },
+    {
+      "covered": true,
+      "manifest": "benchmark/verification-lift-v2/pilot/full-real/runs.jsonl",
+      "metric": "repeated_tool_call_count",
+      "prompt_type": "baseline",
+      "summary_key": "avg_repeated_tool_calls"
+    },
+    {
+      "covered": true,
+      "manifest": "benchmark/verification-lift-v2/pilot/full-real/runs.jsonl",
+      "metric": "retry_count",
+      "prompt_type": "baseline",
+      "summary_key": "avg_retry_count"
+    },
+    {
+      "covered": true,
+      "manifest": "benchmark/verification-lift-v2/pilot/full-real/runs.jsonl",
+      "metric": "turn_count",
+      "prompt_type": "baseline",
+      "summary_key": "avg_turn_count"
+    },
+    {
+      "covered": true,
+      "manifest": "benchmark/verification-lift-v2/pilot/full-real/runs.jsonl",
+      "metric": "token_usage",
+      "prompt_type": "baseline",
+      "summary_key": "avg_token_usage"
+    },
+    {
+      "covered": true,
+      "manifest": "benchmark/verification-lift-v2/pilot/full-real/runs.jsonl",
+      "metric": "command_failure_count",
+      "prompt_type": "baseline",
+      "summary_key": "avg_command_failures"
+    },
+    {
+      "covered": true,
+      "manifest": "benchmark/verification-lift-v2/pilot/full-real/runs.jsonl",
+      "metric": "time_to_first_edit",
+      "prompt_type": "baseline",
+      "summary_key": "avg_time_to_first_edit"
+    },
+    {
+      "covered": true,
+      "manifest": "benchmark/verification-lift-v2/pilot/full-real/runs.jsonl",
+      "metric": "time_to_first_test",
+      "prompt_type": "baseline",
+      "summary_key": "avg_time_to_first_test"
+    },
+    {
+      "covered": true,
+      "manifest": "benchmark/verification-lift-v2/pilot/full-real/runs.jsonl",
+      "metric": "failure_score",
+      "prompt_type": "baseline",
+      "summary_key": "avg_failure_score"
+    },
+    {
+      "covered": true,
+      "manifest": "benchmark/verification-lift-v2/pilot/full-real/runs.jsonl",
+      "metric": "success_rate",
+      "prompt_type": "intervention",
+      "summary_key": "success_rate"
+    },
+    {
+      "covered": true,
+      "manifest": "benchmark/verification-lift-v2/pilot/full-real/runs.jsonl",
+      "metric": "verification_rate",
+      "prompt_type": "intervention",
+      "summary_key": "verification_rate"
+    },
+    {
+      "covered": true,
+      "manifest": "benchmark/verification-lift-v2/pilot/full-real/runs.jsonl",
+      "metric": "unresolved_error_rate",
+      "prompt_type": "intervention",
+      "summary_key": "unresolved_error_rate"
+    },
+    {
+      "covered": true,
+      "manifest": "benchmark/verification-lift-v2/pilot/full-real/runs.jsonl",
+      "metric": "repeated_tool_call_count",
+      "prompt_type": "intervention",
+      "summary_key": "avg_repeated_tool_calls"
+    },
+    {
+      "covered": true,
+      "manifest": "benchmark/verification-lift-v2/pilot/full-real/runs.jsonl",
+      "metric": "retry_count",
+      "prompt_type": "intervention",
+      "summary_key": "avg_retry_count"
+    },
+    {
+      "covered": true,
+      "manifest": "benchmark/verification-lift-v2/pilot/full-real/runs.jsonl",
+      "metric": "turn_count",
+      "prompt_type": "intervention",
+      "summary_key": "avg_turn_count"
+    },
+    {
+      "covered": true,
+      "manifest": "benchmark/verification-lift-v2/pilot/full-real/runs.jsonl",
+      "metric": "token_usage",
+      "prompt_type": "intervention",
+      "summary_key": "avg_token_usage"
+    },
+    {
+      "covered": true,
+      "manifest": "benchmark/verification-lift-v2/pilot/full-real/runs.jsonl",
+      "metric": "command_failure_count",
+      "prompt_type": "intervention",
+      "summary_key": "avg_command_failures"
+    },
+    {
+      "covered": true,
+      "manifest": "benchmark/verification-lift-v2/pilot/full-real/runs.jsonl",
+      "metric": "time_to_first_edit",
+      "prompt_type": "intervention",
+      "summary_key": "avg_time_to_first_edit"
+    },
+    {
+      "covered": true,
+      "manifest": "benchmark/verification-lift-v2/pilot/full-real/runs.jsonl",
+      "metric": "time_to_first_test",
+      "prompt_type": "intervention",
+      "summary_key": "avg_time_to_first_test"
+    },
+    {
+      "covered": true,
+      "manifest": "benchmark/verification-lift-v2/pilot/full-real/runs.jsonl",
+      "metric": "failure_score",
+      "prompt_type": "intervention",
+      "summary_key": "avg_failure_score"
+    },
+    {
+      "covered": true,
+      "manifest": "benchmark/verification-ablation/pilot/full-real/runs.jsonl",
+      "metric": "success_rate",
+      "prompt_type": "baseline",
+      "summary_key": "success_rate"
+    },
+    {
+      "covered": true,
+      "manifest": "benchmark/verification-ablation/pilot/full-real/runs.jsonl",
+      "metric": "verification_rate",
+      "prompt_type": "baseline",
+      "summary_key": "verification_rate"
+    },
+    {
+      "covered": true,
+      "manifest": "benchmark/verification-ablation/pilot/full-real/runs.jsonl",
+      "metric": "unresolved_error_rate",
+      "prompt_type": "baseline",
+      "summary_key": "unresolved_error_rate"
+    },
+    {
+      "covered": true,
+      "manifest": "benchmark/verification-ablation/pilot/full-real/runs.jsonl",
+      "metric": "repeated_tool_call_count",
+      "prompt_type": "baseline",
+      "summary_key": "avg_repeated_tool_calls"
+    },
+    {
+      "covered": true,
+      "manifest": "benchmark/verification-ablation/pilot/full-real/runs.jsonl",
+      "metric": "retry_count",
+      "prompt_type": "baseline",
+      "summary_key": "avg_retry_count"
+    },
+    {
+      "covered": true,
+      "manifest": "benchmark/verification-ablation/pilot/full-real/runs.jsonl",
+      "metric": "turn_count",
+      "prompt_type": "baseline",
+      "summary_key": "avg_turn_count"
+    },
+    {
+      "covered": true,
+      "manifest": "benchmark/verification-ablation/pilot/full-real/runs.jsonl",
+      "metric": "token_usage",
+      "prompt_type": "baseline",
+      "summary_key": "avg_token_usage"
+    },
+    {
+      "covered": true,
+      "manifest": "benchmark/verification-ablation/pilot/full-real/runs.jsonl",
+      "metric": "command_failure_count",
+      "prompt_type": "baseline",
+      "summary_key": "avg_command_failures"
+    },
+    {
+      "covered": true,
+      "manifest": "benchmark/verification-ablation/pilot/full-real/runs.jsonl",
+      "metric": "time_to_first_edit",
+      "prompt_type": "baseline",
+      "summary_key": "avg_time_to_first_edit"
+    },
+    {
+      "covered": true,
+      "manifest": "benchmark/verification-ablation/pilot/full-real/runs.jsonl",
+      "metric": "time_to_first_test",
+      "prompt_type": "baseline",
+      "summary_key": "avg_time_to_first_test"
+    },
+    {
+      "covered": true,
+      "manifest": "benchmark/verification-ablation/pilot/full-real/runs.jsonl",
+      "metric": "failure_score",
+      "prompt_type": "baseline",
+      "summary_key": "avg_failure_score"
+    },
+    {
+      "covered": true,
+      "manifest": "benchmark/verification-ablation/pilot/full-real/runs.jsonl",
+      "metric": "success_rate",
+      "prompt_type": "intervention",
+      "summary_key": "success_rate"
+    },
+    {
+      "covered": true,
+      "manifest": "benchmark/verification-ablation/pilot/full-real/runs.jsonl",
+      "metric": "verification_rate",
+      "prompt_type": "intervention",
+      "summary_key": "verification_rate"
+    },
+    {
+      "covered": true,
+      "manifest": "benchmark/verification-ablation/pilot/full-real/runs.jsonl",
+      "metric": "unresolved_error_rate",
+      "prompt_type": "intervention",
+      "summary_key": "unresolved_error_rate"
+    },
+    {
+      "covered": true,
+      "manifest": "benchmark/verification-ablation/pilot/full-real/runs.jsonl",
+      "metric": "repeated_tool_call_count",
+      "prompt_type": "intervention",
+      "summary_key": "avg_repeated_tool_calls"
+    },
+    {
+      "covered": true,
+      "manifest": "benchmark/verification-ablation/pilot/full-real/runs.jsonl",
+      "metric": "retry_count",
+      "prompt_type": "intervention",
+      "summary_key": "avg_retry_count"
+    },
+    {
+      "covered": true,
+      "manifest": "benchmark/verification-ablation/pilot/full-real/runs.jsonl",
+      "metric": "turn_count",
+      "prompt_type": "intervention",
+      "summary_key": "avg_turn_count"
+    },
+    {
+      "covered": true,
+      "manifest": "benchmark/verification-ablation/pilot/full-real/runs.jsonl",
+      "metric": "token_usage",
+      "prompt_type": "intervention",
+      "summary_key": "avg_token_usage"
+    },
+    {
+      "covered": true,
+      "manifest": "benchmark/verification-ablation/pilot/full-real/runs.jsonl",
+      "metric": "command_failure_count",
+      "prompt_type": "intervention",
+      "summary_key": "avg_command_failures"
+    },
+    {
+      "covered": true,
+      "manifest": "benchmark/verification-ablation/pilot/full-real/runs.jsonl",
+      "metric": "time_to_first_edit",
+      "prompt_type": "intervention",
+      "summary_key": "avg_time_to_first_edit"
+    },
+    {
+      "covered": true,
+      "manifest": "benchmark/verification-ablation/pilot/full-real/runs.jsonl",
+      "metric": "time_to_first_test",
+      "prompt_type": "intervention",
+      "summary_key": "avg_time_to_first_test"
+    },
+    {
+      "covered": true,
+      "manifest": "benchmark/verification-ablation/pilot/full-real/runs.jsonl",
+      "metric": "failure_score",
+      "prompt_type": "intervention",
+      "summary_key": "avg_failure_score"
+    }
+  ],
   "summary": {
     "coverage_cell_count": 77,
     "covered_metric_count": 11,
     "expected_coverage_cell_count": 77,
     "expected_metric_count": 11,
+    "expected_prompt_summary_cell_count": 154,
     "manifest_count": 7,
     "nullable_cells_with_observations": 14,
     "nullable_manifest_cells": 14,
     "nullable_metric_count": 2,
+    "prompt_summary_cell_count": 154,
     "ready": true,
     "ready_manifest_count": 7
   }

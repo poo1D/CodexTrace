@@ -63,12 +63,19 @@ def build_metric_coverage_audit(manifest_path: Path | Iterable[Path] | None = No
         for manifest in manifest_rows
         for row in manifest["metrics"]
     ]
+    prompt_summary_rows = [
+        row
+        for manifest in manifest_rows
+        for row in manifest["prompt_summary_metrics"]
+    ]
     nullable_rows = [
         row
         for manifest in manifest_rows
         for row in manifest["nullable_metrics"]
     ]
-    ready = all(manifest["ready"] for manifest in manifest_rows)
+    ready = all(manifest["ready"] for manifest in manifest_rows) and all(
+        row["covered"] for row in prompt_summary_rows
+    )
     covered_metric_names = {
         row["metric"]
         for row in rows
@@ -83,12 +90,15 @@ def build_metric_coverage_audit(manifest_path: Path | Iterable[Path] | None = No
             "covered_metric_count": len(covered_metric_names),
             "coverage_cell_count": sum(1 for row in rows if row["covered"]),
             "expected_coverage_cell_count": len(rows),
+            "prompt_summary_cell_count": sum(1 for row in prompt_summary_rows if row["covered"]),
+            "expected_prompt_summary_cell_count": len(prompt_summary_rows),
             "nullable_metric_count": len(NULLABLE_METRICS),
             "nullable_manifest_cells": len(nullable_rows),
             "nullable_cells_with_observations": sum(1 for row in nullable_rows if row["present_count"] > 0),
         },
         "manifests": manifest_rows,
         "metrics": rows,
+        "prompt_summary_metrics": prompt_summary_rows,
         "nullable_metrics": nullable_rows,
     }
 
@@ -118,6 +128,21 @@ def _build_manifest_metric_coverage(manifest_path: Path) -> dict[str, Any]:
         row["covered"] = all(row[key] for key in ("run_level", "summary_level", "aggregate_markdown", "csv_field"))
         rows.append(row)
 
+    prompt_summary_rows = []
+    for prompt_type in ("baseline", "intervention"):
+        prompt_summary = aggregate["summary"].get(prompt_type, {})
+        for metric in EXPECTED_METRICS:
+            summary_key = SUMMARY_KEYS[metric]
+            prompt_summary_rows.append(
+                {
+                    "manifest": str(manifest_path),
+                    "prompt_type": prompt_type,
+                    "metric": metric,
+                    "summary_key": summary_key,
+                    "covered": summary_key in prompt_summary,
+                }
+            )
+
     nullable_rows = []
     for metric in NULLABLE_METRICS:
         values = [row.get(metric) for row in aggregate["runs"]]
@@ -133,13 +158,16 @@ def _build_manifest_metric_coverage(manifest_path: Path) -> dict[str, Any]:
             }
         )
 
-    ready = all(row["covered"] for row in rows)
+    ready = all(row["covered"] for row in rows) and all(row["covered"] for row in prompt_summary_rows)
     return {
         "manifest": str(manifest_path),
         "ready": ready,
         "covered_metric_count": sum(1 for row in rows if row["covered"]),
         "expected_metric_count": len(EXPECTED_METRICS),
+        "prompt_summary_covered_count": sum(1 for row in prompt_summary_rows if row["covered"]),
+        "expected_prompt_summary_count": len(prompt_summary_rows),
         "metrics": rows,
+        "prompt_summary_metrics": prompt_summary_rows,
         "nullable_metrics": nullable_rows,
     }
 
@@ -157,6 +185,7 @@ def render_metric_coverage_audit_markdown(result: dict[str, Any]) -> str:
         f"- Manifests checked: {summary['ready_manifest_count']} / {summary['manifest_count']}",
         f"- Metrics covered: {summary['covered_metric_count']} / {summary['expected_metric_count']}",
         f"- Coverage cells covered: {summary['coverage_cell_count']} / {summary['expected_coverage_cell_count']}",
+        f"- Prompt summary cells covered: {summary['prompt_summary_cell_count']} / {summary['expected_prompt_summary_cell_count']}",
         f"- Nullable metrics checked: {summary['nullable_metric_count']}",
         f"- Nullable manifest cells with observations: {summary['nullable_cells_with_observations']} / {summary['nullable_manifest_cells']}",
         "",
@@ -183,6 +212,24 @@ def render_metric_coverage_audit_markdown(result: dict[str, Any]) -> str:
             f"{'yes' if row['summary_level'] else 'no'} | {'yes' if row['csv_field'] else 'no'} | "
             f"{'yes' if row['aggregate_markdown'] else 'no'} | {'yes' if row['covered'] else 'no'} |"
         )
+    lines.extend([
+        "",
+        "## Prompt Summary Coverage",
+        "",
+        "| Manifest | Prompt type | Metrics covered |",
+        "| --- | --- | ---: |",
+    ])
+    for manifest in result["manifests"]:
+        for prompt_type in ("baseline", "intervention"):
+            prompt_rows = [
+                row
+                for row in manifest["prompt_summary_metrics"]
+                if row["prompt_type"] == prompt_type
+            ]
+            lines.append(
+                f"| `{manifest['manifest']}` | `{prompt_type}` | "
+                f"{sum(1 for row in prompt_rows if row['covered'])} / {len(prompt_rows)} |"
+            )
     lines.extend([
         "",
         "## Nullable Metrics",

@@ -8,6 +8,7 @@ This generated audit checks that the metrics named in the experiment design are 
 - Manifests checked: 7 / 7
 - Metrics covered: 11 / 11
 - Coverage cells covered: 77 / 77
+- Prompt summary cells covered: 154 / 154
 - Nullable metrics checked: 2
 - Nullable manifest cells with observations: 14 / 14
 
@@ -104,6 +105,25 @@ This generated audit checks that the metrics named in the experiment design are 
 | `benchmark/verification-ablation/pilot/full-real/runs.jsonl` | time_to_first_edit | `time_to_first_edit` yes | `avg_time_to_first_edit` yes | yes | yes | yes |
 | `benchmark/verification-ablation/pilot/full-real/runs.jsonl` | time_to_first_test | `time_to_first_test` yes | `avg_time_to_first_test` yes | yes | yes | yes |
 | `benchmark/verification-ablation/pilot/full-real/runs.jsonl` | failure_score | `failure_score` yes | `avg_failure_score` yes | yes | yes | yes |
+
+## Prompt Summary Coverage
+
+| Manifest | Prompt type | Metrics covered |
+| --- | --- | ---: |
+| `benchmark/pilot/full30-real/runs.jsonl` | `baseline` | 11 / 11 |
+| `benchmark/pilot/full30-real/runs.jsonl` | `intervention` | 11 / 11 |
+| `benchmark/hard/pilot/hard10-real/runs.jsonl` | `baseline` | 11 / 11 |
+| `benchmark/hard/pilot/hard10-real/runs.jsonl` | `intervention` | 11 / 11 |
+| `benchmark/hard/pilot/hard30-real/runs.jsonl` | `baseline` | 11 / 11 |
+| `benchmark/hard/pilot/hard30-real/runs.jsonl` | `intervention` | 11 / 11 |
+| `benchmark/process-stress/pilot/full-real/runs.jsonl` | `baseline` | 11 / 11 |
+| `benchmark/process-stress/pilot/full-real/runs.jsonl` | `intervention` | 11 / 11 |
+| `benchmark/verification-lift/pilot/full-real/runs.jsonl` | `baseline` | 11 / 11 |
+| `benchmark/verification-lift/pilot/full-real/runs.jsonl` | `intervention` | 11 / 11 |
+| `benchmark/verification-lift-v2/pilot/full-real/runs.jsonl` | `baseline` | 11 / 11 |
+| `benchmark/verification-lift-v2/pilot/full-real/runs.jsonl` | `intervention` | 11 / 11 |
+| `benchmark/verification-ablation/pilot/full-real/runs.jsonl` | `baseline` | 11 / 11 |
+| `benchmark/verification-ablation/pilot/full-real/runs.jsonl` | `intervention` | 11 / 11 |
 
 ## Nullable Metrics
 

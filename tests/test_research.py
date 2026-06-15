@@ -1353,11 +1353,18 @@ def test_metric_coverage_audit_covers_experiment_design_metrics():
     assert result["summary"]["ready"] is True
     assert result["summary"]["manifest_count"] == 1
     assert result["summary"]["covered_metric_count"] == 11
+    assert result["summary"]["prompt_summary_cell_count"] == 22
+    assert result["summary"]["expected_prompt_summary_cell_count"] == 22
     assert result["summary"]["nullable_metric_count"] == 2
     assert len(result["nullable_metrics"]) == 2
+    assert len(result["prompt_summary_metrics"]) == 22
     assert all(row["covered"] for row in result["metrics"])
+    assert all(row["covered"] for row in result["prompt_summary_metrics"])
     assert "time_to_first_test" in markdown
     assert "avg_time_to_first_test" in markdown
+    assert "## Prompt Summary Coverage" in markdown
+    assert "| `benchmark/runs.example.jsonl` | `baseline` | 11 / 11 |" in markdown
+    assert "| `benchmark/runs.example.jsonl` | `intervention` | 11 / 11 |" in markdown
     assert "## Nullable Metrics" in markdown
     assert "aggregate averages use present values only" in markdown
 
@@ -1369,9 +1376,14 @@ def test_metric_coverage_audit_covers_experiment_design_metrics():
     assert default_result["summary"]["ready_manifest_count"] == 7
     assert default_result["summary"]["coverage_cell_count"] == 77
     assert default_result["summary"]["expected_coverage_cell_count"] == 77
+    assert default_result["summary"]["prompt_summary_cell_count"] == 154
+    assert default_result["summary"]["expected_prompt_summary_cell_count"] == 154
     assert default_result["summary"]["nullable_manifest_cells"] == 14
     assert default_result["summary"]["nullable_cells_with_observations"] == 14
     assert "Manifests checked: 7 / 7" in default_markdown
+    assert "Prompt summary cells covered: 154 / 154" in default_markdown
+    assert "| `benchmark/hard/pilot/hard30-real/runs.jsonl` | `baseline` | 11 / 11 |" in default_markdown
+    assert "| `benchmark/hard/pilot/hard30-real/runs.jsonl` | `intervention` | 11 / 11 |" in default_markdown
     assert "Nullable metrics checked: 2" in default_markdown
     assert "benchmark/verification-ablation/pilot/full-real/runs.jsonl" in default_markdown
 
@@ -3133,6 +3145,10 @@ def test_submission_readiness_validates_metric_coverage_audit_content(tmp_path):
     assert "missing manifest count" in check["problems"]
     assert "missing coverage count" in check["problems"]
     assert "missing coverage cells" in check["problems"]
+    assert "missing prompt summary cells" in check["problems"]
+    assert "missing prompt summary section" in check["problems"]
+    assert "missing hard30 baseline prompt summary" in check["problems"]
+    assert "missing hard30 intervention prompt summary" in check["problems"]
     assert "missing time to first test" in check["problems"]
     assert "missing verification ablation manifest" in check["problems"]
 
