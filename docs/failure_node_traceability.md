@@ -12,6 +12,10 @@ This generated audit checks that diagnosis findings carry trace event IDs from p
 - JSON findings with event IDs: 5 / 5
 - Markdown Event IDs lines: 5 / 5
 - Highlighted event nodes: 6
+- Benchmark manifest: `benchmark/hard/pilot/hard30-real/runs.jsonl`
+- Benchmark traces checked: 60
+- Benchmark findings with event IDs: 4 / 4
+- Benchmark findings missing event IDs: 0
 
 ## Source Path Checks
 
@@ -33,5 +37,11 @@ This generated audit checks that diagnosis findings carry trace event IDs from p
 | `premature_completion` | `high` | 1 | yes | 1 | yes |
 | `repeated_search_or_read` | `medium` | 1 | yes | 2 | yes |
 | `sandbox_or_permission_block` | `medium` | 1 | yes | 1 | yes |
+
+## Benchmark Finding Counts
+
+| Finding | Count |
+| --- | ---: |
+| `repeated_search_or_read` | 4 |
 
 Interpretation: this audit covers process-finding node traceability. It does not claim that hidden semantic failures have visible failure nodes; those remain a separate detector-boundary result.

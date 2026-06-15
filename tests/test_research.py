@@ -1604,8 +1604,14 @@ def test_failure_node_traceability_audit_covers_report_and_ui_path():
     assert result["summary"]["findings_with_event_ids"] == 5
     assert result["summary"]["json_event_id_findings"] == 5
     assert result["summary"]["markdown_event_id_lines"] == 5
+    assert result["summary"]["benchmark_traces_checked"] == 60
+    assert result["summary"]["benchmark_finding_count"] == 4
+    assert result["summary"]["benchmark_findings_with_event_ids"] == 4
+    assert result["summary"]["benchmark_missing_event_id_findings"] == 0
     assert result["source_checks"]["web_highlight_class"] is True
+    assert result["benchmark_finding_counts"]["repeated_search_or_read"] == 4
     assert finding_rows["repeated_search_or_read"]["event_id_count"] == 2
+    assert "Benchmark findings with event IDs: 4 / 4" in markdown
     assert "does not claim that hidden semantic failures have visible failure nodes" in markdown
 
 
@@ -3234,6 +3240,8 @@ def test_submission_readiness_validates_failure_node_traceability_content(tmp_pa
     assert "missing ready" in check["problems"]
     assert "missing expected findings" in check["problems"]
     assert "missing finding event ids" in check["problems"]
+    assert "missing benchmark traces" in check["problems"]
+    assert "missing benchmark event ids" in check["problems"]
     assert "missing web highlight" in check["problems"]
 
 

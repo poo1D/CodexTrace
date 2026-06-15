@@ -15,6 +15,8 @@ from codex_trace.report import render_json, render_markdown
 
 
 DEFAULT_TRACE = Path("demo/failing-codex-trace.jsonl")
+DEFAULT_BENCHMARK_MANIFEST = Path("benchmark/hard/pilot/hard30-real/runs.jsonl")
+DEFAULT_BENCHMARK_RUN_DIR = Path("benchmark/hard/pilot/hard30-real")
 DEFAULT_SCHEMA = Path("codex_trace/schema.py")
 DEFAULT_DIAGNOSE = Path("codex_trace/diagnose.py")
 DEFAULT_REPORT = Path("codex_trace/report.py")
@@ -31,6 +33,8 @@ EXPECTED_DEMO_FINDINGS = (
 
 def build_failure_node_traceability_audit(
     trace_path: Path = DEFAULT_TRACE,
+    benchmark_manifest_path: Path = DEFAULT_BENCHMARK_MANIFEST,
+    benchmark_run_dir: Path = DEFAULT_BENCHMARK_RUN_DIR,
     schema_path: Path = DEFAULT_SCHEMA,
     diagnose_path: Path = DEFAULT_DIAGNOSE,
     report_path: Path = DEFAULT_REPORT,
@@ -76,6 +80,7 @@ def build_failure_node_traceability_audit(
         for event_id in finding.event_ids
     })
     expected_present = sorted(set(EXPECTED_DEMO_FINDINGS) & {row["code"] for row in finding_rows})
+    benchmark = _benchmark_finding_event_id_coverage(benchmark_manifest_path, benchmark_run_dir)
     source_checks = {
         "schema_event_ids": "event_ids: list[str]" in source_texts["schema"],
         "diagnose_event_ids": "event_ids=" in source_texts["diagnose"],
@@ -91,6 +96,9 @@ def build_failure_node_traceability_audit(
             and len(expected_present) == len(EXPECTED_DEMO_FINDINGS)
             and json_event_id_findings == len(finding_rows)
             and markdown_event_id_lines == len(finding_rows)
+            and benchmark["trace_count"] == 60
+            and benchmark["finding_count"] > 0
+            and benchmark["missing_event_id_findings"] == 0
             and all(source_checks.values()),
             "trace": str(trace_path),
             "finding_count": len(finding_rows),
@@ -100,9 +108,15 @@ def build_failure_node_traceability_audit(
             "json_event_id_findings": json_event_id_findings,
             "markdown_event_id_lines": markdown_event_id_lines,
             "highlighted_event_count": len(highlighted_event_ids),
+            "benchmark_manifest": str(benchmark_manifest_path),
+            "benchmark_traces_checked": benchmark["trace_count"],
+            "benchmark_finding_count": benchmark["finding_count"],
+            "benchmark_findings_with_event_ids": benchmark["findings_with_event_ids"],
+            "benchmark_missing_event_id_findings": benchmark["missing_event_id_findings"],
         },
         "source_checks": source_checks,
         "findings": finding_rows,
+        "benchmark_finding_counts": benchmark["finding_counts"],
         "highlighted_event_ids": highlighted_event_ids,
     }
 
@@ -124,6 +138,10 @@ def render_failure_node_traceability_markdown(result: dict[str, Any]) -> str:
         f"- JSON findings with event IDs: {summary['json_event_id_findings']} / {summary['finding_count']}",
         f"- Markdown Event IDs lines: {summary['markdown_event_id_lines']} / {summary['finding_count']}",
         f"- Highlighted event nodes: {summary['highlighted_event_count']}",
+        f"- Benchmark manifest: `{summary['benchmark_manifest']}`",
+        f"- Benchmark traces checked: {summary['benchmark_traces_checked']}",
+        f"- Benchmark findings with event IDs: {summary['benchmark_findings_with_event_ids']} / {summary['benchmark_finding_count']}",
+        f"- Benchmark findings missing event IDs: {summary['benchmark_missing_event_id_findings']}",
         "",
         "## Source Path Checks",
         "",
@@ -147,6 +165,15 @@ def render_failure_node_traceability_markdown(result: dict[str, Any]) -> str:
         )
     lines.extend([
         "",
+        "## Benchmark Finding Counts",
+        "",
+        "| Finding | Count |",
+        "| --- | ---: |",
+    ])
+    for code, count in result["benchmark_finding_counts"].items():
+        lines.append(f"| `{code}` | {count} |")
+    lines.extend([
+        "",
         "Interpretation: this audit covers process-finding node traceability. It does not claim that hidden semantic failures have visible failure nodes; those remain a separate detector-boundary result.",
     ])
     return "\n".join(lines) + "\n"
@@ -165,14 +192,50 @@ def _yes(value: bool) -> str:
     return "yes" if value else "no"
 
 
+def _benchmark_finding_event_id_coverage(manifest_path: Path, run_dir: Path) -> dict[str, Any]:
+    rows = [
+        json.loads(line)
+        for line in manifest_path.read_text(encoding="utf-8").splitlines()
+        if line.strip()
+    ]
+    finding_counts: dict[str, int] = {}
+    trace_count = 0
+    finding_count = 0
+    findings_with_event_ids = 0
+    missing_event_id_findings = 0
+    for row in rows:
+        trace_path = run_dir / str(row.get("trace_path", ""))
+        trace = parse_jsonl(trace_path)
+        diagnosis = diagnose(trace)
+        event_ids = {event.id for event in trace.events}
+        trace_count += 1
+        for finding in diagnosis.findings:
+            finding_counts[finding.code] = finding_counts.get(finding.code, 0) + 1
+            finding_count += 1
+            has_valid_event_ids = bool(finding.event_ids) and all(event_id in event_ids for event_id in finding.event_ids)
+            if has_valid_event_ids:
+                findings_with_event_ids += 1
+            else:
+                missing_event_id_findings += 1
+    return {
+        "trace_count": trace_count,
+        "finding_count": finding_count,
+        "findings_with_event_ids": findings_with_event_ids,
+        "missing_event_id_findings": missing_event_id_findings,
+        "finding_counts": dict(sorted(finding_counts.items())),
+    }
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description="Audit diagnosis finding event-ID traceability into report and UI outputs.")
     parser.add_argument("--trace", type=Path, default=DEFAULT_TRACE)
+    parser.add_argument("--benchmark-manifest", type=Path, default=DEFAULT_BENCHMARK_MANIFEST)
+    parser.add_argument("--benchmark-run-dir", type=Path, default=DEFAULT_BENCHMARK_RUN_DIR)
     parser.add_argument("--json-output", type=Path)
     parser.add_argument("--markdown-output", type=Path)
     args = parser.parse_args()
 
-    result = build_failure_node_traceability_audit(args.trace)
+    result = build_failure_node_traceability_audit(args.trace, args.benchmark_manifest, args.benchmark_run_dir)
     if args.json_output or args.markdown_output:
         write_outputs(result, args.json_output, args.markdown_output)
     else:

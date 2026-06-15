@@ -1,4 +1,7 @@
 {
+  "benchmark_finding_counts": {
+    "repeated_search_or_read": 4
+  },
   "findings": [
     {
       "code": "command_failure_unhandled",
@@ -80,6 +83,11 @@
     "web_highlight_style": true
   },
   "summary": {
+    "benchmark_finding_count": 4,
+    "benchmark_findings_with_event_ids": 4,
+    "benchmark_manifest": "benchmark/hard/pilot/hard30-real/runs.jsonl",
+    "benchmark_missing_event_id_findings": 0,
+    "benchmark_traces_checked": 60,
     "expected_demo_findings": 5,
     "expected_demo_findings_present": 5,
     "finding_count": 5,

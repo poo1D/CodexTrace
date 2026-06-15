@@ -1302,6 +1302,9 @@ def check_failure_node_traceability_content(path: Path = Path("docs/failure_node
         "finding event ids": "Findings with event IDs: 5 / 5",
         "json event ids": "JSON findings with event IDs: 5 / 5",
         "markdown event ids": "Markdown Event IDs lines: 5 / 5",
+        "benchmark traces": "Benchmark traces checked: 60",
+        "benchmark event ids": "Benchmark findings with event IDs: 4 / 4",
+        "benchmark missing event ids": "Benchmark findings missing event IDs: 0",
         "highlighted nodes": "Highlighted event nodes:",
         "web highlight": "`web_highlight_class` | yes",
         "repeated search": "`repeated_search_or_read`",
@@ -1315,7 +1318,7 @@ def check_failure_node_traceability_content(path: Path = Path("docs/failure_node
         "name": "failure node traceability audit",
         "ok": not problems,
         "evidence": str(path),
-        "detail": "diagnosis findings carry event IDs through JSON, Markdown, and Web UI highlight paths",
+        "detail": "diagnosis findings carry event IDs through JSON, Markdown, Web UI highlight paths, and hard30 benchmark process findings",
         "problems": problems,
     }
 
