@@ -840,10 +840,13 @@ def check_metric_coverage_audit_content(path: Path = Path("docs/metric_coverage_
 
     required_phrases = {
         "ready": "Ready: yes",
+        "manifest count": "Manifests checked: 7 / 7",
         "coverage count": "Metrics covered: 11 / 11",
+        "coverage cells": "Coverage cells covered: 77 / 77",
         "time to first edit": "time_to_first_edit",
         "time to first test": "time_to_first_test",
         "turn count": "turn_count",
+        "verification ablation manifest": "benchmark/verification-ablation/pilot/full-real/runs.jsonl",
         "summary key": "avg_time_to_first_test",
     }
     for label, phrase in required_phrases.items():
@@ -854,7 +857,7 @@ def check_metric_coverage_audit_content(path: Path = Path("docs/metric_coverage_
         "name": "metric coverage audit",
         "ok": not problems,
         "evidence": str(path),
-        "detail": "all experiment-design metrics are checked across run, CSV, summary, and Markdown outputs",
+        "detail": "all experiment-design metrics are checked across paper-facing run manifests, CSV, summary, and Markdown outputs",
         "problems": problems,
     }
 

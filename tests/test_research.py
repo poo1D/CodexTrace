@@ -1351,10 +1351,22 @@ def test_metric_coverage_audit_covers_experiment_design_metrics():
     markdown = render_metric_coverage_audit_markdown(result)
 
     assert result["summary"]["ready"] is True
+    assert result["summary"]["manifest_count"] == 1
     assert result["summary"]["covered_metric_count"] == 11
     assert all(row["covered"] for row in result["metrics"])
     assert "time_to_first_test" in markdown
     assert "avg_time_to_first_test" in markdown
+
+    default_result = build_metric_coverage_audit()
+    default_markdown = render_metric_coverage_audit_markdown(default_result)
+
+    assert default_result["summary"]["ready"] is True
+    assert default_result["summary"]["manifest_count"] == 7
+    assert default_result["summary"]["ready_manifest_count"] == 7
+    assert default_result["summary"]["coverage_cell_count"] == 77
+    assert default_result["summary"]["expected_coverage_cell_count"] == 77
+    assert "Manifests checked: 7 / 7" in default_markdown
+    assert "benchmark/verification-ablation/pilot/full-real/runs.jsonl" in default_markdown
 
 
 def test_paired_effects_audit_quantifies_rq3_waste_deltas():
@@ -3018,8 +3030,11 @@ def test_submission_readiness_validates_metric_coverage_audit_content(tmp_path):
 
     assert check["ok"] is False
     assert "missing ready" in check["problems"]
+    assert "missing manifest count" in check["problems"]
     assert "missing coverage count" in check["problems"]
+    assert "missing coverage cells" in check["problems"]
     assert "missing time to first test" in check["problems"]
+    assert "missing verification ablation manifest" in check["problems"]
 
 
 def test_submission_readiness_validates_hard30_task_diagnosis_content(tmp_path):

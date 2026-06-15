@@ -5,21 +5,100 @@ This generated audit checks that the metrics named in the experiment design are 
 ## Summary
 
 - Ready: yes
-- Manifest checked: `benchmark/hard/pilot/hard30-real/runs.jsonl`
+- Manifests checked: 7 / 7
 - Metrics covered: 11 / 11
+- Coverage cells covered: 77 / 77
+
+## Manifests
+
+| Manifest | Metrics covered | Ready |
+| --- | ---: | --- |
+| `benchmark/pilot/full30-real/runs.jsonl` | 11 / 11 | yes |
+| `benchmark/hard/pilot/hard10-real/runs.jsonl` | 11 / 11 | yes |
+| `benchmark/hard/pilot/hard30-real/runs.jsonl` | 11 / 11 | yes |
+| `benchmark/process-stress/pilot/full-real/runs.jsonl` | 11 / 11 | yes |
+| `benchmark/verification-lift/pilot/full-real/runs.jsonl` | 11 / 11 | yes |
+| `benchmark/verification-lift-v2/pilot/full-real/runs.jsonl` | 11 / 11 | yes |
+| `benchmark/verification-ablation/pilot/full-real/runs.jsonl` | 11 / 11 | yes |
 
 ## Coverage
 
-| Metric | Run key | Summary key | CSV | Markdown | Covered |
-| --- | --- | --- | --- | --- | --- |
-| success_rate | `success` yes | `success_rate` yes | yes | yes | yes |
-| verification_rate | `verification_rate` yes | `verification_rate` yes | yes | yes | yes |
-| unresolved_error_rate | `unresolved_error` yes | `unresolved_error_rate` yes | yes | yes | yes |
-| repeated_tool_call_count | `repeated_tool_call_count` yes | `avg_repeated_tool_calls` yes | yes | yes | yes |
-| retry_count | `retry_count` yes | `avg_retry_count` yes | yes | yes | yes |
-| turn_count | `turn_count` yes | `avg_turn_count` yes | yes | yes | yes |
-| token_usage | `token_usage` yes | `avg_token_usage` yes | yes | yes | yes |
-| command_failure_count | `command_failure_count` yes | `avg_command_failures` yes | yes | yes | yes |
-| time_to_first_edit | `time_to_first_edit` yes | `avg_time_to_first_edit` yes | yes | yes | yes |
-| time_to_first_test | `time_to_first_test` yes | `avg_time_to_first_test` yes | yes | yes | yes |
-| failure_score | `failure_score` yes | `avg_failure_score` yes | yes | yes | yes |
+| Manifest | Metric | Run key | Summary key | CSV | Markdown | Covered |
+| --- | --- | --- | --- | --- | --- | --- |
+| `benchmark/pilot/full30-real/runs.jsonl` | success_rate | `success` yes | `success_rate` yes | yes | yes | yes |
+| `benchmark/pilot/full30-real/runs.jsonl` | verification_rate | `verification_rate` yes | `verification_rate` yes | yes | yes | yes |
+| `benchmark/pilot/full30-real/runs.jsonl` | unresolved_error_rate | `unresolved_error` yes | `unresolved_error_rate` yes | yes | yes | yes |
+| `benchmark/pilot/full30-real/runs.jsonl` | repeated_tool_call_count | `repeated_tool_call_count` yes | `avg_repeated_tool_calls` yes | yes | yes | yes |
+| `benchmark/pilot/full30-real/runs.jsonl` | retry_count | `retry_count` yes | `avg_retry_count` yes | yes | yes | yes |
+| `benchmark/pilot/full30-real/runs.jsonl` | turn_count | `turn_count` yes | `avg_turn_count` yes | yes | yes | yes |
+| `benchmark/pilot/full30-real/runs.jsonl` | token_usage | `token_usage` yes | `avg_token_usage` yes | yes | yes | yes |
+| `benchmark/pilot/full30-real/runs.jsonl` | command_failure_count | `command_failure_count` yes | `avg_command_failures` yes | yes | yes | yes |
+| `benchmark/pilot/full30-real/runs.jsonl` | time_to_first_edit | `time_to_first_edit` yes | `avg_time_to_first_edit` yes | yes | yes | yes |
+| `benchmark/pilot/full30-real/runs.jsonl` | time_to_first_test | `time_to_first_test` yes | `avg_time_to_first_test` yes | yes | yes | yes |
+| `benchmark/pilot/full30-real/runs.jsonl` | failure_score | `failure_score` yes | `avg_failure_score` yes | yes | yes | yes |
+| `benchmark/hard/pilot/hard10-real/runs.jsonl` | success_rate | `success` yes | `success_rate` yes | yes | yes | yes |
+| `benchmark/hard/pilot/hard10-real/runs.jsonl` | verification_rate | `verification_rate` yes | `verification_rate` yes | yes | yes | yes |
+| `benchmark/hard/pilot/hard10-real/runs.jsonl` | unresolved_error_rate | `unresolved_error` yes | `unresolved_error_rate` yes | yes | yes | yes |
+| `benchmark/hard/pilot/hard10-real/runs.jsonl` | repeated_tool_call_count | `repeated_tool_call_count` yes | `avg_repeated_tool_calls` yes | yes | yes | yes |
+| `benchmark/hard/pilot/hard10-real/runs.jsonl` | retry_count | `retry_count` yes | `avg_retry_count` yes | yes | yes | yes |
+| `benchmark/hard/pilot/hard10-real/runs.jsonl` | turn_count | `turn_count` yes | `avg_turn_count` yes | yes | yes | yes |
+| `benchmark/hard/pilot/hard10-real/runs.jsonl` | token_usage | `token_usage` yes | `avg_token_usage` yes | yes | yes | yes |
+| `benchmark/hard/pilot/hard10-real/runs.jsonl` | command_failure_count | `command_failure_count` yes | `avg_command_failures` yes | yes | yes | yes |
+| `benchmark/hard/pilot/hard10-real/runs.jsonl` | time_to_first_edit | `time_to_first_edit` yes | `avg_time_to_first_edit` yes | yes | yes | yes |
+| `benchmark/hard/pilot/hard10-real/runs.jsonl` | time_to_first_test | `time_to_first_test` yes | `avg_time_to_first_test` yes | yes | yes | yes |
+| `benchmark/hard/pilot/hard10-real/runs.jsonl` | failure_score | `failure_score` yes | `avg_failure_score` yes | yes | yes | yes |
+| `benchmark/hard/pilot/hard30-real/runs.jsonl` | success_rate | `success` yes | `success_rate` yes | yes | yes | yes |
+| `benchmark/hard/pilot/hard30-real/runs.jsonl` | verification_rate | `verification_rate` yes | `verification_rate` yes | yes | yes | yes |
+| `benchmark/hard/pilot/hard30-real/runs.jsonl` | unresolved_error_rate | `unresolved_error` yes | `unresolved_error_rate` yes | yes | yes | yes |
+| `benchmark/hard/pilot/hard30-real/runs.jsonl` | repeated_tool_call_count | `repeated_tool_call_count` yes | `avg_repeated_tool_calls` yes | yes | yes | yes |
+| `benchmark/hard/pilot/hard30-real/runs.jsonl` | retry_count | `retry_count` yes | `avg_retry_count` yes | yes | yes | yes |
+| `benchmark/hard/pilot/hard30-real/runs.jsonl` | turn_count | `turn_count` yes | `avg_turn_count` yes | yes | yes | yes |
+| `benchmark/hard/pilot/hard30-real/runs.jsonl` | token_usage | `token_usage` yes | `avg_token_usage` yes | yes | yes | yes |
+| `benchmark/hard/pilot/hard30-real/runs.jsonl` | command_failure_count | `command_failure_count` yes | `avg_command_failures` yes | yes | yes | yes |
+| `benchmark/hard/pilot/hard30-real/runs.jsonl` | time_to_first_edit | `time_to_first_edit` yes | `avg_time_to_first_edit` yes | yes | yes | yes |
+| `benchmark/hard/pilot/hard30-real/runs.jsonl` | time_to_first_test | `time_to_first_test` yes | `avg_time_to_first_test` yes | yes | yes | yes |
+| `benchmark/hard/pilot/hard30-real/runs.jsonl` | failure_score | `failure_score` yes | `avg_failure_score` yes | yes | yes | yes |
+| `benchmark/process-stress/pilot/full-real/runs.jsonl` | success_rate | `success` yes | `success_rate` yes | yes | yes | yes |
+| `benchmark/process-stress/pilot/full-real/runs.jsonl` | verification_rate | `verification_rate` yes | `verification_rate` yes | yes | yes | yes |
+| `benchmark/process-stress/pilot/full-real/runs.jsonl` | unresolved_error_rate | `unresolved_error` yes | `unresolved_error_rate` yes | yes | yes | yes |
+| `benchmark/process-stress/pilot/full-real/runs.jsonl` | repeated_tool_call_count | `repeated_tool_call_count` yes | `avg_repeated_tool_calls` yes | yes | yes | yes |
+| `benchmark/process-stress/pilot/full-real/runs.jsonl` | retry_count | `retry_count` yes | `avg_retry_count` yes | yes | yes | yes |
+| `benchmark/process-stress/pilot/full-real/runs.jsonl` | turn_count | `turn_count` yes | `avg_turn_count` yes | yes | yes | yes |
+| `benchmark/process-stress/pilot/full-real/runs.jsonl` | token_usage | `token_usage` yes | `avg_token_usage` yes | yes | yes | yes |
+| `benchmark/process-stress/pilot/full-real/runs.jsonl` | command_failure_count | `command_failure_count` yes | `avg_command_failures` yes | yes | yes | yes |
+| `benchmark/process-stress/pilot/full-real/runs.jsonl` | time_to_first_edit | `time_to_first_edit` yes | `avg_time_to_first_edit` yes | yes | yes | yes |
+| `benchmark/process-stress/pilot/full-real/runs.jsonl` | time_to_first_test | `time_to_first_test` yes | `avg_time_to_first_test` yes | yes | yes | yes |
+| `benchmark/process-stress/pilot/full-real/runs.jsonl` | failure_score | `failure_score` yes | `avg_failure_score` yes | yes | yes | yes |
+| `benchmark/verification-lift/pilot/full-real/runs.jsonl` | success_rate | `success` yes | `success_rate` yes | yes | yes | yes |
+| `benchmark/verification-lift/pilot/full-real/runs.jsonl` | verification_rate | `verification_rate` yes | `verification_rate` yes | yes | yes | yes |
+| `benchmark/verification-lift/pilot/full-real/runs.jsonl` | unresolved_error_rate | `unresolved_error` yes | `unresolved_error_rate` yes | yes | yes | yes |
+| `benchmark/verification-lift/pilot/full-real/runs.jsonl` | repeated_tool_call_count | `repeated_tool_call_count` yes | `avg_repeated_tool_calls` yes | yes | yes | yes |
+| `benchmark/verification-lift/pilot/full-real/runs.jsonl` | retry_count | `retry_count` yes | `avg_retry_count` yes | yes | yes | yes |
+| `benchmark/verification-lift/pilot/full-real/runs.jsonl` | turn_count | `turn_count` yes | `avg_turn_count` yes | yes | yes | yes |
+| `benchmark/verification-lift/pilot/full-real/runs.jsonl` | token_usage | `token_usage` yes | `avg_token_usage` yes | yes | yes | yes |
+| `benchmark/verification-lift/pilot/full-real/runs.jsonl` | command_failure_count | `command_failure_count` yes | `avg_command_failures` yes | yes | yes | yes |
+| `benchmark/verification-lift/pilot/full-real/runs.jsonl` | time_to_first_edit | `time_to_first_edit` yes | `avg_time_to_first_edit` yes | yes | yes | yes |
+| `benchmark/verification-lift/pilot/full-real/runs.jsonl` | time_to_first_test | `time_to_first_test` yes | `avg_time_to_first_test` yes | yes | yes | yes |
+| `benchmark/verification-lift/pilot/full-real/runs.jsonl` | failure_score | `failure_score` yes | `avg_failure_score` yes | yes | yes | yes |
+| `benchmark/verification-lift-v2/pilot/full-real/runs.jsonl` | success_rate | `success` yes | `success_rate` yes | yes | yes | yes |
+| `benchmark/verification-lift-v2/pilot/full-real/runs.jsonl` | verification_rate | `verification_rate` yes | `verification_rate` yes | yes | yes | yes |
+| `benchmark/verification-lift-v2/pilot/full-real/runs.jsonl` | unresolved_error_rate | `unresolved_error` yes | `unresolved_error_rate` yes | yes | yes | yes |
+| `benchmark/verification-lift-v2/pilot/full-real/runs.jsonl` | repeated_tool_call_count | `repeated_tool_call_count` yes | `avg_repeated_tool_calls` yes | yes | yes | yes |
+| `benchmark/verification-lift-v2/pilot/full-real/runs.jsonl` | retry_count | `retry_count` yes | `avg_retry_count` yes | yes | yes | yes |
+| `benchmark/verification-lift-v2/pilot/full-real/runs.jsonl` | turn_count | `turn_count` yes | `avg_turn_count` yes | yes | yes | yes |
+| `benchmark/verification-lift-v2/pilot/full-real/runs.jsonl` | token_usage | `token_usage` yes | `avg_token_usage` yes | yes | yes | yes |
+| `benchmark/verification-lift-v2/pilot/full-real/runs.jsonl` | command_failure_count | `command_failure_count` yes | `avg_command_failures` yes | yes | yes | yes |
+| `benchmark/verification-lift-v2/pilot/full-real/runs.jsonl` | time_to_first_edit | `time_to_first_edit` yes | `avg_time_to_first_edit` yes | yes | yes | yes |
+| `benchmark/verification-lift-v2/pilot/full-real/runs.jsonl` | time_to_first_test | `time_to_first_test` yes | `avg_time_to_first_test` yes | yes | yes | yes |
+| `benchmark/verification-lift-v2/pilot/full-real/runs.jsonl` | failure_score | `failure_score` yes | `avg_failure_score` yes | yes | yes | yes |
+| `benchmark/verification-ablation/pilot/full-real/runs.jsonl` | success_rate | `success` yes | `success_rate` yes | yes | yes | yes |
+| `benchmark/verification-ablation/pilot/full-real/runs.jsonl` | verification_rate | `verification_rate` yes | `verification_rate` yes | yes | yes | yes |
+| `benchmark/verification-ablation/pilot/full-real/runs.jsonl` | unresolved_error_rate | `unresolved_error` yes | `unresolved_error_rate` yes | yes | yes | yes |
+| `benchmark/verification-ablation/pilot/full-real/runs.jsonl` | repeated_tool_call_count | `repeated_tool_call_count` yes | `avg_repeated_tool_calls` yes | yes | yes | yes |
+| `benchmark/verification-ablation/pilot/full-real/runs.jsonl` | retry_count | `retry_count` yes | `avg_retry_count` yes | yes | yes | yes |
+| `benchmark/verification-ablation/pilot/full-real/runs.jsonl` | turn_count | `turn_count` yes | `avg_turn_count` yes | yes | yes | yes |
+| `benchmark/verification-ablation/pilot/full-real/runs.jsonl` | token_usage | `token_usage` yes | `avg_token_usage` yes | yes | yes | yes |
+| `benchmark/verification-ablation/pilot/full-real/runs.jsonl` | command_failure_count | `command_failure_count` yes | `avg_command_failures` yes | yes | yes | yes |
+| `benchmark/verification-ablation/pilot/full-real/runs.jsonl` | time_to_first_edit | `time_to_first_edit` yes | `avg_time_to_first_edit` yes | yes | yes | yes |
+| `benchmark/verification-ablation/pilot/full-real/runs.jsonl` | time_to_first_test | `time_to_first_test` yes | `avg_time_to_first_test` yes | yes | yes | yes |
+| `benchmark/verification-ablation/pilot/full-real/runs.jsonl` | failure_score | `failure_score` yes | `avg_failure_score` yes | yes | yes | yes |

@@ -4,7 +4,7 @@ import argparse
 import json
 import sys
 from pathlib import Path
-from typing import Any
+from typing import Any, Iterable
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
@@ -13,6 +13,15 @@ from codex_trace.research import aggregate_runs, render_aggregate_markdown, writ
 
 
 DEFAULT_MANIFEST = Path("benchmark/hard/pilot/hard30-real/runs.jsonl")
+DEFAULT_MANIFESTS = (
+    Path("benchmark/pilot/full30-real/runs.jsonl"),
+    Path("benchmark/hard/pilot/hard10-real/runs.jsonl"),
+    Path("benchmark/hard/pilot/hard30-real/runs.jsonl"),
+    Path("benchmark/process-stress/pilot/full-real/runs.jsonl"),
+    Path("benchmark/verification-lift/pilot/full-real/runs.jsonl"),
+    Path("benchmark/verification-lift-v2/pilot/full-real/runs.jsonl"),
+    Path("benchmark/verification-ablation/pilot/full-real/runs.jsonl"),
+)
 EXPECTED_METRICS = (
     "success_rate",
     "verification_rate",
@@ -45,7 +54,36 @@ RUN_KEYS = {
 }
 
 
-def build_metric_coverage_audit(manifest_path: Path = DEFAULT_MANIFEST) -> dict[str, Any]:
+def build_metric_coverage_audit(manifest_path: Path | Iterable[Path] | None = None) -> dict[str, Any]:
+    manifest_paths = _manifest_paths(manifest_path)
+    manifest_rows = [_build_manifest_metric_coverage(path) for path in manifest_paths]
+    rows = [
+        row
+        for manifest in manifest_rows
+        for row in manifest["metrics"]
+    ]
+    ready = all(manifest["ready"] for manifest in manifest_rows)
+    covered_metric_names = {
+        row["metric"]
+        for row in rows
+        if all(candidate["covered"] for candidate in rows if candidate["metric"] == row["metric"])
+    }
+    return {
+        "summary": {
+            "ready": ready,
+            "manifest_count": len(manifest_rows),
+            "ready_manifest_count": sum(1 for row in manifest_rows if row["ready"]),
+            "expected_metric_count": len(EXPECTED_METRICS),
+            "covered_metric_count": len(covered_metric_names),
+            "coverage_cell_count": sum(1 for row in rows if row["covered"]),
+            "expected_coverage_cell_count": len(rows),
+        },
+        "manifests": manifest_rows,
+        "metrics": rows,
+    }
+
+
+def _build_manifest_metric_coverage(manifest_path: Path) -> dict[str, Any]:
     aggregate = aggregate_runs(manifest_path)
     run_keys = set().union(*(row.keys() for row in aggregate["runs"]))
     summary_keys = set()
@@ -58,6 +96,7 @@ def build_metric_coverage_audit(manifest_path: Path = DEFAULT_MANIFEST) -> dict[
         run_key = RUN_KEYS.get(metric, metric)
         summary_key = SUMMARY_KEYS[metric]
         row = {
+            "manifest": str(manifest_path),
             "metric": metric,
             "run_key": run_key,
             "summary_key": summary_key,
@@ -71,12 +110,10 @@ def build_metric_coverage_audit(manifest_path: Path = DEFAULT_MANIFEST) -> dict[
 
     ready = all(row["covered"] for row in rows)
     return {
-        "summary": {
-            "ready": ready,
-            "manifest": str(manifest_path),
-            "expected_metric_count": len(EXPECTED_METRICS),
-            "covered_metric_count": sum(1 for row in rows if row["covered"]),
-        },
+        "manifest": str(manifest_path),
+        "ready": ready,
+        "covered_metric_count": sum(1 for row in rows if row["covered"]),
+        "expected_metric_count": len(EXPECTED_METRICS),
         "metrics": rows,
     }
 
@@ -91,17 +128,30 @@ def render_metric_coverage_audit_markdown(result: dict[str, Any]) -> str:
         "## Summary",
         "",
         f"- Ready: {'yes' if summary['ready'] else 'no'}",
-        f"- Manifest checked: `{summary['manifest']}`",
+        f"- Manifests checked: {summary['ready_manifest_count']} / {summary['manifest_count']}",
         f"- Metrics covered: {summary['covered_metric_count']} / {summary['expected_metric_count']}",
+        f"- Coverage cells covered: {summary['coverage_cell_count']} / {summary['expected_coverage_cell_count']}",
+        "",
+        "## Manifests",
+        "",
+        "| Manifest | Metrics covered | Ready |",
+        "| --- | ---: | --- |",
+    ]
+    for manifest in result["manifests"]:
+        lines.append(
+            f"| `{manifest['manifest']}` | {manifest['covered_metric_count']} / {manifest['expected_metric_count']} | "
+            f"{'yes' if manifest['ready'] else 'no'} |"
+        )
+    lines.extend([
         "",
         "## Coverage",
         "",
-        "| Metric | Run key | Summary key | CSV | Markdown | Covered |",
-        "| --- | --- | --- | --- | --- | --- |",
-    ]
+        "| Manifest | Metric | Run key | Summary key | CSV | Markdown | Covered |",
+        "| --- | --- | --- | --- | --- | --- | --- |",
+    ])
     for row in result["metrics"]:
         lines.append(
-            f"| {row['metric']} | `{row['run_key']}` {'yes' if row['run_level'] else 'no'} | `{row['summary_key']}` "
+            f"| `{row['manifest']}` | {row['metric']} | `{row['run_key']}` {'yes' if row['run_level'] else 'no'} | `{row['summary_key']}` "
             f"{'yes' if row['summary_level'] else 'no'} | {'yes' if row['csv_field'] else 'no'} | "
             f"{'yes' if row['aggregate_markdown'] else 'no'} | {'yes' if row['covered'] else 'no'} |"
         )
@@ -124,14 +174,23 @@ def _runs_csv_fieldnames(aggregate: dict[str, Any]) -> set[str]:
     return set(header.split(","))
 
 
+def _manifest_paths(manifest_path: Path | Iterable[Path] | None) -> tuple[Path, ...]:
+    if manifest_path is None:
+        return DEFAULT_MANIFESTS
+    if isinstance(manifest_path, Path):
+        return (manifest_path,)
+    return tuple(manifest_path)
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description="Audit coverage for the experiment-design metrics.")
-    parser.add_argument("--manifest", type=Path, default=DEFAULT_MANIFEST)
+    parser.add_argument("--manifest", action="append", type=Path, help="Run manifest to audit. Defaults to all paper-facing pilot manifests.")
     parser.add_argument("--json-output", type=Path)
     parser.add_argument("--markdown-output", type=Path)
     args = parser.parse_args()
 
-    result = build_metric_coverage_audit(args.manifest)
+    manifests = tuple(args.manifest) if args.manifest else None
+    result = build_metric_coverage_audit(manifests)
     if args.json_output or args.markdown_output:
         write_outputs(result, args.json_output, args.markdown_output)
     else:
