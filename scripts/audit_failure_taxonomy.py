@@ -9,6 +9,8 @@ from typing import Any
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
+from scripts.audit_detector_evaluation import build_detector_evaluation_audit
+
 
 DEFAULT_TAXONOMY = Path("docs/failure_taxonomy.md")
 DEFAULT_PAPER_DRAFT = Path("docs/paper_draft.md")
@@ -32,10 +34,16 @@ def build_failure_taxonomy_audit(
     paper_text = paper_draft_path.read_text(encoding="utf-8")
     fixture_eval = json.loads(fixture_eval_path.read_text(encoding="utf-8"))
     fixture_labels = fixture_eval.get("labels", {})
+    detector_audit = build_detector_evaluation_audit(fixture_eval_path=fixture_eval_path)
+    evidence_by_label = {
+        row["label"]: row
+        for row in detector_audit["process_label_evidence_tiers"]
+    }
 
     rows = []
     for label in TARGET_LABELS:
         fixture_scores = fixture_labels.get(label, {})
+        evidence = evidence_by_label.get(label, {})
         row = {
             "label": label,
             "taxonomy_doc": label in taxonomy_text,
@@ -44,6 +52,9 @@ def build_failure_taxonomy_audit(
             "fixture_precision": fixture_scores.get("precision", 0),
             "fixture_recall": fixture_scores.get("recall", 0),
             "fixture_f1": fixture_scores.get("f1", 0),
+            "real_pilot_tp": int(evidence.get("real_pilot_tp", 0) or 0),
+            "ablation_tp": int(evidence.get("ablation_tp", 0) or 0),
+            "evidence_tier": str(evidence.get("evidence_tier", "missing")),
         }
         row["covered"] = (
             row["taxonomy_doc"]
@@ -60,6 +71,9 @@ def build_failure_taxonomy_audit(
             "target_label_count": len(TARGET_LABELS),
             "covered_label_count": sum(1 for row in rows if row["covered"]),
             "fixture_micro_f1": (fixture_eval.get("summary") or {}).get("micro_f1", 0),
+            "real_pilot_positive_label_count": sum(1 for row in rows if row["evidence_tier"] == "real-pilot-positive"),
+            "ablation_positive_label_count": sum(1 for row in rows if row["evidence_tier"] == "ablation-positive"),
+            "fixture_only_label_count": sum(1 for row in rows if row["evidence_tier"] == "fixture-only"),
             "taxonomy_path": str(taxonomy_path),
             "paper_draft_path": str(paper_draft_path),
             "fixture_eval_path": str(fixture_eval_path),
@@ -80,24 +94,29 @@ def render_failure_taxonomy_audit_markdown(result: dict[str, Any]) -> str:
         f"- Ready: {'yes' if summary['ready'] else 'no'}",
         f"- Labels covered: {summary['covered_label_count']} / {summary['target_label_count']}",
         f"- Detector-fixture micro-F1: {_fmt(summary['fixture_micro_f1'])}",
+        f"- Real-pilot-positive labels: {summary['real_pilot_positive_label_count']} / {summary['target_label_count']}",
+        f"- Ablation-positive labels: {summary['ablation_positive_label_count']} / {summary['target_label_count']}",
+        f"- Fixture-only labels: {summary['fixture_only_label_count']} / {summary['target_label_count']}",
         f"- Taxonomy document: `{summary['taxonomy_path']}`",
         f"- Paper draft: `{summary['paper_draft_path']}`",
         f"- Fixture evaluation: `{summary['fixture_eval_path']}`",
         "",
         "## Label Coverage",
         "",
-        "| Label | Taxonomy doc | Paper mapping | Fixture | Precision | Recall | F1 | Covered |",
-        "| --- | --- | --- | --- | ---: | ---: | ---: | --- |",
+        "| Label | Taxonomy doc | Paper mapping | Fixture | Precision | Recall | F1 | Real-pilot TP | Ablation TP | Evidence tier | Covered |",
+        "| --- | --- | --- | --- | ---: | ---: | ---: | ---: | ---: | --- | --- |",
     ]
     for row in result["labels"]:
         lines.append(
             f"| {row['label']} | {_yes(row['taxonomy_doc'])} | {_yes(row['paper_draft'])} | "
             f"{_yes(row['detector_fixture'])} | {_fmt(row['fixture_precision'])} | "
-            f"{_fmt(row['fixture_recall'])} | {_fmt(row['fixture_f1'])} | {_yes(row['covered'])} |"
+            f"{_fmt(row['fixture_recall'])} | {_fmt(row['fixture_f1'])} | "
+            f"{row['real_pilot_tp']} | {row['ablation_tp']} | `{row['evidence_tier']}` | "
+            f"{_yes(row['covered'])} |"
         )
     lines.extend([
         "",
-        "Interpretation: this audit proves rule-level taxonomy coverage, not broad natural-frequency coverage in real pilots. Real-pilot coverage is still described separately in `docs/results_summary.md` and `docs/paper_claim_audit.md`.",
+        "Interpretation: this audit proves rule-level taxonomy coverage and records each label's evidence tier. It does not imply broad natural-frequency coverage in real pilots; fixture-only labels still require careful boundary framing.",
     ])
     return "\n".join(lines) + "\n"
 

@@ -1,72 +1,93 @@
 {
   "labels": [
     {
+      "ablation_tp": 4,
       "covered": true,
       "detector_fixture": true,
+      "evidence_tier": "ablation-positive",
       "fixture_f1": 1.0,
       "fixture_precision": 1.0,
       "fixture_recall": 1.0,
       "label": "verification_gap",
       "paper_draft": true,
+      "real_pilot_tp": 0,
       "taxonomy_doc": true
     },
     {
+      "ablation_tp": 0,
       "covered": true,
       "detector_fixture": true,
+      "evidence_tier": "fixture-only",
       "fixture_f1": 1.0,
       "fixture_precision": 1.0,
       "fixture_recall": 1.0,
       "label": "unrecovered_tool_error",
       "paper_draft": true,
+      "real_pilot_tp": 0,
       "taxonomy_doc": true
     },
     {
+      "ablation_tp": 0,
       "covered": true,
       "detector_fixture": true,
+      "evidence_tier": "real-pilot-positive",
       "fixture_f1": 1.0,
       "fixture_precision": 1.0,
       "fixture_recall": 1.0,
       "label": "repetitive_exploration",
       "paper_draft": true,
+      "real_pilot_tp": 4,
       "taxonomy_doc": true
     },
     {
+      "ablation_tp": 0,
       "covered": true,
       "detector_fixture": true,
+      "evidence_tier": "fixture-only",
       "fixture_f1": 1.0,
       "fixture_precision": 1.0,
       "fixture_recall": 1.0,
       "label": "context_drift",
       "paper_draft": true,
+      "real_pilot_tp": 0,
       "taxonomy_doc": true
     },
     {
+      "ablation_tp": 3,
       "covered": true,
       "detector_fixture": true,
+      "evidence_tier": "ablation-positive",
       "fixture_f1": 1.0,
       "fixture_precision": 1.0,
       "fixture_recall": 1.0,
       "label": "premature_completion",
       "paper_draft": true,
+      "real_pilot_tp": 0,
       "taxonomy_doc": true
     },
     {
+      "ablation_tp": 0,
       "covered": true,
       "detector_fixture": true,
+      "evidence_tier": "real-pilot-positive",
       "fixture_f1": 1.0,
       "fixture_precision": 1.0,
       "fixture_recall": 1.0,
       "label": "sandbox_permission_deadlock",
       "paper_draft": true,
+      "real_pilot_tp": 1,
       "taxonomy_doc": true
     }
   ],
   "summary": {
+    "ablation_positive_label_count": 2,
     "covered_label_count": 6,
     "fixture_eval_path": "benchmark/detector-fixtures/label-eval.json",
     "fixture_micro_f1": 1.0,
+    "fixture_only_label_count": 2,
     "paper_draft_path": "docs/paper_draft.md",
     "ready": true,
+    "real_pilot_positive_label_count": 2,
     "target_label_count": 6,
     "taxonomy_path": "docs/failure_taxonomy.md"
   }

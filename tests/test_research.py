@@ -1600,6 +1600,9 @@ def test_failure_taxonomy_audit_covers_process_labels():
     assert result["summary"]["ready"] is True
     assert result["summary"]["covered_label_count"] == 6
     assert result["summary"]["fixture_micro_f1"] == 1
+    assert result["summary"]["real_pilot_positive_label_count"] == 2
+    assert result["summary"]["ablation_positive_label_count"] == 2
+    assert result["summary"]["fixture_only_label_count"] == 2
     assert {row["label"] for row in result["labels"]} == {
         "verification_gap",
         "unrecovered_tool_error",
@@ -1609,6 +1612,14 @@ def test_failure_taxonomy_audit_covers_process_labels():
         "sandbox_permission_deadlock",
     }
     assert all(row["covered"] for row in result["labels"])
+    tiers = {row["label"]: row["evidence_tier"] for row in result["labels"]}
+    assert tiers["repetitive_exploration"] == "real-pilot-positive"
+    assert tiers["sandbox_permission_deadlock"] == "real-pilot-positive"
+    assert tiers["verification_gap"] == "ablation-positive"
+    assert tiers["premature_completion"] == "ablation-positive"
+    assert tiers["unrecovered_tool_error"] == "fixture-only"
+    assert tiers["context_drift"] == "fixture-only"
+    assert "Fixture-only labels: 2 / 6" in markdown
     assert "rule-level taxonomy coverage" in markdown
 
 
@@ -3267,6 +3278,8 @@ def test_submission_readiness_validates_failure_taxonomy_audit_content(tmp_path)
     assert "missing ready" in check["problems"]
     assert "missing coverage count" in check["problems"]
     assert "missing fixture f1" in check["problems"]
+    assert "missing real pilot evidence tier" in check["problems"]
+    assert "missing fixture only evidence tier" in check["problems"]
 
 
 def test_submission_readiness_validates_related_work_audit_content(tmp_path):

@@ -1410,8 +1410,12 @@ def check_failure_taxonomy_audit_content(path: Path = Path("docs/failure_taxonom
         "ready": "Ready: yes",
         "coverage count": "Labels covered: 6 / 6",
         "fixture f1": "Detector-fixture micro-F1: 1",
+        "real pilot evidence tier": "Real-pilot-positive labels: 2 / 6",
+        "ablation evidence tier": "Ablation-positive labels: 2 / 6",
+        "fixture only evidence tier": "Fixture-only labels: 2 / 6",
         "verification gap": "verification_gap",
         "sandbox deadlock": "sandbox_permission_deadlock",
+        "evidence tier table": "Evidence tier",
         "boundary interpretation": "rule-level taxonomy coverage",
     }
     for label, phrase in required_phrases.items():
@@ -1422,7 +1426,7 @@ def check_failure_taxonomy_audit_content(path: Path = Path("docs/failure_taxonom
         "name": "failure taxonomy audit",
         "ok": not problems,
         "evidence": str(path),
-        "detail": "six target process-failure labels are covered by taxonomy docs, paper mapping, and detector fixtures",
+        "detail": "six target process-failure labels are covered by taxonomy docs, paper mapping, detector fixtures, and evidence-tier counts",
         "problems": problems,
     }
 
