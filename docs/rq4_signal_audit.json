@@ -67,6 +67,134 @@
       "passed": true
     }
   ],
+  "detector_fixture_expected_signal_details": [
+    {
+      "available": true,
+      "delta_label_minus_overall": 1.5,
+      "label": "context_drift",
+      "nonzero": true,
+      "signal": "phase_inspect_events"
+    },
+    {
+      "available": true,
+      "delta_label_minus_overall": 14598.3333,
+      "label": "context_drift",
+      "nonzero": true,
+      "signal": "token_usage"
+    },
+    {
+      "available": true,
+      "delta_label_minus_overall": -20.8333,
+      "label": "context_drift",
+      "nonzero": true,
+      "signal": "failure_score"
+    },
+    {
+      "available": true,
+      "delta_label_minus_overall": 29.1667,
+      "label": "premature_completion",
+      "nonzero": true,
+      "signal": "failure_score"
+    },
+    {
+      "available": true,
+      "delta_label_minus_overall": 0.5,
+      "label": "premature_completion",
+      "nonzero": true,
+      "signal": "phase_edit_events"
+    },
+    {
+      "available": true,
+      "delta_label_minus_overall": 2.0,
+      "label": "premature_completion",
+      "nonzero": true,
+      "signal": "time_to_first_edit"
+    },
+    {
+      "available": true,
+      "delta_label_minus_overall": 0.8333,
+      "label": "repetitive_exploration",
+      "nonzero": true,
+      "signal": "repeated_tool_call_count"
+    },
+    {
+      "available": true,
+      "delta_label_minus_overall": 2.5,
+      "label": "repetitive_exploration",
+      "nonzero": true,
+      "signal": "phase_inspect_events"
+    },
+    {
+      "available": true,
+      "delta_label_minus_overall": -20.8333,
+      "label": "repetitive_exploration",
+      "nonzero": true,
+      "signal": "failure_score"
+    },
+    {
+      "available": true,
+      "delta_label_minus_overall": 0.6667,
+      "label": "sandbox_permission_deadlock",
+      "nonzero": true,
+      "signal": "unresolved_error"
+    },
+    {
+      "available": true,
+      "delta_label_minus_overall": 0.6667,
+      "label": "sandbox_permission_deadlock",
+      "nonzero": true,
+      "signal": "command_failure_count"
+    },
+    {
+      "available": true,
+      "delta_label_minus_overall": 1.5,
+      "label": "sandbox_permission_deadlock",
+      "nonzero": true,
+      "signal": "phase_recover_events"
+    },
+    {
+      "available": true,
+      "delta_label_minus_overall": 0.6667,
+      "label": "unrecovered_tool_error",
+      "nonzero": true,
+      "signal": "unresolved_error"
+    },
+    {
+      "available": true,
+      "delta_label_minus_overall": 0.6667,
+      "label": "unrecovered_tool_error",
+      "nonzero": true,
+      "signal": "command_failure_count"
+    },
+    {
+      "available": true,
+      "delta_label_minus_overall": 1.0,
+      "label": "unrecovered_tool_error",
+      "nonzero": true,
+      "signal": "phase_recover_events"
+    },
+    {
+      "available": true,
+      "delta_label_minus_overall": 11.6667,
+      "label": "verification_gap",
+      "nonzero": true,
+      "signal": "failure_score"
+    },
+    {
+      "available": true,
+      "delta_label_minus_overall": 1.0,
+      "label": "verification_gap",
+      "nonzero": true,
+      "signal": "phase_edit_events"
+    },
+    {
+      "available": true,
+      "delta_label_minus_overall": -0.3333,
+      "label": "verification_gap",
+      "nonzero": true,
+      "signal": "time_to_first_test"
+    }
+  ],
   "detector_fixture_top_signals_by_label": {
     "context_drift": [
       {

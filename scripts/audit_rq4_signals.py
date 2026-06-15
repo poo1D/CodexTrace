@@ -56,6 +56,7 @@ def build_rq4_signal_audit(
         for label in fixture_labels
     }
     fixture_expected = _expected_label_signal_checks(fixtures["signal_by_label"])
+    fixture_expected_details = _expected_label_signal_details(fixtures["signal_by_label"])
 
     ready = (
         hidden_boundary["verification_delta_success_minus_failure"] == 0
@@ -81,6 +82,7 @@ def build_rq4_signal_audit(
         "full30_sandbox_permission_top_signals": full30_sandbox,
         "detector_fixture_top_signals_by_label": fixture_top,
         "detector_fixture_expected_signal_checks": fixture_expected,
+        "detector_fixture_expected_signal_details": fixture_expected_details,
     }
 
 
@@ -154,6 +156,18 @@ def render_rq4_signal_audit_markdown(result: dict[str, Any]) -> str:
         )
     lines.extend([
         "",
+        "## Expected Signal Detail",
+        "",
+        "| Label | Signal | Delta label-baseline | Non-zero |",
+        "| --- | --- | ---: | --- |",
+    ])
+    for row in result["detector_fixture_expected_signal_details"]:
+        lines.append(
+            f"| {row['label']} | {row['signal']} | {_fmt(row['delta_label_minus_overall'])} | "
+            f"{'yes' if row['nonzero'] else 'no'} |"
+        )
+    lines.extend([
+        "",
         "Interpretation: RQ4 is best framed as a boundary result. Process signals explain observable process failures such as repeated exploration and sandbox friction, but hidden semantic failures can look procedurally clean.",
     ])
     return "\n".join(lines) + "\n"
@@ -199,6 +213,26 @@ def _expected_label_signal_checks(rows: list[dict[str, Any]]) -> list[dict[str, 
             "passed": len(available) == len(expected_signals) and len(nonzero) >= 2,
         })
     return checks
+
+
+def _expected_label_signal_details(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    by_label_signal = {
+        (row["failure_tag"], row["signal"]): row
+        for row in rows
+    }
+    details = []
+    for label, expected_signals in sorted(EXPECTED_LABEL_SIGNALS.items()):
+        for signal in expected_signals:
+            row = by_label_signal.get((label, signal), {})
+            delta = float(row.get("delta_label_minus_overall", 0) or 0)
+            details.append({
+                "label": label,
+                "signal": signal,
+                "delta_label_minus_overall": delta,
+                "nonzero": abs(delta) > 0,
+                "available": bool(row),
+            })
+    return details
 
 
 def _signal_row(row: dict[str, Any]) -> str:

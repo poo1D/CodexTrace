@@ -1380,7 +1380,10 @@ def check_rq4_signal_audit_content(path: Path = Path("docs/rq4_signal_audit.md")
         "recover phase": "phase_recover_events",
         "expected signal checks": "Expected label-signal checks passed: 6 / 6",
         "expected signal table": "Expected Label-Signal Checks",
+        "expected signal detail": "Expected Signal Detail",
         "verification gap signal": "verification_gap | failure_score, phase_edit_events, time_to_first_test",
+        "verification detail": "| verification_gap | time_to_first_test |",
+        "sandbox detail": "| sandbox_permission_deadlock | phase_recover_events |",
         "boundary interpretation": "hidden semantic failures can look procedurally clean",
     }
     for label, phrase in required_phrases.items():

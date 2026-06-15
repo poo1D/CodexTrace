@@ -65,4 +65,27 @@ This generated audit summarizes which trace signals explain observable process l
 | unrecovered_tool_error | unresolved_error, command_failure_count, phase_recover_events | 3 / 3 | pass |
 | verification_gap | failure_score, phase_edit_events, time_to_first_test | 3 / 3 | pass |
 
+## Expected Signal Detail
+
+| Label | Signal | Delta label-baseline | Non-zero |
+| --- | --- | ---: | --- |
+| context_drift | phase_inspect_events | 1.5 | yes |
+| context_drift | token_usage | 14.6k | yes |
+| context_drift | failure_score | -20.83 | yes |
+| premature_completion | failure_score | 29.17 | yes |
+| premature_completion | phase_edit_events | 0.5 | yes |
+| premature_completion | time_to_first_edit | 2 | yes |
+| repetitive_exploration | repeated_tool_call_count | 0.8333 | yes |
+| repetitive_exploration | phase_inspect_events | 2.5 | yes |
+| repetitive_exploration | failure_score | -20.83 | yes |
+| sandbox_permission_deadlock | unresolved_error | 0.6667 | yes |
+| sandbox_permission_deadlock | command_failure_count | 0.6667 | yes |
+| sandbox_permission_deadlock | phase_recover_events | 1.5 | yes |
+| unrecovered_tool_error | unresolved_error | 0.6667 | yes |
+| unrecovered_tool_error | command_failure_count | 0.6667 | yes |
+| unrecovered_tool_error | phase_recover_events | 1 | yes |
+| verification_gap | failure_score | 11.67 | yes |
+| verification_gap | phase_edit_events | 1 | yes |
+| verification_gap | time_to_first_test | -0.3333 | yes |
+
 Interpretation: RQ4 is best framed as a boundary result. Process signals explain observable process failures such as repeated exploration and sandbox friction, but hidden semantic failures can look procedurally clean.

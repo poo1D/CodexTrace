@@ -3419,6 +3419,9 @@ def test_submission_readiness_validates_rq4_signal_audit_content(tmp_path):
     assert "missing fixture labels" in check["problems"]
     assert "missing hidden semantic boundary" in check["problems"]
     assert "missing recover phase" in check["problems"]
+    assert "missing expected signal detail" in check["problems"]
+    assert "missing verification detail" in check["problems"]
+    assert "missing sandbox detail" in check["problems"]
 
 
 def test_submission_readiness_validates_phase_coverage_audit_content(tmp_path):
@@ -3712,6 +3715,14 @@ def test_rq4_signal_audit_explains_boundary_and_process_signals():
     assert result["summary"]["detector_fixture_label_count"] == 6
     assert result["summary"]["detector_fixture_expected_signal_failures"] == 0
     assert result["summary"]["detector_fixture_expected_signal_checks"] == 6
+    assert len(result["detector_fixture_expected_signal_details"]) == 18
+    detail_keys = {
+        (row["label"], row["signal"])
+        for row in result["detector_fixture_expected_signal_details"]
+    }
+    assert ("verification_gap", "time_to_first_test") in detail_keys
+    assert ("sandbox_permission_deadlock", "phase_recover_events") in detail_keys
+    assert ("repetitive_exploration", "repeated_tool_call_count") in detail_keys
     assert result["hard30_repetitive_exploration_top_signals"][0]["signal"] == "token_usage"
     assert any(row["signal"] == "repeated_tool_call_count" for row in result["hard30_repetitive_exploration_top_signals"])
     assert any(row["signal"] == "phase_recover_events" for row in result["full30_sandbox_permission_top_signals"])
@@ -3724,6 +3735,9 @@ def test_rq4_signal_audit_explains_boundary_and_process_signals():
     assert expected_checks["verification_gap"]["passed"] is True
     assert "Hidden Semantic Boundary" in markdown
     assert "Expected Label-Signal Checks" in markdown
+    assert "Expected Signal Detail" in markdown
+    assert "| verification_gap | time_to_first_test |" in markdown
+    assert "| sandbox_permission_deadlock | phase_recover_events |" in markdown
     assert "Expected label-signal checks passed: 6 / 6" in markdown
 
 
