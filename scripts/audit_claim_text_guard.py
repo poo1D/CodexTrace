@@ -29,12 +29,22 @@ class RequiredCaveat:
 REQUIRED_CAVEATS = (
     RequiredCaveat(
         path=Path("README.md"),
-        phrases=("not verification-rate lift", "mechanism check"),
+        phrases=(
+            "not verification-rate lift",
+            "mechanism check",
+            "nullable timing metrics",
+            "detector evidence tiers",
+            "design-family mapping",
+        ),
         description="README should frame ordinary-pilot verification lift as unsupported and the no-verify ablation as mechanism-only.",
     ),
     RequiredCaveat(
         path=Path("docs/artifact_guide.md"),
-        phrases=("failure-taxonomy coverage and evidence tiers", "real-pilot-positive, ablation-positive, or fixture-only"),
+        phrases=(
+            "failure-taxonomy coverage and evidence tiers",
+            "real-pilot-positive, ablation-positive, or fixture-only",
+            "docs/task_category_coverage.md",
+        ),
         description="Artifact guide should surface taxonomy evidence tiers on the reviewer-facing path.",
     ),
     RequiredCaveat(
@@ -44,6 +54,9 @@ REQUIRED_CAVEATS = (
             "not claim a verification-rate lift",
             "ordinary and weak-baseline pilots have saturated verification rates",
             "fail to explain hidden semantic outcomes",
+            "`test_writing` covered only by the seed tier",
+            "undefined runs are excluded from group averages",
+            "detector evidence tiers",
         ),
         description="Paper draft should present verification-lift as a negative result and frame RQ4 around the process/semantic boundary.",
     ),
@@ -72,7 +85,13 @@ REQUIRED_CAVEATS = (
     ),
     RequiredCaveat(
         path=Path("docs/reproducibility_checklist.md"),
-        phrases=("Original-thesis verification-rate lift is not yet supported", "mechanism ablation"),
+        phrases=(
+            "Original-thesis verification-rate lift is not yet supported",
+            "mechanism ablation",
+            "nullable timing metrics",
+            "detector evidence tiers",
+            "design-family mapping",
+        ),
         description="Reproducibility checklist should map unsupported verification lift and ablation evidence explicitly.",
     ),
 )
@@ -111,17 +130,24 @@ def audit_claim_text_guard(targets: tuple[Path, ...] = DEFAULT_TARGETS) -> dict[
         })
         problems.extend(file_problems)
 
+    caveat_rows = []
     for caveat in REQUIRED_CAVEATS:
         if caveat.path not in target_set:
             continue
         text = _normalize_text(caveat.path.read_text(encoding="utf-8"))
-        missing = [_normalize_text(phrase) for phrase in caveat.phrases if _normalize_text(phrase) not in text]
+        missing = [phrase for phrase in caveat.phrases if _normalize_text(phrase) not in text]
+        caveat_rows.append({
+            "path": str(caveat.path),
+            "phrase_count": len(caveat.phrases),
+            "missing": missing,
+            "description": caveat.description,
+        })
         if missing:
             problem = {
                 "path": str(caveat.path),
                 "line": None,
                 "kind": "missing_caveat",
-                "match": ", ".join(missing),
+                "match": ", ".join(_normalize_text(phrase) for phrase in missing),
                 "detail": caveat.description,
             }
             problems.append(problem)
@@ -132,6 +158,8 @@ def audit_claim_text_guard(targets: tuple[Path, ...] = DEFAULT_TARGETS) -> dict[
     return {
         "ok": not problems,
         "problem_count": len(problems),
+        "required_caveat_count": sum(1 for caveat in REQUIRED_CAVEATS if caveat.path in target_set),
+        "caveats": caveat_rows,
         "files": files,
         "problems": problems,
     }
@@ -145,6 +173,7 @@ def render_claim_text_guard_markdown(result: dict[str, Any]) -> str:
         "",
         f"- Status: {'pass' if result['ok'] else 'fail'}",
         f"- Files checked: {len(result['files'])}",
+        f"- Required caveats checked: {result['required_caveat_count']}",
         f"- Problems: {result['problem_count']}",
         "",
         "## Files",
@@ -154,6 +183,17 @@ def render_claim_text_guard_markdown(result: dict[str, Any]) -> str:
     ]
     for row in result["files"]:
         lines.append(f"| `{row['path']}` | {row['line_count']} | {len(row['problems'])} |")
+
+    lines.extend([
+        "",
+        "## Caveat Coverage",
+        "",
+        "| File | Phrases | Missing |",
+        "| --- | ---: | --- |",
+    ])
+    for row in result["caveats"]:
+        missing = ", ".join(f"`{phrase}`" for phrase in row["missing"]) if row["missing"] else "-"
+        lines.append(f"| `{row['path']}` | {row['phrase_count']} | {missing} |")
 
     lines.extend(["", "## Problems", ""])
     if not result["problems"]:

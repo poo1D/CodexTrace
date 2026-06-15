@@ -1,4 +1,48 @@
 {
+  "caveats": [
+    {
+      "description": "README should frame ordinary-pilot verification lift as unsupported and the no-verify ablation as mechanism-only.",
+      "missing": [],
+      "path": "README.md",
+      "phrase_count": 5
+    },
+    {
+      "description": "Artifact guide should surface taxonomy evidence tiers on the reviewer-facing path.",
+      "missing": [],
+      "path": "docs/artifact_guide.md",
+      "phrase_count": 3
+    },
+    {
+      "description": "Paper draft should present verification-lift as a negative result and frame RQ4 around the process/semantic boundary.",
+      "missing": [],
+      "path": "docs/paper_draft.md",
+      "phrase_count": 7
+    },
+    {
+      "description": "Paper outline should include the v2 ordinary-baseline negative result and preserve the ablation boundary.",
+      "missing": [],
+      "path": "docs/paper_outline.md",
+      "phrase_count": 3
+    },
+    {
+      "description": "Generated results summary should preserve the verification-lift boundary and no-verify ablation qualifier.",
+      "missing": [],
+      "path": "docs/results_summary.md",
+      "phrase_count": 2
+    },
+    {
+      "description": "Submission package should keep RQ3 framed around waste reduction and qualified success, not verification lift.",
+      "missing": [],
+      "path": "docs/submission_package.md",
+      "phrase_count": 3
+    },
+    {
+      "description": "Reproducibility checklist should map unsupported verification lift and ablation evidence explicitly.",
+      "missing": [],
+      "path": "docs/reproducibility_checklist.md",
+      "phrase_count": 5
+    }
+  ],
   "files": [
     {
       "line_count": 505,
@@ -11,7 +55,7 @@
       "problems": []
     },
     {
-      "line_count": 661,
+      "line_count": 665,
       "path": "docs/paper_draft.md",
       "problems": []
     },
@@ -38,5 +82,6 @@
   ],
   "ok": true,
   "problem_count": 0,
-  "problems": []
+  "problems": [],
+  "required_caveat_count": 7
 }

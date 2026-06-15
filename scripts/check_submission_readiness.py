@@ -494,6 +494,7 @@ def check_claim_text_guard_content(path: Path = Path("docs/claim_text_guard.md")
     required_phrases = {
         "status": "Status: pass",
         "file count": "Files checked: 7",
+        "caveat count": "Required caveats checked: 7",
         "problem count": "Problems: 0",
         "artifact guide target": "docs/artifact_guide.md",
         "submission package target": "docs/submission_package.md",

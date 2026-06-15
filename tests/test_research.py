@@ -2304,11 +2304,18 @@ def test_claim_text_guard_prevents_unsupported_claim_drift(tmp_path):
 
     assert result["ok"] is True
     assert result["problem_count"] == 0
+    assert result["required_caveat_count"] == 7
     assert len(result["files"]) == 7
+    caveats = {row["path"]: row for row in result["caveats"]}
+    assert caveats["docs/paper_draft.md"]["phrase_count"] == 7
+    assert caveats["README.md"]["phrase_count"] == 5
+    assert all(not row["missing"] for row in result["caveats"])
     assert {row["path"] for row in result["files"]} >= {
         "docs/artifact_guide.md",
         "docs/submission_package.md",
     }
+    assert "Required caveats checked: 7" in markdown
+    assert "## Caveat Coverage" in markdown
     assert "docs/artifact_guide.md" in markdown
     assert "docs/submission_package.md" in markdown
     assert "No unsupported-claim drift detected." in markdown
@@ -3059,6 +3066,7 @@ def test_submission_readiness_validates_claim_text_guard_content(tmp_path):
     assert check["ok"] is False
     assert "missing status" in check["problems"]
     assert "missing file count" in check["problems"]
+    assert "missing caveat count" in check["problems"]
     assert "missing problem count" in check["problems"]
     assert "missing artifact guide target" in check["problems"]
     assert "missing submission package target" in check["problems"]
