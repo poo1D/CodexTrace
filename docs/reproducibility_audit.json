@@ -161,6 +161,11 @@
       "present": true
     },
     {
+      "id": "limitations_traceability_audit",
+      "phrase": "scripts/audit_limitations_traceability.py",
+      "present": true
+    },
+    {
       "id": "paper_number_guard",
       "phrase": "scripts/audit_paper_numbers.py",
       "present": true
@@ -234,10 +239,10 @@
   "summary": {
     "bash_fence_count": 57,
     "checklist_path": "docs/reproducibility_checklist.md",
-    "covered_command_count": 46,
+    "covered_command_count": 47,
     "fence_count": 120,
     "fences_balanced": true,
     "ready": true,
-    "required_command_count": 46
+    "required_command_count": 47
   }
 }

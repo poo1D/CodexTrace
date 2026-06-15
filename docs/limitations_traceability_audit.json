@@ -1,0 +1,60 @@
+{
+  "summary": {
+    "covered_threat_count": 7,
+    "paper_path": "docs/paper_draft.md",
+    "ready": true,
+    "threat_count": 7,
+    "validity_path": "docs/validity_threats.json"
+  },
+  "threats": [
+    {
+      "covered": true,
+      "id": "internal_validity",
+      "id_present": true,
+      "paper_language": "Trace-only rules diagnose process failures but do not prove semantic correctness.",
+      "paper_language_present": true
+    },
+    {
+      "covered": true,
+      "id": "construct_validity",
+      "id_present": true,
+      "paper_language": "Verification-rate lift is a negative boundary result, not a supported headline claim.",
+      "paper_language_present": true
+    },
+    {
+      "covered": true,
+      "id": "external_validity",
+      "id_present": true,
+      "paper_language": "Results are pilot-scale and Codex-CLI-specific.",
+      "paper_language_present": true
+    },
+    {
+      "covered": true,
+      "id": "conclusion_validity",
+      "id_present": true,
+      "paper_language": "Waste reduction is the strongest current RQ3 result; success lift remains pilot-qualified.",
+      "paper_language_present": true
+    },
+    {
+      "covered": true,
+      "id": "detector_validity",
+      "id_present": true,
+      "paper_language": "Detector results are boundary results for observable process failures.",
+      "paper_language_present": true
+    },
+    {
+      "covered": true,
+      "id": "ablation_validity",
+      "id_present": true,
+      "paper_language": "No-verify ablation is not ordinary-baseline evidence.",
+      "paper_language_present": true
+    },
+    {
+      "covered": true,
+      "id": "reproducibility_validity",
+      "id_present": true,
+      "paper_language": "The artifact is reproducible for offline analysis, while new live collections may vary.",
+      "paper_language_present": true
+    }
+  ]
+}

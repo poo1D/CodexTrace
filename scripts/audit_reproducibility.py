@@ -54,6 +54,7 @@ REQUIRED_COMMANDS = (
     {"id": "goal_completion", "phrase": "scripts/audit_goal_completion.py"},
     {"id": "thesis_revision_decision", "phrase": "scripts/audit_thesis_revision_decision.py"},
     {"id": "validity_threats", "phrase": "scripts/audit_validity_threats.py"},
+    {"id": "limitations_traceability_audit", "phrase": "scripts/audit_limitations_traceability.py"},
     {"id": "paper_number_guard", "phrase": "scripts/audit_paper_numbers.py"},
     {"id": "reviewer_path_audit", "phrase": "scripts/audit_reviewer_path.py"},
     {"id": "benchmark_trace_artifact", "phrase": "scripts/audit_benchmark_trace_artifact.py"},

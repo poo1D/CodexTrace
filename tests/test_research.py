@@ -39,6 +39,10 @@ from scripts.audit_paper_numbers import build_paper_number_guard, render_paper_n
 from scripts.audit_paper_structure import build_paper_structure_audit, render_paper_structure_audit_markdown
 from scripts.audit_paper_claims import build_claim_audit, render_claim_audit_markdown
 from scripts.audit_paper_abstract import build_paper_abstract_audit, render_paper_abstract_audit_markdown
+from scripts.audit_limitations_traceability import (
+    build_limitations_traceability_audit,
+    render_limitations_traceability_markdown,
+)
 from scripts.audit_process_stress_plan import audit_process_stress_plan
 from scripts.audit_paper_contributions import build_paper_contribution_audit, render_paper_contribution_audit_markdown
 from scripts.audit_method_pipeline import build_method_pipeline_audit, render_method_pipeline_markdown
@@ -107,6 +111,7 @@ from scripts.check_submission_readiness import (
     check_task_category_coverage_content,
     check_harness_protocol_audit_content,
     check_label_provenance_audit_content,
+    check_limitations_traceability_audit_content,
     check_paper_number_guard_content,
     check_paper_abstract_audit_content,
     check_bibliography_audit_content,
@@ -1618,7 +1623,7 @@ def test_reproducibility_audit_covers_key_commands():
     markdown = render_reproducibility_audit_markdown(result)
 
     assert result["summary"]["ready"] is True
-    assert result["summary"]["covered_command_count"] == 46
+    assert result["summary"]["covered_command_count"] == 47
     assert result["summary"]["fences_balanced"] is True
     assert {row["id"] for row in result["commands"]} >= {
         "full30_aggregate",
@@ -1650,6 +1655,7 @@ def test_reproducibility_audit_covers_key_commands():
         "verification_ablation_plan",
         "thesis_revision_decision",
         "validity_threats",
+        "limitations_traceability_audit",
         "submission_readiness_gate",
         "claim_text_guard",
     }
@@ -1846,6 +1852,23 @@ def test_validity_threats_audit_maps_boundary_paper_limits():
     assert "internal_validity" in markdown
     assert "construct_validity" in markdown
     assert "conclusion_validity" in markdown
+
+
+def test_limitations_traceability_audit_maps_validity_threats_into_paper():
+    result = build_limitations_traceability_audit()
+    markdown = render_limitations_traceability_markdown(result)
+
+    assert result["summary"]["ready"] is True
+    assert result["summary"]["covered_threat_count"] == 7
+    assert result["summary"]["threat_count"] == 7
+    assert {row["id"] for row in result["threats"]} >= {
+        "internal_validity",
+        "construct_validity",
+        "ablation_validity",
+        "reproducibility_validity",
+    }
+    assert all(row["covered"] for row in result["threats"])
+    assert "does not judge whether the prose is sufficient" in markdown
 
 
 def test_paper_abstract_audit_covers_supported_boundary_claims():
@@ -2095,6 +2118,9 @@ def test_paper_draft_contains_submission_polish_sections():
     assert "docs/benchmark_trace_artifact.md" in text
     assert "docs/label_provenance_audit.md" in text
     assert "docs/verification_saturation_audit.md" in text
+    assert "docs/limitations_traceability_audit.md" in text
+    assert "`construct_validity`" in text
+    assert "No-verify ablation is not ordinary-baseline evidence." in text
     assert "docs/paired_effects_audit.md" in text
     assert "docs/demo_audit.md" in text
     assert "docs/web_artifact_audit.md" in text
@@ -2116,6 +2142,7 @@ def test_reviewer_docs_surface_hard30_task_diagnosis():
     assert "docs/verification_lift_next_experiment.md" in readme
     assert "docs/thesis_revision_decision.md" in readme
     assert "docs/validity_threats.md" in readme
+    assert "docs/limitations_traceability_audit.md" in readme
     assert "docs/verification_saturation_audit.md" in readme
     assert "docs/paper_abstract_audit.md" in readme
     assert "docs/paper_contribution_audit.md" in readme
@@ -2157,6 +2184,7 @@ def test_reviewer_docs_surface_hard30_task_diagnosis():
     assert "scripts/audit_goal_completion.py --markdown-output docs/goal_completion_audit.md" in readme
     assert "scripts/audit_thesis_revision_decision.py --markdown-output docs/thesis_revision_decision.md" in readme
     assert "scripts/audit_validity_threats.py --markdown-output docs/validity_threats.md" in readme
+    assert "scripts/audit_limitations_traceability.py --markdown-output docs/limitations_traceability_audit.md" in readme
     assert "scripts/audit_verification_saturation.py --markdown-output docs/verification_saturation_audit.md" in readme
     assert "scripts/audit_paper_abstract.py --markdown-output docs/paper_abstract_audit.md" in readme
     assert "scripts/audit_paper_contributions.py --markdown-output docs/paper_contribution_audit.md" in readme
@@ -2196,6 +2224,7 @@ def test_reviewer_docs_surface_hard30_task_diagnosis():
     assert "docs/headline_results.md" in guide
     assert "docs/thesis_revision_decision.md" in guide
     assert "docs/validity_threats.md" in guide
+    assert "docs/limitations_traceability_audit.md" in guide
     assert "docs/verification_saturation_audit.md" in guide
     assert "docs/paper_abstract_audit.md" in guide
     assert "docs/paper_contribution_audit.md" in guide
@@ -2238,6 +2267,7 @@ def test_reviewer_docs_surface_hard30_task_diagnosis():
     assert "scripts/audit_goal_completion.py" in checklist
     assert "scripts/audit_thesis_revision_decision.py" in checklist
     assert "scripts/audit_validity_threats.py" in checklist
+    assert "scripts/audit_limitations_traceability.py" in checklist
     assert "scripts/audit_verification_saturation.py" in checklist
     assert "scripts/audit_paper_abstract.py" in checklist
     assert "scripts/audit_paper_contributions.py" in checklist
@@ -2247,6 +2277,7 @@ def test_reviewer_docs_surface_hard30_task_diagnosis():
     assert "scripts/audit_verification_ablation_plan.py" in checklist
     assert "scripts/audit_headline_results.py" in checklist
     assert "scripts/audit_submission_package.py" in checklist
+    assert "--markdown-output /tmp/limitations-traceability-audit.md" in checklist
     assert "scripts/audit_paper_numbers.py" in checklist
     assert "scripts/audit_reviewer_path.py" in checklist
     assert "scripts/audit_benchmark_trace_artifact.py" in checklist
@@ -2400,6 +2431,7 @@ def test_submission_package_maps_rqs_to_safe_paper_claims():
     assert "docs/goal_completion_audit.md" in package["required_files"]
     assert "docs/thesis_revision_decision.md" in package["required_files"]
     assert "docs/validity_threats.md" in package["required_files"]
+    assert "docs/limitations_traceability_audit.md" in package["required_files"]
     assert "docs/verification_lift_next_experiment.md" in package["required_files"]
     assert "docs/verification_lift_v2_plan_audit.md" in package["required_files"]
     assert "docs/verification_ablation_plan_audit.md" in package["required_files"]
@@ -2470,6 +2502,7 @@ def test_submission_package_maps_rqs_to_safe_paper_claims():
     assert "docs/headline_results.md" in markdown
     assert "docs/thesis_revision_decision.md" in markdown
     assert "docs/validity_threats.md" in markdown
+    assert "docs/limitations_traceability_audit.md" in markdown
     assert "docs/paper_abstract_audit.md" in markdown
     assert "docs/paper_contribution_audit.md" in markdown
     assert "docs/method_pipeline_audit.md" in markdown
@@ -2523,6 +2556,20 @@ def test_submission_readiness_validates_validity_threats_content(tmp_path):
     assert "missing ready" in check["problems"]
     assert "missing coverage" in check["problems"]
     assert "missing construct validity" in check["problems"]
+
+
+def test_submission_readiness_validates_limitations_traceability_audit_content(tmp_path):
+    broken = tmp_path / "limitations_traceability_audit.md"
+    broken.write_text("# Limitations Traceability Audit\nReady: no\n", encoding="utf-8")
+
+    check = check_limitations_traceability_audit_content(broken)
+
+    assert check["ok"] is False
+    assert "missing ready" in check["problems"]
+    assert "missing coverage" in check["problems"]
+    assert "missing internal validity" in check["problems"]
+    assert "missing construct validity" in check["problems"]
+    assert "missing venue caveat" in check["problems"]
 
 
 def test_paper_number_guard_keeps_draft_numbers_in_sync(tmp_path):

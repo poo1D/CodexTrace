@@ -229,6 +229,7 @@ def check_paper_draft_content(path: Path = Path("docs/paper_draft.md")) -> dict[
         "metric coverage link": "docs/metric_coverage_audit.md",
         "benchmark trace artifact link": "docs/benchmark_trace_artifact.md",
         "label provenance audit link": "docs/label_provenance_audit.md",
+        "limitations traceability audit link": "docs/limitations_traceability_audit.md",
         "verification saturation audit link": "docs/verification_saturation_audit.md",
         "paired effects audit link": "docs/paired_effects_audit.md",
         "demo audit link": "docs/demo_audit.md",
@@ -505,6 +506,39 @@ def check_validity_threats_content(path: Path = Path("docs/validity_threats.md")
         "ok": not problems,
         "evidence": str(path),
         "detail": "paper validity threats are mapped to evidence, mitigations, and safe wording",
+        "problems": problems,
+    }
+
+
+def check_limitations_traceability_audit_content(path: Path = Path("docs/limitations_traceability_audit.md")) -> dict[str, Any]:
+    problems = []
+    try:
+        text = path.read_text(encoding="utf-8")
+    except FileNotFoundError:
+        return {
+            "name": "limitations traceability audit",
+            "ok": False,
+            "evidence": str(path),
+            "problems": ["missing limitations traceability audit"],
+        }
+
+    required_phrases = {
+        "ready": "Ready: yes",
+        "coverage": "Threats covered: 7 / 7",
+        "internal validity": "`internal_validity`",
+        "construct validity": "`construct_validity`",
+        "ablation validity": "`ablation_validity`",
+        "venue caveat": "does not judge whether the prose is sufficient",
+    }
+    for label, phrase in required_phrases.items():
+        if phrase not in text:
+            problems.append(f"missing {label}")
+
+    return {
+        "name": "limitations traceability audit",
+        "ok": not problems,
+        "evidence": str(path),
+        "detail": "paper limitations carry validity-threat safe wording",
         "problems": problems,
     }
 
@@ -1431,7 +1465,7 @@ def check_reproducibility_audit_content(path: Path = Path("docs/reproducibility_
 
     required_phrases = {
         "ready": "Ready: yes",
-        "coverage count": "Commands covered: 46 / 46",
+        "coverage count": "Commands covered: 47 / 47",
         "balanced fences": "Markdown fences balanced: yes",
         "submission gate": "submission_readiness_gate",
         "scope caveat": "does not execute the full real Codex collection commands",
@@ -1558,6 +1592,7 @@ def build_report(selection_dir: Path, run_dir: Path) -> dict[str, Any]:
         check_headline_results_content(),
         check_thesis_revision_decision_content(),
         check_validity_threats_content(),
+        check_limitations_traceability_audit_content(),
         check_paper_number_guard_content(),
         check_reviewer_path_audit_content(),
         check_benchmark_trace_artifact_content(),

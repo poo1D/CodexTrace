@@ -27,48 +27,49 @@ oracles for hidden semantic correctness.
 4. Inspect the compact actual headline table in `docs/headline_results.md`.
 5. Inspect the thesis revision decision in `docs/thesis_revision_decision.md`.
 6. Inspect validity threats and safe wording in `docs/validity_threats.md`.
-7. Inspect task-level hard30 repairs, regressions, and double failures in
+7. Check limitations traceability in `docs/limitations_traceability_audit.md`.
+8. Inspect task-level hard30 repairs, regressions, and double failures in
    `docs/hard30_task_diagnosis.md`.
-8. Check safe paper-claim framing in `docs/submission_package.md`.
-9. Check thesis-level support status in `docs/paper_claim_audit.md`.
-10. Check drift guards in `docs/claim_text_guard.md` and
+9. Check safe paper-claim framing in `docs/submission_package.md`.
+10. Check thesis-level support status in `docs/paper_claim_audit.md`.
+11. Check drift guards in `docs/claim_text_guard.md` and
    `docs/paper_number_guard.md`.
-11. Check no-verify ablation scaffold coverage in
+12. Check no-verify ablation scaffold coverage in
    `docs/verification_ablation_plan_audit.md`.
-12. Check detector precision/recall evidence in
+13. Check detector precision/recall evidence in
    `docs/detector_evaluation_audit.md`.
-13. Check diagnosis-rule implementation coverage in
+14. Check diagnosis-rule implementation coverage in
    `docs/rule_implementation_audit.md`.
-14. Check hard30 task/run/trace/manual-label completeness in
+15. Check hard30 task/run/trace/manual-label completeness in
    `docs/benchmark_trace_artifact.md`.
-15. Check hard30 label provenance and evaluation consistency in
+16. Check hard30 label provenance and evaluation consistency in
    `docs/label_provenance_audit.md`.
-16. Check ordinary-baseline verification saturation in
+17. Check ordinary-baseline verification saturation in
    `docs/verification_saturation_audit.md`.
-17. Check paired RQ3 effect-size evidence in
+18. Check paired RQ3 effect-size evidence in
    `docs/paired_effects_audit.md`.
-18. Check offline demo coverage in `docs/demo_audit.md`.
-19. Check Web replay artifact coverage in `docs/web_artifact_audit.md`.
-20. Check offline CLI coverage in `docs/cli_surface_audit.md`.
-21. Check CI/readiness/packaging coverage in `docs/ci_surface_audit.md`.
-22. Check method pipeline source/CLI coverage in `docs/method_pipeline_audit.md`.
-23. Check Run/Step schema-field mapping in `docs/schema_field_audit.md`.
-24. Check parser event coverage in `docs/parser_event_coverage.md`.
-25. Check diagnosis-node traceability in `docs/failure_node_traceability.md`.
-26. Check phase segmentation coverage in `docs/phase_coverage_audit.md`.
-27. Check task-category coverage in `docs/task_category_coverage.md`.
-28. Check harness protocol coverage in `docs/harness_protocol_audit.md`.
-29. Check failure-taxonomy coverage in `docs/failure_taxonomy_audit.md`.
-30. Check related-work positioning coverage in `docs/related_work_audit.md`.
-31. Check paper reference discoverability in `docs/bibliography_audit.md`.
-32. Check abstract-level evidence coverage in `docs/paper_abstract_audit.md`.
-33. Check contribution-claim coverage in `docs/paper_contribution_audit.md`.
-34. Check paper structure and RQ coverage in `docs/paper_structure_audit.md`.
-35. Check RQ result-table consistency in `docs/rq_table_consistency_audit.md`.
-36. Check metric coverage in `docs/metric_coverage_audit.md`.
-37. Check reproduction command coverage in `docs/reproducibility_audit.md`.
-38. Check claim-to-evidence mapping in `docs/reproducibility_checklist.md`.
-39. Run the offline demo:
+19. Check offline demo coverage in `docs/demo_audit.md`.
+20. Check Web replay artifact coverage in `docs/web_artifact_audit.md`.
+21. Check offline CLI coverage in `docs/cli_surface_audit.md`.
+22. Check CI/readiness/packaging coverage in `docs/ci_surface_audit.md`.
+23. Check method pipeline source/CLI coverage in `docs/method_pipeline_audit.md`.
+24. Check Run/Step schema-field mapping in `docs/schema_field_audit.md`.
+25. Check parser event coverage in `docs/parser_event_coverage.md`.
+26. Check diagnosis-node traceability in `docs/failure_node_traceability.md`.
+27. Check phase segmentation coverage in `docs/phase_coverage_audit.md`.
+28. Check task-category coverage in `docs/task_category_coverage.md`.
+29. Check harness protocol coverage in `docs/harness_protocol_audit.md`.
+30. Check failure-taxonomy coverage in `docs/failure_taxonomy_audit.md`.
+31. Check related-work positioning coverage in `docs/related_work_audit.md`.
+32. Check paper reference discoverability in `docs/bibliography_audit.md`.
+33. Check abstract-level evidence coverage in `docs/paper_abstract_audit.md`.
+34. Check contribution-claim coverage in `docs/paper_contribution_audit.md`.
+35. Check paper structure and RQ coverage in `docs/paper_structure_audit.md`.
+36. Check RQ result-table consistency in `docs/rq_table_consistency_audit.md`.
+37. Check metric coverage in `docs/metric_coverage_audit.md`.
+38. Check reproduction command coverage in `docs/reproducibility_audit.md`.
+39. Check claim-to-evidence mapping in `docs/reproducibility_checklist.md`.
+40. Run the offline demo:
 
 ```bash
 ./scripts/demo.sh
@@ -117,6 +118,7 @@ npm run dev
 | What headline table should the paper use? | `docs/headline_results.md` |
 | How should the original thesis be revised? | `docs/thesis_revision_decision.md` |
 | What validity threats constrain the claims? | `docs/validity_threats.md` |
+| Do paper limitations carry validity-threat wording? | `docs/limitations_traceability_audit.md` |
 | RQ4: Which signals explain failure? | `docs/results_summary.md` RQ4 trace-signal table |
 | Are all planned metrics reported? | `docs/metric_coverage_audit.md` |
 | Are reproduction commands complete? | `docs/reproducibility_checklist.md`, `docs/reproducibility_audit.md` |

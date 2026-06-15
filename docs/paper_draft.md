@@ -512,6 +512,16 @@ broader claims. The generated validity map in `docs/validity_threats.md`
 separates internal, construct, external, conclusion, detector, ablation, and
 reproducibility threats, and ties each one to evidence and safe paper wording.
 
+| Threat area | Paper wording |
+| --- | --- |
+| `internal_validity` | Trace-only rules diagnose process failures but do not prove semantic correctness. |
+| `construct_validity` | Verification-rate lift is a negative boundary result, not a supported headline claim. |
+| `external_validity` | Results are pilot-scale and Codex-CLI-specific. |
+| `conclusion_validity` | Waste reduction is the strongest current RQ3 result; success lift remains pilot-qualified. |
+| `detector_validity` | Detector results are boundary results for observable process failures. |
+| `ablation_validity` | No-verify ablation is not ordinary-baseline evidence. |
+| `reproducibility_validity` | The artifact is reproducible for offline analysis, while new live collections may vary. |
+
 ## 10. Artifact Availability
 
 The repository contains the analyzer, fixture generators, stored Codex JSONL
@@ -523,6 +533,7 @@ are `docs/artifact_guide.md` for a short reviewer path,
 `docs/thesis_revision_decision.md` for the explicit boundary-result thesis
 decision,
 `docs/validity_threats.md` for validity threats and safe wording,
+`docs/limitations_traceability_audit.md` for paper-limitations traceability,
 `docs/submission_package.md` for safe RQ-to-evidence claim framing,
 `docs/metric_coverage_audit.md` for experiment-metric coverage,
 `docs/benchmark_trace_artifact.md` for hard30 task/run/trace/manual-label

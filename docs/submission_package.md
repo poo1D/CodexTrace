@@ -39,6 +39,7 @@ This generated map turns the current evidence into reviewer-facing paper claims.
 - `docs/goal_completion_audit.md`
 - `docs/thesis_revision_decision.md`
 - `docs/validity_threats.md`
+- `docs/limitations_traceability_audit.md`
 - `docs/verification_lift_next_experiment.md`
 - `docs/verification_lift_v2_plan_audit.md`
 - `docs/verification_ablation_plan_audit.md`
