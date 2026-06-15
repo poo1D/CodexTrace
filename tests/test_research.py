@@ -58,6 +58,10 @@ from scripts.audit_validity_threats import build_validity_threats_audit, render_
 from scripts.audit_verification_ablation_plan import audit_verification_ablation_plan
 from scripts.audit_verification_lift_plan import audit_verification_lift_plan
 from scripts.audit_verification_lift_v2_plan import audit_verification_lift_v2_plan
+from scripts.audit_verification_saturation import (
+    build_verification_saturation_audit,
+    render_verification_saturation_markdown,
+)
 from scripts.audit_verification_lift_next_experiment import (
     build_verification_lift_next_experiment_audit,
     render_verification_lift_next_experiment_markdown,
@@ -118,6 +122,7 @@ from scripts.check_submission_readiness import (
     check_thesis_revision_decision_content,
     check_validity_threats_content,
     check_verification_ablation_plan_audit_content,
+    check_verification_saturation_audit_content,
     check_verification_lift_next_experiment_content,
     render_report,
 )
@@ -1613,7 +1618,7 @@ def test_reproducibility_audit_covers_key_commands():
     markdown = render_reproducibility_audit_markdown(result)
 
     assert result["summary"]["ready"] is True
-    assert result["summary"]["covered_command_count"] == 45
+    assert result["summary"]["covered_command_count"] == 46
     assert result["summary"]["fences_balanced"] is True
     assert {row["id"] for row in result["commands"]} >= {
         "full30_aggregate",
@@ -1627,6 +1632,7 @@ def test_reproducibility_audit_covers_key_commands():
         "ci_surface_audit",
         "benchmark_trace_artifact",
         "label_provenance_audit",
+        "verification_saturation_audit",
         "schema_field_audit",
         "parser_event_coverage",
         "failure_node_traceability",
@@ -2088,6 +2094,7 @@ def test_paper_draft_contains_submission_polish_sections():
     assert "docs/reproducibility_audit.md" in text
     assert "docs/benchmark_trace_artifact.md" in text
     assert "docs/label_provenance_audit.md" in text
+    assert "docs/verification_saturation_audit.md" in text
     assert "docs/paired_effects_audit.md" in text
     assert "docs/demo_audit.md" in text
     assert "docs/web_artifact_audit.md" in text
@@ -2109,6 +2116,7 @@ def test_reviewer_docs_surface_hard30_task_diagnosis():
     assert "docs/verification_lift_next_experiment.md" in readme
     assert "docs/thesis_revision_decision.md" in readme
     assert "docs/validity_threats.md" in readme
+    assert "docs/verification_saturation_audit.md" in readme
     assert "docs/paper_abstract_audit.md" in readme
     assert "docs/paper_contribution_audit.md" in readme
     assert "docs/method_pipeline_audit.md" in readme
@@ -2149,6 +2157,7 @@ def test_reviewer_docs_surface_hard30_task_diagnosis():
     assert "scripts/audit_goal_completion.py --markdown-output docs/goal_completion_audit.md" in readme
     assert "scripts/audit_thesis_revision_decision.py --markdown-output docs/thesis_revision_decision.md" in readme
     assert "scripts/audit_validity_threats.py --markdown-output docs/validity_threats.md" in readme
+    assert "scripts/audit_verification_saturation.py --markdown-output docs/verification_saturation_audit.md" in readme
     assert "scripts/audit_paper_abstract.py --markdown-output docs/paper_abstract_audit.md" in readme
     assert "scripts/audit_paper_contributions.py --markdown-output docs/paper_contribution_audit.md" in readme
     assert "scripts/audit_method_pipeline.py --markdown-output docs/method_pipeline_audit.md" in readme
@@ -2187,6 +2196,7 @@ def test_reviewer_docs_surface_hard30_task_diagnosis():
     assert "docs/headline_results.md" in guide
     assert "docs/thesis_revision_decision.md" in guide
     assert "docs/validity_threats.md" in guide
+    assert "docs/verification_saturation_audit.md" in guide
     assert "docs/paper_abstract_audit.md" in guide
     assert "docs/paper_contribution_audit.md" in guide
     assert "docs/method_pipeline_audit.md" in guide
@@ -2228,6 +2238,7 @@ def test_reviewer_docs_surface_hard30_task_diagnosis():
     assert "scripts/audit_goal_completion.py" in checklist
     assert "scripts/audit_thesis_revision_decision.py" in checklist
     assert "scripts/audit_validity_threats.py" in checklist
+    assert "scripts/audit_verification_saturation.py" in checklist
     assert "scripts/audit_paper_abstract.py" in checklist
     assert "scripts/audit_paper_contributions.py" in checklist
     assert "scripts/audit_method_pipeline.py" in checklist
@@ -2268,6 +2279,7 @@ def test_reviewer_docs_surface_hard30_task_diagnosis():
     assert "--markdown-output /tmp/rule-implementation-audit.md" in checklist
     assert "--markdown-output /tmp/benchmark-trace-artifact.md" in checklist
     assert "--markdown-output /tmp/label-provenance-audit.md" in checklist
+    assert "--markdown-output /tmp/verification-saturation-audit.md" in checklist
     assert "--markdown-output /tmp/paired-effects-audit.md" in checklist
     assert "--markdown-output /tmp/demo-audit.md" in checklist
     assert "--markdown-output /tmp/web-artifact-audit.md" in checklist
@@ -2404,6 +2416,7 @@ def test_submission_package_maps_rqs_to_safe_paper_claims():
     assert "docs/reviewer_path_audit.md" in package["required_files"]
     assert "docs/benchmark_trace_artifact.md" in package["required_files"]
     assert "docs/label_provenance_audit.md" in package["required_files"]
+    assert "docs/verification_saturation_audit.md" in package["required_files"]
     assert "docs/metric_coverage_audit.md" in package["required_files"]
     assert "docs/paired_effects_audit.md" in package["required_files"]
     assert "docs/demo_audit.md" in package["required_files"]
@@ -2435,6 +2448,7 @@ def test_submission_package_maps_rqs_to_safe_paper_claims():
     assert "docs/rule_implementation_audit.md" in markdown
     assert "docs/benchmark_trace_artifact.md" in markdown
     assert "docs/label_provenance_audit.md" in markdown
+    assert "docs/verification_saturation_audit.md" in markdown
     assert "docs/paired_effects_audit.md" in markdown
     assert "docs/demo_audit.md" in markdown
     assert "docs/web_artifact_audit.md" in markdown
@@ -2971,6 +2985,23 @@ def test_verification_lift_next_experiment_audit_keeps_ablation_in_bounds():
     assert "Planned Ordinary-Baseline V2 Scaffold" in markdown
 
 
+def test_verification_saturation_audit_bounds_ordinary_lift_claim():
+    result = build_verification_saturation_audit()
+    markdown = render_verification_saturation_markdown(result)
+
+    assert result["summary"]["ready"] is True
+    assert result["summary"]["non_ablation_tier_count"] == 6
+    assert result["summary"]["saturated_non_ablation_tier_count"] == 6
+    assert result["summary"]["ordinary_verification_lift_supported"] is False
+    assert result["summary"]["ordinary_exact_verification_lift_supported"] is False
+    assert result["summary"]["ablation_mechanism_positive"] is True
+    assert all(row["verification_delta"] == 0 for row in result["non_ablation_tiers"])
+    assert all(row["success_check_verification_delta"] == 0 for row in result["non_ablation_tiers"])
+    assert result["ablation"]["verification_delta"] == 1
+    assert result["ablation"]["success_check_verification_delta"] == 1
+    assert "cannot close the ordinary-baseline claim" in markdown
+
+
 def test_submission_readiness_validates_verification_lift_next_experiment_content(tmp_path):
     broken = tmp_path / "verification_lift_next_experiment.md"
     broken.write_text("# Verification-Lift Next Experiment Audit\nOriginal verification-lift claim closed: yes\n", encoding="utf-8")
@@ -2981,6 +3012,20 @@ def test_submission_readiness_validates_verification_lift_next_experiment_conten
     assert "missing original claim still open" in check["problems"]
     assert "missing claim revision required" in check["problems"]
     assert "missing no additional ordinary experiment" in check["problems"]
+
+
+def test_submission_readiness_validates_verification_saturation_audit_content(tmp_path):
+    broken = tmp_path / "verification_saturation_audit.md"
+    broken.write_text("# Verification Saturation Audit\nReady: no\n", encoding="utf-8")
+
+    check = check_verification_saturation_audit_content(broken)
+
+    assert check["ok"] is False
+    assert "missing ready" in check["problems"]
+    assert "missing saturated tiers" in check["problems"]
+    assert "missing ordinary lift unsupported" in check["problems"]
+    assert "missing ablation positive" in check["problems"]
+    assert "missing claim closure caveat" in check["problems"]
 
 
 def test_submission_readiness_validates_verification_ablation_plan_audit_content(tmp_path):

@@ -72,12 +72,13 @@ See `docs/artifact_guide.md` for the reviewer-facing walkthrough,
 trace-signal analysis, `docs/headline_results.md` for the compact actual
 headline table, `docs/thesis_revision_decision.md` for the explicit
 boundary-result thesis decision, `docs/validity_threats.md` for validity
-threat mapping, `docs/rq4_signal_audit.md` for the generated
-boundary-style signal audit, `docs/metric_coverage_audit.md` for experiment
+threat mapping, `docs/verification_saturation_audit.md` for the generated
+ordinary-baseline verification-saturation proof, `docs/rq4_signal_audit.md`
+for the generated boundary-style signal audit, `docs/metric_coverage_audit.md` for experiment
 metric coverage, `docs/benchmark_trace_artifact.md` for hard30 task/run/trace
 pair completeness, `docs/label_provenance_audit.md` for hard30 label
-template/manual-label/evaluation consistency, `docs/paired_effects_audit.md` for paired RQ3 effect-size
-and uncertainty evidence, `docs/demo_audit.md` for the offline demo smoke path,
+template/manual-label/evaluation consistency, `docs/paired_effects_audit.md`
+for paired RQ3 effect-size and uncertainty evidence, `docs/demo_audit.md` for the offline demo smoke path,
 `docs/web_artifact_audit.md` for the static Web replay artifact,
 `docs/cli_surface_audit.md` for offline CLI coverage,
 `docs/ci_surface_audit.md` for CI/readiness/packaging coverage,
@@ -174,6 +175,7 @@ Key files:
 - `scripts/audit_goal_completion.py`: checks original-goal completion status against current evidence
 - `scripts/audit_thesis_revision_decision.py`: generates the explicit original-thesis revision decision memo
 - `scripts/audit_validity_threats.py`: generates the validity-threat mapping for safe paper wording
+- `scripts/audit_verification_saturation.py`: checks stored non-ablation pilots for ordinary verification-rate saturation
 - `scripts/audit_paper_numbers.py`: checks paper-draft numeric claims against stored aggregate artifacts
 - `scripts/audit_reviewer_path.py`: checks required reviewer files are discoverable from paper-facing entry points
 - `scripts/audit_benchmark_trace_artifact.py`: checks hard30 task/run/trace/outcome/manual-label completeness
@@ -211,6 +213,7 @@ Key files:
 - `docs/goal_completion_audit.md`: generated audit showing original-goal completion status and blocking evidence gaps
 - `docs/thesis_revision_decision.md`: generated decision memo for revising the original thesis into a boundary-result paper
 - `docs/validity_threats.md`: generated validity-threat map with evidence, mitigations, and safe wording
+- `docs/verification_saturation_audit.md`: generated audit for ordinary-baseline verification saturation and ablation boundary
 - `docs/verification_lift_next_experiment.md`: generated audit for ordinary-baseline verification-lift claim closure and thesis-revision status
 - `docs/headline_results.md`: generated compact actual headline table replacing the expected-results sketch
 - `docs/paper_number_guard.md`: generated guard that checks paper-draft numeric claims against stored artifacts
@@ -248,6 +251,7 @@ Key files:
 - `docs/paper_structure_audit.md`: generated coverage audit for paper sections, RQ result blocks, and boundary framing
 - `docs/rq_table_consistency_audit.md`: generated audit for paper RQ result-table consistency with hard30 report artifacts
 - `docs/label_provenance_audit.md`: generated audit for hard30 label-file provenance and evaluation consistency
+- `docs/verification_saturation_audit.md`: generated audit for ordinary-baseline verification saturation and ablation boundary
 - `docs/reproducibility_audit.md`: generated coverage audit for reproduction commands and checklist Markdown structure
 - `docs/hard30_task_diagnosis.md`: generated task-level hard30 diagnosis for double failures, repairs, regressions, and waste deltas
 - `docs/process_stress_plan_audit.md`: generated coverage audit for the materialized process-stress tier
@@ -366,6 +370,7 @@ PYTHONPATH=. python3 scripts/audit_method_pipeline.py --markdown-output docs/met
 PYTHONPATH=. python3 scripts/audit_paper_structure.py --markdown-output docs/paper_structure_audit.md
 PYTHONPATH=. python3 scripts/audit_rq_table_consistency.py --markdown-output docs/rq_table_consistency_audit.md
 PYTHONPATH=. python3 scripts/audit_label_provenance.py --markdown-output docs/label_provenance_audit.md
+PYTHONPATH=. python3 scripts/audit_verification_saturation.py --markdown-output docs/verification_saturation_audit.md
 PYTHONPATH=. python3 scripts/audit_reproducibility.py --markdown-output docs/reproducibility_audit.md
 ```
 

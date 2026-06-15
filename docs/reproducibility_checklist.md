@@ -31,6 +31,7 @@ The stored pilots can be inspected and aggregated without re-running Codex.
 | `docs/metric_coverage_audit.md` | Generated coverage audit for the metrics named in the experiment design. |
 | `docs/benchmark_trace_artifact.md` | Generated audit for hard30 task/run/trace/outcome/manual-label completeness. |
 | `docs/label_provenance_audit.md` | Generated audit for hard30 label-file provenance and evaluation consistency. |
+| `docs/verification_saturation_audit.md` | Generated audit for ordinary-baseline verification saturation and the no-verify ablation boundary. |
 | `docs/paired_effects_audit.md` | Generated paired effect-size and uncertainty audit for RQ3 intervention deltas. |
 | `docs/demo_audit.md` | Generated audit for the reviewer-facing offline demo script. |
 | `docs/web_artifact_audit.md` | Generated audit for the committed static Web replay artifact. |
@@ -103,6 +104,7 @@ The stored pilots can be inspected and aggregated without re-running Codex.
 | `scripts/audit_reviewer_path.py` | Reviewer-path coverage guard for required paper artifacts. |
 | `scripts/audit_benchmark_trace_artifact.py` | Checks hard30 task/run/trace/outcome/manual-label completeness. |
 | `scripts/audit_label_provenance.py` | Checks hard30 label template, manual-label, and label-evaluation consistency. |
+| `scripts/audit_verification_saturation.py` | Checks stored non-ablation pilots for ordinary verification-rate saturation. |
 | `scripts/audit_metric_coverage.py` | Checks that experiment-design metrics are collected, summarized, exported to CSV, and visible in aggregate Markdown. |
 | `scripts/audit_paired_effects.py` | Computes task-paired effect sizes, sign tests, and bootstrap CIs for RQ3 deltas. |
 | `scripts/audit_demo.py` | Runs the offline demo script and checks generated JSON/Markdown diagnosis artifacts. |
@@ -365,6 +367,14 @@ Label provenance audit:
 PYTHONPATH=. python3 scripts/audit_label_provenance.py \
   --json-output /tmp/label-provenance-audit.json \
   --markdown-output /tmp/label-provenance-audit.md
+```
+
+Verification saturation audit:
+
+```bash
+PYTHONPATH=. python3 scripts/audit_verification_saturation.py \
+  --json-output /tmp/verification-saturation-audit.json \
+  --markdown-output /tmp/verification-saturation-audit.md
 ```
 
 Reproducibility checklist audit:

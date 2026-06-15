@@ -229,6 +229,7 @@ def check_paper_draft_content(path: Path = Path("docs/paper_draft.md")) -> dict[
         "metric coverage link": "docs/metric_coverage_audit.md",
         "benchmark trace artifact link": "docs/benchmark_trace_artifact.md",
         "label provenance audit link": "docs/label_provenance_audit.md",
+        "verification saturation audit link": "docs/verification_saturation_audit.md",
         "paired effects audit link": "docs/paired_effects_audit.md",
         "demo audit link": "docs/demo_audit.md",
         "web artifact audit link": "docs/web_artifact_audit.md",
@@ -673,6 +674,40 @@ def check_label_provenance_audit_content(path: Path = Path("docs/label_provenanc
         "ok": not problems,
         "evidence": str(path),
         "detail": "label templates, manual labels, and evaluation summaries are provenance-consistent",
+        "problems": problems,
+    }
+
+
+def check_verification_saturation_audit_content(path: Path = Path("docs/verification_saturation_audit.md")) -> dict[str, Any]:
+    problems = []
+    try:
+        text = path.read_text(encoding="utf-8")
+    except FileNotFoundError:
+        return {
+            "name": "verification saturation audit",
+            "ok": False,
+            "evidence": str(path),
+            "problems": ["missing verification saturation audit"],
+        }
+
+    required_phrases = {
+        "ready": "Ready: yes",
+        "saturated tiers": "Non-ablation tiers saturated: 6 / 6",
+        "ordinary lift unsupported": "Ordinary verification-rate lift supported: no",
+        "exact lift unsupported": "Ordinary exact success-check verification lift supported: no",
+        "ablation positive": "No-verify ablation mechanism positive: yes",
+        "mechanism boundary": "mechanism-only, not ordinary baseline",
+        "claim closure caveat": "cannot close the ordinary-baseline claim",
+    }
+    for label, phrase in required_phrases.items():
+        if phrase not in text:
+            problems.append(f"missing {label}")
+
+    return {
+        "name": "verification saturation audit",
+        "ok": not problems,
+        "evidence": str(path),
+        "detail": "stored non-ablation pilots are verification-saturated; no-verify ablation is mechanism-only",
         "problems": problems,
     }
 
@@ -1396,7 +1431,7 @@ def check_reproducibility_audit_content(path: Path = Path("docs/reproducibility_
 
     required_phrases = {
         "ready": "Ready: yes",
-        "coverage count": "Commands covered: 45 / 45",
+        "coverage count": "Commands covered: 46 / 46",
         "balanced fences": "Markdown fences balanced: yes",
         "submission gate": "submission_readiness_gate",
         "scope caveat": "does not execute the full real Codex collection commands",
@@ -1527,6 +1562,7 @@ def build_report(selection_dir: Path, run_dir: Path) -> dict[str, Any]:
         check_reviewer_path_audit_content(),
         check_benchmark_trace_artifact_content(),
         check_label_provenance_audit_content(),
+        check_verification_saturation_audit_content(),
         check_metric_coverage_audit_content(),
         check_paired_effects_audit_content(),
         check_demo_audit_content(),

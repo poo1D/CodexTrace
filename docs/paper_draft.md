@@ -529,6 +529,8 @@ decision,
 completeness,
 `docs/label_provenance_audit.md` for hard30 label-file provenance and
 evaluation consistency,
+`docs/verification_saturation_audit.md` for ordinary-baseline verification
+saturation and the no-verify ablation boundary,
 `docs/paired_effects_audit.md` for paired RQ3 effect-size and uncertainty
 evidence,
 `docs/demo_audit.md` for the reviewer-facing offline demo smoke path,

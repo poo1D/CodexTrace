@@ -1,0 +1,105 @@
+{
+  "ablation": {
+    "baseline_success_check_verification_rate": 0.0,
+    "baseline_verification_rate": 0.0,
+    "description": "no-verify mechanism ablation",
+    "intervention_success_check_verification_rate": 1.0,
+    "intervention_verification_rate": 1.0,
+    "mechanism_positive": true,
+    "path": "benchmark/verification-ablation/pilot/full-real/aggregate.json",
+    "runs": 8,
+    "saturated": false,
+    "success_check_verification_delta": 1.0,
+    "tier": "verification-ablation",
+    "verification_delta": 1.0
+  },
+  "non_ablation_tiers": [
+    {
+      "baseline_success_check_verification_rate": 1.0,
+      "baseline_verification_rate": 1.0,
+      "description": "ordinary seed pilot",
+      "intervention_success_check_verification_rate": 1.0,
+      "intervention_verification_rate": 1.0,
+      "path": "benchmark/pilot/full30-real/aggregate.json",
+      "runs": 60,
+      "saturated": true,
+      "success_check_verification_delta": 0.0,
+      "tier": "full30",
+      "verification_delta": 0.0
+    },
+    {
+      "baseline_success_check_verification_rate": 1.0,
+      "baseline_verification_rate": 1.0,
+      "description": "hard-tier pilot",
+      "intervention_success_check_verification_rate": 1.0,
+      "intervention_verification_rate": 1.0,
+      "path": "benchmark/hard/pilot/hard10-real/aggregate.json",
+      "runs": 20,
+      "saturated": true,
+      "success_check_verification_delta": 0.0,
+      "tier": "hard10",
+      "verification_delta": 0.0
+    },
+    {
+      "baseline_success_check_verification_rate": 1.0,
+      "baseline_verification_rate": 1.0,
+      "description": "submission hard-tier pilot",
+      "intervention_success_check_verification_rate": 1.0,
+      "intervention_verification_rate": 1.0,
+      "path": "benchmark/hard/pilot/hard30-real/aggregate.json",
+      "runs": 60,
+      "saturated": true,
+      "success_check_verification_delta": 0.0,
+      "tier": "hard30",
+      "verification_delta": 0.0
+    },
+    {
+      "baseline_success_check_verification_rate": 1.0,
+      "baseline_verification_rate": 1.0,
+      "description": "observable-process stress pilot",
+      "intervention_success_check_verification_rate": 1.0,
+      "intervention_verification_rate": 1.0,
+      "path": "benchmark/process-stress/pilot/full-real/aggregate.json",
+      "runs": 24,
+      "saturated": true,
+      "success_check_verification_delta": 0.0,
+      "tier": "process-stress",
+      "verification_delta": 0.0
+    },
+    {
+      "baseline_success_check_verification_rate": 1.0,
+      "baseline_verification_rate": 1.0,
+      "description": "weak optional-verification pilot",
+      "intervention_success_check_verification_rate": 1.0,
+      "intervention_verification_rate": 1.0,
+      "path": "benchmark/verification-lift/pilot/full-real/aggregate.json",
+      "runs": 16,
+      "saturated": true,
+      "success_check_verification_delta": 0.0,
+      "tier": "verification-lift",
+      "verification_delta": 0.0
+    },
+    {
+      "baseline_success_check_verification_rate": 1.0,
+      "baseline_verification_rate": 1.0,
+      "description": "ordinary-baseline retest",
+      "intervention_success_check_verification_rate": 1.0,
+      "intervention_verification_rate": 1.0,
+      "path": "benchmark/verification-lift-v2/pilot/full-real/aggregate.json",
+      "runs": 16,
+      "saturated": true,
+      "success_check_verification_delta": 0.0,
+      "tier": "verification-lift-v2",
+      "verification_delta": 0.0
+    }
+  ],
+  "summary": {
+    "ablation_mechanism_positive": true,
+    "claim_boundary": "ordinary and weak-baseline pilots are saturated; no-verify ablation is mechanism-only",
+    "non_ablation_tier_count": 6,
+    "ordinary_exact_verification_lift_supported": false,
+    "ordinary_verification_lift_supported": false,
+    "ready": true,
+    "saturated_non_ablation_tier_count": 6
+  }
+}

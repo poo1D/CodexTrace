@@ -220,6 +220,24 @@
     },
     {
       "covered": true,
+      "path": "docs/label_provenance_audit.md",
+      "present_in": [
+        "README.md",
+        "docs/artifact_guide.md",
+        "docs/reproducibility_checklist.md"
+      ]
+    },
+    {
+      "covered": true,
+      "path": "docs/verification_saturation_audit.md",
+      "present_in": [
+        "README.md",
+        "docs/artifact_guide.md",
+        "docs/reproducibility_checklist.md"
+      ]
+    },
+    {
+      "covered": true,
       "path": "docs/metric_coverage_audit.md",
       "present_in": [
         "README.md",
@@ -421,6 +439,6 @@
     "checklist_missing": 0,
     "guide_missing": 0,
     "missing": 0,
-    "required_files": 47
+    "required_files": 49
   }
 }
