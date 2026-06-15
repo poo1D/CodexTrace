@@ -113,7 +113,7 @@ def _fmt_list(values: list[Any]) -> str:
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="Audit artifact-guide review-path numbering.")
+    parser = argparse.ArgumentParser(description="Audit artifact-guide core-path numbering.")
     parser.add_argument("--artifact-guide", type=Path, default=DEFAULT_ARTIFACT_GUIDE)
     parser.add_argument("--json-output", type=Path)
     parser.add_argument("--markdown-output", type=Path)

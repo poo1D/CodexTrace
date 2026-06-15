@@ -58,7 +58,7 @@ The stored pilots can be inspected and aggregated without re-running Codex.
 | `docs/method_pipeline_audit.md` | Generated audit for method pipeline source mapping and offline CLI smoke coverage. |
 | `docs/paper_structure_audit.md` | Generated coverage audit for paper sections, RQ result blocks, and boundary-result framing. |
 | `docs/rq_table_consistency_audit.md` | Generated audit for paper RQ result-table consistency with hard30 report artifacts. |
-| `docs/artifact_guide_sequence_audit.md` | Generated audit for artifact-guide review-path numbering and core evidence links. |
+| `docs/artifact_guide_sequence_audit.md` | Generated audit for artifact-guide core-path numbering and core evidence links. |
 | `docs/reproducibility_audit.md` | Generated coverage audit for reproduction commands and Markdown fence balance. |
 | `docs/hard30_task_diagnosis.md` | Generated task-level hard30 diagnosis for double failures, intervention repairs/regressions, and largest waste deltas. |
 | `docs/paper_claim_audit.md` | Generated support/partial/unsupported audit for thesis-level paper claims. |
@@ -140,7 +140,7 @@ The stored pilots can be inspected and aggregated without re-running Codex.
 | `scripts/audit_method_pipeline.py` | Checks the paper method pipeline against source code and offline CLI smoke outputs. |
 | `scripts/audit_paper_structure.py` | Checks that the paper draft covers required sections, RQ blocks, and boundary-result framing. |
 | `scripts/audit_rq_table_consistency.py` | Checks paper RQ result tables against generated hard30 report artifacts. |
-| `scripts/audit_artifact_guide_sequence.py` | Checks artifact-guide review-path numbering and core evidence links. |
+| `scripts/audit_artifact_guide_sequence.py` | Checks artifact-guide core-path numbering and core evidence links. |
 | `scripts/audit_reproducibility.py` | Checks that this checklist contains required reproduction commands and balanced Markdown fences. |
 | `scripts/audit_hard30_task_diagnosis.py` | Generates task-level hard30 failure-pattern and waste-delta diagnosis. |
 | `scripts/audit_submission_package.py` | Generates the reviewer-facing RQ-to-evidence submission package map. |

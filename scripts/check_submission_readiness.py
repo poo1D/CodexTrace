@@ -696,6 +696,9 @@ def check_reviewer_path_audit_content(path: Path = Path("docs/reviewer_path_audi
         "missing everywhere": "Missing everywhere: 0",
         "guide coverage": "Missing from artifact guide required set: 0",
         "checklist coverage": "Missing from reproducibility checklist: 0",
+        "core path structure": "Core path structure: ok",
+        "core path steps": "Core path steps: 10",
+        "path structure checks": "Path structure checks failed: 0",
         "required files table": "| Required file | Covered | Present in |",
     }
     for label, phrase in required_phrases.items():
@@ -742,7 +745,7 @@ def check_artifact_guide_sequence_audit_content(
         "name": "artifact guide sequence audit",
         "ok": not problems,
         "evidence": str(path),
-        "detail": "reviewer path numbering is contiguous and includes core evidence links",
+        "detail": "artifact-guide core-path numbering is contiguous and includes core evidence links",
         "problems": problems,
     }
 

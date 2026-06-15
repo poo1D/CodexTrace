@@ -7,6 +7,10 @@ Required files: 57
 Missing everywhere: 0
 Missing from artifact guide required set: 0
 Missing from reproducibility checklist: 0
+Core path structure: ok
+Core path steps: 10
+Extended evidence steps: 34
+Path structure checks failed: 0
 
 | Required file | Covered | Present in |
 | --- | --- | --- |
@@ -14,7 +18,7 @@ Missing from reproducibility checklist: 0
 | `docs/artifact_guide.md` | yes | `README.md`, `docs/reproducibility_checklist.md` |
 | `docs/submission_package.md` | yes | `README.md`, `docs/artifact_guide.md`, `docs/reproducibility_checklist.md` |
 | `docs/submission_readiness_plan.md` | yes | `README.md`, `docs/artifact_guide.md`, `docs/reproducibility_checklist.md` |
-| `docs/submission_readiness_plan_audit.md` | yes | `README.md`, `docs/reproducibility_checklist.md` |
+| `docs/submission_readiness_plan_audit.md` | yes | `README.md`, `docs/artifact_guide.md`, `docs/reproducibility_checklist.md` |
 | `docs/goal_completion_audit.md` | yes | `README.md`, `docs/reproducibility_checklist.md` |
 | `docs/thesis_revision_decision.md` | yes | `README.md`, `docs/artifact_guide.md`, `docs/reproducibility_checklist.md` |
 | `docs/validity_threats.md` | yes | `README.md`, `docs/artifact_guide.md`, `docs/reproducibility_checklist.md` |
@@ -67,3 +71,14 @@ Missing from reproducibility checklist: 0
 | `docs/hard30_task_diagnosis.md` | yes | `README.md`, `docs/artifact_guide.md`, `docs/reproducibility_checklist.md` |
 | `docs/reproducibility_checklist.md` | yes | `README.md`, `docs/artifact_guide.md` |
 | `docs/reproducibility_audit.md` | yes | `README.md`, `docs/artifact_guide.md`, `docs/reproducibility_checklist.md` |
+
+## Artifact Guide Path Checks
+
+| Check | Status | Expected |
+| --- | --- | --- |
+| `core_path_heading` | pass | artifact guide exposes the reviewer core path |
+| `extended_path_heading` | pass | artifact guide separates extended evidence from the core path |
+| `core_path_step_count` | pass | core path has exactly 10 steps |
+| `extended_path_depth` | pass | extended evidence path keeps the detailed audit trail |
+| `core_path_demo_command` | pass | core path ends with an offline demo command |
+| `old_long_path_removed` | pass | old single long review-path heading is absent |

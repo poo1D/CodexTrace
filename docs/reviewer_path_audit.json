@@ -40,6 +40,7 @@
       "path": "docs/submission_readiness_plan_audit.md",
       "present_in": [
         "README.md",
+        "docs/artifact_guide.md",
         "docs/reproducibility_checklist.md"
       ]
     },
@@ -506,10 +507,47 @@
   "guide_missing": [],
   "missing": [],
   "ok": true,
+  "path_check_missing": [],
+  "path_checks": [
+    {
+      "expected": "artifact guide exposes the reviewer core path",
+      "id": "core_path_heading",
+      "passed": true
+    },
+    {
+      "expected": "artifact guide separates extended evidence from the core path",
+      "id": "extended_path_heading",
+      "passed": true
+    },
+    {
+      "expected": "core path has exactly 10 steps",
+      "id": "core_path_step_count",
+      "passed": true
+    },
+    {
+      "expected": "extended evidence path keeps the detailed audit trail",
+      "id": "extended_path_depth",
+      "passed": true
+    },
+    {
+      "expected": "core path ends with an offline demo command",
+      "id": "core_path_demo_command",
+      "passed": true
+    },
+    {
+      "expected": "old single long review-path heading is absent",
+      "id": "old_long_path_removed",
+      "passed": true
+    }
+  ],
   "summary": {
     "checklist_missing": 0,
+    "core_step_count": 10,
+    "extended_step_count": 34,
     "guide_missing": 0,
     "missing": 0,
+    "path_check_missing": 0,
+    "path_checks": 6,
     "required_files": 57
   }
 }

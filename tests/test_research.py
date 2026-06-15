@@ -2846,6 +2846,9 @@ def test_reviewer_path_audit_covers_required_artifacts(tmp_path):
     assert result["summary"]["missing"] == 0
     assert result["summary"]["guide_missing"] == 0
     assert result["summary"]["checklist_missing"] == 0
+    assert result["summary"]["path_check_missing"] == 0
+    assert result["summary"]["core_step_count"] == 10
+    assert result["summary"]["extended_step_count"] >= 30
     assert any(row["path"] == "docs/artifact_guide.md" for row in result["coverage"])
     assert any(row["path"] == "docs/experiment_protocol.md" for row in result["coverage"])
     assert any(row["path"] == "docs/paper_outline.md" for row in result["coverage"])
@@ -2879,6 +2882,10 @@ def test_reviewer_path_audit_covers_required_artifacts(tmp_path):
     assert any(row["path"] == "docs/paper_conclusion_audit.md" for row in result["coverage"])
     assert any(row["path"] == "docs/label_limitations_audit.md" for row in result["coverage"])
     assert "Missing from reproducibility checklist: 0" in markdown
+    assert "Core path structure: ok" in markdown
+    assert "Core path steps: 10" in markdown
+    assert "Path structure checks failed: 0" in markdown
+    assert "`core_path_step_count` | pass" in markdown
 
     package = tmp_path / "submission_package.json"
     package.write_text(json.dumps({"required_files": ["docs/not-linked.md"]}), encoding="utf-8")
@@ -2886,6 +2893,20 @@ def test_reviewer_path_audit_covers_required_artifacts(tmp_path):
 
     assert failing["ok"] is False
     assert failing["missing"][0]["path"] == "docs/not-linked.md"
+
+    broken_guide = tmp_path / "artifact_guide.md"
+    broken_guide.write_text(
+        "# CodexTrace Artifact Guide\n\n"
+        "## Fifteen-Minute Review Path\n\n"
+        "1. One\n2. Two\n\n"
+        "## Main Evidence\n",
+        encoding="utf-8",
+    )
+    bad_path = build_reviewer_path_audit(artifact_guide_path=broken_guide)
+
+    assert bad_path["ok"] is False
+    assert "core_path_step_count" in {row["id"] for row in bad_path["path_check_missing"]}
+    assert "old_long_path_removed" in {row["id"] for row in bad_path["path_check_missing"]}
 
 
 def test_submission_readiness_validates_reviewer_path_audit_content(tmp_path):
@@ -2897,6 +2918,7 @@ def test_submission_readiness_validates_reviewer_path_audit_content(tmp_path):
     assert check["ok"] is False
     assert "missing ok" in check["problems"]
     assert "missing checklist coverage" in check["problems"]
+    assert "missing core path structure" in check["problems"]
 
 
 def test_submission_readiness_validates_artifact_guide_sequence_audit_content(tmp_path):
