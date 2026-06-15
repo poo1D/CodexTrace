@@ -17,6 +17,7 @@ RULES = (
     {
         "label": "verification_gap",
         "finding_code": "verification_gap",
+        "detector_signal": "post-edit file changes without later test/build/lint verification",
         "implementation_markers": ("_post_edit_verification_count", "post_edit_verification_commands"),
         "alias_marker": '"verification_gap": "verification_gap"',
         "scope": "direct",
@@ -24,6 +25,7 @@ RULES = (
     {
         "label": "unrecovered_tool_error",
         "finding_code": "command_failure_unhandled",
+        "detector_signal": "failed commands without a later similar recovery command or verification",
         "implementation_markers": ("_unresolved_failed_commands", "_similar_command"),
         "alias_marker": '"command_failure_unhandled": "unrecovered_tool_error"',
         "scope": "direct",
@@ -31,6 +33,7 @@ RULES = (
     {
         "label": "repetitive_exploration",
         "finding_code": "repeated_search_or_read",
+        "detector_signal": "repeated search/read commands and high repeated tool-call volume",
         "implementation_markers": ("_repeated_searches", "_repeated_tool_call_volume"),
         "alias_marker": '"repeated_search_or_read": "repetitive_exploration"',
         "scope": "direct",
@@ -38,6 +41,7 @@ RULES = (
     {
         "label": "context_drift",
         "finding_code": "long_context_no_progress",
+        "detector_signal": "high context growth with weak edit or verification progress",
         "implementation_markers": ("_long_context_no_progress", "input_tokens"),
         "alias_marker": '"long_context_no_progress": "context_drift"',
         "scope": "v1_proxy",
@@ -45,6 +49,7 @@ RULES = (
     {
         "label": "premature_completion",
         "finding_code": "premature_completion",
+        "detector_signal": "completion language emitted before verification evidence",
         "implementation_markers": ("_premature_completion_events", "completion_words"),
         "alias_marker": '"premature_completion": "premature_completion"',
         "scope": "direct",
@@ -52,6 +57,7 @@ RULES = (
     {
         "label": "sandbox_permission_deadlock",
         "finding_code": "sandbox_or_permission_block",
+        "detector_signal": "sandbox, permission, network, or access-denied tool errors",
         "implementation_markers": ("SANDBOX_WORDS", "_sandbox_events"),
         "alias_marker": '"sandbox_or_permission_block": "sandbox_permission_deadlock"',
         "scope": "direct",
@@ -79,6 +85,7 @@ def build_rule_implementation_audit(
         row = {
             "label": rule["label"],
             "finding_code": rule["finding_code"],
+            "detector_signal": rule["detector_signal"],
             "scope": rule["scope"],
             "controlled_fixture": bool(tier.get("controlled_fixture")),
             "real_pilot_tp": int(tier.get("real_pilot_tp", 0) or 0),
@@ -157,13 +164,13 @@ def render_rule_implementation_markdown(result: dict[str, Any]) -> str:
         "",
         "## Rule Coverage",
         "",
-        "| Label | Finding code | Scope | Evidence tier | Real TP | Ablation TP | Code | Markers | Alias | Docs | Covered |",
-        "| --- | --- | --- | --- | ---: | ---: | --- | --- | --- | --- | --- |",
+        "| Label | Finding code | Detector signal | Scope | Evidence tier | Real TP | Ablation TP | Code | Markers | Alias | Docs | Covered |",
+        "| --- | --- | --- | --- | --- | ---: | ---: | --- | --- | --- | --- | --- |",
     ]
     for row in result["rules"]:
         docs = row["taxonomy_present"] and row["paper_present"]
         lines.append(
-            f"| `{row['label']}` | `{row['finding_code']}` | `{row['scope']}` | "
+            f"| `{row['label']}` | `{row['finding_code']}` | {row['detector_signal']} | `{row['scope']}` | "
             f"`{row['evidence_tier']}` | {row['real_pilot_tp']} | {row['ablation_tp']} | "
             f"{_yes(row['finding_code_present'])} | {_yes(row['implementation_markers_present'])} | "
             f"{_yes(row['alias_present'])} | {_yes(docs)} | {_yes(row['covered'])} |"

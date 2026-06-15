@@ -1897,13 +1897,22 @@ def test_rule_implementation_audit_maps_taxonomy_to_diagnosis_rules():
     assert result["summary"]["fixture_only_rule_count"] == 2
     assert rules["verification_gap"]["finding_code"] == "verification_gap"
     assert rules["verification_gap"]["evidence_tier"] == "ablation-positive"
+    assert "post-edit file changes" in rules["verification_gap"]["detector_signal"]
     assert rules["unrecovered_tool_error"]["finding_code"] == "command_failure_unhandled"
     assert rules["unrecovered_tool_error"]["evidence_tier"] == "fixture-only"
+    assert "failed commands" in rules["unrecovered_tool_error"]["detector_signal"]
     assert rules["repetitive_exploration"]["evidence_tier"] == "real-pilot-positive"
+    assert "repeated search/read commands" in rules["repetitive_exploration"]["detector_signal"]
     assert rules["context_drift"]["finding_code"] == "long_context_no_progress"
     assert rules["context_drift"]["scope"] == "v1_proxy"
+    assert "high context growth" in rules["context_drift"]["detector_signal"]
+    assert "sandbox, permission, network" in rules["sandbox_permission_deadlock"]["detector_signal"]
     assert all(row["covered"] for row in result["rules"])
     assert "Rules covered: 6 / 6" in markdown
+    assert "Detector signal" in markdown
+    assert "post-edit file changes without later test/build/lint verification" in markdown
+    assert "failed commands without a later similar recovery command or verification" in markdown
+    assert "high context growth with weak edit or verification progress" in markdown
     assert "Real-pilot-positive rules: 2 / 6" in markdown
     assert "`fixture-only`" in markdown
     assert "not a full semantic task-keyword drift detector" in markdown
@@ -3380,6 +3389,10 @@ def test_submission_readiness_validates_rule_implementation_audit_content(tmp_pa
     assert "missing ready" in check["problems"]
     assert "missing coverage count" in check["problems"]
     assert "missing context proxy" in check["problems"]
+    assert "missing detector signal column" in check["problems"]
+    assert "missing verification detector signal" in check["problems"]
+    assert "missing unrecovered error detector signal" in check["problems"]
+    assert "missing context detector signal" in check["problems"]
     assert "missing semantic caveat" in check["problems"]
 
 
