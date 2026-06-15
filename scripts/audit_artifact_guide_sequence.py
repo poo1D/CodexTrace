@@ -21,7 +21,7 @@ REQUIRED_LINKS = (
 
 def build_artifact_guide_sequence_audit(path: Path = DEFAULT_ARTIFACT_GUIDE) -> dict[str, Any]:
     text = path.read_text(encoding="utf-8")
-    review_path = _extract_section(text, "## Fifteen-Minute Review Path", "## Main Evidence")
+    review_path = _extract_section(text, "## Fifteen-Minute Core Path", "## Extended Evidence Path")
     numbers = _step_numbers(review_path)
     expected = list(range(1, len(numbers) + 1))
     duplicate_numbers = sorted({number for number in numbers if numbers.count(number) > 1})

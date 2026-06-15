@@ -5,10 +5,10 @@ This generated audit checks that the reviewer-facing artifact-guide path has con
 ## Summary
 
 - Ready: yes
-- Step count: 46
+- Step count: 10
 - First step: 1
-- Last step: 46
-- Expected last step: 46
+- Last step: 10
+- Expected last step: 10
 - Duplicate numbers: -
 - Missing numbers: -
 - Missing required links: -

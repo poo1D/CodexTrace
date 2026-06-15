@@ -727,9 +727,9 @@ def check_artifact_guide_sequence_audit_content(
 
     required_phrases = {
         "ready": "Ready: yes",
-        "step count": "Step count: 46",
-        "last step": "Last step: 46",
-        "expected last step": "Expected last step: 46",
+        "step count": "Step count: 10",
+        "last step": "Last step: 10",
+        "expected last step": "Expected last step: 10",
         "no duplicate numbers": "Duplicate numbers: -",
         "no missing numbers": "Missing numbers: -",
         "required links": "docs/paired_effect_limitations_audit.md",

@@ -1465,16 +1465,16 @@ def test_artifact_guide_sequence_audit_checks_reviewer_path_numbering(tmp_path):
     markdown = render_artifact_guide_sequence_markdown(result)
 
     assert result["summary"]["ready"] is True
-    assert result["summary"]["step_count"] == 46
+    assert result["summary"]["step_count"] == 10
     assert result["summary"]["first_step"] == 1
-    assert result["summary"]["last_step"] == 46
+    assert result["summary"]["last_step"] == 10
     assert result["summary"]["missing_numbers"] == []
     assert result["summary"]["duplicate_numbers"] == []
     assert "docs/paired_effect_limitations_audit.md" in markdown
 
     broken = tmp_path / "artifact_guide.md"
     broken.write_text(
-        "## Fifteen-Minute Review Path\n\n1. First\n1. Duplicate\n3. Third\n\n## Main Evidence\n",
+        "## Fifteen-Minute Core Path\n\n1. First\n1. Duplicate\n3. Third\n\n## Extended Evidence Path\n",
         encoding="utf-8",
     )
     failing = build_artifact_guide_sequence_audit(broken)
