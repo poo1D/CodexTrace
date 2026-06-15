@@ -41,6 +41,17 @@
   "stages": [
     {
       "covered": true,
+      "id": "codex_jsonl_trace_input",
+      "paper_present": true,
+      "source_path": "demo/real-codex-run.jsonl",
+      "source_phrases": [
+        "\"type\":\"thread.started\"",
+        "\"type\":\"item.completed\""
+      ],
+      "source_present": true
+    },
+    {
+      "covered": true,
       "id": "jsonl_event_parser",
       "paper_present": true,
       "source_path": "codex_trace/parser.py",
@@ -117,10 +128,10 @@
     "cli_check_count": 4,
     "covered_cli_check_count": 4,
     "covered_smoke_check_count": 6,
-    "covered_stage_count": 6,
+    "covered_stage_count": 7,
     "paper_path": "docs/paper_draft.md",
     "ready": true,
     "smoke_check_count": 6,
-    "stage_count": 6
+    "stage_count": 7
   }
 }

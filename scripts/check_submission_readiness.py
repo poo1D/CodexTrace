@@ -1654,7 +1654,9 @@ def check_method_pipeline_audit_content(path: Path = Path("docs/method_pipeline_
 
     required_phrases = {
         "ready": "Ready: yes",
-        "stage coverage": "Pipeline stages covered: 6 / 6",
+        "stage coverage": "Pipeline stages covered: 7 / 7",
+        "trace input stage": "codex_jsonl_trace_input",
+        "real trace fixture": "demo/real-codex-run.jsonl",
         "cli coverage": "CLI method commands covered: 4 / 4",
         "smoke coverage": "Smoke checks covered: 6 / 6",
         "parser stage": "`jsonl_event_parser`",

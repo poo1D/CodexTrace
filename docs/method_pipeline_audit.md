@@ -5,7 +5,7 @@ This generated audit checks that the CodexTrace method pipeline described in the
 ## Summary
 
 - Ready: yes
-- Pipeline stages covered: 6 / 6
+- Pipeline stages covered: 7 / 7
 - CLI method commands covered: 4 / 4
 - Smoke checks covered: 6 / 6
 - Paper draft: `docs/paper_draft.md`
@@ -14,6 +14,7 @@ This generated audit checks that the CodexTrace method pipeline described in the
 
 | Stage | Paper | Source | Covered |
 | --- | --- | --- | --- |
+| `codex_jsonl_trace_input` | yes | `demo/real-codex-run.jsonl` | yes |
 | `jsonl_event_parser` | yes | `codex_trace/parser.py` | yes |
 | `normalized_trace_schema` | yes | `codex_trace/schema.py` | yes |
 | `phase_segmentation` | yes | `codex_trace/parser.py` | yes |

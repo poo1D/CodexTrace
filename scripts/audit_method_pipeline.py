@@ -20,9 +20,16 @@ DEFAULT_CLI = Path("codex_trace/cli.py")
 DEFAULT_PARSER = Path("codex_trace/parser.py")
 DEFAULT_DIAGNOSE = Path("codex_trace/diagnose.py")
 DEFAULT_RESEARCH = Path("codex_trace/research.py")
+DEFAULT_REAL_TRACE = Path("demo/real-codex-run.jsonl")
 
 
 PIPELINE_STAGES = (
+    {
+        "id": "codex_jsonl_trace_input",
+        "paper_phrase": "codex exec --json",
+        "source_path": DEFAULT_REAL_TRACE,
+        "source_phrases": ('"type":"thread.started"', '"type":"item.completed"'),
+    },
     {
         "id": "jsonl_event_parser",
         "paper_phrase": "JSONL event parser",

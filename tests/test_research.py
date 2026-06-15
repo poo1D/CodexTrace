@@ -1522,10 +1522,11 @@ def test_method_pipeline_audit_maps_paper_pipeline_to_code_and_cli_smoke():
     markdown = render_method_pipeline_markdown(result)
 
     assert result["summary"]["ready"] is True
-    assert result["summary"]["covered_stage_count"] == 6
+    assert result["summary"]["covered_stage_count"] == 7
     assert result["summary"]["covered_cli_check_count"] == 4
     assert result["summary"]["covered_smoke_check_count"] == 6
     assert {row["id"] for row in result["stages"]} == {
+        "codex_jsonl_trace_input",
         "jsonl_event_parser",
         "normalized_trace_schema",
         "phase_segmentation",
@@ -1535,6 +1536,7 @@ def test_method_pipeline_audit_maps_paper_pipeline_to_code_and_cli_smoke():
     }
     assert all(row["covered"] for row in result["stages"])
     assert all(row["covered"] for row in result["smoke"]["checks"])
+    assert "demo/real-codex-run.jsonl" in markdown
     assert "does not execute live Codex collection" in markdown
 
 
