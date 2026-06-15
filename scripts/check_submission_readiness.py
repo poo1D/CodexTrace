@@ -1226,13 +1226,18 @@ def check_schema_field_audit_content(path: Path = Path("docs/schema_field_audit.
 
     required_phrases = {
         "ready": "Ready: yes",
+        "objective schema coverage": "Objective schema fields checked: 15 / 15",
         "run coverage": "Run fields covered: 4 / 4",
         "step coverage": "Step fields covered: 11 / 11",
         "run task id": "`Run.task_id`",
+        "step timestamp": "`Step.timestamp`",
+        "step token usage": "`Step.token_usage`",
         "step file paths": "`Step.file_paths`",
         "failure tags": "`Step.failure_tags`",
         "trace event": "TraceEvent",
         "run record": "RunRecord",
+        "objective boundary": "not all objective fields are direct `TraceEvent` attributes",
+        "trace-level boundary": "not always a per-step field",
         "representational mapping": "schema mapping is representational",
     }
     for label, phrase in required_phrases.items():

@@ -131,10 +131,13 @@ def build_schema_field_audit(
     step_rows = [_row(field, combined, paper_text) for field in STEP_FIELDS]
     representational_scopes = {"alias", "derived", "representational", "trace_level"}
     representational_rows = [row for row in run_rows + step_rows if row["scope"] in representational_scopes]
+    objective_rows = run_rows + step_rows
 
     return {
         "summary": {
             "ready": all(row["covered"] for row in run_rows + step_rows),
+            "objective_schema_field_count": len(objective_rows),
+            "objective_schema_fields_covered": sum(1 for row in objective_rows if row["covered"]),
             "run_field_count": len(run_rows),
             "run_fields_covered": sum(1 for row in run_rows if row["covered"]),
             "step_field_count": len(step_rows),
@@ -159,6 +162,7 @@ def _row(field: dict[str, Any], combined_text: str, paper_text: str) -> dict[str
         "field": field["field"],
         "implementation": field["implementation"],
         "scope": field["scope"],
+        "boundary": _boundary_note(field["scope"]),
         "markers": markers,
         "markers_present": markers_present,
         "implementation_present": len(markers_present) == len(markers),
@@ -167,8 +171,23 @@ def _row(field: dict[str, Any], combined_text: str, paper_text: str) -> dict[str
     }
 
 
+def _boundary_note(scope: str) -> str:
+    if scope == "direct":
+        return "direct normalized field"
+    if scope == "alias":
+        return "renamed implementation field"
+    if scope == "derived":
+        return "detector or label output, not a raw event field"
+    if scope == "trace_level":
+        return "run/trace-level aggregate, not always a per-step field"
+    if scope == "representational":
+        return "preserved through title/detail/metadata rather than a same-named field"
+    return "implementation-specific mapping"
+
+
 def render_schema_field_audit_markdown(result: dict[str, Any]) -> str:
     summary = result["summary"]
+    objective_rows = result["run_fields"] + result["step_fields"]
     lines = [
         "# Schema Field Audit",
         "",
@@ -177,6 +196,7 @@ def render_schema_field_audit_markdown(result: dict[str, Any]) -> str:
         "## Summary",
         "",
         f"- Ready: {'yes' if summary['ready'] else 'no'}",
+        f"- Objective schema fields checked: {summary['objective_schema_fields_covered']} / {summary['objective_schema_field_count']}",
         f"- Run fields covered: {summary['run_fields_covered']} / {summary['run_field_count']}",
         f"- Step fields covered: {summary['step_fields_covered']} / {summary['step_field_count']}",
         f"- Representational mappings: {summary['representational_mapping_count']}",
@@ -185,11 +205,25 @@ def render_schema_field_audit_markdown(result: dict[str, Any]) -> str:
         f"- Research source: `{summary['research_path']}`",
         f"- Paper draft: `{summary['paper_draft_path']}`",
         "",
+        "## Objective Schema Boundary",
+        "",
+        "The original protocol-level Run/Step schema is fully checked here, but not all objective fields are direct `TraceEvent` attributes. CodexTrace keeps those fields through aliases, trace-level aggregates, detector outputs, or event metadata when Codex JSONL does not expose a stable same-named event field.",
+        "",
+        "| Objective field | Scope | Boundary | Covered |",
+        "| --- | --- | --- | --- |",
+    ]
+    for row in objective_rows:
+        lines.append(
+            f"| `{row['field']}` | `{row['scope']}` | {row['boundary']} | {_yes(row['covered'])} |"
+        )
+
+    lines.extend([
+        "",
         "## Run Fields",
         "",
         "| Paper field | Implementation source | Scope | Code | Paper | Covered |",
         "| --- | --- | --- | --- | --- | --- |",
-    ]
+    ])
     for row in result["run_fields"]:
         lines.append(_field_row(row))
 

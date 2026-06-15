@@ -5,6 +5,7 @@ This generated audit checks that the paper-facing Run/Step schema maps to concre
 ## Summary
 
 - Ready: yes
+- Objective schema fields checked: 15 / 15
 - Run fields covered: 4 / 4
 - Step fields covered: 11 / 11
 - Representational mappings: 6
@@ -12,6 +13,28 @@ This generated audit checks that the paper-facing Run/Step schema maps to concre
 - Parser source: `codex_trace/parser.py`
 - Research source: `codex_trace/research.py`
 - Paper draft: `docs/paper_draft.md`
+
+## Objective Schema Boundary
+
+The original protocol-level Run/Step schema is fully checked here, but not all objective fields are direct `TraceEvent` attributes. CodexTrace keeps those fields through aliases, trace-level aggregates, detector outputs, or event metadata when Codex JSONL does not expose a stable same-named event field.
+
+| Objective field | Scope | Boundary | Covered |
+| --- | --- | --- | --- |
+| `Run.task_id` | `direct` | direct normalized field | yes |
+| `Run.prompt_type` | `direct` | direct normalized field | yes |
+| `Run.outcome` | `direct` | direct normalized field | yes |
+| `Run.usage` | `trace_level` | run/trace-level aggregate, not always a per-step field | yes |
+| `Step.timestamp` | `direct` | direct normalized field | yes |
+| `Step.event_type` | `direct` | direct normalized field | yes |
+| `Step.content` | `direct` | direct normalized field | yes |
+| `Step.tool_name` | `representational` | preserved through title/detail/metadata rather than a same-named field | yes |
+| `Step.command` | `direct` | direct normalized field | yes |
+| `Step.status` | `direct` | direct normalized field | yes |
+| `Step.error` | `representational` | preserved through title/detail/metadata rather than a same-named field | yes |
+| `Step.file_paths` | `alias` | renamed implementation field | yes |
+| `Step.token_usage` | `trace_level` | run/trace-level aggregate, not always a per-step field | yes |
+| `Step.phase` | `direct` | direct normalized field | yes |
+| `Step.failure_tags` | `derived` | detector or label output, not a raw event field | yes |
 
 ## Run Fields
 

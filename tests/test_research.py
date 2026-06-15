@@ -1568,11 +1568,16 @@ def test_schema_field_audit_maps_paper_schema_to_code():
     step_fields = {row["field"]: row for row in result["step_fields"]}
 
     assert result["summary"]["ready"] is True
+    assert result["summary"]["objective_schema_fields_covered"] == 15
     assert result["summary"]["run_fields_covered"] == 4
     assert result["summary"]["step_fields_covered"] == 11
+    assert step_fields["Step.timestamp"]["scope"] == "direct"
     assert step_fields["Step.tool_name"]["scope"] == "representational"
     assert step_fields["Step.token_usage"]["scope"] == "trace_level"
     assert step_fields["Step.failure_tags"]["scope"] == "derived"
+    assert step_fields["Step.token_usage"]["boundary"] == "run/trace-level aggregate, not always a per-step field"
+    assert "Objective schema fields checked: 15 / 15" in markdown
+    assert "not all objective fields are direct `TraceEvent` attributes" in markdown
     assert "`Run.task_id`" in markdown
     assert "`Step.file_paths`" in markdown
     assert "schema mapping is representational" in markdown
@@ -3118,6 +3123,7 @@ def test_submission_readiness_validates_schema_field_audit_content(tmp_path):
 
     assert check["ok"] is False
     assert "missing ready" in check["problems"]
+    assert "missing objective schema coverage" in check["problems"]
     assert "missing run coverage" in check["problems"]
     assert "missing step coverage" in check["problems"]
     assert "missing failure tags" in check["problems"]

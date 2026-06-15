@@ -1,6 +1,7 @@
 {
   "run_fields": [
     {
+      "boundary": "direct normalized field",
       "covered": true,
       "field": "Run.task_id",
       "implementation": "RunRecord.task_id and run manifest rows",
@@ -17,6 +18,7 @@
       "scope": "direct"
     },
     {
+      "boundary": "direct normalized field",
       "covered": true,
       "field": "Run.prompt_type",
       "implementation": "RunRecord.prompt_type and PROMPT_TYPES",
@@ -33,6 +35,7 @@
       "scope": "direct"
     },
     {
+      "boundary": "direct normalized field",
       "covered": true,
       "field": "Run.outcome",
       "implementation": "RunRecord.outcome and finalized run rows",
@@ -49,6 +52,7 @@
       "scope": "direct"
     },
     {
+      "boundary": "run/trace-level aggregate, not always a per-step field",
       "covered": true,
       "field": "Run.usage",
       "implementation": "Trace.usage from turn.completed plus aggregate token_usage",
@@ -69,6 +73,7 @@
   ],
   "step_fields": [
     {
+      "boundary": "direct normalized field",
       "covered": true,
       "field": "Step.timestamp",
       "implementation": "TraceEvent.timestamp",
@@ -85,6 +90,7 @@
       "scope": "direct"
     },
     {
+      "boundary": "direct normalized field",
       "covered": true,
       "field": "Step.event_type",
       "implementation": "TraceEvent.kind plus TraceEvent.raw_type",
@@ -101,6 +107,7 @@
       "scope": "direct"
     },
     {
+      "boundary": "direct normalized field",
       "covered": true,
       "field": "Step.content",
       "implementation": "TraceEvent.title and TraceEvent.detail",
@@ -117,6 +124,7 @@
       "scope": "direct"
     },
     {
+      "boundary": "preserved through title/detail/metadata rather than a same-named field",
       "covered": true,
       "field": "Step.tool_name",
       "implementation": "MCP tool name normalized into TraceEvent.title with metadata retained",
@@ -133,6 +141,7 @@
       "scope": "representational"
     },
     {
+      "boundary": "direct normalized field",
       "covered": true,
       "field": "Step.command",
       "implementation": "TraceEvent.command",
@@ -149,6 +158,7 @@
       "scope": "direct"
     },
     {
+      "boundary": "direct normalized field",
       "covered": true,
       "field": "Step.status",
       "implementation": "TraceEvent.status plus command exit_code",
@@ -167,6 +177,7 @@
       "scope": "direct"
     },
     {
+      "boundary": "preserved through title/detail/metadata rather than a same-named field",
       "covered": true,
       "field": "Step.error",
       "implementation": "error events, failed statuses, and failed command detail",
@@ -185,6 +196,7 @@
       "scope": "representational"
     },
     {
+      "boundary": "renamed implementation field",
       "covered": true,
       "field": "Step.file_paths",
       "implementation": "TraceEvent.files from file_change events",
@@ -203,6 +215,7 @@
       "scope": "alias"
     },
     {
+      "boundary": "run/trace-level aggregate, not always a per-step field",
       "covered": true,
       "field": "Step.token_usage",
       "implementation": "Trace.usage and turn-event usage detail, surfaced as run-level token_usage metrics",
@@ -221,6 +234,7 @@
       "scope": "trace_level"
     },
     {
+      "boundary": "direct normalized field",
       "covered": true,
       "field": "Step.phase",
       "implementation": "TraceEvent.phase assigned by assign_phases",
@@ -239,6 +253,7 @@
       "scope": "direct"
     },
     {
+      "boundary": "detector or label output, not a raw event field",
       "covered": true,
       "field": "Step.failure_tags",
       "implementation": "diagnosis findings and manual-label failure_tags",
@@ -258,6 +273,8 @@
     }
   ],
   "summary": {
+    "objective_schema_field_count": 15,
+    "objective_schema_fields_covered": 15,
     "paper_draft_path": "docs/paper_draft.md",
     "parser_path": "codex_trace/parser.py",
     "ready": true,
