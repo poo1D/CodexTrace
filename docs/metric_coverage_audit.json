@@ -127,6 +127,24 @@
           "summary_level": true
         }
       ],
+      "nullable_metrics": [
+        {
+          "manifest": "benchmark/pilot/full30-real/runs.jsonl",
+          "mean_semantics": "averages use present values only; missing values indicate no observed event",
+          "metric": "time_to_first_edit",
+          "missing_count": 0,
+          "present_count": 60,
+          "run_count": 60
+        },
+        {
+          "manifest": "benchmark/pilot/full30-real/runs.jsonl",
+          "mean_semantics": "averages use present values only; missing values indicate no observed event",
+          "metric": "time_to_first_test",
+          "missing_count": 0,
+          "present_count": 60,
+          "run_count": 60
+        }
+      ],
       "ready": true
     },
     {
@@ -254,6 +272,24 @@
           "run_level": true,
           "summary_key": "avg_failure_score",
           "summary_level": true
+        }
+      ],
+      "nullable_metrics": [
+        {
+          "manifest": "benchmark/hard/pilot/hard10-real/runs.jsonl",
+          "mean_semantics": "averages use present values only; missing values indicate no observed event",
+          "metric": "time_to_first_edit",
+          "missing_count": 0,
+          "present_count": 20,
+          "run_count": 20
+        },
+        {
+          "manifest": "benchmark/hard/pilot/hard10-real/runs.jsonl",
+          "mean_semantics": "averages use present values only; missing values indicate no observed event",
+          "metric": "time_to_first_test",
+          "missing_count": 0,
+          "present_count": 20,
+          "run_count": 20
         }
       ],
       "ready": true
@@ -385,6 +421,24 @@
           "summary_level": true
         }
       ],
+      "nullable_metrics": [
+        {
+          "manifest": "benchmark/hard/pilot/hard30-real/runs.jsonl",
+          "mean_semantics": "averages use present values only; missing values indicate no observed event",
+          "metric": "time_to_first_edit",
+          "missing_count": 0,
+          "present_count": 60,
+          "run_count": 60
+        },
+        {
+          "manifest": "benchmark/hard/pilot/hard30-real/runs.jsonl",
+          "mean_semantics": "averages use present values only; missing values indicate no observed event",
+          "metric": "time_to_first_test",
+          "missing_count": 0,
+          "present_count": 60,
+          "run_count": 60
+        }
+      ],
       "ready": true
     },
     {
@@ -512,6 +566,24 @@
           "run_level": true,
           "summary_key": "avg_failure_score",
           "summary_level": true
+        }
+      ],
+      "nullable_metrics": [
+        {
+          "manifest": "benchmark/process-stress/pilot/full-real/runs.jsonl",
+          "mean_semantics": "averages use present values only; missing values indicate no observed event",
+          "metric": "time_to_first_edit",
+          "missing_count": 0,
+          "present_count": 24,
+          "run_count": 24
+        },
+        {
+          "manifest": "benchmark/process-stress/pilot/full-real/runs.jsonl",
+          "mean_semantics": "averages use present values only; missing values indicate no observed event",
+          "metric": "time_to_first_test",
+          "missing_count": 0,
+          "present_count": 24,
+          "run_count": 24
         }
       ],
       "ready": true
@@ -643,6 +715,24 @@
           "summary_level": true
         }
       ],
+      "nullable_metrics": [
+        {
+          "manifest": "benchmark/verification-lift/pilot/full-real/runs.jsonl",
+          "mean_semantics": "averages use present values only; missing values indicate no observed event",
+          "metric": "time_to_first_edit",
+          "missing_count": 0,
+          "present_count": 16,
+          "run_count": 16
+        },
+        {
+          "manifest": "benchmark/verification-lift/pilot/full-real/runs.jsonl",
+          "mean_semantics": "averages use present values only; missing values indicate no observed event",
+          "metric": "time_to_first_test",
+          "missing_count": 0,
+          "present_count": 16,
+          "run_count": 16
+        }
+      ],
       "ready": true
     },
     {
@@ -772,6 +862,24 @@
           "summary_level": true
         }
       ],
+      "nullable_metrics": [
+        {
+          "manifest": "benchmark/verification-lift-v2/pilot/full-real/runs.jsonl",
+          "mean_semantics": "averages use present values only; missing values indicate no observed event",
+          "metric": "time_to_first_edit",
+          "missing_count": 0,
+          "present_count": 16,
+          "run_count": 16
+        },
+        {
+          "manifest": "benchmark/verification-lift-v2/pilot/full-real/runs.jsonl",
+          "mean_semantics": "averages use present values only; missing values indicate no observed event",
+          "metric": "time_to_first_test",
+          "missing_count": 0,
+          "present_count": 16,
+          "run_count": 16
+        }
+      ],
       "ready": true
     },
     {
@@ -899,6 +1007,24 @@
           "run_level": true,
           "summary_key": "avg_failure_score",
           "summary_level": true
+        }
+      ],
+      "nullable_metrics": [
+        {
+          "manifest": "benchmark/verification-ablation/pilot/full-real/runs.jsonl",
+          "mean_semantics": "averages use present values only; missing values indicate no observed event",
+          "metric": "time_to_first_edit",
+          "missing_count": 0,
+          "present_count": 8,
+          "run_count": 8
+        },
+        {
+          "manifest": "benchmark/verification-ablation/pilot/full-real/runs.jsonl",
+          "mean_semantics": "averages use present values only; missing values indicate no observed event",
+          "metric": "time_to_first_test",
+          "missing_count": 4,
+          "present_count": 4,
+          "run_count": 8
         }
       ],
       "ready": true
@@ -1753,12 +1879,129 @@
       "summary_level": true
     }
   ],
+  "nullable_metrics": [
+    {
+      "manifest": "benchmark/pilot/full30-real/runs.jsonl",
+      "mean_semantics": "averages use present values only; missing values indicate no observed event",
+      "metric": "time_to_first_edit",
+      "missing_count": 0,
+      "present_count": 60,
+      "run_count": 60
+    },
+    {
+      "manifest": "benchmark/pilot/full30-real/runs.jsonl",
+      "mean_semantics": "averages use present values only; missing values indicate no observed event",
+      "metric": "time_to_first_test",
+      "missing_count": 0,
+      "present_count": 60,
+      "run_count": 60
+    },
+    {
+      "manifest": "benchmark/hard/pilot/hard10-real/runs.jsonl",
+      "mean_semantics": "averages use present values only; missing values indicate no observed event",
+      "metric": "time_to_first_edit",
+      "missing_count": 0,
+      "present_count": 20,
+      "run_count": 20
+    },
+    {
+      "manifest": "benchmark/hard/pilot/hard10-real/runs.jsonl",
+      "mean_semantics": "averages use present values only; missing values indicate no observed event",
+      "metric": "time_to_first_test",
+      "missing_count": 0,
+      "present_count": 20,
+      "run_count": 20
+    },
+    {
+      "manifest": "benchmark/hard/pilot/hard30-real/runs.jsonl",
+      "mean_semantics": "averages use present values only; missing values indicate no observed event",
+      "metric": "time_to_first_edit",
+      "missing_count": 0,
+      "present_count": 60,
+      "run_count": 60
+    },
+    {
+      "manifest": "benchmark/hard/pilot/hard30-real/runs.jsonl",
+      "mean_semantics": "averages use present values only; missing values indicate no observed event",
+      "metric": "time_to_first_test",
+      "missing_count": 0,
+      "present_count": 60,
+      "run_count": 60
+    },
+    {
+      "manifest": "benchmark/process-stress/pilot/full-real/runs.jsonl",
+      "mean_semantics": "averages use present values only; missing values indicate no observed event",
+      "metric": "time_to_first_edit",
+      "missing_count": 0,
+      "present_count": 24,
+      "run_count": 24
+    },
+    {
+      "manifest": "benchmark/process-stress/pilot/full-real/runs.jsonl",
+      "mean_semantics": "averages use present values only; missing values indicate no observed event",
+      "metric": "time_to_first_test",
+      "missing_count": 0,
+      "present_count": 24,
+      "run_count": 24
+    },
+    {
+      "manifest": "benchmark/verification-lift/pilot/full-real/runs.jsonl",
+      "mean_semantics": "averages use present values only; missing values indicate no observed event",
+      "metric": "time_to_first_edit",
+      "missing_count": 0,
+      "present_count": 16,
+      "run_count": 16
+    },
+    {
+      "manifest": "benchmark/verification-lift/pilot/full-real/runs.jsonl",
+      "mean_semantics": "averages use present values only; missing values indicate no observed event",
+      "metric": "time_to_first_test",
+      "missing_count": 0,
+      "present_count": 16,
+      "run_count": 16
+    },
+    {
+      "manifest": "benchmark/verification-lift-v2/pilot/full-real/runs.jsonl",
+      "mean_semantics": "averages use present values only; missing values indicate no observed event",
+      "metric": "time_to_first_edit",
+      "missing_count": 0,
+      "present_count": 16,
+      "run_count": 16
+    },
+    {
+      "manifest": "benchmark/verification-lift-v2/pilot/full-real/runs.jsonl",
+      "mean_semantics": "averages use present values only; missing values indicate no observed event",
+      "metric": "time_to_first_test",
+      "missing_count": 0,
+      "present_count": 16,
+      "run_count": 16
+    },
+    {
+      "manifest": "benchmark/verification-ablation/pilot/full-real/runs.jsonl",
+      "mean_semantics": "averages use present values only; missing values indicate no observed event",
+      "metric": "time_to_first_edit",
+      "missing_count": 0,
+      "present_count": 8,
+      "run_count": 8
+    },
+    {
+      "manifest": "benchmark/verification-ablation/pilot/full-real/runs.jsonl",
+      "mean_semantics": "averages use present values only; missing values indicate no observed event",
+      "metric": "time_to_first_test",
+      "missing_count": 4,
+      "present_count": 4,
+      "run_count": 8
+    }
+  ],
   "summary": {
     "coverage_cell_count": 77,
     "covered_metric_count": 11,
     "expected_coverage_cell_count": 77,
     "expected_metric_count": 11,
     "manifest_count": 7,
+    "nullable_cells_with_observations": 14,
+    "nullable_manifest_cells": 14,
+    "nullable_metric_count": 2,
     "ready": true,
     "ready_manifest_count": 7
   }

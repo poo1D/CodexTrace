@@ -1353,9 +1353,13 @@ def test_metric_coverage_audit_covers_experiment_design_metrics():
     assert result["summary"]["ready"] is True
     assert result["summary"]["manifest_count"] == 1
     assert result["summary"]["covered_metric_count"] == 11
+    assert result["summary"]["nullable_metric_count"] == 2
+    assert len(result["nullable_metrics"]) == 2
     assert all(row["covered"] for row in result["metrics"])
     assert "time_to_first_test" in markdown
     assert "avg_time_to_first_test" in markdown
+    assert "## Nullable Metrics" in markdown
+    assert "aggregate averages use present values only" in markdown
 
     default_result = build_metric_coverage_audit()
     default_markdown = render_metric_coverage_audit_markdown(default_result)
@@ -1365,7 +1369,10 @@ def test_metric_coverage_audit_covers_experiment_design_metrics():
     assert default_result["summary"]["ready_manifest_count"] == 7
     assert default_result["summary"]["coverage_cell_count"] == 77
     assert default_result["summary"]["expected_coverage_cell_count"] == 77
+    assert default_result["summary"]["nullable_manifest_cells"] == 14
+    assert default_result["summary"]["nullable_cells_with_observations"] == 14
     assert "Manifests checked: 7 / 7" in default_markdown
+    assert "Nullable metrics checked: 2" in default_markdown
     assert "benchmark/verification-ablation/pilot/full-real/runs.jsonl" in default_markdown
 
 

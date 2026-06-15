@@ -35,6 +35,7 @@ EXPECTED_METRICS = (
     "time_to_first_test",
     "failure_score",
 )
+NULLABLE_METRICS = ("time_to_first_edit", "time_to_first_test")
 SUMMARY_KEYS = {
     "success_rate": "success_rate",
     "verification_rate": "verification_rate",
@@ -62,6 +63,11 @@ def build_metric_coverage_audit(manifest_path: Path | Iterable[Path] | None = No
         for manifest in manifest_rows
         for row in manifest["metrics"]
     ]
+    nullable_rows = [
+        row
+        for manifest in manifest_rows
+        for row in manifest["nullable_metrics"]
+    ]
     ready = all(manifest["ready"] for manifest in manifest_rows)
     covered_metric_names = {
         row["metric"]
@@ -77,9 +83,13 @@ def build_metric_coverage_audit(manifest_path: Path | Iterable[Path] | None = No
             "covered_metric_count": len(covered_metric_names),
             "coverage_cell_count": sum(1 for row in rows if row["covered"]),
             "expected_coverage_cell_count": len(rows),
+            "nullable_metric_count": len(NULLABLE_METRICS),
+            "nullable_manifest_cells": len(nullable_rows),
+            "nullable_cells_with_observations": sum(1 for row in nullable_rows if row["present_count"] > 0),
         },
         "manifests": manifest_rows,
         "metrics": rows,
+        "nullable_metrics": nullable_rows,
     }
 
 
@@ -108,6 +118,21 @@ def _build_manifest_metric_coverage(manifest_path: Path) -> dict[str, Any]:
         row["covered"] = all(row[key] for key in ("run_level", "summary_level", "aggregate_markdown", "csv_field"))
         rows.append(row)
 
+    nullable_rows = []
+    for metric in NULLABLE_METRICS:
+        values = [row.get(metric) for row in aggregate["runs"]]
+        present_count = sum(value is not None for value in values)
+        nullable_rows.append(
+            {
+                "manifest": str(manifest_path),
+                "metric": metric,
+                "run_count": len(values),
+                "present_count": present_count,
+                "missing_count": len(values) - present_count,
+                "mean_semantics": "averages use present values only; missing values indicate no observed event",
+            }
+        )
+
     ready = all(row["covered"] for row in rows)
     return {
         "manifest": str(manifest_path),
@@ -115,6 +140,7 @@ def _build_manifest_metric_coverage(manifest_path: Path) -> dict[str, Any]:
         "covered_metric_count": sum(1 for row in rows if row["covered"]),
         "expected_metric_count": len(EXPECTED_METRICS),
         "metrics": rows,
+        "nullable_metrics": nullable_rows,
     }
 
 
@@ -131,6 +157,8 @@ def render_metric_coverage_audit_markdown(result: dict[str, Any]) -> str:
         f"- Manifests checked: {summary['ready_manifest_count']} / {summary['manifest_count']}",
         f"- Metrics covered: {summary['covered_metric_count']} / {summary['expected_metric_count']}",
         f"- Coverage cells covered: {summary['coverage_cell_count']} / {summary['expected_coverage_cell_count']}",
+        f"- Nullable metrics checked: {summary['nullable_metric_count']}",
+        f"- Nullable manifest cells with observations: {summary['nullable_cells_with_observations']} / {summary['nullable_manifest_cells']}",
         "",
         "## Manifests",
         "",
@@ -154,6 +182,20 @@ def render_metric_coverage_audit_markdown(result: dict[str, Any]) -> str:
             f"| `{row['manifest']}` | {row['metric']} | `{row['run_key']}` {'yes' if row['run_level'] else 'no'} | `{row['summary_key']}` "
             f"{'yes' if row['summary_level'] else 'no'} | {'yes' if row['csv_field'] else 'no'} | "
             f"{'yes' if row['aggregate_markdown'] else 'no'} | {'yes' if row['covered'] else 'no'} |"
+        )
+    lines.extend([
+        "",
+        "## Nullable Metrics",
+        "",
+        "`time_to_first_edit` and `time_to_first_test` are event-index metrics. Their aggregate averages use present values only; missing values mean the trace did not expose the corresponding edit or verification event.",
+        "",
+        "| Manifest | Metric | Present | Missing | Mean semantics |",
+        "| --- | --- | ---: | ---: | --- |",
+    ])
+    for row in result["nullable_metrics"]:
+        lines.append(
+            f"| `{row['manifest']}` | {row['metric']} | {row['present_count']} / {row['run_count']} | "
+            f"{row['missing_count']} | {row['mean_semantics']} |"
         )
     return "\n".join(lines) + "\n"
 
