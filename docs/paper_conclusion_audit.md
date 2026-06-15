@@ -5,9 +5,9 @@ This generated audit checks that the paper conclusion restates the evidence-back
 ## Summary
 
 - Ready: yes
-- Checks passed: 11 / 11
+- Checks passed: 12 / 12
 - Missing checks: 0
-- Conclusion words: 187
+- Conclusion words: 188
 - Paper draft: `docs/paper_draft.md`
 
 ## Checks
@@ -23,6 +23,7 @@ This generated audit checks that the paper conclusion restates the evidence-back
 | `headline_link` | pass | docs/headline_results.md |
 | `thesis_revision_link` | pass | docs/thesis_revision_decision.md |
 | `claim_framing_link` | pass | docs/submission_package.md |
+| `paired_effect_limitations_link` | pass | docs/paired_effect_limitations_audit.md |
 | `no_verification_lift_overclaim` | pass | no ordinary verification-rate lift conclusion claim |
 | `no_hidden_correctness_overclaim` | pass | no trace-only hidden-correctness conclusion claim |
 

@@ -23,6 +23,7 @@ def build_paper_conclusion_audit(paper_draft_path: Path = DEFAULT_PAPER_DRAFT) -
         _check("headline_link", "docs/headline_results.md", conclusion),
         _check("thesis_revision_link", "docs/thesis_revision_decision.md", conclusion),
         _check("claim_framing_link", "docs/submission_package.md", conclusion),
+        _check("paired_effect_limitations_link", "docs/paired_effect_limitations_audit.md", conclusion),
     ]
     overclaim_checks = [
         {

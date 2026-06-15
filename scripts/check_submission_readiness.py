@@ -344,9 +344,10 @@ def check_paper_conclusion_audit_content(path: Path = Path("docs/paper_conclusio
 
     required_phrases = {
         "ready": "Ready: yes",
-        "coverage": "Checks passed: 11 / 11",
+        "coverage": "Checks passed: 12 / 12",
         "ordinary verification boundary": "ordinary_verification_boundary",
         "hidden semantic boundary": "hidden_semantic_boundary",
+        "paired effect limitations": "paired_effect_limitations_link",
         "no verification overclaim": "no_verification_lift_overclaim",
         "no hidden correctness overclaim": "no_hidden_correctness_overclaim",
     }
