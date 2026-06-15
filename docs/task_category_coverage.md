@@ -12,9 +12,13 @@ This generated audit checks that benchmark task manifests cover the task categor
 - Hard pool missing design-family categories: `test_writing`
 - Hard30 design-family categories covered: 6 / 7
 - Hard30 missing design-family categories: `test_writing`
+- Design task-count window: 30-50
 - Seed tasks: 30
+- Seed tasks in design window: yes
 - Hard tasks: 50
+- Hard tasks in design window: yes
 - Hard30 selected tasks: 30
+- Hard30 selected tasks in design window: yes
 - Hard30 distinct categories: 12
 - Missing category rows: 0
 

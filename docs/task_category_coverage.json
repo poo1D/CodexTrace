@@ -119,17 +119,21 @@
     }
   ],
   "summary": {
+    "design_task_count_max": 50,
+    "design_task_count_min": 30,
     "hard30_category_count": 12,
     "hard30_family_categories_covered": 6,
     "hard30_family_missing_required_categories": [
       "test_writing"
     ],
+    "hard30_in_design_window": true,
     "hard30_minimum_ready": true,
     "hard30_task_count": 30,
     "hard_family_categories_covered": 6,
     "hard_family_missing_required_categories": [
       "test_writing"
     ],
+    "hard_in_design_window": true,
     "hard_missing_required_categories": [
       "test_writing"
     ],
@@ -139,6 +143,7 @@
     "ready": true,
     "required_design_categories": 7,
     "seed_design_ready": true,
+    "seed_in_design_window": true,
     "seed_required_categories_covered": 7,
     "seed_task_count": 30
   },

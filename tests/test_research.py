@@ -1691,8 +1691,14 @@ def test_task_category_coverage_audit_covers_experiment_design_categories():
     assert result["summary"]["hard30_family_categories_covered"] == 6
     assert result["summary"]["hard30_family_missing_required_categories"] == ["test_writing"]
     assert result["summary"]["required_design_categories"] == 7
+    assert result["summary"]["design_task_count_min"] == 30
+    assert result["summary"]["design_task_count_max"] == 50
     assert result["summary"]["seed_task_count"] == 30
+    assert result["summary"]["hard_task_count"] == 50
     assert result["summary"]["hard30_task_count"] == 30
+    assert result["summary"]["seed_in_design_window"] is True
+    assert result["summary"]["hard_in_design_window"] is True
+    assert result["summary"]["hard30_in_design_window"] is True
     assert rows["bug_fix"]["seed_count"] == 5
     assert rows["bug_fix"]["hard_family_count"] == 15
     assert rows["test_writing"]["seed_count"] == 5
@@ -1700,6 +1706,10 @@ def test_task_category_coverage_audit_covers_experiment_design_categories():
     assert rows["test_writing"]["hard30_count"] == 0
     assert rows["test_writing"]["hard30_family_count"] == 0
     assert "Seed design categories covered: 7 / 7" in markdown
+    assert "Design task-count window: 30-50" in markdown
+    assert "Seed tasks in design window: yes" in markdown
+    assert "Hard tasks in design window: yes" in markdown
+    assert "Hard30 selected tasks in design window: yes" in markdown
     assert "Hard pool missing design categories: `test_writing`" in markdown
     assert "Hard Category Family Mapping" in markdown
     assert "missing direct or family-level design categories such as `test_writing`" in markdown
@@ -3373,6 +3383,10 @@ def test_submission_readiness_validates_task_category_coverage_content(tmp_path)
     assert "missing seed coverage" in check["problems"]
     assert "missing hard pool coverage" in check["problems"]
     assert "missing hard pool missing" in check["problems"]
+    assert "missing task-count window" in check["problems"]
+    assert "missing seed task-count window" in check["problems"]
+    assert "missing hard task-count window" in check["problems"]
+    assert "missing hard30 task-count window" in check["problems"]
     assert "missing multi-turn change" in check["problems"]
 
 

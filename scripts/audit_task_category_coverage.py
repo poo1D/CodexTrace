@@ -14,6 +14,8 @@ sys.path.insert(0, str(ROOT))
 DEFAULT_SEED_TASKS = Path("benchmark/tasks.jsonl")
 DEFAULT_HARD_TASKS = Path("benchmark/hard/tasks.jsonl")
 DEFAULT_HARD30_TASKS = Path("benchmark/hard/pilot/hard30-selection/tasks.jsonl")
+DESIGN_TASK_COUNT_MIN = 30
+DESIGN_TASK_COUNT_MAX = 50
 
 REQUIRED_DESIGN_CATEGORIES = (
     "bug_fix",
@@ -95,6 +97,9 @@ def build_task_category_coverage_audit(
         and len(hard30_categories) >= 7
         and not hard30["missing_category"]
     )
+    seed_in_design_window = DESIGN_TASK_COUNT_MIN <= seed["task_count"] <= DESIGN_TASK_COUNT_MAX
+    hard_in_design_window = DESIGN_TASK_COUNT_MIN <= hard["task_count"] <= DESIGN_TASK_COUNT_MAX
+    hard30_in_design_window = DESIGN_TASK_COUNT_MIN <= hard30["task_count"] <= DESIGN_TASK_COUNT_MAX
     hard_family_covered = {
         row["category"]
         for row in rows
@@ -107,8 +112,17 @@ def build_task_category_coverage_audit(
     }
     return {
         "summary": {
-            "ready": seed_design_ready and hard30_minimum_ready and not all_missing_category,
+            "ready": (
+                seed_design_ready
+                and hard30_minimum_ready
+                and seed_in_design_window
+                and hard_in_design_window
+                and hard30_in_design_window
+                and not all_missing_category
+            ),
             "required_design_categories": len(REQUIRED_DESIGN_CATEGORIES),
+            "design_task_count_min": DESIGN_TASK_COUNT_MIN,
+            "design_task_count_max": DESIGN_TASK_COUNT_MAX,
             "seed_required_categories_covered": len(required & seed_categories),
             "hard_required_categories_covered": len(required & hard_categories),
             "hard_missing_required_categories": sorted(required - hard_categories),
@@ -120,6 +134,9 @@ def build_task_category_coverage_audit(
             "seed_task_count": seed["task_count"],
             "hard_task_count": hard["task_count"],
             "hard30_task_count": hard30["task_count"],
+            "seed_in_design_window": seed_in_design_window,
+            "hard_in_design_window": hard_in_design_window,
+            "hard30_in_design_window": hard30_in_design_window,
             "seed_design_ready": seed_design_ready,
             "hard30_minimum_ready": hard30_minimum_ready,
             "missing_category_rows": len(all_missing_category),
@@ -150,9 +167,13 @@ def render_task_category_coverage_markdown(result: dict[str, Any]) -> str:
         f"- Hard pool missing design-family categories: {_fmt_list(summary['hard_family_missing_required_categories'])}",
         f"- Hard30 design-family categories covered: {summary['hard30_family_categories_covered']} / {summary['required_design_categories']}",
         f"- Hard30 missing design-family categories: {_fmt_list(summary['hard30_family_missing_required_categories'])}",
+        f"- Design task-count window: {summary['design_task_count_min']}-{summary['design_task_count_max']}",
         f"- Seed tasks: {summary['seed_task_count']}",
+        f"- Seed tasks in design window: {'yes' if summary['seed_in_design_window'] else 'no'}",
         f"- Hard tasks: {summary['hard_task_count']}",
+        f"- Hard tasks in design window: {'yes' if summary['hard_in_design_window'] else 'no'}",
         f"- Hard30 selected tasks: {summary['hard30_task_count']}",
+        f"- Hard30 selected tasks in design window: {'yes' if summary['hard30_in_design_window'] else 'no'}",
         f"- Hard30 distinct categories: {summary['hard30_category_count']}",
         f"- Missing category rows: {summary['missing_category_rows']}",
         "",
