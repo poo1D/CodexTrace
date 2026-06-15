@@ -32,6 +32,15 @@
         "id": "aggregate_report_output"
       }
     ],
+    "metrics": {
+      "aggregate_prompt_types": [
+        "baseline",
+        "intervention"
+      ],
+      "aggregate_run_count": 4,
+      "diagnosis_finding_count": 5,
+      "diagnosis_findings_with_event_ids": 5
+    },
     "ready": true,
     "summary": {
       "check_count": 6,
@@ -131,7 +140,10 @@
     "covered_stage_count": 7,
     "paper_path": "docs/paper_draft.md",
     "ready": true,
+    "smoke_aggregate_run_count": 4,
     "smoke_check_count": 6,
+    "smoke_diagnosis_finding_count": 5,
+    "smoke_diagnosis_findings_with_event_ids": 5,
     "stage_count": 7
   }
 }

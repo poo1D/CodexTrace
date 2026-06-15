@@ -107,6 +107,9 @@ def build_method_pipeline_audit(
             "covered_cli_check_count": sum(1 for value in cli_checks.values() if value),
             "smoke_check_count": smoke["summary"]["check_count"],
             "covered_smoke_check_count": smoke["summary"]["covered_check_count"],
+            "smoke_diagnosis_finding_count": smoke["metrics"]["diagnosis_finding_count"],
+            "smoke_diagnosis_findings_with_event_ids": smoke["metrics"]["diagnosis_findings_with_event_ids"],
+            "smoke_aggregate_run_count": smoke["metrics"]["aggregate_run_count"],
             "paper_path": str(paper_path),
         },
         "stages": stage_rows,
@@ -160,6 +163,20 @@ def render_method_pipeline_markdown(result: dict[str, Any]) -> str:
     for row in result["smoke"]["checks"]:
         lines.append(f"| `{row['id']}` | {'yes' if row['covered'] else 'no'} |")
 
+    metrics = result["smoke"]["metrics"]
+    lines.extend([
+        "",
+        "## Smoke Metrics",
+        "",
+        f"- Diagnosis findings: {metrics['diagnosis_finding_count']}",
+        (
+            "- Findings with event IDs: "
+            f"{metrics['diagnosis_findings_with_event_ids']} / {metrics['diagnosis_finding_count']}"
+        ),
+        f"- Aggregate run rows: {metrics['aggregate_run_count']}",
+        f"- Aggregate prompt types: {', '.join(metrics['aggregate_prompt_types'])}",
+    ])
+
     lines.extend([
         "",
         "Interpretation: this audit exercises the offline parser, diagnosis, and aggregate surfaces on committed inputs. It does not execute live Codex collection.",
@@ -206,14 +223,16 @@ def _run_pipeline_smoke() -> dict[str, Any]:
             str(diagnosis_path),
         ])
         diagnosis = json.loads(diagnosis_path.read_text(encoding="utf-8")) if diagnosis_path.exists() else {}
-        finding_codes = {finding.get("code") for finding in diagnosis.get("diagnosis", {}).get("findings", [])}
+        findings = diagnosis.get("diagnosis", {}).get("findings", [])
+        finding_codes = {finding.get("code") for finding in findings}
+        findings_with_event_ids = sum(1 for finding in findings if finding.get("event_ids"))
         checks.append({
             "id": "diagnose_failure_patterns",
             "covered": diagnose_exit == 0 and {"command_failure_unhandled", "repeated_search_or_read"} <= finding_codes,
         })
         checks.append({
             "id": "diagnose_event_ids",
-            "covered": any(finding.get("event_ids") for finding in diagnosis.get("diagnosis", {}).get("findings", [])),
+            "covered": findings_with_event_ids > 0,
         })
 
         aggregate_exit = _run_cli([
@@ -245,6 +264,12 @@ def _run_pipeline_smoke() -> dict[str, Any]:
         "summary": {
             "check_count": len(checks),
             "covered_check_count": sum(1 for row in checks if row["covered"]),
+        },
+        "metrics": {
+            "diagnosis_finding_count": len(findings),
+            "diagnosis_findings_with_event_ids": findings_with_event_ids,
+            "aggregate_run_count": len(aggregate.get("runs", [])),
+            "aggregate_prompt_types": sorted(summary.keys()),
         },
         "checks": checks,
     }

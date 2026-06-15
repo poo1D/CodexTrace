@@ -42,4 +42,11 @@ This generated audit checks that the CodexTrace method pipeline described in the
 | `aggregate_baseline_intervention` | yes |
 | `aggregate_report_output` | yes |
 
+## Smoke Metrics
+
+- Diagnosis findings: 5
+- Findings with event IDs: 5 / 5
+- Aggregate run rows: 4
+- Aggregate prompt types: baseline, intervention
+
 Interpretation: this audit exercises the offline parser, diagnosis, and aggregate surfaces on committed inputs. It does not execute live Codex collection.

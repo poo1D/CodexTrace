@@ -1592,6 +1592,10 @@ def test_method_pipeline_audit_maps_paper_pipeline_to_code_and_cli_smoke():
     assert result["summary"]["covered_stage_count"] == 7
     assert result["summary"]["covered_cli_check_count"] == 4
     assert result["summary"]["covered_smoke_check_count"] == 6
+    assert result["summary"]["smoke_diagnosis_finding_count"] == 5
+    assert result["summary"]["smoke_diagnosis_findings_with_event_ids"] == 5
+    assert result["summary"]["smoke_aggregate_run_count"] == 4
+    assert result["smoke"]["metrics"]["aggregate_prompt_types"] == ["baseline", "intervention"]
     assert {row["id"] for row in result["stages"]} == {
         "codex_jsonl_trace_input",
         "jsonl_event_parser",
@@ -1604,6 +1608,10 @@ def test_method_pipeline_audit_maps_paper_pipeline_to_code_and_cli_smoke():
     assert all(row["covered"] for row in result["stages"])
     assert all(row["covered"] for row in result["smoke"]["checks"])
     assert "demo/real-codex-run.jsonl" in markdown
+    assert "## Smoke Metrics" in markdown
+    assert "Diagnosis findings: 5" in markdown
+    assert "Findings with event IDs: 5 / 5" in markdown
+    assert "Aggregate run rows: 4" in markdown
     assert "does not execute live Codex collection" in markdown
 
 
@@ -3334,6 +3342,10 @@ def test_submission_readiness_validates_method_pipeline_audit_content(tmp_path):
     assert "missing ready" in check["problems"]
     assert "missing stage coverage" in check["problems"]
     assert "missing smoke coverage" in check["problems"]
+    assert "missing smoke metrics" in check["problems"]
+    assert "missing diagnosis findings" in check["problems"]
+    assert "missing findings with event ids" in check["problems"]
+    assert "missing aggregate run rows" in check["problems"]
     assert "missing live collection caveat" in check["problems"]
 
 
