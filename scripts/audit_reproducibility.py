@@ -60,6 +60,7 @@ REQUIRED_COMMANDS = (
     {"id": "expected_results_reconciliation", "phrase": "scripts/audit_expected_results_reconciliation.py"},
     {"id": "paper_number_guard", "phrase": "scripts/audit_paper_numbers.py"},
     {"id": "reviewer_path_audit", "phrase": "scripts/audit_reviewer_path.py"},
+    {"id": "artifact_guide_sequence_audit", "phrase": "scripts/audit_artifact_guide_sequence.py"},
     {"id": "benchmark_trace_artifact", "phrase": "scripts/audit_benchmark_trace_artifact.py"},
     {"id": "label_provenance_audit", "phrase": "scripts/audit_label_provenance.py"},
     {"id": "label_limitations_audit", "phrase": "scripts/audit_label_limitations.py"},

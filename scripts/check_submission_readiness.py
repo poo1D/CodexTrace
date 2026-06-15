@@ -676,6 +676,42 @@ def check_reviewer_path_audit_content(path: Path = Path("docs/reviewer_path_audi
     }
 
 
+def check_artifact_guide_sequence_audit_content(
+    path: Path = Path("docs/artifact_guide_sequence_audit.md"),
+) -> dict[str, Any]:
+    problems = []
+    try:
+        text = path.read_text(encoding="utf-8")
+    except FileNotFoundError:
+        return {
+            "name": "artifact guide sequence audit",
+            "ok": False,
+            "evidence": str(path),
+            "problems": ["missing artifact guide sequence audit"],
+        }
+
+    required_phrases = {
+        "ready": "Ready: yes",
+        "step count": "Step count: 46",
+        "last step": "Last step: 46",
+        "expected last step": "Expected last step: 46",
+        "no duplicate numbers": "Duplicate numbers: -",
+        "no missing numbers": "Missing numbers: -",
+        "required links": "docs/paired_effect_limitations_audit.md",
+    }
+    for label, phrase in required_phrases.items():
+        if phrase not in text:
+            problems.append(f"missing {label}")
+
+    return {
+        "name": "artifact guide sequence audit",
+        "ok": not problems,
+        "evidence": str(path),
+        "detail": "reviewer path numbering is contiguous and includes core evidence links",
+        "problems": problems,
+    }
+
+
 def check_metric_coverage_audit_content(path: Path = Path("docs/metric_coverage_audit.md")) -> dict[str, Any]:
     problems = []
     try:
@@ -1600,7 +1636,7 @@ def check_reproducibility_audit_content(path: Path = Path("docs/reproducibility_
 
     required_phrases = {
         "ready": "Ready: yes",
-        "coverage count": "Commands covered: 51 / 51",
+        "coverage count": "Commands covered: 52 / 52",
         "balanced fences": "Markdown fences balanced: yes",
         "submission gate": "submission_readiness_gate",
         "scope caveat": "does not execute the full real Codex collection commands",
@@ -1731,6 +1767,7 @@ def build_report(selection_dir: Path, run_dir: Path) -> dict[str, Any]:
         check_expected_results_reconciliation_content(),
         check_paper_number_guard_content(),
         check_reviewer_path_audit_content(),
+        check_artifact_guide_sequence_audit_content(),
         check_benchmark_trace_artifact_content(),
         check_label_provenance_audit_content(),
         check_label_limitations_audit_content(),

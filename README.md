@@ -100,6 +100,7 @@ coverage, `docs/related_work_audit.md` for related-work positioning coverage,
 `docs/method_pipeline_audit.md` for method pipeline source/CLI coverage,
 `docs/paper_structure_audit.md` for paper-section/RQ coverage,
 `docs/rq_table_consistency_audit.md` for RQ result-table drift checks,
+`docs/artifact_guide_sequence_audit.md` for artifact-guide numbering checks,
 `docs/reproducibility_audit.md` for reproducibility-command coverage,
 `docs/hard30_task_diagnosis.md` for task-level
 hard30 repairs/regressions and double failures, `docs/thesis_readiness.md` for
@@ -214,6 +215,7 @@ Key files:
 - `scripts/audit_method_pipeline.py`: checks method pipeline mapping to source and offline CLI smoke outputs
 - `scripts/audit_paper_structure.py`: checks paper draft section, RQ, and boundary-result coverage
 - `scripts/audit_rq_table_consistency.py`: checks paper RQ result tables against generated hard30 report artifacts
+- `scripts/audit_artifact_guide_sequence.py`: checks artifact-guide review-path numbering and core evidence links
 - `scripts/audit_reproducibility.py`: checks reproducibility checklist command coverage and Markdown fence balance
 - `scripts/audit_submission_package.py`: generates the RQ-to-evidence submission package map
 - `docs/artifact_guide.md`: 15-minute reviewer/interviewer walkthrough
@@ -267,6 +269,7 @@ Key files:
 - `docs/method_pipeline_audit.md`: generated audit for method pipeline source/CLI smoke coverage
 - `docs/paper_structure_audit.md`: generated coverage audit for paper sections, RQ result blocks, and boundary framing
 - `docs/rq_table_consistency_audit.md`: generated audit for paper RQ result-table consistency with hard30 report artifacts
+- `docs/artifact_guide_sequence_audit.md`: generated audit for artifact-guide review-path numbering and core evidence links
 - `docs/label_provenance_audit.md`: generated audit for hard30 label-file provenance and evaluation consistency
 - `docs/label_limitations_audit.md`: generated audit for manual-label limitation wording and provenance caveats
 - `docs/verification_saturation_audit.md`: generated audit for ordinary-baseline verification saturation and ablation boundary
@@ -391,6 +394,7 @@ PYTHONPATH=. python3 scripts/audit_paper_conclusion.py --markdown-output docs/pa
 PYTHONPATH=. python3 scripts/audit_method_pipeline.py --markdown-output docs/method_pipeline_audit.md
 PYTHONPATH=. python3 scripts/audit_paper_structure.py --markdown-output docs/paper_structure_audit.md
 PYTHONPATH=. python3 scripts/audit_rq_table_consistency.py --markdown-output docs/rq_table_consistency_audit.md
+PYTHONPATH=. python3 scripts/audit_artifact_guide_sequence.py --markdown-output docs/artifact_guide_sequence_audit.md
 PYTHONPATH=. python3 scripts/audit_label_provenance.py --markdown-output docs/label_provenance_audit.md
 PYTHONPATH=. python3 scripts/audit_label_limitations.py --markdown-output docs/label_limitations_audit.md
 PYTHONPATH=. python3 scripts/audit_verification_saturation.py --markdown-output docs/verification_saturation_audit.md

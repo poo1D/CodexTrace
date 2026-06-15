@@ -191,6 +191,11 @@
       "present": true
     },
     {
+      "id": "artifact_guide_sequence_audit",
+      "phrase": "scripts/audit_artifact_guide_sequence.py",
+      "present": true
+    },
+    {
       "id": "benchmark_trace_artifact",
       "phrase": "scripts/audit_benchmark_trace_artifact.py",
       "present": true
@@ -257,12 +262,12 @@
     }
   ],
   "summary": {
-    "bash_fence_count": 60,
+    "bash_fence_count": 61,
     "checklist_path": "docs/reproducibility_checklist.md",
-    "covered_command_count": 51,
-    "fence_count": 126,
+    "covered_command_count": 52,
+    "fence_count": 128,
     "fences_balanced": true,
     "ready": true,
-    "required_command_count": 51
+    "required_command_count": 52
   }
 }

@@ -40,6 +40,10 @@ from scripts.audit_hard30_task_diagnosis import build_task_diagnosis, render_tas
 from scripts.audit_headline_results import build_headline_results, render_headline_results_markdown
 from scripts.audit_label_provenance import build_label_provenance_audit, render_label_provenance_markdown
 from scripts.audit_label_limitations import build_label_limitations_audit, render_label_limitations_markdown
+from scripts.audit_artifact_guide_sequence import (
+    build_artifact_guide_sequence_audit,
+    render_artifact_guide_sequence_markdown,
+)
 from scripts.audit_paper_numbers import build_paper_number_guard, render_paper_number_guard_markdown
 from scripts.audit_paper_structure import build_paper_structure_audit, render_paper_structure_audit_markdown
 from scripts.audit_paper_claims import build_claim_audit, render_claim_audit_markdown
@@ -126,6 +130,7 @@ from scripts.check_submission_readiness import (
     check_limitations_traceability_audit_content,
     check_expected_results_reconciliation_content,
     check_paper_number_guard_content,
+    check_artifact_guide_sequence_audit_content,
     check_paper_abstract_audit_content,
     check_bibliography_audit_content,
     check_paper_contribution_audit_content,
@@ -1438,6 +1443,30 @@ def test_benchmark_trace_artifact_audit_covers_hard30_pairs_and_traces():
     assert "does not rerun Codex or hidden graders" in markdown
 
 
+def test_artifact_guide_sequence_audit_checks_reviewer_path_numbering(tmp_path):
+    result = build_artifact_guide_sequence_audit()
+    markdown = render_artifact_guide_sequence_markdown(result)
+
+    assert result["summary"]["ready"] is True
+    assert result["summary"]["step_count"] == 46
+    assert result["summary"]["first_step"] == 1
+    assert result["summary"]["last_step"] == 46
+    assert result["summary"]["missing_numbers"] == []
+    assert result["summary"]["duplicate_numbers"] == []
+    assert "docs/paired_effect_limitations_audit.md" in markdown
+
+    broken = tmp_path / "artifact_guide.md"
+    broken.write_text(
+        "## Fifteen-Minute Review Path\n\n1. First\n1. Duplicate\n3. Third\n\n## Main Evidence\n",
+        encoding="utf-8",
+    )
+    failing = build_artifact_guide_sequence_audit(broken)
+
+    assert failing["summary"]["ready"] is False
+    assert failing["summary"]["duplicate_numbers"] == [1]
+    assert failing["summary"]["missing_numbers"] == [2]
+
+
 def test_label_provenance_audit_covers_hard30_label_files_and_eval_outputs():
     result = build_label_provenance_audit()
     markdown = render_label_provenance_markdown(result)
@@ -1662,7 +1691,7 @@ def test_reproducibility_audit_covers_key_commands():
     markdown = render_reproducibility_audit_markdown(result)
 
     assert result["summary"]["ready"] is True
-    assert result["summary"]["covered_command_count"] == 51
+    assert result["summary"]["covered_command_count"] == 52
     assert result["summary"]["fences_balanced"] is True
     assert {row["id"] for row in result["commands"]} >= {
         "full30_aggregate",
@@ -1699,6 +1728,7 @@ def test_reproducibility_audit_covers_key_commands():
         "validity_threats",
         "limitations_traceability_audit",
         "expected_results_reconciliation",
+        "artifact_guide_sequence_audit",
         "submission_readiness_gate",
         "claim_text_guard",
     }
@@ -2238,6 +2268,7 @@ def test_reviewer_docs_surface_hard30_task_diagnosis():
     assert "docs/submission_package.md" in readme
     assert "docs/paper_number_guard.md" in readme
     assert "docs/reviewer_path_audit.md" in readme
+    assert "docs/artifact_guide_sequence_audit.md" in readme
     assert "docs/benchmark_trace_artifact.md" in readme
     assert "docs/label_provenance_audit.md" in readme
     assert "docs/label_limitations_audit.md" in readme
@@ -2282,6 +2313,7 @@ def test_reviewer_docs_surface_hard30_task_diagnosis():
     assert "scripts/audit_headline_results.py --markdown-output docs/headline_results.md" in readme
     assert "scripts/audit_paper_numbers.py --markdown-output docs/paper_number_guard.md" in readme
     assert "scripts/audit_reviewer_path.py --markdown-output docs/reviewer_path_audit.md" in readme
+    assert "scripts/audit_artifact_guide_sequence.py --markdown-output docs/artifact_guide_sequence_audit.md" in readme
     assert "scripts/audit_benchmark_trace_artifact.py --markdown-output docs/benchmark_trace_artifact.md" in readme
     assert "scripts/audit_label_provenance.py --markdown-output docs/label_provenance_audit.md" in readme
     assert "scripts/audit_label_limitations.py --markdown-output docs/label_limitations_audit.md" in readme
@@ -2318,6 +2350,7 @@ def test_reviewer_docs_surface_hard30_task_diagnosis():
     assert "docs/paper_abstract_audit.md" in guide
     assert "docs/paper_contribution_audit.md" in guide
     assert "docs/paper_conclusion_audit.md" in guide
+    assert "docs/artifact_guide_sequence_audit.md" in guide
     assert "docs/method_pipeline_audit.md" in guide
     assert "docs/claim_text_guard.md" in guide
     assert "docs/paper_number_guard.md" in guide
@@ -2365,6 +2398,7 @@ def test_reviewer_docs_surface_hard30_task_diagnosis():
     assert "scripts/audit_paper_abstract.py" in checklist
     assert "scripts/audit_paper_contributions.py" in checklist
     assert "scripts/audit_paper_conclusion.py" in checklist
+    assert "scripts/audit_artifact_guide_sequence.py" in checklist
     assert "scripts/audit_method_pipeline.py" in checklist
     assert "scripts/audit_verification_lift_next_experiment.py" in checklist
     assert "scripts/audit_verification_lift_v2_plan.py" in checklist
@@ -2547,6 +2581,7 @@ def test_submission_package_maps_rqs_to_safe_paper_claims():
     assert "docs/paper_outline.md" in package["required_files"]
     assert "docs/paper_number_guard.md" in package["required_files"]
     assert "docs/reviewer_path_audit.md" in package["required_files"]
+    assert "docs/artifact_guide_sequence_audit.md" in package["required_files"]
     assert "docs/benchmark_trace_artifact.md" in package["required_files"]
     assert "docs/label_provenance_audit.md" in package["required_files"]
     assert "docs/label_limitations_audit.md" in package["required_files"]
@@ -2582,6 +2617,7 @@ def test_submission_package_maps_rqs_to_safe_paper_claims():
     assert "docs/detector_evaluation_audit.md" in markdown
     assert "docs/rule_implementation_audit.md" in markdown
     assert "docs/benchmark_trace_artifact.md" in markdown
+    assert "docs/artifact_guide_sequence_audit.md" in markdown
     assert "docs/label_provenance_audit.md" in markdown
     assert "docs/label_limitations_audit.md" in markdown
     assert "docs/verification_saturation_audit.md" in markdown
@@ -2793,6 +2829,7 @@ def test_reviewer_path_audit_covers_required_artifacts(tmp_path):
     assert any(row["path"] == "docs/bibliography_audit.md" for row in result["coverage"])
     assert any(row["path"] == "docs/paper_structure_audit.md" for row in result["coverage"])
     assert any(row["path"] == "docs/reproducibility_audit.md" for row in result["coverage"])
+    assert any(row["path"] == "docs/artifact_guide_sequence_audit.md" for row in result["coverage"])
     assert any(row["path"] == "docs/headline_results.md" for row in result["coverage"])
     assert any(row["path"] == "docs/thesis_revision_decision.md" for row in result["coverage"])
     assert any(row["path"] == "docs/validity_threats.md" for row in result["coverage"])
@@ -2819,6 +2856,19 @@ def test_submission_readiness_validates_reviewer_path_audit_content(tmp_path):
     assert check["ok"] is False
     assert "missing ok" in check["problems"]
     assert "missing checklist coverage" in check["problems"]
+
+
+def test_submission_readiness_validates_artifact_guide_sequence_audit_content(tmp_path):
+    broken = tmp_path / "artifact_guide_sequence_audit.md"
+    broken.write_text("# Artifact Guide Sequence Audit\nReady: no\n", encoding="utf-8")
+
+    check = check_artifact_guide_sequence_audit_content(broken)
+
+    assert check["ok"] is False
+    assert "missing ready" in check["problems"]
+    assert "missing step count" in check["problems"]
+    assert "missing no duplicate numbers" in check["problems"]
+    assert "missing required links" in check["problems"]
 
 
 def test_submission_readiness_validates_metric_coverage_audit_content(tmp_path):
