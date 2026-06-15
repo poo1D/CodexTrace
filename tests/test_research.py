@@ -49,6 +49,7 @@ from scripts.audit_expected_results_reconciliation import (
 )
 from scripts.audit_process_stress_plan import audit_process_stress_plan
 from scripts.audit_paper_contributions import build_paper_contribution_audit, render_paper_contribution_audit_markdown
+from scripts.audit_paper_conclusion import build_paper_conclusion_audit, render_paper_conclusion_audit_markdown
 from scripts.audit_method_pipeline import build_method_pipeline_audit, render_method_pipeline_markdown
 from scripts.audit_reviewer_path import build_reviewer_path_audit, render_reviewer_path_audit_markdown
 from scripts.audit_related_work import build_related_work_audit, render_related_work_audit_markdown
@@ -121,6 +122,7 @@ from scripts.check_submission_readiness import (
     check_paper_abstract_audit_content,
     check_bibliography_audit_content,
     check_paper_contribution_audit_content,
+    check_paper_conclusion_audit_content,
     check_method_pipeline_audit_content,
     check_paper_structure_audit_content,
     check_related_work_audit_content,
@@ -1628,7 +1630,7 @@ def test_reproducibility_audit_covers_key_commands():
     markdown = render_reproducibility_audit_markdown(result)
 
     assert result["summary"]["ready"] is True
-    assert result["summary"]["covered_command_count"] == 48
+    assert result["summary"]["covered_command_count"] == 49
     assert result["summary"]["fences_balanced"] is True
     assert {row["id"] for row in result["commands"]} >= {
         "full30_aggregate",
@@ -1652,6 +1654,7 @@ def test_reproducibility_audit_covers_key_commands():
         "bibliography_audit",
         "paper_abstract_audit",
         "paper_contribution_audit",
+        "paper_conclusion_audit",
         "method_pipeline_audit",
         "rq_table_consistency_audit",
         "hard30_paper_report",
@@ -1927,6 +1930,23 @@ def test_paper_contribution_audit_covers_supported_contributions():
     assert "no_verification_lift_contribution" in markdown
 
 
+def test_paper_conclusion_audit_covers_boundary_result_close():
+    result = build_paper_conclusion_audit()
+    markdown = render_paper_conclusion_audit_markdown(result)
+    checks = {row["id"]: row for row in result["checks"]}
+
+    assert result["summary"]["ready"] is True
+    assert result["summary"]["passed"] == 11
+    assert result["summary"]["checks"] == 11
+    assert checks["ordinary_verification_boundary"]["passed"] is True
+    assert checks["hidden_semantic_boundary"]["passed"] is True
+    assert checks["semantic_oracles"]["passed"] is True
+    assert checks["no_verification_lift_overclaim"]["passed"] is True
+    assert checks["no_hidden_correctness_overclaim"]["passed"] is True
+    assert "Checks passed: 11 / 11" in markdown
+    assert "ordinary_verification_boundary" in markdown
+
+
 def test_bibliography_audit_covers_related_work_sources():
     result = build_bibliography_audit()
     markdown = render_bibliography_audit_markdown(result)
@@ -2134,6 +2154,7 @@ def test_paper_draft_contains_submission_polish_sections():
     assert "## References" in text
     assert "docs/paper_structure_audit.md" in text
     assert "docs/method_pipeline_audit.md" in text
+    assert "docs/paper_conclusion_audit.md" in text
     assert "docs/rq_table_consistency_audit.md" in text
     assert "docs/reproducibility_audit.md" in text
     assert "docs/benchmark_trace_artifact.md" in text
@@ -2169,6 +2190,7 @@ def test_reviewer_docs_surface_hard30_task_diagnosis():
     assert "docs/verification_saturation_audit.md" in readme
     assert "docs/paper_abstract_audit.md" in readme
     assert "docs/paper_contribution_audit.md" in readme
+    assert "docs/paper_conclusion_audit.md" in readme
     assert "docs/method_pipeline_audit.md" in readme
     assert "docs/verification_lift_v2_plan_audit.md" in readme
     assert "docs/verification_ablation_plan_audit.md" in readme
@@ -2212,6 +2234,7 @@ def test_reviewer_docs_surface_hard30_task_diagnosis():
     assert "scripts/audit_verification_saturation.py --markdown-output docs/verification_saturation_audit.md" in readme
     assert "scripts/audit_paper_abstract.py --markdown-output docs/paper_abstract_audit.md" in readme
     assert "scripts/audit_paper_contributions.py --markdown-output docs/paper_contribution_audit.md" in readme
+    assert "scripts/audit_paper_conclusion.py --markdown-output docs/paper_conclusion_audit.md" in readme
     assert "scripts/audit_method_pipeline.py --markdown-output docs/method_pipeline_audit.md" in readme
     assert "scripts/audit_verification_lift_next_experiment.py --markdown-output docs/verification_lift_next_experiment.md" in readme
     assert "scripts/audit_verification_lift_v2_plan.py --markdown-output docs/verification_lift_v2_plan_audit.md" in readme
@@ -2253,6 +2276,7 @@ def test_reviewer_docs_surface_hard30_task_diagnosis():
     assert "docs/verification_saturation_audit.md" in guide
     assert "docs/paper_abstract_audit.md" in guide
     assert "docs/paper_contribution_audit.md" in guide
+    assert "docs/paper_conclusion_audit.md" in guide
     assert "docs/method_pipeline_audit.md" in guide
     assert "docs/claim_text_guard.md" in guide
     assert "docs/paper_number_guard.md" in guide
@@ -2297,6 +2321,7 @@ def test_reviewer_docs_surface_hard30_task_diagnosis():
     assert "scripts/audit_verification_saturation.py" in checklist
     assert "scripts/audit_paper_abstract.py" in checklist
     assert "scripts/audit_paper_contributions.py" in checklist
+    assert "scripts/audit_paper_conclusion.py" in checklist
     assert "scripts/audit_method_pipeline.py" in checklist
     assert "scripts/audit_verification_lift_next_experiment.py" in checklist
     assert "scripts/audit_verification_lift_v2_plan.py" in checklist
@@ -2305,6 +2330,7 @@ def test_reviewer_docs_surface_hard30_task_diagnosis():
     assert "scripts/audit_submission_package.py" in checklist
     assert "--markdown-output /tmp/limitations-traceability-audit.md" in checklist
     assert "--markdown-output /tmp/expected-results-reconciliation.md" in checklist
+    assert "--markdown-output /tmp/paper-conclusion-audit.md" in checklist
     assert "scripts/audit_paper_numbers.py" in checklist
     assert "scripts/audit_reviewer_path.py" in checklist
     assert "scripts/audit_benchmark_trace_artifact.py" in checklist
@@ -2467,6 +2493,7 @@ def test_submission_package_maps_rqs_to_safe_paper_claims():
     assert "docs/paper_draft.md" in package["required_files"]
     assert "docs/paper_abstract_audit.md" in package["required_files"]
     assert "docs/paper_contribution_audit.md" in package["required_files"]
+    assert "docs/paper_conclusion_audit.md" in package["required_files"]
     assert "docs/method_pipeline_audit.md" in package["required_files"]
     assert "docs/rq_table_consistency_audit.md" in package["required_files"]
     assert "docs/paper_structure_audit.md" in package["required_files"]
@@ -2534,6 +2561,7 @@ def test_submission_package_maps_rqs_to_safe_paper_claims():
     assert "docs/expected_results_reconciliation.md" in markdown
     assert "docs/paper_abstract_audit.md" in markdown
     assert "docs/paper_contribution_audit.md" in markdown
+    assert "docs/paper_conclusion_audit.md" in markdown
     assert "docs/method_pipeline_audit.md" in markdown
     assert "docs/rq_table_consistency_audit.md" in markdown
     assert "Unsupported Claims To Avoid" in markdown
@@ -2669,6 +2697,20 @@ def test_submission_readiness_validates_paper_contribution_audit_content(tmp_pat
     assert "missing taxonomy" in check["problems"]
 
 
+def test_submission_readiness_validates_paper_conclusion_audit_content(tmp_path):
+    broken = tmp_path / "paper_conclusion_audit.md"
+    broken.write_text("# Paper Conclusion Audit\nReady: no\n", encoding="utf-8")
+
+    check = check_paper_conclusion_audit_content(broken)
+
+    assert check["ok"] is False
+    assert "missing ready" in check["problems"]
+    assert "missing coverage" in check["problems"]
+    assert "missing ordinary verification boundary" in check["problems"]
+    assert "missing hidden semantic boundary" in check["problems"]
+    assert "missing no verification overclaim" in check["problems"]
+
+
 def test_reviewer_path_audit_covers_required_artifacts(tmp_path):
     result = build_reviewer_path_audit()
     markdown = render_reviewer_path_audit_markdown(result)
@@ -2704,6 +2746,7 @@ def test_reviewer_path_audit_covers_required_artifacts(tmp_path):
     assert any(row["path"] == "docs/validity_threats.md" for row in result["coverage"])
     assert any(row["path"] == "docs/paper_abstract_audit.md" for row in result["coverage"])
     assert any(row["path"] == "docs/paper_contribution_audit.md" for row in result["coverage"])
+    assert any(row["path"] == "docs/paper_conclusion_audit.md" for row in result["coverage"])
     assert "Missing from reproducibility checklist: 0" in markdown
 
     package = tmp_path / "submission_package.json"

@@ -238,6 +238,7 @@ def check_paper_draft_content(path: Path = Path("docs/paper_draft.md")) -> dict[
         "ci surface audit link": "docs/ci_surface_audit.md",
         "method pipeline audit link": "docs/method_pipeline_audit.md",
         "rq table consistency audit link": "docs/rq_table_consistency_audit.md",
+        "paper conclusion audit link": "docs/paper_conclusion_audit.md",
         "schema field audit link": "docs/schema_field_audit.md",
         "parser event audit link": "docs/parser_event_coverage.md",
         "failure node audit link": "docs/failure_node_traceability.md",
@@ -324,6 +325,39 @@ def check_paper_contribution_audit_content(path: Path = Path("docs/paper_contrib
         "ok": not problems,
         "evidence": str(path),
         "detail": "paper contribution claims match supported boundary-result evidence",
+        "problems": problems,
+    }
+
+
+def check_paper_conclusion_audit_content(path: Path = Path("docs/paper_conclusion_audit.md")) -> dict[str, Any]:
+    problems = []
+    try:
+        text = path.read_text(encoding="utf-8")
+    except FileNotFoundError:
+        return {
+            "name": "paper conclusion audit",
+            "ok": False,
+            "evidence": str(path),
+            "problems": ["missing paper conclusion audit"],
+        }
+
+    required_phrases = {
+        "ready": "Ready: yes",
+        "coverage": "Checks passed: 11 / 11",
+        "ordinary verification boundary": "ordinary_verification_boundary",
+        "hidden semantic boundary": "hidden_semantic_boundary",
+        "no verification overclaim": "no_verification_lift_overclaim",
+        "no hidden correctness overclaim": "no_hidden_correctness_overclaim",
+    }
+    for label, phrase in required_phrases.items():
+        if phrase not in text:
+            problems.append(f"missing {label}")
+
+    return {
+        "name": "paper conclusion audit",
+        "ok": not problems,
+        "evidence": str(path),
+        "detail": "paper conclusion restates boundary-result claims without unsupported findings",
         "problems": problems,
     }
 
@@ -1497,7 +1531,7 @@ def check_reproducibility_audit_content(path: Path = Path("docs/reproducibility_
 
     required_phrases = {
         "ready": "Ready: yes",
-        "coverage count": "Commands covered: 48 / 48",
+        "coverage count": "Commands covered: 49 / 49",
         "balanced fences": "Markdown fences balanced: yes",
         "submission gate": "submission_readiness_gate",
         "scope caveat": "does not execute the full real Codex collection commands",
@@ -1651,6 +1685,7 @@ def build_report(selection_dir: Path, run_dir: Path) -> dict[str, Any]:
         check_bibliography_audit_content(),
         check_paper_abstract_audit_content(),
         check_paper_contribution_audit_content(),
+        check_paper_conclusion_audit_content(),
         check_paper_structure_audit_content(),
         check_method_pipeline_audit_content(),
         check_rq_table_consistency_audit_content(),

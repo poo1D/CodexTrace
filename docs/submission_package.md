@@ -48,6 +48,7 @@ This generated map turns the current evidence into reviewer-facing paper claims.
 - `docs/paper_draft.md`
 - `docs/paper_abstract_audit.md`
 - `docs/paper_contribution_audit.md`
+- `docs/paper_conclusion_audit.md`
 - `docs/paper_structure_audit.md`
 - `docs/method_pipeline_audit.md`
 - `docs/paper_outline.md`

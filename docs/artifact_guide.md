@@ -66,12 +66,13 @@ oracles for hidden semantic correctness.
 33. Check paper reference discoverability in `docs/bibliography_audit.md`.
 34. Check abstract-level evidence coverage in `docs/paper_abstract_audit.md`.
 35. Check contribution-claim coverage in `docs/paper_contribution_audit.md`.
-36. Check paper structure and RQ coverage in `docs/paper_structure_audit.md`.
-37. Check RQ result-table consistency in `docs/rq_table_consistency_audit.md`.
-38. Check metric coverage in `docs/metric_coverage_audit.md`.
-39. Check reproduction command coverage in `docs/reproducibility_audit.md`.
-40. Check claim-to-evidence mapping in `docs/reproducibility_checklist.md`.
-41. Run the offline demo:
+36. Check conclusion boundary alignment in `docs/paper_conclusion_audit.md`.
+37. Check paper structure and RQ coverage in `docs/paper_structure_audit.md`.
+38. Check RQ result-table consistency in `docs/rq_table_consistency_audit.md`.
+39. Check metric coverage in `docs/metric_coverage_audit.md`.
+40. Check reproduction command coverage in `docs/reproducibility_audit.md`.
+41. Check claim-to-evidence mapping in `docs/reproducibility_checklist.md`.
+42. Run the offline demo:
 
 ```bash
 ./scripts/demo.sh
@@ -107,6 +108,7 @@ npm run dev
 | Are paper references discoverable? | `docs/bibliography_audit.md` |
 | Does the abstract match the evidence boundary? | `docs/paper_abstract_audit.md` |
 | Are the contribution claims evidence-backed? | `docs/paper_contribution_audit.md` |
+| Does the conclusion preserve the boundary result? | `docs/paper_conclusion_audit.md` |
 | Does the method pipeline map to source and CLI outputs? | `docs/method_pipeline_audit.md` |
 | Does the paper draft cover the required structure? | `docs/paper_draft.md`, `docs/paper_structure_audit.md` |
 | Do RQ result tables match generated artifacts? | `docs/rq_table_consistency_audit.md` |

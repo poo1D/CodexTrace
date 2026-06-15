@@ -574,10 +574,12 @@ commands.
 
 CodexTrace shows that coding-agent traces can be used as first-class evaluation
 objects, not merely logs. In real Codex runs, trace analysis exposes process
-failures and quantifies harness-level waste reductions. The current hard-tier
-pilot also gives an important limitation: hidden semantic edge failures can
-escape process-only rules. A practical evaluation stack should therefore combine
-trace-based diagnosis with strong task-level oracles.
+failures and quantifies harness-level waste reductions. It also shows a
+negative boundary: current ordinary and weak baselines are verification
+saturated, so the paper should not claim an ordinary verification-rate lift.
+The current hard-tier pilot also gives an important limitation: hidden semantic
+edge failures can escape process-only rules. A practical evaluation stack should
+therefore combine trace-based diagnosis with strong task-level oracles.
 
 The next step is to repeat the hard30 collection, add richer labels for
 observable process failures, and evaluate whether additional trace signals or
@@ -603,7 +605,8 @@ For safe claim framing and generated guard status, see
 `docs/harness_protocol_audit.md`,
 `docs/related_work_audit.md`, `docs/bibliography_audit.md`,
 `docs/paper_abstract_audit.md`,
-`docs/paper_contribution_audit.md`, `docs/method_pipeline_audit.md`,
+`docs/paper_contribution_audit.md`, `docs/paper_conclusion_audit.md`,
+`docs/method_pipeline_audit.md`,
 `docs/paper_structure_audit.md`,
 `docs/rq_table_consistency_audit.md`,
 `docs/reproducibility_audit.md`, `docs/claim_text_guard.md`, and

@@ -93,6 +93,7 @@ coverage, `docs/related_work_audit.md` for related-work positioning coverage,
 `docs/bibliography_audit.md` for paper reference discoverability,
 `docs/paper_abstract_audit.md` for abstract-level claim coverage,
 `docs/paper_contribution_audit.md` for contribution-claim coverage,
+`docs/paper_conclusion_audit.md` for conclusion boundary alignment,
 `docs/method_pipeline_audit.md` for method pipeline source/CLI coverage,
 `docs/paper_structure_audit.md` for paper-section/RQ coverage,
 `docs/rq_table_consistency_audit.md` for RQ result-table drift checks,
@@ -204,6 +205,7 @@ Key files:
 - `scripts/audit_bibliography.py`: checks paper reference discoverability across the draft and related-work notes
 - `scripts/audit_paper_abstract.py`: checks abstract-level evidence coverage and overclaim boundaries
 - `scripts/audit_paper_contributions.py`: checks contribution claims against current evidence boundaries
+- `scripts/audit_paper_conclusion.py`: checks conclusion claims against current evidence boundaries
 - `scripts/audit_method_pipeline.py`: checks method pipeline mapping to source and offline CLI smoke outputs
 - `scripts/audit_paper_structure.py`: checks paper draft section, RQ, and boundary-result coverage
 - `scripts/audit_rq_table_consistency.py`: checks paper RQ result tables against generated hard30 report artifacts
@@ -254,6 +256,7 @@ Key files:
 - `docs/bibliography_audit.md`: generated audit for reference discoverability across paper and notes
 - `docs/paper_abstract_audit.md`: generated audit for abstract-level evidence coverage and overclaim boundaries
 - `docs/paper_contribution_audit.md`: generated audit for evidence-backed contribution claims
+- `docs/paper_conclusion_audit.md`: generated audit for conclusion boundary alignment and overclaim prevention
 - `docs/method_pipeline_audit.md`: generated audit for method pipeline source/CLI smoke coverage
 - `docs/paper_structure_audit.md`: generated coverage audit for paper sections, RQ result blocks, and boundary framing
 - `docs/rq_table_consistency_audit.md`: generated audit for paper RQ result-table consistency with hard30 report artifacts
@@ -375,6 +378,7 @@ PYTHONPATH=. python3 scripts/audit_related_work.py --markdown-output docs/relate
 PYTHONPATH=. python3 scripts/audit_bibliography.py --markdown-output docs/bibliography_audit.md
 PYTHONPATH=. python3 scripts/audit_paper_abstract.py --markdown-output docs/paper_abstract_audit.md
 PYTHONPATH=. python3 scripts/audit_paper_contributions.py --markdown-output docs/paper_contribution_audit.md
+PYTHONPATH=. python3 scripts/audit_paper_conclusion.py --markdown-output docs/paper_conclusion_audit.md
 PYTHONPATH=. python3 scripts/audit_method_pipeline.py --markdown-output docs/method_pipeline_audit.md
 PYTHONPATH=. python3 scripts/audit_paper_structure.py --markdown-output docs/paper_structure_audit.md
 PYTHONPATH=. python3 scripts/audit_rq_table_consistency.py --markdown-output docs/rq_table_consistency_audit.md

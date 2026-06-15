@@ -41,6 +41,7 @@ REQUIRED_COMMANDS = (
     {"id": "bibliography_audit", "phrase": "scripts/audit_bibliography.py"},
     {"id": "paper_abstract_audit", "phrase": "scripts/audit_paper_abstract.py"},
     {"id": "paper_contribution_audit", "phrase": "scripts/audit_paper_contributions.py"},
+    {"id": "paper_conclusion_audit", "phrase": "scripts/audit_paper_conclusion.py"},
     {"id": "paper_structure_audit", "phrase": "scripts/audit_paper_structure.py"},
     {"id": "method_pipeline_audit", "phrase": "scripts/audit_method_pipeline.py"},
     {"id": "rq_table_consistency_audit", "phrase": "scripts/audit_rq_table_consistency.py"},

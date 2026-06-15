@@ -52,6 +52,7 @@ The stored pilots can be inspected and aggregated without re-running Codex.
 | `docs/bibliography_audit.md` | Generated audit for reference discoverability across paper and notes. |
 | `docs/paper_abstract_audit.md` | Generated audit for abstract-level evidence coverage and overclaim boundaries. |
 | `docs/paper_contribution_audit.md` | Generated audit for evidence-backed contribution claims. |
+| `docs/paper_conclusion_audit.md` | Generated audit for conclusion boundary alignment and overclaim prevention. |
 | `docs/method_pipeline_audit.md` | Generated audit for method pipeline source mapping and offline CLI smoke coverage. |
 | `docs/paper_structure_audit.md` | Generated coverage audit for paper sections, RQ result blocks, and boundary-result framing. |
 | `docs/rq_table_consistency_audit.md` | Generated audit for paper RQ result-table consistency with hard30 report artifacts. |
@@ -128,6 +129,7 @@ The stored pilots can be inspected and aggregated without re-running Codex.
 | `scripts/audit_bibliography.py` | Checks that paper references are discoverable from the draft and related-work notes. |
 | `scripts/audit_paper_abstract.py` | Checks the abstract for supported evidence coverage and overclaim boundaries. |
 | `scripts/audit_paper_contributions.py` | Checks contribution claims against current evidence boundaries. |
+| `scripts/audit_paper_conclusion.py` | Checks conclusion claims against current evidence boundaries. |
 | `scripts/audit_method_pipeline.py` | Checks the paper method pipeline against source code and offline CLI smoke outputs. |
 | `scripts/audit_paper_structure.py` | Checks that the paper draft covers required sections, RQ blocks, and boundary-result framing. |
 | `scripts/audit_rq_table_consistency.py` | Checks paper RQ result tables against generated hard30 report artifacts. |
@@ -339,6 +341,14 @@ Paper contribution audit:
 PYTHONPATH=. python3 scripts/audit_paper_contributions.py \
   --json-output /tmp/paper-contribution-audit.json \
   --markdown-output /tmp/paper-contribution-audit.md
+```
+
+Paper conclusion audit:
+
+```bash
+PYTHONPATH=. python3 scripts/audit_paper_conclusion.py \
+  --json-output /tmp/paper-conclusion-audit.json \
+  --markdown-output /tmp/paper-conclusion-audit.md
 ```
 
 Method pipeline audit:
