@@ -5,7 +5,7 @@ This generated audit checks that the reviewer-facing reproducibility checklist c
 ## Summary
 
 - Ready: yes
-- Commands covered: 52 / 52
+- Commands covered: 53 / 53
 - Markdown fences balanced: yes
 - Bash command blocks: 61
 - Checklist: `docs/reproducibility_checklist.md`
@@ -46,6 +46,7 @@ This generated audit checks that the reviewer-facing reproducibility checklist c
 | combined_summary | yes |
 | thesis_readiness | yes |
 | goal_completion | yes |
+| submission_readiness_plan_audit | yes |
 | thesis_revision_decision | yes |
 | validity_threats | yes |
 | limitations_traceability_audit | yes |

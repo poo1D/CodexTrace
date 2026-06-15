@@ -611,6 +611,41 @@ def check_expected_results_reconciliation_content(path: Path = Path("docs/expect
     }
 
 
+def check_submission_readiness_plan_audit_content(
+    path: Path = Path("docs/submission_readiness_plan_audit.md"),
+) -> dict[str, Any]:
+    problems = []
+    try:
+        text = path.read_text(encoding="utf-8")
+    except FileNotFoundError:
+        return {
+            "name": "submission readiness plan audit",
+            "ok": False,
+            "evidence": str(path),
+            "problems": ["missing submission readiness plan audit"],
+        }
+
+    required_phrases = {
+        "ready": "Ready: yes",
+        "coverage": "Checks passed: 15 / 15",
+        "boundary positioning": "submission-ready hard30 artifact",
+        "remaining repeatability": "repeat a hard-tier subset to estimate variance",
+        "remaining process positives": "collect more natural observable process-failure positives",
+        "no original complete overclaim": "no original-goal-complete claim",
+    }
+    for label, phrase in required_phrases.items():
+        if phrase not in text:
+            problems.append(f"missing {label}")
+
+    return {
+        "name": "submission readiness plan audit",
+        "ok": not problems,
+        "evidence": str(path),
+        "detail": "stronger-submission plan preserves current readiness and remaining evidence gaps",
+        "problems": problems,
+    }
+
+
 def check_paper_number_guard_content(path: Path = Path("docs/paper_number_guard.md")) -> dict[str, Any]:
     problems = []
     try:
@@ -1636,7 +1671,7 @@ def check_reproducibility_audit_content(path: Path = Path("docs/reproducibility_
 
     required_phrases = {
         "ready": "Ready: yes",
-        "coverage count": "Commands covered: 52 / 52",
+        "coverage count": "Commands covered: 53 / 53",
         "balanced fences": "Markdown fences balanced: yes",
         "submission gate": "submission_readiness_gate",
         "scope caveat": "does not execute the full real Codex collection commands",
@@ -1765,6 +1800,7 @@ def build_report(selection_dir: Path, run_dir: Path) -> dict[str, Any]:
         check_validity_threats_content(),
         check_limitations_traceability_audit_content(),
         check_expected_results_reconciliation_content(),
+        check_submission_readiness_plan_audit_content(),
         check_paper_number_guard_content(),
         check_reviewer_path_audit_content(),
         check_artifact_guide_sequence_audit_content(),

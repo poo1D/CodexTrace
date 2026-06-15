@@ -28,6 +28,23 @@
     },
     {
       "covered": true,
+      "path": "docs/submission_readiness_plan.md",
+      "present_in": [
+        "README.md",
+        "docs/artifact_guide.md",
+        "docs/reproducibility_checklist.md"
+      ]
+    },
+    {
+      "covered": true,
+      "path": "docs/submission_readiness_plan_audit.md",
+      "present_in": [
+        "README.md",
+        "docs/reproducibility_checklist.md"
+      ]
+    },
+    {
+      "covered": true,
       "path": "docs/goal_completion_audit.md",
       "present_in": [
         "README.md",
@@ -493,6 +510,6 @@
     "checklist_missing": 0,
     "guide_missing": 0,
     "missing": 0,
-    "required_files": 55
+    "required_files": 57
   }
 }

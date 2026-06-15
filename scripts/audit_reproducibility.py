@@ -54,6 +54,7 @@ REQUIRED_COMMANDS = (
     {"id": "combined_summary", "phrase": "codex_trace.cli research summary"},
     {"id": "thesis_readiness", "phrase": "scripts/audit_thesis_readiness.py"},
     {"id": "goal_completion", "phrase": "scripts/audit_goal_completion.py"},
+    {"id": "submission_readiness_plan_audit", "phrase": "scripts/audit_submission_readiness_plan.py"},
     {"id": "thesis_revision_decision", "phrase": "scripts/audit_thesis_revision_decision.py"},
     {"id": "validity_threats", "phrase": "scripts/audit_validity_threats.py"},
     {"id": "limitations_traceability_audit", "phrase": "scripts/audit_limitations_traceability.py"},

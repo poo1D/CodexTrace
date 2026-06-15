@@ -539,6 +539,8 @@ decision,
 `docs/limitations_traceability_audit.md` for paper-limitations traceability,
 `docs/expected_results_reconciliation.md` for replacing the expected-results
 sketch with stored headline evidence,
+`docs/submission_readiness_plan_audit.md` for preserving the distinction
+between the current boundary-result artifact and stronger-submission work,
 `docs/submission_package.md` for safe RQ-to-evidence claim framing,
 `docs/metric_coverage_audit.md` for experiment-metric coverage,
 `docs/benchmark_trace_artifact.md` for hard30 task/run/trace/manual-label

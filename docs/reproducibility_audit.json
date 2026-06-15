@@ -161,6 +161,11 @@
       "present": true
     },
     {
+      "id": "submission_readiness_plan_audit",
+      "phrase": "scripts/audit_submission_readiness_plan.py",
+      "present": true
+    },
+    {
       "id": "thesis_revision_decision",
       "phrase": "scripts/audit_thesis_revision_decision.py",
       "present": true
@@ -264,10 +269,10 @@
   "summary": {
     "bash_fence_count": 61,
     "checklist_path": "docs/reproducibility_checklist.md",
-    "covered_command_count": 52,
+    "covered_command_count": 53,
     "fence_count": 128,
     "fences_balanced": true,
     "ready": true,
-    "required_command_count": 52
+    "required_command_count": 53
   }
 }

@@ -56,6 +56,10 @@ from scripts.audit_expected_results_reconciliation import (
     build_expected_results_reconciliation,
     render_expected_results_reconciliation_markdown,
 )
+from scripts.audit_submission_readiness_plan import (
+    build_submission_readiness_plan_audit,
+    render_submission_readiness_plan_markdown,
+)
 from scripts.audit_process_stress_plan import audit_process_stress_plan
 from scripts.audit_paper_contributions import build_paper_contribution_audit, render_paper_contribution_audit_markdown
 from scripts.audit_paper_conclusion import build_paper_conclusion_audit, render_paper_conclusion_audit_markdown
@@ -129,6 +133,7 @@ from scripts.check_submission_readiness import (
     check_label_limitations_audit_content,
     check_limitations_traceability_audit_content,
     check_expected_results_reconciliation_content,
+    check_submission_readiness_plan_audit_content,
     check_paper_number_guard_content,
     check_artifact_guide_sequence_audit_content,
     check_paper_abstract_audit_content,
@@ -1026,6 +1031,18 @@ def test_submission_readiness_plan_matches_current_gate_status():
     assert "collect more natural observable process-failure positives" in normalized
 
 
+def test_submission_readiness_plan_audit_preserves_remaining_work():
+    result = build_submission_readiness_plan_audit()
+    markdown = render_submission_readiness_plan_markdown(result)
+
+    assert result["summary"]["ready"] is True
+    assert result["summary"]["passed"] == 15
+    assert all(row["passed"] for row in result["checks"])
+    assert "submission-ready hard30 artifact" in markdown
+    assert "repeat a hard-tier subset to estimate variance" in markdown
+    assert "collect more natural observable process-failure positives" in markdown
+
+
 def test_submission_readiness_rejects_low_quality_manual_labels(tmp_path):
     root = Path.cwd()
     selection_dir = tmp_path / "selection"
@@ -1691,7 +1708,7 @@ def test_reproducibility_audit_covers_key_commands():
     markdown = render_reproducibility_audit_markdown(result)
 
     assert result["summary"]["ready"] is True
-    assert result["summary"]["covered_command_count"] == 52
+    assert result["summary"]["covered_command_count"] == 53
     assert result["summary"]["fences_balanced"] is True
     assert {row["id"] for row in result["commands"]} >= {
         "full30_aggregate",
@@ -1728,6 +1745,7 @@ def test_reproducibility_audit_covers_key_commands():
         "validity_threats",
         "limitations_traceability_audit",
         "expected_results_reconciliation",
+        "submission_readiness_plan_audit",
         "artifact_guide_sequence_audit",
         "submission_readiness_gate",
         "claim_text_guard",
@@ -2228,6 +2246,7 @@ def test_paper_draft_contains_submission_polish_sections():
     assert "docs/verification_saturation_audit.md" in text
     assert "docs/limitations_traceability_audit.md" in text
     assert "docs/expected_results_reconciliation.md" in text
+    assert "docs/submission_readiness_plan_audit.md" in text
     assert "`construct_validity`" in text
     assert "No-verify ablation is not ordinary-baseline evidence." in text
     assert "docs/paired_effects_audit.md" in text
@@ -2254,6 +2273,7 @@ def test_reviewer_docs_surface_hard30_task_diagnosis():
     assert "docs/validity_threats.md" in readme
     assert "docs/limitations_traceability_audit.md" in readme
     assert "docs/expected_results_reconciliation.md" in readme
+    assert "docs/submission_readiness_plan_audit.md" in readme
     assert "docs/verification_saturation_audit.md" in readme
     assert "docs/paper_abstract_audit.md" in readme
     assert "docs/paper_contribution_audit.md" in readme
@@ -2301,6 +2321,7 @@ def test_reviewer_docs_surface_hard30_task_diagnosis():
     assert "scripts/audit_validity_threats.py --markdown-output docs/validity_threats.md" in readme
     assert "scripts/audit_limitations_traceability.py --markdown-output docs/limitations_traceability_audit.md" in readme
     assert "scripts/audit_expected_results_reconciliation.py --markdown-output docs/expected_results_reconciliation.md" in readme
+    assert "scripts/audit_submission_readiness_plan.py --markdown-output docs/submission_readiness_plan_audit.md" in readme
     assert "scripts/audit_verification_saturation.py --markdown-output docs/verification_saturation_audit.md" in readme
     assert "scripts/audit_paper_abstract.py --markdown-output docs/paper_abstract_audit.md" in readme
     assert "scripts/audit_paper_contributions.py --markdown-output docs/paper_contribution_audit.md" in readme
@@ -2394,6 +2415,7 @@ def test_reviewer_docs_surface_hard30_task_diagnosis():
     assert "scripts/audit_validity_threats.py" in checklist
     assert "scripts/audit_limitations_traceability.py" in checklist
     assert "scripts/audit_expected_results_reconciliation.py" in checklist
+    assert "scripts/audit_submission_readiness_plan.py" in checklist
     assert "scripts/audit_verification_saturation.py" in checklist
     assert "scripts/audit_paper_abstract.py" in checklist
     assert "scripts/audit_paper_contributions.py" in checklist
@@ -2566,6 +2588,8 @@ def test_submission_package_maps_rqs_to_safe_paper_claims():
     assert "docs/validity_threats.md" in package["required_files"]
     assert "docs/limitations_traceability_audit.md" in package["required_files"]
     assert "docs/expected_results_reconciliation.md" in package["required_files"]
+    assert "docs/submission_readiness_plan.md" in package["required_files"]
+    assert "docs/submission_readiness_plan_audit.md" in package["required_files"]
     assert "docs/verification_lift_next_experiment.md" in package["required_files"]
     assert "docs/verification_lift_v2_plan_audit.md" in package["required_files"]
     assert "docs/verification_ablation_plan_audit.md" in package["required_files"]
@@ -2618,6 +2642,7 @@ def test_submission_package_maps_rqs_to_safe_paper_claims():
     assert "docs/rule_implementation_audit.md" in markdown
     assert "docs/benchmark_trace_artifact.md" in markdown
     assert "docs/artifact_guide_sequence_audit.md" in markdown
+    assert "docs/submission_readiness_plan_audit.md" in markdown
     assert "docs/label_provenance_audit.md" in markdown
     assert "docs/label_limitations_audit.md" in markdown
     assert "docs/verification_saturation_audit.md" in markdown
@@ -2645,6 +2670,7 @@ def test_submission_package_maps_rqs_to_safe_paper_claims():
     assert "docs/validity_threats.md" in markdown
     assert "docs/limitations_traceability_audit.md" in markdown
     assert "docs/expected_results_reconciliation.md" in markdown
+    assert "docs/submission_readiness_plan_audit.md" in markdown
     assert "docs/paper_abstract_audit.md" in markdown
     assert "docs/paper_contribution_audit.md" in markdown
     assert "docs/paper_conclusion_audit.md" in markdown
@@ -2727,6 +2753,20 @@ def test_submission_readiness_validates_expected_results_reconciliation_content(
     assert "missing headline phrases" in check["problems"]
     assert "missing ordinary lift unsupported" in check["problems"]
     assert "missing expected sketch caveat" in check["problems"]
+
+
+def test_submission_readiness_validates_submission_readiness_plan_audit_content(tmp_path):
+    broken = tmp_path / "submission_readiness_plan_audit.md"
+    broken.write_text("# Submission Readiness Plan Audit\nReady: no\n", encoding="utf-8")
+
+    check = check_submission_readiness_plan_audit_content(broken)
+
+    assert check["ok"] is False
+    assert "missing ready" in check["problems"]
+    assert "missing coverage" in check["problems"]
+    assert "missing boundary positioning" in check["problems"]
+    assert "missing remaining process positives" in check["problems"]
+    assert "missing no original complete overclaim" in check["problems"]
 
 
 def test_paper_number_guard_keeps_draft_numbers_in_sync(tmp_path):
@@ -2830,6 +2870,7 @@ def test_reviewer_path_audit_covers_required_artifacts(tmp_path):
     assert any(row["path"] == "docs/paper_structure_audit.md" for row in result["coverage"])
     assert any(row["path"] == "docs/reproducibility_audit.md" for row in result["coverage"])
     assert any(row["path"] == "docs/artifact_guide_sequence_audit.md" for row in result["coverage"])
+    assert any(row["path"] == "docs/submission_readiness_plan_audit.md" for row in result["coverage"])
     assert any(row["path"] == "docs/headline_results.md" for row in result["coverage"])
     assert any(row["path"] == "docs/thesis_revision_decision.md" for row in result["coverage"])
     assert any(row["path"] == "docs/validity_threats.md" for row in result["coverage"])

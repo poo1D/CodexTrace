@@ -107,6 +107,8 @@ def build_submission_package() -> dict[str, Any]:
             "README.md",
             "docs/artifact_guide.md",
             "docs/submission_package.md",
+            "docs/submission_readiness_plan.md",
+            "docs/submission_readiness_plan_audit.md",
             "docs/goal_completion_audit.md",
             "docs/thesis_revision_decision.md",
             "docs/validity_threats.md",

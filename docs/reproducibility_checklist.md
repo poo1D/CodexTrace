@@ -78,6 +78,7 @@ The stored pilots can be inspected and aggregated without re-running Codex.
 | `docs/experiment_protocol.md` | Collection, labeling, and evaluation protocol. |
 | `docs/related_work.md` | Compact bibliography and positioning notes. |
 | `docs/submission_readiness_plan.md` | Workstreams and decision gate for a stronger paper submission. |
+| `docs/submission_readiness_plan_audit.md` | Generated audit that keeps the stronger-submission plan aligned with current readiness and remaining gaps. |
 | `benchmark/hard/pilot/hard30-selection/` | Fixed 30-task hard-tier selection used for the 60-run hard30 collection. |
 | `benchmark/hard/pilot/hard30-real/` | Submission-ready 30-task / 60-run hard-tier artifact with reports, labels, and shard metadata. |
 | `benchmark/process-stress/tasks.jsonl` | Materialized 12-task process-stress tier for observable process failures. |
@@ -105,6 +106,7 @@ The stored pilots can be inspected and aggregated without re-running Codex.
 | `scripts/audit_validity_threats.py` | Generates validity-threat mapping for safe paper wording. |
 | `scripts/audit_limitations_traceability.py` | Checks paper Threats To Validity wording against the generated validity-threat map. |
 | `scripts/audit_expected_results_reconciliation.py` | Checks paper-facing files use stored headline evidence instead of the expected-results sketch. |
+| `scripts/audit_submission_readiness_plan.py` | Checks stronger-submission plan wording against current readiness and remaining evidence gaps. |
 | `scripts/audit_verification_lift_next_experiment.py` | Claim-closure audit for the unresolved ordinary-baseline verification-lift claim. |
 | `scripts/audit_headline_results.py` | Generates the compact headline-results table and verification-lift boundary note. |
 | `scripts/audit_verification_lift_v2_plan.py` | Plan audit for the ordinary-baseline verification-lift v2 scaffold. |
@@ -531,6 +533,10 @@ PYTHONPATH=. python3 scripts/audit_limitations_traceability.py \
 PYTHONPATH=. python3 scripts/audit_expected_results_reconciliation.py \
   --json-output /tmp/expected-results-reconciliation.json \
   --markdown-output /tmp/expected-results-reconciliation.md
+
+PYTHONPATH=. python3 scripts/audit_submission_readiness_plan.py \
+  --json-output /tmp/submission-readiness-plan-audit.json \
+  --markdown-output /tmp/submission-readiness-plan-audit.md
 
 PYTHONPATH=. python3 scripts/audit_verification_lift_next_experiment.py \
   --markdown-output /tmp/verification-lift-next-experiment.md \

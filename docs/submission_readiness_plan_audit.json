@@ -1,0 +1,87 @@
+{
+  "checks": [
+    {
+      "expected": "## Current Evidence Level",
+      "id": "current_evidence_level",
+      "passed": true
+    },
+    {
+      "expected": "## Target For A Stronger Submission",
+      "id": "stronger_submission_target",
+      "passed": true
+    },
+    {
+      "expected": "## Workstream 1: Repeat And Stress Hard30",
+      "id": "repeat_hard30_workstream",
+      "passed": true
+    },
+    {
+      "expected": "## Workstream 2: Improve Manual Labeling",
+      "id": "manual_labeling_workstream",
+      "passed": true
+    },
+    {
+      "expected": "## Workstream 3: Repeatability And Variance",
+      "id": "repeatability_workstream",
+      "passed": true
+    },
+    {
+      "expected": "## Workstream 4: Better RQ4 Analysis",
+      "id": "rq4_workstream",
+      "passed": true
+    },
+    {
+      "expected": "## Decision Gate",
+      "id": "decision_gate",
+      "passed": true
+    },
+    {
+      "expected": "Current status: this gate passes for the stored hard30 artifact",
+      "id": "current_gate_passes",
+      "passed": true
+    },
+    {
+      "expected": "submission-ready hard30 artifact",
+      "id": "boundary_positioning",
+      "passed": true
+    },
+    {
+      "expected": "A reproducible pilot artifact showing",
+      "id": "honest_positioning",
+      "passed": true
+    },
+    {
+      "expected": "repeat a hard-tier subset to estimate variance",
+      "id": "remaining_repeatability",
+      "passed": true
+    },
+    {
+      "expected": "collect more natural observable process-failure positives",
+      "id": "remaining_process_positives",
+      "passed": true
+    },
+    {
+      "expected": "scripts/check_submission_readiness.py",
+      "id": "known_readiness_command",
+      "passed": true
+    },
+    {
+      "expected": "no original-goal-complete claim",
+      "id": "no_original_goal_complete_claim",
+      "passed": true
+    },
+    {
+      "expected": "no stronger-submission-complete claim",
+      "id": "no_stronger_submission_complete_claim",
+      "passed": true
+    }
+  ],
+  "missing": [],
+  "summary": {
+    "checks": 15,
+    "missing": 0,
+    "passed": 15,
+    "plan_path": "docs/submission_readiness_plan.md",
+    "ready": true
+  }
+}
