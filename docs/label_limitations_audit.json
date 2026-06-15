@@ -1,0 +1,53 @@
+{
+  "checks": [
+    {
+      "expected": "hidden grader outcomes and qualitative inspection",
+      "id": "hidden_grader_basis",
+      "passed": true
+    },
+    {
+      "expected": "single-artifact diagnostic labels",
+      "id": "single_artifact_caveat",
+      "passed": true
+    },
+    {
+      "expected": "not inter-annotator-agreement evidence",
+      "id": "no_inter_annotator_claim",
+      "passed": true
+    },
+    {
+      "expected": "richer process failure labels",
+      "id": "richer_labels_needed",
+      "passed": true
+    },
+    {
+      "expected": "Ready: yes",
+      "id": "provenance_ready",
+      "passed": true
+    },
+    {
+      "expected": "Failure rows with notes: 30 / 30",
+      "id": "provenance_failure_notes",
+      "passed": true
+    },
+    {
+      "expected": "does not prove inter-annotator agreement",
+      "id": "provenance_inter_annotator_caveat",
+      "passed": true
+    },
+    {
+      "expected": "no gold-label or inter-annotator-agreement claim",
+      "id": "no_gold_label_claim",
+      "passed": true
+    }
+  ],
+  "missing": [],
+  "summary": {
+    "checks": 8,
+    "label_provenance": "docs/label_provenance_audit.md",
+    "missing": 0,
+    "paper_draft": "docs/paper_draft.md",
+    "passed": 8,
+    "ready": true
+  }
+}

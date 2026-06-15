@@ -80,7 +80,8 @@ ordinary-baseline verification-saturation proof, `docs/rq4_signal_audit.md`
 for the generated boundary-style signal audit, `docs/metric_coverage_audit.md` for experiment
 metric coverage, `docs/benchmark_trace_artifact.md` for hard30 task/run/trace
 pair completeness, `docs/label_provenance_audit.md` for hard30 label
-template/manual-label/evaluation consistency, `docs/paired_effects_audit.md`
+template/manual-label/evaluation consistency, `docs/label_limitations_audit.md`
+for manual-label claim limits, `docs/paired_effects_audit.md`
 for paired RQ3 effect-size and uncertainty evidence, `docs/demo_audit.md` for the offline demo smoke path,
 `docs/web_artifact_audit.md` for the static Web replay artifact,
 `docs/cli_surface_audit.md` for offline CLI coverage,
@@ -186,6 +187,7 @@ Key files:
 - `scripts/audit_reviewer_path.py`: checks required reviewer files are discoverable from paper-facing entry points
 - `scripts/audit_benchmark_trace_artifact.py`: checks hard30 task/run/trace/outcome/manual-label completeness
 - `scripts/audit_label_provenance.py`: checks hard30 label template, manual-label, and label-evaluation consistency
+- `scripts/audit_label_limitations.py`: checks paper limitations for manual-label claim boundaries
 - `scripts/audit_metric_coverage.py`: checks planned experiment metrics across run rows, summaries, CSV, and aggregate Markdown
 - `scripts/audit_paired_effects.py`: computes task-paired effect sizes, sign tests, and bootstrap CIs for RQ3 deltas
 - `scripts/audit_demo.py`: runs the offline demo script and checks generated JSON/Markdown diagnosis artifacts
@@ -229,6 +231,7 @@ Key files:
 - `docs/reviewer_path_audit.md`: generated guard that checks reviewer-path coverage for required paper artifacts
 - `docs/benchmark_trace_artifact.md`: generated audit for hard30 task/run/trace/outcome/manual-label completeness
 - `docs/label_provenance_audit.md`: generated audit for hard30 label-file provenance and evaluation consistency
+- `docs/label_limitations_audit.md`: generated audit for manual-label limitation wording and provenance caveats
 - `docs/paper_draft.md`: result-driven workshop-style paper draft
 - `docs/paper_outline.md`: paper outline and experiment plan
 - `docs/paired_effects_audit.md`: generated paired effect-size and uncertainty audit for RQ3 waste-reduction claims
@@ -261,6 +264,7 @@ Key files:
 - `docs/paper_structure_audit.md`: generated coverage audit for paper sections, RQ result blocks, and boundary framing
 - `docs/rq_table_consistency_audit.md`: generated audit for paper RQ result-table consistency with hard30 report artifacts
 - `docs/label_provenance_audit.md`: generated audit for hard30 label-file provenance and evaluation consistency
+- `docs/label_limitations_audit.md`: generated audit for manual-label limitation wording and provenance caveats
 - `docs/verification_saturation_audit.md`: generated audit for ordinary-baseline verification saturation and ablation boundary
 - `docs/reproducibility_audit.md`: generated coverage audit for reproduction commands and checklist Markdown structure
 - `docs/hard30_task_diagnosis.md`: generated task-level hard30 diagnosis for double failures, repairs, regressions, and waste deltas
@@ -383,6 +387,7 @@ PYTHONPATH=. python3 scripts/audit_method_pipeline.py --markdown-output docs/met
 PYTHONPATH=. python3 scripts/audit_paper_structure.py --markdown-output docs/paper_structure_audit.md
 PYTHONPATH=. python3 scripts/audit_rq_table_consistency.py --markdown-output docs/rq_table_consistency_audit.md
 PYTHONPATH=. python3 scripts/audit_label_provenance.py --markdown-output docs/label_provenance_audit.md
+PYTHONPATH=. python3 scripts/audit_label_limitations.py --markdown-output docs/label_limitations_audit.md
 PYTHONPATH=. python3 scripts/audit_verification_saturation.py --markdown-output docs/verification_saturation_audit.md
 PYTHONPATH=. python3 scripts/audit_reproducibility.py --markdown-output docs/reproducibility_audit.md
 ```

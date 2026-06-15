@@ -229,6 +229,7 @@ def check_paper_draft_content(path: Path = Path("docs/paper_draft.md")) -> dict[
         "metric coverage link": "docs/metric_coverage_audit.md",
         "benchmark trace artifact link": "docs/benchmark_trace_artifact.md",
         "label provenance audit link": "docs/label_provenance_audit.md",
+        "label limitations audit link": "docs/label_limitations_audit.md",
         "limitations traceability audit link": "docs/limitations_traceability_audit.md",
         "verification saturation audit link": "docs/verification_saturation_audit.md",
         "paired effects audit link": "docs/paired_effects_audit.md",
@@ -774,6 +775,38 @@ def check_label_provenance_audit_content(path: Path = Path("docs/label_provenanc
         "ok": not problems,
         "evidence": str(path),
         "detail": "label templates, manual labels, and evaluation summaries are provenance-consistent",
+        "problems": problems,
+    }
+
+
+def check_label_limitations_audit_content(path: Path = Path("docs/label_limitations_audit.md")) -> dict[str, Any]:
+    problems = []
+    try:
+        text = path.read_text(encoding="utf-8")
+    except FileNotFoundError:
+        return {
+            "name": "label limitations audit",
+            "ok": False,
+            "evidence": str(path),
+            "problems": ["missing label limitations audit"],
+        }
+
+    required_phrases = {
+        "ready": "Ready: yes",
+        "coverage": "Checks passed: 8 / 8",
+        "single artifact caveat": "single_artifact_caveat",
+        "inter annotator caveat": "no_inter_annotator_claim",
+        "provenance caveat": "provenance_inter_annotator_caveat",
+    }
+    for label, phrase in required_phrases.items():
+        if phrase not in text:
+            problems.append(f"missing {label}")
+
+    return {
+        "name": "label limitations audit",
+        "ok": not problems,
+        "evidence": str(path),
+        "detail": "manual diagnostic labels are paired with paper limitations",
         "problems": problems,
     }
 
@@ -1531,7 +1564,7 @@ def check_reproducibility_audit_content(path: Path = Path("docs/reproducibility_
 
     required_phrases = {
         "ready": "Ready: yes",
-        "coverage count": "Commands covered: 49 / 49",
+        "coverage count": "Commands covered: 50 / 50",
         "balanced fences": "Markdown fences balanced: yes",
         "submission gate": "submission_readiness_gate",
         "scope caveat": "does not execute the full real Codex collection commands",
@@ -1664,6 +1697,7 @@ def build_report(selection_dir: Path, run_dir: Path) -> dict[str, Any]:
         check_reviewer_path_audit_content(),
         check_benchmark_trace_artifact_content(),
         check_label_provenance_audit_content(),
+        check_label_limitations_audit_content(),
         check_verification_saturation_audit_content(),
         check_metric_coverage_audit_content(),
         check_paired_effects_audit_content(),

@@ -196,6 +196,11 @@
       "present": true
     },
     {
+      "id": "label_limitations_audit",
+      "phrase": "scripts/audit_label_limitations.py",
+      "present": true
+    },
+    {
       "id": "verification_saturation_audit",
       "phrase": "scripts/audit_verification_saturation.py",
       "present": true
@@ -247,12 +252,12 @@
     }
   ],
   "summary": {
-    "bash_fence_count": 58,
+    "bash_fence_count": 59,
     "checklist_path": "docs/reproducibility_checklist.md",
-    "covered_command_count": 49,
-    "fence_count": 122,
+    "covered_command_count": 50,
+    "fence_count": 124,
     "fences_balanced": true,
     "ready": true,
-    "required_command_count": 49
+    "required_command_count": 50
   }
 }

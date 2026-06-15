@@ -62,6 +62,7 @@ This generated map turns the current evidence into reviewer-facing paper claims.
 - `docs/reviewer_path_audit.md`
 - `docs/benchmark_trace_artifact.md`
 - `docs/label_provenance_audit.md`
+- `docs/label_limitations_audit.md`
 - `docs/verification_saturation_audit.md`
 - `docs/metric_coverage_audit.md`
 - `docs/paired_effects_audit.md`

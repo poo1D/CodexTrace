@@ -506,9 +506,10 @@ benchmark. The hard30 artifact has 30 selected tasks and 60 real runs, but the
 rather than a stable population estimate. The detectors are rule-based and
 intentionally interpretable, but incomplete. Manual labels for hidden semantic
 failures are based on hidden grader outcomes and qualitative inspection of
-failure messages. Larger repository tasks, repeated trials, richer process
-failure labels, and lightweight semantic checks are needed before making
-broader claims. The generated validity map in `docs/validity_threats.md`
+failure messages; they are single-artifact diagnostic labels, not
+inter-annotator-agreement evidence. Larger repository tasks, repeated trials,
+richer process failure labels, and lightweight semantic checks are needed
+before making broader claims. The generated validity map in `docs/validity_threats.md`
 separates internal, construct, external, conclusion, detector, ablation, and
 reproducibility threats, and ties each one to evidence and safe paper wording.
 
@@ -542,6 +543,7 @@ sketch with stored headline evidence,
 completeness,
 `docs/label_provenance_audit.md` for hard30 label-file provenance and
 evaluation consistency,
+`docs/label_limitations_audit.md` for manual-label claim limits,
 `docs/verification_saturation_audit.md` for ordinary-baseline verification
 saturation and the no-verify ablation boundary,
 `docs/paired_effects_audit.md` for paired RQ3 effect-size and uncertainty

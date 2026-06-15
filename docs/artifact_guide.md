@@ -46,33 +46,34 @@ oracles for hidden semantic correctness.
    `docs/benchmark_trace_artifact.md`.
 17. Check hard30 label provenance and evaluation consistency in
    `docs/label_provenance_audit.md`.
-18. Check ordinary-baseline verification saturation in
+18. Check manual-label limitation wording in `docs/label_limitations_audit.md`.
+19. Check ordinary-baseline verification saturation in
    `docs/verification_saturation_audit.md`.
-19. Check paired RQ3 effect-size evidence in
+20. Check paired RQ3 effect-size evidence in
    `docs/paired_effects_audit.md`.
-20. Check offline demo coverage in `docs/demo_audit.md`.
-21. Check Web replay artifact coverage in `docs/web_artifact_audit.md`.
-22. Check offline CLI coverage in `docs/cli_surface_audit.md`.
-23. Check CI/readiness/packaging coverage in `docs/ci_surface_audit.md`.
-24. Check method pipeline source/CLI coverage in `docs/method_pipeline_audit.md`.
-25. Check Run/Step schema-field mapping in `docs/schema_field_audit.md`.
-26. Check parser event coverage in `docs/parser_event_coverage.md`.
-27. Check diagnosis-node traceability in `docs/failure_node_traceability.md`.
-28. Check phase segmentation coverage in `docs/phase_coverage_audit.md`.
-29. Check task-category coverage in `docs/task_category_coverage.md`.
-30. Check harness protocol coverage in `docs/harness_protocol_audit.md`.
-31. Check failure-taxonomy coverage in `docs/failure_taxonomy_audit.md`.
-32. Check related-work positioning coverage in `docs/related_work_audit.md`.
-33. Check paper reference discoverability in `docs/bibliography_audit.md`.
-34. Check abstract-level evidence coverage in `docs/paper_abstract_audit.md`.
-35. Check contribution-claim coverage in `docs/paper_contribution_audit.md`.
-36. Check conclusion boundary alignment in `docs/paper_conclusion_audit.md`.
-37. Check paper structure and RQ coverage in `docs/paper_structure_audit.md`.
-38. Check RQ result-table consistency in `docs/rq_table_consistency_audit.md`.
-39. Check metric coverage in `docs/metric_coverage_audit.md`.
-40. Check reproduction command coverage in `docs/reproducibility_audit.md`.
-41. Check claim-to-evidence mapping in `docs/reproducibility_checklist.md`.
-42. Run the offline demo:
+21. Check offline demo coverage in `docs/demo_audit.md`.
+22. Check Web replay artifact coverage in `docs/web_artifact_audit.md`.
+23. Check offline CLI coverage in `docs/cli_surface_audit.md`.
+24. Check CI/readiness/packaging coverage in `docs/ci_surface_audit.md`.
+25. Check method pipeline source/CLI coverage in `docs/method_pipeline_audit.md`.
+26. Check Run/Step schema-field mapping in `docs/schema_field_audit.md`.
+27. Check parser event coverage in `docs/parser_event_coverage.md`.
+28. Check diagnosis-node traceability in `docs/failure_node_traceability.md`.
+29. Check phase segmentation coverage in `docs/phase_coverage_audit.md`.
+30. Check task-category coverage in `docs/task_category_coverage.md`.
+31. Check harness protocol coverage in `docs/harness_protocol_audit.md`.
+32. Check failure-taxonomy coverage in `docs/failure_taxonomy_audit.md`.
+33. Check related-work positioning coverage in `docs/related_work_audit.md`.
+34. Check paper reference discoverability in `docs/bibliography_audit.md`.
+35. Check abstract-level evidence coverage in `docs/paper_abstract_audit.md`.
+36. Check contribution-claim coverage in `docs/paper_contribution_audit.md`.
+37. Check conclusion boundary alignment in `docs/paper_conclusion_audit.md`.
+38. Check paper structure and RQ coverage in `docs/paper_structure_audit.md`.
+39. Check RQ result-table consistency in `docs/rq_table_consistency_audit.md`.
+40. Check metric coverage in `docs/metric_coverage_audit.md`.
+41. Check reproduction command coverage in `docs/reproducibility_audit.md`.
+42. Check claim-to-evidence mapping in `docs/reproducibility_checklist.md`.
+43. Run the offline demo:
 
 ```bash
 ./scripts/demo.sh
@@ -113,6 +114,7 @@ npm run dev
 | Does the paper draft cover the required structure? | `docs/paper_draft.md`, `docs/paper_structure_audit.md` |
 | Do RQ result tables match generated artifacts? | `docs/rq_table_consistency_audit.md` |
 | Are manual labels provenance-consistent? | `docs/label_provenance_audit.md` |
+| Are manual-label limitations explicit? | `docs/label_limitations_audit.md` |
 | Why is verification lift not a finding? | `docs/verification_saturation_audit.md` |
 | RQ3: Do harness interventions help? | `docs/results_summary.md` RQ3 tables |
 | Are RQ3 deltas task-paired with uncertainty? | `docs/paired_effects_audit.md` |
