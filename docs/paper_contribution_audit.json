@@ -41,6 +41,21 @@
       "passed": true
     },
     {
+      "expected": "detector evidence tiers",
+      "id": "detector_evidence_tiers",
+      "passed": true
+    },
+    {
+      "expected": "hard30 category-level lost-task diagnosis",
+      "id": "category_lost_task_diagnosis",
+      "passed": true
+    },
+    {
+      "expected": "run-level harness proxy checks",
+      "id": "harness_proxy_checks",
+      "passed": true
+    },
+    {
       "expected": "no contribution claims ordinary verification-rate lift",
       "id": "no_verification_lift_contribution",
       "passed": true
@@ -48,10 +63,10 @@
   ],
   "missing": [],
   "summary": {
-    "checks": 9,
+    "checks": 12,
     "missing": 0,
     "paper_draft": "docs/paper_draft.md",
-    "passed": 9,
+    "passed": 12,
     "ready": true
   }
 }

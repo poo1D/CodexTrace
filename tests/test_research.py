@@ -2021,14 +2021,17 @@ def test_paper_contribution_audit_covers_supported_contributions():
     checks = {row["id"]: row for row in result["checks"]}
 
     assert result["summary"]["ready"] is True
-    assert result["summary"]["passed"] == 9
-    assert result["summary"]["checks"] == 9
+    assert result["summary"]["passed"] == 12
+    assert result["summary"]["checks"] == 12
     assert checks["taxonomy_contribution"]["passed"] is True
     assert checks["benchmark_contribution"]["passed"] is True
     assert checks["codextrace_contribution"]["passed"] is True
     assert checks["empirical_boundary_contribution"]["passed"] is True
+    assert checks["detector_evidence_tiers"]["passed"] is True
+    assert checks["category_lost_task_diagnosis"]["passed"] is True
+    assert checks["harness_proxy_checks"]["passed"] is True
     assert checks["no_verification_lift_contribution"]["passed"] is True
-    assert "Checks passed: 9 / 9" in markdown
+    assert "Checks passed: 12 / 12" in markdown
     assert "no_verification_lift_contribution" in markdown
 
 

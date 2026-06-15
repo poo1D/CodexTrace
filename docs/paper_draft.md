@@ -73,7 +73,10 @@ Our contributions are:
   pilots do not support an ordinary verification-rate lift; this negative
   result means the current evidence does not support an ordinary
   verification-rate lift, and hidden semantic failures still require strong
-  task-level oracles.
+  task-level oracles. The analysis includes detector evidence tiers for each
+  process label, hard30 category-level lost-task diagnosis, and run-level
+  harness proxy checks that connect prompt constraints to aggregate trace
+  metrics.
 
 ## 2. Related Work
 

@@ -310,11 +310,14 @@ def check_paper_contribution_audit_content(path: Path = Path("docs/paper_contrib
 
     required_phrases = {
         "ready": "Ready: yes",
-        "coverage": "Checks passed: 9 / 9",
+        "coverage": "Checks passed: 12 / 12",
         "taxonomy": "taxonomy_contribution",
         "benchmark": "benchmark_contribution",
         "codextrace": "codextrace_contribution",
         "empirical boundary": "empirical_boundary_contribution",
+        "evidence tiers": "detector_evidence_tiers",
+        "category diagnosis": "category_lost_task_diagnosis",
+        "harness proxies": "harness_proxy_checks",
         "verification boundary": "no_verification_lift_contribution",
     }
     for label, phrase in required_phrases.items():

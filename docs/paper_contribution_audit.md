@@ -5,7 +5,7 @@ This generated audit checks that the paper's contribution claims match the curre
 ## Summary
 
 - Ready: yes
-- Checks passed: 9 / 9
+- Checks passed: 12 / 12
 - Missing checks: 0
 - Paper draft: `docs/paper_draft.md`
 
@@ -21,6 +21,9 @@ This generated audit checks that the paper's contribution claims match the curre
 | `waste_reduction` | pass | tool-call and token waste |
 | `verification_negative` | pass | does not support an ordinary verification-rate lift |
 | `semantic_oracle_boundary` | pass | strong task-level oracles |
+| `detector_evidence_tiers` | pass | detector evidence tiers |
+| `category_lost_task_diagnosis` | pass | hard30 category-level lost-task diagnosis |
+| `harness_proxy_checks` | pass | run-level harness proxy checks |
 | `no_verification_lift_contribution` | pass | no contribution claims ordinary verification-rate lift |
 
-Interpretation: contribution claims are ready only if they state taxonomy, benchmark, CodexTrace, and boundary-result empirical contributions without presenting ordinary verification-rate lift as a finding.
+Interpretation: contribution claims are ready only if they state taxonomy, benchmark, CodexTrace, and boundary-result empirical contributions with evidence-tier, category-diagnosis, and harness-proxy safeguards, without presenting ordinary verification-rate lift as a finding.

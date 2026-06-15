@@ -21,6 +21,9 @@ def build_paper_contribution_audit(paper_draft_path: Path = DEFAULT_PAPER_DRAFT)
         _check("waste_reduction", "tool-call and token waste", text),
         _check("verification_negative", "does not support an ordinary verification-rate lift", text),
         _check("semantic_oracle_boundary", "strong task-level oracles", text),
+        _check("detector_evidence_tiers", "detector evidence tiers", text),
+        _check("category_lost_task_diagnosis", "hard30 category-level lost-task diagnosis", text),
+        _check("harness_proxy_checks", "run-level harness proxy checks", text),
         {
             "id": "no_verification_lift_contribution",
             "passed": "contribution: verification-rate lift" not in normalized
@@ -66,7 +69,7 @@ def render_paper_contribution_audit_markdown(result: dict[str, Any]) -> str:
         lines.append(f"| `{row['id']}` | {'pass' if row['passed'] else 'fail'} | {row['expected']} |")
     lines.extend([
         "",
-        "Interpretation: contribution claims are ready only if they state taxonomy, benchmark, CodexTrace, and boundary-result empirical contributions without presenting ordinary verification-rate lift as a finding.",
+        "Interpretation: contribution claims are ready only if they state taxonomy, benchmark, CodexTrace, and boundary-result empirical contributions with evidence-tier, category-diagnosis, and harness-proxy safeguards, without presenting ordinary verification-rate lift as a finding.",
     ])
     return "\n".join(lines) + "\n"
 
