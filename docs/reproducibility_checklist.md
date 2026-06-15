@@ -36,6 +36,7 @@ The stored pilots can be inspected and aggregated without re-running Codex.
 | `docs/label_limitations_audit.md` | Generated audit for manual-label limitation wording and provenance caveats. |
 | `docs/verification_saturation_audit.md` | Generated audit for ordinary-baseline verification saturation and the no-verify ablation boundary. |
 | `docs/paired_effects_audit.md` | Generated paired effect-size and uncertainty audit for RQ3 intervention deltas. |
+| `docs/paired_effect_limitations_audit.md` | Generated audit that keeps paired-effect claims pilot-scale rather than population-level. |
 | `docs/demo_audit.md` | Generated audit for the reviewer-facing offline demo script. |
 | `docs/web_artifact_audit.md` | Generated audit for the committed static Web replay artifact. |
 | `docs/cli_surface_audit.md` | Generated audit for offline CLI command surface coverage. |
@@ -114,6 +115,7 @@ The stored pilots can be inspected and aggregated without re-running Codex.
 | `scripts/audit_verification_saturation.py` | Checks stored non-ablation pilots for ordinary verification-rate saturation. |
 | `scripts/audit_metric_coverage.py` | Checks that experiment-design metrics are collected, summarized, exported to CSV, and visible in aggregate Markdown. |
 | `scripts/audit_paired_effects.py` | Computes task-paired effect sizes, sign tests, and bootstrap CIs for RQ3 deltas. |
+| `scripts/audit_paired_effect_limitations.py` | Checks paired-effect evidence against pilot-scale and population-claim limitations. |
 | `scripts/audit_demo.py` | Runs the offline demo script and checks generated JSON/Markdown diagnosis artifacts. |
 | `scripts/audit_web_artifact.py` | Checks the committed Web replay fixture and event-ID highlight source path. |
 | `scripts/audit_cli_surface.py` | Smoke-tests offline CLI entry points for trace, diagnosis, aggregate, label, paper-report, summary, and dry-run artifacts. |
@@ -223,6 +225,14 @@ Paired effects audit:
 PYTHONPATH=. python3 scripts/audit_paired_effects.py \
   --json-output /tmp/paired-effects-audit.json \
   --markdown-output /tmp/paired-effects-audit.md
+```
+
+Paired effect limitations audit:
+
+```bash
+PYTHONPATH=. python3 scripts/audit_paired_effect_limitations.py \
+  --json-output /tmp/paired-effect-limitations-audit.json \
+  --markdown-output /tmp/paired-effect-limitations-audit.md
 ```
 
 Offline demo audit:

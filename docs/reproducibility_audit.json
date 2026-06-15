@@ -36,6 +36,11 @@
       "present": true
     },
     {
+      "id": "paired_effect_limitations_audit",
+      "phrase": "scripts/audit_paired_effect_limitations.py",
+      "present": true
+    },
+    {
       "id": "demo_audit",
       "phrase": "scripts/audit_demo.py",
       "present": true
@@ -252,12 +257,12 @@
     }
   ],
   "summary": {
-    "bash_fence_count": 59,
+    "bash_fence_count": 60,
     "checklist_path": "docs/reproducibility_checklist.md",
-    "covered_command_count": 50,
-    "fence_count": 124,
+    "covered_command_count": 51,
+    "fence_count": 126,
     "fences_balanced": true,
     "ready": true,
-    "required_command_count": 50
+    "required_command_count": 51
   }
 }

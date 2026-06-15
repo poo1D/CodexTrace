@@ -880,6 +880,41 @@ def check_paired_effects_audit_content(path: Path = Path("docs/paired_effects_au
     }
 
 
+def check_paired_effect_limitations_audit_content(
+    path: Path = Path("docs/paired_effect_limitations_audit.md"),
+) -> dict[str, Any]:
+    problems = []
+    try:
+        text = path.read_text(encoding="utf-8")
+    except FileNotFoundError:
+        return {
+            "name": "paired effect limitations audit",
+            "ok": False,
+            "evidence": str(path),
+            "problems": ["missing paired effect limitations audit"],
+        }
+
+    required_phrases = {
+        "ready": "Ready: yes",
+        "checks passed": "Checks passed: 13 / 13",
+        "population caveat": "not population-level significance claims",
+        "pilot evidence": "pilot evidence",
+        "stable population caveat": "stable population estimate",
+        "overclaim guard": "no statistically significant population effect overclaim",
+    }
+    for label, phrase in required_phrases.items():
+        if phrase not in text:
+            problems.append(f"missing {label}")
+
+    return {
+        "name": "paired effect limitations audit",
+        "ok": not problems,
+        "evidence": str(path),
+        "detail": "task-paired effect sizes are paired with pilot-scale and population-claim limitations",
+        "problems": problems,
+    }
+
+
 def check_demo_audit_content(path: Path = Path("docs/demo_audit.md")) -> dict[str, Any]:
     problems = []
     try:
@@ -1564,7 +1599,7 @@ def check_reproducibility_audit_content(path: Path = Path("docs/reproducibility_
 
     required_phrases = {
         "ready": "Ready: yes",
-        "coverage count": "Commands covered: 50 / 50",
+        "coverage count": "Commands covered: 51 / 51",
         "balanced fences": "Markdown fences balanced: yes",
         "submission gate": "submission_readiness_gate",
         "scope caveat": "does not execute the full real Codex collection commands",
@@ -1701,6 +1736,7 @@ def build_report(selection_dir: Path, run_dir: Path) -> dict[str, Any]:
         check_verification_saturation_audit_content(),
         check_metric_coverage_audit_content(),
         check_paired_effects_audit_content(),
+        check_paired_effect_limitations_audit_content(),
         check_demo_audit_content(),
         check_web_artifact_audit_content(),
         check_cli_surface_audit_content(),

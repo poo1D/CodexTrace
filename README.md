@@ -82,7 +82,9 @@ metric coverage, `docs/benchmark_trace_artifact.md` for hard30 task/run/trace
 pair completeness, `docs/label_provenance_audit.md` for hard30 label
 template/manual-label/evaluation consistency, `docs/label_limitations_audit.md`
 for manual-label claim limits, `docs/paired_effects_audit.md`
-for paired RQ3 effect-size and uncertainty evidence, `docs/demo_audit.md` for the offline demo smoke path,
+for paired RQ3 effect-size and uncertainty evidence,
+`docs/paired_effect_limitations_audit.md` for paired-effect population-claim limits,
+`docs/demo_audit.md` for the offline demo smoke path,
 `docs/web_artifact_audit.md` for the static Web replay artifact,
 `docs/cli_surface_audit.md` for offline CLI coverage,
 `docs/ci_surface_audit.md` for CI/readiness/packaging coverage,
@@ -190,6 +192,7 @@ Key files:
 - `scripts/audit_label_limitations.py`: checks paper limitations for manual-label claim boundaries
 - `scripts/audit_metric_coverage.py`: checks planned experiment metrics across run rows, summaries, CSV, and aggregate Markdown
 - `scripts/audit_paired_effects.py`: computes task-paired effect sizes, sign tests, and bootstrap CIs for RQ3 deltas
+- `scripts/audit_paired_effect_limitations.py`: checks paired-effect evidence against pilot-scale and population-claim limitations
 - `scripts/audit_demo.py`: runs the offline demo script and checks generated JSON/Markdown diagnosis artifacts
 - `scripts/audit_web_artifact.py`: checks the committed Web replay fixture and event-ID highlight source path
 - `scripts/audit_cli_surface.py`: smoke-tests offline CLI entry points for trace, diagnosis, and research artifact generation
@@ -235,6 +238,7 @@ Key files:
 - `docs/paper_draft.md`: result-driven workshop-style paper draft
 - `docs/paper_outline.md`: paper outline and experiment plan
 - `docs/paired_effects_audit.md`: generated paired effect-size and uncertainty audit for RQ3 waste-reduction claims
+- `docs/paired_effect_limitations_audit.md`: generated audit that keeps paired-effect claims pilot-scale rather than population-level
 - `docs/demo_audit.md`: generated audit for the reviewer-facing offline demo script
 - `docs/web_artifact_audit.md`: generated audit for the committed static Web replay artifact
 - `docs/ci_surface_audit.md`: generated audit for CI, packaging, readiness-gate, and local task-runner coverage
@@ -367,6 +371,7 @@ PYTHONPATH=. python3 scripts/audit_submission_package.py --markdown-output docs/
 PYTHONPATH=. python3 scripts/audit_detector_evaluation.py --markdown-output docs/detector_evaluation_audit.md
 PYTHONPATH=. python3 scripts/audit_rule_implementation.py --markdown-output docs/rule_implementation_audit.md
 PYTHONPATH=. python3 scripts/audit_paired_effects.py --markdown-output docs/paired_effects_audit.md
+PYTHONPATH=. python3 scripts/audit_paired_effect_limitations.py --markdown-output docs/paired_effect_limitations_audit.md
 PYTHONPATH=. python3 scripts/audit_demo.py --markdown-output docs/demo_audit.md
 PYTHONPATH=. python3 scripts/audit_web_artifact.py --markdown-output docs/web_artifact_audit.md
 PYTHONPATH=. python3 scripts/audit_cli_surface.py --markdown-output docs/cli_surface_audit.md

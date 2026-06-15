@@ -51,11 +51,13 @@ oracles for hidden semantic correctness.
    `docs/verification_saturation_audit.md`.
 20. Check paired RQ3 effect-size evidence in
    `docs/paired_effects_audit.md`.
-21. Check offline demo coverage in `docs/demo_audit.md`.
-22. Check Web replay artifact coverage in `docs/web_artifact_audit.md`.
-23. Check offline CLI coverage in `docs/cli_surface_audit.md`.
-24. Check CI/readiness/packaging coverage in `docs/ci_surface_audit.md`.
-25. Check method pipeline source/CLI coverage in `docs/method_pipeline_audit.md`.
+21. Check paired-effect population-claim limits in
+   `docs/paired_effect_limitations_audit.md`.
+22. Check offline demo coverage in `docs/demo_audit.md`.
+23. Check Web replay artifact coverage in `docs/web_artifact_audit.md`.
+24. Check offline CLI coverage in `docs/cli_surface_audit.md`.
+25. Check CI/readiness/packaging coverage in `docs/ci_surface_audit.md`.
+26. Check method pipeline source/CLI coverage in `docs/method_pipeline_audit.md`.
 26. Check Run/Step schema-field mapping in `docs/schema_field_audit.md`.
 27. Check parser event coverage in `docs/parser_event_coverage.md`.
 28. Check diagnosis-node traceability in `docs/failure_node_traceability.md`.
@@ -118,6 +120,7 @@ npm run dev
 | Why is verification lift not a finding? | `docs/verification_saturation_audit.md` |
 | RQ3: Do harness interventions help? | `docs/results_summary.md` RQ3 tables |
 | Are RQ3 deltas task-paired with uncertainty? | `docs/paired_effects_audit.md` |
+| Are paired-effect claims limited to pilot evidence? | `docs/paired_effect_limitations_audit.md` |
 | Does the offline demo path work? | `docs/demo_audit.md` |
 | Is the committed Web replay artifact current? | `docs/web_artifact_audit.md` |
 | Does CI exercise tests, readiness, and Web build gates? | `docs/ci_surface_audit.md` |

@@ -1,0 +1,78 @@
+{
+  "checks": [
+    {
+      "expected": "Ready: yes",
+      "id": "paired_audit_ready",
+      "passed": true
+    },
+    {
+      "expected": "Hard30 paired tasks: 30",
+      "id": "hard30_paired_tasks",
+      "passed": true
+    },
+    {
+      "expected": "Hard30 repeated tool-call delta: -3.733",
+      "id": "hard30_repeated_delta",
+      "passed": true
+    },
+    {
+      "expected": "Hard30 token-usage delta: -98.7k",
+      "id": "hard30_token_delta",
+      "passed": true
+    },
+    {
+      "expected": "95% bootstrap CI",
+      "id": "bootstrap_interval_table",
+      "passed": true
+    },
+    {
+      "expected": "Sign p",
+      "id": "sign_test_table",
+      "passed": true
+    },
+    {
+      "expected": "not population-level significance claims",
+      "id": "paired_audit_population_caveat",
+      "passed": true
+    },
+    {
+      "expected": "pilot evidence",
+      "id": "paper_pilot_evidence",
+      "passed": true
+    },
+    {
+      "expected": "stable population estimate",
+      "id": "paper_stable_population_caveat",
+      "passed": true
+    },
+    {
+      "expected": "repeated trials",
+      "id": "paper_repeated_trials_needed",
+      "passed": true
+    },
+    {
+      "expected": "docs/paired_effects_audit.md",
+      "id": "paper_paired_audit_reference",
+      "passed": true
+    },
+    {
+      "expected": "no statistically significant population effect overclaim",
+      "id": "no_statistically_significant_population_effect",
+      "passed": true
+    },
+    {
+      "expected": "no proves-general-effect overclaim",
+      "id": "no_proves_general_effect",
+      "passed": true
+    }
+  ],
+  "missing": [],
+  "summary": {
+    "checks": 13,
+    "missing": 0,
+    "paired_effects": "docs/paired_effects_audit.md",
+    "paper_draft": "docs/paper_draft.md",
+    "passed": 13,
+    "ready": true
+  }
+}

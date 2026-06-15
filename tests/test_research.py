@@ -15,6 +15,10 @@ from scripts.audit_benchmark_trace_artifact import (
     render_benchmark_trace_artifact_markdown,
 )
 from scripts.audit_paired_effects import build_paired_effects_audit, render_paired_effects_markdown
+from scripts.audit_paired_effect_limitations import (
+    build_paired_effect_limitations_audit,
+    render_paired_effect_limitations_markdown,
+)
 from scripts.audit_demo import build_demo_audit, render_demo_audit_markdown
 from scripts.audit_web_artifact import build_web_artifact_audit, render_web_artifact_markdown
 from scripts.audit_cli_surface import build_cli_surface_audit, render_cli_surface_markdown
@@ -105,6 +109,7 @@ from scripts.check_submission_readiness import (
     check_metric_coverage_audit_content,
     check_benchmark_trace_artifact_content,
     check_paired_effects_audit_content,
+    check_paired_effect_limitations_audit_content,
     check_demo_audit_content,
     check_web_artifact_audit_content,
     check_cli_surface_audit_content,
@@ -1344,6 +1349,17 @@ def test_paired_effects_audit_quantifies_rq3_waste_deltas():
     assert "not population-level significance claims" in markdown
 
 
+def test_paired_effect_limitations_audit_guards_population_overclaims():
+    result = build_paired_effect_limitations_audit()
+    markdown = render_paired_effect_limitations_markdown(result)
+
+    assert result["summary"]["ready"] is True
+    assert result["summary"]["passed"] == 13
+    assert all(row["passed"] for row in result["checks"])
+    assert "not population-level significance claims" in markdown
+    assert "population-level significance claims out of the headline" in markdown
+
+
 def test_demo_audit_runs_offline_reviewer_demo():
     result = build_demo_audit()
     markdown = render_demo_audit_markdown(result)
@@ -1646,7 +1662,7 @@ def test_reproducibility_audit_covers_key_commands():
     markdown = render_reproducibility_audit_markdown(result)
 
     assert result["summary"]["ready"] is True
-    assert result["summary"]["covered_command_count"] == 50
+    assert result["summary"]["covered_command_count"] == 51
     assert result["summary"]["fences_balanced"] is True
     assert {row["id"] for row in result["commands"]} >= {
         "full30_aggregate",
@@ -1654,6 +1670,7 @@ def test_reproducibility_audit_covers_key_commands():
         "detector_evaluation_audit",
         "rule_implementation_audit",
         "paired_effects_audit",
+        "paired_effect_limitations_audit",
         "demo_audit",
         "web_artifact_audit",
         "cli_surface_audit",
@@ -2183,6 +2200,7 @@ def test_paper_draft_contains_submission_polish_sections():
     assert "`construct_validity`" in text
     assert "No-verify ablation is not ordinary-baseline evidence." in text
     assert "docs/paired_effects_audit.md" in text
+    assert "docs/paired_effect_limitations_audit.md" in text
     assert "docs/demo_audit.md" in text
     assert "docs/web_artifact_audit.md" in text
     assert "docs/cli_surface_audit.md" in text
@@ -2225,6 +2243,7 @@ def test_reviewer_docs_surface_hard30_task_diagnosis():
     assert "docs/detector_evaluation_audit.md" in readme
     assert "docs/rule_implementation_audit.md" in readme
     assert "docs/paired_effects_audit.md" in readme
+    assert "docs/paired_effect_limitations_audit.md" in readme
     assert "docs/demo_audit.md" in readme
     assert "docs/web_artifact_audit.md" in readme
     assert "docs/cli_surface_audit.md" in readme
@@ -2269,6 +2288,7 @@ def test_reviewer_docs_surface_hard30_task_diagnosis():
     assert "scripts/audit_detector_evaluation.py --markdown-output docs/detector_evaluation_audit.md" in readme
     assert "scripts/audit_rule_implementation.py --markdown-output docs/rule_implementation_audit.md" in readme
     assert "scripts/audit_paired_effects.py --markdown-output docs/paired_effects_audit.md" in readme
+    assert "scripts/audit_paired_effect_limitations.py --markdown-output docs/paired_effect_limitations_audit.md" in readme
     assert "scripts/audit_demo.py --markdown-output docs/demo_audit.md" in readme
     assert "scripts/audit_web_artifact.py --markdown-output docs/web_artifact_audit.md" in readme
     assert "scripts/audit_cli_surface.py --markdown-output docs/cli_surface_audit.md" in readme
@@ -2307,6 +2327,7 @@ def test_reviewer_docs_surface_hard30_task_diagnosis():
     assert "docs/label_provenance_audit.md" in guide
     assert "docs/label_limitations_audit.md" in guide
     assert "docs/paired_effects_audit.md" in guide
+    assert "docs/paired_effect_limitations_audit.md" in guide
     assert "docs/demo_audit.md" in guide
     assert "docs/web_artifact_audit.md" in guide
     assert "docs/cli_surface_audit.md" in guide
@@ -2361,6 +2382,7 @@ def test_reviewer_docs_surface_hard30_task_diagnosis():
     assert "scripts/audit_detector_evaluation.py" in checklist
     assert "scripts/audit_rule_implementation.py" in checklist
     assert "scripts/audit_paired_effects.py" in checklist
+    assert "scripts/audit_paired_effect_limitations.py" in checklist
     assert "scripts/audit_demo.py" in checklist
     assert "scripts/audit_web_artifact.py" in checklist
     assert "scripts/audit_cli_surface.py" in checklist
@@ -2530,6 +2552,7 @@ def test_submission_package_maps_rqs_to_safe_paper_claims():
     assert "docs/verification_saturation_audit.md" in package["required_files"]
     assert "docs/metric_coverage_audit.md" in package["required_files"]
     assert "docs/paired_effects_audit.md" in package["required_files"]
+    assert "docs/paired_effect_limitations_audit.md" in package["required_files"]
     assert "docs/demo_audit.md" in package["required_files"]
     assert "docs/web_artifact_audit.md" in package["required_files"]
     assert "docs/cli_surface_audit.md" in package["required_files"]
@@ -2562,6 +2585,7 @@ def test_submission_package_maps_rqs_to_safe_paper_claims():
     assert "docs/label_limitations_audit.md" in markdown
     assert "docs/verification_saturation_audit.md" in markdown
     assert "docs/paired_effects_audit.md" in markdown
+    assert "docs/paired_effect_limitations_audit.md" in markdown
     assert "docs/demo_audit.md" in markdown
     assert "docs/web_artifact_audit.md" in markdown
     assert "docs/verification_ablation_plan_audit.md" in markdown
@@ -2752,6 +2776,7 @@ def test_reviewer_path_audit_covers_required_artifacts(tmp_path):
     assert any(row["path"] == "docs/rule_implementation_audit.md" for row in result["coverage"])
     assert any(row["path"] == "docs/verification_ablation_plan_audit.md" for row in result["coverage"])
     assert any(row["path"] == "docs/paired_effects_audit.md" for row in result["coverage"])
+    assert any(row["path"] == "docs/paired_effect_limitations_audit.md" for row in result["coverage"])
     assert any(row["path"] == "docs/demo_audit.md" for row in result["coverage"])
     assert any(row["path"] == "docs/web_artifact_audit.md" for row in result["coverage"])
     assert any(row["path"] == "docs/cli_surface_audit.md" for row in result["coverage"])
@@ -2817,6 +2842,19 @@ def test_submission_readiness_validates_paired_effects_audit_content(tmp_path):
     assert "missing study coverage" in check["problems"]
     assert "missing hard30 paired tasks" in check["problems"]
     assert "missing bootstrap caveat" in check["problems"]
+
+
+def test_submission_readiness_validates_paired_effect_limitations_audit_content(tmp_path):
+    broken = tmp_path / "paired_effect_limitations_audit.md"
+    broken.write_text("# Paired Effect Limitations Audit\nReady: no\n", encoding="utf-8")
+
+    check = check_paired_effect_limitations_audit_content(broken)
+
+    assert check["ok"] is False
+    assert "missing ready" in check["problems"]
+    assert "missing checks passed" in check["problems"]
+    assert "missing population caveat" in check["problems"]
+    assert "missing overclaim guard" in check["problems"]
 
 
 def test_submission_readiness_validates_demo_audit_content(tmp_path):

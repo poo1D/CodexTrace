@@ -26,6 +26,7 @@ REQUIRED_COMMANDS = (
     {"id": "rq4_signal_audit", "phrase": "scripts/audit_rq4_signals.py"},
     {"id": "metric_coverage_audit", "phrase": "scripts/audit_metric_coverage.py"},
     {"id": "paired_effects_audit", "phrase": "scripts/audit_paired_effects.py"},
+    {"id": "paired_effect_limitations_audit", "phrase": "scripts/audit_paired_effect_limitations.py"},
     {"id": "demo_audit", "phrase": "scripts/audit_demo.py"},
     {"id": "web_artifact_audit", "phrase": "scripts/audit_web_artifact.py"},
     {"id": "cli_surface_audit", "phrase": "scripts/audit_cli_surface.py"},

@@ -502,8 +502,10 @@ ran the visible tests cleanly but missed hidden edge cases.
 
 This study currently uses one agent interface, Codex CLI, and a pilot-scale
 benchmark. The hard30 artifact has 30 selected tasks and 60 real runs, but the
-70% to 80% hard10 success-rate lift should still be read as pilot evidence
-rather than a stable population estimate. The detectors are rule-based and
+70% to 80% hard10 success-rate lift and hard30 paired-task waste deltas should
+still be read as pilot evidence rather than a stable population estimate.
+`docs/paired_effects_audit.md` records current-sample bootstrap intervals and
+sign tests, but not population-level significance claims. The detectors are rule-based and
 intentionally interpretable, but incomplete. Manual labels for hidden semantic
 failures are based on hidden grader outcomes and qualitative inspection of
 failure messages; they are single-artifact diagnostic labels, not
@@ -547,7 +549,8 @@ evaluation consistency,
 `docs/verification_saturation_audit.md` for ordinary-baseline verification
 saturation and the no-verify ablation boundary,
 `docs/paired_effects_audit.md` for paired RQ3 effect-size and uncertainty
-evidence,
+evidence, `docs/paired_effect_limitations_audit.md` for paired-effect
+population-claim limits,
 `docs/demo_audit.md` for the reviewer-facing offline demo smoke path,
 `docs/web_artifact_audit.md` for the committed Web replay artifact,
 `docs/cli_surface_audit.md` for offline CLI coverage,
@@ -596,7 +599,8 @@ claim-evidence mapping, validity threats, and reproduction commands, see
 For safe claim framing and generated guard status, see
 `docs/submission_package.md`, `docs/failure_taxonomy_audit.md`,
 `docs/benchmark_trace_artifact.md`,
-`docs/paired_effects_audit.md`, `docs/demo_audit.md`,
+`docs/paired_effects_audit.md`, `docs/paired_effect_limitations_audit.md`,
+`docs/demo_audit.md`,
 `docs/web_artifact_audit.md`, `docs/cli_surface_audit.md`,
 `docs/ci_surface_audit.md`,
 `docs/schema_field_audit.md`,

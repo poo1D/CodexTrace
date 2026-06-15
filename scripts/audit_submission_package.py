@@ -56,6 +56,7 @@ def build_submission_package() -> dict[str, Any]:
             "primary_evidence": [
                 "docs/results_summary.md",
                 "docs/paired_effects_audit.md",
+                "docs/paired_effect_limitations_audit.md",
                 "docs/hard30_task_diagnosis.md",
                 "docs/paper_claim_audit.md",
                 "docs/verification_ablation_plan_audit.md",
@@ -136,6 +137,7 @@ def build_submission_package() -> dict[str, Any]:
             "docs/verification_saturation_audit.md",
             "docs/metric_coverage_audit.md",
             "docs/paired_effects_audit.md",
+            "docs/paired_effect_limitations_audit.md",
             "docs/demo_audit.md",
             "docs/web_artifact_audit.md",
             "docs/cli_surface_audit.md",
