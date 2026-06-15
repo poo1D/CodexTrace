@@ -11,6 +11,7 @@ Core path structure: ok
 Core path steps: 10
 Extended evidence steps: 34
 Path structure checks failed: 0
+Entry boundary checks failed: 0
 
 | Required file | Covered | Present in |
 | --- | --- | --- |
@@ -82,3 +83,14 @@ Path structure checks failed: 0
 | `extended_path_depth` | pass | extended evidence path keeps the detailed audit trail |
 | `core_path_demo_command` | pass | core path ends with an offline demo command |
 | `old_long_path_removed` | pass | old single long review-path heading is absent |
+
+## Entry Boundary Checks
+
+| Check | Entry | Status | Expected |
+| --- | --- | --- | --- |
+| `readme_detector_evidence_tiers` | `README.md` | pass | detector evidence tiers separate real-pilot positives from ablation and fixture coverage |
+| `guide_detector_evidence_tiers` | `docs/artifact_guide.md` | pass | detector evidence tiers separate real-pilot positives from ablation and fixture coverage |
+| `readme_hard_tier_test_writing_boundary` | `README.md` | pass | hard-tier `test_writing` coverage remains seed-only |
+| `guide_hard_tier_test_writing_boundary` | `docs/artifact_guide.md` | pass | hard-tier `test_writing` coverage remains seed-only |
+| `readme_nullable_timing_boundary` | `README.md` | pass | nullable timing metrics use present values only rather than converting missing events to zero |
+| `guide_nullable_timing_boundary` | `docs/artifact_guide.md` | pass | nullable timing metrics use present values only rather than converting missing events to zero |

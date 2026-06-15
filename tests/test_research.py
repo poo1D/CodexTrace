@@ -2982,6 +2982,8 @@ def test_reviewer_path_audit_covers_required_artifacts(tmp_path):
     assert result["summary"]["guide_missing"] == 0
     assert result["summary"]["checklist_missing"] == 0
     assert result["summary"]["path_check_missing"] == 0
+    assert result["summary"]["boundary_check_missing"] == 0
+    assert result["summary"]["boundary_checks"] == 6
     assert result["summary"]["core_step_count"] == 10
     assert result["summary"]["extended_step_count"] >= 30
     assert any(row["path"] == "docs/artifact_guide.md" for row in result["coverage"])
@@ -3020,6 +3022,10 @@ def test_reviewer_path_audit_covers_required_artifacts(tmp_path):
     assert "Core path structure: ok" in markdown
     assert "Core path steps: 10" in markdown
     assert "Path structure checks failed: 0" in markdown
+    assert "Entry boundary checks failed: 0" in markdown
+    assert "`readme_detector_evidence_tiers` | `README.md` | pass" in markdown
+    assert "`guide_hard_tier_test_writing_boundary` | `docs/artifact_guide.md` | pass" in markdown
+    assert "`readme_nullable_timing_boundary` | `README.md` | pass" in markdown
     assert "`core_path_step_count` | pass" in markdown
 
     package = tmp_path / "submission_package.json"
@@ -3042,6 +3048,7 @@ def test_reviewer_path_audit_covers_required_artifacts(tmp_path):
     assert bad_path["ok"] is False
     assert "core_path_step_count" in {row["id"] for row in bad_path["path_check_missing"]}
     assert "old_long_path_removed" in {row["id"] for row in bad_path["path_check_missing"]}
+    assert "guide_detector_evidence_tiers" in {row["id"] for row in bad_path["boundary_check_missing"]}
 
 
 def test_submission_readiness_validates_reviewer_path_audit_content(tmp_path):
@@ -3054,6 +3061,8 @@ def test_submission_readiness_validates_reviewer_path_audit_content(tmp_path):
     assert "missing ok" in check["problems"]
     assert "missing checklist coverage" in check["problems"]
     assert "missing core path structure" in check["problems"]
+    assert "missing entry boundary checks" in check["problems"]
+    assert "missing entry boundary table" in check["problems"]
 
 
 def test_submission_readiness_validates_artifact_guide_sequence_audit_content(tmp_path):

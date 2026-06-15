@@ -781,6 +781,11 @@ def check_reviewer_path_audit_content(path: Path = Path("docs/reviewer_path_audi
         "core path structure": "Core path structure: ok",
         "core path steps": "Core path steps: 10",
         "path structure checks": "Path structure checks failed: 0",
+        "entry boundary checks": "Entry boundary checks failed: 0",
+        "entry boundary table": "## Entry Boundary Checks",
+        "detector evidence tiers boundary": "detector evidence tiers separate real-pilot positives from ablation and fixture coverage",
+        "hard-tier test writing boundary": "hard-tier `test_writing` coverage remains seed-only",
+        "nullable timing boundary": "nullable timing metrics use present values only rather than converting missing events to zero",
         "required files table": "| Required file | Covered | Present in |",
     }
     for label, phrase in required_phrases.items():

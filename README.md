@@ -66,6 +66,10 @@ strong task-level oracles. At the same time, reviewed high-volume
 (`TP=4`, `FP=0`, `FN=0`). Controlled detector fixtures cover all six
 process labels with micro-F1 `1.00`; those fixtures are rule-level sanity
 checks, not real-pilot outcome evidence.
+Reviewer-facing boundary checks are intentionally explicit: detector evidence
+tiers separate real-pilot positives from ablation and fixture coverage,
+hard-tier `test_writing` coverage remains seed-only, and nullable timing
+metrics use present values only rather than converting missing events to zero.
 
 See `docs/artifact_guide.md` for the reviewer-facing walkthrough,
 `docs/results_summary.md` for the generated result summary and RQ4

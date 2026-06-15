@@ -1,4 +1,43 @@
 {
+  "boundary_check_missing": [],
+  "boundary_checks": [
+    {
+      "entry": "README.md",
+      "expected": "detector evidence tiers separate real-pilot positives from ablation and fixture coverage",
+      "id": "readme_detector_evidence_tiers",
+      "passed": true
+    },
+    {
+      "entry": "docs/artifact_guide.md",
+      "expected": "detector evidence tiers separate real-pilot positives from ablation and fixture coverage",
+      "id": "guide_detector_evidence_tiers",
+      "passed": true
+    },
+    {
+      "entry": "README.md",
+      "expected": "hard-tier `test_writing` coverage remains seed-only",
+      "id": "readme_hard_tier_test_writing_boundary",
+      "passed": true
+    },
+    {
+      "entry": "docs/artifact_guide.md",
+      "expected": "hard-tier `test_writing` coverage remains seed-only",
+      "id": "guide_hard_tier_test_writing_boundary",
+      "passed": true
+    },
+    {
+      "entry": "README.md",
+      "expected": "nullable timing metrics use present values only rather than converting missing events to zero",
+      "id": "readme_nullable_timing_boundary",
+      "passed": true
+    },
+    {
+      "entry": "docs/artifact_guide.md",
+      "expected": "nullable timing metrics use present values only rather than converting missing events to zero",
+      "id": "guide_nullable_timing_boundary",
+      "passed": true
+    }
+  ],
   "checklist_missing": [],
   "coverage": [
     {
@@ -541,6 +580,8 @@
     }
   ],
   "summary": {
+    "boundary_check_missing": 0,
+    "boundary_checks": 6,
     "checklist_missing": 0,
     "core_step_count": 10,
     "extended_step_count": 34,

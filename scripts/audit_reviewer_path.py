@@ -12,6 +12,39 @@ DEFAULT_README = Path("README.md")
 DEFAULT_ARTIFACT_GUIDE = Path("docs/artifact_guide.md")
 DEFAULT_REPRO_CHECKLIST = Path("docs/reproducibility_checklist.md")
 
+ENTRY_BOUNDARY_CHECKS = [
+    {
+        "id": "readme_detector_evidence_tiers",
+        "entry": "README.md",
+        "phrase": "detector evidence tiers separate real-pilot positives from ablation and fixture coverage",
+    },
+    {
+        "id": "guide_detector_evidence_tiers",
+        "entry": "docs/artifact_guide.md",
+        "phrase": "detector evidence tiers separate real-pilot positives from ablation and fixture coverage",
+    },
+    {
+        "id": "readme_hard_tier_test_writing_boundary",
+        "entry": "README.md",
+        "phrase": "hard-tier `test_writing` coverage remains seed-only",
+    },
+    {
+        "id": "guide_hard_tier_test_writing_boundary",
+        "entry": "docs/artifact_guide.md",
+        "phrase": "hard-tier `test_writing` coverage remains seed-only",
+    },
+    {
+        "id": "readme_nullable_timing_boundary",
+        "entry": "README.md",
+        "phrase": "nullable timing metrics use present values only rather than converting missing events to zero",
+    },
+    {
+        "id": "guide_nullable_timing_boundary",
+        "entry": "docs/artifact_guide.md",
+        "phrase": "nullable timing metrics use present values only rather than converting missing events to zero",
+    },
+]
+
 
 def build_reviewer_path_audit(
     submission_package_path: Path = DEFAULT_SUBMISSION_PACKAGE,
@@ -99,8 +132,22 @@ def build_reviewer_path_audit(
         },
     ]
     path_check_missing = [row for row in path_checks if not row["passed"]]
+    boundary_checks = [
+        {
+            "id": check["id"],
+            "entry": check["entry"],
+            "passed": _normalize(check["phrase"]) in _normalize(texts[check["entry"]]),
+            "expected": check["phrase"],
+        }
+        for check in ENTRY_BOUNDARY_CHECKS
+    ]
+    boundary_check_missing = [row for row in boundary_checks if not row["passed"]]
     return {
-        "ok": not missing and not guide_missing and not checklist_missing and not path_check_missing,
+        "ok": not missing
+        and not guide_missing
+        and not checklist_missing
+        and not path_check_missing
+        and not boundary_check_missing,
         "summary": {
             "required_files": len(required_files),
             "missing": len(missing),
@@ -108,6 +155,8 @@ def build_reviewer_path_audit(
             "checklist_missing": len(checklist_missing),
             "path_checks": len(path_checks),
             "path_check_missing": len(path_check_missing),
+            "boundary_checks": len(boundary_checks),
+            "boundary_check_missing": len(boundary_check_missing),
             "core_step_count": core_step_count,
             "extended_step_count": extended_step_count,
         },
@@ -117,6 +166,8 @@ def build_reviewer_path_audit(
         "checklist_missing": checklist_missing,
         "path_checks": path_checks,
         "path_check_missing": path_check_missing,
+        "boundary_checks": boundary_checks,
+        "boundary_check_missing": boundary_check_missing,
     }
 
 
@@ -140,6 +191,10 @@ def _step_numbers(text: str) -> list[int]:
     return [int(match.group(1)) for match in re.finditer(r"(?m)^(\d+)\.\s", text)]
 
 
+def _normalize(text: str) -> str:
+    return " ".join(text.lower().split())
+
+
 def render_reviewer_path_audit_markdown(result: dict[str, Any]) -> str:
     lines = [
         "# Reviewer Path Audit",
@@ -155,6 +210,7 @@ def render_reviewer_path_audit_markdown(result: dict[str, Any]) -> str:
         f"Core path steps: {result['summary']['core_step_count']}",
         f"Extended evidence steps: {result['summary']['extended_step_count']}",
         f"Path structure checks failed: {result['summary']['path_check_missing']}",
+        f"Entry boundary checks failed: {result['summary']['boundary_check_missing']}",
         "",
         "| Required file | Covered | Present in |",
         "| --- | --- | --- |",
@@ -177,6 +233,17 @@ def render_reviewer_path_audit_markdown(result: dict[str, Any]) -> str:
     ])
     for row in result["path_checks"]:
         lines.append(f"| `{row['id']}` | {'pass' if row['passed'] else 'fail'} | {row['expected']} |")
+    lines.extend([
+        "",
+        "## Entry Boundary Checks",
+        "",
+        "| Check | Entry | Status | Expected |",
+        "| --- | --- | --- | --- |",
+    ])
+    for row in result["boundary_checks"]:
+        lines.append(
+            f"| `{row['id']}` | `{row['entry']}` | {'pass' if row['passed'] else 'fail'} | {row['expected']} |"
+        )
     return "\n".join(lines) + "\n"
 
 

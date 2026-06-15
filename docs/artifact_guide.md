@@ -18,6 +18,11 @@ baseline-vs-intervention experiments.
 The core claim is intentionally narrow: trace analysis can expose observable
 process failures and process waste, but it does not replace strong task-level
 oracles for hidden semantic correctness.
+Three reviewer-facing boundaries should travel with that claim: detector
+evidence tiers separate real-pilot positives from ablation and fixture
+coverage, hard-tier `test_writing` coverage remains seed-only, and nullable
+timing metrics use present values only rather than converting missing events to
+zero.
 
 ## Fifteen-Minute Core Path
 
