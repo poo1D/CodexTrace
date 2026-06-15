@@ -51,6 +51,26 @@
       "passed": true
     },
     {
+      "expected": "detector evidence tiers distinguish real-pilot positives from ablation and fixture coverage",
+      "id": "detector_evidence_tiers_boundary",
+      "passed": true
+    },
+    {
+      "expected": "hard-tier `test_writing` remains seed-only",
+      "id": "hard_tier_test_writing_boundary",
+      "passed": true
+    },
+    {
+      "expected": "nullable timing metrics exclude undefined runs rather than converting them to zero",
+      "id": "nullable_timing_boundary",
+      "passed": true
+    },
+    {
+      "expected": "docs/metric_coverage_audit.md",
+      "id": "metric_coverage_link",
+      "passed": true
+    },
+    {
       "expected": "no ordinary verification-rate lift conclusion claim",
       "id": "no_verification_lift_overclaim",
       "passed": true
@@ -61,14 +81,14 @@
       "passed": true
     }
   ],
-  "conclusion": "CodexTrace shows that coding-agent traces can be used as first-class evaluation\nobjects, not merely logs. In real Codex runs, trace analysis exposes process\nfailures and quantifies harness-level waste reductions. It also shows a\nnegative boundary: current ordinary and weak baselines are verification\nsaturated, so the paper should not claim an ordinary verification-rate lift.\nThe current hard-tier pilot also gives an important limitation: hidden semantic\nedge failures can escape process-only rules. A practical evaluation stack should\ntherefore combine trace-based diagnosis with strong task-level oracles.\n\nThe next step is to repeat the hard30 collection, add richer labels for\nobservable process failures, and evaluate whether additional trace signals or\nlightweight semantic checks can recover hidden edge-case failures.\n\nFor a reviewer-facing walkthrough, see `docs/artifact_guide.md`. For the\ngenerated result summary and compact headline table, see\n`docs/results_summary.md` and `docs/headline_results.md`. For the explicit\nthesis-revision decision, see `docs/thesis_revision_decision.md`. For\nclaim-evidence mapping, validity threats, and reproduction commands, see\n`docs/validity_threats.md` and `docs/reproducibility_checklist.md`.\nFor safe claim framing and generated guard status, see\n`docs/submission_package.md`, `docs/failure_taxonomy_audit.md`,\n`docs/benchmark_trace_artifact.md`,\n`docs/paired_effects_audit.md`, `docs/paired_effect_limitations_audit.md`,\n`docs/demo_audit.md`,\n`docs/web_artifact_audit.md`, `docs/cli_surface_audit.md`,\n`docs/ci_surface_audit.md`,\n`docs/schema_field_audit.md`,\n`docs/parser_event_coverage.md`,\n`docs/failure_node_traceability.md`,\n`docs/phase_coverage_audit.md`,\n`docs/task_category_coverage.md`,\n`docs/harness_protocol_audit.md`,\n`docs/related_work_audit.md`, `docs/bibliography_audit.md`,\n`docs/paper_abstract_audit.md`,\n`docs/paper_contribution_audit.md`, `docs/paper_conclusion_audit.md`,\n`docs/method_pipeline_audit.md`,\n`docs/paper_structure_audit.md`,\n`docs/rq_table_consistency_audit.md`,\n`docs/reproducibility_audit.md`, `docs/claim_text_guard.md`, and\n`docs/paper_number_guard.md`.",
+  "conclusion": "CodexTrace shows that coding-agent traces can be used as first-class evaluation\nobjects, not merely logs. In real Codex runs, trace analysis exposes process\nfailures and quantifies harness-level waste reductions. It also shows a\nnegative boundary: current ordinary and weak baselines are verification\nsaturated, so the paper should not claim an ordinary verification-rate lift.\nThe current hard-tier pilot also gives an important limitation: hidden semantic\nedge failures can escape process-only rules. A practical evaluation stack should\ntherefore combine trace-based diagnosis with strong task-level oracles.\nThe generated guard set should also be read with three boundaries: detector\nevidence tiers distinguish real-pilot positives from ablation and fixture\ncoverage, task-category coverage shows hard-tier `test_writing` remains\nseed-only, and nullable timing metrics exclude undefined runs rather than\nconverting them to zero.\n\nThe next step is to repeat the hard30 collection, add richer labels for\nobservable process failures, and evaluate whether additional trace signals or\nlightweight semantic checks can recover hidden edge-case failures.\n\nFor a reviewer-facing walkthrough, see `docs/artifact_guide.md`. For the\ngenerated result summary and compact headline table, see\n`docs/results_summary.md` and `docs/headline_results.md`. For the explicit\nthesis-revision decision, see `docs/thesis_revision_decision.md`. For\nclaim-evidence mapping, validity threats, and reproduction commands, see\n`docs/validity_threats.md` and `docs/reproducibility_checklist.md`.\nFor safe claim framing and generated guard status, see\n`docs/submission_package.md`, `docs/failure_taxonomy_audit.md`,\n`docs/benchmark_trace_artifact.md`,\n`docs/paired_effects_audit.md`, `docs/paired_effect_limitations_audit.md`,\n`docs/demo_audit.md`,\n`docs/web_artifact_audit.md`, `docs/cli_surface_audit.md`,\n`docs/ci_surface_audit.md`,\n`docs/schema_field_audit.md`,\n`docs/parser_event_coverage.md`,\n`docs/failure_node_traceability.md`,\n`docs/phase_coverage_audit.md`,\n`docs/task_category_coverage.md`,\n`docs/harness_protocol_audit.md`,\n`docs/related_work_audit.md`, `docs/bibliography_audit.md`,\n`docs/paper_abstract_audit.md`,\n`docs/paper_contribution_audit.md`, `docs/paper_conclusion_audit.md`,\n`docs/method_pipeline_audit.md`,\n`docs/paper_structure_audit.md`,\n`docs/rq_table_consistency_audit.md`,\n`docs/reproducibility_audit.md`, `docs/claim_text_guard.md`, and\n`docs/paper_number_guard.md`. For nullable metric semantics, see\n`docs/metric_coverage_audit.md`.",
   "missing": [],
   "summary": {
-    "checks": 12,
-    "conclusion_word_count": 188,
+    "checks": 16,
+    "conclusion_word_count": 236,
     "missing": 0,
     "paper_draft": "docs/paper_draft.md",
-    "passed": 12,
+    "passed": 16,
     "ready": true
   }
 }

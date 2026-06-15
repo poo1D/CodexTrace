@@ -5,9 +5,9 @@ This generated audit checks that the paper conclusion restates the evidence-back
 ## Summary
 
 - Ready: yes
-- Checks passed: 12 / 12
+- Checks passed: 16 / 16
 - Missing checks: 0
-- Conclusion words: 188
+- Conclusion words: 236
 - Paper draft: `docs/paper_draft.md`
 
 ## Checks
@@ -24,6 +24,10 @@ This generated audit checks that the paper conclusion restates the evidence-back
 | `thesis_revision_link` | pass | docs/thesis_revision_decision.md |
 | `claim_framing_link` | pass | docs/submission_package.md |
 | `paired_effect_limitations_link` | pass | docs/paired_effect_limitations_audit.md |
+| `detector_evidence_tiers_boundary` | pass | detector evidence tiers distinguish real-pilot positives from ablation and fixture coverage |
+| `hard_tier_test_writing_boundary` | pass | hard-tier `test_writing` remains seed-only |
+| `nullable_timing_boundary` | pass | nullable timing metrics exclude undefined runs rather than converting them to zero |
+| `metric_coverage_link` | pass | docs/metric_coverage_audit.md |
 | `no_verification_lift_overclaim` | pass | no ordinary verification-rate lift conclusion claim |
 | `no_hidden_correctness_overclaim` | pass | no trace-only hidden-correctness conclusion claim |
 

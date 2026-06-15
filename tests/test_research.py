@@ -2118,15 +2118,19 @@ def test_paper_conclusion_audit_covers_boundary_result_close():
     checks = {row["id"]: row for row in result["checks"]}
 
     assert result["summary"]["ready"] is True
-    assert result["summary"]["passed"] == 12
-    assert result["summary"]["checks"] == 12
+    assert result["summary"]["passed"] == 16
+    assert result["summary"]["checks"] == 16
     assert checks["ordinary_verification_boundary"]["passed"] is True
     assert checks["hidden_semantic_boundary"]["passed"] is True
     assert checks["semantic_oracles"]["passed"] is True
+    assert checks["detector_evidence_tiers_boundary"]["passed"] is True
+    assert checks["hard_tier_test_writing_boundary"]["passed"] is True
+    assert checks["nullable_timing_boundary"]["passed"] is True
+    assert checks["metric_coverage_link"]["passed"] is True
     assert checks["paired_effect_limitations_link"]["passed"] is True
     assert checks["no_verification_lift_overclaim"]["passed"] is True
     assert checks["no_hidden_correctness_overclaim"]["passed"] is True
-    assert "Checks passed: 12 / 12" in markdown
+    assert "Checks passed: 16 / 16" in markdown
     assert "ordinary_verification_boundary" in markdown
 
 
@@ -2955,6 +2959,10 @@ def test_submission_readiness_validates_paper_conclusion_audit_content(tmp_path)
     assert "missing coverage" in check["problems"]
     assert "missing ordinary verification boundary" in check["problems"]
     assert "missing hidden semantic boundary" in check["problems"]
+    assert "missing detector evidence tiers boundary" in check["problems"]
+    assert "missing hard-tier test writing boundary" in check["problems"]
+    assert "missing nullable timing boundary" in check["problems"]
+    assert "missing metric coverage link" in check["problems"]
     assert "missing paired effect limitations" in check["problems"]
     assert "missing no verification overclaim" in check["problems"]
 

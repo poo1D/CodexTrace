@@ -616,6 +616,11 @@ saturated, so the paper should not claim an ordinary verification-rate lift.
 The current hard-tier pilot also gives an important limitation: hidden semantic
 edge failures can escape process-only rules. A practical evaluation stack should
 therefore combine trace-based diagnosis with strong task-level oracles.
+The generated guard set should also be read with three boundaries: detector
+evidence tiers distinguish real-pilot positives from ablation and fixture
+coverage, task-category coverage shows hard-tier `test_writing` remains
+seed-only, and nullable timing metrics exclude undefined runs rather than
+converting them to zero.
 
 The next step is to repeat the hard30 collection, add richer labels for
 observable process failures, and evaluate whether additional trace signals or
@@ -647,7 +652,8 @@ For safe claim framing and generated guard status, see
 `docs/paper_structure_audit.md`,
 `docs/rq_table_consistency_audit.md`,
 `docs/reproducibility_audit.md`, `docs/claim_text_guard.md`, and
-`docs/paper_number_guard.md`.
+`docs/paper_number_guard.md`. For nullable metric semantics, see
+`docs/metric_coverage_audit.md`.
 
 ## References
 

@@ -24,6 +24,10 @@ def build_paper_conclusion_audit(paper_draft_path: Path = DEFAULT_PAPER_DRAFT) -
         _check("thesis_revision_link", "docs/thesis_revision_decision.md", conclusion),
         _check("claim_framing_link", "docs/submission_package.md", conclusion),
         _check("paired_effect_limitations_link", "docs/paired_effect_limitations_audit.md", conclusion),
+        _check("detector_evidence_tiers_boundary", "detector evidence tiers distinguish real-pilot positives from ablation and fixture coverage", conclusion),
+        _check("hard_tier_test_writing_boundary", "hard-tier `test_writing` remains seed-only", conclusion),
+        _check("nullable_timing_boundary", "nullable timing metrics exclude undefined runs rather than converting them to zero", conclusion),
+        _check("metric_coverage_link", "docs/metric_coverage_audit.md", conclusion),
     ]
     overclaim_checks = [
         {
