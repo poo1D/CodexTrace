@@ -479,6 +479,39 @@ def check_submission_package_content(path: Path = Path("docs/submission_package.
     }
 
 
+def check_claim_text_guard_content(path: Path = Path("docs/claim_text_guard.md")) -> dict[str, Any]:
+    problems = []
+    try:
+        text = path.read_text(encoding="utf-8")
+    except FileNotFoundError:
+        return {
+            "name": "claim text guard",
+            "ok": False,
+            "evidence": str(path),
+            "problems": ["missing claim text guard"],
+        }
+
+    required_phrases = {
+        "status": "Status: pass",
+        "file count": "Files checked: 7",
+        "problem count": "Problems: 0",
+        "artifact guide target": "docs/artifact_guide.md",
+        "submission package target": "docs/submission_package.md",
+        "no drift": "No unsupported-claim drift detected.",
+    }
+    for label, phrase in required_phrases.items():
+        if phrase not in text:
+            problems.append(f"missing {label}")
+
+    return {
+        "name": "claim text guard",
+        "ok": not problems,
+        "evidence": str(path),
+        "detail": "paper-facing entry points are checked for unsupported verification, semantic, and evidence-tier claim drift",
+        "problems": problems,
+    }
+
+
 def check_headline_results_content(path: Path = Path("docs/headline_results.md")) -> dict[str, Any]:
     problems = []
     try:
@@ -1860,6 +1893,7 @@ def build_report(selection_dir: Path, run_dir: Path) -> dict[str, Any]:
         check_hard30_report_content(run_dir),
         check_hard30_task_diagnosis_content(),
         check_submission_package_content(),
+        check_claim_text_guard_content(),
         check_headline_results_content(),
         check_thesis_revision_decision_content(),
         check_validity_threats_content(),

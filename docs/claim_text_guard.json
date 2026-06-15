@@ -6,7 +6,12 @@
       "problems": []
     },
     {
-      "line_count": 636,
+      "line_count": 242,
+      "path": "docs/artifact_guide.md",
+      "problems": []
+    },
+    {
+      "line_count": 661,
       "path": "docs/paper_draft.md",
       "problems": []
     },
@@ -18,6 +23,11 @@
     {
       "line_count": 248,
       "path": "docs/results_summary.md",
+      "problems": []
+    },
+    {
+      "line_count": 92,
+      "path": "docs/submission_package.md",
       "problems": []
     },
     {

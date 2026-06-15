@@ -10,9 +10,11 @@ from typing import Any
 
 DEFAULT_TARGETS = (
     Path("README.md"),
+    Path("docs/artifact_guide.md"),
     Path("docs/paper_draft.md"),
     Path("docs/paper_outline.md"),
     Path("docs/results_summary.md"),
+    Path("docs/submission_package.md"),
     Path("docs/reproducibility_checklist.md"),
 )
 
@@ -29,6 +31,11 @@ REQUIRED_CAVEATS = (
         path=Path("README.md"),
         phrases=("not verification-rate lift", "mechanism check"),
         description="README should frame ordinary-pilot verification lift as unsupported and the no-verify ablation as mechanism-only.",
+    ),
+    RequiredCaveat(
+        path=Path("docs/artifact_guide.md"),
+        phrases=("failure-taxonomy coverage and evidence tiers", "real-pilot-positive, ablation-positive, or fixture-only"),
+        description="Artifact guide should surface taxonomy evidence tiers on the reviewer-facing path.",
     ),
     RequiredCaveat(
         path=Path("docs/paper_draft.md"),
@@ -53,6 +60,15 @@ REQUIRED_CAVEATS = (
         path=Path("docs/results_summary.md"),
         phrases=("does not support a verification-rate lift", "not an ordinary baseline"),
         description="Generated results summary should preserve the verification-lift boundary and no-verify ablation qualifier.",
+    ),
+    RequiredCaveat(
+        path=Path("docs/submission_package.md"),
+        phrases=(
+            "ordinary verification-rate lift remains unsupported",
+            "Waste reduction is supported",
+            "success lift is pilot-qualified",
+        ),
+        description="Submission package should keep RQ3 framed around waste reduction and qualified success, not verification lift.",
     ),
     RequiredCaveat(
         path=Path("docs/reproducibility_checklist.md"),

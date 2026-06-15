@@ -148,6 +148,7 @@ from scripts.check_submission_readiness import (
     check_reviewer_path_audit_content,
     check_rule_implementation_audit_content,
     check_rq_table_consistency_audit_content,
+    check_claim_text_guard_content,
     check_submission_package_content,
     check_thesis_revision_decision_content,
     check_validity_threats_content,
@@ -2249,6 +2250,13 @@ def test_claim_text_guard_prevents_unsupported_claim_drift(tmp_path):
 
     assert result["ok"] is True
     assert result["problem_count"] == 0
+    assert len(result["files"]) == 7
+    assert {row["path"] for row in result["files"]} >= {
+        "docs/artifact_guide.md",
+        "docs/submission_package.md",
+    }
+    assert "docs/artifact_guide.md" in markdown
+    assert "docs/submission_package.md" in markdown
     assert "No unsupported-claim drift detected." in markdown
 
     draft = tmp_path / "draft.md"
@@ -2986,6 +2994,20 @@ def test_submission_readiness_validates_artifact_guide_sequence_audit_content(tm
     assert "missing required links" in check["problems"]
     assert "missing taxonomy evidence tiers" in check["problems"]
     assert "missing tier labels" in check["problems"]
+
+
+def test_submission_readiness_validates_claim_text_guard_content(tmp_path):
+    broken = tmp_path / "claim_text_guard.md"
+    broken.write_text("# Claim Text Guard\nStatus: fail\nFiles checked: 5\n", encoding="utf-8")
+
+    check = check_claim_text_guard_content(broken)
+
+    assert check["ok"] is False
+    assert "missing status" in check["problems"]
+    assert "missing file count" in check["problems"]
+    assert "missing problem count" in check["problems"]
+    assert "missing artifact guide target" in check["problems"]
+    assert "missing submission package target" in check["problems"]
 
 
 def test_submission_readiness_validates_metric_coverage_audit_content(tmp_path):
