@@ -73,7 +73,9 @@ trace-signal analysis, `docs/headline_results.md` for the compact actual
 headline table, `docs/thesis_revision_decision.md` for the explicit
 boundary-result thesis decision, `docs/validity_threats.md` for validity
 threat mapping, `docs/limitations_traceability_audit.md` for paper-limitations
-traceability, `docs/verification_saturation_audit.md` for the generated
+traceability, `docs/expected_results_reconciliation.md` for replacing the
+original expected-results sketch with stored evidence,
+`docs/verification_saturation_audit.md` for the generated
 ordinary-baseline verification-saturation proof, `docs/rq4_signal_audit.md`
 for the generated boundary-style signal audit, `docs/metric_coverage_audit.md` for experiment
 metric coverage, `docs/benchmark_trace_artifact.md` for hard30 task/run/trace
@@ -177,6 +179,7 @@ Key files:
 - `scripts/audit_thesis_revision_decision.py`: generates the explicit original-thesis revision decision memo
 - `scripts/audit_validity_threats.py`: generates the validity-threat mapping for safe paper wording
 - `scripts/audit_limitations_traceability.py`: checks paper limitations against validity-threat safe wording
+- `scripts/audit_expected_results_reconciliation.py`: checks paper-facing files use stored headline evidence instead of the expected-results sketch
 - `scripts/audit_verification_saturation.py`: checks stored non-ablation pilots for ordinary verification-rate saturation
 - `scripts/audit_paper_numbers.py`: checks paper-draft numeric claims against stored aggregate artifacts
 - `scripts/audit_reviewer_path.py`: checks required reviewer files are discoverable from paper-facing entry points
@@ -216,6 +219,7 @@ Key files:
 - `docs/thesis_revision_decision.md`: generated decision memo for revising the original thesis into a boundary-result paper
 - `docs/validity_threats.md`: generated validity-threat map with evidence, mitigations, and safe wording
 - `docs/limitations_traceability_audit.md`: generated audit linking paper limitations to validity-threat safe wording
+- `docs/expected_results_reconciliation.md`: generated audit proving paper-facing files use actual headline evidence instead of expected-results numbers
 - `docs/verification_saturation_audit.md`: generated audit for ordinary-baseline verification saturation and ablation boundary
 - `docs/verification_lift_next_experiment.md`: generated audit for ordinary-baseline verification-lift claim closure and thesis-revision status
 - `docs/headline_results.md`: generated compact actual headline table replacing the expected-results sketch
@@ -344,6 +348,7 @@ PYTHONPATH=. python3 scripts/audit_goal_completion.py --markdown-output docs/goa
 PYTHONPATH=. python3 scripts/audit_thesis_revision_decision.py --markdown-output docs/thesis_revision_decision.md
 PYTHONPATH=. python3 scripts/audit_validity_threats.py --markdown-output docs/validity_threats.md
 PYTHONPATH=. python3 scripts/audit_limitations_traceability.py --markdown-output docs/limitations_traceability_audit.md
+PYTHONPATH=. python3 scripts/audit_expected_results_reconciliation.py --markdown-output docs/expected_results_reconciliation.md
 PYTHONPATH=. python3 scripts/audit_verification_lift_next_experiment.py --markdown-output docs/verification_lift_next_experiment.md
 PYTHONPATH=. python3 scripts/audit_verification_lift_v2_plan.py --markdown-output docs/verification_lift_v2_plan_audit.md
 PYTHONPATH=. python3 scripts/audit_verification_ablation_plan.py --markdown-output docs/verification_ablation_plan_audit.md

@@ -28,6 +28,7 @@ The stored pilots can be inspected and aggregated without re-running Codex.
 | `docs/thesis_revision_decision.md` | Generated decision memo for revising the original thesis into a boundary-result paper. |
 | `docs/validity_threats.md` | Generated validity-threat map with evidence, mitigations, and safe wording. |
 | `docs/limitations_traceability_audit.md` | Generated audit linking paper limitations to validity-threat safe wording. |
+| `docs/expected_results_reconciliation.md` | Generated audit proving paper-facing files use actual headline evidence instead of expected-results numbers. |
 | `docs/rq4_signal_audit.md` | Generated signal audit for observable process positives and hidden semantic boundaries. |
 | `docs/metric_coverage_audit.md` | Generated coverage audit for the metrics named in the experiment design. |
 | `docs/benchmark_trace_artifact.md` | Generated audit for hard30 task/run/trace/outcome/manual-label completeness. |
@@ -99,6 +100,7 @@ The stored pilots can be inspected and aggregated without re-running Codex.
 | `scripts/audit_thesis_revision_decision.py` | Generates the explicit thesis-revision decision memo. |
 | `scripts/audit_validity_threats.py` | Generates validity-threat mapping for safe paper wording. |
 | `scripts/audit_limitations_traceability.py` | Checks paper Threats To Validity wording against the generated validity-threat map. |
+| `scripts/audit_expected_results_reconciliation.py` | Checks paper-facing files use stored headline evidence instead of the expected-results sketch. |
 | `scripts/audit_verification_lift_next_experiment.py` | Claim-closure audit for the unresolved ordinary-baseline verification-lift claim. |
 | `scripts/audit_headline_results.py` | Generates the compact headline-results table and verification-lift boundary note. |
 | `scripts/audit_verification_lift_v2_plan.py` | Plan audit for the ordinary-baseline verification-lift v2 scaffold. |
@@ -485,6 +487,10 @@ PYTHONPATH=. python3 scripts/audit_validity_threats.py \
 PYTHONPATH=. python3 scripts/audit_limitations_traceability.py \
   --json-output /tmp/limitations-traceability-audit.json \
   --markdown-output /tmp/limitations-traceability-audit.md
+
+PYTHONPATH=. python3 scripts/audit_expected_results_reconciliation.py \
+  --json-output /tmp/expected-results-reconciliation.json \
+  --markdown-output /tmp/expected-results-reconciliation.md
 
 PYTHONPATH=. python3 scripts/audit_verification_lift_next_experiment.py \
   --markdown-output /tmp/verification-lift-next-experiment.md \

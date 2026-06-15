@@ -543,6 +543,38 @@ def check_limitations_traceability_audit_content(path: Path = Path("docs/limitat
     }
 
 
+def check_expected_results_reconciliation_content(path: Path = Path("docs/expected_results_reconciliation.md")) -> dict[str, Any]:
+    problems = []
+    try:
+        text = path.read_text(encoding="utf-8")
+    except FileNotFoundError:
+        return {
+            "name": "expected results reconciliation audit",
+            "ok": False,
+            "evidence": str(path),
+            "problems": ["missing expected results reconciliation audit"],
+        }
+
+    required_phrases = {
+        "ready": "Ready: yes",
+        "paper files clean": "Paper files clean: 5 / 5",
+        "headline phrases": "Headline phrases present: 7 / 7",
+        "ordinary lift unsupported": "Ordinary verification-rate lift supported: no",
+        "expected sketch caveat": "aspirational expected-results table",
+    }
+    for label, phrase in required_phrases.items():
+        if phrase not in text:
+            problems.append(f"missing {label}")
+
+    return {
+        "name": "expected results reconciliation audit",
+        "ok": not problems,
+        "evidence": str(path),
+        "detail": "paper-facing files use stored headline evidence instead of the expected-results sketch",
+        "problems": problems,
+    }
+
+
 def check_paper_number_guard_content(path: Path = Path("docs/paper_number_guard.md")) -> dict[str, Any]:
     problems = []
     try:
@@ -1465,7 +1497,7 @@ def check_reproducibility_audit_content(path: Path = Path("docs/reproducibility_
 
     required_phrases = {
         "ready": "Ready: yes",
-        "coverage count": "Commands covered: 47 / 47",
+        "coverage count": "Commands covered: 48 / 48",
         "balanced fences": "Markdown fences balanced: yes",
         "submission gate": "submission_readiness_gate",
         "scope caveat": "does not execute the full real Codex collection commands",
@@ -1593,6 +1625,7 @@ def build_report(selection_dir: Path, run_dir: Path) -> dict[str, Any]:
         check_thesis_revision_decision_content(),
         check_validity_threats_content(),
         check_limitations_traceability_audit_content(),
+        check_expected_results_reconciliation_content(),
         check_paper_number_guard_content(),
         check_reviewer_path_audit_content(),
         check_benchmark_trace_artifact_content(),

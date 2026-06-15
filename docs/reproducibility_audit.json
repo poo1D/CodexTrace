@@ -166,6 +166,11 @@
       "present": true
     },
     {
+      "id": "expected_results_reconciliation",
+      "phrase": "scripts/audit_expected_results_reconciliation.py",
+      "present": true
+    },
+    {
       "id": "paper_number_guard",
       "phrase": "scripts/audit_paper_numbers.py",
       "present": true
@@ -239,10 +244,10 @@
   "summary": {
     "bash_fence_count": 57,
     "checklist_path": "docs/reproducibility_checklist.md",
-    "covered_command_count": 47,
+    "covered_command_count": 48,
     "fence_count": 120,
     "fences_balanced": true,
     "ready": true,
-    "required_command_count": 47
+    "required_command_count": 48
   }
 }

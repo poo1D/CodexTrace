@@ -1,0 +1,67 @@
+{
+  "headline_checks": [
+    {
+      "phrase": "This generated table replaces the original expected-results sketch with the current stored evidence.",
+      "present": true
+    },
+    {
+      "phrase": "Ordinary verification-rate lift supported: no",
+      "present": true
+    },
+    {
+      "phrase": "Waste reduction supported: yes",
+      "present": true
+    },
+    {
+      "phrase": "ordinary verification-rate lift is unsupported; no-verify ablation is a mechanism check only, not an ordinary baseline",
+      "present": true
+    },
+    {
+      "phrase": "| `hard30_success` | 0.50 | 0.50 | +0.00 | flat hard30 success |",
+      "present": true
+    },
+    {
+      "phrase": "| `hard30_verification` | 1.00 | 1.00 | +0.00 | saturated; no ordinary verification lift |",
+      "present": true
+    },
+    {
+      "phrase": "| `hard30_token_usage` | 355.0k | 256.3k | -98.7k | supported waste reduction |",
+      "present": true
+    }
+  ],
+  "paper_files": [
+    {
+      "clean": true,
+      "forbidden_expected_strings": [],
+      "path": "README.md"
+    },
+    {
+      "clean": true,
+      "forbidden_expected_strings": [],
+      "path": "docs/paper_draft.md"
+    },
+    {
+      "clean": true,
+      "forbidden_expected_strings": [],
+      "path": "docs/headline_results.md"
+    },
+    {
+      "clean": true,
+      "forbidden_expected_strings": [],
+      "path": "docs/submission_package.md"
+    },
+    {
+      "clean": true,
+      "forbidden_expected_strings": [],
+      "path": "docs/reproducibility_checklist.md"
+    }
+  ],
+  "summary": {
+    "clean_paper_file_count": 5,
+    "headline_path": "docs/headline_results.md",
+    "headline_phrase_count": 7,
+    "headline_phrase_present_count": 7,
+    "paper_file_count": 5,
+    "ready": true
+  }
+}

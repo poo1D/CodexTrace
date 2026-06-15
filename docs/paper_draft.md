@@ -534,6 +534,8 @@ are `docs/artifact_guide.md` for a short reviewer path,
 decision,
 `docs/validity_threats.md` for validity threats and safe wording,
 `docs/limitations_traceability_audit.md` for paper-limitations traceability,
+`docs/expected_results_reconciliation.md` for replacing the expected-results
+sketch with stored headline evidence,
 `docs/submission_package.md` for safe RQ-to-evidence claim framing,
 `docs/metric_coverage_audit.md` for experiment-metric coverage,
 `docs/benchmark_trace_artifact.md` for hard30 task/run/trace/manual-label
