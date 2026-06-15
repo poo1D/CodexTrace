@@ -70,6 +70,10 @@ Reviewer-facing boundary checks are intentionally explicit: detector evidence
 tiers separate real-pilot positives from ablation and fixture coverage,
 hard-tier `test_writing` coverage remains seed-only, and nullable timing
 metrics use present values only rather than converting missing events to zero.
+The main RQ claim-boundary verdict tables are in
+`docs/failure_taxonomy_audit.md` (RQ1), `docs/detector_evaluation_audit.md`
+(RQ2), `docs/paired_effects_audit.md` (RQ3), and
+`docs/rq4_signal_audit.md` (RQ4).
 
 See `docs/artifact_guide.md` for the reviewer-facing walkthrough,
 `docs/results_summary.md` for the generated result summary and RQ4

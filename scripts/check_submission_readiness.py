@@ -823,8 +823,13 @@ def check_artifact_guide_sequence_audit_content(
         "no duplicate numbers": "Duplicate numbers: -",
         "no missing numbers": "Missing numbers: -",
         "required links": "docs/paired_effect_limitations_audit.md",
+        "rq2 detector link": "docs/detector_evaluation_audit.md",
+        "rq4 signal link": "docs/rq4_signal_audit.md",
         "taxonomy evidence tiers": "failure-taxonomy coverage and evidence tiers",
         "tier labels": "real-pilot-positive, ablation-positive, or fixture-only",
+        "rq1 verdict phrase": "RQ1 Distribution Boundary",
+        "rq3 verdict phrase": "RQ3 Claim Boundary Verdicts",
+        "rq4 verdict phrase": "RQ4 Signal Verdicts",
     }
     for label, phrase in required_phrases.items():
         if phrase not in text:

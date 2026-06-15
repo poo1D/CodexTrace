@@ -25,6 +25,9 @@ This generated audit checks that the reviewer-facing artifact-guide path has con
 | `docs/reproducibility_checklist.md` | yes |
 | `docs/paired_effect_limitations_audit.md` | yes |
 | `docs/failure_taxonomy_audit.md` | yes |
+| `docs/detector_evaluation_audit.md` | yes |
+| `docs/paired_effects_audit.md` | yes |
+| `docs/rq4_signal_audit.md` | yes |
 
 ## Required Phrases
 
@@ -32,5 +35,9 @@ This generated audit checks that the reviewer-facing artifact-guide path has con
 | --- | --- |
 | `failure-taxonomy coverage and evidence tiers` | yes |
 | `real-pilot-positive, ablation-positive, or fixture-only` | yes |
+| `RQ1 Distribution Boundary` | yes |
+| `Claim Boundary Verdicts` | yes |
+| `RQ3 Claim Boundary Verdicts` | yes |
+| `RQ4 Signal Verdicts` | yes |
 
 Interpretation: the artifact guide is reviewer-ready only if the numbered path is mechanically navigable and points to the core evidence chain.

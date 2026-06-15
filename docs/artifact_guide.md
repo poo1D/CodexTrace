@@ -31,13 +31,14 @@ zero.
 3. Inspect generated results in `docs/results_summary.md`.
 4. Inspect the compact actual headline table in `docs/headline_results.md`.
 5. Inspect the thesis revision decision in `docs/thesis_revision_decision.md`.
-6. Check safe paper-claim framing in `docs/submission_package.md` and taxonomy
-   evidence tiers in `docs/failure_taxonomy_audit.md`.
+6. Check safe paper-claim framing in `docs/submission_package.md` and the RQ1/RQ2
+   verdict tables in `docs/failure_taxonomy_audit.md` and
+   `docs/detector_evaluation_audit.md`.
 7. Inspect task-level hard30 repairs, regressions, and double failures in
    `docs/hard30_task_diagnosis.md`.
-8. Check paired RQ3 effect-size and population-claim limits in
-   `docs/paired_effects_audit.md` and
-   `docs/paired_effect_limitations_audit.md`.
+8. Check paired RQ3 effect-size verdicts and population-claim limits in
+   `docs/paired_effects_audit.md`, `docs/paired_effect_limitations_audit.md`,
+   and RQ4 signal verdicts in `docs/rq4_signal_audit.md`.
 9. Inspect validity threats, reproducibility, and stronger-submission guardrails in
    `docs/validity_threats.md` and
    `docs/reproducibility_checklist.md` and
@@ -104,8 +105,8 @@ npm run dev
 
 | Question | Evidence |
 | --- | --- |
-| RQ1: What failure modes are observable? | `docs/failure_taxonomy.md`, `docs/paper_draft.md` |
-| RQ2: Can trace rules detect failures? | `benchmark/hard/pilot/hard30-real/label-eval.md` |
+| RQ1: What failure modes are observable? | `docs/failure_taxonomy.md`, `docs/failure_taxonomy_audit.md` RQ1 Distribution Boundary |
+| RQ2: Can trace rules detect failures? | `docs/detector_evaluation_audit.md` Claim Boundary Verdicts, `benchmark/hard/pilot/hard30-real/label-eval.md` |
 | Is detector evaluation evidence consolidated? | `docs/detector_evaluation_audit.md` |
 | Are diagnosis rules implemented for each taxonomy label? | `docs/rule_implementation_audit.md` |
 | Is the no-verify ablation scaffold ready? | `docs/verification_ablation_plan_audit.md` |
@@ -129,7 +130,7 @@ npm run dev
 | Are manual labels provenance-consistent? | `docs/label_provenance_audit.md` |
 | Are manual-label limitations explicit? | `docs/label_limitations_audit.md` |
 | Why is verification lift not a finding? | `docs/verification_saturation_audit.md` |
-| RQ3: Do harness interventions help? | `docs/results_summary.md` RQ3 tables |
+| RQ3: Do harness interventions help? | `docs/paired_effects_audit.md` RQ3 Claim Boundary Verdicts, `docs/results_summary.md` RQ3 tables |
 | Are RQ3 deltas task-paired with uncertainty? | `docs/paired_effects_audit.md` |
 | Are paired-effect claims limited to pilot evidence? | `docs/paired_effect_limitations_audit.md` |
 | Does the offline demo path work? | `docs/demo_audit.md` |
@@ -141,7 +142,7 @@ npm run dev
 | What validity threats constrain the claims? | `docs/validity_threats.md` |
 | Do paper limitations carry validity-threat wording? | `docs/limitations_traceability_audit.md` |
 | Did the expected-results sketch get replaced? | `docs/expected_results_reconciliation.md` |
-| RQ4: Which signals explain failure? | `docs/results_summary.md` RQ4 trace-signal table |
+| RQ4: Which signals explain failure? | `docs/rq4_signal_audit.md` RQ4 Signal Verdicts, `docs/results_summary.md` RQ4 trace-signal table |
 | Are all planned metrics reported? | `docs/metric_coverage_audit.md` |
 | Are reproduction commands complete? | `docs/reproducibility_checklist.md`, `docs/reproducibility_audit.md` |
 | Which tasks get lost? | `docs/hard30_task_diagnosis.md` |

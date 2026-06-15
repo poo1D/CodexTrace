@@ -1547,7 +1547,12 @@ def test_artifact_guide_sequence_audit_checks_reviewer_path_numbering(tmp_path):
     assert result["summary"]["duplicate_numbers"] == []
     assert result["summary"]["missing_phrases"] == []
     assert "docs/paired_effect_limitations_audit.md" in markdown
+    assert "docs/detector_evaluation_audit.md" in markdown
+    assert "docs/rq4_signal_audit.md" in markdown
     assert "failure-taxonomy coverage and evidence tiers" in markdown
+    assert "RQ1 Distribution Boundary" in markdown
+    assert "RQ3 Claim Boundary Verdicts" in markdown
+    assert "RQ4 Signal Verdicts" in markdown
 
     broken = tmp_path / "artifact_guide.md"
     broken.write_text(
@@ -2526,6 +2531,11 @@ def test_reviewer_docs_surface_hard30_task_diagnosis():
     assert "docs/rule_implementation_audit.md" in readme
     assert "docs/paired_effects_audit.md" in readme
     assert "docs/paired_effect_limitations_audit.md" in readme
+    assert "The main RQ claim-boundary verdict tables are in" in readme
+    assert "`docs/failure_taxonomy_audit.md` (RQ1)" in readme
+    assert "`docs/detector_evaluation_audit.md`" in readme
+    assert "`docs/paired_effects_audit.md` (RQ3)" in readme
+    assert "`docs/rq4_signal_audit.md` (RQ4)" in readme
     assert "docs/demo_audit.md" in readme
     assert "docs/web_artifact_audit.md" in readme
     assert "docs/cli_surface_audit.md" in readme
@@ -3178,8 +3188,13 @@ def test_submission_readiness_validates_artifact_guide_sequence_audit_content(tm
     assert "missing step count" in check["problems"]
     assert "missing no duplicate numbers" in check["problems"]
     assert "missing required links" in check["problems"]
+    assert "missing rq2 detector link" in check["problems"]
+    assert "missing rq4 signal link" in check["problems"]
     assert "missing taxonomy evidence tiers" in check["problems"]
     assert "missing tier labels" in check["problems"]
+    assert "missing rq1 verdict phrase" in check["problems"]
+    assert "missing rq3 verdict phrase" in check["problems"]
+    assert "missing rq4 verdict phrase" in check["problems"]
 
 
 def test_submission_readiness_validates_claim_text_guard_content(tmp_path):

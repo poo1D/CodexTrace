@@ -17,10 +17,17 @@ REQUIRED_LINKS = (
     "docs/reproducibility_checklist.md",
     "docs/paired_effect_limitations_audit.md",
     "docs/failure_taxonomy_audit.md",
+    "docs/detector_evaluation_audit.md",
+    "docs/paired_effects_audit.md",
+    "docs/rq4_signal_audit.md",
 )
 REQUIRED_PHRASES = (
     "failure-taxonomy coverage and evidence tiers",
     "real-pilot-positive, ablation-positive, or fixture-only",
+    "RQ1 Distribution Boundary",
+    "Claim Boundary Verdicts",
+    "RQ3 Claim Boundary Verdicts",
+    "RQ4 Signal Verdicts",
 )
 
 
