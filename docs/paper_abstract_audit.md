@@ -5,9 +5,9 @@ This generated audit checks that the paper abstract states the current evidence-
 ## Summary
 
 - Ready: yes
-- Checks passed: 15 / 15
+- Checks passed: 18 / 18
 - Missing checks: 0
-- Abstract words: 287
+- Abstract words: 311
 - Paper draft: `docs/paper_draft.md`
 
 ## Checks
@@ -27,6 +27,9 @@ This generated audit checks that the paper abstract states the current evidence-
 | `hidden_semantic_boundary` | pass | 30 hidden semantic edge-case failures |
 | `semantic_oracles` | pass | strong semantic oracles |
 | `process_failures` | pass | observable process failures |
+| `detector_evidence_tiers` | pass | detector evidence tiers |
+| `hard30_category_diagnosis` | pass | hard30 category-level lost-task diagnosis |
+| `harness_proxy_checks` | pass | run-level harness proxy checks |
 | `no_unqualified_verification_lift` | pass | no unqualified verification-rate lift claim |
 | `no_hidden_correctness_claim` | pass | no trace-only hidden-correctness claim |
 

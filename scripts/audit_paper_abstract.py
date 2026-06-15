@@ -27,6 +27,9 @@ def build_paper_abstract_audit(paper_draft_path: Path = DEFAULT_PAPER_DRAFT) -> 
         _check("hidden_semantic_boundary", "30 hidden semantic edge-case failures", abstract),
         _check("semantic_oracles", "strong semantic oracles", abstract),
         _check("process_failures", "observable process failures", abstract),
+        _check("detector_evidence_tiers", "detector evidence tiers", abstract),
+        _check("hard30_category_diagnosis", "hard30 category-level lost-task diagnosis", abstract),
+        _check("harness_proxy_checks", "run-level harness proxy checks", abstract),
     ]
     overclaim_checks = [
         {

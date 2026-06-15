@@ -27,6 +27,9 @@ usage from 218.7k to 184.8k. On the hard30 tier, success rate stays flat at
 50%, but the intervention reduces repeated tool calls from 12.93 to 9.20,
 average token usage from 355.0k to 256.3k, and failure score from 3.50 to
 1.17.
+We report detector evidence tiers, a hard30 category-level lost-task diagnosis,
+and run-level harness proxy checks to keep those claims tied to observable
+trace evidence.
 A manual-label analysis also shows a boundary of trace-only diagnosis: 30
 hidden semantic edge-case failures are missed by deterministic process rules
 because their visible process traces often look clean. These results suggest

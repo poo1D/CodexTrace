@@ -2080,14 +2080,17 @@ def test_paper_abstract_audit_covers_supported_boundary_claims():
     checks = {row["id"]: row for row in result["checks"]}
 
     assert result["summary"]["ready"] is True
-    assert result["summary"]["passed"] == 15
-    assert result["summary"]["checks"] == 15
+    assert result["summary"]["passed"] == 18
+    assert result["summary"]["checks"] == 18
     assert checks["verification_negative"]["passed"] is True
     assert checks["hard30_success_flat"]["passed"] is True
     assert checks["hard30_repeated_calls"]["passed"] is True
     assert checks["hidden_semantic_boundary"]["passed"] is True
+    assert checks["detector_evidence_tiers"]["passed"] is True
+    assert checks["hard30_category_diagnosis"]["passed"] is True
+    assert checks["harness_proxy_checks"]["passed"] is True
     assert checks["no_unqualified_verification_lift"]["passed"] is True
-    assert "Checks passed: 15 / 15" in markdown
+    assert "Checks passed: 18 / 18" in markdown
     assert "verification_negative" in markdown
     assert "no_unqualified_verification_lift" in markdown
 
@@ -2934,6 +2937,9 @@ def test_submission_readiness_validates_paper_abstract_audit_content(tmp_path):
     assert "missing ready" in check["problems"]
     assert "missing coverage" in check["problems"]
     assert "missing verification negative" in check["problems"]
+    assert "missing detector evidence tiers" in check["problems"]
+    assert "missing hard30 category diagnosis" in check["problems"]
+    assert "missing harness proxy checks" in check["problems"]
 
 
 def test_submission_readiness_validates_paper_contribution_audit_content(tmp_path):

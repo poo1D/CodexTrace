@@ -276,11 +276,14 @@ def check_paper_abstract_audit_content(path: Path = Path("docs/paper_abstract_au
 
     required_phrases = {
         "ready": "Ready: yes",
-        "coverage": "Checks passed: 15 / 15",
+        "coverage": "Checks passed: 18 / 18",
         "verification negative": "verification_negative",
         "hard30 waste": "hard30_repeated_calls",
         "hidden semantic boundary": "hidden_semantic_boundary",
         "semantic oracles": "semantic_oracles",
+        "detector evidence tiers": "detector_evidence_tiers",
+        "hard30 category diagnosis": "hard30_category_diagnosis",
+        "harness proxy checks": "harness_proxy_checks",
         "no overclaim": "no_unqualified_verification_lift",
     }
     for label, phrase in required_phrases.items():
