@@ -1,8 +1,12 @@
 {
   "rules": [
     {
+      "ablation_tp": 4,
       "alias_present": true,
+      "controlled_fixture": true,
       "covered": true,
+      "evidence_tier": "ablation-positive",
+      "evidence_tier_present": true,
       "finding_code": "verification_gap",
       "finding_code_present": true,
       "implementation_markers_present": true,
@@ -12,12 +16,17 @@
         "post_edit_verification_commands"
       ],
       "paper_present": true,
+      "real_pilot_tp": 0,
       "scope": "direct",
       "taxonomy_present": true
     },
     {
+      "ablation_tp": 0,
       "alias_present": true,
+      "controlled_fixture": true,
       "covered": true,
+      "evidence_tier": "fixture-only",
+      "evidence_tier_present": true,
       "finding_code": "command_failure_unhandled",
       "finding_code_present": true,
       "implementation_markers_present": true,
@@ -27,12 +36,17 @@
         "_similar_command"
       ],
       "paper_present": true,
+      "real_pilot_tp": 0,
       "scope": "direct",
       "taxonomy_present": true
     },
     {
+      "ablation_tp": 0,
       "alias_present": true,
+      "controlled_fixture": true,
       "covered": true,
+      "evidence_tier": "real-pilot-positive",
+      "evidence_tier_present": true,
       "finding_code": "repeated_search_or_read",
       "finding_code_present": true,
       "implementation_markers_present": true,
@@ -42,12 +56,17 @@
         "_repeated_tool_call_volume"
       ],
       "paper_present": true,
+      "real_pilot_tp": 4,
       "scope": "direct",
       "taxonomy_present": true
     },
     {
+      "ablation_tp": 0,
       "alias_present": true,
+      "controlled_fixture": true,
       "covered": true,
+      "evidence_tier": "fixture-only",
+      "evidence_tier_present": true,
       "finding_code": "long_context_no_progress",
       "finding_code_present": true,
       "implementation_markers_present": true,
@@ -57,12 +76,17 @@
         "input_tokens"
       ],
       "paper_present": true,
+      "real_pilot_tp": 0,
       "scope": "v1_proxy",
       "taxonomy_present": true
     },
     {
+      "ablation_tp": 3,
       "alias_present": true,
+      "controlled_fixture": true,
       "covered": true,
+      "evidence_tier": "ablation-positive",
+      "evidence_tier_present": true,
       "finding_code": "premature_completion",
       "finding_code_present": true,
       "implementation_markers_present": true,
@@ -72,12 +96,17 @@
         "completion_words"
       ],
       "paper_present": true,
+      "real_pilot_tp": 0,
       "scope": "direct",
       "taxonomy_present": true
     },
     {
+      "ablation_tp": 0,
       "alias_present": true,
+      "controlled_fixture": true,
       "covered": true,
+      "evidence_tier": "real-pilot-positive",
+      "evidence_tier_present": true,
       "finding_code": "sandbox_or_permission_block",
       "finding_code_present": true,
       "implementation_markers_present": true,
@@ -87,16 +116,21 @@
         "_sandbox_events"
       ],
       "paper_present": true,
+      "real_pilot_tp": 1,
       "scope": "direct",
       "taxonomy_present": true
     }
   ],
   "summary": {
+    "ablation_positive_rule_count": 2,
     "context_proxy_disclosed": true,
     "covered_rule_count": 6,
+    "detector_audit_path": "docs/detector_evaluation_audit.json",
     "diagnose_path": "codex_trace/diagnose.py",
+    "fixture_only_rule_count": 2,
     "paper_draft_path": "docs/paper_draft.md",
     "ready": true,
+    "real_pilot_positive_rule_count": 2,
     "research_path": "codex_trace/research.py",
     "rule_count": 6,
     "taxonomy_path": "docs/failure_taxonomy.md"

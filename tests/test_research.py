@@ -1840,12 +1840,20 @@ def test_rule_implementation_audit_maps_taxonomy_to_diagnosis_rules():
     assert result["summary"]["ready"] is True
     assert result["summary"]["covered_rule_count"] == 6
     assert result["summary"]["context_proxy_disclosed"] is True
+    assert result["summary"]["real_pilot_positive_rule_count"] == 2
+    assert result["summary"]["ablation_positive_rule_count"] == 2
+    assert result["summary"]["fixture_only_rule_count"] == 2
     assert rules["verification_gap"]["finding_code"] == "verification_gap"
+    assert rules["verification_gap"]["evidence_tier"] == "ablation-positive"
     assert rules["unrecovered_tool_error"]["finding_code"] == "command_failure_unhandled"
+    assert rules["unrecovered_tool_error"]["evidence_tier"] == "fixture-only"
+    assert rules["repetitive_exploration"]["evidence_tier"] == "real-pilot-positive"
     assert rules["context_drift"]["finding_code"] == "long_context_no_progress"
     assert rules["context_drift"]["scope"] == "v1_proxy"
     assert all(row["covered"] for row in result["rules"])
     assert "Rules covered: 6 / 6" in markdown
+    assert "Real-pilot-positive rules: 2 / 6" in markdown
+    assert "`fixture-only`" in markdown
     assert "not a full semantic task-keyword drift detector" in markdown
 
 

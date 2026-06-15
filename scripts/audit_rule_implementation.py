@@ -10,6 +10,7 @@ DEFAULT_DIAGNOSE = Path("codex_trace/diagnose.py")
 DEFAULT_RESEARCH = Path("codex_trace/research.py")
 DEFAULT_TAXONOMY = Path("docs/failure_taxonomy.md")
 DEFAULT_PAPER_DRAFT = Path("docs/paper_draft.md")
+DEFAULT_DETECTOR_AUDIT = Path("docs/detector_evaluation_audit.json")
 
 
 RULES = (
@@ -63,24 +64,32 @@ def build_rule_implementation_audit(
     research_path: Path = DEFAULT_RESEARCH,
     taxonomy_path: Path = DEFAULT_TAXONOMY,
     paper_draft_path: Path = DEFAULT_PAPER_DRAFT,
+    detector_audit_path: Path = DEFAULT_DETECTOR_AUDIT,
 ) -> dict[str, Any]:
     diagnose_text = diagnose_path.read_text(encoding="utf-8")
     research_text = research_path.read_text(encoding="utf-8")
     taxonomy_text = taxonomy_path.read_text(encoding="utf-8")
     paper_text = paper_draft_path.read_text(encoding="utf-8")
+    evidence_tiers = _read_evidence_tiers(detector_audit_path)
 
     rows = []
     for rule in RULES:
         markers = list(rule["implementation_markers"])
+        tier = evidence_tiers.get(rule["label"], {})
         row = {
             "label": rule["label"],
             "finding_code": rule["finding_code"],
             "scope": rule["scope"],
+            "controlled_fixture": bool(tier.get("controlled_fixture")),
+            "real_pilot_tp": int(tier.get("real_pilot_tp", 0) or 0),
+            "ablation_tp": int(tier.get("ablation_tp", 0) or 0),
+            "evidence_tier": tier.get("evidence_tier", "missing"),
             "finding_code_present": f'code="{rule["finding_code"]}"' in diagnose_text,
             "implementation_markers_present": all(marker in diagnose_text for marker in markers),
             "alias_present": rule["alias_marker"] in research_text,
             "taxonomy_present": rule["label"] in taxonomy_text,
             "paper_present": rule["label"] in paper_text,
+            "evidence_tier_present": rule["label"] in evidence_tiers,
             "markers": markers,
         }
         row["covered"] = (
@@ -89,6 +98,7 @@ def build_rule_implementation_audit(
             and row["alias_present"]
             and row["taxonomy_present"]
             and row["paper_present"]
+            and row["evidence_tier_present"]
         )
         rows.append(row)
 
@@ -105,12 +115,24 @@ def build_rule_implementation_audit(
             "rule_count": len(rows),
             "covered_rule_count": sum(1 for row in rows if row["covered"]),
             "context_proxy_disclosed": context_proxy_disclosed,
+            "real_pilot_positive_rule_count": sum(1 for row in rows if row["evidence_tier"] == "real-pilot-positive"),
+            "ablation_positive_rule_count": sum(1 for row in rows if row["evidence_tier"] == "ablation-positive"),
+            "fixture_only_rule_count": sum(1 for row in rows if row["evidence_tier"] == "fixture-only"),
             "diagnose_path": str(diagnose_path),
             "research_path": str(research_path),
             "taxonomy_path": str(taxonomy_path),
             "paper_draft_path": str(paper_draft_path),
+            "detector_audit_path": str(detector_audit_path),
         },
         "rules": rows,
+    }
+
+
+def _read_evidence_tiers(detector_audit_path: Path) -> dict[str, dict[str, Any]]:
+    detector_audit = json.loads(detector_audit_path.read_text(encoding="utf-8"))
+    return {
+        row["label"]: row
+        for row in detector_audit.get("process_label_evidence_tiers", [])
     }
 
 
@@ -126,24 +148,29 @@ def render_rule_implementation_markdown(result: dict[str, Any]) -> str:
         f"- Ready: {'yes' if summary['ready'] else 'no'}",
         f"- Rules covered: {summary['covered_rule_count']} / {summary['rule_count']}",
         f"- Context drift v1 proxy disclosed: {'yes' if summary['context_proxy_disclosed'] else 'no'}",
+        f"- Real-pilot-positive rules: {summary['real_pilot_positive_rule_count']} / {summary['rule_count']}",
+        f"- Ablation-positive rules: {summary['ablation_positive_rule_count']} / {summary['rule_count']}",
+        f"- Fixture-only rules: {summary['fixture_only_rule_count']} / {summary['rule_count']}",
         f"- Diagnosis source: `{summary['diagnose_path']}`",
         f"- Label alias source: `{summary['research_path']}`",
+        f"- Detector evidence source: `{summary['detector_audit_path']}`",
         "",
         "## Rule Coverage",
         "",
-        "| Label | Finding code | Scope | Code | Markers | Alias | Docs | Covered |",
-        "| --- | --- | --- | --- | --- | --- | --- | --- |",
+        "| Label | Finding code | Scope | Evidence tier | Real TP | Ablation TP | Code | Markers | Alias | Docs | Covered |",
+        "| --- | --- | --- | --- | ---: | ---: | --- | --- | --- | --- | --- |",
     ]
     for row in result["rules"]:
         docs = row["taxonomy_present"] and row["paper_present"]
         lines.append(
             f"| `{row['label']}` | `{row['finding_code']}` | `{row['scope']}` | "
+            f"`{row['evidence_tier']}` | {row['real_pilot_tp']} | {row['ablation_tp']} | "
             f"{_yes(row['finding_code_present'])} | {_yes(row['implementation_markers_present'])} | "
             f"{_yes(row['alias_present'])} | {_yes(docs)} | {_yes(row['covered'])} |"
         )
     lines.extend([
         "",
-        "Interpretation: this audit checks implementation coverage and label mapping. It also records that `context_drift` is a v1 proxy based on high context with weak progress, not a full semantic task-keyword drift detector.",
+        "Interpretation: this audit checks implementation coverage, label mapping, and the detector evidence tier for each rule. It also records that `context_drift` is a v1 proxy based on high context with weak progress, not a full semantic task-keyword drift detector.",
     ])
     return "\n".join(lines) + "\n"
 
@@ -167,11 +194,18 @@ def main() -> int:
     parser.add_argument("--research", type=Path, default=DEFAULT_RESEARCH)
     parser.add_argument("--taxonomy", type=Path, default=DEFAULT_TAXONOMY)
     parser.add_argument("--paper-draft", type=Path, default=DEFAULT_PAPER_DRAFT)
+    parser.add_argument("--detector-audit", type=Path, default=DEFAULT_DETECTOR_AUDIT)
     parser.add_argument("--json-output", type=Path)
     parser.add_argument("--markdown-output", type=Path)
     args = parser.parse_args()
 
-    result = build_rule_implementation_audit(args.diagnose, args.research, args.taxonomy, args.paper_draft)
+    result = build_rule_implementation_audit(
+        args.diagnose,
+        args.research,
+        args.taxonomy,
+        args.paper_draft,
+        args.detector_audit,
+    )
     if args.json_output or args.markdown_output:
         write_outputs(result, args.json_output, args.markdown_output)
     else:
