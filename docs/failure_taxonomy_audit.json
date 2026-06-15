@@ -79,12 +79,39 @@
       "taxonomy_doc": true
     }
   ],
+  "rq1_boundaries": [
+    {
+      "claim": "CodexTrace defines the six target observable process-failure modes.",
+      "evidence": "6/6 labels covered in taxonomy docs, paper mapping, and controlled fixtures.",
+      "safe_wording": "Use as the RQ1 process-failure taxonomy.",
+      "verdict": "supported"
+    },
+    {
+      "claim": "Current real pilots naturally expose all six process-failure modes.",
+      "evidence": "2/6 labels have real-pilot positives: `repetitive_exploration`, `sandbox_permission_deadlock`.",
+      "safe_wording": "Report evidence tiers rather than claiming natural-frequency coverage for every label.",
+      "verdict": "unsupported"
+    },
+    {
+      "claim": "Some target process modes are only visible in ablation or controlled traces so far.",
+      "evidence": "Ablation-positive labels: `verification_gap`, `premature_completion`; fixture-only labels: `unrecovered_tool_error`, `context_drift`.",
+      "safe_wording": "Frame ablation and fixture evidence as rule coverage, not broad pilot prevalence.",
+      "verdict": "boundary"
+    },
+    {
+      "claim": "Hard30 outcome failures reveal an additional hidden-semantic boundary.",
+      "evidence": "Hard30 hidden_semantic_edge_case false negatives: 30.",
+      "safe_wording": "Describe hidden semantic failures separately from observable process-failure taxonomy.",
+      "verdict": "supported-boundary"
+    }
+  ],
   "summary": {
     "ablation_positive_label_count": 2,
     "covered_label_count": 6,
     "fixture_eval_path": "benchmark/detector-fixtures/label-eval.json",
     "fixture_micro_f1": 1.0,
     "fixture_only_label_count": 2,
+    "hidden_semantic_hard30_fn": 30,
     "paper_draft_path": "docs/paper_draft.md",
     "ready": true,
     "real_pilot_positive_label_count": 2,

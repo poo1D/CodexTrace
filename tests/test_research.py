@@ -1693,6 +1693,7 @@ def test_failure_taxonomy_audit_covers_process_labels():
     assert result["summary"]["real_pilot_positive_label_count"] == 2
     assert result["summary"]["ablation_positive_label_count"] == 2
     assert result["summary"]["fixture_only_label_count"] == 2
+    assert result["summary"]["hidden_semantic_hard30_fn"] == 30
     assert {row["label"] for row in result["labels"]} == {
         "verification_gap",
         "unrecovered_tool_error",
@@ -1709,7 +1710,15 @@ def test_failure_taxonomy_audit_covers_process_labels():
     assert tiers["premature_completion"] == "ablation-positive"
     assert tiers["unrecovered_tool_error"] == "fixture-only"
     assert tiers["context_drift"] == "fixture-only"
+    rq1_boundaries = {row["claim"]: row for row in result["rq1_boundaries"]}
+    assert rq1_boundaries["CodexTrace defines the six target observable process-failure modes."]["verdict"] == "supported"
+    assert rq1_boundaries["Current real pilots naturally expose all six process-failure modes."]["verdict"] == "unsupported"
+    assert rq1_boundaries["Some target process modes are only visible in ablation or controlled traces so far."]["verdict"] == "boundary"
+    assert rq1_boundaries["Hard30 outcome failures reveal an additional hidden-semantic boundary."]["verdict"] == "supported-boundary"
     assert "Fixture-only labels: 2 / 6" in markdown
+    assert "RQ1 Distribution Boundary" in markdown
+    assert "Report evidence tiers rather than claiming natural-frequency coverage for every label" in markdown
+    assert "Describe hidden semantic failures separately from observable process-failure taxonomy" in markdown
     assert "rule-level taxonomy coverage" in markdown
 
 
@@ -3532,6 +3541,10 @@ def test_submission_readiness_validates_failure_taxonomy_audit_content(tmp_path)
     assert "missing fixture f1" in check["problems"]
     assert "missing real pilot evidence tier" in check["problems"]
     assert "missing fixture only evidence tier" in check["problems"]
+    assert "missing hard30 hidden semantic" in check["problems"]
+    assert "missing rq1 distribution boundary" in check["problems"]
+    assert "missing natural coverage unsupported" in check["problems"]
+    assert "missing hidden semantic separate" in check["problems"]
 
 
 def test_submission_readiness_validates_related_work_audit_content(tmp_path):

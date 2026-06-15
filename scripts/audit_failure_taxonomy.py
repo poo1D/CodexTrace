@@ -39,6 +39,14 @@ def build_failure_taxonomy_audit(
         row["label"]: row
         for row in detector_audit["process_label_evidence_tiers"]
     }
+    hidden_semantic_hard30_fn = next(
+        (
+            int(row["fn"])
+            for row in detector_audit["hidden_semantic_boundaries"]
+            if row["slice"] == "hard30"
+        ),
+        0,
+    )
 
     rows = []
     for label in TARGET_LABELS:
@@ -65,6 +73,7 @@ def build_failure_taxonomy_audit(
         rows.append(row)
 
     ready = all(row["covered"] for row in rows)
+    rq1_boundaries = _rq1_boundaries(rows, hidden_semantic_hard30_fn)
     return {
         "summary": {
             "ready": ready,
@@ -74,10 +83,12 @@ def build_failure_taxonomy_audit(
             "real_pilot_positive_label_count": sum(1 for row in rows if row["evidence_tier"] == "real-pilot-positive"),
             "ablation_positive_label_count": sum(1 for row in rows if row["evidence_tier"] == "ablation-positive"),
             "fixture_only_label_count": sum(1 for row in rows if row["evidence_tier"] == "fixture-only"),
+            "hidden_semantic_hard30_fn": hidden_semantic_hard30_fn,
             "taxonomy_path": str(taxonomy_path),
             "paper_draft_path": str(paper_draft_path),
             "fixture_eval_path": str(fixture_eval_path),
         },
+        "rq1_boundaries": rq1_boundaries,
         "labels": rows,
     }
 
@@ -97,6 +108,7 @@ def render_failure_taxonomy_audit_markdown(result: dict[str, Any]) -> str:
         f"- Real-pilot-positive labels: {summary['real_pilot_positive_label_count']} / {summary['target_label_count']}",
         f"- Ablation-positive labels: {summary['ablation_positive_label_count']} / {summary['target_label_count']}",
         f"- Fixture-only labels: {summary['fixture_only_label_count']} / {summary['target_label_count']}",
+        f"- Hard30 hidden semantic false negatives: {summary['hidden_semantic_hard30_fn']}",
         f"- Taxonomy document: `{summary['taxonomy_path']}`",
         f"- Paper draft: `{summary['paper_draft_path']}`",
         f"- Fixture evaluation: `{summary['fixture_eval_path']}`",
@@ -116,6 +128,17 @@ def render_failure_taxonomy_audit_markdown(result: dict[str, Any]) -> str:
         )
     lines.extend([
         "",
+        "## RQ1 Distribution Boundary",
+        "",
+        "| Claim | Verdict | Evidence | Safe wording |",
+        "| --- | --- | --- | --- |",
+    ])
+    for row in result["rq1_boundaries"]:
+        lines.append(
+            f"| {row['claim']} | `{row['verdict']}` | {row['evidence']} | {row['safe_wording']} |"
+        )
+    lines.extend([
+        "",
         "Interpretation: this audit proves rule-level taxonomy coverage and records each label's evidence tier. It does not imply broad natural-frequency coverage in real pilots; fixture-only labels still require careful boundary framing.",
     ])
     return "\n".join(lines) + "\n"
@@ -132,6 +155,53 @@ def write_outputs(result: dict[str, Any], json_path: Path | None, markdown_path:
 
 def _yes(value: bool) -> str:
     return "yes" if value else "no"
+
+
+def _rq1_boundaries(rows: list[dict[str, Any]], hidden_semantic_hard30_fn: int) -> list[dict[str, str]]:
+    tier_counts = {
+        "real-pilot-positive": sum(1 for row in rows if row["evidence_tier"] == "real-pilot-positive"),
+        "ablation-positive": sum(1 for row in rows if row["evidence_tier"] == "ablation-positive"),
+        "fixture-only": sum(1 for row in rows if row["evidence_tier"] == "fixture-only"),
+    }
+    real_labels = _labels_for_tier(rows, "real-pilot-positive")
+    ablation_labels = _labels_for_tier(rows, "ablation-positive")
+    fixture_only_labels = _labels_for_tier(rows, "fixture-only")
+    return [
+        {
+            "claim": "CodexTrace defines the six target observable process-failure modes.",
+            "verdict": "supported",
+            "evidence": f"{len(rows)}/6 labels covered in taxonomy docs, paper mapping, and controlled fixtures.",
+            "safe_wording": "Use as the RQ1 process-failure taxonomy.",
+        },
+        {
+            "claim": "Current real pilots naturally expose all six process-failure modes.",
+            "verdict": "unsupported",
+            "evidence": (
+                f"{tier_counts['real-pilot-positive']}/6 labels have real-pilot positives: "
+                f"{real_labels}."
+            ),
+            "safe_wording": "Report evidence tiers rather than claiming natural-frequency coverage for every label.",
+        },
+        {
+            "claim": "Some target process modes are only visible in ablation or controlled traces so far.",
+            "verdict": "boundary",
+            "evidence": (
+                f"Ablation-positive labels: {ablation_labels}; fixture-only labels: {fixture_only_labels}."
+            ),
+            "safe_wording": "Frame ablation and fixture evidence as rule coverage, not broad pilot prevalence.",
+        },
+        {
+            "claim": "Hard30 outcome failures reveal an additional hidden-semantic boundary.",
+            "verdict": "supported-boundary",
+            "evidence": f"Hard30 hidden_semantic_edge_case false negatives: {hidden_semantic_hard30_fn}.",
+            "safe_wording": "Describe hidden semantic failures separately from observable process-failure taxonomy.",
+        },
+    ]
+
+
+def _labels_for_tier(rows: list[dict[str, Any]], tier: str) -> str:
+    labels = [f"`{row['label']}`" for row in rows if row["evidence_tier"] == tier]
+    return ", ".join(labels) if labels else "-"
 
 
 def _fmt(value: Any) -> str:
