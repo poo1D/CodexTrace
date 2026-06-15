@@ -279,7 +279,11 @@ usage, and command failures.
 The hard tier contains 50 runnable harder tasks with hidden graders. The
 current paper-facing hard30 artifact selects 30 of these tasks and stores 60
 real baseline/intervention runs. These tasks are designed to create outcome
-failures even when visible tests pass.
+failures even when visible tests pass. The hard tier uses refined categories
+such as stateful regression, dependency friction, and data migration; mapped
+back to the original design families it covers six of seven families, with
+`test_writing` covered only by the seed tier and treated as a hard-tier
+coverage boundary.
 
 ### Measurement
 

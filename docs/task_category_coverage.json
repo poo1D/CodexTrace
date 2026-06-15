@@ -4,8 +4,17 @@
       "category": "bug_fix",
       "hard30_count": 4,
       "hard30_covered": true,
+      "hard30_family_count": 11,
+      "hard30_family_covered": true,
       "hard_count": 7,
       "hard_covered": true,
+      "hard_family_categories": [
+        "bug_fix",
+        "error_recovery",
+        "stateful_regression"
+      ],
+      "hard_family_count": 15,
+      "hard_family_covered": true,
       "seed_count": 5,
       "seed_covered": true
     },
@@ -13,8 +22,16 @@
       "category": "feature",
       "hard30_count": 4,
       "hard30_covered": true,
+      "hard30_family_count": 5,
+      "hard30_family_covered": true,
       "hard_count": 8,
       "hard_covered": true,
+      "hard_family_categories": [
+        "feature",
+        "data_migration"
+      ],
+      "hard_family_count": 10,
+      "hard_family_covered": true,
       "seed_count": 5,
       "seed_covered": true
     },
@@ -22,8 +39,15 @@
       "category": "test_writing",
       "hard30_count": 0,
       "hard30_covered": false,
+      "hard30_family_count": 0,
+      "hard30_family_covered": false,
       "hard_count": 0,
       "hard_covered": false,
+      "hard_family_categories": [
+        "test_writing"
+      ],
+      "hard_family_count": 0,
+      "hard_family_covered": false,
       "seed_count": 5,
       "seed_covered": true
     },
@@ -31,8 +55,15 @@
       "category": "refactor",
       "hard30_count": 1,
       "hard30_covered": true,
+      "hard30_family_count": 1,
+      "hard30_family_covered": true,
       "hard_count": 4,
       "hard_covered": true,
+      "hard_family_categories": [
+        "refactor"
+      ],
+      "hard_family_count": 4,
+      "hard_family_covered": true,
       "seed_count": 5,
       "seed_covered": true
     },
@@ -40,8 +71,16 @@
       "category": "ci_failure",
       "hard30_count": 2,
       "hard30_covered": true,
+      "hard30_family_count": 5,
+      "hard30_family_covered": true,
       "hard_count": 3,
       "hard_covered": true,
+      "hard_family_categories": [
+        "ci_failure",
+        "dependency_friction"
+      ],
+      "hard_family_count": 6,
+      "hard_family_covered": true,
       "seed_count": 5,
       "seed_covered": true
     },
@@ -49,8 +88,16 @@
       "category": "error_localization",
       "hard30_count": 2,
       "hard30_covered": true,
+      "hard30_family_count": 4,
+      "hard30_family_covered": true,
       "hard_count": 4,
       "hard_covered": true,
+      "hard_family_categories": [
+        "error_localization",
+        "multi_turn_tool_debug"
+      ],
+      "hard_family_count": 7,
+      "hard_family_covered": true,
       "seed_count": 2,
       "seed_covered": true
     },
@@ -58,16 +105,31 @@
       "category": "multi_turn_change",
       "hard30_count": 3,
       "hard30_covered": true,
+      "hard30_family_count": 3,
+      "hard30_family_covered": true,
       "hard_count": 7,
       "hard_covered": true,
+      "hard_family_categories": [
+        "multi_turn_change"
+      ],
+      "hard_family_count": 7,
+      "hard_family_covered": true,
       "seed_count": 3,
       "seed_covered": true
     }
   ],
   "summary": {
     "hard30_category_count": 12,
+    "hard30_family_categories_covered": 6,
+    "hard30_family_missing_required_categories": [
+      "test_writing"
+    ],
     "hard30_minimum_ready": true,
     "hard30_task_count": 30,
+    "hard_family_categories_covered": 6,
+    "hard_family_missing_required_categories": [
+      "test_writing"
+    ],
     "hard_missing_required_categories": [
       "test_writing"
     ],

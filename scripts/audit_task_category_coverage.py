@@ -24,6 +24,15 @@ REQUIRED_DESIGN_CATEGORIES = (
     "error_localization",
     "multi_turn_change",
 )
+HARD_CATEGORY_FAMILIES = {
+    "bug_fix": ("bug_fix", "error_recovery", "stateful_regression"),
+    "feature": ("feature", "data_migration"),
+    "test_writing": ("test_writing",),
+    "refactor": ("refactor",),
+    "ci_failure": ("ci_failure", "dependency_friction"),
+    "error_localization": ("error_localization", "multi_turn_tool_debug"),
+    "multi_turn_change": ("multi_turn_change",),
+}
 
 
 def _load_category_counts(path: Path) -> dict[str, Any]:
@@ -57,14 +66,22 @@ def build_task_category_coverage_audit(
 
     rows = []
     for category in REQUIRED_DESIGN_CATEGORIES:
+        hard_family_categories = HARD_CATEGORY_FAMILIES[category]
+        hard_family_count = sum(hard["category_counts"].get(candidate, 0) for candidate in hard_family_categories)
+        hard30_family_count = sum(hard30["category_counts"].get(candidate, 0) for candidate in hard_family_categories)
         rows.append({
             "category": category,
+            "hard_family_categories": list(hard_family_categories),
             "seed_count": seed["category_counts"].get(category, 0),
             "hard_count": hard["category_counts"].get(category, 0),
             "hard30_count": hard30["category_counts"].get(category, 0),
+            "hard_family_count": hard_family_count,
+            "hard30_family_count": hard30_family_count,
             "seed_covered": category in seed_categories,
             "hard_covered": category in hard_categories,
             "hard30_covered": category in hard30_categories,
+            "hard_family_covered": hard_family_count > 0,
+            "hard30_family_covered": hard30_family_count > 0,
         })
 
     all_missing_category = (
@@ -78,6 +95,16 @@ def build_task_category_coverage_audit(
         and len(hard30_categories) >= 7
         and not hard30["missing_category"]
     )
+    hard_family_covered = {
+        row["category"]
+        for row in rows
+        if row["hard_family_covered"]
+    }
+    hard30_family_covered = {
+        row["category"]
+        for row in rows
+        if row["hard30_family_covered"]
+    }
     return {
         "summary": {
             "ready": seed_design_ready and hard30_minimum_ready and not all_missing_category,
@@ -85,6 +112,10 @@ def build_task_category_coverage_audit(
             "seed_required_categories_covered": len(required & seed_categories),
             "hard_required_categories_covered": len(required & hard_categories),
             "hard_missing_required_categories": sorted(required - hard_categories),
+            "hard_family_categories_covered": len(hard_family_covered),
+            "hard_family_missing_required_categories": sorted(required - hard_family_covered),
+            "hard30_family_categories_covered": len(hard30_family_covered),
+            "hard30_family_missing_required_categories": sorted(required - hard30_family_covered),
             "hard30_category_count": len(hard30_categories),
             "seed_task_count": seed["task_count"],
             "hard_task_count": hard["task_count"],
@@ -115,6 +146,10 @@ def render_task_category_coverage_markdown(result: dict[str, Any]) -> str:
         f"- Seed design categories covered: {summary['seed_required_categories_covered']} / {summary['required_design_categories']}",
         f"- Hard pool design categories covered: {summary['hard_required_categories_covered']} / {summary['required_design_categories']}",
         f"- Hard pool missing design categories: {_fmt_list(summary['hard_missing_required_categories'])}",
+        f"- Hard pool design-family categories covered: {summary['hard_family_categories_covered']} / {summary['required_design_categories']}",
+        f"- Hard pool missing design-family categories: {_fmt_list(summary['hard_family_missing_required_categories'])}",
+        f"- Hard30 design-family categories covered: {summary['hard30_family_categories_covered']} / {summary['required_design_categories']}",
+        f"- Hard30 missing design-family categories: {_fmt_list(summary['hard30_family_missing_required_categories'])}",
         f"- Seed tasks: {summary['seed_task_count']}",
         f"- Hard tasks: {summary['hard_task_count']}",
         f"- Hard30 selected tasks: {summary['hard30_task_count']}",
@@ -123,13 +158,26 @@ def render_task_category_coverage_markdown(result: dict[str, Any]) -> str:
         "",
         "## Required Design Categories",
         "",
-        "| Category | Seed | Hard pool | Hard30 selection |",
-        "| --- | ---: | ---: | ---: |",
+        "| Category | Seed | Hard pool | Hard30 selection | Hard family | Hard30 family |",
+        "| --- | ---: | ---: | ---: | ---: | ---: |",
     ]
     for row in result["required_categories"]:
         lines.append(
-            f"| `{row['category']}` | {row['seed_count']} | {row['hard_count']} | {row['hard30_count']} |"
+            f"| `{row['category']}` | {row['seed_count']} | {row['hard_count']} | "
+            f"{row['hard30_count']} | {row['hard_family_count']} | {row['hard30_family_count']} |"
         )
+    lines.extend([
+        "",
+        "## Hard Category Family Mapping",
+        "",
+        "Hard-tier categories refine the original design categories. Family counts aggregate those refinements back to the design-level task types; direct category counts are still reported separately so missing categories such as `test_writing` remain visible.",
+        "",
+        "| Design category | Hard-tier categories counted in family |",
+        "| --- | --- |",
+    ])
+    for category in REQUIRED_DESIGN_CATEGORIES:
+        family = ", ".join(f"`{value}`" for value in HARD_CATEGORY_FAMILIES[category])
+        lines.append(f"| `{category}` | {family} |")
     lines.extend([
         "",
         "## Tier Category Counts",
@@ -143,7 +191,7 @@ def render_task_category_coverage_markdown(result: dict[str, Any]) -> str:
         lines.append(f"- `{tier_name}`: {counts}")
     lines.extend([
         "",
-        "Interpretation: the seed benchmark covers all task categories named in the original design. The hard pool and hard30 paper-facing tier are selected for hidden-grader difficulty and broad category diversity; they are not required to preserve every seed category one-for-one, and missing design categories must be treated as coverage boundaries.",
+        "Interpretation: the seed benchmark covers all task categories named in the original design. The hard pool and hard30 paper-facing tier are selected for hidden-grader difficulty and broad category diversity; they are not required to preserve every seed category one-for-one, and missing direct or family-level design categories such as `test_writing` must be treated as coverage boundaries.",
     ])
     return "\n".join(lines) + "\n"
 
