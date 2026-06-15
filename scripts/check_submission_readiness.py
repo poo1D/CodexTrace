@@ -466,6 +466,11 @@ def check_submission_package_content(path: Path = Path("docs/submission_package.
 
     required_phrases = {
         "rq map": "## RQ-To-Evidence Map",
+        "verdict table column": "Verdict table",
+        "rq1 verdict anchor": "docs/failure_taxonomy_audit.md#RQ1 Distribution Boundary",
+        "rq2 verdict anchor": "docs/detector_evaluation_audit.md#Claim Boundary Verdicts",
+        "rq3 verdict anchor": "docs/paired_effects_audit.md#RQ3 Claim Boundary Verdicts",
+        "rq4 verdict anchor": "docs/rq4_signal_audit.md#RQ4 Signal Verdicts",
         "rq3 row": "| RQ3 | supported |",
         "required boundary": "ordinary verification-rate lift remains unsupported; no-verify lift is an ablation only",
         "unsupported claims": "## Unsupported Claims To Avoid",

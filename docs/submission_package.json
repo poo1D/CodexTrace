@@ -85,7 +85,8 @@
       ],
       "question": "What observable multi-turn coding-agent failure modes appear?",
       "rq": "RQ1",
-      "status": "satisfied"
+      "status": "satisfied",
+      "verdict_table": "docs/failure_taxonomy_audit.md#RQ1 Distribution Boundary"
     },
     {
       "claim_boundary": "Supported for rule fixtures and observed process positives; not supported for hidden semantic failures.",
@@ -99,7 +100,8 @@
       ],
       "question": "Can these failure modes be detected from trace signals alone?",
       "rq": "RQ2",
-      "status": "partial"
+      "status": "partial",
+      "verdict_table": "docs/detector_evaluation_audit.md#Claim Boundary Verdicts"
     },
     {
       "claim_boundary": "Waste reduction is supported; success lift is pilot-qualified; ordinary verification-rate lift is unsupported.",
@@ -114,7 +116,8 @@
       ],
       "question": "Do harness interventions reduce failures or waste?",
       "rq": "RQ3",
-      "status": "supported"
+      "status": "supported",
+      "verdict_table": "docs/paired_effects_audit.md#RQ3 Claim Boundary Verdicts"
     },
     {
       "claim_boundary": "Signals explain observable process positives and the hidden-semantic boundary, not hidden correctness by themselves.",
@@ -126,7 +129,8 @@
       ],
       "question": "Which trace signals explain failure?",
       "rq": "RQ4",
-      "status": "satisfied"
+      "status": "satisfied",
+      "verdict_table": "docs/rq4_signal_audit.md#RQ4 Signal Verdicts"
     }
   ],
   "summary": {

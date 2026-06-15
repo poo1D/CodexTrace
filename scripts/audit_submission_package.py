@@ -25,6 +25,7 @@ def build_submission_package() -> dict[str, Any]:
             "question": "What observable multi-turn coding-agent failure modes appear?",
             "status": requirements_by_id["taxonomy"]["status"],
             "claim_boundary": "Use the six-label process taxonomy; do not imply the current real pilots cover every label equally.",
+            "verdict_table": "docs/failure_taxonomy_audit.md#RQ1 Distribution Boundary",
             "primary_evidence": [
                 "docs/failure_taxonomy.md",
                 "docs/failure_taxonomy_audit.md",
@@ -39,6 +40,7 @@ def build_submission_package() -> dict[str, Any]:
             "question": "Can these failure modes be detected from trace signals alone?",
             "status": claims_by_name["Trace-based process rules detect most failure processes."]["status"],
             "claim_boundary": "Supported for rule fixtures and observed process positives; not supported for hidden semantic failures.",
+            "verdict_table": "docs/detector_evaluation_audit.md#Claim Boundary Verdicts",
             "primary_evidence": [
                 "docs/detector_evaluation_audit.md",
                 "docs/failure_taxonomy_audit.md",
@@ -53,6 +55,7 @@ def build_submission_package() -> dict[str, Any]:
             "question": "Do harness interventions reduce failures or waste?",
             "status": claims_by_name["Harness intervention reduces repeated tool-call and token waste."]["status"],
             "claim_boundary": "Waste reduction is supported; success lift is pilot-qualified; ordinary verification-rate lift is unsupported.",
+            "verdict_table": "docs/paired_effects_audit.md#RQ3 Claim Boundary Verdicts",
             "primary_evidence": [
                 "docs/results_summary.md",
                 "docs/paired_effects_audit.md",
@@ -68,6 +71,7 @@ def build_submission_package() -> dict[str, Any]:
             "question": "Which trace signals explain failure?",
             "status": requirements_by_id["rq4_explanation"]["status"],
             "claim_boundary": "Signals explain observable process positives and the hidden-semantic boundary, not hidden correctness by themselves.",
+            "verdict_table": "docs/rq4_signal_audit.md#RQ4 Signal Verdicts",
             "primary_evidence": [
                 "docs/rq4_signal_audit.md",
                 "docs/results_summary.md",
@@ -184,13 +188,14 @@ def render_submission_package_markdown(package: dict[str, Any]) -> str:
         "",
         "## RQ-To-Evidence Map",
         "",
-        "| RQ | Status | Evidence | Boundary | Paper action |",
-        "| --- | --- | --- | --- | --- |",
+        "| RQ | Status | Verdict table | Evidence | Boundary | Paper action |",
+        "| --- | --- | --- | --- | --- | --- |",
     ]
     for row in package["rq_rows"]:
         evidence = ", ".join(f"`{path}`" for path in row["primary_evidence"])
         lines.append(
-            f"| {row['rq']} | {row['status']} | {evidence} | {row['claim_boundary']} | {row['paper_action']} |"
+            f"| {row['rq']} | {row['status']} | `{row['verdict_table']}` | {evidence} | "
+            f"{row['claim_boundary']} | {row['paper_action']} |"
         )
 
     lines.extend(["", "## Unsupported Claims To Avoid", ""])

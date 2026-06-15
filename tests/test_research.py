@@ -2872,6 +2872,11 @@ def test_submission_package_maps_rqs_to_safe_paper_claims():
     assert "docs/bibliography_audit.md" in package["required_files"]
     assert "docs/reproducibility_audit.md" in package["required_files"]
     assert [row["rq"] for row in package["rq_rows"]] == ["RQ1", "RQ2", "RQ3", "RQ4"]
+    verdict_tables = {row["rq"]: row["verdict_table"] for row in package["rq_rows"]}
+    assert verdict_tables["RQ1"] == "docs/failure_taxonomy_audit.md#RQ1 Distribution Boundary"
+    assert verdict_tables["RQ2"] == "docs/detector_evaluation_audit.md#Claim Boundary Verdicts"
+    assert verdict_tables["RQ3"] == "docs/paired_effects_audit.md#RQ3 Claim Boundary Verdicts"
+    assert verdict_tables["RQ4"] == "docs/rq4_signal_audit.md#RQ4 Signal Verdicts"
     assert package["rq_rows"][2]["status"] == "supported"
     assert "ordinary verification-rate lift is unsupported" in package["rq_rows"][2]["claim_boundary"]
     assert any(row["claim"] == "Harness intervention increases verification rate." for row in package["unsupported_claims"])
@@ -2879,6 +2884,7 @@ def test_submission_package_maps_rqs_to_safe_paper_claims():
     assert "## RQ-To-Evidence Map" in markdown
     assert "docs/hard30_task_diagnosis.md" in markdown
     assert "docs/detector_evaluation_audit.md" in markdown
+    assert "docs/detector_evaluation_audit.md#Claim Boundary Verdicts" in markdown
     assert "docs/rule_implementation_audit.md" in markdown
     assert "docs/benchmark_trace_artifact.md" in markdown
     assert "docs/artifact_guide_sequence_audit.md" in markdown
@@ -2927,6 +2933,11 @@ def test_submission_readiness_validates_submission_package_content(tmp_path):
 
     assert check["ok"] is False
     assert "missing rq map" in check["problems"]
+    assert "missing verdict table column" in check["problems"]
+    assert "missing rq1 verdict anchor" in check["problems"]
+    assert "missing rq2 verdict anchor" in check["problems"]
+    assert "missing rq3 verdict anchor" in check["problems"]
+    assert "missing rq4 verdict anchor" in check["problems"]
     assert "missing required boundary" in check["problems"]
     assert "missing verification overclaim guard" in check["problems"]
 
