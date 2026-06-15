@@ -574,6 +574,12 @@ sketch with stored headline evidence,
 `docs/submission_readiness_plan_audit.md` for preserving the distinction
 between the current boundary-result artifact and stronger-submission work,
 `docs/submission_package.md` for safe RQ-to-evidence claim framing,
+including a generated map from each RQ to its reviewer-facing verdict table.
+The RQ-level claim-boundary verdict tables are
+`docs/failure_taxonomy_audit.md#RQ1 Distribution Boundary`,
+`docs/detector_evaluation_audit.md#Claim Boundary Verdicts`,
+`docs/paired_effects_audit.md#RQ3 Claim Boundary Verdicts`, and
+`docs/rq4_signal_audit.md#RQ4 Signal Verdicts`,
 `docs/metric_coverage_audit.md` for experiment-metric coverage,
 `docs/benchmark_trace_artifact.md` for hard30 task/run/trace/manual-label
 completeness,

@@ -2482,6 +2482,11 @@ def test_paper_draft_contains_submission_polish_sections():
     assert "docs/limitations_traceability_audit.md" in text
     assert "docs/expected_results_reconciliation.md" in text
     assert "docs/submission_readiness_plan_audit.md" in text
+    assert "generated map from each RQ to its reviewer-facing verdict table" in text
+    assert "docs/failure_taxonomy_audit.md#RQ1 Distribution Boundary" in text
+    assert "docs/detector_evaluation_audit.md#Claim Boundary Verdicts" in text
+    assert "docs/paired_effects_audit.md#RQ3 Claim Boundary Verdicts" in text
+    assert "docs/rq4_signal_audit.md#RQ4 Signal Verdicts" in text
     assert "`construct_validity`" in text
     assert "No-verify ablation is not ordinary-baseline evidence." in text
     assert "docs/paired_effects_audit.md" in text
