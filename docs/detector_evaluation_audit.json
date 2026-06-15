@@ -151,6 +151,50 @@
       "tp": 3
     }
   ],
+  "process_label_evidence_tiers": [
+    {
+      "ablation_tp": 4,
+      "controlled_fixture": true,
+      "evidence_tier": "ablation-positive",
+      "label": "verification_gap",
+      "real_pilot_tp": 0
+    },
+    {
+      "ablation_tp": 0,
+      "controlled_fixture": true,
+      "evidence_tier": "fixture-only",
+      "label": "unrecovered_tool_error",
+      "real_pilot_tp": 0
+    },
+    {
+      "ablation_tp": 0,
+      "controlled_fixture": true,
+      "evidence_tier": "real-pilot-positive",
+      "label": "repetitive_exploration",
+      "real_pilot_tp": 4
+    },
+    {
+      "ablation_tp": 0,
+      "controlled_fixture": true,
+      "evidence_tier": "fixture-only",
+      "label": "context_drift",
+      "real_pilot_tp": 0
+    },
+    {
+      "ablation_tp": 3,
+      "controlled_fixture": true,
+      "evidence_tier": "ablation-positive",
+      "label": "premature_completion",
+      "real_pilot_tp": 0
+    },
+    {
+      "ablation_tp": 0,
+      "controlled_fixture": true,
+      "evidence_tier": "real-pilot-positive",
+      "label": "sandbox_permission_deadlock",
+      "real_pilot_tp": 1
+    }
+  ],
   "sources": {
     "fixture_eval": "benchmark/detector-fixtures/label-eval.json",
     "full30_process_eval": "benchmark/pilot/full30-real/process-label-eval.json",
@@ -160,14 +204,17 @@
     "verification_lift_eval": "benchmark/verification-lift/pilot/full-real/label-eval.json"
   },
   "summary": {
+    "ablation_positive_label_count": 2,
     "ablation_premature_completion_tp": 3,
     "ablation_verification_gap_tp": 4,
     "controlled_label_count": 6,
     "controlled_micro_f1": 1.0,
+    "fixture_only_label_count": 2,
     "full30_sandbox_tp": 1,
     "hard30_repetitive_tp": 4,
     "hidden_semantic_fn_total": 36,
     "ready": true,
+    "real_pilot_positive_label_count": 2,
     "target_label_count": 6
   }
 }

@@ -330,6 +330,13 @@ present in a minimal JSONL trace, it recovers all six taxonomy labels:
 | `unrecovered_tool_error` | 2 | 0 | 0 | 1 | 1 | 1 |
 | `verification_gap` | 2 | 0 | 0 | 1 | 1 | 1 |
 
+This rule-level table is not the same as natural-frequency evidence. Across
+the stored pilots, two process labels have real-pilot positives
+(`repetitive_exploration` and `sandbox_permission_deadlock`), two are positive
+only in the no-verify ablation (`verification_gap` and
+`premature_completion`), and two remain fixture-only in the current artifact
+(`unrecovered_tool_error` and `context_drift`).
+
 Second, on real pilot traces, the detector identifies reviewed observable
 process positives but does not detect hidden semantic edge cases. For the
 hard30 manual labels, detector agreement is:

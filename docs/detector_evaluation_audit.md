@@ -12,6 +12,9 @@ This generated audit consolidates the detector precision/recall evidence used fo
 - Verification-ablation verification_gap TP: 4
 - Verification-ablation premature_completion TP: 3
 - Hidden semantic false negatives: 36
+- Real-pilot-positive process labels: 2 / 6
+- Ablation-positive process labels: 2 / 6
+- Fixture-only process labels: 2 / 6
 
 ## Controlled Fixture Coverage
 
@@ -23,6 +26,17 @@ This generated audit consolidates the detector precision/recall evidence used fo
 | `context_drift` | 1 | 0 | 0 | 1 | 1 | 1 |
 | `premature_completion` | 1 | 0 | 0 | 1 | 1 | 1 |
 | `sandbox_permission_deadlock` | 1 | 0 | 0 | 1 | 1 | 1 |
+
+## Evidence Tier By Process Label
+
+| Label | Controlled fixture | Real-pilot TP | Ablation TP | Evidence tier |
+| --- | --- | ---: | ---: | --- |
+| `verification_gap` | yes | 0 | 4 | `ablation-positive` |
+| `unrecovered_tool_error` | yes | 0 | 0 | `fixture-only` |
+| `repetitive_exploration` | yes | 4 | 0 | `real-pilot-positive` |
+| `context_drift` | yes | 0 | 0 | `fixture-only` |
+| `premature_completion` | yes | 0 | 3 | `ablation-positive` |
+| `sandbox_permission_deadlock` | yes | 1 | 0 | `real-pilot-positive` |
 
 ## Observable Process Positives
 

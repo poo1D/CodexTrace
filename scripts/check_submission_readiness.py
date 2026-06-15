@@ -1297,6 +1297,10 @@ def check_detector_evaluation_audit_content(path: Path = Path("docs/detector_eva
         "full30 sandbox": "Full30 sandbox_permission_deadlock TP: 1",
         "ablation verification": "Verification-ablation verification_gap TP: 4",
         "hidden semantic": "Hidden semantic false negatives: 36",
+        "evidence tier table": "Evidence Tier By Process Label",
+        "real-pilot process labels": "Real-pilot-positive process labels: 2 / 6",
+        "ablation process labels": "Ablation-positive process labels: 2 / 6",
+        "fixture-only process labels": "Fixture-only process labels: 2 / 6",
         "boundary interpretation": "do not detect hidden semantic correctness failures",
     }
     for label, phrase in required_phrases.items():

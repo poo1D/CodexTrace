@@ -1795,8 +1795,18 @@ def test_detector_evaluation_audit_consolidates_rq2_evidence():
     assert result["summary"]["ablation_verification_gap_tp"] == 4
     assert result["summary"]["ablation_premature_completion_tp"] == 3
     assert result["summary"]["hidden_semantic_fn_total"] == 36
+    assert result["summary"]["real_pilot_positive_label_count"] == 2
+    assert result["summary"]["ablation_positive_label_count"] == 2
+    assert result["summary"]["fixture_only_label_count"] == 2
+    tiers = {row["label"]: row["evidence_tier"] for row in result["process_label_evidence_tiers"]}
+    assert tiers["repetitive_exploration"] == "real-pilot-positive"
+    assert tiers["sandbox_permission_deadlock"] == "real-pilot-positive"
+    assert tiers["verification_gap"] == "ablation-positive"
+    assert tiers["unrecovered_tool_error"] == "fixture-only"
     assert "Controlled process labels covered: 6 / 6" in markdown
     assert "Hidden semantic false negatives: 36" in markdown
+    assert "Evidence Tier By Process Label" in markdown
+    assert "| `context_drift` | yes | 0 | 0 | `fixture-only` |" in markdown
     assert "do not detect hidden semantic correctness failures" in markdown
 
 

@@ -75,6 +75,27 @@ def build_detector_evaluation_audit(
             **_scores(verification_ablation_labels, "premature_completion"),
         },
     ]
+    evidence_tiers = []
+    for label in TARGET_PROCESS_LABELS:
+        real_pilot_tp = (
+            _metric(hard30_labels, label, "tp")
+            + _metric(full30_labels, label, "tp")
+            + _metric(process_stress_labels, label, "tp")
+            + _metric(verification_lift_labels, label, "tp")
+        )
+        ablation_tp = _metric(verification_ablation_labels, label, "tp")
+        tier = "fixture-only"
+        if real_pilot_tp > 0:
+            tier = "real-pilot-positive"
+        elif ablation_tp > 0:
+            tier = "ablation-positive"
+        evidence_tiers.append({
+            "label": label,
+            "controlled_fixture": label in fixture_labels,
+            "real_pilot_tp": real_pilot_tp,
+            "ablation_tp": ablation_tp,
+            "evidence_tier": tier,
+        })
     boundary_rows = [
         {
             "slice": "hard30",
@@ -106,6 +127,9 @@ def build_detector_evaluation_audit(
         and _metric(verification_ablation_labels, "premature_completion", "tp") == 3
         and _metric(hard30_labels, "hidden_semantic_edge_case", "fn") == 30
         and hidden_fn_total == 36
+        and sum(1 for row in evidence_tiers if row["evidence_tier"] == "real-pilot-positive") == 2
+        and sum(1 for row in evidence_tiers if row["evidence_tier"] == "ablation-positive") == 2
+        and sum(1 for row in evidence_tiers if row["evidence_tier"] == "fixture-only") == 2
     )
     return {
         "summary": {
@@ -118,11 +142,15 @@ def build_detector_evaluation_audit(
             "ablation_verification_gap_tp": _metric(verification_ablation_labels, "verification_gap", "tp"),
             "ablation_premature_completion_tp": _metric(verification_ablation_labels, "premature_completion", "tp"),
             "hidden_semantic_fn_total": hidden_fn_total,
+            "real_pilot_positive_label_count": sum(1 for row in evidence_tiers if row["evidence_tier"] == "real-pilot-positive"),
+            "ablation_positive_label_count": sum(1 for row in evidence_tiers if row["evidence_tier"] == "ablation-positive"),
+            "fixture_only_label_count": sum(1 for row in evidence_tiers if row["evidence_tier"] == "fixture-only"),
         },
         "controlled_fixture_labels": [
             {"label": label, **_scores(fixture_labels, label)}
             for label in TARGET_PROCESS_LABELS
         ],
+        "process_label_evidence_tiers": evidence_tiers,
         "observable_process_positives": observable_positive_rows,
         "hidden_semantic_boundaries": boundary_rows,
         "false_positive_boundaries": [
@@ -156,6 +184,9 @@ def render_detector_evaluation_markdown(result: dict[str, Any]) -> str:
         f"- Verification-ablation verification_gap TP: {summary['ablation_verification_gap_tp']}",
         f"- Verification-ablation premature_completion TP: {summary['ablation_premature_completion_tp']}",
         f"- Hidden semantic false negatives: {summary['hidden_semantic_fn_total']}",
+        f"- Real-pilot-positive process labels: {summary['real_pilot_positive_label_count']} / {summary['target_label_count']}",
+        f"- Ablation-positive process labels: {summary['ablation_positive_label_count']} / {summary['target_label_count']}",
+        f"- Fixture-only process labels: {summary['fixture_only_label_count']} / {summary['target_label_count']}",
         "",
         "## Controlled Fixture Coverage",
         "",
@@ -164,6 +195,18 @@ def render_detector_evaluation_markdown(result: dict[str, Any]) -> str:
     ]
     for row in result["controlled_fixture_labels"]:
         lines.append(_label_row(row))
+    lines.extend([
+        "",
+        "## Evidence Tier By Process Label",
+        "",
+        "| Label | Controlled fixture | Real-pilot TP | Ablation TP | Evidence tier |",
+        "| --- | --- | ---: | ---: | --- |",
+    ])
+    for row in result["process_label_evidence_tiers"]:
+        lines.append(
+            f"| `{row['label']}` | {'yes' if row['controlled_fixture'] else 'no'} | "
+            f"{row['real_pilot_tp']} | {row['ablation_tp']} | `{row['evidence_tier']}` |"
+        )
     lines.extend([
         "",
         "## Observable Process Positives",
