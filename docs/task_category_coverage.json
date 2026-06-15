@@ -1,4 +1,76 @@
 {
+  "exemplars": [
+    {
+      "category": "bug_fix",
+      "hard30_category": "bug_fix",
+      "hard30_public_success_check": "python3 -m unittest discover -s tests",
+      "hard30_repo_hint": "python/interval_merge",
+      "hard30_task_id": "HARD-001",
+      "seed_public_success_check": "python3 -m unittest discover -s tests",
+      "seed_repo_hint": "python/toy_calc",
+      "seed_task_id": "CT-001"
+    },
+    {
+      "category": "feature",
+      "hard30_category": "feature",
+      "hard30_public_success_check": "python3 -m unittest discover -s tests",
+      "hard30_repo_hint": "python/cent_allocation",
+      "hard30_task_id": "HARD-003",
+      "seed_public_success_check": "python3 -m unittest discover -s tests",
+      "seed_repo_hint": "python/text_stats",
+      "seed_task_id": "CT-006"
+    },
+    {
+      "category": "test_writing",
+      "hard30_category": "-",
+      "hard30_public_success_check": "-",
+      "hard30_repo_hint": "-",
+      "hard30_task_id": "-",
+      "seed_public_success_check": "python3 -m unittest discover -s tests",
+      "seed_repo_hint": "python/email_validator",
+      "seed_task_id": "CT-011"
+    },
+    {
+      "category": "refactor",
+      "hard30_category": "refactor",
+      "hard30_public_success_check": "python3 -m unittest discover -s tests",
+      "hard30_repo_hint": "python/config_merge",
+      "hard30_task_id": "HARD-007",
+      "seed_public_success_check": "python3 -m unittest discover -s tests",
+      "seed_repo_hint": "python/csv_importer",
+      "seed_task_id": "CT-016"
+    },
+    {
+      "category": "ci_failure",
+      "hard30_category": "ci_failure",
+      "hard30_public_success_check": "npm run build",
+      "hard30_repo_hint": "typescript/package_exports",
+      "hard30_task_id": "HARD-015",
+      "seed_public_success_check": "python3 -m unittest discover -s tests",
+      "seed_repo_hint": "python/package_metadata",
+      "seed_task_id": "CT-021"
+    },
+    {
+      "category": "error_localization",
+      "hard30_category": "error_localization",
+      "hard30_public_success_check": "python3 -m unittest discover -s tests",
+      "hard30_repo_hint": "python/toposort",
+      "hard30_task_id": "HARD-004",
+      "seed_public_success_check": "python3 -m unittest discover -s tests",
+      "seed_repo_hint": "python/json_reader",
+      "seed_task_id": "CT-026"
+    },
+    {
+      "category": "multi_turn_change",
+      "hard30_category": "multi_turn_change",
+      "hard30_public_success_check": "python3 -m unittest discover -s tests",
+      "hard30_repo_hint": "python/booking_policy",
+      "hard30_task_id": "HARD-009",
+      "seed_public_success_check": "python3 -m unittest discover -s tests",
+      "seed_repo_hint": "python/search_index",
+      "seed_task_id": "CT-028"
+    }
+  ],
   "required_categories": [
     {
       "category": "bug_fix",

@@ -49,6 +49,7 @@ def _load_category_counts(path: Path) -> dict[str, Any]:
         "task_count": len(rows),
         "category_counts": dict(sorted(counts.items())),
         "missing_category": missing_category,
+        "rows": rows,
     }
 
 
@@ -67,10 +68,13 @@ def build_task_category_coverage_audit(
     required = set(REQUIRED_DESIGN_CATEGORIES)
 
     rows = []
+    exemplars = []
     for category in REQUIRED_DESIGN_CATEGORIES:
         hard_family_categories = HARD_CATEGORY_FAMILIES[category]
         hard_family_count = sum(hard["category_counts"].get(candidate, 0) for candidate in hard_family_categories)
         hard30_family_count = sum(hard30["category_counts"].get(candidate, 0) for candidate in hard_family_categories)
+        seed_exemplar = _first_task_in_categories(seed["rows"], (category,))
+        hard30_exemplar = _first_task_in_categories(hard30["rows"], hard_family_categories)
         rows.append({
             "category": category,
             "hard_family_categories": list(hard_family_categories),
@@ -84,6 +88,16 @@ def build_task_category_coverage_audit(
             "hard30_covered": category in hard30_categories,
             "hard_family_covered": hard_family_count > 0,
             "hard30_family_covered": hard30_family_count > 0,
+        })
+        exemplars.append({
+            "category": category,
+            "seed_task_id": _task_field(seed_exemplar, "task_id"),
+            "seed_repo_hint": _task_field(seed_exemplar, "repo_hint"),
+            "seed_public_success_check": _task_field(seed_exemplar, "public_success_check"),
+            "hard30_task_id": _task_field(hard30_exemplar, "task_id"),
+            "hard30_category": _task_field(hard30_exemplar, "category"),
+            "hard30_repo_hint": _task_field(hard30_exemplar, "repo_hint"),
+            "hard30_public_success_check": _task_field(hard30_exemplar, "public_success_check"),
         })
 
     all_missing_category = (
@@ -142,10 +156,11 @@ def build_task_category_coverage_audit(
             "missing_category_rows": len(all_missing_category),
         },
         "required_categories": rows,
+        "exemplars": exemplars,
         "tiers": {
-            "seed": seed,
-            "hard": hard,
-            "hard30": hard30,
+            "seed": _public_tier(seed),
+            "hard": _public_tier(hard),
+            "hard30": _public_tier(hard30),
         },
     }
 
@@ -201,6 +216,22 @@ def render_task_category_coverage_markdown(result: dict[str, Any]) -> str:
         lines.append(f"| `{category}` | {family} |")
     lines.extend([
         "",
+        "## Category Exemplars",
+        "",
+        "Each row names a seed task that directly represents the original design category and, when available, a hard30 task that represents the mapped hard-tier family. The public success check is the visible verification command available to the agent during the run.",
+        "",
+        "| Design category | Seed exemplar | Seed check | Hard30 family exemplar | Hard30 check |",
+        "| --- | --- | --- | --- | --- |",
+    ])
+    for row in result["exemplars"]:
+        seed = _fmt_exemplar(row["seed_task_id"], row["seed_repo_hint"])
+        hard30 = _fmt_exemplar(row["hard30_task_id"], row["hard30_repo_hint"], row["hard30_category"])
+        lines.append(
+            f"| `{row['category']}` | {seed} | `{row['seed_public_success_check']}` | "
+            f"{hard30} | `{row['hard30_public_success_check']}` |"
+        )
+    lines.extend([
+        "",
         "## Tier Category Counts",
         "",
     ])
@@ -228,6 +259,31 @@ def write_outputs(result: dict[str, Any], json_path: Path | None, markdown_path:
 
 def _fmt_list(values: list[str]) -> str:
     return ", ".join(f"`{value}`" for value in values) if values else "-"
+
+
+def _public_tier(tier: dict[str, Any]) -> dict[str, Any]:
+    return {key: value for key, value in tier.items() if key != "rows"}
+
+
+def _first_task_in_categories(rows: list[dict[str, Any]], categories: tuple[str, ...]) -> dict[str, Any] | None:
+    for category in categories:
+        for row in rows:
+            if row.get("category") == category:
+                return row
+    return None
+
+
+def _task_field(row: dict[str, Any] | None, field: str) -> str:
+    if row is None:
+        return "-"
+    return str(row.get(field) or "-")
+
+
+def _fmt_exemplar(task_id: str, repo_hint: str, category: str | None = None) -> str:
+    if task_id == "-":
+        return "boundary: none"
+    suffix = f" ({category})" if category else ""
+    return f"`{task_id}` / `{repo_hint}`{suffix}"
 
 
 def main() -> int:

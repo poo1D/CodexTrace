@@ -1727,6 +1727,7 @@ def test_task_category_coverage_audit_covers_experiment_design_categories():
     result = build_task_category_coverage_audit()
     markdown = render_task_category_coverage_markdown(result)
     rows = {row["category"]: row for row in result["required_categories"]}
+    exemplars = {row["category"]: row for row in result["exemplars"]}
 
     assert result["summary"]["ready"] is True
     assert result["summary"]["seed_required_categories_covered"] == 7
@@ -1751,11 +1752,20 @@ def test_task_category_coverage_audit_covers_experiment_design_categories():
     assert rows["multi_turn_change"]["seed_count"] == 3
     assert rows["test_writing"]["hard30_count"] == 0
     assert rows["test_writing"]["hard30_family_count"] == 0
+    assert len(result["exemplars"]) == 7
+    assert exemplars["bug_fix"]["seed_task_id"] == "CT-001"
+    assert exemplars["ci_failure"]["hard30_task_id"] == "HARD-015"
+    assert exemplars["ci_failure"]["hard30_public_success_check"] == "npm run build"
+    assert exemplars["test_writing"]["hard30_task_id"] == "-"
     assert "Seed design categories covered: 7 / 7" in markdown
     assert "Design task-count window: 30-50" in markdown
     assert "Seed tasks in design window: yes" in markdown
     assert "Hard tasks in design window: yes" in markdown
     assert "Hard30 selected tasks in design window: yes" in markdown
+    assert "## Category Exemplars" in markdown
+    assert "`CT-001` / `python/toy_calc`" in markdown
+    assert "`HARD-015` / `typescript/package_exports` (ci_failure)" in markdown
+    assert "boundary: none" in markdown
     assert "Hard pool missing design categories: `test_writing`" in markdown
     assert "Hard Category Family Mapping" in markdown
     assert "missing direct or family-level design categories such as `test_writing`" in markdown
@@ -3464,6 +3474,11 @@ def test_submission_readiness_validates_task_category_coverage_content(tmp_path)
     assert "missing seed task-count window" in check["problems"]
     assert "missing hard task-count window" in check["problems"]
     assert "missing hard30 task-count window" in check["problems"]
+    assert "missing category exemplars" in check["problems"]
+    assert "missing seed exemplar" in check["problems"]
+    assert "missing hard30 ci exemplar" in check["problems"]
+    assert "missing test writing boundary exemplar" in check["problems"]
+    assert "missing visible verification command" in check["problems"]
     assert "missing multi-turn change" in check["problems"]
 
 

@@ -48,6 +48,20 @@ Hard-tier categories refine the original design categories. Family counts aggreg
 | `error_localization` | `error_localization`, `multi_turn_tool_debug` |
 | `multi_turn_change` | `multi_turn_change` |
 
+## Category Exemplars
+
+Each row names a seed task that directly represents the original design category and, when available, a hard30 task that represents the mapped hard-tier family. The public success check is the visible verification command available to the agent during the run.
+
+| Design category | Seed exemplar | Seed check | Hard30 family exemplar | Hard30 check |
+| --- | --- | --- | --- | --- |
+| `bug_fix` | `CT-001` / `python/toy_calc` | `python3 -m unittest discover -s tests` | `HARD-001` / `python/interval_merge` (bug_fix) | `python3 -m unittest discover -s tests` |
+| `feature` | `CT-006` / `python/text_stats` | `python3 -m unittest discover -s tests` | `HARD-003` / `python/cent_allocation` (feature) | `python3 -m unittest discover -s tests` |
+| `test_writing` | `CT-011` / `python/email_validator` | `python3 -m unittest discover -s tests` | boundary: none | `-` |
+| `refactor` | `CT-016` / `python/csv_importer` | `python3 -m unittest discover -s tests` | `HARD-007` / `python/config_merge` (refactor) | `python3 -m unittest discover -s tests` |
+| `ci_failure` | `CT-021` / `python/package_metadata` | `python3 -m unittest discover -s tests` | `HARD-015` / `typescript/package_exports` (ci_failure) | `npm run build` |
+| `error_localization` | `CT-026` / `python/json_reader` | `python3 -m unittest discover -s tests` | `HARD-004` / `python/toposort` (error_localization) | `python3 -m unittest discover -s tests` |
+| `multi_turn_change` | `CT-028` / `python/search_index` | `python3 -m unittest discover -s tests` | `HARD-009` / `python/booking_policy` (multi_turn_change) | `python3 -m unittest discover -s tests` |
+
 ## Tier Category Counts
 
 - `seed`: `bug_fix`=5, `ci_failure`=5, `error_localization`=2, `feature`=5, `multi_turn_change`=3, `refactor`=5, `test_writing`=5
