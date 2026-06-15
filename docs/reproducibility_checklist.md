@@ -30,7 +30,7 @@ The stored pilots can be inspected and aggregated without re-running Codex.
 | `docs/limitations_traceability_audit.md` | Generated audit linking paper limitations to validity-threat safe wording. |
 | `docs/expected_results_reconciliation.md` | Generated audit proving paper-facing files use actual headline evidence instead of expected-results numbers. |
 | `docs/rq4_signal_audit.md` | Generated signal audit for observable process positives and hidden semantic boundaries. |
-| `docs/metric_coverage_audit.md` | Generated coverage audit for the metrics named in the experiment design. |
+| `docs/metric_coverage_audit.md` | Generated coverage audit for the metrics named in the experiment design and nullable timing metrics. |
 | `docs/benchmark_trace_artifact.md` | Generated audit for hard30 task/run/trace/outcome/manual-label completeness. |
 | `docs/label_provenance_audit.md` | Generated audit for hard30 label-file provenance and evaluation consistency. |
 | `docs/label_limitations_audit.md` | Generated audit for manual-label limitation wording and provenance caveats. |
@@ -45,9 +45,9 @@ The stored pilots can be inspected and aggregated without re-running Codex.
 | `docs/parser_event_coverage.md` | Generated audit for synthetic JSONL parser event-kind and phase coverage. |
 | `docs/failure_node_traceability.md` | Generated audit for diagnosis finding event-ID traceability into reports and UI highlights. |
 | `docs/detector_evaluation_audit.md` | Generated detector precision/recall audit for RQ2 boundary claims. |
-| `docs/rule_implementation_audit.md` | Generated audit for taxonomy-label to diagnosis-rule implementation coverage. |
+| `docs/rule_implementation_audit.md` | Generated audit for taxonomy-label to diagnosis-rule implementation coverage and detector evidence tiers. |
 | `docs/phase_coverage_audit.md` | Generated audit for phase segmentation coverage across schema, paper text, run rows, and RQ4 signals. |
-| `docs/task_category_coverage.md` | Generated audit for benchmark task-category coverage. |
+| `docs/task_category_coverage.md` | Generated audit for benchmark task-category coverage and design-family mapping. |
 | `docs/harness_protocol_audit.md` | Generated audit for intervention prompt/protocol coverage. |
 | `docs/failure_taxonomy_audit.md` | Generated coverage audit for the six process-failure taxonomy labels. |
 | `docs/related_work_audit.md` | Generated coverage audit for related-work positioning axes. |
@@ -116,7 +116,7 @@ The stored pilots can be inspected and aggregated without re-running Codex.
 | `scripts/audit_label_provenance.py` | Checks hard30 label template, manual-label, and label-evaluation consistency. |
 | `scripts/audit_label_limitations.py` | Checks paper limitations for manual-label claim boundaries. |
 | `scripts/audit_verification_saturation.py` | Checks stored non-ablation pilots for ordinary verification-rate saturation. |
-| `scripts/audit_metric_coverage.py` | Checks that experiment-design metrics are collected, summarized, exported to CSV, and visible in aggregate Markdown. |
+| `scripts/audit_metric_coverage.py` | Checks that experiment-design metrics are collected, summarized, exported to CSV, visible in aggregate Markdown, and explicit about nullable timing metrics. |
 | `scripts/audit_paired_effects.py` | Computes task-paired effect sizes, sign tests, and bootstrap CIs for RQ3 deltas. |
 | `scripts/audit_paired_effect_limitations.py` | Checks paired-effect evidence against pilot-scale and population-claim limitations. |
 | `scripts/audit_demo.py` | Runs the offline demo script and checks generated JSON/Markdown diagnosis artifacts. |
@@ -127,9 +127,9 @@ The stored pilots can be inspected and aggregated without re-running Codex.
 | `scripts/audit_parser_event_coverage.py` | Checks synthetic JSONL event-kind, usage, file, tool, and phase coverage for the parser. |
 | `scripts/audit_failure_node_traceability.py` | Checks that diagnosis findings carry event IDs through JSON, Markdown, and Web UI highlight paths. |
 | `scripts/audit_detector_evaluation.py` | Consolidates detector precision/recall evidence for RQ2 boundary claims. |
-| `scripts/audit_rule_implementation.py` | Checks taxonomy labels against implemented diagnosis rules and paper-label aliases. |
+| `scripts/audit_rule_implementation.py` | Checks taxonomy labels against implemented diagnosis rules, paper-label aliases, and detector evidence tiers. |
 | `scripts/audit_phase_coverage.py` | Checks phase segmentation coverage across schema, paper text, run rows, and RQ4 signals. |
-| `scripts/audit_task_category_coverage.py` | Checks benchmark task-category coverage across seed, hard, and hard30 manifests. |
+| `scripts/audit_task_category_coverage.py` | Checks benchmark task-category coverage and design-family mapping across seed, hard, and hard30 manifests. |
 | `scripts/audit_harness_protocol.py` | Checks intervention prompt templates and experiment protocol coverage for the harness constraints. |
 | `scripts/audit_failure_taxonomy.py` | Checks that taxonomy labels are defined, mapped in the paper draft, and covered by detector fixtures. |
 | `scripts/audit_related_work.py` | Checks that related-work notes and the paper draft cover the required positioning axes. |

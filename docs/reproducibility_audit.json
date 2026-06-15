@@ -266,13 +266,32 @@
       "present": true
     }
   ],
+  "semantic_phrases": [
+    {
+      "id": "nullable_timing_metrics",
+      "phrase": "nullable timing metrics",
+      "present": true
+    },
+    {
+      "id": "rule_evidence_tiers",
+      "phrase": "detector evidence tiers",
+      "present": true
+    },
+    {
+      "id": "task_design_family_mapping",
+      "phrase": "design-family mapping",
+      "present": true
+    }
+  ],
   "summary": {
     "bash_fence_count": 61,
     "checklist_path": "docs/reproducibility_checklist.md",
     "covered_command_count": 53,
+    "covered_semantic_phrase_count": 3,
     "fence_count": 128,
     "fences_balanced": true,
     "ready": true,
-    "required_command_count": 53
+    "required_command_count": 53,
+    "required_semantic_phrase_count": 3
   }
 }

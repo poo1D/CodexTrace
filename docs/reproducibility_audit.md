@@ -6,6 +6,7 @@ This generated audit checks that the reviewer-facing reproducibility checklist c
 
 - Ready: yes
 - Commands covered: 53 / 53
+- Semantic phrases covered: 3 / 3
 - Markdown fences balanced: yes
 - Bash command blocks: 61
 - Checklist: `docs/reproducibility_checklist.md`
@@ -68,4 +69,12 @@ This generated audit checks that the reviewer-facing reproducibility checklist c
 | paper_claim_audit | yes |
 | claim_text_guard | yes |
 
-Interpretation: this audit checks command presence and Markdown structure. It does not execute the full real Codex collection commands.
+## Semantic Phrase Coverage
+
+| Reproducibility note | Covered |
+| --- | --- |
+| nullable_timing_metrics | yes |
+| rule_evidence_tiers | yes |
+| task_design_family_mapping | yes |
+
+Interpretation: this audit checks command presence, key reproducibility semantics, and Markdown structure. It does not execute the full real Codex collection commands.

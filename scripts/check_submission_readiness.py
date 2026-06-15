@@ -1799,9 +1799,13 @@ def check_reproducibility_audit_content(path: Path = Path("docs/reproducibility_
     required_phrases = {
         "ready": "Ready: yes",
         "coverage count": "Commands covered: 53 / 53",
+        "semantic coverage count": "Semantic phrases covered: 3 / 3",
         "balanced fences": "Markdown fences balanced: yes",
         "submission gate": "submission_readiness_gate",
         "scope caveat": "does not execute the full real Codex collection commands",
+        "nullable timing": "nullable_timing_metrics",
+        "rule evidence tiers": "rule_evidence_tiers",
+        "task design family mapping": "task_design_family_mapping",
     }
     for label, phrase in required_phrases.items():
         if phrase not in text:

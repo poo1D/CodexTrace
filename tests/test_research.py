@@ -1783,6 +1783,7 @@ def test_reproducibility_audit_covers_key_commands():
 
     assert result["summary"]["ready"] is True
     assert result["summary"]["covered_command_count"] == 53
+    assert result["summary"]["covered_semantic_phrase_count"] == 3
     assert result["summary"]["fences_balanced"] is True
     assert {row["id"] for row in result["commands"]} >= {
         "full30_aggregate",
@@ -1825,6 +1826,10 @@ def test_reproducibility_audit_covers_key_commands():
         "claim_text_guard",
     }
     assert all(row["present"] for row in result["commands"])
+    assert all(row["present"] for row in result["semantic_phrases"])
+    assert "Semantic phrases covered: 3 / 3" in markdown
+    assert "nullable_timing_metrics" in markdown
+    assert "task_design_family_mapping" in markdown
     assert "does not execute the full real Codex collection commands" in markdown
 
 
@@ -3411,6 +3416,7 @@ def test_submission_readiness_validates_reproducibility_audit_content(tmp_path):
     assert check["ok"] is False
     assert "missing ready" in check["problems"]
     assert "missing coverage count" in check["problems"]
+    assert "missing semantic coverage count" in check["problems"]
     assert "missing balanced fences" in check["problems"]
 
 

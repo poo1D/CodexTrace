@@ -79,6 +79,20 @@ REQUIRED_COMMANDS = (
     {"id": "paper_claim_audit", "phrase": "scripts/audit_paper_claims.py"},
     {"id": "claim_text_guard", "phrase": "scripts/audit_claim_text_guard.py"},
 )
+REQUIRED_SEMANTIC_PHRASES = (
+    {
+        "id": "nullable_timing_metrics",
+        "phrase": "nullable timing metrics",
+    },
+    {
+        "id": "rule_evidence_tiers",
+        "phrase": "detector evidence tiers",
+    },
+    {
+        "id": "task_design_family_mapping",
+        "phrase": "design-family mapping",
+    },
+)
 
 
 def build_reproducibility_audit(checklist_path: Path = DEFAULT_CHECKLIST) -> dict[str, Any]:
@@ -92,20 +106,35 @@ def build_reproducibility_audit(checklist_path: Path = DEFAULT_CHECKLIST) -> dic
             "phrase": command["phrase"],
             "present": present,
         })
+    semantic_rows = []
+    for phrase in REQUIRED_SEMANTIC_PHRASES:
+        present = _normalize(phrase["phrase"]) in normalized_text
+        semantic_rows.append({
+            "id": phrase["id"],
+            "phrase": phrase["phrase"],
+            "present": present,
+        })
 
     fence_count = text.count("```")
     bash_fence_count = text.count("```bash")
     return {
         "summary": {
-            "ready": all(row["present"] for row in command_rows) and fence_count % 2 == 0,
+            "ready": (
+                all(row["present"] for row in command_rows)
+                and all(row["present"] for row in semantic_rows)
+                and fence_count % 2 == 0
+            ),
             "required_command_count": len(command_rows),
             "covered_command_count": sum(1 for row in command_rows if row["present"]),
+            "required_semantic_phrase_count": len(semantic_rows),
+            "covered_semantic_phrase_count": sum(1 for row in semantic_rows if row["present"]),
             "fence_count": fence_count,
             "bash_fence_count": bash_fence_count,
             "fences_balanced": fence_count % 2 == 0,
             "checklist_path": str(checklist_path),
         },
         "commands": command_rows,
+        "semantic_phrases": semantic_rows,
     }
 
 
@@ -120,6 +149,7 @@ def render_reproducibility_audit_markdown(result: dict[str, Any]) -> str:
         "",
         f"- Ready: {'yes' if summary['ready'] else 'no'}",
         f"- Commands covered: {summary['covered_command_count']} / {summary['required_command_count']}",
+        f"- Semantic phrases covered: {summary['covered_semantic_phrase_count']} / {summary['required_semantic_phrase_count']}",
         f"- Markdown fences balanced: {'yes' if summary['fences_balanced'] else 'no'}",
         f"- Bash command blocks: {summary['bash_fence_count']}",
         f"- Checklist: `{summary['checklist_path']}`",
@@ -133,7 +163,16 @@ def render_reproducibility_audit_markdown(result: dict[str, Any]) -> str:
         lines.append(f"| {row['id']} | {'yes' if row['present'] else 'no'} |")
     lines.extend([
         "",
-        "Interpretation: this audit checks command presence and Markdown structure. It does not execute the full real Codex collection commands.",
+        "## Semantic Phrase Coverage",
+        "",
+        "| Reproducibility note | Covered |",
+        "| --- | --- |",
+    ])
+    for row in result["semantic_phrases"]:
+        lines.append(f"| {row['id']} | {'yes' if row['present'] else 'no'} |")
+    lines.extend([
+        "",
+        "Interpretation: this audit checks command presence, key reproducibility semantics, and Markdown structure. It does not execute the full real Codex collection commands.",
     ])
     return "\n".join(lines) + "\n"
 

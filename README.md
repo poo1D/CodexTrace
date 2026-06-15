@@ -193,7 +193,7 @@ Key files:
 - `scripts/audit_benchmark_trace_artifact.py`: checks hard30 task/run/trace/outcome/manual-label completeness
 - `scripts/audit_label_provenance.py`: checks hard30 label template, manual-label, and label-evaluation consistency
 - `scripts/audit_label_limitations.py`: checks paper limitations for manual-label claim boundaries
-- `scripts/audit_metric_coverage.py`: checks planned experiment metrics across run rows, summaries, CSV, and aggregate Markdown
+- `scripts/audit_metric_coverage.py`: checks planned experiment metrics across run rows, summaries, CSV, aggregate Markdown, and nullable timing metrics
 - `scripts/audit_paired_effects.py`: computes task-paired effect sizes, sign tests, and bootstrap CIs for RQ3 deltas
 - `scripts/audit_paired_effect_limitations.py`: checks paired-effect evidence against pilot-scale and population-claim limitations
 - `scripts/audit_demo.py`: runs the offline demo script and checks generated JSON/Markdown diagnosis artifacts
@@ -204,9 +204,9 @@ Key files:
 - `scripts/audit_parser_event_coverage.py`: checks synthetic JSONL event-kind and phase coverage for the parser
 - `scripts/audit_failure_node_traceability.py`: checks diagnosis finding event IDs through JSON, Markdown, and Web UI highlights
 - `scripts/audit_detector_evaluation.py`: consolidates detector precision/recall evidence for RQ2 boundary claims
-- `scripts/audit_rule_implementation.py`: checks taxonomy labels against implemented diagnosis rules and label aliases
+- `scripts/audit_rule_implementation.py`: checks taxonomy labels against implemented diagnosis rules, label aliases, and detector evidence tiers
 - `scripts/audit_phase_coverage.py`: checks phase segmentation coverage across schema, paper text, run rows, and RQ4 signals
-- `scripts/audit_task_category_coverage.py`: checks benchmark task-category coverage across seed, hard, and hard30 manifests
+- `scripts/audit_task_category_coverage.py`: checks benchmark task-category coverage and design-family mapping across seed, hard, and hard30 manifests
 - `scripts/audit_harness_protocol.py`: checks intervention prompt templates and protocol coverage for the harness constraints
 - `scripts/audit_failure_taxonomy.py`: checks six-label taxonomy coverage across docs, paper mapping, and detector fixtures
 - `scripts/audit_related_work.py`: checks related-work coverage across bibliography notes and the paper draft
@@ -251,16 +251,16 @@ Key files:
 - `docs/results_summary.md`: generated full30 + hard10 + hard30 + process-stress + verification-lift + verification-lift-v2 + verification-ablation result summary, including RQ4 trace-signal analysis
 - `docs/rq4_signal_audit.md`: generated signal audit for observable process failures and hidden semantic boundaries
 - `docs/benchmark_trace_artifact.md`: generated audit for hard30 task/run/trace/outcome/manual-label completeness
-- `docs/metric_coverage_audit.md`: generated coverage audit for the experiment-design metrics
+- `docs/metric_coverage_audit.md`: generated coverage audit for the experiment-design metrics and nullable timing semantics
 - `docs/cli_surface_audit.md`: generated audit for offline CLI command surface coverage
 - `docs/ci_surface_audit.md`: generated audit for CI, packaging, readiness-gate, and local task-runner coverage
 - `docs/schema_field_audit.md`: generated audit for paper-facing Run/Step schema-field mapping
 - `docs/parser_event_coverage.md`: generated audit for JSONL parser event-kind and phase coverage
 - `docs/failure_node_traceability.md`: generated audit for diagnosis finding event-ID traceability
 - `docs/detector_evaluation_audit.md`: generated audit for detector precision/recall evidence
-- `docs/rule_implementation_audit.md`: generated audit for implemented diagnosis-rule coverage
+- `docs/rule_implementation_audit.md`: generated audit for implemented diagnosis-rule coverage and detector evidence tiers
 - `docs/phase_coverage_audit.md`: generated audit for phase segmentation coverage
-- `docs/task_category_coverage.md`: generated audit for benchmark task-category coverage
+- `docs/task_category_coverage.md`: generated audit for benchmark task-category coverage and design-family mapping
 - `docs/harness_protocol_audit.md`: generated audit for intervention prompt/protocol coverage
 - `docs/failure_taxonomy_audit.md`: generated coverage audit for the six process-failure taxonomy labels
 - `docs/related_work_audit.md`: generated coverage audit for related-work positioning axes
