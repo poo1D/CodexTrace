@@ -38,6 +38,15 @@ This generated audit consolidates the detector precision/recall evidence used fo
 | `premature_completion` | yes | 0 | 3 | `ablation-positive` |
 | `sandbox_permission_deadlock` | yes | 1 | 0 | `real-pilot-positive` |
 
+## Claim Boundary Verdicts
+
+| Claim | Verdict | Evidence | Safe wording |
+| --- | --- | --- | --- |
+| Rules cover the six process-failure labels on controlled traces. | `supported` | 6/6 controlled labels, micro-F1=1. | Use as rule-level taxonomy coverage, not natural-frequency evidence. |
+| Rules detect observed process-positive slices in real or ablation pilots. | `supported-with-boundary` | 2 real-pilot-positive labels, 2 ablation-positive labels, 2 fixture-only labels. | Claim detection of reviewed observable process positives and report evidence tiers. |
+| Rules detect most real-world outcome failures. | `unsupported` | Hidden semantic false negatives total 36, including 30 hard30 false negatives. | Do not claim majority real-world failure detection; keep the claim process-scoped. |
+| Rules detect hidden semantic correctness failures. | `contradicted` | Hidden semantic false negatives total 36. | State that hidden semantic failures require stronger task oracles or semantic checks. |
+
 ## Observable Process Positives
 
 | Slice | Label | TP | FP | FN | Precision | Recall | F1 |

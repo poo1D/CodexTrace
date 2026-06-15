@@ -1960,6 +1960,11 @@ def test_detector_evaluation_audit_consolidates_rq2_evidence():
     assert result["summary"]["real_pilot_positive_label_count"] == 2
     assert result["summary"]["ablation_positive_label_count"] == 2
     assert result["summary"]["fixture_only_label_count"] == 2
+    claim_boundaries = {row["claim"]: row for row in result["claim_boundaries"]}
+    assert claim_boundaries["Rules cover the six process-failure labels on controlled traces."]["verdict"] == "supported"
+    assert claim_boundaries["Rules detect observed process-positive slices in real or ablation pilots."]["verdict"] == "supported-with-boundary"
+    assert claim_boundaries["Rules detect most real-world outcome failures."]["verdict"] == "unsupported"
+    assert claim_boundaries["Rules detect hidden semantic correctness failures."]["verdict"] == "contradicted"
     tiers = {row["label"]: row["evidence_tier"] for row in result["process_label_evidence_tiers"]}
     assert tiers["repetitive_exploration"] == "real-pilot-positive"
     assert tiers["sandbox_permission_deadlock"] == "real-pilot-positive"
@@ -1968,6 +1973,9 @@ def test_detector_evaluation_audit_consolidates_rq2_evidence():
     assert "Controlled process labels covered: 6 / 6" in markdown
     assert "Hidden semantic false negatives: 36" in markdown
     assert "Evidence Tier By Process Label" in markdown
+    assert "Claim Boundary Verdicts" in markdown
+    assert "Do not claim majority real-world failure detection" in markdown
+    assert "State that hidden semantic failures require stronger task oracles or semantic checks" in markdown
     assert "| `context_drift` | yes | 0 | 0 | `fixture-only` |" in markdown
     assert "do not detect hidden semantic correctness failures" in markdown
 
@@ -3411,6 +3419,9 @@ def test_submission_readiness_validates_detector_evaluation_audit_content(tmp_pa
     assert "missing controlled coverage" in check["problems"]
     assert "missing hard30 repetitive" in check["problems"]
     assert "missing hidden semantic" in check["problems"]
+    assert "missing claim boundary verdicts" in check["problems"]
+    assert "missing no majority outcome claim" in check["problems"]
+    assert "missing hidden semantic contradicted" in check["problems"]
 
 
 def test_submission_readiness_validates_rule_implementation_audit_content(tmp_path):

@@ -131,6 +131,16 @@ def build_detector_evaluation_audit(
         and sum(1 for row in evidence_tiers if row["evidence_tier"] == "ablation-positive") == 2
         and sum(1 for row in evidence_tiers if row["evidence_tier"] == "fixture-only") == 2
     )
+    claim_boundaries = _claim_boundaries(
+        controlled_labels_covered=controlled_labels_covered,
+        target_label_count=len(TARGET_PROCESS_LABELS),
+        controlled_micro_f1=float(fixtures["summary"]["micro_f1"]),
+        real_positive_label_count=sum(1 for row in evidence_tiers if row["evidence_tier"] == "real-pilot-positive"),
+        ablation_positive_label_count=sum(1 for row in evidence_tiers if row["evidence_tier"] == "ablation-positive"),
+        fixture_only_label_count=sum(1 for row in evidence_tiers if row["evidence_tier"] == "fixture-only"),
+        hidden_fn_total=hidden_fn_total,
+        hard30_hidden_fn=_metric(hard30_labels, "hidden_semantic_edge_case", "fn"),
+    )
     return {
         "summary": {
             "ready": ready,
@@ -146,6 +156,7 @@ def build_detector_evaluation_audit(
             "ablation_positive_label_count": sum(1 for row in evidence_tiers if row["evidence_tier"] == "ablation-positive"),
             "fixture_only_label_count": sum(1 for row in evidence_tiers if row["evidence_tier"] == "fixture-only"),
         },
+        "claim_boundaries": claim_boundaries,
         "controlled_fixture_labels": [
             {"label": label, **_scores(fixture_labels, label)}
             for label in TARGET_PROCESS_LABELS
@@ -209,6 +220,17 @@ def render_detector_evaluation_markdown(result: dict[str, Any]) -> str:
         )
     lines.extend([
         "",
+        "## Claim Boundary Verdicts",
+        "",
+        "| Claim | Verdict | Evidence | Safe wording |",
+        "| --- | --- | --- | --- |",
+    ])
+    for row in result["claim_boundaries"]:
+        lines.append(
+            f"| {row['claim']} | `{row['verdict']}` | {row['evidence']} | {row['safe_wording']} |"
+        )
+    lines.extend([
+        "",
         "## Observable Process Positives",
         "",
         "| Slice | Label | TP | FP | FN | Precision | Recall | F1 |",
@@ -260,6 +282,55 @@ def _scores(labels: dict[str, Any], label: str) -> dict[str, Any]:
         "recall": float(row.get("recall", 0) or 0),
         "f1": float(row.get("f1", 0) or 0),
     }
+
+
+def _claim_boundaries(
+    *,
+    controlled_labels_covered: int,
+    target_label_count: int,
+    controlled_micro_f1: float,
+    real_positive_label_count: int,
+    ablation_positive_label_count: int,
+    fixture_only_label_count: int,
+    hidden_fn_total: int,
+    hard30_hidden_fn: int,
+) -> list[dict[str, str]]:
+    return [
+        {
+            "claim": "Rules cover the six process-failure labels on controlled traces.",
+            "verdict": "supported",
+            "evidence": (
+                f"{controlled_labels_covered}/{target_label_count} controlled labels, "
+                f"micro-F1={_fmt(controlled_micro_f1)}."
+            ),
+            "safe_wording": "Use as rule-level taxonomy coverage, not natural-frequency evidence.",
+        },
+        {
+            "claim": "Rules detect observed process-positive slices in real or ablation pilots.",
+            "verdict": "supported-with-boundary",
+            "evidence": (
+                f"{real_positive_label_count} real-pilot-positive labels, "
+                f"{ablation_positive_label_count} ablation-positive labels, "
+                f"{fixture_only_label_count} fixture-only labels."
+            ),
+            "safe_wording": "Claim detection of reviewed observable process positives and report evidence tiers.",
+        },
+        {
+            "claim": "Rules detect most real-world outcome failures.",
+            "verdict": "unsupported",
+            "evidence": (
+                f"Hidden semantic false negatives total {hidden_fn_total}, including "
+                f"{hard30_hidden_fn} hard30 false negatives."
+            ),
+            "safe_wording": "Do not claim majority real-world failure detection; keep the claim process-scoped.",
+        },
+        {
+            "claim": "Rules detect hidden semantic correctness failures.",
+            "verdict": "contradicted",
+            "evidence": f"Hidden semantic false negatives total {hidden_fn_total}.",
+            "safe_wording": "State that hidden semantic failures require stronger task oracles or semantic checks.",
+        },
+    ]
 
 
 def _metric(labels: dict[str, Any], label: str, metric: str) -> int:

@@ -1423,6 +1423,10 @@ def check_detector_evaluation_audit_content(path: Path = Path("docs/detector_eva
         "real-pilot process labels": "Real-pilot-positive process labels: 2 / 6",
         "ablation process labels": "Ablation-positive process labels: 2 / 6",
         "fixture-only process labels": "Fixture-only process labels: 2 / 6",
+        "claim boundary verdicts": "Claim Boundary Verdicts",
+        "process scoped claim": "Claim detection of reviewed observable process positives and report evidence tiers.",
+        "no majority outcome claim": "Do not claim majority real-world failure detection; keep the claim process-scoped.",
+        "hidden semantic contradicted": "`contradicted` | Hidden semantic false negatives total 36.",
         "boundary interpretation": "do not detect hidden semantic correctness failures",
     }
     for label, phrase in required_phrases.items():
