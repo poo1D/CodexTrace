@@ -16,6 +16,11 @@ REQUIRED_LINKS = (
     "docs/submission_package.md",
     "docs/reproducibility_checklist.md",
     "docs/paired_effect_limitations_audit.md",
+    "docs/failure_taxonomy_audit.md",
+)
+REQUIRED_PHRASES = (
+    "failure-taxonomy coverage and evidence tiers",
+    "real-pilot-positive, ablation-positive, or fixture-only",
 )
 
 
@@ -28,6 +33,7 @@ def build_artifact_guide_sequence_audit(path: Path = DEFAULT_ARTIFACT_GUIDE) -> 
     missing_numbers = [number for number in expected if number not in numbers]
     out_of_order = numbers != expected
     missing_links = [link for link in REQUIRED_LINKS if link not in review_path]
+    missing_phrases = [phrase for phrase in REQUIRED_PHRASES if phrase not in text]
     problems = []
     if out_of_order:
         problems.append("review path numbering is not contiguous from 1")
@@ -37,6 +43,8 @@ def build_artifact_guide_sequence_audit(path: Path = DEFAULT_ARTIFACT_GUIDE) -> 
         problems.append("review path skips step numbers")
     if missing_links:
         problems.append("review path is missing required links")
+    if missing_phrases:
+        problems.append("artifact guide is missing required evidence-tier wording")
 
     return {
         "summary": {
@@ -48,11 +56,13 @@ def build_artifact_guide_sequence_audit(path: Path = DEFAULT_ARTIFACT_GUIDE) -> 
             "duplicate_numbers": duplicate_numbers,
             "missing_numbers": missing_numbers,
             "missing_links": missing_links,
+            "missing_phrases": missing_phrases,
             "artifact_guide": str(path),
         },
         "steps": numbers,
         "expected": expected,
         "required_links": list(REQUIRED_LINKS),
+        "required_phrases": list(REQUIRED_PHRASES),
         "problems": problems,
     }
 
@@ -74,6 +84,7 @@ def render_artifact_guide_sequence_markdown(result: dict[str, Any]) -> str:
         f"- Duplicate numbers: {_fmt_list(summary['duplicate_numbers'])}",
         f"- Missing numbers: {_fmt_list(summary['missing_numbers'])}",
         f"- Missing required links: {_fmt_list(summary['missing_links'])}",
+        f"- Missing required phrases: {_fmt_list(summary['missing_phrases'])}",
         f"- Artifact guide: `{summary['artifact_guide']}`",
         "",
         "## Required Links",
@@ -84,6 +95,16 @@ def render_artifact_guide_sequence_markdown(result: dict[str, Any]) -> str:
     missing_links = set(summary["missing_links"])
     for link in result["required_links"]:
         lines.append(f"| `{link}` | {'no' if link in missing_links else 'yes'} |")
+    lines.extend([
+        "",
+        "## Required Phrases",
+        "",
+        "| Phrase | Present |",
+        "| --- | --- |",
+    ])
+    missing_phrases = set(summary["missing_phrases"])
+    for phrase in result["required_phrases"]:
+        lines.append(f"| `{phrase}` | {'no' if phrase in missing_phrases else 'yes'} |")
     lines.extend([
         "",
         "Interpretation: the artifact guide is reviewer-ready only if the numbered path is mechanically navigable and points to the core evidence chain.",

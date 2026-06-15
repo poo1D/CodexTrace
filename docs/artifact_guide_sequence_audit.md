@@ -12,6 +12,7 @@ This generated audit checks that the reviewer-facing artifact-guide path has con
 - Duplicate numbers: -
 - Missing numbers: -
 - Missing required links: -
+- Missing required phrases: -
 - Artifact guide: `docs/artifact_guide.md`
 
 ## Required Links
@@ -23,5 +24,13 @@ This generated audit checks that the reviewer-facing artifact-guide path has con
 | `docs/submission_package.md` | yes |
 | `docs/reproducibility_checklist.md` | yes |
 | `docs/paired_effect_limitations_audit.md` | yes |
+| `docs/failure_taxonomy_audit.md` | yes |
+
+## Required Phrases
+
+| Phrase | Present |
+| --- | --- |
+| `failure-taxonomy coverage and evidence tiers` | yes |
+| `real-pilot-positive, ablation-positive, or fixture-only` | yes |
 
 Interpretation: the artifact guide is reviewer-ready only if the numbered path is mechanically navigable and points to the core evidence chain.

@@ -777,6 +777,8 @@ def check_artifact_guide_sequence_audit_content(
         "no duplicate numbers": "Duplicate numbers: -",
         "no missing numbers": "Missing numbers: -",
         "required links": "docs/paired_effect_limitations_audit.md",
+        "taxonomy evidence tiers": "failure-taxonomy coverage and evidence tiers",
+        "tier labels": "real-pilot-positive, ablation-positive, or fixture-only",
     }
     for label, phrase in required_phrases.items():
         if phrase not in text:
@@ -786,7 +788,7 @@ def check_artifact_guide_sequence_audit_content(
         "name": "artifact guide sequence audit",
         "ok": not problems,
         "evidence": str(path),
-        "detail": "artifact-guide core-path numbering is contiguous and includes core evidence links",
+        "detail": "artifact-guide core-path numbering is contiguous and includes core evidence links and taxonomy evidence-tier wording",
         "problems": problems,
     }
 

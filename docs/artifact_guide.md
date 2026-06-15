@@ -26,7 +26,8 @@ oracles for hidden semantic correctness.
 3. Inspect generated results in `docs/results_summary.md`.
 4. Inspect the compact actual headline table in `docs/headline_results.md`.
 5. Inspect the thesis revision decision in `docs/thesis_revision_decision.md`.
-6. Check safe paper-claim framing in `docs/submission_package.md`.
+6. Check safe paper-claim framing in `docs/submission_package.md` and taxonomy
+   evidence tiers in `docs/failure_taxonomy_audit.md`.
 7. Inspect task-level hard30 repairs, regressions, and double failures in
    `docs/hard30_task_diagnosis.md`.
 8. Check paired RQ3 effect-size and population-claim limits in
@@ -73,7 +74,8 @@ oracles for hidden semantic correctness.
 19. Check phase segmentation coverage in `docs/phase_coverage_audit.md`.
 20. Check task-category coverage in `docs/task_category_coverage.md`.
 21. Check harness protocol coverage in `docs/harness_protocol_audit.md`.
-22. Check failure-taxonomy coverage in `docs/failure_taxonomy_audit.md`.
+22. Check failure-taxonomy coverage and evidence tiers in
+   `docs/failure_taxonomy_audit.md`.
 23. Check related-work positioning coverage in `docs/related_work_audit.md`.
 24. Check paper reference discoverability in `docs/bibliography_audit.md`.
 25. Check abstract-level evidence coverage in `docs/paper_abstract_audit.md`.
@@ -110,7 +112,7 @@ npm run dev
 | Is phase segmentation covered? | `docs/phase_coverage_audit.md` |
 | Do benchmark tasks cover the planned task types? | `docs/task_category_coverage.md` |
 | Do intervention prompts encode the harness protocol? | `docs/harness_protocol_audit.md` |
-| Is the six-label taxonomy covered? | `docs/failure_taxonomy_audit.md` |
+| Is the six-label taxonomy covered, and which labels are real-pilot-positive, ablation-positive, or fixture-only? | `docs/failure_taxonomy_audit.md` |
 | Is the related-work positioning covered? | `docs/related_work.md`, `docs/related_work_audit.md` |
 | Are paper references discoverable? | `docs/bibliography_audit.md` |
 | Does the abstract match the evidence boundary? | `docs/paper_abstract_audit.md` |

@@ -17,7 +17,12 @@
     "docs/results_summary.md",
     "docs/submission_package.md",
     "docs/reproducibility_checklist.md",
-    "docs/paired_effect_limitations_audit.md"
+    "docs/paired_effect_limitations_audit.md",
+    "docs/failure_taxonomy_audit.md"
+  ],
+  "required_phrases": [
+    "failure-taxonomy coverage and evidence tiers",
+    "real-pilot-positive, ablation-positive, or fixture-only"
   ],
   "steps": [
     1,
@@ -39,6 +44,7 @@
     "last_step": 10,
     "missing_links": [],
     "missing_numbers": [],
+    "missing_phrases": [],
     "ready": true,
     "step_count": 10
   }

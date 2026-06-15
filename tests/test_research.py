@@ -1477,7 +1477,9 @@ def test_artifact_guide_sequence_audit_checks_reviewer_path_numbering(tmp_path):
     assert result["summary"]["last_step"] == 10
     assert result["summary"]["missing_numbers"] == []
     assert result["summary"]["duplicate_numbers"] == []
+    assert result["summary"]["missing_phrases"] == []
     assert "docs/paired_effect_limitations_audit.md" in markdown
+    assert "failure-taxonomy coverage and evidence tiers" in markdown
 
     broken = tmp_path / "artifact_guide.md"
     broken.write_text(
@@ -1489,6 +1491,7 @@ def test_artifact_guide_sequence_audit_checks_reviewer_path_numbering(tmp_path):
     assert failing["summary"]["ready"] is False
     assert failing["summary"]["duplicate_numbers"] == [1]
     assert failing["summary"]["missing_numbers"] == [2]
+    assert "failure-taxonomy coverage and evidence tiers" in failing["summary"]["missing_phrases"]
 
 
 def test_label_provenance_audit_covers_hard30_label_files_and_eval_outputs():
@@ -2981,6 +2984,8 @@ def test_submission_readiness_validates_artifact_guide_sequence_audit_content(tm
     assert "missing step count" in check["problems"]
     assert "missing no duplicate numbers" in check["problems"]
     assert "missing required links" in check["problems"]
+    assert "missing taxonomy evidence tiers" in check["problems"]
+    assert "missing tier labels" in check["problems"]
 
 
 def test_submission_readiness_validates_metric_coverage_audit_content(tmp_path):
