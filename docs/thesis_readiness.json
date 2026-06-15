@@ -77,6 +77,13 @@
       "status": "satisfied"
     },
     {
+      "evidence": "verification behavior audit shows saturated non-ablation tiers=6/6, earlier verification tiers=6/6, leaner verify-phase tiers=6/6.",
+      "gap": "Boundary-style RQ3 verification behavior is supported: intervention reaches verification earlier with fewer verify-phase events, not a higher or deeper verification rate.",
+      "id": "verification_behavior",
+      "requirement": "Characterize harness effects on verification behavior when verification rate is saturated.",
+      "status": "satisfied"
+    },
+    {
       "evidence": "hard30 hidden failures are not separated by process signals: verification delta=+0.00, exact success-check delta=+0.00, unresolved-error delta=+0.00; repetitive_exploration positives are explained by repeated calls, token usage, and failure score; RQ4 signal audit ready=True.",
       "gap": "Boundary-style RQ4 is supported: process signals explain observable process failures, while hidden semantic correctness remains a limitation.",
       "id": "rq4_explanation",
@@ -87,10 +94,10 @@
   "summary": {
     "ready_for_boundary_result_paper": true,
     "ready_for_original_thesis": false,
-    "requirements": 7,
+    "requirements": 8,
     "status_counts": {
       "missing": 1,
-      "satisfied": 6
+      "satisfied": 7
     }
   },
   "verification_ablation_experiment": {

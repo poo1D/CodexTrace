@@ -2788,11 +2788,14 @@ def test_thesis_readiness_identifies_original_thesis_gaps():
     assert requirements["benchmark"]["status"] == "satisfied"
     assert requirements["verification_lift"]["status"] == "missing"
     assert requirements["process_rule_detection"]["status"] == "satisfied"
+    assert requirements["verification_behavior"]["status"] == "satisfied"
     assert requirements["rq4_explanation"]["status"] == "satisfied"
-    assert result["summary"]["status_counts"]["satisfied"] == 6
+    assert result["summary"]["status_counts"]["satisfied"] == 7
     assert "full30 sandbox_permission_deadlock has TP=1" in markdown
     assert "controlled detector fixtures cover 6 labels" in markdown
     assert "task diagnosis: double failures=14, repairs=1, regressions=1" in markdown
+    assert "verification behavior audit shows saturated non-ablation tiers=6/6" in markdown
+    assert "intervention reaches verification earlier with fewer verify-phase events" in markdown
     assert "Boundary-style RQ4 is supported" in markdown
     assert "optional process-stress expansion" in markdown
     assert "verification-lift tier" in markdown
@@ -3653,6 +3656,8 @@ def test_goal_completion_audit_keeps_original_goal_open():
     assert result["summary"]["should_mark_goal_complete"] is False
     assert result["summary"]["blocking_items"] == 1
     assert result["blocking_items"][0]["id"] == "verification_lift"
+    assert "verification_behavior" in markdown
+    assert "does not close ordinary verification-rate lift" in markdown
     assert "Should mark active goal complete: no" in markdown
     assert "Revise the thesis to a boundary-result paper" in markdown
     assert "verification-lift-v2 retest is complete and remains saturated" in markdown

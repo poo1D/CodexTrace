@@ -19,6 +19,7 @@ DEFAULT_VERIFICATION_LIFT_PILOT = Path("benchmark/verification-lift/pilot/full-r
 DEFAULT_VERIFICATION_LIFT_V2_PILOT = Path("benchmark/verification-lift-v2/pilot/full-real/aggregate.json")
 DEFAULT_VERIFICATION_ABLATION_AUDIT = Path("docs/verification_ablation_plan_audit.json")
 DEFAULT_VERIFICATION_ABLATION_PILOT = Path("benchmark/verification-ablation/pilot/full-real/aggregate.json")
+DEFAULT_VERIFICATION_BEHAVIOR_AUDIT = Path("docs/verification_behavior_audit.json")
 DEFAULT_RQ4_SIGNAL_AUDIT = Path("docs/rq4_signal_audit.json")
 DEFAULT_HARD30_TASK_DIAGNOSIS = Path("docs/hard30_task_diagnosis.json")
 DEFAULT_TAXONOMY = Path("docs/failure_taxonomy.md")
@@ -38,6 +39,7 @@ def build_thesis_readiness(
     verification_lift_v2_pilot_path: Path = DEFAULT_VERIFICATION_LIFT_V2_PILOT,
     verification_ablation_audit_path: Path = DEFAULT_VERIFICATION_ABLATION_AUDIT,
     verification_ablation_pilot_path: Path = DEFAULT_VERIFICATION_ABLATION_PILOT,
+    verification_behavior_audit_path: Path = DEFAULT_VERIFICATION_BEHAVIOR_AUDIT,
     rq4_signal_audit_path: Path = DEFAULT_RQ4_SIGNAL_AUDIT,
     hard30_task_diagnosis_path: Path = DEFAULT_HARD30_TASK_DIAGNOSIS,
     taxonomy_path: Path = DEFAULT_TAXONOMY,
@@ -55,6 +57,7 @@ def build_thesis_readiness(
     verification_lift_v2_pilot = _read_json(verification_lift_v2_pilot_path) if verification_lift_v2_pilot_path.exists() else None
     verification_ablation = _read_json(verification_ablation_audit_path) if verification_ablation_audit_path.exists() else {"ok": False, "task_count": 0}
     verification_ablation_pilot = _read_json(verification_ablation_pilot_path) if verification_ablation_pilot_path.exists() else None
+    verification_behavior = _read_json(verification_behavior_audit_path) if verification_behavior_audit_path.exists() else {"summary": {"ready": False}}
     rq4_signal_audit = _read_json(rq4_signal_audit_path) if rq4_signal_audit_path.exists() else {"summary": {"ready": False}}
     hard30_task_diagnosis = _read_json(hard30_task_diagnosis_path) if hard30_task_diagnosis_path.exists() else {"summary": {}}
     taxonomy_text = taxonomy_path.read_text(encoding="utf-8")
@@ -68,6 +71,8 @@ def build_thesis_readiness(
     hard30_paired = hard30["paired_task_summary"]
     signal_rows = {row["signal"]: row for row in hard30["signal_by_outcome"]}
     rq4_ready = bool(rq4_signal_audit.get("summary", {}).get("ready"))
+    verification_behavior_summary = verification_behavior.get("summary", {})
+    verification_behavior_ready = bool(verification_behavior_summary.get("ready"))
 
     taxonomy_tags = [
         "verification_gap",
@@ -254,6 +259,27 @@ def build_thesis_readiness(
                 f"{process_waste_evidence}{verification_lift_waste_evidence}."
             ),
             "gap": "Repeat hard30 or add a process-stress tier if a stable success-rate lift is required.",
+        },
+        {
+            "id": "verification_behavior",
+            "requirement": "Characterize harness effects on verification behavior when verification rate is saturated.",
+            "status": "satisfied" if verification_behavior_ready else "partial",
+            "evidence": (
+                "verification behavior audit shows saturated non-ablation tiers="
+                f"{verification_behavior_summary.get('saturated_non_ablation_tier_count', 0)}/"
+                f"{verification_behavior_summary.get('non_ablation_tier_count', 0)}, "
+                "earlier verification tiers="
+                f"{verification_behavior_summary.get('earlier_verification_count', 0)}/"
+                f"{verification_behavior_summary.get('non_ablation_tier_count', 0)}, "
+                "leaner verify-phase tiers="
+                f"{verification_behavior_summary.get('leaner_verify_phase_count', 0)}/"
+                f"{verification_behavior_summary.get('non_ablation_tier_count', 0)}."
+            ),
+            "gap": (
+                "Boundary-style RQ3 verification behavior is supported: intervention reaches verification earlier with fewer verify-phase events, not a higher or deeper verification rate."
+                if verification_behavior_ready
+                else "Generate and validate docs/verification_behavior_audit.md before making verification-behavior claims."
+            ),
         },
         {
             "id": "rq4_explanation",

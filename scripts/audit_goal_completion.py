@@ -2,8 +2,12 @@ from __future__ import annotations
 
 import argparse
 import json
+import sys
 from pathlib import Path
 from typing import Any
+
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT))
 
 from scripts.audit_paper_claims import build_claim_audit
 from scripts.audit_submission_package import build_submission_package
@@ -59,6 +63,13 @@ def build_goal_completion_audit() -> dict[str, Any]:
             "status": requirements["success_or_waste"]["status"],
             "evidence": requirements["success_or_waste"]["evidence"],
             "completion_effect": "complete for waste; success lift remains pilot-qualified",
+        },
+        {
+            "id": "verification_behavior",
+            "objective": "Show harness intervention changes verification behavior under saturated verification rates.",
+            "status": requirements["verification_behavior"]["status"],
+            "evidence": requirements["verification_behavior"]["evidence"],
+            "completion_effect": "complete as boundary evidence; does not close ordinary verification-rate lift",
         },
         {
             "id": "rq4",

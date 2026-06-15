@@ -1956,6 +1956,7 @@ def check_goal_completion_audit_content(path: Path = Path("docs/goal_completion_
         "boundary ready": "Boundary-result paper ready: yes",
         "do not complete": "Should mark active goal complete: no",
         "verification blocker": "verification_lift",
+        "verification behavior": "verification_behavior",
         "next decision": "Revise the thesis to a boundary-result paper",
     }
     for label, phrase in required_phrases.items():

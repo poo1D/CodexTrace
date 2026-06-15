@@ -52,6 +52,13 @@
       "status": "satisfied"
     },
     {
+      "completion_effect": "complete as boundary evidence; does not close ordinary verification-rate lift",
+      "evidence": "verification behavior audit shows saturated non-ablation tiers=6/6, earlier verification tiers=6/6, leaner verify-phase tiers=6/6.",
+      "id": "verification_behavior",
+      "objective": "Show harness intervention changes verification behavior under saturated verification rates.",
+      "status": "satisfied"
+    },
+    {
       "completion_effect": "complete for boundary-style RQ4",
       "evidence": "hard30 hidden failures are not separated by process signals: verification delta=+0.00, exact success-check delta=+0.00, unresolved-error delta=+0.00; repetitive_exploration positives are explained by repeated calls, token usage, and failure score; RQ4 signal audit ready=True.",
       "id": "rq4",
@@ -62,7 +69,7 @@
   "summary": {
     "blocking_items": 1,
     "boundary_result_paper_ready": true,
-    "items": 7,
+    "items": 8,
     "next_decision": "Revise the thesis to a boundary-result paper centered on waste reduction and trace-diagnosis limits; the ordinary-baseline verification-lift-v2 retest is complete and remains saturated.",
     "original_goal_complete": false,
     "should_mark_goal_complete": false
