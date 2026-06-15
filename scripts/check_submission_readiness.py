@@ -1476,6 +1476,9 @@ def check_harness_protocol_audit_content(path: Path = Path("docs/harness_protoco
         "verification": "post_edit_verification",
         "failure diagnosis": "failure_diagnosis_before_retry",
         "finish evidence": "finish_with_evidence",
+        "run proxies": "Run-level proxy checks passed: 6 / 6",
+        "proxy table": "Run-Level Proxy Checks",
+        "token proxy": "token_waste_proxy",
         "scope caveat": "does not prove that every model run obeyed each instruction",
     }
     for label, phrase in required_phrases.items():

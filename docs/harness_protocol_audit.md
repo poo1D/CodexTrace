@@ -8,7 +8,9 @@ This generated audit checks that intervention prompt templates preserve the harn
 - Intervention prompts covered: 4 / 4
 - Harness rules per prompt: 5
 - Protocol rules covered: 5 / 5
+- Run-level proxy checks passed: 6 / 6
 - Experiment protocol: `docs/experiment_protocol.md`
+- Hard30 report: `benchmark/hard/pilot/hard30-real/paper-report-labeled.json`
 
 ## Prompt Coverage
 
@@ -29,4 +31,15 @@ This generated audit checks that intervention prompt templates preserve the harn
 | `failure_diagnosis_before_retry` | yes |
 | `finish_with_evidence` | yes |
 
-Interpretation: this audit verifies prompt-template and protocol coverage of the harness constraints. It does not prove that every model run obeyed each instruction; run-level behavior is measured separately through trace metrics and labels.
+## Run-Level Proxy Checks
+
+| Constraint proxy | Baseline | Intervention | Delta | Status |
+| --- | ---: | ---: | ---: | --- |
+| `post_edit_verification_proxy` | 1 | 1 | 0 | pass |
+| `verification_rate_proxy` | 1 | 1 | 0 | pass |
+| `minimal_edit_proxy` | 9.1 | 4.533 | -4.567 | pass |
+| `repetitive_exploration_proxy` | 12.93 | 9.2 | -3.733 | pass |
+| `token_waste_proxy` | 355.0k | 256.3k | -98.7k | pass |
+| `failed_command_proxy` | 0.3 | 0.1 | -0.2 | pass |
+
+Interpretation: this audit verifies prompt-template and protocol coverage of the harness constraints, then links those constraints to hard30 aggregate trace-metric proxies. It does not prove that every model run obeyed each instruction.

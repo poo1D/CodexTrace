@@ -268,6 +268,11 @@ changes. Each task is run with two prompt conditions:
   edits, post-edit verification, failed-command diagnosis, and evidence before
   completion.
 
+`docs/harness_protocol_audit.md` checks both the prompt/protocol wording and
+hard30 aggregate proxy metrics for this harness contrast, including saturated
+intervention verification and reduced edit events, repeated tool calls, token
+usage, and command failures.
+
 The hard tier contains 50 runnable harder tasks with hidden graders. The
 current paper-facing hard30 artifact selects 30 of these tasks and stores 60
 real baseline/intervention runs. These tasks are designed to create outcome

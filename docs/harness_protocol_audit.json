@@ -220,12 +220,65 @@
       "phrase": "finish only with evidence"
     }
   ],
+  "run_proxy_checks": [
+    {
+      "baseline": 1.0,
+      "delta": 0.0,
+      "id": "post_edit_verification_proxy",
+      "intervention": 1.0,
+      "metric": "success_check_verification_rate",
+      "passed": true
+    },
+    {
+      "baseline": 1.0,
+      "delta": 0.0,
+      "id": "verification_rate_proxy",
+      "intervention": 1.0,
+      "metric": "verification_rate",
+      "passed": true
+    },
+    {
+      "baseline": 9.1,
+      "delta": -4.5667,
+      "id": "minimal_edit_proxy",
+      "intervention": 4.5333,
+      "metric": "avg_edit_events",
+      "passed": true
+    },
+    {
+      "baseline": 12.9333,
+      "delta": -3.7333,
+      "id": "repetitive_exploration_proxy",
+      "intervention": 9.2,
+      "metric": "avg_repeated_tool_calls",
+      "passed": true
+    },
+    {
+      "baseline": 354971.1,
+      "delta": -98656.76669999998,
+      "id": "token_waste_proxy",
+      "intervention": 256314.3333,
+      "metric": "avg_token_usage",
+      "passed": true
+    },
+    {
+      "baseline": 0.3,
+      "delta": -0.19999999999999998,
+      "id": "failed_command_proxy",
+      "intervention": 0.1,
+      "metric": "avg_command_failures",
+      "passed": true
+    }
+  ],
   "summary": {
     "covered_prompt_count": 4,
+    "hard30_report_path": "benchmark/hard/pilot/hard30-real/paper-report-labeled.json",
     "prompt_count": 4,
     "protocol_path": "docs/experiment_protocol.md",
     "protocol_rule_count": 5,
     "ready": true,
-    "rule_count": 5
+    "rule_count": 5,
+    "run_proxy_count": 6,
+    "run_proxy_passed": 6
   }
 }

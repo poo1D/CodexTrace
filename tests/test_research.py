@@ -1650,7 +1650,13 @@ def test_harness_protocol_audit_covers_intervention_constraints():
     assert result["summary"]["prompt_count"] == 4
     assert result["summary"]["rule_count"] == 5
     assert result["summary"]["protocol_rule_count"] == 5
+    assert result["summary"]["run_proxy_passed"] == 6
+    assert result["summary"]["run_proxy_count"] == 6
     assert all(prompt["covered"] for prompt in result["prompts"])
+    proxies = {row["id"]: row for row in result["run_proxy_checks"]}
+    assert proxies["post_edit_verification_proxy"]["intervention"] == 1
+    assert proxies["minimal_edit_proxy"]["delta"] < 0
+    assert proxies["token_waste_proxy"]["delta"] < 0
     assert {row["id"] for row in result["protocol_rules"]} == {
         "inspect_first",
         "minimal_edit",
@@ -1659,6 +1665,9 @@ def test_harness_protocol_audit_covers_intervention_constraints():
         "finish_with_evidence",
     }
     assert "Intervention prompts covered: 4 / 4" in markdown
+    assert "Run-level proxy checks passed: 6 / 6" in markdown
+    assert "Run-Level Proxy Checks" in markdown
+    assert "`token_waste_proxy`" in markdown
     assert "does not prove that every model run obeyed each instruction" in markdown
 
 

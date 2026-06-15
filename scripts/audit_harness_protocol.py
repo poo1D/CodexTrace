@@ -17,6 +17,7 @@ INTERVENTION_PROMPTS = (
     Path("benchmark/verification-ablation/prompts/intervention.txt"),
 )
 DEFAULT_PROTOCOL = Path("docs/experiment_protocol.md")
+DEFAULT_HARD30_REPORT = Path("benchmark/hard/pilot/hard30-real/paper-report-labeled.json")
 
 REQUIRED_RULES = (
     {
@@ -55,8 +56,10 @@ def _check_any(text: str, phrases: tuple[str, ...]) -> bool:
 def build_harness_protocol_audit(
     intervention_prompts: tuple[Path, ...] = INTERVENTION_PROMPTS,
     protocol_path: Path = DEFAULT_PROTOCOL,
+    hard30_report_path: Path = DEFAULT_HARD30_REPORT,
 ) -> dict[str, Any]:
     protocol_text = protocol_path.read_text(encoding="utf-8")
+    hard30_report = json.loads(hard30_report_path.read_text(encoding="utf-8"))
     prompt_rows = []
     for prompt_path in intervention_prompts:
         text = prompt_path.read_text(encoding="utf-8")
@@ -84,17 +87,26 @@ def build_harness_protocol_audit(
             "covered": rule["protocol_phrase"].lower() in protocol_lower,
         })
 
+    run_proxy_checks = _run_proxy_checks(hard30_report)
     return {
         "summary": {
-            "ready": all(row["covered"] for row in prompt_rows) and all(row["covered"] for row in protocol_rules),
+            "ready": (
+                all(row["covered"] for row in prompt_rows)
+                and all(row["covered"] for row in protocol_rules)
+                and all(row["passed"] for row in run_proxy_checks)
+            ),
             "prompt_count": len(prompt_rows),
             "covered_prompt_count": sum(1 for row in prompt_rows if row["covered"]),
             "rule_count": len(REQUIRED_RULES),
             "protocol_rule_count": sum(1 for row in protocol_rules if row["covered"]),
             "protocol_path": str(protocol_path),
+            "run_proxy_count": len(run_proxy_checks),
+            "run_proxy_passed": sum(1 for row in run_proxy_checks if row["passed"]),
+            "hard30_report_path": str(hard30_report_path),
         },
         "prompts": prompt_rows,
         "protocol_rules": protocol_rules,
+        "run_proxy_checks": run_proxy_checks,
     }
 
 
@@ -111,7 +123,9 @@ def render_harness_protocol_markdown(result: dict[str, Any]) -> str:
         f"- Intervention prompts covered: {summary['covered_prompt_count']} / {summary['prompt_count']}",
         f"- Harness rules per prompt: {summary['rule_count']}",
         f"- Protocol rules covered: {summary['protocol_rule_count']} / {summary['rule_count']}",
+        f"- Run-level proxy checks passed: {summary['run_proxy_passed']} / {summary['run_proxy_count']}",
         f"- Experiment protocol: `{summary['protocol_path']}`",
+        f"- Hard30 report: `{summary['hard30_report_path']}`",
         "",
         "## Prompt Coverage",
         "",
@@ -133,9 +147,63 @@ def render_harness_protocol_markdown(result: dict[str, Any]) -> str:
         lines.append(f"| `{row['id']}` | {'yes' if row['covered'] else 'no'} |")
     lines.extend([
         "",
-        "Interpretation: this audit verifies prompt-template and protocol coverage of the harness constraints. It does not prove that every model run obeyed each instruction; run-level behavior is measured separately through trace metrics and labels.",
+        "## Run-Level Proxy Checks",
+        "",
+        "| Constraint proxy | Baseline | Intervention | Delta | Status |",
+        "| --- | ---: | ---: | ---: | --- |",
+    ])
+    for row in result["run_proxy_checks"]:
+        lines.append(
+            f"| `{row['id']}` | {_fmt(row['baseline'])} | {_fmt(row['intervention'])} | "
+            f"{_fmt(row['delta'])} | {'pass' if row['passed'] else 'fail'} |"
+        )
+    lines.extend([
+        "",
+        "Interpretation: this audit verifies prompt-template and protocol coverage of the harness constraints, then links those constraints to hard30 aggregate trace-metric proxies. It does not prove that every model run obeyed each instruction.",
     ])
     return "\n".join(lines) + "\n"
+
+
+def _run_proxy_checks(report: dict[str, Any]) -> list[dict[str, Any]]:
+    baseline = report["aggregate"]["summary"]["baseline"]
+    intervention = report["aggregate"]["summary"]["intervention"]
+    return [
+        _metric_check("post_edit_verification_proxy", baseline, intervention, "success_check_verification_rate", "ge"),
+        _metric_check("verification_rate_proxy", baseline, intervention, "verification_rate", "ge"),
+        _metric_check("minimal_edit_proxy", baseline, intervention, "avg_edit_events", "le"),
+        _metric_check("repetitive_exploration_proxy", baseline, intervention, "avg_repeated_tool_calls", "le"),
+        _metric_check("token_waste_proxy", baseline, intervention, "avg_token_usage", "le"),
+        _metric_check("failed_command_proxy", baseline, intervention, "avg_command_failures", "le"),
+    ]
+
+
+def _metric_check(
+    check_id: str,
+    baseline: dict[str, Any],
+    intervention: dict[str, Any],
+    metric: str,
+    direction: str,
+) -> dict[str, Any]:
+    base_value = float(baseline[metric])
+    intervention_value = float(intervention[metric])
+    delta = intervention_value - base_value
+    passed = intervention_value >= base_value if direction == "ge" else intervention_value <= base_value
+    return {
+        "id": check_id,
+        "metric": metric,
+        "baseline": base_value,
+        "intervention": intervention_value,
+        "delta": delta,
+        "passed": passed,
+    }
+
+
+def _fmt(value: Any) -> str:
+    if isinstance(value, float):
+        if abs(value) >= 1000:
+            return f"{value / 1000:.1f}k"
+        return f"{value:.4g}"
+    return str(value)
 
 
 def write_outputs(result: dict[str, Any], json_path: Path | None, markdown_path: Path | None) -> None:
@@ -150,11 +218,12 @@ def write_outputs(result: dict[str, Any], json_path: Path | None, markdown_path:
 def main() -> int:
     parser = argparse.ArgumentParser(description="Audit harness intervention protocol coverage.")
     parser.add_argument("--protocol", type=Path, default=DEFAULT_PROTOCOL)
+    parser.add_argument("--hard30-report", type=Path, default=DEFAULT_HARD30_REPORT)
     parser.add_argument("--json-output", type=Path)
     parser.add_argument("--markdown-output", type=Path)
     args = parser.parse_args()
 
-    result = build_harness_protocol_audit(protocol_path=args.protocol)
+    result = build_harness_protocol_audit(protocol_path=args.protocol, hard30_report_path=args.hard30_report)
     if args.json_output or args.markdown_output:
         write_outputs(result, args.json_output, args.markdown_output)
     else:
