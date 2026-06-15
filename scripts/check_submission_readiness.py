@@ -842,6 +842,9 @@ def check_benchmark_trace_artifact_content(path: Path = Path("docs/benchmark_tra
         "run coverage": "Run rows covered: 60 / 60",
         "paired tasks": "Paired baseline/intervention tasks: 30 / 30",
         "trace coverage": "Codex JSONL traces covered: 60 / 60",
+        "parseable traces": "Parseable traces: 60 / 60",
+        "diagnosable traces": "Diagnosable traces: 60 / 60",
+        "trace sidecars": "Trace sidecar bundles: 60 / 60",
         "outcome coverage": "Outcome rows with grader results: 60 / 60",
         "label coverage": "Manual label rows: 60 / 60",
         "missing run keys": "Missing run keys: 0",
@@ -855,7 +858,7 @@ def check_benchmark_trace_artifact_content(path: Path = Path("docs/benchmark_tra
         "name": "benchmark trace artifact audit",
         "ok": not problems,
         "evidence": str(path),
-        "detail": "hard30 task, run, trace, outcome, and manual-label records are paired and complete",
+        "detail": "hard30 task, run, parseable trace, sidecar, outcome, and manual-label records are paired and complete",
         "problems": problems,
     }
 

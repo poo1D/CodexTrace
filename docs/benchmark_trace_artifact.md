@@ -11,6 +11,10 @@ This generated audit checks that the paper-facing hard30 benchmark has paired ba
 - Paired baseline/intervention tasks: 30 / 30
 - Codex JSONL traces covered: 60 / 60
 - Trace event lines: 2074
+- Parseable traces: 60 / 60
+- Parsed trace events: 2074
+- Diagnosable traces: 60 / 60
+- Trace sidecar bundles: 60 / 60
 - Outcome rows with grader results: 60 / 60
 - Manual label rows: 60 / 60
 - Labeled failure rows: 30

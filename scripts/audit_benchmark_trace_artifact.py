@@ -10,6 +10,9 @@ from typing import Any
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
+from codex_trace.diagnose import diagnose
+from codex_trace.parser import parse_jsonl
+
 
 DEFAULT_TASKS = Path("benchmark/hard/pilot/hard30-selection/tasks.jsonl")
 DEFAULT_RUNS = Path("benchmark/hard/pilot/hard30-real/runs.jsonl")
@@ -41,6 +44,20 @@ def build_benchmark_trace_artifact_audit(
         trace_path = run_dir / str(row.get("trace_path", ""))
         exists = trace_path.exists()
         event_lines = _count_nonempty_lines(trace_path) if exists else 0
+        parsed_events = 0
+        diagnosis_outcome = ""
+        parse_error = ""
+        if exists:
+            try:
+                trace = parse_jsonl(trace_path)
+                parsed_events = len(trace.events)
+                diagnosis_outcome = diagnose(trace).outcome
+            except (OSError, json.JSONDecodeError, ValueError) as error:
+                parse_error = str(error)
+        run_sidecar_dir = trace_path.parent
+        prompt_path = run_sidecar_dir / "prompt.md"
+        success_check_path = run_sidecar_dir / "success_check.txt"
+        stderr_path = run_sidecar_dir / "codex.stderr"
         trace_rows.append({
             "task_id": str(row.get("task_id", "")),
             "prompt_type": str(row.get("prompt_type", "")),
@@ -48,6 +65,14 @@ def build_benchmark_trace_artifact_audit(
             "exists": exists,
             "event_lines": event_lines,
             "nonempty": event_lines > 0,
+            "parseable": parsed_events > 0 and not parse_error,
+            "parsed_events": parsed_events,
+            "diagnosis_outcome": diagnosis_outcome,
+            "parse_error": parse_error,
+            "prompt_exists": prompt_path.exists(),
+            "success_check_exists": success_check_path.exists(),
+            "stderr_exists": stderr_path.exists(),
+            "sidecars_complete": prompt_path.exists() and success_check_path.exists() and stderr_path.exists(),
         })
 
     outcome_rows = [
@@ -85,6 +110,8 @@ def build_benchmark_trace_artifact_audit(
         and len(outcome_rows) == 60
     )
     trace_rows_ready = len(trace_rows) == 60 and all(row["nonempty"] for row in trace_rows)
+    trace_parse_ready = len(trace_rows) == 60 and all(row["parseable"] for row in trace_rows)
+    trace_sidecars_ready = len(trace_rows) == 60 and all(row["sidecars_complete"] for row in trace_rows)
     label_rows_ready = (
         len(labels) == 60
         and not missing_label_keys
@@ -94,7 +121,7 @@ def build_benchmark_trace_artifact_audit(
 
     return {
         "summary": {
-            "ready": task_rows_ready and run_rows_ready and trace_rows_ready and label_rows_ready,
+            "ready": task_rows_ready and run_rows_ready and trace_rows_ready and trace_parse_ready and trace_sidecars_ready and label_rows_ready,
             "task_count": len(tasks),
             "unique_task_count": len(task_id_set),
             "run_count": len(runs),
@@ -102,12 +129,18 @@ def build_benchmark_trace_artifact_audit(
             "trace_count": len(trace_rows),
             "nonempty_trace_count": sum(1 for row in trace_rows if row["nonempty"]),
             "trace_event_lines": sum(row["event_lines"] for row in trace_rows),
+            "parseable_trace_count": sum(1 for row in trace_rows if row["parseable"]),
+            "parsed_trace_events": sum(row["parsed_events"] for row in trace_rows),
+            "diagnosed_trace_count": sum(1 for row in trace_rows if row["diagnosis_outcome"]),
+            "trace_sidecar_count": sum(1 for row in trace_rows if row["sidecars_complete"]),
             "label_count": len(labels),
             "labeled_failure_count": len(labeled_failure_rows),
             "outcome_rows_with_grader_count": len(outcome_rows),
             "task_rows_ready": task_rows_ready,
             "run_rows_ready": run_rows_ready,
             "trace_rows_ready": trace_rows_ready,
+            "trace_parse_ready": trace_parse_ready,
+            "trace_sidecars_ready": trace_sidecars_ready,
             "label_rows_ready": label_rows_ready,
             "tasks_path": str(tasks_path),
             "runs_path": str(runs_path),
@@ -140,6 +173,10 @@ def render_benchmark_trace_artifact_markdown(result: dict[str, Any]) -> str:
         f"- Paired baseline/intervention tasks: {summary['paired_task_count']} / 30",
         f"- Codex JSONL traces covered: {summary['nonempty_trace_count']} / {summary['trace_count']}",
         f"- Trace event lines: {summary['trace_event_lines']}",
+        f"- Parseable traces: {summary['parseable_trace_count']} / {summary['trace_count']}",
+        f"- Parsed trace events: {summary['parsed_trace_events']}",
+        f"- Diagnosable traces: {summary['diagnosed_trace_count']} / {summary['trace_count']}",
+        f"- Trace sidecar bundles: {summary['trace_sidecar_count']} / {summary['trace_count']}",
         f"- Outcome rows with grader results: {summary['outcome_rows_with_grader_count']} / 60",
         f"- Manual label rows: {summary['label_count']} / 60",
         f"- Labeled failure rows: {summary['labeled_failure_count']}",

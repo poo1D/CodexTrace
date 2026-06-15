@@ -1453,11 +1453,17 @@ def test_benchmark_trace_artifact_audit_covers_hard30_pairs_and_traces():
     assert result["summary"]["paired_task_count"] == 30
     assert result["summary"]["trace_count"] == 60
     assert result["summary"]["nonempty_trace_count"] == 60
+    assert result["summary"]["parseable_trace_count"] == 60
+    assert result["summary"]["diagnosed_trace_count"] == 60
+    assert result["summary"]["trace_sidecar_count"] == 60
     assert result["summary"]["label_count"] == 60
     assert result["summary"]["outcome_rows_with_grader_count"] == 60
     assert result["missing_run_keys"] == []
     assert result["missing_label_keys"] == []
     assert result["summary"]["trace_event_lines"] > 0
+    assert result["summary"]["parsed_trace_events"] > 0
+    assert "Parseable traces: 60 / 60" in markdown
+    assert "Trace sidecar bundles: 60 / 60" in markdown
     assert "does not rerun Codex or hidden graders" in markdown
 
 
@@ -3091,6 +3097,8 @@ def test_submission_readiness_validates_benchmark_trace_artifact_content(tmp_pat
     assert "missing ready" in check["problems"]
     assert "missing task coverage" in check["problems"]
     assert "missing trace coverage" in check["problems"]
+    assert "missing parseable traces" in check["problems"]
+    assert "missing trace sidecars" in check["problems"]
     assert "missing rerun caveat" in check["problems"]
 
 
