@@ -83,6 +83,8 @@ def build_task_category_coverage_audit(
             "ready": seed_design_ready and hard30_minimum_ready and not all_missing_category,
             "required_design_categories": len(REQUIRED_DESIGN_CATEGORIES),
             "seed_required_categories_covered": len(required & seed_categories),
+            "hard_required_categories_covered": len(required & hard_categories),
+            "hard_missing_required_categories": sorted(required - hard_categories),
             "hard30_category_count": len(hard30_categories),
             "seed_task_count": seed["task_count"],
             "hard_task_count": hard["task_count"],
@@ -111,6 +113,8 @@ def render_task_category_coverage_markdown(result: dict[str, Any]) -> str:
         "",
         f"- Ready: {'yes' if summary['ready'] else 'no'}",
         f"- Seed design categories covered: {summary['seed_required_categories_covered']} / {summary['required_design_categories']}",
+        f"- Hard pool design categories covered: {summary['hard_required_categories_covered']} / {summary['required_design_categories']}",
+        f"- Hard pool missing design categories: {_fmt_list(summary['hard_missing_required_categories'])}",
         f"- Seed tasks: {summary['seed_task_count']}",
         f"- Hard tasks: {summary['hard_task_count']}",
         f"- Hard30 selected tasks: {summary['hard30_task_count']}",
@@ -139,7 +143,7 @@ def render_task_category_coverage_markdown(result: dict[str, Any]) -> str:
         lines.append(f"- `{tier_name}`: {counts}")
     lines.extend([
         "",
-        "Interpretation: the seed benchmark covers all task categories named in the original design. The hard30 paper-facing tier is selected for hidden-grader difficulty and broad category diversity; it is not required to preserve every seed category one-for-one.",
+        "Interpretation: the seed benchmark covers all task categories named in the original design. The hard pool and hard30 paper-facing tier are selected for hidden-grader difficulty and broad category diversity; they are not required to preserve every seed category one-for-one, and missing design categories must be treated as coverage boundaries.",
     ])
     return "\n".join(lines) + "\n"
 
@@ -151,6 +155,10 @@ def write_outputs(result: dict[str, Any], json_path: Path | None, markdown_path:
     if markdown_path:
         markdown_path.parent.mkdir(parents=True, exist_ok=True)
         markdown_path.write_text(render_task_category_coverage_markdown(result), encoding="utf-8")
+
+
+def _fmt_list(values: list[str]) -> str:
+    return ", ".join(f"`{value}`" for value in values) if values else "-"
 
 
 def main() -> int:

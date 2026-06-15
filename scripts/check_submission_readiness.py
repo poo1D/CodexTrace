@@ -1484,6 +1484,8 @@ def check_task_category_coverage_content(path: Path = Path("docs/task_category_c
     required_phrases = {
         "ready": "Ready: yes",
         "seed coverage": "Seed design categories covered: 7 / 7",
+        "hard pool coverage": "Hard pool design categories covered: 6 / 7",
+        "hard pool missing": "Hard pool missing design categories: `test_writing`",
         "seed tasks": "Seed tasks: 30",
         "hard30 tasks": "Hard30 selected tasks: 30",
         "bug fix": "`bug_fix`",
@@ -1499,7 +1501,7 @@ def check_task_category_coverage_content(path: Path = Path("docs/task_category_c
         "name": "task category coverage audit",
         "ok": not problems,
         "evidence": str(path),
-        "detail": "benchmark manifests cover the task categories named in the experiment design",
+        "detail": "benchmark manifests cover the task categories named in the experiment design and expose hard-tier category boundaries",
         "problems": problems,
     }
 

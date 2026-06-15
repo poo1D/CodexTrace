@@ -1666,6 +1666,8 @@ def test_task_category_coverage_audit_covers_experiment_design_categories():
 
     assert result["summary"]["ready"] is True
     assert result["summary"]["seed_required_categories_covered"] == 7
+    assert result["summary"]["hard_required_categories_covered"] == 6
+    assert result["summary"]["hard_missing_required_categories"] == ["test_writing"]
     assert result["summary"]["required_design_categories"] == 7
     assert result["summary"]["seed_task_count"] == 30
     assert result["summary"]["hard30_task_count"] == 30
@@ -1674,6 +1676,7 @@ def test_task_category_coverage_audit_covers_experiment_design_categories():
     assert rows["multi_turn_change"]["seed_count"] == 3
     assert rows["test_writing"]["hard30_count"] == 0
     assert "Seed design categories covered: 7 / 7" in markdown
+    assert "Hard pool missing design categories: `test_writing`" in markdown
     assert "not required to preserve every seed category one-for-one" in markdown
 
 
@@ -3295,6 +3298,8 @@ def test_submission_readiness_validates_task_category_coverage_content(tmp_path)
     assert check["ok"] is False
     assert "missing ready" in check["problems"]
     assert "missing seed coverage" in check["problems"]
+    assert "missing hard pool coverage" in check["problems"]
+    assert "missing hard pool missing" in check["problems"]
     assert "missing multi-turn change" in check["problems"]
 
 

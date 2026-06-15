@@ -6,6 +6,8 @@ This generated audit checks that benchmark task manifests cover the task categor
 
 - Ready: yes
 - Seed design categories covered: 7 / 7
+- Hard pool design categories covered: 6 / 7
+- Hard pool missing design categories: `test_writing`
 - Seed tasks: 30
 - Hard tasks: 50
 - Hard30 selected tasks: 30
@@ -30,4 +32,4 @@ This generated audit checks that benchmark task manifests cover the task categor
 - `hard`: `bug_fix`=7, `ci_failure`=3, `data_migration`=2, `dependency_friction`=3, `error_localization`=4, `error_recovery`=3, `feature`=8, `multi_turn_change`=7, `multi_turn_tool_debug`=3, `refactor`=4, `sandbox_friction`=1, `stateful_regression`=5
 - `hard30`: `bug_fix`=4, `ci_failure`=2, `data_migration`=1, `dependency_friction`=3, `error_localization`=2, `error_recovery`=3, `feature`=4, `multi_turn_change`=3, `multi_turn_tool_debug`=2, `refactor`=1, `sandbox_friction`=1, `stateful_regression`=4
 
-Interpretation: the seed benchmark covers all task categories named in the original design. The hard30 paper-facing tier is selected for hidden-grader difficulty and broad category diversity; it is not required to preserve every seed category one-for-one.
+Interpretation: the seed benchmark covers all task categories named in the original design. The hard pool and hard30 paper-facing tier are selected for hidden-grader difficulty and broad category diversity; they are not required to preserve every seed category one-for-one, and missing design categories must be treated as coverage boundaries.

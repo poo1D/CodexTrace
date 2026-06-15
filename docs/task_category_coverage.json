@@ -68,6 +68,10 @@
     "hard30_category_count": 12,
     "hard30_minimum_ready": true,
     "hard30_task_count": 30,
+    "hard_missing_required_categories": [
+      "test_writing"
+    ],
+    "hard_required_categories_covered": 6,
     "hard_task_count": 50,
     "missing_category_rows": 0,
     "ready": true,
