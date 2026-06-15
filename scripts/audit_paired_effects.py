@@ -24,6 +24,7 @@ DEFAULT_STUDIES = (
     ("verification_lift_v2", Path("benchmark/verification-lift-v2/pilot/full-real/runs.jsonl")),
     ("verification_ablation", Path("benchmark/verification-ablation/pilot/full-real/runs.jsonl")),
 )
+ABLATION_STUDIES = {"verification_ablation"}
 METRICS = {
     "success_delta": {"field": "success", "direction": 1, "label": "success"},
     "verification_delta": {"field": "verification_rate", "direction": 1, "label": "verification"},
@@ -69,6 +70,7 @@ def build_paired_effects_audit(
         study_rows.append({
             "study": study_name,
             "manifest": str(manifest_path),
+            "role": "auxiliary_ablation" if study_name in ABLATION_STUDIES else "non_ablation_pilot",
             "paired_task_count": len(paired_rows),
             "success_avg_delta": by_metric["success_delta"]["avg_delta"],
             "verification_avg_delta": by_metric["verification_delta"]["avg_delta"],
@@ -80,8 +82,13 @@ def build_paired_effects_audit(
         metric_rows.extend(metrics)
 
     hard30 = _metric_lookup(metric_rows, "hard30")
+    non_ablation_rows = [row for row in study_rows if row["role"] == "non_ablation_pilot"]
+    non_ablation_repeated_improved = sum(row["repeated_tool_call_avg_delta"] < 0 for row in non_ablation_rows)
+    non_ablation_token_improved = sum(row["token_usage_avg_delta"] < 0 for row in non_ablation_rows)
     ready = (
         len(study_rows) == len(studies)
+        and non_ablation_repeated_improved == len(non_ablation_rows)
+        and non_ablation_token_improved == len(non_ablation_rows)
         and hard30["success_delta"]["n"] == 30
         and hard30["repeated_tool_call_delta"]["avg_delta"] < 0
         and hard30["repeated_tool_call_delta"]["ci_high"] < 0
@@ -96,6 +103,9 @@ def build_paired_effects_audit(
             "metric_count": len(METRICS),
             "bootstrap_samples": bootstrap_samples,
             "bootstrap_seed": seed,
+            "non_ablation_study_count": len(non_ablation_rows),
+            "non_ablation_repeated_improved": non_ablation_repeated_improved,
+            "non_ablation_token_improved": non_ablation_token_improved,
             "hard30_paired_tasks": hard30["success_delta"]["n"],
             "hard30_repeated_tool_call_avg_delta": hard30["repeated_tool_call_delta"]["avg_delta"],
             "hard30_repeated_tool_call_ci": [
@@ -129,6 +139,8 @@ def render_paired_effects_markdown(result: dict[str, Any]) -> str:
         f"- Metrics per study: {summary['metric_count']}",
         f"- Bootstrap samples: {summary['bootstrap_samples']}",
         f"- Bootstrap seed: {summary['bootstrap_seed']}",
+        f"- Non-ablation studies with lower repeated calls: {summary['non_ablation_repeated_improved']} / {summary['non_ablation_study_count']}",
+        f"- Non-ablation studies with lower token usage: {summary['non_ablation_token_improved']} / {summary['non_ablation_study_count']}",
         f"- Hard30 paired tasks: {summary['hard30_paired_tasks']}",
         f"- Hard30 repeated tool-call delta: {_fmt(summary['hard30_repeated_tool_call_avg_delta'])} "
         f"[{_fmt(summary['hard30_repeated_tool_call_ci'][0])}, {_fmt(summary['hard30_repeated_tool_call_ci'][1])}]",
@@ -159,12 +171,12 @@ def render_paired_effects_markdown(result: dict[str, Any]) -> str:
         "",
         "## Study-Level Waste Deltas",
         "",
-        "| Study | Paired tasks | Success delta | Verification delta | Repeated call delta | Token delta | Repeated improved | Token improved |",
-        "| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |",
+        "| Study | Role | Paired tasks | Success delta | Verification delta | Repeated call delta | Token delta | Repeated improved | Token improved |",
+        "| --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |",
     ])
     for row in result["studies"]:
         lines.append(
-            f"| {row['study']} | {row['paired_task_count']} | {_fmt(row['success_avg_delta'])} | "
+            f"| {row['study']} | {row['role']} | {row['paired_task_count']} | {_fmt(row['success_avg_delta'])} | "
             f"{_fmt(row['verification_avg_delta'])} | {_fmt(row['repeated_tool_call_avg_delta'])} | "
             f"{_fmt(row['token_usage_avg_delta'])} | {row['repeated_tool_call_improved']} | {row['token_usage_improved']} |"
         )

@@ -9,6 +9,8 @@ This generated audit computes task-paired baseline-to-intervention effects for t
 - Metrics per study: 10
 - Bootstrap samples: 2000
 - Bootstrap seed: 20260614
+- Non-ablation studies with lower repeated calls: 6 / 6
+- Non-ablation studies with lower token usage: 6 / 6
 - Hard30 paired tasks: 30
 - Hard30 repeated tool-call delta: -3.733 [-5.033, -2.5]
 - Hard30 token-usage delta: -98.7k [-154.6k, -54.6k]
@@ -31,14 +33,14 @@ This generated audit computes task-paired baseline-to-intervention effects for t
 
 ## Study-Level Waste Deltas
 
-| Study | Paired tasks | Success delta | Verification delta | Repeated call delta | Token delta | Repeated improved | Token improved |
-| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| full30 | 30 | 0 | 0 | -3.433 | -34.0k | 24 | 19 |
-| hard10 | 10 | 0.1 | 0 | -3 | -61.4k | 9 | 9 |
-| hard30 | 30 | 0 | 0 | -3.733 | -98.7k | 26 | 26 |
-| process_stress | 12 | 0 | 0 | -0.9167 | -23.9k | 4 | 5 |
-| verification_lift | 8 | 0 | 0 | -0.75 | -4.7k | 5 | 5 |
-| verification_lift_v2 | 8 | 0 | 0 | -3.125 | -39.2k | 7 | 8 |
-| verification_ablation | 4 | 0 | 1 | 1.25 | 26.3k | 0 | 1 |
+| Study | Role | Paired tasks | Success delta | Verification delta | Repeated call delta | Token delta | Repeated improved | Token improved |
+| --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| full30 | non_ablation_pilot | 30 | 0 | 0 | -3.433 | -34.0k | 24 | 19 |
+| hard10 | non_ablation_pilot | 10 | 0.1 | 0 | -3 | -61.4k | 9 | 9 |
+| hard30 | non_ablation_pilot | 30 | 0 | 0 | -3.733 | -98.7k | 26 | 26 |
+| process_stress | non_ablation_pilot | 12 | 0 | 0 | -0.9167 | -23.9k | 4 | 5 |
+| verification_lift | non_ablation_pilot | 8 | 0 | 0 | -0.75 | -4.7k | 5 | 5 |
+| verification_lift_v2 | non_ablation_pilot | 8 | 0 | 0 | -3.125 | -39.2k | 7 | 8 |
+| verification_ablation | auxiliary_ablation | 4 | 0 | 1 | 1.25 | 26.3k | 0 | 1 |
 
 Interpretation: this audit supports the RQ3 waste-reduction claim with paired task evidence. Bootstrap intervals describe the current task sample only; they are not population-level significance claims.

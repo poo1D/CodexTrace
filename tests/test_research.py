@@ -1395,12 +1395,21 @@ def test_paired_effects_audit_quantifies_rq3_waste_deltas():
 
     assert result["summary"]["ready"] is True
     assert result["summary"]["study_count"] == 7
+    assert result["summary"]["non_ablation_study_count"] == 6
+    assert result["summary"]["non_ablation_repeated_improved"] == 6
+    assert result["summary"]["non_ablation_token_improved"] == 6
     assert result["summary"]["hard30_paired_tasks"] == 30
+    studies = {row["study"]: row for row in result["studies"]}
+    assert studies["hard30"]["role"] == "non_ablation_pilot"
+    assert studies["verification_ablation"]["role"] == "auxiliary_ablation"
     assert hard30["repeated_tool_call_delta"]["avg_delta"] < 0
     assert hard30["repeated_tool_call_delta"]["ci_high"] < 0
     assert hard30["token_usage_delta"]["avg_delta"] < 0
     assert hard30["token_usage_delta"]["ci_high"] < 0
     assert hard30["verification_delta"]["avg_delta"] == 0
+    assert "Non-ablation studies with lower repeated calls: 6 / 6" in markdown
+    assert "Non-ablation studies with lower token usage: 6 / 6" in markdown
+    assert "| verification_ablation | auxiliary_ablation |" in markdown
     assert "not population-level significance claims" in markdown
 
 
@@ -3184,6 +3193,9 @@ def test_submission_readiness_validates_paired_effects_audit_content(tmp_path):
     assert "missing ready" in check["problems"]
     assert "missing study coverage" in check["problems"]
     assert "missing hard30 paired tasks" in check["problems"]
+    assert "missing non-ablation repeated" in check["problems"]
+    assert "missing non-ablation token" in check["problems"]
+    assert "missing ablation role" in check["problems"]
     assert "missing bootstrap caveat" in check["problems"]
 
 
