@@ -84,6 +84,10 @@ from scripts.audit_verification_saturation import (
     build_verification_saturation_audit,
     render_verification_saturation_markdown,
 )
+from scripts.audit_verification_behavior import (
+    build_verification_behavior_audit,
+    render_verification_behavior_markdown,
+)
 from scripts.audit_verification_lift_next_experiment import (
     build_verification_lift_next_experiment_audit,
     render_verification_lift_next_experiment_markdown,
@@ -153,6 +157,7 @@ from scripts.check_submission_readiness import (
     check_thesis_revision_decision_content,
     check_validity_threats_content,
     check_verification_ablation_plan_audit_content,
+    check_verification_behavior_audit_content,
     check_verification_saturation_audit_content,
     check_verification_lift_next_experiment_content,
     render_report,
@@ -1872,7 +1877,7 @@ def test_reproducibility_audit_covers_key_commands():
     markdown = render_reproducibility_audit_markdown(result)
 
     assert result["summary"]["ready"] is True
-    assert result["summary"]["covered_command_count"] == 53
+    assert result["summary"]["covered_command_count"] == 54
     assert result["summary"]["covered_semantic_phrase_count"] == 3
     assert result["summary"]["fences_balanced"] is True
     assert {row["id"] for row in result["commands"]} >= {
@@ -1890,6 +1895,7 @@ def test_reproducibility_audit_covers_key_commands():
         "label_provenance_audit",
         "label_limitations_audit",
         "verification_saturation_audit",
+        "verification_behavior_audit",
         "schema_field_audit",
         "parser_event_coverage",
         "failure_node_traceability",
@@ -1917,6 +1923,7 @@ def test_reproducibility_audit_covers_key_commands():
     }
     assert all(row["present"] for row in result["commands"])
     assert all(row["present"] for row in result["semantic_phrases"])
+    assert "Commands covered: 54 / 54" in markdown
     assert "Semantic phrases covered: 3 / 3" in markdown
     assert "nullable_timing_metrics" in markdown
     assert "task_design_family_mapping" in markdown
@@ -2487,6 +2494,7 @@ def test_paper_draft_contains_submission_polish_sections():
     assert "docs/detector_evaluation_audit.md#Claim Boundary Verdicts" in text
     assert "docs/paired_effects_audit.md#RQ3 Claim Boundary Verdicts" in text
     assert "docs/rq4_signal_audit.md#RQ4 Signal Verdicts" in text
+    assert "docs/verification_behavior_audit.md" in text
     assert "`construct_validity`" in text
     assert "No-verify ablation is not ordinary-baseline evidence." in text
     assert "docs/paired_effects_audit.md" in text
@@ -2568,6 +2576,7 @@ def test_reviewer_docs_surface_hard30_task_diagnosis():
     assert "scripts/audit_expected_results_reconciliation.py --markdown-output docs/expected_results_reconciliation.md" in readme
     assert "scripts/audit_submission_readiness_plan.py --markdown-output docs/submission_readiness_plan_audit.md" in readme
     assert "scripts/audit_verification_saturation.py --markdown-output docs/verification_saturation_audit.md" in readme
+    assert "scripts/audit_verification_behavior.py --markdown-output docs/verification_behavior_audit.md" in readme
     assert "scripts/audit_paper_abstract.py --markdown-output docs/paper_abstract_audit.md" in readme
     assert "scripts/audit_paper_contributions.py --markdown-output docs/paper_contribution_audit.md" in readme
     assert "scripts/audit_paper_conclusion.py --markdown-output docs/paper_conclusion_audit.md" in readme
@@ -2662,6 +2671,7 @@ def test_reviewer_docs_surface_hard30_task_diagnosis():
     assert "scripts/audit_expected_results_reconciliation.py" in checklist
     assert "scripts/audit_submission_readiness_plan.py" in checklist
     assert "scripts/audit_verification_saturation.py" in checklist
+    assert "scripts/audit_verification_behavior.py" in checklist
     assert "scripts/audit_paper_abstract.py" in checklist
     assert "scripts/audit_paper_contributions.py" in checklist
     assert "scripts/audit_paper_conclusion.py" in checklist
@@ -2711,6 +2721,7 @@ def test_reviewer_docs_surface_hard30_task_diagnosis():
     assert "--markdown-output /tmp/benchmark-trace-artifact.md" in checklist
     assert "--markdown-output /tmp/label-provenance-audit.md" in checklist
     assert "--markdown-output /tmp/verification-saturation-audit.md" in checklist
+    assert "--markdown-output /tmp/verification-behavior-audit.md" in checklist
     assert "--markdown-output /tmp/paired-effects-audit.md" in checklist
     assert "--markdown-output /tmp/demo-audit.md" in checklist
     assert "--markdown-output /tmp/web-artifact-audit.md" in checklist
@@ -2876,6 +2887,7 @@ def test_submission_package_maps_rqs_to_safe_paper_claims():
     assert "docs/related_work_audit.md" in package["required_files"]
     assert "docs/bibliography_audit.md" in package["required_files"]
     assert "docs/reproducibility_audit.md" in package["required_files"]
+    assert "docs/verification_behavior_audit.md" in package["required_files"]
     assert [row["rq"] for row in package["rq_rows"]] == ["RQ1", "RQ2", "RQ3", "RQ4"]
     verdict_tables = {row["rq"]: row["verdict_table"] for row in package["rq_rows"]}
     assert verdict_tables["RQ1"] == "docs/failure_taxonomy_audit.md#RQ1 Distribution Boundary"
@@ -2884,6 +2896,7 @@ def test_submission_package_maps_rqs_to_safe_paper_claims():
     assert verdict_tables["RQ4"] == "docs/rq4_signal_audit.md#RQ4 Signal Verdicts"
     assert package["rq_rows"][2]["status"] == "supported"
     assert "ordinary verification-rate lift is unsupported" in package["rq_rows"][2]["claim_boundary"]
+    assert "docs/verification_behavior_audit.md" in package["rq_rows"][2]["primary_evidence"]
     assert any(row["claim"] == "Harness intervention increases verification rate." for row in package["unsupported_claims"])
     assert "verification-lift-v2 verification delta is +0.00" in markdown
     assert "## RQ-To-Evidence Map" in markdown
@@ -3121,6 +3134,7 @@ def test_reviewer_path_audit_covers_required_artifacts(tmp_path):
     assert any(row["path"] == "docs/detector_evaluation_audit.md" for row in result["coverage"])
     assert any(row["path"] == "docs/rule_implementation_audit.md" for row in result["coverage"])
     assert any(row["path"] == "docs/verification_ablation_plan_audit.md" for row in result["coverage"])
+    assert any(row["path"] == "docs/verification_behavior_audit.md" for row in result["coverage"])
     assert any(row["path"] == "docs/paired_effects_audit.md" for row in result["coverage"])
     assert any(row["path"] == "docs/paired_effect_limitations_audit.md" for row in result["coverage"])
     assert any(row["path"] == "docs/demo_audit.md" for row in result["coverage"])
@@ -3716,6 +3730,37 @@ def test_submission_readiness_validates_verification_saturation_audit_content(tm
     assert "missing ordinary lift unsupported" in check["problems"]
     assert "missing ablation positive" in check["problems"]
     assert "missing claim closure caveat" in check["problems"]
+
+
+def test_verification_behavior_audit_captures_saturated_rate_process_effect():
+    result = build_verification_behavior_audit()
+    markdown = render_verification_behavior_markdown(result)
+    verdicts = {row["claim"]: row for row in result["claim_boundaries"]}
+
+    assert result["summary"]["ready"] is True
+    assert result["summary"]["saturated_non_ablation_tier_count"] == 6
+    assert result["summary"]["earlier_verification_count"] == 6
+    assert result["summary"]["leaner_verify_phase_count"] == 6
+    assert verdicts["Harness intervention improves ordinary-baseline verification rate."]["verdict"] == "unsupported"
+    assert verdicts["Harness intervention reaches verification earlier under saturated ordinary pilots."]["verdict"] == "supported"
+    assert verdicts["Harness intervention makes ordinary-pilot verification deeper."]["verdict"] == "contradicted"
+    assert verdicts["No-verify ablation shows harness control over verification behavior."]["verdict"] == "mechanism-check-only"
+    assert "Non-ablation tiers with earlier verification: 6 / 6" in markdown
+    assert "Use leaner verification path, not deeper verification." in markdown
+
+
+def test_submission_readiness_validates_verification_behavior_audit_content(tmp_path):
+    broken = tmp_path / "verification_behavior_audit.md"
+    broken.write_text("# Verification Behavior Audit\nReady: no\n", encoding="utf-8")
+
+    check = check_verification_behavior_audit_content(broken)
+
+    assert check["ok"] is False
+    assert "missing ready" in check["problems"]
+    assert "missing saturated tiers" in check["problems"]
+    assert "missing earlier verification" in check["problems"]
+    assert "missing leaner verify phase" in check["problems"]
+    assert "missing not deeper verification" in check["problems"]
 
 
 def test_submission_readiness_validates_verification_ablation_plan_audit_content(tmp_path):

@@ -38,6 +38,7 @@ zero.
    `docs/hard30_task_diagnosis.md`.
 8. Check paired RQ3 effect-size verdicts and population-claim limits in
    `docs/paired_effects_audit.md`, `docs/paired_effect_limitations_audit.md`,
+   verification-behavior boundaries in `docs/verification_behavior_audit.md`,
    and RQ4 signal verdicts in `docs/rq4_signal_audit.md`.
 9. Inspect validity threats, reproducibility, and stronger-submission guardrails in
    `docs/validity_threats.md` and
@@ -67,33 +68,35 @@ zero.
 8. Check manual-label limitation wording in `docs/label_limitations_audit.md`.
 9. Check ordinary-baseline verification saturation in
    `docs/verification_saturation_audit.md`.
-10. Check expected-results replacement in
+10. Check verification behavior under saturated ordinary pilots in
+   `docs/verification_behavior_audit.md`.
+11. Check expected-results replacement in
    `docs/expected_results_reconciliation.md`.
-11. Check offline demo coverage in `docs/demo_audit.md`.
-12. Check Web replay artifact coverage in `docs/web_artifact_audit.md`.
-13. Check offline CLI coverage in `docs/cli_surface_audit.md`.
-14. Check CI/readiness/packaging coverage in `docs/ci_surface_audit.md`.
-15. Check method pipeline source/CLI coverage in `docs/method_pipeline_audit.md`.
-16. Check Run/Step schema-field mapping in `docs/schema_field_audit.md`.
-17. Check parser event coverage in `docs/parser_event_coverage.md`.
-18. Check diagnosis-node traceability in `docs/failure_node_traceability.md`.
-19. Check phase segmentation coverage in `docs/phase_coverage_audit.md`.
-20. Check task-category coverage in `docs/task_category_coverage.md`.
-21. Check harness protocol coverage in `docs/harness_protocol_audit.md`.
-22. Check failure-taxonomy coverage and evidence tiers in
+12. Check offline demo coverage in `docs/demo_audit.md`.
+13. Check Web replay artifact coverage in `docs/web_artifact_audit.md`.
+14. Check offline CLI coverage in `docs/cli_surface_audit.md`.
+15. Check CI/readiness/packaging coverage in `docs/ci_surface_audit.md`.
+16. Check method pipeline source/CLI coverage in `docs/method_pipeline_audit.md`.
+17. Check Run/Step schema-field mapping in `docs/schema_field_audit.md`.
+18. Check parser event coverage in `docs/parser_event_coverage.md`.
+19. Check diagnosis-node traceability in `docs/failure_node_traceability.md`.
+20. Check phase segmentation coverage in `docs/phase_coverage_audit.md`.
+21. Check task-category coverage in `docs/task_category_coverage.md`.
+22. Check harness protocol coverage in `docs/harness_protocol_audit.md`.
+23. Check failure-taxonomy coverage and evidence tiers in
    `docs/failure_taxonomy_audit.md`.
-23. Check related-work positioning coverage in `docs/related_work_audit.md`.
-24. Check paper reference discoverability in `docs/bibliography_audit.md`.
-25. Check abstract-level evidence coverage in `docs/paper_abstract_audit.md`.
-26. Check contribution-claim coverage in `docs/paper_contribution_audit.md`.
-27. Check conclusion boundary alignment in `docs/paper_conclusion_audit.md`.
-28. Check paper structure and RQ coverage in `docs/paper_structure_audit.md`.
-29. Check RQ result-table consistency in `docs/rq_table_consistency_audit.md`.
-30. Check metric coverage in `docs/metric_coverage_audit.md`.
-31. Check reproduction command coverage in `docs/reproducibility_audit.md`.
-32. Check artifact-guide numbering in `docs/artifact_guide_sequence_audit.md`.
-33. Check claim-to-evidence mapping in `docs/reproducibility_checklist.md`.
-34. Optionally open the visual replay UI:
+24. Check related-work positioning coverage in `docs/related_work_audit.md`.
+25. Check paper reference discoverability in `docs/bibliography_audit.md`.
+26. Check abstract-level evidence coverage in `docs/paper_abstract_audit.md`.
+27. Check contribution-claim coverage in `docs/paper_contribution_audit.md`.
+28. Check conclusion boundary alignment in `docs/paper_conclusion_audit.md`.
+29. Check paper structure and RQ coverage in `docs/paper_structure_audit.md`.
+30. Check RQ result-table consistency in `docs/rq_table_consistency_audit.md`.
+31. Check metric coverage in `docs/metric_coverage_audit.md`.
+32. Check reproduction command coverage in `docs/reproducibility_audit.md`.
+33. Check artifact-guide numbering in `docs/artifact_guide_sequence_audit.md`.
+34. Check claim-to-evidence mapping in `docs/reproducibility_checklist.md`.
+35. Optionally open the visual replay UI:
 
 ```bash
 cd web
@@ -131,6 +134,7 @@ npm run dev
 | Are manual-label limitations explicit? | `docs/label_limitations_audit.md` |
 | Why is verification lift not a finding? | `docs/verification_saturation_audit.md` |
 | RQ3: Do harness interventions help? | `docs/paired_effects_audit.md` RQ3 Claim Boundary Verdicts, `docs/results_summary.md` RQ3 tables |
+| What changes when verification rate is saturated? | `docs/verification_behavior_audit.md` |
 | Are RQ3 deltas task-paired with uncertainty? | `docs/paired_effects_audit.md` |
 | Are paired-effect claims limited to pilot evidence? | `docs/paired_effect_limitations_audit.md` |
 | Does the offline demo path work? | `docs/demo_audit.md` |

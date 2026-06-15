@@ -35,6 +35,7 @@ The stored pilots can be inspected and aggregated without re-running Codex.
 | `docs/label_provenance_audit.md` | Generated audit for hard30 label-file provenance and evaluation consistency. |
 | `docs/label_limitations_audit.md` | Generated audit for manual-label limitation wording and provenance caveats. |
 | `docs/verification_saturation_audit.md` | Generated audit for ordinary-baseline verification saturation and the no-verify ablation boundary. |
+| `docs/verification_behavior_audit.md` | Generated audit for earlier and leaner verification behavior under saturated ordinary pilots. |
 | `docs/paired_effects_audit.md` | Generated paired effect-size and uncertainty audit for RQ3 intervention deltas. |
 | `docs/paired_effect_limitations_audit.md` | Generated audit that keeps paired-effect claims pilot-scale rather than population-level. |
 | `docs/demo_audit.md` | Generated audit for the reviewer-facing offline demo script. |
@@ -116,6 +117,7 @@ The stored pilots can be inspected and aggregated without re-running Codex.
 | `scripts/audit_label_provenance.py` | Checks hard30 label template, manual-label, and label-evaluation consistency. |
 | `scripts/audit_label_limitations.py` | Checks paper limitations for manual-label claim boundaries. |
 | `scripts/audit_verification_saturation.py` | Checks stored non-ablation pilots for ordinary verification-rate saturation. |
+| `scripts/audit_verification_behavior.py` | Checks saturated ordinary pilots for earlier and leaner verification behavior. |
 | `scripts/audit_metric_coverage.py` | Checks that experiment-design metrics are collected, summarized, exported to CSV, visible in aggregate Markdown, and explicit about nullable timing metrics. |
 | `scripts/audit_paired_effects.py` | Computes task-paired effect sizes, sign tests, and bootstrap CIs for RQ3 deltas. |
 | `scripts/audit_paired_effect_limitations.py` | Checks paired-effect evidence against pilot-scale and population-claim limitations. |
@@ -421,6 +423,14 @@ Verification saturation audit:
 PYTHONPATH=. python3 scripts/audit_verification_saturation.py \
   --json-output /tmp/verification-saturation-audit.json \
   --markdown-output /tmp/verification-saturation-audit.md
+```
+
+Verification behavior audit:
+
+```bash
+PYTHONPATH=. python3 scripts/audit_verification_behavior.py \
+  --json-output /tmp/verification-behavior-audit.json \
+  --markdown-output /tmp/verification-behavior-audit.md
 ```
 
 Reproducibility checklist audit:

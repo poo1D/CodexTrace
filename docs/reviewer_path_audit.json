@@ -154,6 +154,15 @@
     },
     {
       "covered": true,
+      "path": "docs/verification_behavior_audit.md",
+      "present_in": [
+        "README.md",
+        "docs/artifact_guide.md",
+        "docs/reproducibility_checklist.md"
+      ]
+    },
+    {
+      "covered": true,
       "path": "docs/headline_results.md",
       "present_in": [
         "README.md",
@@ -513,6 +522,7 @@
       "path": "docs/rq4_signal_audit.md",
       "present_in": [
         "README.md",
+        "docs/artifact_guide.md",
         "docs/reproducibility_checklist.md"
       ]
     },
@@ -584,11 +594,11 @@
     "boundary_checks": 6,
     "checklist_missing": 0,
     "core_step_count": 10,
-    "extended_step_count": 34,
+    "extended_step_count": 35,
     "guide_missing": 0,
     "missing": 0,
     "path_check_missing": 0,
     "path_checks": 6,
-    "required_files": 57
+    "required_files": 58
   }
 }

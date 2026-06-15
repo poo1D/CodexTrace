@@ -232,6 +232,7 @@ def check_paper_draft_content(path: Path = Path("docs/paper_draft.md")) -> dict[
         "label limitations audit link": "docs/label_limitations_audit.md",
         "limitations traceability audit link": "docs/limitations_traceability_audit.md",
         "verification saturation audit link": "docs/verification_saturation_audit.md",
+        "verification behavior audit link": "docs/verification_behavior_audit.md",
         "paired effects audit link": "docs/paired_effects_audit.md",
         "demo audit link": "docs/demo_audit.md",
         "web artifact audit link": "docs/web_artifact_audit.md",
@@ -478,6 +479,7 @@ def check_submission_package_content(path: Path = Path("docs/submission_package.
         "rq4 verdict anchor": "docs/rq4_signal_audit.md#RQ4 Signal Verdicts",
         "rq3 row": "| RQ3 | supported |",
         "required boundary": "ordinary verification-rate lift remains unsupported; no-verify lift is an ablation only",
+        "verification behavior audit": "docs/verification_behavior_audit.md",
         "unsupported claims": "## Unsupported Claims To Avoid",
         "verification overclaim guard": "Harness intervention increases verification rate.",
         "required reviewer files": "## Required Reviewer Files",
@@ -1039,6 +1041,42 @@ def check_verification_saturation_audit_content(path: Path = Path("docs/verifica
         "ok": not problems,
         "evidence": str(path),
         "detail": "stored non-ablation pilots are verification-saturated; no-verify ablation is mechanism-only",
+        "problems": problems,
+    }
+
+
+def check_verification_behavior_audit_content(path: Path = Path("docs/verification_behavior_audit.md")) -> dict[str, Any]:
+    problems = []
+    try:
+        text = path.read_text(encoding="utf-8")
+    except FileNotFoundError:
+        return {
+            "name": "verification behavior audit",
+            "ok": False,
+            "evidence": str(path),
+            "problems": ["missing verification behavior audit"],
+        }
+
+    required_phrases = {
+        "ready": "Ready: yes",
+        "saturated tiers": "Non-ablation tiers saturated: 6 / 6",
+        "earlier verification": "Non-ablation tiers with earlier verification: 6 / 6",
+        "leaner verify phase": "Non-ablation tiers with leaner verify phase: 6 / 6",
+        "claim boundary verdicts": "Claim Boundary Verdicts",
+        "unsupported rate lift": "Report verification-rate saturation, not ordinary verification-rate lift.",
+        "earlier process behavior": "Describe earlier verification as a process-behavior effect under saturated rates.",
+        "not deeper verification": "Use leaner verification path, not deeper verification.",
+        "mechanism only": "Use only as an artificial-baseline mechanism check.",
+    }
+    for label, phrase in required_phrases.items():
+        if phrase not in text:
+            problems.append(f"missing {label}")
+
+    return {
+        "name": "verification behavior audit",
+        "ok": not problems,
+        "evidence": str(path),
+        "detail": "saturated ordinary pilots show earlier and leaner verification behavior, not a rate lift",
         "problems": problems,
     }
 
@@ -1879,7 +1917,7 @@ def check_reproducibility_audit_content(path: Path = Path("docs/reproducibility_
 
     required_phrases = {
         "ready": "Ready: yes",
-        "coverage count": "Commands covered: 53 / 53",
+        "coverage count": "Commands covered: 54 / 54",
         "semantic coverage count": "Semantic phrases covered: 3 / 3",
         "balanced fences": "Markdown fences balanced: yes",
         "submission gate": "submission_readiness_gate",
@@ -2021,6 +2059,7 @@ def build_report(selection_dir: Path, run_dir: Path) -> dict[str, Any]:
         check_label_provenance_audit_content(),
         check_label_limitations_audit_content(),
         check_verification_saturation_audit_content(),
+        check_verification_behavior_audit_content(),
         check_metric_coverage_audit_content(),
         check_paired_effects_audit_content(),
         check_paired_effect_limitations_audit_content(),

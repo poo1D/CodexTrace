@@ -66,6 +66,7 @@ REQUIRED_COMMANDS = (
     {"id": "label_provenance_audit", "phrase": "scripts/audit_label_provenance.py"},
     {"id": "label_limitations_audit", "phrase": "scripts/audit_label_limitations.py"},
     {"id": "verification_saturation_audit", "phrase": "scripts/audit_verification_saturation.py"},
+    {"id": "verification_behavior_audit", "phrase": "scripts/audit_verification_behavior.py"},
     {"id": "submission_package", "phrase": "scripts/audit_submission_package.py"},
     {"id": "headline_results", "phrase": "scripts/audit_headline_results.py"},
     {"id": "verification_ablation_plan", "phrase": "scripts/audit_verification_ablation_plan.py"},

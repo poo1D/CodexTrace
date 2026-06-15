@@ -588,6 +588,9 @@ evaluation consistency,
 `docs/label_limitations_audit.md` for manual-label claim limits,
 `docs/verification_saturation_audit.md` for ordinary-baseline verification
 saturation and the no-verify ablation boundary,
+`docs/verification_behavior_audit.md` for showing that saturated ordinary
+pilots reach verification earlier and with fewer verify-phase events rather
+than with higher verification rate or deeper verification,
 `docs/paired_effects_audit.md` for paired RQ3 effect-size and uncertainty
 evidence, `docs/paired_effect_limitations_audit.md` for paired-effect
 population-claim limits,
