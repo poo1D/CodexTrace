@@ -11,7 +11,7 @@ This generated decision memo records how the original thesis should be revised g
 - Claim revision required: yes
 - Additional ordinary-baseline experiment required: no
 - Ordinary verification-rate lift supported: no
-- Recommended thesis: Coding-agent traces can diagnose observable multi-turn process failures and quantify harness-level waste reduction, but ordinary Codex baselines already verify on these small tasks, so verification-rate lift should be reported as a negative boundary result.
+- Recommended thesis: Coding-agent traces can diagnose observable multi-turn process failures and quantify harness-level waste reduction, but ordinary Codex baselines already verify on these small tasks with no observed rate headroom, so verification-rate lift should be reported as a negative boundary result.
 
 ## Claim Decisions
 
@@ -19,7 +19,7 @@ This generated decision memo records how the original thesis should be revised g
 | --- | --- | --- | --- |
 | `failure_taxonomy` | keep | Use the six-label process taxonomy as a contribution. | docs/failure_taxonomy.md contains 6 target process labels. |
 | `trace_rule_detection` | narrow | Claim trace-only rules detect observable process positives and expose hidden-semantic limits. | controlled detector fixtures cover 6 labels with micro-F1=1.00; hard30 repetitive_exploration detector has TP=4, FP=0, FN=0; full30 sandbox_permission_deadlock has TP=1, FP=0, FN=0; full30 process-label repetitive_exploration has FP=2; hidden_semantic_edge_case recall=0.00. |
-| `verification_rate_lift` | drop_as_finding | Report saturated ordinary baselines as a negative result and limitation. | hard30 verification delta is +0.00 and exact success-check delta is +0.00; process-stress verification delta is +0.00 and exact success-check delta is +0.00; verification-lift verification delta is +0.00 and exact success-check delta is +0.00; verification-lift-v2 verification delta is +0.00 and exact success-check delta is +0.00; stored ordinary/weak-baseline pilots are saturated. |
+| `verification_rate_lift` | drop_as_finding | Report saturated ordinary baselines as a negative result and headroom limitation. | hard30 verification delta is +0.00 and exact success-check delta is +0.00; process-stress verification delta is +0.00 and exact success-check delta is +0.00; verification-lift verification delta is +0.00 and exact success-check delta is +0.00; verification-lift-v2 verification delta is +0.00 and exact success-check delta is +0.00; stored ordinary/weak-baseline pilots are saturated. Headroom audit: 98 non-ablation baseline run(s), 0 without broad verification, 0 without exact success-check verification, empirical headroom=0.00; same-style ordinary expansion can close claim=no. |
 | `no_verify_ablation` | keep_as_mechanism_check | Use only as an auxiliary mechanism check, not as ordinary-baseline evidence. | mechanism check only; not an ordinary baseline |
 | `waste_reduction` | keep | Lead RQ3 with paired hard30 waste reduction and supporting pilots. | hard30 repeated tool calls change -3.73, token usage -98656.8; process-stress repeated tool calls change -0.92, token usage -23868.4; verification-lift repeated tool calls change -0.75, token usage -4661.8; verification-lift-v2 repeated tool calls change -3.12, token usage -39165.2. |
 | `success_lift` | qualify | Report hard10 lift as pilot-qualified and hard30 as flat. | hard10 success delta is +0.10; hard30 success delta is +0.00. |

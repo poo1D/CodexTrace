@@ -9,6 +9,7 @@ from typing import Any
 DEFAULT_THESIS_READINESS = Path("docs/thesis_readiness.json")
 DEFAULT_CLAIM_AUDIT = Path("docs/paper_claim_audit.json")
 DEFAULT_VERIFICATION_LIFT_DECISION = Path("docs/verification_lift_next_experiment.json")
+DEFAULT_VERIFICATION_LIFT_POWER = Path("docs/verification_lift_power_audit.json")
 DEFAULT_HEADLINE_RESULTS = Path("docs/headline_results.json")
 
 
@@ -16,16 +17,30 @@ def build_thesis_revision_decision(
     thesis_readiness_path: Path = DEFAULT_THESIS_READINESS,
     claim_audit_path: Path = DEFAULT_CLAIM_AUDIT,
     verification_lift_decision_path: Path = DEFAULT_VERIFICATION_LIFT_DECISION,
+    verification_lift_power_path: Path = DEFAULT_VERIFICATION_LIFT_POWER,
     headline_results_path: Path = DEFAULT_HEADLINE_RESULTS,
 ) -> dict[str, Any]:
     thesis = _read_json(thesis_readiness_path)
     claims = _read_json(claim_audit_path)
     verification = _read_json(verification_lift_decision_path)
+    verification_power = _read_json(verification_lift_power_path)
     headline = _read_json(headline_results_path)
 
     requirements = {row["id"]: row for row in thesis["requirements"]}
     claim_rows = {row["claim"]: row for row in claims["claims"]}
     headline_rows = {row["id"]: row for row in headline["rows"]}
+    power_summary = verification_power["summary"]
+    verification_drop_evidence = (
+        claim_rows["Harness intervention increases verification rate."]["evidence"]
+        + " "
+        + f"Headroom audit: {int(power_summary['baseline_runs'])} non-ablation baseline run(s), "
+        + f"{int(power_summary['baseline_unverified_broad'])} without broad verification, "
+        + f"{int(power_summary['baseline_unverified_exact'])} without exact success-check verification, "
+        + f"empirical headroom={float(power_summary['empirical_rate_headroom']):.2f}; "
+        + "same-style ordinary expansion can close claim="
+        + ("yes" if power_summary["ordinary_expansion_can_close_claim"] else "no")
+        + "."
+    )
 
     decision_rows = [
         {
@@ -46,8 +61,8 @@ def build_thesis_revision_decision(
             "id": "verification_rate_lift",
             "original_claim": "Harness intervention increases ordinary-baseline verification rate.",
             "decision": "drop_as_finding",
-            "paper_framing": "Report saturated ordinary baselines as a negative result and limitation.",
-            "evidence": claim_rows["Harness intervention increases verification rate."]["evidence"],
+            "paper_framing": "Report saturated ordinary baselines as a negative result and headroom limitation.",
+            "evidence": verification_drop_evidence,
         },
         {
             "id": "no_verify_ablation",
@@ -97,9 +112,12 @@ def build_thesis_revision_decision(
             "claim_revision_required": verification["claim_revision_required"],
             "additional_ordinary_baseline_experiment_required": verification["additional_ordinary_baseline_experiment_required"],
             "ordinary_verification_rate_lift_supported": headline["summary"]["ordinary_verification_rate_lift_supported"],
+            "verification_headroom_baseline_runs": int(power_summary["baseline_runs"]),
+            "verification_headroom_empirical_rate": float(power_summary["empirical_rate_headroom"]),
+            "ordinary_expansion_can_close_verification_claim": bool(power_summary["ordinary_expansion_can_close_claim"]),
             "recommended_thesis": (
                 "Coding-agent traces can diagnose observable multi-turn process failures and quantify harness-level waste reduction, "
-                "but ordinary Codex baselines already verify on these small tasks, so verification-rate lift should be reported as a negative boundary result."
+                "but ordinary Codex baselines already verify on these small tasks with no observed rate headroom, so verification-rate lift should be reported as a negative boundary result."
             ),
         },
         "decisions": decision_rows,
@@ -144,11 +162,12 @@ def _read_json(path: Path) -> dict[str, Any]:
 
 def main() -> int:
     parser = argparse.ArgumentParser(description="Generate the CodexTrace thesis-revision decision memo.")
+    parser.add_argument("--verification-lift-power", type=Path, default=DEFAULT_VERIFICATION_LIFT_POWER)
     parser.add_argument("--json-output", type=Path)
     parser.add_argument("--markdown-output", type=Path)
     args = parser.parse_args()
 
-    result = build_thesis_revision_decision()
+    result = build_thesis_revision_decision(verification_lift_power_path=args.verification_lift_power)
     if args.json_output:
         args.json_output.parent.mkdir(parents=True, exist_ok=True)
         args.json_output.write_text(json.dumps(result, indent=2, sort_keys=True) + "\n", encoding="utf-8")

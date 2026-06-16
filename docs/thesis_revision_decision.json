@@ -16,10 +16,10 @@
     },
     {
       "decision": "drop_as_finding",
-      "evidence": "hard30 verification delta is +0.00 and exact success-check delta is +0.00; process-stress verification delta is +0.00 and exact success-check delta is +0.00; verification-lift verification delta is +0.00 and exact success-check delta is +0.00; verification-lift-v2 verification delta is +0.00 and exact success-check delta is +0.00; stored ordinary/weak-baseline pilots are saturated.",
+      "evidence": "hard30 verification delta is +0.00 and exact success-check delta is +0.00; process-stress verification delta is +0.00 and exact success-check delta is +0.00; verification-lift verification delta is +0.00 and exact success-check delta is +0.00; verification-lift-v2 verification delta is +0.00 and exact success-check delta is +0.00; stored ordinary/weak-baseline pilots are saturated. Headroom audit: 98 non-ablation baseline run(s), 0 without broad verification, 0 without exact success-check verification, empirical headroom=0.00; same-style ordinary expansion can close claim=no.",
       "id": "verification_rate_lift",
       "original_claim": "Harness intervention increases ordinary-baseline verification rate.",
-      "paper_framing": "Report saturated ordinary baselines as a negative result and limitation."
+      "paper_framing": "Report saturated ordinary baselines as a negative result and headroom limitation."
     },
     {
       "decision": "keep_as_mechanism_check",
@@ -54,10 +54,13 @@
     "additional_ordinary_baseline_experiment_required": false,
     "claim_revision_required": true,
     "decision": "revise_to_boundary_result_paper",
+    "ordinary_expansion_can_close_verification_claim": false,
     "ordinary_verification_rate_lift_supported": false,
     "ready": true,
     "ready_for_boundary_result_paper": true,
     "ready_for_original_thesis": false,
-    "recommended_thesis": "Coding-agent traces can diagnose observable multi-turn process failures and quantify harness-level waste reduction, but ordinary Codex baselines already verify on these small tasks, so verification-rate lift should be reported as a negative boundary result."
+    "recommended_thesis": "Coding-agent traces can diagnose observable multi-turn process failures and quantify harness-level waste reduction, but ordinary Codex baselines already verify on these small tasks with no observed rate headroom, so verification-rate lift should be reported as a negative boundary result.",
+    "verification_headroom_baseline_runs": 98,
+    "verification_headroom_empirical_rate": 0.0
   }
 }

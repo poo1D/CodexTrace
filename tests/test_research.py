@@ -2150,12 +2150,19 @@ def test_thesis_revision_decision_records_boundary_result_reframe():
     assert result["summary"]["claim_revision_required"] is True
     assert result["summary"]["additional_ordinary_baseline_experiment_required"] is False
     assert result["summary"]["ordinary_verification_rate_lift_supported"] is False
+    assert result["summary"]["verification_headroom_baseline_runs"] == 98
+    assert result["summary"]["verification_headroom_empirical_rate"] == 0
+    assert result["summary"]["ordinary_expansion_can_close_verification_claim"] is False
     assert decisions["verification_rate_lift"]["decision"] == "drop_as_finding"
+    assert "Headroom audit: 98 non-ablation baseline run(s)" in decisions["verification_rate_lift"]["evidence"]
+    assert "same-style ordinary expansion can close claim=no" in decisions["verification_rate_lift"]["evidence"]
     assert decisions["no_verify_ablation"]["decision"] == "keep_as_mechanism_check"
     assert decisions["waste_reduction"]["decision"] == "keep"
     assert decisions["success_lift"]["decision"] == "qualify"
     assert "Decision: revise_to_boundary_result_paper" in markdown
     assert "Ordinary verification-rate lift supported: no" in markdown
+    assert "Headroom audit: 98 non-ablation baseline run(s)" in markdown
+    assert "same-style ordinary expansion can close claim=no" in markdown
     assert "drops the ordinary verification-rate-lift finding" in markdown
 
 
@@ -3041,6 +3048,7 @@ def test_submission_readiness_validates_thesis_revision_decision_content(tmp_pat
     assert check["ok"] is False
     assert "missing ready" in check["problems"]
     assert "missing decision" in check["problems"]
+    assert "missing headroom baseline runs" in check["problems"]
     assert "missing drop finding" in check["problems"]
 
 
