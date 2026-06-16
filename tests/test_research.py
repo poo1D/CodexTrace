@@ -2189,12 +2189,14 @@ def test_validity_threats_audit_maps_boundary_paper_limits():
     assert result["summary"]["boundary_decision"] == "revise_to_boundary_result_paper"
     assert result["summary"]["ordinary_verification_rate_lift_supported"] is False
     assert threats["construct_validity"]["paper_language"] == "Verification-rate lift is a negative boundary result, not a supported headline claim."
+    assert threats["detector_validity"]["paper_language"] == "Detector results are boundary results for observable process failures; hidden semantic recall is 0.00 with FN=30."
     assert threats["ablation_validity"]["paper_language"] == "No-verify ablation is not ordinary-baseline evidence."
     assert threats["external_validity"]["paper_language"] == "Results are pilot-scale and Codex-CLI-specific."
     assert "Threats covered: 7 / 7" in markdown
     assert "internal_validity" in markdown
     assert "construct_validity" in markdown
     assert "conclusion_validity" in markdown
+    assert "hidden semantic recall is 0.00 with FN=30" in markdown
 
 
 def test_limitations_traceability_audit_maps_validity_threats_into_paper():
@@ -2204,6 +2206,10 @@ def test_limitations_traceability_audit_maps_validity_threats_into_paper():
     assert result["summary"]["ready"] is True
     assert result["summary"]["covered_threat_count"] == 7
     assert result["summary"]["threat_count"] == 7
+    assert any(
+        row["id"] == "detector_validity" and row["paper_language_present"]
+        for row in result["threats"]
+    )
     assert {row["id"] for row in result["threats"]} >= {
         "internal_validity",
         "construct_validity",
@@ -2211,6 +2217,7 @@ def test_limitations_traceability_audit_maps_validity_threats_into_paper():
         "reproducibility_validity",
     }
     assert all(row["covered"] for row in result["threats"])
+    assert "hidden semantic recall is 0.00 with FN=30" in markdown
     assert "does not judge whether the prose is sufficient" in markdown
 
 

@@ -63,7 +63,7 @@ def build_validity_threats_audit(
             "threat": "Rule-based detectors are interpretable but incomplete and can miss hidden semantic edge cases.",
             "evidence": claim_rows["Trace-based process rules detect most failure processes."].get("evidence", ""),
             "mitigation": "Separate controlled-fixture detector coverage from natural real-pilot outcome detection.",
-            "paper_language": "Detector results are boundary results for observable process failures.",
+            "paper_language": "Detector results are boundary results for observable process failures; hidden semantic recall is 0.00 with FN=30.",
         },
         {
             "id": "ablation_validity",

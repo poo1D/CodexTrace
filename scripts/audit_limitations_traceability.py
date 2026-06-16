@@ -64,13 +64,14 @@ def render_limitations_traceability_markdown(result: dict[str, Any]) -> str:
         "",
         "## Threat Coverage",
         "",
-        "| Threat | ID | Paper language | Covered |",
-        "| --- | --- | --- | --- |",
+        "| Threat | ID | Paper language present | Paper language | Covered |",
+        "| --- | --- | --- | --- | --- |",
     ]
     for row in result["threats"]:
         lines.append(
             f"| `{row['id']}` | {'yes' if row['id_present'] else 'no'} | "
-            f"{'yes' if row['paper_language_present'] else 'no'} | {'yes' if row['covered'] else 'no'} |"
+            f"{'yes' if row['paper_language_present'] else 'no'} | {row['paper_language']} | "
+            f"{'yes' if row['covered'] else 'no'} |"
         )
     lines.extend([
         "",

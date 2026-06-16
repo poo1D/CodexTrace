@@ -39,7 +39,7 @@
       "covered": true,
       "id": "detector_validity",
       "id_present": true,
-      "paper_language": "Detector results are boundary results for observable process failures.",
+      "paper_language": "Detector results are boundary results for observable process failures; hidden semantic recall is 0.00 with FN=30.",
       "paper_language_present": true
     },
     {

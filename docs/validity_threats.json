@@ -40,7 +40,7 @@
       "evidence": "controlled detector fixtures cover 6 labels with micro-F1=1.00; hard30 includes 4 detected repetitive-exploration process positives (F1=1.00); full30 includes sandbox/permission TP=1, FP=0, FN=0, with 2 repetitive-exploration FP in the process-label slice. Hidden semantic recall is 0.00 with FN=30; process-stress hidden semantic FN=2; verification-lift hidden semantic FN=2.",
       "id": "detector_validity",
       "mitigation": "Separate controlled-fixture detector coverage from natural real-pilot outcome detection.",
-      "paper_language": "Detector results are boundary results for observable process failures.",
+      "paper_language": "Detector results are boundary results for observable process failures; hidden semantic recall is 0.00 with FN=30.",
       "threat": "Rule-based detectors are interpretable but incomplete and can miss hidden semantic edge cases."
     },
     {

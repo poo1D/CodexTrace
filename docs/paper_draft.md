@@ -588,7 +588,7 @@ reproducibility threats, and ties each one to evidence and safe paper wording.
 | `construct_validity` | Verification-rate lift is a negative boundary result, not a supported headline claim. |
 | `external_validity` | Results are pilot-scale and Codex-CLI-specific. |
 | `conclusion_validity` | Waste reduction is the strongest current RQ3 result; success lift remains pilot-qualified. |
-| `detector_validity` | Detector results are boundary results for observable process failures. |
+| `detector_validity` | Detector results are boundary results for observable process failures; hidden semantic recall is 0.00 with FN=30. |
 | `ablation_validity` | No-verify ablation is not ordinary-baseline evidence. |
 | `reproducibility_validity` | The artifact is reproducible for offline analysis, while new live collections may vary. |
 

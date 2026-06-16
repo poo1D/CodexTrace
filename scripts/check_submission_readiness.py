@@ -637,6 +637,7 @@ def check_validity_threats_content(path: Path = Path("docs/validity_threats.md")
         "external validity": "external_validity",
         "conclusion validity": "conclusion_validity",
         "detector validity": "detector_validity",
+        "detector semantic fn": "hidden semantic recall is 0.00 with FN=30",
         "ablation validity": "ablation_validity",
         "reproducibility validity": "reproducibility_validity",
         "verification boundary": "Ordinary verification-rate lift supported: no",
@@ -672,6 +673,7 @@ def check_limitations_traceability_audit_content(path: Path = Path("docs/limitat
         "internal validity": "`internal_validity`",
         "construct validity": "`construct_validity`",
         "ablation validity": "`ablation_validity`",
+        "detector semantic fn": "hidden semantic recall is 0.00 with FN=30",
         "venue caveat": "does not judge whether the prose is sufficient",
     }
     for label, phrase in required_phrases.items():
