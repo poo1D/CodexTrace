@@ -19,6 +19,18 @@ DEFAULT_RUNS = Path("benchmark/hard/pilot/hard30-real/runs.jsonl")
 DEFAULT_LABELS = Path("benchmark/hard/pilot/hard30-real/manual-labels.jsonl")
 DEFAULT_RUN_DIR = Path("benchmark/hard/pilot/hard30-real")
 PROMPT_TYPES = ("baseline", "intervention")
+RUN_PROVENANCE_FIELDS = (
+    "task_id",
+    "prompt_type",
+    "outcome",
+    "trace_path",
+    "prompt_path",
+    "success_check",
+    "success_check_exit_code",
+    "codex_exit_code",
+    "grader_path",
+    "workdir",
+)
 
 
 def build_benchmark_trace_artifact_audit(
@@ -42,6 +54,9 @@ def build_benchmark_trace_artifact_audit(
     trace_rows = []
     for row in runs:
         trace_path = run_dir / str(row.get("trace_path", ""))
+        manifest_prompt_path = run_dir / str(row.get("prompt_path", ""))
+        manifest_grader_path = run_dir / str(row.get("grader_path", ""))
+        manifest_workdir = run_dir / str(row.get("workdir", ""))
         exists = trace_path.exists()
         event_lines = _count_nonempty_lines(trace_path) if exists else 0
         parsed_events = 0
@@ -70,8 +85,13 @@ def build_benchmark_trace_artifact_audit(
             "diagnosis_outcome": diagnosis_outcome,
             "parse_error": parse_error,
             "prompt_exists": prompt_path.exists(),
+            "manifest_prompt_exists": manifest_prompt_path.exists(),
             "success_check_exists": success_check_path.exists(),
             "stderr_exists": stderr_path.exists(),
+            "manifest_grader_exists": manifest_grader_path.exists(),
+            "manifest_workdir_exists": manifest_workdir.exists(),
+            "success_check_recorded": bool(row.get("success_check")),
+            "codex_exit_code_recorded": row.get("codex_exit_code") is not None,
             "sidecars_complete": prompt_path.exists() and success_check_path.exists() and stderr_path.exists(),
         })
 
@@ -117,6 +137,13 @@ def build_benchmark_trace_artifact_audit(
     trace_rows_ready = len(trace_rows) == 60 and all(row["nonempty"] for row in trace_rows)
     trace_parse_ready = len(trace_rows) == 60 and all(row["parseable"] for row in trace_rows)
     trace_sidecars_ready = len(trace_rows) == 60 and all(row["sidecars_complete"] for row in trace_rows)
+    manifest_provenance_ready = (
+        len(runs) == 60
+        and all(all(field in row for field in RUN_PROVENANCE_FIELDS) for row in runs)
+        and all(row["manifest_prompt_exists"] for row in trace_rows)
+        and all(row["success_check_recorded"] for row in trace_rows)
+        and all(row["codex_exit_code_recorded"] for row in trace_rows)
+    )
     label_rows_ready = (
         len(labels) == 60
         and not missing_label_keys
@@ -158,6 +185,7 @@ def build_benchmark_trace_artifact_audit(
                 and trace_rows_ready
                 and trace_parse_ready
                 and trace_sidecars_ready
+                and manifest_provenance_ready
                 and label_rows_ready
                 and prompt_type_balance_ready
             ),
@@ -172,6 +200,18 @@ def build_benchmark_trace_artifact_audit(
             "parsed_trace_events": sum(row["parsed_events"] for row in trace_rows),
             "diagnosed_trace_count": sum(1 for row in trace_rows if row["diagnosis_outcome"]),
             "trace_sidecar_count": sum(1 for row in trace_rows if row["sidecars_complete"]),
+            "manifest_provenance_field_count": sum(
+                1
+                for row in runs
+                for field in RUN_PROVENANCE_FIELDS
+                if field in row
+            ),
+            "manifest_provenance_field_expected_count": len(runs) * len(RUN_PROVENANCE_FIELDS),
+            "manifest_prompt_path_count": sum(1 for row in trace_rows if row["manifest_prompt_exists"]),
+            "manifest_grader_path_count": sum(1 for row in trace_rows if row["manifest_grader_exists"]),
+            "manifest_workdir_count": sum(1 for row in trace_rows if row["manifest_workdir_exists"]),
+            "success_check_recorded_count": sum(1 for row in trace_rows if row["success_check_recorded"]),
+            "codex_exit_code_recorded_count": sum(1 for row in trace_rows if row["codex_exit_code_recorded"]),
             "label_count": len(labels),
             "labeled_failure_count": len(labeled_failure_rows),
             "outcome_rows_with_grader_count": len(outcome_rows),
@@ -180,6 +220,7 @@ def build_benchmark_trace_artifact_audit(
             "trace_rows_ready": trace_rows_ready,
             "trace_parse_ready": trace_parse_ready,
             "trace_sidecars_ready": trace_sidecars_ready,
+            "manifest_provenance_ready": manifest_provenance_ready,
             "label_rows_ready": label_rows_ready,
             "prompt_type_balance_ready": prompt_type_balance_ready,
             "tasks_path": str(tasks_path),
@@ -218,6 +259,10 @@ def render_benchmark_trace_artifact_markdown(result: dict[str, Any]) -> str:
         f"- Parsed trace events: {summary['parsed_trace_events']}",
         f"- Diagnosable traces: {summary['diagnosed_trace_count']} / {summary['trace_count']}",
         f"- Trace sidecar bundles: {summary['trace_sidecar_count']} / {summary['trace_count']}",
+        f"- Run manifest provenance fields: {summary['manifest_provenance_field_count']} / {summary['manifest_provenance_field_expected_count']}",
+        f"- Manifest prompt paths present: {summary['manifest_prompt_path_count']} / {summary['trace_count']}",
+        f"- Manifest success checks recorded: {summary['success_check_recorded_count']} / {summary['trace_count']}",
+        f"- Manifest Codex exit codes recorded: {summary['codex_exit_code_recorded_count']} / {summary['trace_count']}",
         f"- Outcome rows with grader results: {summary['outcome_rows_with_grader_count']} / 60",
         f"- Manual label rows: {summary['label_count']} / 60",
         f"- Labeled failure rows: {summary['labeled_failure_count']}",
@@ -226,11 +271,29 @@ def render_benchmark_trace_artifact_markdown(result: dict[str, Any]) -> str:
         f"- Run manifest: `{summary['runs_path']}`",
         f"- Manual labels: `{summary['labels_path']}`",
         "",
+        "## Run Manifest Provenance",
+        "",
+        "| Field | Rows with field | Committed path exists | Notes |",
+        "| --- | ---: | ---: | --- |",
+    ]
+    provenance_rows = [
+        ("trace_path", summary["run_count"], summary["nonempty_trace_count"], "raw `codex exec --json` trace"),
+        ("prompt_path", summary["run_count"], summary["manifest_prompt_path_count"], "prompt used for the run"),
+        ("success_check", summary["success_check_recorded_count"], "-", "visible command recorded in manifest"),
+        ("codex_exit_code", summary["codex_exit_code_recorded_count"], "-", "Codex process exit status recorded in manifest"),
+        ("grader_path", summary["run_count"], summary["manifest_grader_path_count"], "hidden-grader path reference; grader directory is not committed"),
+        ("workdir", summary["run_count"], summary["manifest_workdir_count"], "run worktree path reference; mutable workdir is not committed"),
+    ]
+    for field, rows_with_field, path_count, notes in provenance_rows:
+        lines.append(f"| `{field}` | {rows_with_field} | {path_count} | {notes} |")
+
+    lines.extend([
+        "",
         "## Category Counts",
         "",
         "| Category | Tasks |",
         "| --- | ---: |",
-    ]
+    ])
     for category, count in result["category_counts"].items():
         lines.append(f"| `{category}` | {count} |")
 
@@ -267,7 +330,7 @@ def render_benchmark_trace_artifact_markdown(result: dict[str, Any]) -> str:
         f"- Missing label keys: {len(result['missing_label_keys'])}",
         f"- Extra label keys: {len(result['extra_label_keys'])}",
         "",
-        "Interpretation: this audit proves the committed hard30 paper artifact has paired task/run/trace/label records. It does not rerun Codex or hidden graders.",
+        "Interpretation: this audit proves the committed hard30 paper artifact has paired task/run/trace/label records and run-manifest provenance for trace, prompt, success-check, outcome, and Codex exit status. It does not rerun Codex or hidden graders, and it treats grader/workdir paths as provenance references rather than committed directories.",
     ])
     return "\n".join(lines) + "\n"
 

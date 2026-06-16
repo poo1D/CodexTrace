@@ -1512,6 +1512,13 @@ def test_benchmark_trace_artifact_audit_covers_hard30_pairs_and_traces():
     assert result["summary"]["parseable_trace_count"] == 60
     assert result["summary"]["diagnosed_trace_count"] == 60
     assert result["summary"]["trace_sidecar_count"] == 60
+    assert result["summary"]["manifest_provenance_field_count"] == 600
+    assert result["summary"]["manifest_provenance_field_expected_count"] == 600
+    assert result["summary"]["manifest_prompt_path_count"] == 60
+    assert result["summary"]["success_check_recorded_count"] == 60
+    assert result["summary"]["codex_exit_code_recorded_count"] == 60
+    assert result["summary"]["manifest_grader_path_count"] == 0
+    assert result["summary"]["manifest_workdir_count"] == 0
     assert result["summary"]["label_count"] == 60
     assert result["summary"]["outcome_rows_with_grader_count"] == 60
     assert result["summary"]["prompt_type_balance_ready"] is True
@@ -1534,6 +1541,9 @@ def test_benchmark_trace_artifact_audit_covers_hard30_pairs_and_traces():
     assert result["summary"]["parsed_trace_events"] > 0
     assert "Parseable traces: 60 / 60" in markdown
     assert "Trace sidecar bundles: 60 / 60" in markdown
+    assert "Run Manifest Provenance" in markdown
+    assert "Run manifest provenance fields: 600 / 600" in markdown
+    assert "| `grader_path` | 60 | 0 | hidden-grader path reference; grader directory is not committed |" in markdown
     assert "Prompt-type balance ready: yes" in markdown
     assert "| `baseline` | 30 | 30 | 30 | 30 | 30 | yes |" in markdown
     assert "| `intervention` | 30 | 30 | 30 | 30 | 30 | yes |" in markdown
@@ -2493,6 +2503,8 @@ def test_paper_draft_contains_submission_polish_sections():
     assert "docs/submission_package.md" in text
     assert "docs/paper_number_guard.md" in text
     assert "docs/task_category_coverage.md" in text
+    assert "run-manifest provenance" in text
+    assert "grader and workdir paths are retained as manifest references rather than committed directories" in text
     assert "docs/harness_protocol_audit.md" in text
     assert "docs/failure_taxonomy_audit.md" in text
     assert "docs/related_work_audit.md" in text

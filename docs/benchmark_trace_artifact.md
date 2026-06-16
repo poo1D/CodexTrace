@@ -15,6 +15,10 @@ This generated audit checks that the paper-facing hard30 benchmark has paired ba
 - Parsed trace events: 2074
 - Diagnosable traces: 60 / 60
 - Trace sidecar bundles: 60 / 60
+- Run manifest provenance fields: 600 / 600
+- Manifest prompt paths present: 60 / 60
+- Manifest success checks recorded: 60 / 60
+- Manifest Codex exit codes recorded: 60 / 60
 - Outcome rows with grader results: 60 / 60
 - Manual label rows: 60 / 60
 - Labeled failure rows: 30
@@ -22,6 +26,17 @@ This generated audit checks that the paper-facing hard30 benchmark has paired ba
 - Tasks manifest: `benchmark/hard/pilot/hard30-selection/tasks.jsonl`
 - Run manifest: `benchmark/hard/pilot/hard30-real/runs.jsonl`
 - Manual labels: `benchmark/hard/pilot/hard30-real/manual-labels.jsonl`
+
+## Run Manifest Provenance
+
+| Field | Rows with field | Committed path exists | Notes |
+| --- | ---: | ---: | --- |
+| `trace_path` | 60 | 60 | raw `codex exec --json` trace |
+| `prompt_path` | 60 | 60 | prompt used for the run |
+| `success_check` | 60 | - | visible command recorded in manifest |
+| `codex_exit_code` | 60 | - | Codex process exit status recorded in manifest |
+| `grader_path` | 60 | 0 | hidden-grader path reference; grader directory is not committed |
+| `workdir` | 60 | 0 | run worktree path reference; mutable workdir is not committed |
 
 ## Category Counts
 
@@ -61,4 +76,4 @@ This generated audit checks that the paper-facing hard30 benchmark has paired ba
 - Missing label keys: 0
 - Extra label keys: 0
 
-Interpretation: this audit proves the committed hard30 paper artifact has paired task/run/trace/label records. It does not rerun Codex or hidden graders.
+Interpretation: this audit proves the committed hard30 paper artifact has paired task/run/trace/label records and run-manifest provenance for trace, prompt, success-check, outcome, and Codex exit status. It does not rerun Codex or hidden graders, and it treats grader/workdir paths as provenance references rather than committed directories.

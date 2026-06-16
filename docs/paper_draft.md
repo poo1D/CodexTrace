@@ -609,7 +609,8 @@ The RQ-level claim-boundary verdict tables are
 `docs/rq4_signal_audit.md#RQ4 Signal Verdicts`,
 `docs/metric_coverage_audit.md` for experiment-metric coverage,
 `docs/benchmark_trace_artifact.md` for hard30 task/run/trace/manual-label
-completeness,
+completeness and run-manifest provenance; committed traces and prompts are
+present for all 60 hard30 runs, while grader and workdir paths are retained as manifest references rather than committed directories,
 `docs/label_provenance_audit.md` for hard30 label-file provenance and
 evaluation consistency,
 `docs/label_limitations_audit.md` for manual-label claim limits,
