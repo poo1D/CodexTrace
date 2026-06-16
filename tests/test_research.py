@@ -2461,6 +2461,8 @@ def test_paper_draft_contains_submission_polish_sections():
     assert "## 10. Artifact Availability" in text
     assert "| Work line | Primary question | Typical evidence | CodexTrace difference |" in text
     assert "| Tier | Tasks | Runs | Baseline | Intervention | Outcome oracle | Primary use |" in text
+    assert "| Design coverage slice | Covered design families | Missing design families | Use in paper |" in text
+    assert "| hard30 paper-facing tier | 6 / 7 | `test_writing` |" in text
     assert "| Schema object | Fields | Purpose |" in text
     assert "| Paper field | Implementation source | Notes |" in text
     assert "`Step.event_type`" in text

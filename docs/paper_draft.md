@@ -288,6 +288,15 @@ back to the original design families it covers six of seven families, with
 `test_writing` covered only by the seed tier and treated as a hard-tier
 coverage boundary.
 
+The generated task-category coverage audit keeps this boundary explicit rather
+than silently folding all tiers together:
+
+| Design coverage slice | Covered design families | Missing design families | Use in paper |
+| --- | ---: | --- | --- |
+| seed benchmark | 7 / 7 | - | Shows the original 30-task benchmark covers every planned task type, including `test_writing`. |
+| hard pool family mapping | 6 / 7 | `test_writing` | Expands difficulty and hidden-oracle coverage without claiming direct test-writing coverage. |
+| hard30 paper-facing tier | 6 / 7 | `test_writing` | Supports hard-tier RQ3/RQ4 boundary results; `test_writing` remains seed-only. |
+
 ### Measurement
 
 The experiment design tracks both final outcomes and process-level waste. Each

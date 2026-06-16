@@ -218,6 +218,8 @@ def check_paper_draft_content(path: Path = Path("docs/paper_draft.md")) -> dict[
         "artifact availability section": "## 10. Artifact Availability",
         "related-work positioning matrix": "| Work line | Primary question | Typical evidence | CodexTrace difference |",
         "dataset construction table": "| Tier | Tasks | Runs | Baseline | Intervention | Outcome oracle | Primary use |",
+        "task coverage matrix": "| Design coverage slice | Covered design families | Missing design families | Use in paper |",
+        "hard30 test writing boundary": "| hard30 paper-facing tier | 6 / 7 | `test_writing` |",
         "trace schema table": "| Schema object | Fields | Purpose |",
         "paper schema mapping": "| Paper field | Implementation source | Notes |",
         "step event type field": "`Step.event_type`",
