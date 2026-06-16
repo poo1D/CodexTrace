@@ -489,6 +489,7 @@ def check_submission_package_content(path: Path = Path("docs/submission_package.
         "rq4 verdict anchor": "docs/rq4_signal_audit.md#RQ4 Signal Verdicts",
         "rq3 row": "| RQ3 | supported |",
         "required boundary": "ordinary verification-rate lift remains unsupported; no-verify lift is an ablation only",
+        "verification lift power audit": "docs/verification_lift_power_audit.md",
         "verification behavior audit": "docs/verification_behavior_audit.md",
         "unsupported claims": "## Unsupported Claims To Avoid",
         "verification overclaim guard": "Harness intervention increases verification rate.",
@@ -1061,6 +1062,44 @@ def check_verification_saturation_audit_content(path: Path = Path("docs/verifica
         "ok": not problems,
         "evidence": str(path),
         "detail": "stored non-ablation pilots are verification-saturated; no-verify ablation is mechanism-only",
+        "problems": problems,
+    }
+
+
+def check_verification_lift_power_audit_content(path: Path = Path("docs/verification_lift_power_audit.md")) -> dict[str, Any]:
+    problems = []
+    try:
+        text = path.read_text(encoding="utf-8")
+    except FileNotFoundError:
+        return {
+            "name": "verification-lift power audit",
+            "ok": False,
+            "evidence": str(path),
+            "problems": ["missing verification-lift power audit"],
+        }
+
+    required_phrases = {
+        "ready": "Ready: yes",
+        "baseline run count": "Baseline runs: 98",
+        "broad unverified zero": "Baseline runs without broad verification: 0",
+        "exact unverified zero": "Baseline runs without exact success-check verification: 0",
+        "empirical headroom zero": "Empirical verification-rate headroom: 0.00",
+        "rule-of-three bound": "Rule-of-three nonverification upper bound: 0.031",
+        "expected delta": "Expected headline verification delta: 0.32",
+        "expected table incompatible": "Expected 51% -> 83% table compatible: no",
+        "ordinary expansion boundary": "Ordinary expansion can close current claim without non-saturated baseline evidence: no",
+        "closure condition": "non_saturated_ordinary_baseline",
+        "stopping rule": "not a substitute for a new positive experiment",
+    }
+    for label, phrase in required_phrases.items():
+        if phrase not in text:
+            problems.append(f"missing {label}")
+
+    return {
+        "name": "verification-lift power audit",
+        "ok": not problems,
+        "evidence": str(path),
+        "detail": "quantifies saturated baseline headroom for the original verification-rate-lift claim",
         "problems": problems,
     }
 
@@ -2084,6 +2123,7 @@ def build_report(selection_dir: Path, run_dir: Path) -> dict[str, Any]:
         check_label_provenance_audit_content(),
         check_label_limitations_audit_content(),
         check_verification_saturation_audit_content(),
+        check_verification_lift_power_audit_content(),
         check_verification_behavior_audit_content(),
         check_metric_coverage_audit_content(),
         check_paired_effects_audit_content(),

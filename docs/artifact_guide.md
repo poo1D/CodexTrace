@@ -134,6 +134,7 @@ npm run dev
 | Are manual labels provenance-consistent? | `docs/label_provenance_audit.md` |
 | Are manual-label limitations explicit? | `docs/label_limitations_audit.md` |
 | Why is verification lift not a finding? | `docs/verification_saturation_audit.md` |
+| Is there verification-rate headroom for the original expected table? | `docs/verification_lift_power_audit.md` |
 | RQ3: Do harness interventions help? | `docs/paired_effects_audit.md` RQ3 Claim Boundary Verdicts, `docs/results_summary.md` RQ3 tables |
 | What changes when verification rate is saturated? | `docs/verification_behavior_audit.md` |
 | Are RQ3 deltas task-paired with uncertainty? | `docs/paired_effects_audit.md` |

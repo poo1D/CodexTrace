@@ -86,6 +86,8 @@ original expected-results sketch with stored evidence,
 `docs/submission_readiness_plan_audit.md` for stronger-submission plan guardrails,
 `docs/verification_saturation_audit.md` for the generated
 ordinary-baseline verification-saturation proof,
+`docs/verification_lift_power_audit.md` for verification-rate headroom and
+expected-table incompatibility,
 `docs/verification_behavior_audit.md` for the saturated-rate verification
 behavior audit, `docs/rq4_signal_audit.md`
 for the generated boundary-style signal audit, `docs/metric_coverage_audit.md` for experiment
@@ -198,6 +200,7 @@ Key files:
 - `scripts/audit_expected_results_reconciliation.py`: checks paper-facing files use stored headline evidence instead of the expected-results sketch
 - `scripts/audit_submission_readiness_plan.py`: checks stronger-submission plan wording against current readiness and remaining evidence gaps
 - `scripts/audit_verification_saturation.py`: checks stored non-ablation pilots for ordinary verification-rate saturation
+- `scripts/audit_verification_lift_power.py`: checks ordinary-baseline verification-rate headroom and expected-table compatibility
 - `scripts/audit_verification_behavior.py`: checks saturated ordinary pilots for earlier and leaner verification behavior
 - `scripts/audit_paper_numbers.py`: checks paper-draft numeric claims against stored aggregate artifacts
 - `scripts/audit_reviewer_path.py`: checks required reviewer files are discoverable from paper-facing entry points
@@ -243,6 +246,7 @@ Key files:
 - `docs/limitations_traceability_audit.md`: generated audit linking paper limitations to validity-threat safe wording
 - `docs/expected_results_reconciliation.md`: generated audit proving paper-facing files use actual headline evidence instead of expected-results numbers
 - `docs/verification_saturation_audit.md`: generated audit for ordinary-baseline verification saturation and ablation boundary
+- `docs/verification_lift_power_audit.md`: generated audit for ordinary-baseline verification-rate headroom and original expected-table incompatibility
 - `docs/verification_behavior_audit.md`: generated audit for saturated-rate verification behavior
 - `docs/verification_lift_next_experiment.md`: generated audit for ordinary-baseline verification-lift claim closure and thesis-revision status
 - `docs/headline_results.md`: generated compact actual headline table replacing the expected-results sketch
@@ -414,6 +418,7 @@ PYTHONPATH=. python3 scripts/audit_artifact_guide_sequence.py --markdown-output 
 PYTHONPATH=. python3 scripts/audit_label_provenance.py --markdown-output docs/label_provenance_audit.md
 PYTHONPATH=. python3 scripts/audit_label_limitations.py --markdown-output docs/label_limitations_audit.md
 PYTHONPATH=. python3 scripts/audit_verification_saturation.py --markdown-output docs/verification_saturation_audit.md
+PYTHONPATH=. python3 scripts/audit_verification_lift_power.py --markdown-output docs/verification_lift_power_audit.md
 PYTHONPATH=. python3 scripts/audit_verification_behavior.py --markdown-output docs/verification_behavior_audit.md
 PYTHONPATH=. python3 scripts/audit_reproducibility.py --markdown-output docs/reproducibility_audit.md
 ```

@@ -88,6 +88,10 @@ from scripts.audit_verification_behavior import (
     build_verification_behavior_audit,
     render_verification_behavior_markdown,
 )
+from scripts.audit_verification_lift_power import (
+    build_verification_lift_power_audit,
+    render_verification_lift_power_markdown,
+)
 from scripts.audit_verification_lift_next_experiment import (
     build_verification_lift_next_experiment_audit,
     render_verification_lift_next_experiment_markdown,
@@ -158,6 +162,7 @@ from scripts.check_submission_readiness import (
     check_validity_threats_content,
     check_verification_ablation_plan_audit_content,
     check_verification_behavior_audit_content,
+    check_verification_lift_power_audit_content,
     check_verification_saturation_audit_content,
     check_verification_lift_next_experiment_content,
     render_report,
@@ -2557,6 +2562,7 @@ def test_reviewer_docs_surface_hard30_task_diagnosis():
     assert "docs/expected_results_reconciliation.md" in readme
     assert "docs/submission_readiness_plan_audit.md" in readme
     assert "docs/verification_saturation_audit.md" in readme
+    assert "docs/verification_lift_power_audit.md" in readme
     assert "docs/paper_abstract_audit.md" in readme
     assert "docs/paper_contribution_audit.md" in readme
     assert "docs/paper_conclusion_audit.md" in readme
@@ -2610,6 +2616,7 @@ def test_reviewer_docs_surface_hard30_task_diagnosis():
     assert "scripts/audit_expected_results_reconciliation.py --markdown-output docs/expected_results_reconciliation.md" in readme
     assert "scripts/audit_submission_readiness_plan.py --markdown-output docs/submission_readiness_plan_audit.md" in readme
     assert "scripts/audit_verification_saturation.py --markdown-output docs/verification_saturation_audit.md" in readme
+    assert "scripts/audit_verification_lift_power.py --markdown-output docs/verification_lift_power_audit.md" in readme
     assert "scripts/audit_verification_behavior.py --markdown-output docs/verification_behavior_audit.md" in readme
     assert "scripts/audit_paper_abstract.py --markdown-output docs/paper_abstract_audit.md" in readme
     assert "scripts/audit_paper_contributions.py --markdown-output docs/paper_contribution_audit.md" in readme
@@ -2656,6 +2663,8 @@ def test_reviewer_docs_surface_hard30_task_diagnosis():
     assert "docs/limitations_traceability_audit.md" in guide
     assert "docs/expected_results_reconciliation.md" in guide
     assert "docs/verification_saturation_audit.md" in guide
+    assert "docs/verification_lift_power_audit.md" in guide
+    assert "Is there verification-rate headroom for the original expected table?" in guide
     assert "docs/paper_abstract_audit.md" in guide
     assert "docs/paper_contribution_audit.md" in guide
     assert "docs/paper_conclusion_audit.md" in guide
@@ -2707,6 +2716,7 @@ def test_reviewer_docs_surface_hard30_task_diagnosis():
     assert "scripts/audit_expected_results_reconciliation.py" in checklist
     assert "scripts/audit_submission_readiness_plan.py" in checklist
     assert "scripts/audit_verification_saturation.py" in checklist
+    assert "scripts/audit_verification_lift_power.py" in checklist
     assert "scripts/audit_verification_behavior.py" in checklist
     assert "scripts/audit_paper_abstract.py" in checklist
     assert "scripts/audit_paper_contributions.py" in checklist
@@ -2907,6 +2917,7 @@ def test_submission_package_maps_rqs_to_safe_paper_claims():
     assert "docs/label_provenance_audit.md" in package["required_files"]
     assert "docs/label_limitations_audit.md" in package["required_files"]
     assert "docs/verification_saturation_audit.md" in package["required_files"]
+    assert "docs/verification_lift_power_audit.md" in package["required_files"]
     assert "docs/metric_coverage_audit.md" in package["required_files"]
     assert "docs/paired_effects_audit.md" in package["required_files"]
     assert "docs/paired_effect_limitations_audit.md" in package["required_files"]
@@ -2937,6 +2948,7 @@ def test_submission_package_maps_rqs_to_safe_paper_claims():
     assert verdict_tables["RQ4"] == "docs/rq4_signal_audit.md#RQ4 Signal Verdicts"
     assert package["rq_rows"][2]["status"] == "supported"
     assert "ordinary verification-rate lift is unsupported" in package["rq_rows"][2]["claim_boundary"]
+    assert "docs/verification_lift_power_audit.md" in package["rq_rows"][2]["primary_evidence"]
     assert "docs/verification_behavior_audit.md" in package["rq_rows"][2]["primary_evidence"]
     assert any(row["claim"] == "Harness intervention increases verification rate." for row in package["unsupported_claims"])
     assert "verification-lift-v2 verification delta is +0.00" in markdown
@@ -3747,6 +3759,35 @@ def test_verification_saturation_audit_bounds_ordinary_lift_claim():
     assert result["ablation"]["verification_delta"] == 1
     assert result["ablation"]["success_check_verification_delta"] == 1
     assert "cannot close the ordinary-baseline claim" in markdown
+
+
+def test_verification_lift_power_audit_quantifies_saturated_headroom():
+    result = build_verification_lift_power_audit()
+    markdown = render_verification_lift_power_markdown(result)
+    summary = result["summary"]
+
+    assert summary["ready"] is True
+    assert summary["baseline_runs"] == 98
+    assert summary["baseline_unverified_broad"] == 0
+    assert summary["baseline_unverified_exact"] == 0
+    assert summary["empirical_rate_headroom"] == 0
+    assert summary["expected_table_compatible"] is False
+    assert summary["ordinary_expansion_can_close_claim"] is False
+    assert summary["rule_of_three_nonverification_upper_bound"] < summary["expected_table_delta"]
+    assert "Expected 51% -> 83% table compatible: no" in markdown
+    assert "0/98 broad baseline runs lack verification" in markdown
+    assert "not a substitute for a new positive experiment" in markdown
+
+
+def test_submission_readiness_validates_verification_lift_power_audit_content(tmp_path):
+    broken = tmp_path / "verification_lift_power_audit.md"
+    broken.write_text("# Missing\n", encoding="utf-8")
+
+    check = check_verification_lift_power_audit_content(broken)
+
+    assert check["ok"] is False
+    assert "missing baseline run count" in check["problems"]
+    assert "missing expected table incompatible" in check["problems"]
 
 
 def test_submission_readiness_validates_verification_lift_next_experiment_content(tmp_path):

@@ -396,7 +396,11 @@ Table 4 summarizes the paper-facing result in the compact form implied by the
 thesis. The current evidence supports success improvement only in the early
 hard10 pilot, supports waste reduction most strongly on hard30, and gives a
 negative result for verification-rate lift under ordinary or weak-baseline
-conditions.
+conditions. A headroom audit over the stored non-ablation pilots finds 98 / 98
+baseline runs with broad and exact visible-success-check verification, so the
+original expected verification-rate table is incompatible with the current
+evidence unless a future ordinary-baseline design first produces non-saturated
+baseline behavior.
 
 | Evidence slice | Baseline | Intervention | Interpretation |
 | --- | ---: | ---: | --- |
@@ -616,6 +620,9 @@ evaluation consistency,
 `docs/label_limitations_audit.md` for manual-label claim limits,
 `docs/verification_saturation_audit.md` for ordinary-baseline verification
 saturation and the no-verify ablation boundary,
+`docs/verification_lift_power_audit.md` for the 98-run non-ablation baseline
+headroom audit showing that the original expected verification-rate table is
+not compatible with the stored evidence,
 `docs/verification_behavior_audit.md` for showing that saturated ordinary
 pilots reach verification earlier and with fewer verify-phase events rather
 than with higher verification rate or deeper verification,
@@ -652,7 +659,8 @@ CodexTrace shows that coding-agent traces can be used as first-class evaluation
 objects, not merely logs. In real Codex runs, trace analysis exposes process
 failures and quantifies harness-level waste reductions. It also shows a
 negative boundary: current ordinary and weak baselines are verification
-saturated, so the paper should not claim an ordinary verification-rate lift.
+saturated, with 98 / 98 stored non-ablation baseline runs already verifying,
+so the paper should not claim an ordinary verification-rate lift.
 The current hard-tier pilot also gives an important limitation: hidden semantic
 edge failures can escape process-only rules. A practical evaluation stack should
 therefore combine trace-based diagnosis with strong task-level oracles.
