@@ -1991,6 +1991,7 @@ def test_detector_evaluation_audit_consolidates_rq2_evidence():
     assert result["summary"]["real_pilot_positive_label_count"] == 2
     assert result["summary"]["ablation_positive_label_count"] == 2
     assert result["summary"]["fixture_only_label_count"] == 2
+    assert result["summary"]["mechanism_row_count"] == 6
     claim_boundaries = {row["claim"]: row for row in result["claim_boundaries"]}
     assert claim_boundaries["Rules cover the six process-failure labels on controlled traces."]["verdict"] == "supported"
     assert claim_boundaries["Rules detect observed process-positive slices in real or ablation pilots."]["verdict"] == "supported-with-boundary"
@@ -2001,9 +2002,15 @@ def test_detector_evaluation_audit_consolidates_rq2_evidence():
     assert tiers["sandbox_permission_deadlock"] == "real-pilot-positive"
     assert tiers["verification_gap"] == "ablation-positive"
     assert tiers["unrecovered_tool_error"] == "fixture-only"
+    mechanisms = {row["label"]: row for row in result["process_rule_mechanisms"]}
+    assert mechanisms["context_drift"]["finding_code"] == "long_context_no_progress"
+    assert mechanisms["context_drift"]["boundary_note"] == "V1 proxy; not a semantic task-keyword drift detector."
+    assert mechanisms["sandbox_permission_deadlock"]["trace_signal"] == "sandbox, permission, network, or access-denied tool errors"
     assert "Controlled process labels covered: 6 / 6" in markdown
     assert "Hidden semantic false negatives: 36" in markdown
     assert "Evidence Tier By Process Label" in markdown
+    assert "Process Rule Mechanism Map" in markdown
+    assert "V1 proxy; not a semantic task-keyword drift detector." in markdown
     assert "Claim Boundary Verdicts" in markdown
     assert "Do not claim majority real-world failure detection" in markdown
     assert "State that hidden semantic failures require stronger task oracles or semantic checks" in markdown

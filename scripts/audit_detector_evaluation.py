@@ -23,6 +23,39 @@ TARGET_PROCESS_LABELS = (
     "sandbox_permission_deadlock",
 )
 
+RULE_MECHANISMS = {
+    "verification_gap": {
+        "finding_code": "verification_gap",
+        "trace_signal": "post-edit file changes without later test/build/lint verification",
+        "boundary_note": "Direct process signal; strongest current evidence is no-verify ablation.",
+    },
+    "unrecovered_tool_error": {
+        "finding_code": "command_failure_unhandled",
+        "trace_signal": "failed commands without a later similar recovery command or verification",
+        "boundary_note": "Implemented rule; current evidence is controlled-fixture only.",
+    },
+    "repetitive_exploration": {
+        "finding_code": "repeated_search_or_read",
+        "trace_signal": "repeated search/read commands and high repeated tool-call volume",
+        "boundary_note": "Observed in hard30 real-pilot positives.",
+    },
+    "context_drift": {
+        "finding_code": "long_context_no_progress",
+        "trace_signal": "high context growth with weak edit or verification progress",
+        "boundary_note": "V1 proxy; not a semantic task-keyword drift detector.",
+    },
+    "premature_completion": {
+        "finding_code": "premature_completion",
+        "trace_signal": "completion language emitted before verification evidence",
+        "boundary_note": "Direct process signal; strongest current evidence is no-verify ablation.",
+    },
+    "sandbox_permission_deadlock": {
+        "finding_code": "sandbox_or_permission_block",
+        "trace_signal": "sandbox, permission, network, or access-denied tool errors",
+        "boundary_note": "Observed in full30 real-pilot process labels.",
+    },
+}
+
 
 def build_detector_evaluation_audit(
     fixture_eval_path: Path = DEFAULT_FIXTURE_EVAL,
@@ -96,6 +129,7 @@ def build_detector_evaluation_audit(
             "ablation_tp": ablation_tp,
             "evidence_tier": tier,
         })
+    mechanism_rows = _mechanism_rows(evidence_tiers)
     boundary_rows = [
         {
             "slice": "hard30",
@@ -130,6 +164,7 @@ def build_detector_evaluation_audit(
         and sum(1 for row in evidence_tiers if row["evidence_tier"] == "real-pilot-positive") == 2
         and sum(1 for row in evidence_tiers if row["evidence_tier"] == "ablation-positive") == 2
         and sum(1 for row in evidence_tiers if row["evidence_tier"] == "fixture-only") == 2
+        and len(mechanism_rows) == len(TARGET_PROCESS_LABELS)
     )
     claim_boundaries = _claim_boundaries(
         controlled_labels_covered=controlled_labels_covered,
@@ -155,6 +190,7 @@ def build_detector_evaluation_audit(
             "real_pilot_positive_label_count": sum(1 for row in evidence_tiers if row["evidence_tier"] == "real-pilot-positive"),
             "ablation_positive_label_count": sum(1 for row in evidence_tiers if row["evidence_tier"] == "ablation-positive"),
             "fixture_only_label_count": sum(1 for row in evidence_tiers if row["evidence_tier"] == "fixture-only"),
+            "mechanism_row_count": len(mechanism_rows),
         },
         "claim_boundaries": claim_boundaries,
         "controlled_fixture_labels": [
@@ -162,6 +198,7 @@ def build_detector_evaluation_audit(
             for label in TARGET_PROCESS_LABELS
         ],
         "process_label_evidence_tiers": evidence_tiers,
+        "process_rule_mechanisms": mechanism_rows,
         "observable_process_positives": observable_positive_rows,
         "hidden_semantic_boundaries": boundary_rows,
         "false_positive_boundaries": [
@@ -198,6 +235,7 @@ def render_detector_evaluation_markdown(result: dict[str, Any]) -> str:
         f"- Real-pilot-positive process labels: {summary['real_pilot_positive_label_count']} / {summary['target_label_count']}",
         f"- Ablation-positive process labels: {summary['ablation_positive_label_count']} / {summary['target_label_count']}",
         f"- Fixture-only process labels: {summary['fixture_only_label_count']} / {summary['target_label_count']}",
+        f"- Process rule mechanisms mapped: {summary['mechanism_row_count']} / {summary['target_label_count']}",
         "",
         "## Controlled Fixture Coverage",
         "",
@@ -217,6 +255,18 @@ def render_detector_evaluation_markdown(result: dict[str, Any]) -> str:
         lines.append(
             f"| `{row['label']}` | {'yes' if row['controlled_fixture'] else 'no'} | "
             f"{row['real_pilot_tp']} | {row['ablation_tp']} | `{row['evidence_tier']}` |"
+        )
+    lines.extend([
+        "",
+        "## Process Rule Mechanism Map",
+        "",
+        "| Label | Finding code | Trace signal | Evidence tier | Boundary note |",
+        "| --- | --- | --- | --- | --- |",
+    ])
+    for row in result["process_rule_mechanisms"]:
+        lines.append(
+            f"| `{row['label']}` | `{row['finding_code']}` | {row['trace_signal']} | "
+            f"`{row['evidence_tier']}` | {row['boundary_note']} |"
         )
     lines.extend([
         "",
@@ -270,6 +320,22 @@ def write_outputs(result: dict[str, Any], json_path: Path | None, markdown_path:
     if markdown_path:
         markdown_path.parent.mkdir(parents=True, exist_ok=True)
         markdown_path.write_text(render_detector_evaluation_markdown(result), encoding="utf-8")
+
+
+def _mechanism_rows(evidence_tiers: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    tiers_by_label = {row["label"]: row for row in evidence_tiers}
+    rows = []
+    for label in TARGET_PROCESS_LABELS:
+        mechanism = RULE_MECHANISMS[label]
+        tier = tiers_by_label[label]
+        rows.append({
+            "label": label,
+            "finding_code": mechanism["finding_code"],
+            "trace_signal": mechanism["trace_signal"],
+            "evidence_tier": tier["evidence_tier"],
+            "boundary_note": mechanism["boundary_note"],
+        })
+    return rows
 
 
 def _scores(labels: dict[str, Any], label: str) -> dict[str, Any]:

@@ -15,6 +15,7 @@ This generated audit consolidates the detector precision/recall evidence used fo
 - Real-pilot-positive process labels: 2 / 6
 - Ablation-positive process labels: 2 / 6
 - Fixture-only process labels: 2 / 6
+- Process rule mechanisms mapped: 6 / 6
 
 ## Controlled Fixture Coverage
 
@@ -37,6 +38,17 @@ This generated audit consolidates the detector precision/recall evidence used fo
 | `context_drift` | yes | 0 | 0 | `fixture-only` |
 | `premature_completion` | yes | 0 | 3 | `ablation-positive` |
 | `sandbox_permission_deadlock` | yes | 1 | 0 | `real-pilot-positive` |
+
+## Process Rule Mechanism Map
+
+| Label | Finding code | Trace signal | Evidence tier | Boundary note |
+| --- | --- | --- | --- | --- |
+| `verification_gap` | `verification_gap` | post-edit file changes without later test/build/lint verification | `ablation-positive` | Direct process signal; strongest current evidence is no-verify ablation. |
+| `unrecovered_tool_error` | `command_failure_unhandled` | failed commands without a later similar recovery command or verification | `fixture-only` | Implemented rule; current evidence is controlled-fixture only. |
+| `repetitive_exploration` | `repeated_search_or_read` | repeated search/read commands and high repeated tool-call volume | `real-pilot-positive` | Observed in hard30 real-pilot positives. |
+| `context_drift` | `long_context_no_progress` | high context growth with weak edit or verification progress | `fixture-only` | V1 proxy; not a semantic task-keyword drift detector. |
+| `premature_completion` | `premature_completion` | completion language emitted before verification evidence | `ablation-positive` | Direct process signal; strongest current evidence is no-verify ablation. |
+| `sandbox_permission_deadlock` | `sandbox_or_permission_block` | sandbox, permission, network, or access-denied tool errors | `real-pilot-positive` | Observed in full30 real-pilot process labels. |
 
 ## Claim Boundary Verdicts
 

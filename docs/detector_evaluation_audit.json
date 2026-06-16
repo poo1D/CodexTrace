@@ -221,6 +221,50 @@
       "real_pilot_tp": 1
     }
   ],
+  "process_rule_mechanisms": [
+    {
+      "boundary_note": "Direct process signal; strongest current evidence is no-verify ablation.",
+      "evidence_tier": "ablation-positive",
+      "finding_code": "verification_gap",
+      "label": "verification_gap",
+      "trace_signal": "post-edit file changes without later test/build/lint verification"
+    },
+    {
+      "boundary_note": "Implemented rule; current evidence is controlled-fixture only.",
+      "evidence_tier": "fixture-only",
+      "finding_code": "command_failure_unhandled",
+      "label": "unrecovered_tool_error",
+      "trace_signal": "failed commands without a later similar recovery command or verification"
+    },
+    {
+      "boundary_note": "Observed in hard30 real-pilot positives.",
+      "evidence_tier": "real-pilot-positive",
+      "finding_code": "repeated_search_or_read",
+      "label": "repetitive_exploration",
+      "trace_signal": "repeated search/read commands and high repeated tool-call volume"
+    },
+    {
+      "boundary_note": "V1 proxy; not a semantic task-keyword drift detector.",
+      "evidence_tier": "fixture-only",
+      "finding_code": "long_context_no_progress",
+      "label": "context_drift",
+      "trace_signal": "high context growth with weak edit or verification progress"
+    },
+    {
+      "boundary_note": "Direct process signal; strongest current evidence is no-verify ablation.",
+      "evidence_tier": "ablation-positive",
+      "finding_code": "premature_completion",
+      "label": "premature_completion",
+      "trace_signal": "completion language emitted before verification evidence"
+    },
+    {
+      "boundary_note": "Observed in full30 real-pilot process labels.",
+      "evidence_tier": "real-pilot-positive",
+      "finding_code": "sandbox_or_permission_block",
+      "label": "sandbox_permission_deadlock",
+      "trace_signal": "sandbox, permission, network, or access-denied tool errors"
+    }
+  ],
   "sources": {
     "fixture_eval": "benchmark/detector-fixtures/label-eval.json",
     "full30_process_eval": "benchmark/pilot/full30-real/process-label-eval.json",
@@ -239,6 +283,7 @@
     "full30_sandbox_tp": 1,
     "hard30_repetitive_tp": 4,
     "hidden_semantic_fn_total": 36,
+    "mechanism_row_count": 6,
     "ready": true,
     "real_pilot_positive_label_count": 2,
     "target_label_count": 6
