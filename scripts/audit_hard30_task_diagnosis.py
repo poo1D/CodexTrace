@@ -67,6 +67,7 @@ def build_task_diagnosis(
             "token_usage_delta": _to_int(delta["token_usage_delta"]),
             "failure_score_delta": _to_int(delta["failure_score_delta"]),
         })
+        rows[-1]["paired_lostness_score"] = _paired_lostness_score(rows[-1])
         rows_by_category[category].append(rows[-1])
 
     double_failures = [row for row in rows if row["failure_pattern"] == "both_failed"]
@@ -94,6 +95,7 @@ def build_task_diagnosis(
         "top_waste_reductions": sorted(rows, key=lambda row: row["token_usage_delta"])[:5],
         "top_waste_regressions": sorted(rows, key=lambda row: row["token_usage_delta"], reverse=True)[:5],
         "top_repeated_call_reductions": sorted(rows, key=lambda row: row["repeated_tool_call_delta"])[:5],
+        "top_lostness_tasks": sorted(rows, key=lambda row: row["paired_lostness_score"], reverse=True)[:5],
         "tasks": rows,
     }
 
@@ -157,6 +159,18 @@ def render_task_diagnosis_markdown(result: dict[str, Any]) -> str:
     ])
     for row in result["intervention_repairs"] + result["intervention_regressions"]:
         lines.append(_pattern_row(row))
+
+    lines.extend([
+        "",
+        "## Top Lostness Ranking",
+        "",
+        "The paired lostness score combines outcome persistence, manual failure tags, and paired waste reductions. Higher scores mark tasks where the agent most visibly got lost in the paired traces, especially when the intervention removed substantial token or repeated-call waste without fully repairing the outcome.",
+        "",
+        "| Task | Pattern | Category | Tags | Lostness score | Repeated-call delta | Token delta |",
+        "| --- | --- | --- | --- | ---: | ---: | ---: |",
+    ])
+    for row in result["top_lostness_tasks"]:
+        lines.append(_lostness_row(row))
 
     lines.extend([
         "",
@@ -248,6 +262,46 @@ def _waste_row(row: dict[str, Any]) -> str:
         f"| {row['task_id']} | {row['failure_pattern']} | {row['category']} | {row['repo_hint']} | "
         f"{row['repeated_tool_call_delta']} | {row['token_usage_delta']} | {row['failure_score_delta']} |"
     )
+
+
+def _lostness_row(row: dict[str, Any]) -> str:
+    tags = ", ".join(row["failure_tags"]) if row["failure_tags"] else "-"
+    return (
+        f"| {row['task_id']} | {row['failure_pattern']} | {row['category']} | {tags} | "
+        f"{_fmt(row['paired_lostness_score'])} | {row['repeated_tool_call_delta']} | {row['token_usage_delta']} |"
+    )
+
+
+def _paired_lostness_score(row: dict[str, Any]) -> float:
+    """Transparent task-level index for ranking where paired hard30 traces got lost."""
+    score = 0.0
+    if row["failure_pattern"] == "both_failed":
+        score += 100.0
+    elif row["failure_pattern"] == "intervention_regressed":
+        score += 80.0
+    elif row["failure_pattern"] == "intervention_repaired":
+        score += 50.0
+
+    tags = set(row["failure_tags"])
+    if "hidden_semantic_edge_case" in tags:
+        score += 40.0
+    if "repetitive_exploration" in tags:
+        score += 30.0
+    if "sandbox_permission_deadlock" in tags:
+        score += 30.0
+    if "unrecovered_tool_error" in tags:
+        score += 20.0
+    if "verification_gap" in tags or "premature_completion" in tags:
+        score += 20.0
+    if "context_drift" in tags:
+        score += 20.0
+
+    # Negative deltas mean the intervention spent fewer resources than baseline;
+    # large reductions are evidence that the baseline trace had more process waste.
+    score += max(0, -row["repeated_tool_call_delta"]) * 2.0
+    score += max(0, -row["token_usage_delta"]) / 10000.0
+    score += max(0, -row["failure_score_delta"])
+    return round(score, 2)
 
 
 def _category_diagnosis(rows_by_category: dict[str, list[dict[str, Any]]]) -> list[dict[str, Any]]:

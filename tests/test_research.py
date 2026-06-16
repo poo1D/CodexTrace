@@ -2372,8 +2372,12 @@ def test_hard30_task_diagnosis_identifies_lost_tasks_and_waste_patterns():
     assert result["intervention_repairs"][0]["task_id"] == "HARD-050"
     assert result["intervention_regressions"][0]["task_id"] == "HARD-007"
     assert result["top_waste_reductions"][0]["task_id"] == "HARD-033"
+    assert result["top_lostness_tasks"][0]["task_id"] == "HARD-033"
+    assert result["top_lostness_tasks"][0]["paired_lostness_score"] > 300
     assert "## Category-Level Diagnosis" in markdown
+    assert "## Top Lostness Ranking" in markdown
     assert "| dependency_friction | 3 | 3 | 0 | 0 |" in markdown
+    assert "| HARD-033 | both_failed | error_recovery | hidden_semantic_edge_case, repetitive_exploration |" in markdown
     assert "## Double-Failure Tasks" in markdown
     assert "HARD-050" in markdown
     assert "HARD-007" in markdown

@@ -64,6 +64,18 @@ This generated audit answers which hard30 tasks are easiest for the agent to get
 | HARD-050 | intervention_repaired | multi_turn_change | python/config_overlay_resolver | -4 | -170828 |
 | HARD-007 | intervention_regressed | refactor | python/config_merge | -2 | -72244 |
 
+## Top Lostness Ranking
+
+The paired lostness score combines outcome persistence, manual failure tags, and paired waste reductions. Higher scores mark tasks where the agent most visibly got lost in the paired traces, especially when the intervention removed substantial token or repeated-call waste without fully repairing the outcome.
+
+| Task | Pattern | Category | Tags | Lostness score | Repeated-call delta | Token delta |
+| --- | --- | --- | --- | ---: | ---: | ---: |
+| HARD-033 | both_failed | error_recovery | hidden_semantic_edge_case, repetitive_exploration | 304.9 | -15 | -699231 |
+| HARD-027 | both_failed | dependency_friction | hidden_semantic_edge_case | 187.5 | -11 | -204667 |
+| HARD-013 | both_failed | multi_turn_change | hidden_semantic_edge_case | 186.6 | -9 | -235860 |
+| HARD-015 | both_failed | ci_failure | hidden_semantic_edge_case | 161.2 | -5 | -111558 |
+| HARD-043 | both_failed | data_migration | hidden_semantic_edge_case | 159.8 | -4 | -118044 |
+
 ## Largest Waste Reductions
 
 | Task | Pattern | Category | Repo | Repeated-call delta | Token delta | Failure-score delta |

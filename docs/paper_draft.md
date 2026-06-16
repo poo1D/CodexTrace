@@ -435,6 +435,11 @@ that 14 tasks fail under both prompts, `HARD-050` is the single hard30 repair,
 `HARD-007` is the single outcome regression, and the largest waste reduction is
 `HARD-033`, where repeated tool calls drop by 15 and token usage drops by
 699.2k tokens.
+The same audit now reports a paired lostness ranking that combines persistent
+failure, manual process labels, and paired waste reductions. `HARD-033` is the
+top-ranked lost task because both prompts fail, the trace is manually labeled
+with both `hidden_semantic_edge_case` and `repetitive_exploration`, and the
+intervention removes the largest observed token and repeated-call waste.
 
 Four auxiliary pilots further test whether the original thesis should claim
 verification-rate lift. In the process-stress tier, success remains

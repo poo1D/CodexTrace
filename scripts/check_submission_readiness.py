@@ -443,6 +443,8 @@ def check_hard30_task_diagnosis_content(path: Path = Path("docs/hard30_task_diag
         "repeated improved": "Repeated tool calls improved: 26/30",
         "category diagnosis": "Category-Level Diagnosis",
         "dependency friction": "| dependency_friction | 3 | 3 | 0 | 0 |",
+        "lostness ranking": "Top Lostness Ranking",
+        "top lost task": "| HARD-033 | both_failed | error_recovery | hidden_semantic_edge_case, repetitive_exploration |",
         "repair task": "HARD-050",
         "regression task": "HARD-007",
         "interpretation": "dominated by hidden semantic double failures",

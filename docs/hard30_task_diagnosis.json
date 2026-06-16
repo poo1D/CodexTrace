@@ -143,6 +143,7 @@
         "hidden_semantic_edge_case"
       ],
       "intervention_outcome": "failure",
+      "paired_lostness_score": 152.98,
       "repeated_tool_call_delta": -3,
       "repo_hint": "python/interval_merge",
       "success_delta": 0,
@@ -158,6 +159,7 @@
         "hidden_semantic_edge_case"
       ],
       "intervention_outcome": "failure",
+      "paired_lostness_score": 153.38,
       "repeated_tool_call_delta": -3,
       "repo_hint": "typescript/retry",
       "success_delta": 0,
@@ -173,6 +175,7 @@
         "hidden_semantic_edge_case"
       ],
       "intervention_outcome": "failure",
+      "paired_lostness_score": 143.56,
       "repeated_tool_call_delta": 0,
       "repo_hint": "python/booking_policy",
       "success_delta": 0,
@@ -188,6 +191,7 @@
         "hidden_semantic_edge_case"
       ],
       "intervention_outcome": "failure",
+      "paired_lostness_score": 147.99,
       "repeated_tool_call_delta": -2,
       "repo_hint": "python/http_client",
       "success_delta": 0,
@@ -203,6 +207,7 @@
         "hidden_semantic_edge_case"
       ],
       "intervention_outcome": "failure",
+      "paired_lostness_score": 186.59,
       "repeated_tool_call_delta": -9,
       "repo_hint": "typescript/filter_builder",
       "success_delta": 0,
@@ -218,6 +223,7 @@
         "hidden_semantic_edge_case"
       ],
       "intervention_outcome": "failure",
+      "paired_lostness_score": 161.16,
       "repeated_tool_call_delta": -5,
       "repo_hint": "typescript/package_exports",
       "success_delta": 0,
@@ -233,6 +239,7 @@
         "hidden_semantic_edge_case"
       ],
       "intervention_outcome": "failure",
+      "paired_lostness_score": 187.47,
       "repeated_tool_call_delta": -11,
       "repo_hint": "typescript/date_formatter",
       "success_delta": 0,
@@ -248,6 +255,7 @@
         "hidden_semantic_edge_case"
       ],
       "intervention_outcome": "failure",
+      "paired_lostness_score": 150.03,
       "repeated_tool_call_delta": -3,
       "repo_hint": "typescript/undoable_queue",
       "success_delta": 0,
@@ -264,6 +272,7 @@
         "repetitive_exploration"
       ],
       "intervention_outcome": "failure",
+      "paired_lostness_score": 304.92,
       "repeated_tool_call_delta": -15,
       "repo_hint": "python/log_redactor",
       "success_delta": 0,
@@ -279,6 +288,7 @@
         "hidden_semantic_edge_case"
       ],
       "intervention_outcome": "failure",
+      "paired_lostness_score": 142.0,
       "repeated_tool_call_delta": -1,
       "repo_hint": "python/retry_policy",
       "success_delta": 0,
@@ -294,6 +304,7 @@
         "hidden_semantic_edge_case"
       ],
       "intervention_outcome": "failure",
+      "paired_lostness_score": 154.67,
       "repeated_tool_call_delta": -3,
       "repo_hint": "typescript/source_map_ranges",
       "success_delta": 0,
@@ -309,6 +320,7 @@
         "hidden_semantic_edge_case"
       ],
       "intervention_outcome": "failure",
+      "paired_lostness_score": 148.78,
       "repeated_tool_call_delta": -2,
       "repo_hint": "python/ledger_reconciler",
       "success_delta": 0,
@@ -324,6 +336,7 @@
         "hidden_semantic_edge_case"
       ],
       "intervention_outcome": "failure",
+      "paired_lostness_score": 159.8,
       "repeated_tool_call_delta": -4,
       "repo_hint": "python/migration_runner",
       "success_delta": 0,
@@ -339,6 +352,7 @@
         "hidden_semantic_edge_case"
       ],
       "intervention_outcome": "failure",
+      "paired_lostness_score": 155.68,
       "repeated_tool_call_delta": -4,
       "repo_hint": "python/stream_window_join",
       "success_delta": 0,
@@ -356,6 +370,7 @@
         "hidden_semantic_edge_case"
       ],
       "intervention_outcome": "failure",
+      "paired_lostness_score": 131.22,
       "repeated_tool_call_delta": -2,
       "repo_hint": "python/config_merge",
       "success_delta": -1,
@@ -373,6 +388,7 @@
         "hidden_semantic_edge_case"
       ],
       "intervention_outcome": "success",
+      "paired_lostness_score": 115.08,
       "repeated_tool_call_delta": -4,
       "repo_hint": "python/config_overlay_resolver",
       "success_delta": 1,
@@ -423,6 +439,7 @@
         "hidden_semantic_edge_case"
       ],
       "intervention_outcome": "failure",
+      "paired_lostness_score": 152.98,
       "repeated_tool_call_delta": -3,
       "repo_hint": "python/interval_merge",
       "success_delta": 0,
@@ -436,6 +453,7 @@
       "failure_score_delta": 0,
       "failure_tags": [],
       "intervention_outcome": "success",
+      "paired_lostness_score": 17.46,
       "repeated_tool_call_delta": -5,
       "repo_hint": "python/csv_records",
       "success_delta": 0,
@@ -449,6 +467,7 @@
       "failure_score_delta": 0,
       "failure_tags": [],
       "intervention_outcome": "success",
+      "paired_lostness_score": 13.33,
       "repeated_tool_call_delta": -3,
       "repo_hint": "python/cent_allocation",
       "success_delta": 0,
@@ -462,6 +481,7 @@
       "failure_score_delta": 0,
       "failure_tags": [],
       "intervention_outcome": "success",
+      "paired_lostness_score": 4.96,
       "repeated_tool_call_delta": -2,
       "repo_hint": "python/toposort",
       "success_delta": 0,
@@ -475,6 +495,7 @@
       "failure_score_delta": 0,
       "failure_tags": [],
       "intervention_outcome": "success",
+      "paired_lostness_score": 0.0,
       "repeated_tool_call_delta": 0,
       "repo_hint": "typescript/router",
       "success_delta": 0,
@@ -490,6 +511,7 @@
         "hidden_semantic_edge_case"
       ],
       "intervention_outcome": "failure",
+      "paired_lostness_score": 153.38,
       "repeated_tool_call_delta": -3,
       "repo_hint": "typescript/retry",
       "success_delta": 0,
@@ -505,6 +527,7 @@
         "hidden_semantic_edge_case"
       ],
       "intervention_outcome": "failure",
+      "paired_lostness_score": 131.22,
       "repeated_tool_call_delta": -2,
       "repo_hint": "python/config_merge",
       "success_delta": -1,
@@ -518,6 +541,7 @@
       "failure_score_delta": 0,
       "failure_tags": [],
       "intervention_outcome": "success",
+      "paired_lostness_score": 15.6,
       "repeated_tool_call_delta": -4,
       "repo_hint": "typescript/undo_redo",
       "success_delta": 0,
@@ -533,6 +557,7 @@
         "hidden_semantic_edge_case"
       ],
       "intervention_outcome": "failure",
+      "paired_lostness_score": 143.56,
       "repeated_tool_call_delta": 0,
       "repo_hint": "python/booking_policy",
       "success_delta": 0,
@@ -546,6 +571,7 @@
       "failure_score_delta": 0,
       "failure_tags": [],
       "intervention_outcome": "success",
+      "paired_lostness_score": 25.03,
       "repeated_tool_call_delta": -5,
       "repo_hint": "typescript/markdown_table",
       "success_delta": 0,
@@ -561,6 +587,7 @@
         "repetitive_exploration"
       ],
       "intervention_outcome": "success",
+      "paired_lostness_score": 93.66,
       "repeated_tool_call_delta": -6,
       "repo_hint": "python/json_patch",
       "success_delta": 0,
@@ -576,6 +603,7 @@
         "hidden_semantic_edge_case"
       ],
       "intervention_outcome": "failure",
+      "paired_lostness_score": 147.99,
       "repeated_tool_call_delta": -2,
       "repo_hint": "python/http_client",
       "success_delta": 0,
@@ -591,6 +619,7 @@
         "hidden_semantic_edge_case"
       ],
       "intervention_outcome": "failure",
+      "paired_lostness_score": 186.59,
       "repeated_tool_call_delta": -9,
       "repo_hint": "typescript/filter_builder",
       "success_delta": 0,
@@ -606,6 +635,7 @@
         "hidden_semantic_edge_case"
       ],
       "intervention_outcome": "failure",
+      "paired_lostness_score": 161.16,
       "repeated_tool_call_delta": -5,
       "repo_hint": "typescript/package_exports",
       "success_delta": 0,
@@ -619,6 +649,7 @@
       "failure_score_delta": 0,
       "failure_tags": [],
       "intervention_outcome": "success",
+      "paired_lostness_score": 15.62,
       "repeated_tool_call_delta": -4,
       "repo_hint": "typescript/asset_loader",
       "success_delta": 0,
@@ -632,6 +663,7 @@
       "failure_score_delta": 0,
       "failure_tags": [],
       "intervention_outcome": "success",
+      "paired_lostness_score": 30.47,
       "repeated_tool_call_delta": -7,
       "repo_hint": "python/cache_stampede",
       "success_delta": 0,
@@ -645,6 +677,7 @@
       "failure_score_delta": 5,
       "failure_tags": [],
       "intervention_outcome": "success",
+      "paired_lostness_score": 31.84,
       "repeated_tool_call_delta": -5,
       "repo_hint": "typescript/csv_stream",
       "success_delta": 0,
@@ -658,6 +691,7 @@
       "failure_score_delta": 0,
       "failure_tags": [],
       "intervention_outcome": "success",
+      "paired_lostness_score": 11.64,
       "repeated_tool_call_delta": -4,
       "repo_hint": "python/typing_protocol",
       "success_delta": 0,
@@ -673,6 +707,7 @@
         "hidden_semantic_edge_case"
       ],
       "intervention_outcome": "failure",
+      "paired_lostness_score": 187.47,
       "repeated_tool_call_delta": -11,
       "repo_hint": "typescript/date_formatter",
       "success_delta": 0,
@@ -686,6 +721,7 @@
       "failure_score_delta": 0,
       "failure_tags": [],
       "intervention_outcome": "success",
+      "paired_lostness_score": 0.0,
       "repeated_tool_call_delta": 5,
       "repo_hint": "python/env_manifest_resolver",
       "success_delta": 0,
@@ -701,6 +737,7 @@
         "hidden_semantic_edge_case"
       ],
       "intervention_outcome": "failure",
+      "paired_lostness_score": 150.03,
       "repeated_tool_call_delta": -3,
       "repo_hint": "typescript/undoable_queue",
       "success_delta": 0,
@@ -717,6 +754,7 @@
         "repetitive_exploration"
       ],
       "intervention_outcome": "failure",
+      "paired_lostness_score": 304.92,
       "repeated_tool_call_delta": -15,
       "repo_hint": "python/log_redactor",
       "success_delta": 0,
@@ -732,6 +770,7 @@
         "hidden_semantic_edge_case"
       ],
       "intervention_outcome": "failure",
+      "paired_lostness_score": 142.0,
       "repeated_tool_call_delta": -1,
       "repo_hint": "python/retry_policy",
       "success_delta": 0,
@@ -747,6 +786,7 @@
         "hidden_semantic_edge_case"
       ],
       "intervention_outcome": "failure",
+      "paired_lostness_score": 154.67,
       "repeated_tool_call_delta": -3,
       "repo_hint": "typescript/source_map_ranges",
       "success_delta": 0,
@@ -762,6 +802,7 @@
         "repetitive_exploration"
       ],
       "intervention_outcome": "success",
+      "paired_lostness_score": 30.0,
       "repeated_tool_call_delta": 1,
       "repo_hint": "python/cli_report_writer",
       "success_delta": 0,
@@ -777,6 +818,7 @@
         "hidden_semantic_edge_case"
       ],
       "intervention_outcome": "failure",
+      "paired_lostness_score": 148.78,
       "repeated_tool_call_delta": -2,
       "repo_hint": "python/ledger_reconciler",
       "success_delta": 0,
@@ -792,6 +834,7 @@
         "hidden_semantic_edge_case"
       ],
       "intervention_outcome": "failure",
+      "paired_lostness_score": 159.8,
       "repeated_tool_call_delta": -4,
       "repo_hint": "python/migration_runner",
       "success_delta": 0,
@@ -807,6 +850,7 @@
         "hidden_semantic_edge_case"
       ],
       "intervention_outcome": "failure",
+      "paired_lostness_score": 155.68,
       "repeated_tool_call_delta": -4,
       "repo_hint": "python/stream_window_join",
       "success_delta": 0,
@@ -820,6 +864,7 @@
       "failure_score_delta": 0,
       "failure_tags": [],
       "intervention_outcome": "success",
+      "paired_lostness_score": 11.75,
       "repeated_tool_call_delta": -2,
       "repo_hint": "python/webhook_replay_guard",
       "success_delta": 0,
@@ -835,6 +880,7 @@
         "hidden_semantic_edge_case"
       ],
       "intervention_outcome": "success",
+      "paired_lostness_score": 115.08,
       "repeated_tool_call_delta": -4,
       "repo_hint": "python/config_overlay_resolver",
       "success_delta": 1,
@@ -842,7 +888,7 @@
       "token_usage_delta": -170828
     }
   ],
-  "top_repeated_call_reductions": [
+  "top_lostness_tasks": [
     {
       "baseline_outcome": "failure",
       "category": "error_recovery",
@@ -853,6 +899,7 @@
         "repetitive_exploration"
       ],
       "intervention_outcome": "failure",
+      "paired_lostness_score": 304.92,
       "repeated_tool_call_delta": -15,
       "repo_hint": "python/log_redactor",
       "success_delta": 0,
@@ -868,6 +915,7 @@
         "hidden_semantic_edge_case"
       ],
       "intervention_outcome": "failure",
+      "paired_lostness_score": 187.47,
       "repeated_tool_call_delta": -11,
       "repo_hint": "typescript/date_formatter",
       "success_delta": 0,
@@ -883,6 +931,90 @@
         "hidden_semantic_edge_case"
       ],
       "intervention_outcome": "failure",
+      "paired_lostness_score": 186.59,
+      "repeated_tool_call_delta": -9,
+      "repo_hint": "typescript/filter_builder",
+      "success_delta": 0,
+      "task_id": "HARD-013",
+      "token_usage_delta": -235860
+    },
+    {
+      "baseline_outcome": "failure",
+      "category": "ci_failure",
+      "failure_pattern": "both_failed",
+      "failure_score_delta": 0,
+      "failure_tags": [
+        "hidden_semantic_edge_case"
+      ],
+      "intervention_outcome": "failure",
+      "paired_lostness_score": 161.16,
+      "repeated_tool_call_delta": -5,
+      "repo_hint": "typescript/package_exports",
+      "success_delta": 0,
+      "task_id": "HARD-015",
+      "token_usage_delta": -111558
+    },
+    {
+      "baseline_outcome": "failure",
+      "category": "data_migration",
+      "failure_pattern": "both_failed",
+      "failure_score_delta": 0,
+      "failure_tags": [
+        "hidden_semantic_edge_case"
+      ],
+      "intervention_outcome": "failure",
+      "paired_lostness_score": 159.8,
+      "repeated_tool_call_delta": -4,
+      "repo_hint": "python/migration_runner",
+      "success_delta": 0,
+      "task_id": "HARD-043",
+      "token_usage_delta": -118044
+    }
+  ],
+  "top_repeated_call_reductions": [
+    {
+      "baseline_outcome": "failure",
+      "category": "error_recovery",
+      "failure_pattern": "both_failed",
+      "failure_score_delta": -35,
+      "failure_tags": [
+        "hidden_semantic_edge_case",
+        "repetitive_exploration"
+      ],
+      "intervention_outcome": "failure",
+      "paired_lostness_score": 304.92,
+      "repeated_tool_call_delta": -15,
+      "repo_hint": "python/log_redactor",
+      "success_delta": 0,
+      "task_id": "HARD-033",
+      "token_usage_delta": -699231
+    },
+    {
+      "baseline_outcome": "failure",
+      "category": "dependency_friction",
+      "failure_pattern": "both_failed",
+      "failure_score_delta": -5,
+      "failure_tags": [
+        "hidden_semantic_edge_case"
+      ],
+      "intervention_outcome": "failure",
+      "paired_lostness_score": 187.47,
+      "repeated_tool_call_delta": -11,
+      "repo_hint": "typescript/date_formatter",
+      "success_delta": 0,
+      "task_id": "HARD-027",
+      "token_usage_delta": -204667
+    },
+    {
+      "baseline_outcome": "failure",
+      "category": "multi_turn_change",
+      "failure_pattern": "both_failed",
+      "failure_score_delta": -5,
+      "failure_tags": [
+        "hidden_semantic_edge_case"
+      ],
+      "intervention_outcome": "failure",
+      "paired_lostness_score": 186.59,
       "repeated_tool_call_delta": -9,
       "repo_hint": "typescript/filter_builder",
       "success_delta": 0,
@@ -896,6 +1028,7 @@
       "failure_score_delta": 0,
       "failure_tags": [],
       "intervention_outcome": "success",
+      "paired_lostness_score": 30.47,
       "repeated_tool_call_delta": -7,
       "repo_hint": "python/cache_stampede",
       "success_delta": 0,
@@ -911,6 +1044,7 @@
         "repetitive_exploration"
       ],
       "intervention_outcome": "success",
+      "paired_lostness_score": 93.66,
       "repeated_tool_call_delta": -6,
       "repo_hint": "python/json_patch",
       "success_delta": 0,
@@ -929,6 +1063,7 @@
         "repetitive_exploration"
       ],
       "intervention_outcome": "failure",
+      "paired_lostness_score": 304.92,
       "repeated_tool_call_delta": -15,
       "repo_hint": "python/log_redactor",
       "success_delta": 0,
@@ -944,6 +1079,7 @@
         "hidden_semantic_edge_case"
       ],
       "intervention_outcome": "failure",
+      "paired_lostness_score": 186.59,
       "repeated_tool_call_delta": -9,
       "repo_hint": "typescript/filter_builder",
       "success_delta": 0,
@@ -957,6 +1093,7 @@
       "failure_score_delta": 5,
       "failure_tags": [],
       "intervention_outcome": "success",
+      "paired_lostness_score": 31.84,
       "repeated_tool_call_delta": -5,
       "repo_hint": "typescript/csv_stream",
       "success_delta": 0,
@@ -972,6 +1109,7 @@
         "repetitive_exploration"
       ],
       "intervention_outcome": "success",
+      "paired_lostness_score": 93.66,
       "repeated_tool_call_delta": -6,
       "repo_hint": "python/json_patch",
       "success_delta": 0,
@@ -987,6 +1125,7 @@
         "hidden_semantic_edge_case"
       ],
       "intervention_outcome": "failure",
+      "paired_lostness_score": 187.47,
       "repeated_tool_call_delta": -11,
       "repo_hint": "typescript/date_formatter",
       "success_delta": 0,
@@ -1002,6 +1141,7 @@
       "failure_score_delta": 0,
       "failure_tags": [],
       "intervention_outcome": "success",
+      "paired_lostness_score": 0.0,
       "repeated_tool_call_delta": 5,
       "repo_hint": "python/env_manifest_resolver",
       "success_delta": 0,
@@ -1017,6 +1157,7 @@
         "repetitive_exploration"
       ],
       "intervention_outcome": "success",
+      "paired_lostness_score": 30.0,
       "repeated_tool_call_delta": 1,
       "repo_hint": "python/cli_report_writer",
       "success_delta": 0,
@@ -1030,6 +1171,7 @@
       "failure_score_delta": 0,
       "failure_tags": [],
       "intervention_outcome": "success",
+      "paired_lostness_score": 0.0,
       "repeated_tool_call_delta": 0,
       "repo_hint": "typescript/router",
       "success_delta": 0,
@@ -1045,6 +1187,7 @@
         "hidden_semantic_edge_case"
       ],
       "intervention_outcome": "failure",
+      "paired_lostness_score": 142.0,
       "repeated_tool_call_delta": -1,
       "repo_hint": "python/retry_policy",
       "success_delta": 0,
@@ -1058,6 +1201,7 @@
       "failure_score_delta": 0,
       "failure_tags": [],
       "intervention_outcome": "success",
+      "paired_lostness_score": 4.96,
       "repeated_tool_call_delta": -2,
       "repo_hint": "python/toposort",
       "success_delta": 0,
