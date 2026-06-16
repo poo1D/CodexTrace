@@ -15,6 +15,7 @@ REQUIRED_LINKS = (
     "docs/results_summary.md",
     "docs/submission_package.md",
     "docs/reproducibility_checklist.md",
+    "docs/project_closure.md",
     "docs/paired_effect_limitations_audit.md",
     "docs/failure_taxonomy_audit.md",
     "docs/detector_evaluation_audit.md",

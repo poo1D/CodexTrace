@@ -590,7 +590,7 @@
       "passed": true
     },
     {
-      "expected": "core path has exactly 10 steps",
+      "expected": "core path has exactly 11 steps",
       "id": "core_path_step_count",
       "passed": true
     },
@@ -614,7 +614,7 @@
     "boundary_check_missing": 0,
     "boundary_checks": 8,
     "checklist_missing": 0,
-    "core_step_count": 10,
+    "core_step_count": 11,
     "extended_step_count": 35,
     "guide_missing": 0,
     "missing": 0,

@@ -31,20 +31,21 @@ zero.
 3. Inspect generated results in `docs/results_summary.md`.
 4. Inspect the compact actual headline table in `docs/headline_results.md`.
 5. Inspect the thesis revision decision in `docs/thesis_revision_decision.md`.
-6. Check safe paper-claim framing in `docs/submission_package.md` and the RQ1/RQ2
+6. Inspect the project closure decision in `docs/project_closure.md`.
+7. Check safe paper-claim framing in `docs/submission_package.md` and the RQ1/RQ2
    verdict tables in `docs/failure_taxonomy_audit.md` and
    `docs/detector_evaluation_audit.md`.
-7. Inspect task-level hard30 repairs, regressions, and double failures in
+8. Inspect task-level hard30 repairs, regressions, and double failures in
    `docs/hard30_task_diagnosis.md`.
-8. Check paired RQ3 effect-size verdicts and population-claim limits in
+9. Check paired RQ3 effect-size verdicts and population-claim limits in
    `docs/paired_effects_audit.md`, `docs/paired_effect_limitations_audit.md`,
    verification-behavior boundaries in `docs/verification_behavior_audit.md`,
    and RQ4 signal verdicts in `docs/rq4_signal_audit.md`.
-9. Inspect validity threats, reproducibility, and stronger-submission guardrails in
+10. Inspect validity threats, reproducibility, and stronger-submission guardrails in
    `docs/validity_threats.md` and
    `docs/reproducibility_checklist.md` and
    `docs/submission_readiness_plan_audit.md`.
-10. Run the offline demo:
+11. Run the offline demo:
 
 ```bash
 ./scripts/demo.sh
@@ -146,6 +147,7 @@ npm run dev
 | Is the reviewer path numbering contiguous? | `docs/artifact_guide_sequence_audit.md` |
 | What headline table should the paper use? | `docs/headline_results.md` |
 | How should the original thesis be revised? | `docs/thesis_revision_decision.md` |
+| Is the current experiment closed? | `docs/project_closure.md` |
 | What validity threats constrain the claims? | `docs/validity_threats.md` |
 | Do paper limitations carry validity-threat wording? | `docs/limitations_traceability_audit.md` |
 | Did the expected-results sketch get replaced? | `docs/expected_results_reconciliation.md` |

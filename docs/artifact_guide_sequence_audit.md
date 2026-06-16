@@ -5,10 +5,10 @@ This generated audit checks that the reviewer-facing artifact-guide path has con
 ## Summary
 
 - Ready: yes
-- Step count: 10
+- Step count: 11
 - First step: 1
-- Last step: 10
-- Expected last step: 10
+- Last step: 11
+- Expected last step: 11
 - Duplicate numbers: -
 - Missing numbers: -
 - Missing required links: -
@@ -23,6 +23,7 @@ This generated audit checks that the reviewer-facing artifact-guide path has con
 | `docs/results_summary.md` | yes |
 | `docs/submission_package.md` | yes |
 | `docs/reproducibility_checklist.md` | yes |
+| `docs/project_closure.md` | yes |
 | `docs/paired_effect_limitations_audit.md` | yes |
 | `docs/failure_taxonomy_audit.md` | yes |
 | `docs/detector_evaluation_audit.md` | yes |

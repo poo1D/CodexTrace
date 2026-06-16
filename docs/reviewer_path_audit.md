@@ -8,7 +8,7 @@ Missing everywhere: 0
 Missing from artifact guide required set: 0
 Missing from reproducibility checklist: 0
 Core path structure: ok
-Core path steps: 10
+Core path steps: 11
 Extended evidence steps: 35
 Path structure checks failed: 0
 Entry boundary checks failed: 0
@@ -81,7 +81,7 @@ Entry boundary checks failed: 0
 | --- | --- | --- |
 | `core_path_heading` | pass | artifact guide exposes the reviewer core path |
 | `extended_path_heading` | pass | artifact guide separates extended evidence from the core path |
-| `core_path_step_count` | pass | core path has exactly 10 steps |
+| `core_path_step_count` | pass | core path has exactly 11 steps |
 | `extended_path_depth` | pass | extended evidence path keeps the detailed audit trail |
 | `core_path_demo_command` | pass | core path ends with an offline demo command |
 | `old_long_path_removed` | pass | old single long review-path heading is absent |

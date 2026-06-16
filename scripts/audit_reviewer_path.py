@@ -122,8 +122,8 @@ def build_reviewer_path_audit(
         },
         {
             "id": "core_path_step_count",
-            "passed": core_step_count == 10,
-            "expected": "core path has exactly 10 steps",
+            "passed": core_step_count == 11,
+            "expected": "core path has exactly 11 steps",
         },
         {
             "id": "extended_path_depth",

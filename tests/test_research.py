@@ -1565,12 +1565,13 @@ def test_artifact_guide_sequence_audit_checks_reviewer_path_numbering(tmp_path):
     markdown = render_artifact_guide_sequence_markdown(result)
 
     assert result["summary"]["ready"] is True
-    assert result["summary"]["step_count"] == 10
+    assert result["summary"]["step_count"] == 11
     assert result["summary"]["first_step"] == 1
-    assert result["summary"]["last_step"] == 10
+    assert result["summary"]["last_step"] == 11
     assert result["summary"]["missing_numbers"] == []
     assert result["summary"]["duplicate_numbers"] == []
     assert result["summary"]["missing_phrases"] == []
+    assert "docs/project_closure.md" in markdown
     assert "docs/paired_effect_limitations_audit.md" in markdown
     assert "docs/detector_evaluation_audit.md" in markdown
     assert "docs/rq4_signal_audit.md" in markdown
@@ -2592,6 +2593,7 @@ def test_reviewer_docs_surface_hard30_task_diagnosis():
     assert "docs/goal_completion_audit.md" in readme
     assert "docs/verification_lift_next_experiment.md" in readme
     assert "docs/thesis_revision_decision.md" in readme
+    assert "docs/project_closure.md" in readme
     assert "docs/validity_threats.md" in readme
     assert "docs/limitations_traceability_audit.md" in readme
     assert "docs/expected_results_reconciliation.md" in readme
@@ -2694,6 +2696,7 @@ def test_reviewer_docs_surface_hard30_task_diagnosis():
     assert "docs/submission_package.md" in guide
     assert "docs/headline_results.md" in guide
     assert "docs/thesis_revision_decision.md" in guide
+    assert "docs/project_closure.md" in guide
     assert "docs/validity_threats.md" in guide
     assert "docs/limitations_traceability_audit.md" in guide
     assert "docs/expected_results_reconciliation.md" in guide
@@ -3223,7 +3226,7 @@ def test_reviewer_path_audit_covers_required_artifacts(tmp_path):
     assert result["summary"]["path_check_missing"] == 0
     assert result["summary"]["boundary_check_missing"] == 0
     assert result["summary"]["boundary_checks"] == 8
-    assert result["summary"]["core_step_count"] == 10
+    assert result["summary"]["core_step_count"] == 11
     assert result["summary"]["extended_step_count"] >= 30
     assert any(row["path"] == "docs/artifact_guide.md" for row in result["coverage"])
     assert any(row["path"] == "docs/experiment_protocol.md" for row in result["coverage"])
@@ -3260,7 +3263,7 @@ def test_reviewer_path_audit_covers_required_artifacts(tmp_path):
     assert any(row["path"] == "docs/label_limitations_audit.md" for row in result["coverage"])
     assert "Missing from reproducibility checklist: 0" in markdown
     assert "Core path structure: ok" in markdown
-    assert "Core path steps: 10" in markdown
+    assert "Core path steps: 11" in markdown
     assert "Path structure checks failed: 0" in markdown
     assert "Entry boundary checks failed: 0" in markdown
     assert "`readme_detector_evidence_tiers` | `README.md` | pass" in markdown
@@ -3319,6 +3322,7 @@ def test_submission_readiness_validates_artifact_guide_sequence_audit_content(tm
     assert "missing step count" in check["problems"]
     assert "missing no duplicate numbers" in check["problems"]
     assert "missing required links" in check["problems"]
+    assert "missing project closure link" in check["problems"]
     assert "missing rq2 detector link" in check["problems"]
     assert "missing rq4 signal link" in check["problems"]
     assert "missing taxonomy evidence tiers" in check["problems"]

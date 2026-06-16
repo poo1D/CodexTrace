@@ -79,7 +79,8 @@ See `docs/artifact_guide.md` for the reviewer-facing walkthrough,
 `docs/results_summary.md` for the generated result summary and RQ4
 trace-signal analysis, `docs/headline_results.md` for the compact actual
 headline table, `docs/thesis_revision_decision.md` for the explicit
-boundary-result thesis decision, `docs/validity_threats.md` for validity
+boundary-result thesis decision, `docs/project_closure.md` for the frozen
+closure decision, `docs/validity_threats.md` for validity
 threat mapping, `docs/limitations_traceability_audit.md` for paper-limitations
 traceability, `docs/expected_results_reconciliation.md` for replacing the
 original expected-results sketch with stored evidence,
@@ -242,6 +243,7 @@ Key files:
 - `docs/claim_text_guard.md`: generated guard that checks paper-facing text for unsupported-claim drift
 - `docs/goal_completion_audit.md`: generated audit showing original-goal completion status and blocking evidence gaps
 - `docs/thesis_revision_decision.md`: generated decision memo for revising the original thesis into a boundary-result paper
+- `docs/project_closure.md`: closure note freezing the current artifact as a boundary-result paper
 - `docs/validity_threats.md`: generated validity-threat map with evidence, mitigations, and safe wording
 - `docs/limitations_traceability_audit.md`: generated audit linking paper limitations to validity-threat safe wording
 - `docs/expected_results_reconciliation.md`: generated audit proving paper-facing files use actual headline evidence instead of expected-results numbers
