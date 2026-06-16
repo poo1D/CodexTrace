@@ -360,6 +360,13 @@ the stored pilots, two process labels have real-pilot positives
 only in the no-verify ablation (`verification_gap` and
 `premature_completion`), and two remain fixture-only in the current artifact
 (`unrecovered_tool_error` and `context_drift`).
+The generated detector mechanism map in
+`docs/detector_evaluation_audit.md` ties each RQ2 label to the rule-level
+finding code, observable trace signal, evidence tier, and boundary note. For
+example, `repetitive_exploration` maps to `repeated_search_or_read` and
+repeated search/read or high repeated-tool-call traces, while
+`context_drift` maps to `long_context_no_progress` and is explicitly disclosed
+as a v1 proxy rather than a semantic task-keyword drift detector.
 
 Second, on real pilot traces, the detector identifies reviewed observable
 process positives but does not detect hidden semantic edge cases. For the

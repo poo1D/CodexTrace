@@ -2484,6 +2484,8 @@ def test_paper_draft_contains_submission_polish_sections():
     assert "| Taxonomy label | Implementation finding | Detector signal |" in text
     assert "| `verification_gap` | `verification_gap` |" in text
     assert "| `unrecovered_tool_error` | `command_failure_unhandled` |" in text
+    assert "generated detector mechanism map" in text
+    assert "v1 proxy rather than a semantic task-keyword drift detector" in text
     assert "| Evidence slice | Baseline | Intervention | Interpretation |" in text
     assert "| unresolved_error_rate | 0.00 | 0.00 | 0.00 |" in text
     assert "No model training, fine-tuning, embedding index, or GPU inference is used" in text

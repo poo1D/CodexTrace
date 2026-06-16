@@ -227,6 +227,8 @@ def check_paper_draft_content(path: Path = Path("docs/paper_draft.md")) -> dict[
         "step file paths field": "`Step.file_paths`",
         "step failure tags field": "`Step.failure_tags`",
         "detector rule mapping": "| Taxonomy label | Implementation finding | Detector signal |",
+        "detector mechanism map": "generated detector mechanism map",
+        "context drift proxy": "v1 proxy rather than a semantic task-keyword drift detector",
         "measurement table": "| Metric | Measurement |",
         "metric coverage link": "docs/metric_coverage_audit.md",
         "benchmark trace artifact link": "docs/benchmark_trace_artifact.md",
