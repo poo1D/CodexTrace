@@ -12,7 +12,9 @@ sys.path.insert(0, str(ROOT))
 
 DEFAULT_PATHS = (
     Path("README.md"),
+    Path("docs/artifact_guide.md"),
     Path("docs/paper_draft.md"),
+    Path("docs/paper_outline.md"),
     Path("docs/headline_results.md"),
     Path("docs/submission_package.md"),
     Path("docs/reproducibility_checklist.md"),

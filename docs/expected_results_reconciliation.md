@@ -5,7 +5,7 @@ This generated audit checks that paper-facing files use the stored headline evid
 ## Summary
 
 - Ready: yes
-- Paper files clean: 5 / 5
+- Paper files clean: 7 / 7
 - Headline phrases present: 7 / 7
 - Expected sketch replacements: 5
 - Headline table: `docs/headline_results.md`
@@ -15,7 +15,9 @@ This generated audit checks that paper-facing files use the stored headline evid
 | File | Clean | Forbidden expected strings |
 | --- | --- | --- |
 | `README.md` | yes | - |
+| `docs/artifact_guide.md` | yes | - |
 | `docs/paper_draft.md` | yes | - |
+| `docs/paper_outline.md` | yes | - |
 | `docs/headline_results.md` | yes | - |
 | `docs/submission_package.md` | yes | - |
 | `docs/reproducibility_checklist.md` | yes | - |

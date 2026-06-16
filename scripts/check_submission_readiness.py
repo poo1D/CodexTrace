@@ -701,8 +701,10 @@ def check_expected_results_reconciliation_content(path: Path = Path("docs/expect
 
     required_phrases = {
         "ready": "Ready: yes",
-        "paper files clean": "Paper files clean: 5 / 5",
+        "paper files clean": "Paper files clean: 7 / 7",
         "headline phrases": "Headline phrases present: 7 / 7",
+        "artifact guide scanned": "docs/artifact_guide.md",
+        "paper outline scanned": "docs/paper_outline.md",
         "replacement map": "## Expected Sketch Replacement Map",
         "replacement count": "Expected sketch replacements: 5",
         "verification replacement": "ordinary-baseline verification-rate lift unsupported",

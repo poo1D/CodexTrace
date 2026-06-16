@@ -70,7 +70,17 @@
     {
       "clean": true,
       "forbidden_expected_strings": [],
+      "path": "docs/artifact_guide.md"
+    },
+    {
+      "clean": true,
+      "forbidden_expected_strings": [],
       "path": "docs/paper_draft.md"
+    },
+    {
+      "clean": true,
+      "forbidden_expected_strings": [],
+      "path": "docs/paper_outline.md"
     },
     {
       "clean": true,
@@ -89,11 +99,11 @@
     }
   ],
   "summary": {
-    "clean_paper_file_count": 5,
+    "clean_paper_file_count": 7,
     "headline_path": "docs/headline_results.md",
     "headline_phrase_count": 7,
     "headline_phrase_present_count": 7,
-    "paper_file_count": 5,
+    "paper_file_count": 7,
     "ready": true,
     "replacement_count": 5
   }

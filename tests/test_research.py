@@ -2214,8 +2214,8 @@ def test_expected_results_reconciliation_replaces_aspirational_table():
     markdown = render_expected_results_reconciliation_markdown(result)
 
     assert result["summary"]["ready"] is True
-    assert result["summary"]["clean_paper_file_count"] == 5
-    assert result["summary"]["paper_file_count"] == 5
+    assert result["summary"]["clean_paper_file_count"] == 7
+    assert result["summary"]["paper_file_count"] == 7
     assert result["summary"]["headline_phrase_present_count"] == 7
     assert result["summary"]["headline_phrase_count"] == 7
     assert result["summary"]["replacement_count"] == 5
@@ -2223,8 +2223,15 @@ def test_expected_results_reconciliation_replaces_aspirational_table():
     assert replacements["verification_rate"]["paper_status"] == "ordinary-baseline verification-rate lift unsupported"
     assert replacements["token_usage"]["stored_evidence"] == "hard30 355.0k -> 256.3k"
     assert all(row["clean"] for row in result["paper_files"])
+    assert {row["path"] for row in result["paper_files"]} >= {
+        "docs/artifact_guide.md",
+        "docs/paper_outline.md",
+    }
     assert all(row["present"] for row in result["headline_checks"])
     assert "aspirational expected-results table" in markdown
+    assert "Paper files clean: 7 / 7" in markdown
+    assert "`docs/artifact_guide.md`" in markdown
+    assert "`docs/paper_outline.md`" in markdown
     assert "## Expected Sketch Replacement Map" in markdown
     assert "Ordinary verification-rate lift supported: no" in markdown
 
@@ -3097,6 +3104,8 @@ def test_submission_readiness_validates_expected_results_reconciliation_content(
     assert "missing ready" in check["problems"]
     assert "missing paper files clean" in check["problems"]
     assert "missing headline phrases" in check["problems"]
+    assert "missing artifact guide scanned" in check["problems"]
+    assert "missing paper outline scanned" in check["problems"]
     assert "missing ordinary lift unsupported" in check["problems"]
     assert "missing expected sketch caveat" in check["problems"]
 
