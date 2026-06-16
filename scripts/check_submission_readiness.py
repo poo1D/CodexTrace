@@ -695,6 +695,10 @@ def check_expected_results_reconciliation_content(path: Path = Path("docs/expect
         "ready": "Ready: yes",
         "paper files clean": "Paper files clean: 5 / 5",
         "headline phrases": "Headline phrases present: 7 / 7",
+        "replacement map": "## Expected Sketch Replacement Map",
+        "replacement count": "Expected sketch replacements: 5",
+        "verification replacement": "ordinary-baseline verification-rate lift unsupported",
+        "token replacement": "hard30 355.0k -> 256.3k",
         "ordinary lift unsupported": "Ordinary verification-rate lift supported: no",
         "expected sketch caveat": "aspirational expected-results table",
     }

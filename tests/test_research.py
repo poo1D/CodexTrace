@@ -2182,9 +2182,14 @@ def test_expected_results_reconciliation_replaces_aspirational_table():
     assert result["summary"]["paper_file_count"] == 5
     assert result["summary"]["headline_phrase_present_count"] == 7
     assert result["summary"]["headline_phrase_count"] == 7
+    assert result["summary"]["replacement_count"] == 5
+    replacements = {row["sketch_metric"]: row for row in result["expected_sketch_replacements"]}
+    assert replacements["verification_rate"]["paper_status"] == "ordinary-baseline verification-rate lift unsupported"
+    assert replacements["token_usage"]["stored_evidence"] == "hard30 355.0k -> 256.3k"
     assert all(row["clean"] for row in result["paper_files"])
     assert all(row["present"] for row in result["headline_checks"])
     assert "aspirational expected-results table" in markdown
+    assert "## Expected Sketch Replacement Map" in markdown
     assert "Ordinary verification-rate lift supported: no" in markdown
 
 

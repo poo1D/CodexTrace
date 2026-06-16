@@ -43,6 +43,39 @@ REQUIRED_HEADLINE_PHRASES = (
     "| `hard30_token_usage` | 355.0k | 256.3k | -98.7k | supported waste reduction |",
 )
 
+EXPECTED_SKETCH_REPLACEMENTS = (
+    {
+        "sketch_metric": "success_rate",
+        "original_expected": "42% -> 58%",
+        "stored_evidence": "hard30 0.50 -> 0.50; hard10 0.70 -> 0.80",
+        "paper_status": "flat hard30; pilot-qualified hard10 lift",
+    },
+    {
+        "sketch_metric": "verification_rate",
+        "original_expected": "51% -> 83%",
+        "stored_evidence": "hard30 1.00 -> 1.00; verification-lift-v2 1.00 -> 1.00",
+        "paper_status": "ordinary-baseline verification-rate lift unsupported",
+    },
+    {
+        "sketch_metric": "repeated_tool_calls",
+        "original_expected": "6.4 -> 3.1",
+        "stored_evidence": "hard30 12.93 -> 9.20",
+        "paper_status": "supported waste reduction",
+    },
+    {
+        "sketch_metric": "unresolved_errors",
+        "original_expected": "2.2 -> 0.9",
+        "stored_evidence": "hard30 0.00 -> 0.00",
+        "paper_status": "no unresolved-error movement",
+    },
+    {
+        "sketch_metric": "token_usage",
+        "original_expected": "18.7k -> 15.2k",
+        "stored_evidence": "hard30 355.0k -> 256.3k",
+        "paper_status": "supported waste reduction",
+    },
+)
+
 
 def build_expected_results_reconciliation(
     paper_paths: tuple[Path, ...] = DEFAULT_PATHS,
@@ -71,10 +104,12 @@ def build_expected_results_reconciliation(
             "clean_paper_file_count": sum(1 for row in paper_checks if row["clean"]),
             "headline_phrase_count": len(headline_checks),
             "headline_phrase_present_count": sum(1 for row in headline_checks if row["present"]),
+            "replacement_count": len(EXPECTED_SKETCH_REPLACEMENTS),
             "headline_path": str(headline_path),
         },
         "paper_files": paper_checks,
         "headline_checks": headline_checks,
+        "expected_sketch_replacements": list(EXPECTED_SKETCH_REPLACEMENTS),
     }
 
 
@@ -90,6 +125,7 @@ def render_expected_results_reconciliation_markdown(result: dict[str, Any]) -> s
         f"- Ready: {'yes' if summary['ready'] else 'no'}",
         f"- Paper files clean: {summary['clean_paper_file_count']} / {summary['paper_file_count']}",
         f"- Headline phrases present: {summary['headline_phrase_present_count']} / {summary['headline_phrase_count']}",
+        f"- Expected sketch replacements: {summary['replacement_count']}",
         f"- Headline table: `{summary['headline_path']}`",
         "",
         "## Paper-Facing Files",
@@ -111,6 +147,18 @@ def render_expected_results_reconciliation_markdown(result: dict[str, Any]) -> s
     for row in result["headline_checks"]:
         phrase = _escape_table_cell(f"`{row['phrase']}`")
         lines.append(f"| {phrase} | {'yes' if row['present'] else 'no'} |")
+    lines.extend([
+        "",
+        "## Expected Sketch Replacement Map",
+        "",
+        "| Sketch metric | Original expected | Stored evidence | Paper status |",
+        "| --- | --- | --- | --- |",
+    ])
+    for row in result["expected_sketch_replacements"]:
+        lines.append(
+            f"| `{row['sketch_metric']}` | `{row['original_expected']}` | "
+            f"{row['stored_evidence']} | {row['paper_status']} |"
+        )
     lines.extend([
         "",
         "Interpretation: this audit prevents the aspirational expected-results table from drifting back into the paper as evidence. It does not judge whether the current headline results are strong enough for a particular venue.",

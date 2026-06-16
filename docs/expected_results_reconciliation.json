@@ -1,4 +1,36 @@
 {
+  "expected_sketch_replacements": [
+    {
+      "original_expected": "42% -> 58%",
+      "paper_status": "flat hard30; pilot-qualified hard10 lift",
+      "sketch_metric": "success_rate",
+      "stored_evidence": "hard30 0.50 -> 0.50; hard10 0.70 -> 0.80"
+    },
+    {
+      "original_expected": "51% -> 83%",
+      "paper_status": "ordinary-baseline verification-rate lift unsupported",
+      "sketch_metric": "verification_rate",
+      "stored_evidence": "hard30 1.00 -> 1.00; verification-lift-v2 1.00 -> 1.00"
+    },
+    {
+      "original_expected": "6.4 -> 3.1",
+      "paper_status": "supported waste reduction",
+      "sketch_metric": "repeated_tool_calls",
+      "stored_evidence": "hard30 12.93 -> 9.20"
+    },
+    {
+      "original_expected": "2.2 -> 0.9",
+      "paper_status": "no unresolved-error movement",
+      "sketch_metric": "unresolved_errors",
+      "stored_evidence": "hard30 0.00 -> 0.00"
+    },
+    {
+      "original_expected": "18.7k -> 15.2k",
+      "paper_status": "supported waste reduction",
+      "sketch_metric": "token_usage",
+      "stored_evidence": "hard30 355.0k -> 256.3k"
+    }
+  ],
   "headline_checks": [
     {
       "phrase": "This generated table replaces the original expected-results sketch with the current stored evidence.",
@@ -62,6 +94,7 @@
     "headline_phrase_count": 7,
     "headline_phrase_present_count": 7,
     "paper_file_count": 5,
-    "ready": true
+    "ready": true,
+    "replacement_count": 5
   }
 }
