@@ -63,8 +63,8 @@
       "status": "satisfied"
     },
     {
-      "evidence": "verification is saturated in stored pilots: full30=1.00->1.00 (exact=1.00->1.00), hard10=1.00->1.00 (exact=1.00->1.00), hard30=1.00->1.00 (exact=1.00->1.00), process-stress=1.00->1.00 (exact=1.00->1.00), verification-lift=1.00->1.00 (exact=1.00->1.00), verification-lift-v2=1.00->1.00 (exact=1.00->1.00).",
-      "gap": "The ordinary and weak-baseline pilots are negative results; the no-verify ablation shows the harness can lift verification from 0.00 to 1.00, and exact success-check verification from 0.00 to 1.00, but this is not an ordinary-baseline result.",
+      "evidence": "verification is saturated in stored pilots: full30=1.00->1.00 (exact=1.00->1.00), hard10=1.00->1.00 (exact=1.00->1.00), hard30=1.00->1.00 (exact=1.00->1.00), process-stress=1.00->1.00 (exact=1.00->1.00), verification-lift=1.00->1.00 (exact=1.00->1.00), verification-lift-v2=1.00->1.00 (exact=1.00->1.00). Headroom audit: 98 non-ablation baseline run(s), 0 without broad verification, 0 without exact success-check verification, empirical headroom=0.00, rule-of-three nonverification upper bound=0.031, ordinary expansion can close claim=no.",
+      "gap": "The ordinary and weak-baseline pilots are negative results; the no-verify ablation shows the harness can lift verification from 0.00 to 1.00, and exact success-check verification from 0.00 to 1.00, but this is not an ordinary-baseline result. The headroom audit is a stopping rule for same-style ordinary expansion, not a positive verification-lift experiment.",
       "id": "verification_lift",
       "requirement": "Show that harness intervention increases verification rate.",
       "status": "missing"
@@ -166,6 +166,31 @@
     ],
     "name": "verification-lift tier",
     "purpose": "Directly test the missing verification-rate-lift claim under a prompt contrast where baseline verification is optional and intervention verification is evidence-gated."
+  },
+  "verification_lift_power_audit": {
+    "path": "docs/verification_lift_power_audit.json",
+    "summary": {
+      "baseline_runs": 98,
+      "baseline_unverified_broad": 0,
+      "baseline_unverified_exact": 0,
+      "empirical_exact_rate_headroom": 0.0,
+      "empirical_rate_headroom": 0.0,
+      "expected_table_baseline_rate": 0.51,
+      "expected_table_compatible": false,
+      "expected_table_delta": 0.31999999999999995,
+      "expected_table_intervention_rate": 0.83,
+      "interpretation": "stored ordinary and weak-baseline runs have no observed verification-rate headroom; additional same-style saturated runs cannot prove a positive rate lift",
+      "intervention_runs": 98,
+      "non_ablation_tier_count": 6,
+      "observed_baseline_verification_rate": 1.0,
+      "observed_exact_baseline_verification_rate": 1.0,
+      "observed_exact_intervention_verification_rate": 1.0,
+      "observed_intervention_verification_rate": 1.0,
+      "ordinary_expansion_can_close_claim": false,
+      "ready": true,
+      "rule_of_three_exact_nonverification_upper_bound": 0.030612244897959183,
+      "rule_of_three_nonverification_upper_bound": 0.030612244897959183
+    }
   },
   "verification_lift_v2_experiment": {
     "current_scaffold": {

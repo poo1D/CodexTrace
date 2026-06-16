@@ -2,7 +2,7 @@
   "blocking_items": [
     {
       "completion_effect": "blocks original goal completion",
-      "evidence": "verification is saturated in stored pilots: full30=1.00->1.00 (exact=1.00->1.00), hard10=1.00->1.00 (exact=1.00->1.00), hard30=1.00->1.00 (exact=1.00->1.00), process-stress=1.00->1.00 (exact=1.00->1.00), verification-lift=1.00->1.00 (exact=1.00->1.00), verification-lift-v2=1.00->1.00 (exact=1.00->1.00).",
+      "evidence": "verification is saturated in stored pilots: full30=1.00->1.00 (exact=1.00->1.00), hard10=1.00->1.00 (exact=1.00->1.00), hard30=1.00->1.00 (exact=1.00->1.00), process-stress=1.00->1.00 (exact=1.00->1.00), verification-lift=1.00->1.00 (exact=1.00->1.00), verification-lift-v2=1.00->1.00 (exact=1.00->1.00). Headroom audit: 98 non-ablation baseline run(s), 0 without broad verification, 0 without exact success-check verification, empirical headroom=0.00, rule-of-three nonverification upper bound=0.031, ordinary expansion can close claim=no.",
       "id": "verification_lift",
       "objective": "Show harness intervention raises ordinary-baseline verification rate.",
       "status": "missing"
@@ -39,7 +39,7 @@
     },
     {
       "completion_effect": "blocks original goal completion",
-      "evidence": "verification is saturated in stored pilots: full30=1.00->1.00 (exact=1.00->1.00), hard10=1.00->1.00 (exact=1.00->1.00), hard30=1.00->1.00 (exact=1.00->1.00), process-stress=1.00->1.00 (exact=1.00->1.00), verification-lift=1.00->1.00 (exact=1.00->1.00), verification-lift-v2=1.00->1.00 (exact=1.00->1.00).",
+      "evidence": "verification is saturated in stored pilots: full30=1.00->1.00 (exact=1.00->1.00), hard10=1.00->1.00 (exact=1.00->1.00), hard30=1.00->1.00 (exact=1.00->1.00), process-stress=1.00->1.00 (exact=1.00->1.00), verification-lift=1.00->1.00 (exact=1.00->1.00), verification-lift-v2=1.00->1.00 (exact=1.00->1.00). Headroom audit: 98 non-ablation baseline run(s), 0 without broad verification, 0 without exact success-check verification, empirical headroom=0.00, rule-of-three nonverification upper bound=0.031, ordinary expansion can close claim=no.",
       "id": "verification_lift",
       "objective": "Show harness intervention raises ordinary-baseline verification rate.",
       "status": "missing"

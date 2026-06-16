@@ -17,6 +17,7 @@ DEFAULT_PROCESS_STRESS_PILOT = Path("benchmark/process-stress/pilot/full-real/ag
 DEFAULT_VERIFICATION_LIFT_AUDIT = Path("docs/verification_lift_plan_audit.json")
 DEFAULT_VERIFICATION_LIFT_PILOT = Path("benchmark/verification-lift/pilot/full-real/aggregate.json")
 DEFAULT_VERIFICATION_LIFT_V2_PILOT = Path("benchmark/verification-lift-v2/pilot/full-real/aggregate.json")
+DEFAULT_VERIFICATION_LIFT_POWER_AUDIT = Path("docs/verification_lift_power_audit.json")
 DEFAULT_VERIFICATION_ABLATION_AUDIT = Path("docs/verification_ablation_plan_audit.json")
 DEFAULT_VERIFICATION_ABLATION_PILOT = Path("benchmark/verification-ablation/pilot/full-real/aggregate.json")
 DEFAULT_VERIFICATION_BEHAVIOR_AUDIT = Path("docs/verification_behavior_audit.json")
@@ -37,6 +38,7 @@ def build_thesis_readiness(
     verification_lift_audit_path: Path = DEFAULT_VERIFICATION_LIFT_AUDIT,
     verification_lift_pilot_path: Path = DEFAULT_VERIFICATION_LIFT_PILOT,
     verification_lift_v2_pilot_path: Path = DEFAULT_VERIFICATION_LIFT_V2_PILOT,
+    verification_lift_power_audit_path: Path = DEFAULT_VERIFICATION_LIFT_POWER_AUDIT,
     verification_ablation_audit_path: Path = DEFAULT_VERIFICATION_ABLATION_AUDIT,
     verification_ablation_pilot_path: Path = DEFAULT_VERIFICATION_ABLATION_PILOT,
     verification_behavior_audit_path: Path = DEFAULT_VERIFICATION_BEHAVIOR_AUDIT,
@@ -55,6 +57,7 @@ def build_thesis_readiness(
     verification_lift = _read_json(verification_lift_audit_path) if verification_lift_audit_path.exists() else {"ok": False, "task_count": 0}
     verification_lift_pilot = _read_json(verification_lift_pilot_path) if verification_lift_pilot_path.exists() else None
     verification_lift_v2_pilot = _read_json(verification_lift_v2_pilot_path) if verification_lift_v2_pilot_path.exists() else None
+    verification_lift_power = _read_json(verification_lift_power_audit_path) if verification_lift_power_audit_path.exists() else {"summary": {"ready": False}}
     verification_ablation = _read_json(verification_ablation_audit_path) if verification_ablation_audit_path.exists() else {"ok": False, "task_count": 0}
     verification_ablation_pilot = _read_json(verification_ablation_pilot_path) if verification_ablation_pilot_path.exists() else None
     verification_behavior = _read_json(verification_behavior_audit_path) if verification_behavior_audit_path.exists() else {"summary": {"ready": False}}
@@ -73,6 +76,7 @@ def build_thesis_readiness(
     rq4_ready = bool(rq4_signal_audit.get("summary", {}).get("ready"))
     verification_behavior_summary = verification_behavior.get("summary", {})
     verification_behavior_ready = bool(verification_behavior_summary.get("ready"))
+    verification_lift_power_summary = verification_lift_power.get("summary", {})
 
     taxonomy_tags = [
         "verification_gap",
@@ -162,6 +166,18 @@ def build_thesis_readiness(
     )
     non_ablation_verification_delta = max(verification_lift_delta, verification_lift_v2_delta)
     non_ablation_success_check_delta = max(verification_lift_success_check_delta, verification_lift_v2_success_check_delta)
+    verification_lift_power_evidence = ""
+    if verification_lift_power_summary.get("ready"):
+        verification_lift_power_evidence = (
+            " Headroom audit: "
+            f"{int(verification_lift_power_summary.get('baseline_runs', 0))} non-ablation baseline run(s), "
+            f"{int(verification_lift_power_summary.get('baseline_unverified_broad', 0))} without broad verification, "
+            f"{int(verification_lift_power_summary.get('baseline_unverified_exact', 0))} without exact success-check verification, "
+            f"empirical headroom={float(verification_lift_power_summary.get('empirical_rate_headroom', 0)):.2f}, "
+            f"rule-of-three nonverification upper bound={float(verification_lift_power_summary.get('rule_of_three_nonverification_upper_bound', 0)):.3f}, "
+            "ordinary expansion can close claim="
+            f"{'yes' if verification_lift_power_summary.get('ordinary_expansion_can_close_claim') else 'no'}."
+        )
     token_improved = int(hard30_paired["token_usage_delta"]["improved"])
     repeated_improved = int(hard30_paired["repeated_tool_call_delta"]["improved"])
     paired_n = int(hard30_paired["token_usage_delta"]["n"])
@@ -235,6 +251,7 @@ def build_thesis_readiness(
                 f"hard30={hard30_summary['baseline']['verification_rate']:.2f}->{hard30_summary['intervention']['verification_rate']:.2f} "
                 f"(exact={hard30_summary['baseline'].get('success_check_verification_rate', 0):.2f}->{hard30_summary['intervention'].get('success_check_verification_rate', 0):.2f})"
                 f"{process_verification_evidence}{verification_lift_evidence}."
+                f"{verification_lift_power_evidence}"
             ),
             "gap": (
                 "None for original thesis." if non_ablation_verification_delta > 0 and non_ablation_success_check_delta > 0
@@ -243,7 +260,7 @@ def build_thesis_readiness(
                     f"from {verification_ablation_summary.get('baseline_verification_rate', 0):.2f} to {verification_ablation_summary.get('intervention_verification_rate', 0):.2f}, "
                     f"and exact success-check verification from {verification_ablation_summary.get('baseline_success_check_verification_rate', 0):.2f} "
                     f"to {verification_ablation_summary.get('intervention_success_check_verification_rate', 0):.2f}, "
-                    "but this is not an ordinary-baseline result."
+                    "but this is not an ordinary-baseline result. The headroom audit is a stopping rule for same-style ordinary expansion, not a positive verification-lift experiment."
                 )
             ),
         },
@@ -362,6 +379,10 @@ def build_thesis_readiness(
                 "Use it as stronger evidence that ordinary Codex baselines already verify on these small tasks.",
                 "Report the clear waste reduction separately from verification-rate lift.",
             ],
+        },
+        "verification_lift_power_audit": {
+            "path": str(verification_lift_power_audit_path),
+            "summary": verification_lift_power_summary,
         },
         "verification_ablation_experiment": {
             "name": "verification-ablation tier",
@@ -585,6 +606,7 @@ def main() -> int:
     parser.add_argument("--verification-lift-audit", type=Path, default=DEFAULT_VERIFICATION_LIFT_AUDIT)
     parser.add_argument("--verification-lift-pilot", type=Path, default=DEFAULT_VERIFICATION_LIFT_PILOT)
     parser.add_argument("--verification-lift-v2-pilot", type=Path, default=DEFAULT_VERIFICATION_LIFT_V2_PILOT)
+    parser.add_argument("--verification-lift-power-audit", type=Path, default=DEFAULT_VERIFICATION_LIFT_POWER_AUDIT)
     parser.add_argument("--verification-ablation-audit", type=Path, default=DEFAULT_VERIFICATION_ABLATION_AUDIT)
     parser.add_argument("--verification-ablation-pilot", type=Path, default=DEFAULT_VERIFICATION_ABLATION_PILOT)
     parser.add_argument("--rq4-signal-audit", type=Path, default=DEFAULT_RQ4_SIGNAL_AUDIT)
@@ -606,6 +628,7 @@ def main() -> int:
         verification_lift_audit_path=args.verification_lift_audit,
         verification_lift_pilot_path=args.verification_lift_pilot,
         verification_lift_v2_pilot_path=args.verification_lift_v2_pilot,
+        verification_lift_power_audit_path=args.verification_lift_power_audit,
         verification_ablation_audit_path=args.verification_ablation_audit,
         verification_ablation_pilot_path=args.verification_ablation_pilot,
         rq4_signal_audit_path=args.rq4_signal_audit,

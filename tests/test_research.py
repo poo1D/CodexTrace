@@ -2844,6 +2844,9 @@ def test_thesis_readiness_identifies_original_thesis_gaps():
     assert "task diagnosis: double failures=14, repairs=1, regressions=1" in markdown
     assert "verification behavior audit shows saturated non-ablation tiers=6/6" in markdown
     assert "intervention reaches verification earlier with fewer verify-phase events" in markdown
+    assert "Headroom audit: 98 non-ablation baseline run(s)" in markdown
+    assert "empirical headroom=0.00" in markdown
+    assert "ordinary expansion can close claim=no" in markdown
     assert "Boundary-style RQ4 is supported" in markdown
     assert "optional process-stress expansion" in markdown
     assert "verification-lift tier" in markdown
@@ -2871,6 +2874,10 @@ def test_thesis_readiness_identifies_original_thesis_gaps():
     assert v2_pilot["baseline_verification_rate"] == v2_pilot["intervention_verification_rate"]
     assert v2_pilot["baseline_repeated_calls"] > v2_pilot["intervention_repeated_calls"]
     assert v2_pilot["baseline_token_usage"] > v2_pilot["intervention_token_usage"]
+    power = result["verification_lift_power_audit"]["summary"]
+    assert power["baseline_runs"] == 98
+    assert power["baseline_unverified_broad"] == 0
+    assert power["ordinary_expansion_can_close_claim"] is False
     pilot = result["next_experiment"]["current_scaffold"]["pilot"]
     assert pilot["tasks"] == 12
     assert pilot["runs"] == 24
@@ -3709,6 +3716,8 @@ def test_goal_completion_audit_keeps_original_goal_open():
     assert "verification_behavior" in markdown
     assert "does not close ordinary verification-rate lift" in markdown
     assert "Should mark active goal complete: no" in markdown
+    assert "Headroom audit: 98 non-ablation baseline run(s)" in markdown
+    assert "ordinary expansion can close claim=no" in markdown
     assert "Revise the thesis to a boundary-result paper" in markdown
     assert "verification-lift-v2 retest is complete and remains saturated" in markdown
 
