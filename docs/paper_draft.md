@@ -360,6 +360,10 @@ the stored pilots, two process labels have real-pilot positives
 only in the no-verify ablation (`verification_gap` and
 `premature_completion`), and two remain fixture-only in the current artifact
 (`unrecovered_tool_error` and `context_drift`).
+The RQ1 audit therefore includes a Natural Coverage Closure Plan: each
+non-real-pilot-positive process label needs at least two non-ablation
+baseline/intervention real-pilot positives with manual labels and detector
+evidence before the paper can claim natural coverage beyond evidence tiers.
 The generated detector mechanism map in
 `docs/detector_evaluation_audit.md` ties each RQ2 label to the rule-level
 finding code, observable trace signal, evidence tier, and boundary note. For

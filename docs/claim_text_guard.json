@@ -10,13 +10,13 @@
       "description": "Artifact guide should surface taxonomy evidence tiers on the reviewer-facing path.",
       "missing": [],
       "path": "docs/artifact_guide.md",
-      "phrase_count": 3
+      "phrase_count": 4
     },
     {
       "description": "Paper draft should present verification-lift as a negative result and frame RQ4 around the process/semantic boundary.",
       "missing": [],
       "path": "docs/paper_draft.md",
-      "phrase_count": 7
+      "phrase_count": 8
     },
     {
       "description": "Paper outline should include the v2 ordinary-baseline negative result and preserve the ablation boundary.",
@@ -45,17 +45,17 @@
   ],
   "files": [
     {
-      "line_count": 505,
+      "line_count": 523,
       "path": "README.md",
       "problems": []
     },
     {
-      "line_count": 242,
+      "line_count": 255,
       "path": "docs/artifact_guide.md",
       "problems": []
     },
     {
-      "line_count": 665,
+      "line_count": 723,
       "path": "docs/paper_draft.md",
       "problems": []
     },
@@ -70,12 +70,12 @@
       "problems": []
     },
     {
-      "line_count": 92,
+      "line_count": 94,
       "path": "docs/submission_package.md",
       "problems": []
     },
     {
-      "line_count": 876,
+      "line_count": 901,
       "path": "docs/reproducibility_checklist.md",
       "problems": []
     }

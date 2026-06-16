@@ -84,7 +84,8 @@ zero.
 21. Check task-category coverage in `docs/task_category_coverage.md`.
 22. Check harness protocol coverage in `docs/harness_protocol_audit.md`.
 23. Check failure-taxonomy coverage and evidence tiers in
-   `docs/failure_taxonomy_audit.md`.
+   `docs/failure_taxonomy_audit.md`, including the Natural Coverage Closure
+   Plan for labels that still lack non-ablation real-pilot positives.
 24. Check related-work positioning coverage in `docs/related_work_audit.md`.
 25. Check paper reference discoverability in `docs/bibliography_audit.md`.
 26. Check abstract-level evidence coverage in `docs/paper_abstract_audit.md`.

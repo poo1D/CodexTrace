@@ -42,6 +42,7 @@ REQUIRED_CAVEATS = (
         path=Path("docs/artifact_guide.md"),
         phrases=(
             "failure-taxonomy coverage and evidence tiers",
+            "Natural Coverage Closure Plan",
             "real-pilot-positive, ablation-positive, or fixture-only",
             "docs/task_category_coverage.md",
         ),
@@ -54,6 +55,7 @@ REQUIRED_CAVEATS = (
             "not claim a verification-rate lift",
             "ordinary and weak-baseline pilots have saturated verification rates",
             "fail to explain hidden semantic outcomes",
+            "Natural Coverage Closure Plan",
             "`test_writing` covered only by the seed tier",
             "undefined runs are excluded from group averages",
             "detector evidence tiers",
