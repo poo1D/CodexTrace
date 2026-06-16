@@ -1408,9 +1408,11 @@ def test_paired_effects_audit_quantifies_rq3_waste_deltas():
     assert result["summary"]["non_ablation_study_count"] == 6
     assert result["summary"]["non_ablation_repeated_improved"] == 6
     assert result["summary"]["non_ablation_token_improved"] == 6
+    assert result["summary"]["non_ablation_verification_flat"] == 6
     assert result["summary"]["hard30_paired_tasks"] == 30
     studies = {row["study"]: row for row in result["studies"]}
     assert studies["hard30"]["role"] == "non_ablation_pilot"
+    assert studies["hard30"]["success_check_verification_avg_delta"] == 0
     assert studies["verification_ablation"]["role"] == "auxiliary_ablation"
     claim_boundaries = {row["claim"]: row for row in result["claim_boundaries"]}
     assert claim_boundaries["Harness intervention reduces tool-call and token waste."]["verdict"] == "supported"
@@ -1425,6 +1427,9 @@ def test_paired_effects_audit_quantifies_rq3_waste_deltas():
     assert hard30["verification_delta"]["avg_delta"] == 0
     assert "Non-ablation studies with lower repeated calls: 6 / 6" in markdown
     assert "Non-ablation studies with lower token usage: 6 / 6" in markdown
+    assert "Non-ablation studies with flat broad and exact verification: 6 / 6" in markdown
+    assert "Exact verification delta" in markdown
+    assert "zero broad and exact visible-success-check verification deltas" in markdown
     assert "| verification_ablation | auxiliary_ablation |" in markdown
     assert "RQ3 Claim Boundary Verdicts" in markdown
     assert "Use as the primary RQ3 result and keep it task-paired" in markdown

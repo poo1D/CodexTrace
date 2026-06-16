@@ -74,6 +74,7 @@ def build_paired_effects_audit(
             "paired_task_count": len(paired_rows),
             "success_avg_delta": by_metric["success_delta"]["avg_delta"],
             "verification_avg_delta": by_metric["verification_delta"]["avg_delta"],
+            "success_check_verification_avg_delta": by_metric["success_check_verification_delta"]["avg_delta"],
             "repeated_tool_call_avg_delta": by_metric["repeated_tool_call_delta"]["avg_delta"],
             "token_usage_avg_delta": by_metric["token_usage_delta"]["avg_delta"],
             "repeated_tool_call_improved": by_metric["repeated_tool_call_delta"]["improved"],
@@ -85,10 +86,15 @@ def build_paired_effects_audit(
     non_ablation_rows = [row for row in study_rows if row["role"] == "non_ablation_pilot"]
     non_ablation_repeated_improved = sum(row["repeated_tool_call_avg_delta"] < 0 for row in non_ablation_rows)
     non_ablation_token_improved = sum(row["token_usage_avg_delta"] < 0 for row in non_ablation_rows)
+    non_ablation_verification_flat = sum(
+        row["verification_avg_delta"] == 0 and row["success_check_verification_avg_delta"] == 0
+        for row in non_ablation_rows
+    )
     ready = (
         len(study_rows) == len(studies)
         and non_ablation_repeated_improved == len(non_ablation_rows)
         and non_ablation_token_improved == len(non_ablation_rows)
+        and non_ablation_verification_flat == len(non_ablation_rows)
         and hard30["success_delta"]["n"] == 30
         and hard30["repeated_tool_call_delta"]["avg_delta"] < 0
         and hard30["repeated_tool_call_delta"]["ci_high"] < 0
@@ -107,6 +113,7 @@ def build_paired_effects_audit(
             "non_ablation_study_count": len(non_ablation_rows),
             "non_ablation_repeated_improved": non_ablation_repeated_improved,
             "non_ablation_token_improved": non_ablation_token_improved,
+            "non_ablation_verification_flat": non_ablation_verification_flat,
             "hard30_paired_tasks": hard30["success_delta"]["n"],
             "hard30_repeated_tool_call_avg_delta": hard30["repeated_tool_call_delta"]["avg_delta"],
             "hard30_repeated_tool_call_ci": [
@@ -143,6 +150,7 @@ def render_paired_effects_markdown(result: dict[str, Any]) -> str:
         f"- Bootstrap seed: {summary['bootstrap_seed']}",
         f"- Non-ablation studies with lower repeated calls: {summary['non_ablation_repeated_improved']} / {summary['non_ablation_study_count']}",
         f"- Non-ablation studies with lower token usage: {summary['non_ablation_token_improved']} / {summary['non_ablation_study_count']}",
+        f"- Non-ablation studies with flat broad and exact verification: {summary['non_ablation_verification_flat']} / {summary['non_ablation_study_count']}",
         f"- Hard30 paired tasks: {summary['hard30_paired_tasks']}",
         f"- Hard30 repeated tool-call delta: {_fmt(summary['hard30_repeated_tool_call_avg_delta'])} "
         f"[{_fmt(summary['hard30_repeated_tool_call_ci'][0])}, {_fmt(summary['hard30_repeated_tool_call_ci'][1])}]",
@@ -173,13 +181,14 @@ def render_paired_effects_markdown(result: dict[str, Any]) -> str:
         "",
         "## Study-Level Waste Deltas",
         "",
-        "| Study | Role | Paired tasks | Success delta | Verification delta | Repeated call delta | Token delta | Repeated improved | Token improved |",
-        "| --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |",
+        "| Study | Role | Paired tasks | Success delta | Verification delta | Exact verification delta | Repeated call delta | Token delta | Repeated improved | Token improved |",
+        "| --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |",
     ])
     for row in result["studies"]:
         lines.append(
             f"| {row['study']} | {row['role']} | {row['paired_task_count']} | {_fmt(row['success_avg_delta'])} | "
-            f"{_fmt(row['verification_avg_delta'])} | {_fmt(row['repeated_tool_call_avg_delta'])} | "
+            f"{_fmt(row['verification_avg_delta'])} | {_fmt(row['success_check_verification_avg_delta'])} | "
+            f"{_fmt(row['repeated_tool_call_avg_delta'])} | "
             f"{_fmt(row['token_usage_avg_delta'])} | {row['repeated_tool_call_improved']} | {row['token_usage_improved']} |"
         )
 
@@ -270,6 +279,10 @@ def _claim_boundaries(
     non_ablation_rows = [row for row in study_rows if row["role"] == "non_ablation_pilot"]
     lower_repeated = sum(row["repeated_tool_call_avg_delta"] < 0 for row in non_ablation_rows)
     lower_tokens = sum(row["token_usage_avg_delta"] < 0 for row in non_ablation_rows)
+    flat_verification = sum(
+        row["verification_avg_delta"] == 0 and row["success_check_verification_avg_delta"] == 0
+        for row in non_ablation_rows
+    )
     return [
         {
             "claim": "Harness intervention reduces tool-call and token waste.",
@@ -297,7 +310,11 @@ def _claim_boundaries(
         {
             "claim": "Harness intervention improves ordinary-baseline verification rate.",
             "verdict": "unsupported",
-            "evidence": f"Hard30 verification delta={_fmt(hard30_study['verification_avg_delta'])}.",
+            "evidence": (
+                f"{flat_verification}/{len(non_ablation_rows)} non-ablation studies have "
+                "zero broad and exact visible-success-check verification deltas. "
+                f"Hard30 verification delta={_fmt(hard30_study['verification_avg_delta'])}."
+            ),
             "safe_wording": "Do not claim ordinary verification-rate lift; report verification saturation.",
         },
         {
