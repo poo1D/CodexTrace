@@ -1735,6 +1735,10 @@ def test_failure_taxonomy_audit_covers_process_labels():
     assert tiers["premature_completion"] == "ablation-positive"
     assert tiers["unrecovered_tool_error"] == "fixture-only"
     assert tiers["context_drift"] == "fixture-only"
+    plan = {row["label"]: row for row in result["natural_coverage_plan"]}
+    assert set(plan) == {"verification_gap", "unrecovered_tool_error", "context_drift", "premature_completion"}
+    assert all(row["natural_positive_target"] == 2 for row in plan.values())
+    assert "do not count controlled fixtures or no-verify ablation rows" in plan["verification_gap"]["acceptance_gate"]
     rq1_boundaries = {row["claim"]: row for row in result["rq1_boundaries"]}
     assert rq1_boundaries["CodexTrace defines the six target observable process-failure modes."]["verdict"] == "supported"
     assert rq1_boundaries["Current real pilots naturally expose all six process-failure modes."]["verdict"] == "unsupported"
@@ -1742,6 +1746,9 @@ def test_failure_taxonomy_audit_covers_process_labels():
     assert rq1_boundaries["Hard30 outcome failures reveal an additional hidden-semantic boundary."]["verdict"] == "supported-boundary"
     assert "Fixture-only labels: 2 / 6" in markdown
     assert "RQ1 Distribution Boundary" in markdown
+    assert "Natural Coverage Closure Plan" in markdown
+    assert "Natural-positive target" in markdown
+    assert "do not count controlled fixtures or no-verify ablation rows" in markdown
     assert "Report evidence tiers rather than claiming natural-frequency coverage for every label" in markdown
     assert "Describe hidden semantic failures separately from observable process-failure taxonomy" in markdown
     assert "rule-level taxonomy coverage" in markdown
@@ -3662,6 +3669,7 @@ def test_submission_readiness_validates_failure_taxonomy_audit_content(tmp_path)
     assert "missing fixture only evidence tier" in check["problems"]
     assert "missing hard30 hidden semantic" in check["problems"]
     assert "missing rq1 distribution boundary" in check["problems"]
+    assert "missing natural coverage plan" in check["problems"]
     assert "missing natural coverage unsupported" in check["problems"]
     assert "missing hidden semantic separate" in check["problems"]
 

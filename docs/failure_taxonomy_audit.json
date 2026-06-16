@@ -79,6 +79,36 @@
       "taxonomy_doc": true
     }
   ],
+  "natural_coverage_plan": [
+    {
+      "acceptance_gate": "at least two non-ablation baseline/intervention real-pilot positives with manual labels and detector evidence; do not count controlled fixtures or no-verify ablation rows",
+      "candidate_task_pattern": "ordinary tasks with weak visible tests where the agent edits files but plausibly stops after inspection or local reasoning",
+      "current_tier": "ablation-positive",
+      "label": "verification_gap",
+      "natural_positive_target": 2
+    },
+    {
+      "acceptance_gate": "at least two non-ablation baseline/intervention real-pilot positives with manual labels and detector evidence; do not count controlled fixtures or no-verify ablation rows",
+      "candidate_task_pattern": "tasks with an initially failing command that requires a concrete repair before any successful verification",
+      "current_tier": "fixture-only",
+      "label": "unrecovered_tool_error",
+      "natural_positive_target": 2
+    },
+    {
+      "acceptance_gate": "at least two non-ablation baseline/intervention real-pilot positives with manual labels and detector evidence; do not count controlled fixtures or no-verify ablation rows",
+      "candidate_task_pattern": "multi-file or multi-turn change requests with tempting adjacent files that are irrelevant to the stated task",
+      "current_tier": "fixture-only",
+      "label": "context_drift",
+      "natural_positive_target": 2
+    },
+    {
+      "acceptance_gate": "at least two non-ablation baseline/intervention real-pilot positives with manual labels and detector evidence; do not count controlled fixtures or no-verify ablation rows",
+      "candidate_task_pattern": "tasks where a plausible edit is easy but the hidden grader needs an additional edge-case fix after verification",
+      "current_tier": "ablation-positive",
+      "label": "premature_completion",
+      "natural_positive_target": 2
+    }
+  ],
   "rq1_boundaries": [
     {
       "claim": "CodexTrace defines the six target observable process-failure modes.",

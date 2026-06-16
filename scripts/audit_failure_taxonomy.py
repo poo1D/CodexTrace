@@ -74,6 +74,7 @@ def build_failure_taxonomy_audit(
 
     ready = all(row["covered"] for row in rows)
     rq1_boundaries = _rq1_boundaries(rows, hidden_semantic_hard30_fn)
+    natural_coverage_plan = _natural_coverage_plan(rows)
     return {
         "summary": {
             "ready": ready,
@@ -89,6 +90,7 @@ def build_failure_taxonomy_audit(
             "fixture_eval_path": str(fixture_eval_path),
         },
         "rq1_boundaries": rq1_boundaries,
+        "natural_coverage_plan": natural_coverage_plan,
         "labels": rows,
     }
 
@@ -136,6 +138,18 @@ def render_failure_taxonomy_audit_markdown(result: dict[str, Any]) -> str:
     for row in result["rq1_boundaries"]:
         lines.append(
             f"| {row['claim']} | `{row['verdict']}` | {row['evidence']} | {row['safe_wording']} |"
+        )
+    lines.extend([
+        "",
+        "## Natural Coverage Closure Plan",
+        "",
+        "| Label | Current tier | Natural-positive target | Candidate task pattern | Acceptance gate |",
+        "| --- | --- | ---: | --- | --- |",
+    ])
+    for row in result["natural_coverage_plan"]:
+        lines.append(
+            f"| `{row['label']}` | `{row['current_tier']}` | {row['natural_positive_target']} | "
+            f"{row['candidate_task_pattern']} | {row['acceptance_gate']} |"
         )
     lines.extend([
         "",
@@ -197,6 +211,30 @@ def _rq1_boundaries(rows: list[dict[str, Any]], hidden_semantic_hard30_fn: int) 
             "safe_wording": "Describe hidden semantic failures separately from observable process-failure taxonomy.",
         },
     ]
+
+
+def _natural_coverage_plan(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    patterns = {
+        "verification_gap": "ordinary tasks with weak visible tests where the agent edits files but plausibly stops after inspection or local reasoning",
+        "unrecovered_tool_error": "tasks with an initially failing command that requires a concrete repair before any successful verification",
+        "context_drift": "multi-file or multi-turn change requests with tempting adjacent files that are irrelevant to the stated task",
+        "premature_completion": "tasks where a plausible edit is easy but the hidden grader needs an additional edge-case fix after verification",
+    }
+    plan = []
+    for row in rows:
+        if row["evidence_tier"] == "real-pilot-positive":
+            continue
+        plan.append({
+            "label": row["label"],
+            "current_tier": row["evidence_tier"],
+            "natural_positive_target": 2,
+            "candidate_task_pattern": patterns.get(row["label"], "ordinary Codex task designed to naturally elicit the process failure"),
+            "acceptance_gate": (
+                "at least two non-ablation baseline/intervention real-pilot positives with manual labels and detector evidence; "
+                "do not count controlled fixtures or no-verify ablation rows"
+            ),
+        })
+    return plan
 
 
 def _labels_for_tier(rows: list[dict[str, Any]], tier: str) -> str:
