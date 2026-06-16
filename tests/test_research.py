@@ -2667,6 +2667,8 @@ def test_reviewer_docs_surface_hard30_task_diagnosis():
     assert "docs/detector_evaluation_audit.md" in guide
     assert "docs/rule_implementation_audit.md" in guide
     assert "docs/benchmark_trace_artifact.md" in guide
+    assert "Is hard30 run-manifest provenance explicit?" in guide
+    assert "traces and prompts are committed for all 60 runs" in guide
     assert "docs/label_provenance_audit.md" in guide
     assert "docs/label_limitations_audit.md" in guide
     assert "docs/paired_effects_audit.md" in guide
@@ -2723,6 +2725,8 @@ def test_reviewer_docs_surface_hard30_task_diagnosis():
     assert "scripts/audit_paper_numbers.py" in checklist
     assert "scripts/audit_reviewer_path.py" in checklist
     assert "scripts/audit_benchmark_trace_artifact.py" in checklist
+    assert "Run Manifest Provenance table" in checklist
+    assert "grader/workdir paths are provenance references rather than committed directories" in checklist
     assert "scripts/audit_label_provenance.py" in checklist
     assert "scripts/audit_label_limitations.py" in checklist
     assert "scripts/audit_detector_evaluation.py" in checklist

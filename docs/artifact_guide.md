@@ -115,6 +115,7 @@ npm run dev
 | Is the no-verify ablation scaffold ready? | `docs/verification_ablation_plan_audit.md` |
 | Can the offline CLI regenerate representative artifacts? | `docs/cli_surface_audit.md` |
 | Is the hard30 JSONL trace benchmark complete? | `docs/benchmark_trace_artifact.md` |
+| Is hard30 run-manifest provenance explicit? | `docs/benchmark_trace_artifact.md` Run Manifest Provenance table; traces and prompts are committed for all 60 runs, while grader/workdir paths are provenance references. |
 | Is the normalized trace schema mapped to code? | `docs/schema_field_audit.md` |
 | Does the JSONL parser cover expected event variants? | `docs/parser_event_coverage.md` |
 | Do diagnosis findings trace to highlighted event nodes? | `docs/failure_node_traceability.md` |

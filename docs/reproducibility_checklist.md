@@ -225,6 +225,11 @@ PYTHONPATH=. python3 scripts/audit_benchmark_trace_artifact.py \
   --markdown-output /tmp/benchmark-trace-artifact.md
 ```
 
+Use the generated Run Manifest Provenance table to verify that every hard30
+run records `trace_path`, `prompt_path`, `success_check`, `codex_exit_code`,
+`grader_path`, and `workdir`. The committed artifact preserves trace and
+prompt files for all 60 runs; grader/workdir paths are provenance references rather than committed directories.
+
 Paired effects audit:
 
 ```bash
