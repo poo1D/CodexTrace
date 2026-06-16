@@ -6,6 +6,8 @@ This generated audit summarizes which trace signals explain observable process l
 
 - Ready for boundary-style RQ4 claim: yes
 - Detector-fixture labels with top signals: 6
+- Hard30 hidden semantic false negatives: 30
+- Hard30 hidden semantic recall: 0.00
 - Hard30 hidden semantic verification delta: +0.00
 - Hard30 hidden semantic exact success-check delta: +0.00
 - Hard30 hidden semantic unresolved-error delta: +0.00
@@ -15,6 +17,7 @@ This generated audit summarizes which trace signals explain observable process l
 
 | Signal | Delta success-failure | Interpretation |
 | --- | ---: | --- |
+| detector_recall | 0.00 | Process detectors miss 30 hidden semantic failures. |
 | verification_rate | +0.00 | Hidden failures are still verified. |
 | success_check_verification_rate | +0.00 | Hidden failures still run the visible success check. |
 | unresolved_error | +0.00 | Hidden failures do not leave unresolved tool errors. |
@@ -94,7 +97,7 @@ This generated audit summarizes which trace signals explain observable process l
 | --- | --- | --- | --- |
 | Trace signals explain controlled observable process labels. | `supported` | 6/6 expected label-signal checks pass. | Use expected signal checks as rule-level process-signal evidence. |
 | Trace signals explain observed real process positives. | `supported-with-boundary` | Hard30 repetitive_exploration top signals=5; full30 sandbox_permission_deadlock top signals=5. | Claim explanation for reviewed observable process positives, not all outcomes. |
-| Trace signals predict hidden semantic outcome failures. | `unsupported` | Hard30 hidden semantic deltas for verification, exact success-check verification, and unresolved_error are +0.00, +0.00, +0.00. | State that hidden semantic failures can look procedurally clean. |
+| Trace signals predict hidden semantic outcome failures. | `unsupported` | Hard30 hidden semantic detector recall=0.00 with FN=30; deltas for verification, exact success-check verification, and unresolved_error are +0.00, +0.00, +0.00. | State that hidden semantic failures can look procedurally clean. |
 | Failure score or token usage alone ranks hidden correctness. | `unsupported` | Hard30 hidden semantic token delta=-1771.6; failure-score delta=+1.00. | Keep token/failure-score claims process-scoped and pair them with task oracles. |
 
 Interpretation: RQ4 is best framed as a boundary result. Process signals explain observable process failures such as repeated exploration and sandbox friction, but hidden semantic failures can look procedurally clean.

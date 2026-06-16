@@ -39,8 +39,11 @@ def build_rq4_signal_audit(
     full30 = build_paper_report(full30_manifest_path, labels_path=full30_process_labels_path)
     fixtures = build_paper_report(detector_fixture_manifest_path, labels_path=detector_fixture_labels_path)
 
+    hidden_eval = hard30["detector_evaluation"]["labels"]["hidden_semantic_edge_case"]
     hard30_outcome = {row["signal"]: row for row in hard30["signal_by_outcome"]}
     hidden_boundary = {
+        "false_negatives": hidden_eval["fn"],
+        "recall": hidden_eval["recall"],
         "verification_delta_success_minus_failure": hard30_outcome["verification_rate"]["delta_success_minus_failure"],
         "success_check_verification_delta_success_minus_failure": hard30_outcome["success_check_verification_rate"]["delta_success_minus_failure"],
         "unresolved_error_delta_success_minus_failure": hard30_outcome["unresolved_error"]["delta_success_minus_failure"],
@@ -104,6 +107,8 @@ def render_rq4_signal_audit_markdown(result: dict[str, Any]) -> str:
         "",
         f"- Ready for boundary-style RQ4 claim: {'yes' if result['summary']['ready'] else 'no'}",
         f"- Detector-fixture labels with top signals: {result['summary']['detector_fixture_label_count']}",
+        f"- Hard30 hidden semantic false negatives: {boundary['false_negatives']}",
+        f"- Hard30 hidden semantic recall: {boundary['recall']:.2f}",
         f"- Hard30 hidden semantic verification delta: {boundary['verification_delta_success_minus_failure']:+.2f}",
         f"- Hard30 hidden semantic exact success-check delta: {boundary['success_check_verification_delta_success_minus_failure']:+.2f}",
         f"- Hard30 hidden semantic unresolved-error delta: {boundary['unresolved_error_delta_success_minus_failure']:+.2f}",
@@ -113,6 +118,7 @@ def render_rq4_signal_audit_markdown(result: dict[str, Any]) -> str:
         "",
         "| Signal | Delta success-failure | Interpretation |",
         "| --- | ---: | --- |",
+        f"| detector_recall | {boundary['recall']:.2f} | Process detectors miss {boundary['false_negatives']} hidden semantic failures. |",
         f"| verification_rate | {boundary['verification_delta_success_minus_failure']:+.2f} | Hidden failures are still verified. |",
         f"| success_check_verification_rate | {boundary['success_check_verification_delta_success_minus_failure']:+.2f} | Hidden failures still run the visible success check. |",
         f"| unresolved_error | {boundary['unresolved_error_delta_success_minus_failure']:+.2f} | Hidden failures do not leave unresolved tool errors. |",
@@ -286,7 +292,8 @@ def _signal_verdicts(
             "claim": "Trace signals predict hidden semantic outcome failures.",
             "verdict": "unsupported",
             "evidence": (
-                "Hard30 hidden semantic deltas for verification, exact success-check verification, "
+                f"Hard30 hidden semantic detector recall={hidden_boundary['recall']:.2f} "
+                f"with FN={hidden_boundary['false_negatives']}; deltas for verification, exact success-check verification, "
                 f"and unresolved_error are {core_hidden_deltas[0]:+.2f}, {core_hidden_deltas[1]:+.2f}, "
                 f"{core_hidden_deltas[2]:+.2f}."
             ),

@@ -3988,6 +3988,8 @@ def test_rq4_signal_audit_explains_boundary_and_process_signals():
     assert result["summary"]["detector_fixture_label_count"] == 6
     assert result["summary"]["detector_fixture_expected_signal_failures"] == 0
     assert result["summary"]["detector_fixture_expected_signal_checks"] == 6
+    assert result["hard30_hidden_boundary"]["false_negatives"] == 30
+    assert result["hard30_hidden_boundary"]["recall"] == 0
     assert len(result["detector_fixture_expected_signal_details"]) == 18
     detail_keys = {
         (row["label"], row["signal"])
@@ -4010,8 +4012,11 @@ def test_rq4_signal_audit_explains_boundary_and_process_signals():
     assert signal_verdicts["Trace signals explain controlled observable process labels."]["verdict"] == "supported"
     assert signal_verdicts["Trace signals explain observed real process positives."]["verdict"] == "supported-with-boundary"
     assert signal_verdicts["Trace signals predict hidden semantic outcome failures."]["verdict"] == "unsupported"
+    assert "FN=30" in signal_verdicts["Trace signals predict hidden semantic outcome failures."]["evidence"]
     assert signal_verdicts["Failure score or token usage alone ranks hidden correctness."]["verdict"] == "unsupported"
     assert "Hidden Semantic Boundary" in markdown
+    assert "Hard30 hidden semantic false negatives: 30" in markdown
+    assert "| detector_recall | 0.00 | Process detectors miss 30 hidden semantic failures. |" in markdown
     assert "Expected Label-Signal Checks" in markdown
     assert "Expected Signal Detail" in markdown
     assert "RQ4 Signal Verdicts" in markdown

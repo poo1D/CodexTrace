@@ -397,6 +397,8 @@
   ],
   "hard30_hidden_boundary": {
     "failure_score_delta_success_minus_failure": 1.0,
+    "false_negatives": 30,
+    "recall": 0.0,
     "success_check_verification_delta_success_minus_failure": 0.0,
     "token_usage_delta_success_minus_failure": -1771.6333,
     "unresolved_error_delta_success_minus_failure": 0.0,
@@ -459,7 +461,7 @@
     },
     {
       "claim": "Trace signals predict hidden semantic outcome failures.",
-      "evidence": "Hard30 hidden semantic deltas for verification, exact success-check verification, and unresolved_error are +0.00, +0.00, +0.00.",
+      "evidence": "Hard30 hidden semantic detector recall=0.00 with FN=30; deltas for verification, exact success-check verification, and unresolved_error are +0.00, +0.00, +0.00.",
       "safe_wording": "State that hidden semantic failures can look procedurally clean.",
       "verdict": "unsupported"
     },
@@ -477,6 +479,8 @@
     "full30_sandbox_top_signal_count": 5,
     "hard30_hidden_boundary": {
       "failure_score_delta_success_minus_failure": 1.0,
+      "false_negatives": 30,
+      "recall": 0.0,
       "success_check_verification_delta_success_minus_failure": 0.0,
       "token_usage_delta_success_minus_failure": -1771.6333,
       "unresolved_error_delta_success_minus_failure": 0.0,

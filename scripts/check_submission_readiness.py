@@ -1500,6 +1500,9 @@ def check_rq4_signal_audit_content(path: Path = Path("docs/rq4_signal_audit.md")
         "ready": "Ready for boundary-style RQ4 claim: yes",
         "fixture labels": "Detector-fixture labels with top signals: 6",
         "hidden semantic boundary": "Hidden Semantic Boundary",
+        "hidden semantic fn": "Hard30 hidden semantic false negatives: 30",
+        "hidden semantic recall": "Hard30 hidden semantic recall: 0.00",
+        "detector recall row": "| detector_recall | 0.00 | Process detectors miss 30 hidden semantic failures. |",
         "verification boundary": "Hard30 hidden semantic verification delta: +0.00",
         "unresolved error boundary": "Hard30 hidden semantic unresolved-error delta: +0.00",
         "repetitive exploration": "Hard30 Repetitive Exploration",
@@ -1515,6 +1518,7 @@ def check_rq4_signal_audit_content(path: Path = Path("docs/rq4_signal_audit.md")
         "controlled signal verdict": "Use expected signal checks as rule-level process-signal evidence.",
         "real process signal boundary": "Claim explanation for reviewed observable process positives, not all outcomes.",
         "hidden semantic unsupported": "Trace signals predict hidden semantic outcome failures. | `unsupported`",
+        "hidden semantic fn evidence": "FN=30",
         "task oracle pairing": "Keep token/failure-score claims process-scoped and pair them with task oracles.",
         "boundary interpretation": "hidden semantic failures can look procedurally clean",
     }
