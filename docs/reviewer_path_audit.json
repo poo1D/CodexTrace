@@ -36,6 +36,18 @@
       "expected": "nullable timing metrics use present values only rather than converting missing events to zero",
       "id": "guide_nullable_timing_boundary",
       "passed": true
+    },
+    {
+      "entry": "README.md",
+      "expected": "verification-rate headroom and expected-table incompatibility",
+      "id": "readme_verification_headroom_boundary",
+      "passed": true
+    },
+    {
+      "entry": "docs/artifact_guide.md",
+      "expected": "verification-rate headroom for the original expected table",
+      "id": "guide_verification_headroom_boundary",
+      "passed": true
     }
   ],
   "checklist_missing": [],
@@ -146,6 +158,15 @@
     {
       "covered": true,
       "path": "docs/verification_ablation_plan_audit.md",
+      "present_in": [
+        "README.md",
+        "docs/artifact_guide.md",
+        "docs/reproducibility_checklist.md"
+      ]
+    },
+    {
+      "covered": true,
+      "path": "docs/verification_lift_power_audit.md",
       "present_in": [
         "README.md",
         "docs/artifact_guide.md",
@@ -591,7 +612,7 @@
   ],
   "summary": {
     "boundary_check_missing": 0,
-    "boundary_checks": 6,
+    "boundary_checks": 8,
     "checklist_missing": 0,
     "core_step_count": 10,
     "extended_step_count": 35,
@@ -599,6 +620,6 @@
     "missing": 0,
     "path_check_missing": 0,
     "path_checks": 6,
-    "required_files": 58
+    "required_files": 59
   }
 }

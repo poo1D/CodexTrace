@@ -3,7 +3,7 @@
 This generated guard checks that required reviewer files are discoverable from the paper-facing entry points.
 
 OK: yes
-Required files: 58
+Required files: 59
 Missing everywhere: 0
 Missing from artifact guide required set: 0
 Missing from reproducibility checklist: 0
@@ -28,6 +28,7 @@ Entry boundary checks failed: 0
 | `docs/verification_lift_next_experiment.md` | yes | `README.md`, `docs/reproducibility_checklist.md` |
 | `docs/verification_lift_v2_plan_audit.md` | yes | `README.md`, `docs/reproducibility_checklist.md` |
 | `docs/verification_ablation_plan_audit.md` | yes | `README.md`, `docs/artifact_guide.md`, `docs/reproducibility_checklist.md` |
+| `docs/verification_lift_power_audit.md` | yes | `README.md`, `docs/artifact_guide.md`, `docs/reproducibility_checklist.md` |
 | `docs/verification_behavior_audit.md` | yes | `README.md`, `docs/artifact_guide.md`, `docs/reproducibility_checklist.md` |
 | `docs/headline_results.md` | yes | `README.md`, `docs/artifact_guide.md`, `docs/reproducibility_checklist.md` |
 | `docs/paper_draft.md` | yes | `README.md`, `docs/artifact_guide.md`, `docs/reproducibility_checklist.md` |
@@ -95,3 +96,5 @@ Entry boundary checks failed: 0
 | `guide_hard_tier_test_writing_boundary` | `docs/artifact_guide.md` | pass | hard-tier `test_writing` coverage remains seed-only |
 | `readme_nullable_timing_boundary` | `README.md` | pass | nullable timing metrics use present values only rather than converting missing events to zero |
 | `guide_nullable_timing_boundary` | `docs/artifact_guide.md` | pass | nullable timing metrics use present values only rather than converting missing events to zero |
+| `readme_verification_headroom_boundary` | `README.md` | pass | verification-rate headroom and expected-table incompatibility |
+| `guide_verification_headroom_boundary` | `docs/artifact_guide.md` | pass | verification-rate headroom for the original expected table |

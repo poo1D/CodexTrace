@@ -816,6 +816,8 @@ def check_reviewer_path_audit_content(path: Path = Path("docs/reviewer_path_audi
         "detector evidence tiers boundary": "detector evidence tiers separate real-pilot positives from ablation and fixture coverage",
         "hard-tier test writing boundary": "hard-tier `test_writing` coverage remains seed-only",
         "nullable timing boundary": "nullable timing metrics use present values only rather than converting missing events to zero",
+        "verification headroom boundary": "verification-rate headroom and expected-table incompatibility",
+        "verification headroom guide boundary": "verification-rate headroom for the original expected table",
         "required files table": "| Required file | Covered | Present in |",
     }
     for label, phrase in required_phrases.items():

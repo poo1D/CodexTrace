@@ -3192,7 +3192,7 @@ def test_reviewer_path_audit_covers_required_artifacts(tmp_path):
     assert result["summary"]["checklist_missing"] == 0
     assert result["summary"]["path_check_missing"] == 0
     assert result["summary"]["boundary_check_missing"] == 0
-    assert result["summary"]["boundary_checks"] == 6
+    assert result["summary"]["boundary_checks"] == 8
     assert result["summary"]["core_step_count"] == 10
     assert result["summary"]["extended_step_count"] >= 30
     assert any(row["path"] == "docs/artifact_guide.md" for row in result["coverage"])
@@ -3236,6 +3236,8 @@ def test_reviewer_path_audit_covers_required_artifacts(tmp_path):
     assert "`readme_detector_evidence_tiers` | `README.md` | pass" in markdown
     assert "`guide_hard_tier_test_writing_boundary` | `docs/artifact_guide.md` | pass" in markdown
     assert "`readme_nullable_timing_boundary` | `README.md` | pass" in markdown
+    assert "`readme_verification_headroom_boundary` | `README.md` | pass" in markdown
+    assert "`guide_verification_headroom_boundary` | `docs/artifact_guide.md` | pass" in markdown
     assert "`core_path_step_count` | pass" in markdown
 
     package = tmp_path / "submission_package.json"
@@ -3273,6 +3275,7 @@ def test_submission_readiness_validates_reviewer_path_audit_content(tmp_path):
     assert "missing core path structure" in check["problems"]
     assert "missing entry boundary checks" in check["problems"]
     assert "missing entry boundary table" in check["problems"]
+    assert "missing verification headroom boundary" in check["problems"]
 
 
 def test_submission_readiness_validates_artifact_guide_sequence_audit_content(tmp_path):

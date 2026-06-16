@@ -43,6 +43,16 @@ ENTRY_BOUNDARY_CHECKS = [
         "entry": "docs/artifact_guide.md",
         "phrase": "nullable timing metrics use present values only rather than converting missing events to zero",
     },
+    {
+        "id": "readme_verification_headroom_boundary",
+        "entry": "README.md",
+        "phrase": "verification-rate headroom and expected-table incompatibility",
+    },
+    {
+        "id": "guide_verification_headroom_boundary",
+        "entry": "docs/artifact_guide.md",
+        "phrase": "verification-rate headroom for the original expected table",
+    },
 ]
 
 
