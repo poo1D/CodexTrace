@@ -2215,8 +2215,8 @@ def test_paper_contribution_audit_covers_supported_contributions():
     checks = {row["id"]: row for row in result["checks"]}
 
     assert result["summary"]["ready"] is True
-    assert result["summary"]["passed"] == 12
-    assert result["summary"]["checks"] == 12
+    assert result["summary"]["passed"] == 13
+    assert result["summary"]["checks"] == 13
     assert checks["taxonomy_contribution"]["passed"] is True
     assert checks["benchmark_contribution"]["passed"] is True
     assert checks["codextrace_contribution"]["passed"] is True
@@ -2224,8 +2224,9 @@ def test_paper_contribution_audit_covers_supported_contributions():
     assert checks["detector_evidence_tiers"]["passed"] is True
     assert checks["category_lost_task_diagnosis"]["passed"] is True
     assert checks["harness_proxy_checks"]["passed"] is True
+    assert checks["verification_behavior_boundary"]["passed"] is True
     assert checks["no_verification_lift_contribution"]["passed"] is True
-    assert "Checks passed: 12 / 12" in markdown
+    assert "Checks passed: 13 / 13" in markdown
     assert "no_verification_lift_contribution" in markdown
 
 
@@ -2495,6 +2496,7 @@ def test_paper_draft_contains_submission_polish_sections():
     assert "docs/paired_effects_audit.md#RQ3 Claim Boundary Verdicts" in text
     assert "docs/rq4_signal_audit.md#RQ4 Signal Verdicts" in text
     assert "docs/verification_behavior_audit.md" in text
+    assert "earlier and leaner verification path" in text
     assert "`construct_validity`" in text
     assert "No-verify ablation is not ordinary-baseline evidence." in text
     assert "docs/paired_effects_audit.md" in text

@@ -459,6 +459,12 @@ behavior, but it is not ordinary-baseline evidence. Overall, the ordinary and
 weak-baseline pilots are a negative result for the verification-rate-lift claim
 and a positive result for the narrower waste-reduction claim.
 
+The generated verification-behavior audit adds a more precise process-level
+interpretation: in all six non-ablation tiers, intervention reaches
+verification earlier and uses fewer verify-phase events while broad and exact
+verification rates remain saturated. Thus the supported claim is an earlier and leaner verification path
+under saturated rates, not a higher verification rate or deeper verification.
+
 ### RQ4: Trace Signals By Outcome
 
 On the hard30 tier, the process signals do not strongly separate successful

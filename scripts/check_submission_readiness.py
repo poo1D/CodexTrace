@@ -252,6 +252,7 @@ def check_paper_draft_content(path: Path = Path("docs/paper_draft.md")) -> dict[
         "contribution block": "Our contributions are:",
         "references section": "## References",
         "time-to-first-test definition": "`time_to_first_test`",
+        "verification behavior result": "earlier and leaner verification path",
         "gpu-free method note": "No model training, fine-tuning, embedding index, or GPU inference is used",
         "process-vs-semantic limitation": "Trace diagnosis is less suited for proving semantic correctness",
     }
@@ -319,7 +320,7 @@ def check_paper_contribution_audit_content(path: Path = Path("docs/paper_contrib
 
     required_phrases = {
         "ready": "Ready: yes",
-        "coverage": "Checks passed: 12 / 12",
+        "coverage": "Checks passed: 13 / 13",
         "taxonomy": "taxonomy_contribution",
         "benchmark": "benchmark_contribution",
         "codextrace": "codextrace_contribution",
@@ -327,6 +328,7 @@ def check_paper_contribution_audit_content(path: Path = Path("docs/paper_contrib
         "evidence tiers": "detector_evidence_tiers",
         "category diagnosis": "category_lost_task_diagnosis",
         "harness proxies": "harness_proxy_checks",
+        "verification behavior boundary": "verification_behavior_boundary",
         "verification boundary": "no_verification_lift_contribution",
     }
     for label, phrase in required_phrases.items():
