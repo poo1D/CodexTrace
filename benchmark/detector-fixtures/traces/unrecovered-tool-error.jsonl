@@ -1,0 +1,5 @@
+{"type":"thread.started","thread_id":"detector-unrecovered-tool-error"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_1","type":"command_execution","command":"pytest -q","status":"failed","exit_code":1,"stderr":"FAILED tests/test_api.py::test_edge_case"}}
+{"type":"item.completed","item":{"id":"item_2","type":"agent_message","text":"I saw the failing test and will stop here."}}
+{"type":"turn.completed","usage":{"input_tokens":7600,"cached_input_tokens":5000,"output_tokens":220,"reasoning_output_tokens":30}}

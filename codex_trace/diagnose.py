@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 from collections import Counter
 
 from .parser import is_search_command, is_verification_command
@@ -13,20 +14,20 @@ def diagnose(trace: Trace) -> Diagnosis:
     findings: list[Finding] = []
     metrics = _metrics(trace)
 
-    failed_commands = [event for event in trace.events if event.kind == "command" and event.exit_code not in (None, 0)]
-    unresolved_failed_commands = _unresolved_failed_commands(trace.events, failed_commands)
-    if unresolved_failed_commands:
+    failed_executions = [event for event in trace.events if _event_is_failed_execution(event)]
+    unresolved_failed_executions = _unresolved_failed_executions(trace.events, failed_executions)
+    if unresolved_failed_executions:
         findings.append(Finding(
             code="command_failure_unhandled",
-            title="Command failures were not clearly handled",
+            title="Command or tool failures were not clearly handled",
             severity="high",
-            evidence=[_event_label(event) for event in unresolved_failed_commands],
+            evidence=[_event_label(event) for event in unresolved_failed_executions],
             recommendation="After a failed command, add an explicit repair step and rerun the relevant verification command before ending the turn.",
-            event_ids=[event.id for event in unresolved_failed_commands],
+            event_ids=[event.id for event in unresolved_failed_executions],
         ))
 
     if metrics["file_change_events"] > 0 and metrics["post_edit_verification_commands"] == 0:
-        changed = [event.id for event in trace.events if event.kind == "file_change"]
+        changed = [event.id for event in trace.events if _event_changes_files(event)]
         findings.append(Finding(
             code="verification_gap",
             title="Files changed without a verification command",
@@ -123,9 +124,12 @@ def _metrics(trace: Trace) -> dict[str, int]:
     return {
         "events": len(trace.events),
         "command_events": sum(event.kind == "command" and event.status != "in_progress" for event in trace.events),
+        "tool_call_events": sum(event.kind == "mcp_tool" and event.status != "in_progress" for event in trace.events),
         "failed_commands": sum(event.kind == "command" and event.exit_code not in (None, 0) for event in trace.events),
-        "file_change_events": sum(event.kind == "file_change" for event in trace.events),
+        "failed_tool_events": sum(event.kind == "mcp_tool" and _event_is_failed_execution(event) for event in trace.events),
+        "file_change_events": sum(_event_changes_files(event) for event in trace.events),
         "verification_commands": sum(event.kind == "command" and _is_verification(event.command or "") for event in trace.events),
+        "verification_tool_events": sum(event.kind == "mcp_tool" and _event_is_verification(event) for event in trace.events),
         "post_edit_verification_commands": _post_edit_verification_count(trace.events),
         "search_commands": sum(event.kind == "command" and event.status != "in_progress" and _is_search(event.command or "") for event in trace.events),
         "phase_setup_events": phase_counts["setup"],
@@ -141,12 +145,19 @@ def _metrics(trace: Trace) -> dict[str, int]:
     }
 
 
-def _unresolved_failed_commands(events: list[TraceEvent], failed: list[TraceEvent]) -> list[TraceEvent]:
+def _unresolved_failed_executions(events: list[TraceEvent], failed: list[TraceEvent]) -> list[TraceEvent]:
     unresolved = []
     for failed_event in failed:
         idx = events.index(failed_event)
-        later_commands = [event for event in events[idx + 1 :] if event.kind == "command"]
-        has_later_success = any(event.exit_code in (None, 0) and (_is_verification(event.command or "") or _similar_command(failed_event.command or "", event.command or "")) for event in later_commands)
+        later_executions = [
+            event
+            for event in events[idx + 1 :]
+            if event.kind in {"command", "mcp_tool"} and not _event_is_failed_execution(event)
+        ]
+        has_later_success = any(
+            _event_is_verification(event) or _similar_execution(failed_event, event)
+            for event in later_executions
+        )
         if not has_later_success:
             unresolved.append(failed_event)
     return unresolved
@@ -194,7 +205,7 @@ def _sandbox_events(events: list[TraceEvent]) -> list[TraceEvent]:
     for event in events:
         if event.status not in {"failed", "blocked", "error"} and event.exit_code in (None, 0):
             continue
-        haystack = f"{event.title}\n{event.detail}".lower()
+        haystack = f"{event.title}\n{event.detail}\n{_tool_haystack(event)}".lower()
         if any(word in haystack for word in SANDBOX_WORDS):
             matches.append(event)
     return matches
@@ -207,11 +218,11 @@ def _long_context_no_progress(trace: Trace, metrics: dict[str, int]) -> bool:
 def _post_edit_verification_count(events: list[TraceEvent]) -> int:
     last_change = None
     for index, event in enumerate(events):
-        if event.kind == "file_change":
+        if _event_changes_files(event):
             last_change = index
     if last_change is None:
         return 0
-    return sum(event.kind == "command" and _is_verification(event.command or "") for event in events[last_change + 1 :])
+    return sum(_event_is_verification(event) for event in events[last_change + 1 :])
 
 
 def _premature_completion_events(events: list[TraceEvent], metrics: dict[str, int]) -> list[TraceEvent]:
@@ -230,7 +241,7 @@ def _score(findings: list[Finding], metrics: dict[str, int]) -> int:
     score = 0
     for finding in findings:
         score += {"low": 10, "medium": 20, "high": 35}[finding.severity]
-    score += min(metrics["failed_commands"] * 5, 15)
+    score += min((metrics["failed_commands"] + metrics.get("failed_tool_events", 0)) * 5, 15)
     return min(score, 100)
 
 
@@ -238,7 +249,8 @@ def _summary(outcome: str, findings: list[Finding], metrics: dict[str, int]) -> 
     if not findings:
         return "No obvious failure pattern was detected in this trace."
     top = findings[0].title
-    return f"{outcome.title()} trace: {top}. {metrics['events']} events, {metrics['command_events']} commands, {metrics['failed_commands']} failed commands."
+    failed_total = metrics["failed_commands"] + metrics.get("failed_tool_events", 0)
+    return f"{outcome.title()} trace: {top}. {metrics['events']} events, {metrics['command_events']} commands, {failed_total} failed execution(s)."
 
 
 def _is_verification(command: str) -> bool:
@@ -257,6 +269,50 @@ def _similar_command(left: str, right: str) -> bool:
     left_head = _normalize_command(left).split(" ")[:2]
     right_head = _normalize_command(right).split(" ")[:2]
     return bool(left_head and left_head == right_head)
+
+
+def _event_is_failed_execution(event: TraceEvent) -> bool:
+    if event.kind == "command":
+        return event.exit_code not in (None, 0)
+    if event.kind == "mcp_tool":
+        return event.status in {"failed", "blocked", "error"} or event.tool_error is not None
+    return False
+
+
+def _event_is_verification(event: TraceEvent) -> bool:
+    if event.kind == "command":
+        return _is_verification(event.command or "")
+    if event.kind == "mcp_tool":
+        return _is_verification(_tool_haystack(event))
+    return False
+
+
+def _event_changes_files(event: TraceEvent) -> bool:
+    if event.kind == "file_change":
+        return True
+    if event.kind != "mcp_tool" or not event.files:
+        return False
+    name = (event.tool_name or event.title).lower()
+    return any(word in name for word in ("edit", "write", "patch", "apply", "update", "create", "delete"))
+
+
+def _similar_execution(left: TraceEvent, right: TraceEvent) -> bool:
+    if left.kind == "command" and right.kind == "command":
+        return _similar_command(left.command or "", right.command or "")
+    if left.kind == "mcp_tool" and right.kind == "mcp_tool":
+        return (left.tool_name or left.title) == (right.tool_name or right.title)
+    return False
+
+
+def _tool_haystack(event: TraceEvent) -> str:
+    parts = [
+        event.tool_name or event.title,
+        event.detail,
+        json.dumps(event.tool_arguments, sort_keys=True, default=str),
+        json.dumps(event.tool_result, sort_keys=True, default=str),
+        json.dumps(event.tool_error, sort_keys=True, default=str),
+    ]
+    return "\n".join(part for part in parts if part)
 
 
 def _event_label(event: TraceEvent) -> str:

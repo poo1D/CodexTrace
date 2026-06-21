@@ -9,6 +9,7 @@ from .parser import parse_jsonl
 from .report import render_json, render_markdown
 from .research import (
     aggregate_runs,
+    build_dashboard_artifact,
     build_paper_report,
     build_results_summary,
     evaluate_detector_labels,
@@ -22,6 +23,7 @@ from .research import (
     render_prompt,
     run_benchmark,
     write_aggregate_outputs,
+    write_dashboard_artifact,
     write_label_evaluation_outputs,
     write_label_template,
     write_paper_report_outputs,
@@ -29,10 +31,11 @@ from .research import (
     write_run_manifest,
     write_runs_csv,
 )
+from .sandbox import DockerRunConfig, run_docker_benchmark, smoke_check_fixture, write_docker_run_manifest
 
 
 def main(argv: list[str] | None = None) -> int:
-    parser = argparse.ArgumentParser(prog="codex-trace", description="Diagnose Codex exec --json traces.")
+    parser = argparse.ArgumentParser(prog="codex-trace", description="Diagnose and replay agent harness traces.")
     subparsers = parser.add_subparsers(dest="command", required=True)
 
     collect = subparsers.add_parser("collect", help="Normalize a Codex JSONL trace into schema JSON.")
@@ -43,6 +46,24 @@ def main(argv: list[str] | None = None) -> int:
     diagnose_cmd.add_argument("trace", type=Path)
     diagnose_cmd.add_argument("--format", choices=["markdown", "json"], default="markdown")
     diagnose_cmd.add_argument("-o", "--output", type=Path)
+
+    sandbox_cmd = subparsers.add_parser("sandbox", help="Docker sandbox benchmark runner.")
+    sandbox_subparsers = sandbox_cmd.add_subparsers(dest="sandbox_command", required=True)
+
+    docker_run_cmd = sandbox_subparsers.add_parser("run", help="Run benchmark fixture checks in a constrained Docker container.")
+    docker_run_cmd.add_argument("--tasks", type=Path, default=Path("benchmark/smoke/tasks.jsonl"))
+    docker_run_cmd.add_argument("--output-dir", type=Path, required=True)
+    docker_run_cmd.add_argument("--task-id", action="append", dest="task_ids")
+    docker_run_cmd.add_argument("--image", default="python:3.12-slim")
+    docker_run_cmd.add_argument("--cpus", default="1")
+    docker_run_cmd.add_argument("--memory", default="512m")
+    docker_run_cmd.add_argument("--network", default="none")
+    docker_run_cmd.add_argument("--timeout-seconds", type=int, default=60)
+    docker_run_cmd.add_argument("--command", dest="docker_command")
+    docker_run_cmd.add_argument("--dry-run", action="store_true")
+
+    sandbox_smoke_cmd = sandbox_subparsers.add_parser("smoke-check", help="Run a local fixture smoke check without Docker.")
+    sandbox_smoke_cmd.add_argument("--task-id", default="SM-001")
 
     research = subparsers.add_parser("research", help="Research benchmark helpers.")
     research_subparsers = research.add_subparsers(dest="research_command", required=True)
@@ -75,6 +96,10 @@ def main(argv: list[str] | None = None) -> int:
     paper_cmd.add_argument("--labels", type=Path)
     paper_cmd.add_argument("--json-output", type=Path)
     paper_cmd.add_argument("--markdown-output", type=Path)
+
+    dashboard_cmd = research_subparsers.add_parser("dashboard", help="Generate Web dashboard reports.json from a run manifest.")
+    dashboard_cmd.add_argument("manifest", type=Path)
+    dashboard_cmd.add_argument("-o", "--output", type=Path, default=Path("web/public/reports.json"))
 
     summary_cmd = research_subparsers.add_parser("summary", help="Generate a combined full30/hard10/hard30/process-stress paper result summary.")
     summary_cmd.add_argument("--full-manifest", type=Path, default=Path("benchmark/pilot/full30-real/runs.jsonl"))
@@ -121,6 +146,32 @@ def main(argv: list[str] | None = None) -> int:
         _write_or_print(output, args.output)
         return 0
 
+    if args.command == "sandbox" and args.sandbox_command == "run":
+        config = DockerRunConfig(
+            image=args.image,
+            cpus=args.cpus,
+            memory=args.memory,
+            timeout_seconds=args.timeout_seconds,
+            network=args.network,
+            command=args.docker_command,
+            dry_run=args.dry_run,
+        )
+        rows = run_docker_benchmark(
+            tasks_path=args.tasks,
+            output_dir=args.output_dir,
+            task_ids=args.task_ids,
+            config=config,
+        )
+        manifest_path = args.output_dir / "docker-runs.jsonl"
+        write_docker_run_manifest(rows, manifest_path)
+        print(f"Wrote {len(rows)} Docker run record(s) to {manifest_path}")
+        return 0
+
+    if args.command == "sandbox" and args.sandbox_command == "smoke-check":
+        result = smoke_check_fixture(args.task_id)
+        print(result.stdout or "", end="")
+        return 0 if result.returncode != 0 else 1
+
     if args.command == "research" and args.research_command == "prompt":
         tasks = {task.task_id: task for task in load_tasks(args.tasks)}
         if args.task_id not in tasks:
@@ -160,6 +211,12 @@ def main(argv: list[str] | None = None) -> int:
             write_paper_report_outputs(result, args.json_output, args.markdown_output)
         else:
             print(render_paper_report_markdown(result), end="")
+        return 0
+
+    if args.command == "research" and args.research_command == "dashboard":
+        result = build_dashboard_artifact(args.manifest)
+        write_dashboard_artifact(result, args.output)
+        print(f"Wrote {len(result['runs'])} dashboard run(s) to {args.output}")
         return 0
 
     if args.command == "research" and args.research_command == "summary":

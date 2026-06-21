@@ -1,8 +1,10 @@
 # CodexTrace
 
-CodexTrace is a flight recorder and failure debugger for `codex exec --json` runs.
-It turns Codex JSONL event streams into a normalized trace, detects agent failure
-patterns, and produces a report plus a replay UI.
+CodexTrace is a runnable Agent Harness showcase for trace ingestion, sandboxed
+fixture execution, deterministic evaluation, and replay visualization. It turns
+Codex, MCP, and OpenAI function-calling traces into a normalized event stream,
+detects agent failure patterns, emits report artifacts, and renders a compact
+evaluation dashboard.
 
 The practical problem is simple: after a coding agent fails, the transcript is
 long and noisy. CodexTrace answers:
@@ -27,6 +29,8 @@ codex exec --json "your coding task" > traces/run.jsonl
 ## Features
 
 - Normalize `codex exec --json` JSONL into a stable trace schema.
+- Normalize MCP JSON-RPC tool calls and OpenAI function-calling traces into the
+  same event model.
 - Segment trace events into setup, inspect, edit, verify, recover, and complete phases.
 - Detect concrete failure or inefficiency modes:
   - command failure not clearly handled
@@ -36,7 +40,11 @@ codex exec --json "your coding task" > traces/run.jsonl
   - sandbox or permission blocks
   - long context with weak progress
 - Generate Markdown and JSON diagnosis reports.
-- Replay a trace in a TypeScript Web UI with highlighted failure nodes.
+- Run benchmark fixtures in an isolated Docker workdir with CPU/memory/network
+  limits, timeout handling, stdout/stderr capture, git diffs, and metadata.
+- Replay multiple runs in a TypeScript dashboard with task lists,
+  baseline/intervention comparison, failure tags, diff/test-log panels, and
+  timeline filters.
 - Run offline with demo traces; optional LLM judging can be added later.
 - Includes `demo/real-codex-run.jsonl`, a real `codex exec --json` fixture captured from this repository.
 
@@ -130,8 +138,41 @@ pip install -e ".[dev]"
 
 codex-trace diagnose demo/failing-codex-trace.jsonl
 codex-trace diagnose demo/failing-codex-trace.jsonl --format json -o demo/report.json
+codex-trace sandbox smoke-check --task-id SM-001
+codex-trace sandbox run --tasks benchmark/smoke/tasks.jsonl --task-id SM-001 \
+  --output-dir runs/docker-smoke --dry-run
+codex-trace research dashboard benchmark/runs.example.jsonl -o web/public/reports.json
 pytest
+
+cd web
+npm ci
+npm run build
 ```
+
+The Docker runner command can execute for real when Docker is available:
+
+```bash
+codex-trace sandbox run --tasks benchmark/smoke/tasks.jsonl --task-id SM-001 \
+  --output-dir runs/docker-smoke --image python:3.12-slim \
+  --cpus 1 --memory 512m --timeout-seconds 60
+```
+
+Each Docker run writes `stdout.log`, `stderr.log`, `diff.patch`,
+`metadata.json`, `report.json`, and a top-level `docker-runs.jsonl` manifest.
+
+## Architecture
+
+CodexTrace has four small layers:
+
+1. Trace ingestion in `codex_trace/parser.py` maps Codex JSONL, MCP tool calls,
+   and OpenAI function calls onto `TraceEvent`.
+2. Diagnosis in `codex_trace/diagnose.py` computes deterministic failure
+   findings and metrics.
+3. Harness execution in `codex_trace/research.py` and `codex_trace/sandbox.py`
+   materializes benchmark fixtures, runs checks, captures logs, and writes
+   reproducible artifacts.
+4. Replay in `web/` loads single reports or multi-run artifacts for comparison,
+   failure inspection, diffs, logs, and timeline filtering.
 
 ## Demo
 
@@ -360,6 +401,12 @@ codex-trace research paper-report benchmark/runs.example.jsonl \
   --labels benchmark/labels.example.jsonl \
   --json-output reports/example-paper-report.json \
   --markdown-output reports/example-paper-report.md
+```
+
+Generate the replay dashboard artifact:
+
+```bash
+codex-trace research dashboard benchmark/runs.example.jsonl -o web/public/reports.json
 ```
 
 Current paper artifacts:

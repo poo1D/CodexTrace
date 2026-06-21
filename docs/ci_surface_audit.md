@@ -5,7 +5,7 @@ This generated audit checks that the repository CI and packaging surface exercis
 ## Summary
 
 - Ready: yes
-- CI checks covered: 10 / 10
+- CI checks covered: 11 / 11
 - Packaging checks covered: 6 / 6
 - Makefile checks covered: 3 / 3
 - CI workflow: `.github/workflows/ci.yml`
@@ -22,6 +22,7 @@ This generated audit checks that the repository CI and packaging surface exercis
 | `editable_dev_install` | installs package and dev dependencies | yes |
 | `pytest` | runs Python tests | yes |
 | `submission_readiness` | runs the paper artifact readiness gate | yes |
+| `docker_sandbox_smoke` | runs one smoke fixture through the Docker sandbox runner | yes |
 | `setup_node` | installs the Node runtime | yes |
 | `node_22` | pins CI to Node 22 | yes |
 | `web_install` | installs Web UI dependencies | yes |

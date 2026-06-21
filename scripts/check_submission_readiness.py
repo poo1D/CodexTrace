@@ -1350,10 +1350,11 @@ def check_ci_surface_audit_content(path: Path = Path("docs/ci_surface_audit.md")
 
     required_phrases = {
         "ready": "Ready: yes",
-        "ci coverage": "CI checks covered: 10 / 10",
+        "ci coverage": "CI checks covered: 11 / 11",
         "packaging coverage": "Packaging checks covered: 6 / 6",
         "makefile coverage": "Makefile checks covered: 3 / 3",
         "submission readiness": "`submission_readiness`",
+        "docker sandbox smoke": "`docker_sandbox_smoke`",
         "web build": "`web_build`",
         "console script": "`console_script`",
         "actions caveat": "does not execute GitHub Actions itself",
@@ -1607,7 +1608,7 @@ def check_rule_implementation_audit_content(path: Path = Path("docs/rule_impleme
         "detector evidence source": "Detector evidence source: `docs/detector_evaluation_audit.json`",
         "detector signal column": "Detector signal",
         "verification detector signal": "post-edit file changes without later test/build/lint verification",
-        "unrecovered error detector signal": "failed commands without a later similar recovery command or verification",
+        "unrecovered error detector signal": "failed commands or tool calls without a later similar recovery action or verification",
         "repetitive detector signal": "repeated search/read commands and high repeated tool-call volume",
         "context detector signal": "high context growth with weak edit or verification progress",
         "sandbox detector signal": "sandbox, permission, network, or access-denied tool errors",

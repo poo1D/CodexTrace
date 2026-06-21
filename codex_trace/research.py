@@ -584,6 +584,42 @@ def write_paper_report_outputs(result: dict[str, Any], json_path: str | Path | N
         path.write_text(render_paper_report_markdown(result), encoding="utf-8")
 
 
+def build_dashboard_artifact(manifest_path: str | Path) -> dict[str, Any]:
+    runs = []
+    for record, raw_trace_path in _load_run_manifest_items(manifest_path):
+        trace = parse_jsonl(record.trace_path)
+        diagnosis = diagnose(trace)
+        run_dir = record.trace_path.parent
+        diff_path = run_dir / "diff.patch"
+        test_log_path = run_dir / "success_check.txt"
+        stderr_path = run_dir / "codex.stderr"
+        run_id = f"{record.task_id}-{record.prompt_type}"
+        runs.append({
+            "id": run_id,
+            "task_id": record.task_id,
+            "prompt_type": record.prompt_type,
+            "outcome": record.outcome,
+            "report_path": raw_trace_path,
+            "diff": _read_optional_text(diff_path),
+            "test_log": _read_optional_text(test_log_path) or _read_optional_text(stderr_path),
+            "report": {
+                "trace": trace.to_dict(),
+                "diagnosis": diagnosis.to_dict(),
+            },
+        })
+    return {
+        "schema_version": 1,
+        "source_manifest": str(manifest_path),
+        "runs": runs,
+    }
+
+
+def write_dashboard_artifact(result: dict[str, Any], path: str | Path) -> None:
+    output_path = Path(path)
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    output_path.write_text(json.dumps(result, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+
+
 def build_results_summary(
     full_manifest_path: str | Path,
     full_process_labels_path: str | Path | None,
@@ -707,6 +743,10 @@ def _load_finalized_paper_report(manifest_path: str | Path, labels_path: str | P
         if path.exists():
             return json.loads(path.read_text(encoding="utf-8"))
     return None
+
+
+def _read_optional_text(path: Path) -> str:
+    return path.read_text(encoding="utf-8") if path.exists() else ""
 
 
 def render_results_summary_markdown(result: dict[str, Any]) -> str:

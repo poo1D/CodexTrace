@@ -1,0 +1,7 @@
+{"type":"thread.started","thread_id":"detector-context-drift"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_1","type":"agent_message","text":"I will inspect the repository broadly before deciding what to do."}}
+{"type":"item.completed","item":{"id":"item_2","type":"command_execution","command":"pwd","status":"completed","exit_code":0,"stdout":"/repo"}}
+{"type":"item.completed","item":{"id":"item_3","type":"command_execution","command":"git status --short","status":"completed","exit_code":0,"stdout":""}}
+{"type":"item.completed","item":{"id":"item_4","type":"agent_message","text":"I need more context before making progress."}}
+{"type":"turn.completed","usage":{"input_tokens":26000,"cached_input_tokens":20000,"output_tokens":400,"reasoning_output_tokens":100}}

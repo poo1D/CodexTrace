@@ -14,11 +14,14 @@ jobs:
           python-version: "3.12"
       - run: pip install -e ".[dev]"
       - run: pytest
+      - run: codex-trace sandbox smoke-check --task-id SM-001
+      - run: codex-trace sandbox run --tasks benchmark/smoke/tasks.jsonl --task-id SM-001 --output-dir /tmp/codextrace-docker-smoke --dry-run
+      - run: codex-trace sandbox run --tasks benchmark/smoke/tasks.jsonl --task-id SM-001 --output-dir /tmp/codextrace-docker-real --image python:3.12-slim --timeout-seconds 60
       - run: PYTHONPATH=. python3 scripts/check_submission_readiness.py
       - uses: actions/setup-node@v4
         with:
           node-version: "22"
-      - run: npm install
+      - run: npm ci
         working-directory: web
       - run: npm run build
         working-directory: web

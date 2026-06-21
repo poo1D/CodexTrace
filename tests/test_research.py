@@ -170,6 +170,7 @@ from scripts.check_submission_readiness import (
 
 from codex_trace.research import (
     aggregate_runs,
+    build_dashboard_artifact,
     build_paper_report,
     build_results_summary,
     evaluate_detector_labels,
@@ -183,6 +184,7 @@ from codex_trace.research import (
     run_success_check,
     write_run_manifest,
 )
+from codex_trace.sandbox import DockerRunConfig, build_docker_command, run_docker_benchmark
 
 
 def test_load_tasks_and_render_prompts():
@@ -1499,10 +1501,11 @@ def test_ci_surface_audit_covers_ci_packaging_and_readiness_gate():
     packaging_checks = {row["id"]: row for row in result["packaging_checks"]}
 
     assert result["summary"]["ready"] is True
-    assert result["summary"]["covered_ci_check_count"] == 10
+    assert result["summary"]["covered_ci_check_count"] == 11
     assert result["summary"]["covered_packaging_check_count"] == 6
     assert result["summary"]["covered_make_check_count"] == 3
     assert ci_checks["submission_readiness"]["present"] is True
+    assert ci_checks["docker_sandbox_smoke"]["present"] is True
     assert ci_checks["web_build"]["present"] is True
     assert packaging_checks["console_script"]["present"] is True
     assert "does not execute GitHub Actions itself" in markdown
@@ -1997,7 +2000,7 @@ def test_rule_implementation_audit_maps_taxonomy_to_diagnosis_rules():
     assert "Rules covered: 6 / 6" in markdown
     assert "Detector signal" in markdown
     assert "post-edit file changes without later test/build/lint verification" in markdown
-    assert "failed commands without a later similar recovery command or verification" in markdown
+    assert "failed commands or tool calls without a later similar recovery action or verification" in markdown
     assert "high context growth with weak edit or verification progress" in markdown
     assert "Real-pilot-positive rules: 2 / 6" in markdown
     assert "`fixture-only`" in markdown
@@ -4109,3 +4112,62 @@ def test_dry_run_materializes_external_grader(tmp_path):
     assert copied_grader.exists()
     assert "../grader" not in prompt.read_text(encoding="utf-8")
     assert "python3 -m unittest discover -s tests" in prompt.read_text(encoding="utf-8")
+
+
+def test_docker_sandbox_dry_run_records_artifacts_and_resource_limits(tmp_path):
+    rows = run_docker_benchmark(
+        tasks_path="benchmark/smoke/tasks.jsonl",
+        output_dir=tmp_path,
+        task_ids=["SM-001"],
+        config=DockerRunConfig(dry_run=True, cpus="0.5", memory="256m", timeout_seconds=10),
+    )
+
+    report_path = tmp_path / rows[0]["report_path"]
+    metadata_path = tmp_path / rows[0]["metadata_path"]
+    stdout_path = tmp_path / rows[0]["stdout_path"]
+    diff_path = tmp_path / rows[0]["diff_path"]
+    metadata = json.loads(metadata_path.read_text(encoding="utf-8"))
+
+    assert rows[0]["runner"] == "docker"
+    assert rows[0]["outcome"] == "success"
+    assert report_path.exists()
+    assert stdout_path.exists()
+    assert diff_path.exists()
+    assert metadata["resource_limits"] == {
+        "cpus": "0.5",
+        "memory": "256m",
+        "network": "none",
+        "timeout_seconds": 10,
+    }
+    assert metadata["docker_command"][0:4] == ["docker", "run", "--rm", "--network"]
+
+
+def test_build_docker_command_isolates_workdir_and_uses_requested_image(tmp_path):
+    command = build_docker_command(
+        tmp_path,
+        "python3 -m unittest discover -s tests",
+        DockerRunConfig(image="python:3.12-slim", cpus="2", memory="1g"),
+    )
+
+    assert "--workdir" in command
+    assert command[command.index("--workdir") + 1] == "/workspace"
+    assert "--network" in command
+    assert command[command.index("--network") + 1] == "none"
+    assert "--cpus" in command
+    assert command[command.index("--cpus") + 1] == "2"
+    assert "--memory" in command
+    assert command[command.index("--memory") + 1] == "1g"
+    assert "python:3.12-slim" in command
+    assert command[-1] == "python3 -m unittest discover -s tests"
+
+
+def test_dashboard_artifact_embeds_reports_for_web_ui():
+    artifact = build_dashboard_artifact("benchmark/runs.example.jsonl")
+    first = artifact["runs"][0]
+
+    assert artifact["schema_version"] == 1
+    assert len(artifact["runs"]) == 4
+    assert first["id"] == f"{first['task_id']}-{first['prompt_type']}"
+    assert "trace" in first["report"]
+    assert "diagnosis" in first["report"]
+    assert isinstance(first["test_log"], str)

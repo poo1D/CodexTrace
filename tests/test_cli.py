@@ -37,3 +37,40 @@ def test_paper_report_cli_writes_markdown(tmp_path, capsys):
     captured = capsys.readouterr()
     assert captured.out == ""
     assert "RQ3 Baseline vs Intervention" in output.read_text(encoding="utf-8")
+
+
+def test_sandbox_run_cli_dry_run_writes_manifest(tmp_path, capsys):
+    output_dir = tmp_path / "docker-runs"
+
+    assert main([
+        "sandbox",
+        "run",
+        "--tasks",
+        "benchmark/smoke/tasks.jsonl",
+        "--task-id",
+        "SM-001",
+        "--output-dir",
+        str(output_dir),
+        "--dry-run",
+    ]) == 0
+
+    captured = capsys.readouterr()
+    manifest = output_dir / "docker-runs.jsonl"
+
+    assert "Docker run record" in captured.out
+    assert manifest.exists()
+    assert '"runner": "docker"' in manifest.read_text(encoding="utf-8")
+
+
+def test_dashboard_cli_writes_web_reports_artifact(tmp_path, capsys):
+    output = tmp_path / "reports.json"
+
+    assert main(["research", "dashboard", "benchmark/runs.example.jsonl", "--output", str(output)]) == 0
+
+    captured = capsys.readouterr()
+    payload = output.read_text(encoding="utf-8")
+
+    assert "dashboard run" in captured.out
+    assert '"schema_version": 1' in payload
+    assert '"report"' in payload
+    assert '"diagnosis"' in payload

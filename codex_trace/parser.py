@@ -112,6 +112,10 @@ def _event_from_payload(payload: dict[str, Any], counter: int) -> TraceEvent | N
     raw_type = str(payload.get("type", "unknown"))
     event_id = f"e{counter:04d}"
 
+    generic = _event_from_generic_tool_payload(payload, event_id, raw_type)
+    if generic:
+        return generic
+
     if raw_type.startswith("thread."):
         return TraceEvent(event_id, "thread", _status(payload), raw_type, raw_type=raw_type, metadata=payload)
 
@@ -154,9 +158,9 @@ def _event_from_item(item: dict[str, Any], event_id: str, raw_type: str, payload
         return TraceEvent(event_id, "file_change", status, "file change", detail=", ".join(files), raw_type=raw_type, files=files, metadata=payload)
 
     if item_type in {"mcp_tool_call", "tool_call", "function_call"}:
-        name = str(item.get("name") or item.get("tool_name") or "tool call")
-        detail = json_dumps_compact(item.get("arguments") or item.get("input") or {})
-        return TraceEvent(event_id, "mcp_tool", status, name, detail=detail, raw_type=raw_type, metadata=payload)
+        normalized = _normalize_tool_payload(item)
+        event_status = _tool_status(status, normalized)
+        return _tool_event(event_id, event_status, raw_type, payload, normalized)
 
     if item_type == "web_search":
         query = str(item.get("query") or item.get("text") or "")
@@ -166,6 +170,148 @@ def _event_from_item(item: dict[str, Any], event_id: str, raw_type: str, payload
         return TraceEvent(event_id, "plan", status, "plan update", detail=json_dumps_compact(item), raw_type=raw_type, metadata=payload)
 
     return TraceEvent(event_id, "unknown", status, item_type, detail=json_dumps_compact(item), raw_type=raw_type, metadata=payload)
+
+
+def _event_from_generic_tool_payload(payload: dict[str, Any], event_id: str, raw_type: str) -> TraceEvent | None:
+    if _looks_like_mcp_request(payload):
+        params = payload.get("params") if isinstance(payload.get("params"), dict) else {}
+        normalized = _normalize_tool_payload({
+            "type": "mcp_tool_call",
+            "name": params.get("name") or payload.get("name"),
+            "arguments": params.get("arguments") or params.get("input") or {},
+            "result": payload.get("result"),
+            "error": payload.get("error"),
+            "started_at": payload.get("started_at") or payload.get("timestamp"),
+            "ended_at": payload.get("ended_at"),
+            "duration_ms": payload.get("duration_ms"),
+            "related_files": payload.get("related_files") or params.get("related_files"),
+        })
+        return _tool_event(event_id, _tool_status(_status(payload), normalized), str(payload.get("method") or raw_type), payload, normalized)
+
+    if raw_type in {"function_call", "function_call_output", "tool_call"}:
+        normalized = _normalize_tool_payload(payload)
+        return _tool_event(event_id, _tool_status(_status(payload), normalized), raw_type, payload, normalized)
+
+    choice_tool_call = _extract_openai_chat_tool_call(payload)
+    if choice_tool_call:
+        normalized = _normalize_tool_payload(choice_tool_call)
+        return _tool_event(event_id, _tool_status(_status(payload), normalized), "openai.chat.tool_call", payload, normalized)
+
+    return None
+
+
+def _tool_event(
+    event_id: str,
+    status: str,
+    raw_type: str,
+    payload: dict[str, Any],
+    normalized: dict[str, Any],
+) -> TraceEvent:
+    return TraceEvent(
+        event_id,
+        "mcp_tool",
+        status,
+        normalized["name"],
+        detail=json_dumps_compact(normalized["arguments"]),
+        raw_type=raw_type,
+        timestamp=normalized["started_at"],
+        files=normalized["files"],
+        tool_name=normalized["name"],
+        tool_arguments=normalized["arguments"],
+        tool_result=normalized["result"],
+        tool_error=normalized["error"],
+        duration_ms=normalized["duration_ms"],
+        metadata={**payload, "normalized_tool_call": normalized},
+    )
+
+
+def _looks_like_mcp_request(payload: dict[str, Any]) -> bool:
+    method = payload.get("method")
+    params = payload.get("params")
+    return method in {"tools/call", "tool.call", "mcp.tool_call"} and isinstance(params, dict)
+
+
+def _extract_openai_chat_tool_call(payload: dict[str, Any]) -> dict[str, Any] | None:
+    choices = payload.get("choices")
+    if not isinstance(choices, list) or not choices:
+        return None
+    first = choices[0]
+    if not isinstance(first, dict):
+        return None
+    message = first.get("message")
+    if not isinstance(message, dict):
+        return None
+    tool_calls = message.get("tool_calls")
+    if not isinstance(tool_calls, list) or not tool_calls:
+        return None
+    call = tool_calls[0]
+    if not isinstance(call, dict):
+        return None
+    function = call.get("function") if isinstance(call.get("function"), dict) else {}
+    return {
+        "type": "tool_call",
+        "id": call.get("id"),
+        "name": function.get("name") or call.get("name"),
+        "arguments": function.get("arguments") or call.get("arguments") or {},
+        "status": first.get("finish_reason") or payload.get("status"),
+        "created": payload.get("created"),
+    }
+
+
+def _normalize_tool_payload(item: dict[str, Any]) -> dict[str, Any]:
+    arguments = _parse_json_value(item.get("arguments") or item.get("input") or item.get("args") or {})
+    result = _parse_json_value(item.get("result") or item.get("output") or item.get("response"))
+    error = _parse_json_value(item.get("error"))
+    files = _extract_related_files(item, arguments, result)
+    started_at = item.get("started_at") or item.get("start_time") or item.get("timestamp") or item.get("created")
+    ended_at = item.get("ended_at") or item.get("end_time")
+    return {
+        "name": str(item.get("name") or item.get("tool_name") or item.get("function_name") or item.get("call_id") or "tool call"),
+        "arguments": arguments,
+        "result": result,
+        "error": error,
+        "status": str(item.get("status") or ("error" if error else "completed")),
+        "started_at": str(started_at) if started_at is not None else None,
+        "ended_at": str(ended_at) if ended_at is not None else None,
+        "duration_ms": item.get("duration_ms") or item.get("elapsed_ms"),
+        "files": files,
+    }
+
+
+def _tool_status(status: str, normalized: dict[str, Any]) -> str:
+    normalized_status = str(normalized.get("status") or status)
+    if normalized.get("error") or normalized_status in {"failed", "error", "errored"}:
+        return "failed"
+    if normalized_status in {"in_progress", "running"}:
+        return "in_progress"
+    return "completed" if normalized_status == "tool_calls" else normalized_status
+
+
+def _parse_json_value(value: Any) -> Any:
+    if isinstance(value, str):
+        stripped = value.strip()
+        if stripped.startswith("{") or stripped.startswith("["):
+            try:
+                return json.loads(stripped)
+            except json.JSONDecodeError:
+                return value
+    return value
+
+
+def _extract_related_files(item: dict[str, Any], arguments: Any, result: Any) -> list[str]:
+    files: list[str] = []
+    for source in (item, arguments, result):
+        if not isinstance(source, dict):
+            continue
+        for key in ("files", "related_files", "paths"):
+            value = source.get(key)
+            if isinstance(value, list):
+                files.extend(str(path) for path in value)
+        for key in ("file", "path", "filename"):
+            value = source.get(key)
+            if value:
+                files.append(str(value))
+    return sorted(dict.fromkeys(files))
 
 
 def _status(payload: dict[str, Any]) -> str:

@@ -72,12 +72,12 @@ def build_web_artifact_audit(
         "finding_event_ids": all(row["event_ids_match"] for row in finding_rows),
     }
     source_checks = {
-        "fetch_report": 'fetch("/report.json")' in main_text,
-        "fallback_report": "catch(() => setReport(demoReport))" in main_text,
+        "fetch_report": 'fetchJson<DashboardData>("/reports.json")' in main_text and 'fetchJson<Report>("/report.json")' in main_text,
+        "fallback_report": "return demoRuns" in main_text,
         "finding_event_flatmap": ".flatMap((finding) => finding.event_ids)" in main_text,
         "highlighted_class": "highlighted.has(event.id)" in main_text,
         "highlighted_style": ".event.highlighted" in styles_text,
-        "responsive_css": "@media (max-width: 860px)" in styles_text,
+        "responsive_css": "@media (max-width: 980px)" in styles_text,
         "vite_build_script": package.get("scripts", {}).get("build") == "tsc && vite build",
         "react_dependency": "react" in package.get("dependencies", {}),
         "root_mount": '<div id="root"></div>' in index_text,

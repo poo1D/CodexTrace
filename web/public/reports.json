@@ -1,0 +1,1272 @@
+{
+  "schema_version": 1,
+  "source_manifest": "benchmark/runs.example.jsonl",
+  "runs": [
+    {
+      "id": "CT-001-baseline",
+      "task_id": "CT-001",
+      "prompt_type": "baseline",
+      "outcome": "failure",
+      "report_path": "../demo/failing-codex-trace.jsonl",
+      "diff": "",
+      "test_log": "",
+      "report": {
+        "trace": {
+          "thread_id": "demo-thread-001",
+          "source": "/Users/lidengye/Developer/CodexTrace-github/demo/failing-codex-trace.jsonl",
+          "usage": {
+            "input_tokens": 28600,
+            "cached_input_tokens": 12000,
+            "output_tokens": 900,
+            "reasoning_output_tokens": 220
+          },
+          "events": [
+            {
+              "id": "e0000",
+              "kind": "thread",
+              "status": "in_progress",
+              "title": "thread.started",
+              "detail": "",
+              "raw_type": "thread.started",
+              "timestamp": null,
+              "command": null,
+              "exit_code": null,
+              "files": [],
+              "phase": "setup",
+              "metadata": {
+                "type": "thread.started",
+                "thread_id": "demo-thread-001"
+              }
+            },
+            {
+              "id": "e0001",
+              "kind": "turn",
+              "status": "in_progress",
+              "title": "turn.started",
+              "detail": "",
+              "raw_type": "turn.started",
+              "timestamp": null,
+              "command": null,
+              "exit_code": null,
+              "files": [],
+              "phase": "setup",
+              "metadata": {
+                "type": "turn.started"
+              }
+            },
+            {
+              "id": "e0002",
+              "kind": "agent_message",
+              "status": "completed",
+              "title": "I will inspect the repository and find the failing tests.",
+              "detail": "I will inspect the repository and find the failing tests.",
+              "raw_type": "item.completed",
+              "timestamp": null,
+              "command": null,
+              "exit_code": null,
+              "files": [],
+              "phase": "setup",
+              "metadata": {
+                "type": "item.completed",
+                "item": {
+                  "id": "item_1",
+                  "type": "agent_message",
+                  "text": "I will inspect the repository and find the failing tests."
+                }
+              }
+            },
+            {
+              "id": "e0003",
+              "kind": "command",
+              "status": "completed",
+              "title": "rg \"calculate_total\"",
+              "detail": "src/cart.py:def calculate_total(items):",
+              "raw_type": "item.completed",
+              "timestamp": null,
+              "command": "rg \"calculate_total\"",
+              "exit_code": 0,
+              "files": [],
+              "phase": "inspect",
+              "metadata": {
+                "type": "item.completed",
+                "item": {
+                  "id": "item_2",
+                  "type": "command_execution",
+                  "command": "rg \"calculate_total\"",
+                  "status": "completed",
+                  "exit_code": 0,
+                  "stdout": "src/cart.py:def calculate_total(items):"
+                }
+              }
+            },
+            {
+              "id": "e0004",
+              "kind": "command",
+              "status": "completed",
+              "title": "rg \"calculate_total\"",
+              "detail": "src/cart.py:def calculate_total(items):",
+              "raw_type": "item.completed",
+              "timestamp": null,
+              "command": "rg \"calculate_total\"",
+              "exit_code": 0,
+              "files": [],
+              "phase": "inspect",
+              "metadata": {
+                "type": "item.completed",
+                "item": {
+                  "id": "item_3",
+                  "type": "command_execution",
+                  "command": "rg \"calculate_total\"",
+                  "status": "completed",
+                  "exit_code": 0,
+                  "stdout": "src/cart.py:def calculate_total(items):"
+                }
+              }
+            },
+            {
+              "id": "e0005",
+              "kind": "command",
+              "status": "failed",
+              "title": "pytest -q",
+              "detail": "FAILED tests/test_cart.py::test_discount",
+              "raw_type": "item.completed",
+              "timestamp": null,
+              "command": "pytest -q",
+              "exit_code": 1,
+              "files": [],
+              "phase": "verify",
+              "metadata": {
+                "type": "item.completed",
+                "item": {
+                  "id": "item_4",
+                  "type": "command_execution",
+                  "command": "pytest -q",
+                  "status": "completed",
+                  "exit_code": 1,
+                  "stderr": "FAILED tests/test_cart.py::test_discount"
+                }
+              }
+            },
+            {
+              "id": "e0006",
+              "kind": "file_change",
+              "status": "completed",
+              "title": "file change",
+              "detail": "src/cart.py",
+              "raw_type": "item.completed",
+              "timestamp": null,
+              "command": null,
+              "exit_code": null,
+              "files": [
+                "src/cart.py"
+              ],
+              "phase": "edit",
+              "metadata": {
+                "type": "item.completed",
+                "item": {
+                  "id": "item_5",
+                  "type": "file_change",
+                  "status": "completed",
+                  "files": [
+                    "src/cart.py"
+                  ]
+                }
+              }
+            },
+            {
+              "id": "e0007",
+              "kind": "command",
+              "status": "failed",
+              "title": "npm install",
+              "detail": "permission denied by sandbox: network access requires approval",
+              "raw_type": "item.completed",
+              "timestamp": null,
+              "command": "npm install",
+              "exit_code": 1,
+              "files": [],
+              "phase": "recover",
+              "metadata": {
+                "type": "item.completed",
+                "item": {
+                  "id": "item_6",
+                  "type": "command_execution",
+                  "command": "npm install",
+                  "status": "failed",
+                  "exit_code": 1,
+                  "stderr": "permission denied by sandbox: network access requires approval"
+                }
+              }
+            },
+            {
+              "id": "e0008",
+              "kind": "agent_message",
+              "status": "completed",
+              "title": "I updated the implementation. The task is complete.",
+              "detail": "I updated the implementation. The task is complete.",
+              "raw_type": "item.completed",
+              "timestamp": null,
+              "command": null,
+              "exit_code": null,
+              "files": [],
+              "phase": "complete",
+              "metadata": {
+                "type": "item.completed",
+                "item": {
+                  "id": "item_7",
+                  "type": "agent_message",
+                  "text": "I updated the implementation. The task is complete."
+                }
+              }
+            },
+            {
+              "id": "e0009",
+              "kind": "turn",
+              "status": "completed",
+              "title": "turn.completed",
+              "detail": "input_tokens=28600, cached_input_tokens=12000, output_tokens=900, reasoning_output_tokens=220",
+              "raw_type": "turn.completed",
+              "timestamp": null,
+              "command": null,
+              "exit_code": null,
+              "files": [],
+              "phase": "complete",
+              "metadata": {
+                "type": "turn.completed",
+                "usage": {
+                  "input_tokens": 28600,
+                  "cached_input_tokens": 12000,
+                  "output_tokens": 900,
+                  "reasoning_output_tokens": 220
+                }
+              }
+            }
+          ]
+        },
+        "diagnosis": {
+          "outcome": "failed",
+          "failure_score": 100,
+          "summary": "Failed trace: Command failures were not clearly handled. 10 events, 4 commands, 2 failed commands.",
+          "metrics": {
+            "events": 10,
+            "command_events": 4,
+            "failed_commands": 2,
+            "file_change_events": 1,
+            "verification_commands": 1,
+            "post_edit_verification_commands": 0,
+            "search_commands": 2,
+            "phase_setup_events": 3,
+            "phase_inspect_events": 2,
+            "phase_edit_events": 1,
+            "phase_verify_events": 1,
+            "phase_recover_events": 1,
+            "phase_complete_events": 2,
+            "phase_other_events": 0,
+            "input_tokens": 28600,
+            "output_tokens": 900,
+            "reasoning_output_tokens": 220
+          },
+          "findings": [
+            {
+              "code": "command_failure_unhandled",
+              "title": "Command failures were not clearly handled",
+              "severity": "high",
+              "evidence": [
+                "e0005 command: pytest -q exit_code=1",
+                "e0007 command: npm install exit_code=1"
+              ],
+              "recommendation": "After a failed command, add an explicit repair step and rerun the relevant verification command before ending the turn.",
+              "event_ids": [
+                "e0005",
+                "e0007"
+              ]
+            },
+            {
+              "code": "verification_gap",
+              "title": "Files changed without a verification command",
+              "severity": "high",
+              "evidence": [
+                "1 file-change event(s), 0 post-edit verification command(s)."
+              ],
+              "recommendation": "Add a post-edit validation step such as tests, type checks, or a focused smoke command.",
+              "event_ids": [
+                "e0006"
+              ]
+            },
+            {
+              "code": "premature_completion",
+              "title": "Agent claimed completion without verification evidence",
+              "severity": "high",
+              "evidence": [
+                "e0008 agent_message: I updated the implementation. The task is complete."
+              ],
+              "recommendation": "Require the final answer to cite a passing post-edit verification command before declaring the task complete.",
+              "event_ids": [
+                "e0008"
+              ]
+            },
+            {
+              "code": "repeated_search_or_read",
+              "title": "Repeated search/read commands suggest inefficient exploration",
+              "severity": "medium",
+              "evidence": [
+                "`rg \"calculate_total\"` repeated 2 times"
+              ],
+              "recommendation": "Summarize discovered facts after each exploration pass and switch from broad search to targeted file reads.",
+              "event_ids": [
+                "e0003",
+                "e0004"
+              ]
+            },
+            {
+              "code": "sandbox_or_permission_block",
+              "title": "Sandbox or permission friction blocked progress",
+              "severity": "medium",
+              "evidence": [
+                "e0007 command: npm install exit_code=1"
+              ],
+              "recommendation": "Declare the needed permission up front, reduce the command scope, or redesign the workflow to keep privileged steps outside the agent loop.",
+              "event_ids": [
+                "e0007"
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "CT-001-intervention",
+      "task_id": "CT-001",
+      "prompt_type": "intervention",
+      "outcome": "success",
+      "report_path": "../demo/healthy-codex-trace.jsonl",
+      "diff": "",
+      "test_log": "",
+      "report": {
+        "trace": {
+          "thread_id": "demo-thread-002",
+          "source": "/Users/lidengye/Developer/CodexTrace-github/demo/healthy-codex-trace.jsonl",
+          "usage": {
+            "input_tokens": 8200,
+            "cached_input_tokens": 5000,
+            "output_tokens": 460,
+            "reasoning_output_tokens": 80
+          },
+          "events": [
+            {
+              "id": "e0000",
+              "kind": "thread",
+              "status": "in_progress",
+              "title": "thread.started",
+              "detail": "",
+              "raw_type": "thread.started",
+              "timestamp": null,
+              "command": null,
+              "exit_code": null,
+              "files": [],
+              "phase": "setup",
+              "metadata": {
+                "type": "thread.started",
+                "thread_id": "demo-thread-002"
+              }
+            },
+            {
+              "id": "e0001",
+              "kind": "turn",
+              "status": "in_progress",
+              "title": "turn.started",
+              "detail": "",
+              "raw_type": "turn.started",
+              "timestamp": null,
+              "command": null,
+              "exit_code": null,
+              "files": [],
+              "phase": "setup",
+              "metadata": {
+                "type": "turn.started"
+              }
+            },
+            {
+              "id": "e0002",
+              "kind": "command",
+              "status": "completed",
+              "title": "rg \"calculate_total\" src tests",
+              "detail": "src/cart.py:def calculate_total(items):",
+              "raw_type": "item.completed",
+              "timestamp": null,
+              "command": "rg \"calculate_total\" src tests",
+              "exit_code": 0,
+              "files": [],
+              "phase": "inspect",
+              "metadata": {
+                "type": "item.completed",
+                "item": {
+                  "id": "item_1",
+                  "type": "command_execution",
+                  "command": "rg \"calculate_total\" src tests",
+                  "status": "completed",
+                  "exit_code": 0,
+                  "stdout": "src/cart.py:def calculate_total(items):"
+                }
+              }
+            },
+            {
+              "id": "e0003",
+              "kind": "file_change",
+              "status": "completed",
+              "title": "file change",
+              "detail": "src/cart.py",
+              "raw_type": "item.completed",
+              "timestamp": null,
+              "command": null,
+              "exit_code": null,
+              "files": [
+                "src/cart.py"
+              ],
+              "phase": "edit",
+              "metadata": {
+                "type": "item.completed",
+                "item": {
+                  "id": "item_2",
+                  "type": "file_change",
+                  "status": "completed",
+                  "files": [
+                    "src/cart.py"
+                  ]
+                }
+              }
+            },
+            {
+              "id": "e0004",
+              "kind": "command",
+              "status": "completed",
+              "title": "pytest -q",
+              "detail": "12 passed",
+              "raw_type": "item.completed",
+              "timestamp": null,
+              "command": "pytest -q",
+              "exit_code": 0,
+              "files": [],
+              "phase": "verify",
+              "metadata": {
+                "type": "item.completed",
+                "item": {
+                  "id": "item_3",
+                  "type": "command_execution",
+                  "command": "pytest -q",
+                  "status": "completed",
+                  "exit_code": 0,
+                  "stdout": "12 passed"
+                }
+              }
+            },
+            {
+              "id": "e0005",
+              "kind": "agent_message",
+              "status": "completed",
+              "title": "Implemented the fix and verified it with pytest -q.",
+              "detail": "Implemented the fix and verified it with pytest -q.",
+              "raw_type": "item.completed",
+              "timestamp": null,
+              "command": null,
+              "exit_code": null,
+              "files": [],
+              "phase": "complete",
+              "metadata": {
+                "type": "item.completed",
+                "item": {
+                  "id": "item_4",
+                  "type": "agent_message",
+                  "text": "Implemented the fix and verified it with pytest -q."
+                }
+              }
+            },
+            {
+              "id": "e0006",
+              "kind": "turn",
+              "status": "completed",
+              "title": "turn.completed",
+              "detail": "input_tokens=8200, cached_input_tokens=5000, output_tokens=460, reasoning_output_tokens=80",
+              "raw_type": "turn.completed",
+              "timestamp": null,
+              "command": null,
+              "exit_code": null,
+              "files": [],
+              "phase": "complete",
+              "metadata": {
+                "type": "turn.completed",
+                "usage": {
+                  "input_tokens": 8200,
+                  "cached_input_tokens": 5000,
+                  "output_tokens": 460,
+                  "reasoning_output_tokens": 80
+                }
+              }
+            }
+          ]
+        },
+        "diagnosis": {
+          "outcome": "healthy",
+          "failure_score": 0,
+          "summary": "No obvious failure pattern was detected in this trace.",
+          "metrics": {
+            "events": 7,
+            "command_events": 2,
+            "failed_commands": 0,
+            "file_change_events": 1,
+            "verification_commands": 1,
+            "post_edit_verification_commands": 1,
+            "search_commands": 1,
+            "phase_setup_events": 2,
+            "phase_inspect_events": 1,
+            "phase_edit_events": 1,
+            "phase_verify_events": 1,
+            "phase_recover_events": 0,
+            "phase_complete_events": 2,
+            "phase_other_events": 0,
+            "input_tokens": 8200,
+            "output_tokens": 460,
+            "reasoning_output_tokens": 80
+          },
+          "findings": []
+        }
+      }
+    },
+    {
+      "id": "CT-002-baseline",
+      "task_id": "CT-002",
+      "prompt_type": "baseline",
+      "outcome": "failure",
+      "report_path": "../demo/failing-codex-trace.jsonl",
+      "diff": "",
+      "test_log": "",
+      "report": {
+        "trace": {
+          "thread_id": "demo-thread-001",
+          "source": "/Users/lidengye/Developer/CodexTrace-github/demo/failing-codex-trace.jsonl",
+          "usage": {
+            "input_tokens": 28600,
+            "cached_input_tokens": 12000,
+            "output_tokens": 900,
+            "reasoning_output_tokens": 220
+          },
+          "events": [
+            {
+              "id": "e0000",
+              "kind": "thread",
+              "status": "in_progress",
+              "title": "thread.started",
+              "detail": "",
+              "raw_type": "thread.started",
+              "timestamp": null,
+              "command": null,
+              "exit_code": null,
+              "files": [],
+              "phase": "setup",
+              "metadata": {
+                "type": "thread.started",
+                "thread_id": "demo-thread-001"
+              }
+            },
+            {
+              "id": "e0001",
+              "kind": "turn",
+              "status": "in_progress",
+              "title": "turn.started",
+              "detail": "",
+              "raw_type": "turn.started",
+              "timestamp": null,
+              "command": null,
+              "exit_code": null,
+              "files": [],
+              "phase": "setup",
+              "metadata": {
+                "type": "turn.started"
+              }
+            },
+            {
+              "id": "e0002",
+              "kind": "agent_message",
+              "status": "completed",
+              "title": "I will inspect the repository and find the failing tests.",
+              "detail": "I will inspect the repository and find the failing tests.",
+              "raw_type": "item.completed",
+              "timestamp": null,
+              "command": null,
+              "exit_code": null,
+              "files": [],
+              "phase": "setup",
+              "metadata": {
+                "type": "item.completed",
+                "item": {
+                  "id": "item_1",
+                  "type": "agent_message",
+                  "text": "I will inspect the repository and find the failing tests."
+                }
+              }
+            },
+            {
+              "id": "e0003",
+              "kind": "command",
+              "status": "completed",
+              "title": "rg \"calculate_total\"",
+              "detail": "src/cart.py:def calculate_total(items):",
+              "raw_type": "item.completed",
+              "timestamp": null,
+              "command": "rg \"calculate_total\"",
+              "exit_code": 0,
+              "files": [],
+              "phase": "inspect",
+              "metadata": {
+                "type": "item.completed",
+                "item": {
+                  "id": "item_2",
+                  "type": "command_execution",
+                  "command": "rg \"calculate_total\"",
+                  "status": "completed",
+                  "exit_code": 0,
+                  "stdout": "src/cart.py:def calculate_total(items):"
+                }
+              }
+            },
+            {
+              "id": "e0004",
+              "kind": "command",
+              "status": "completed",
+              "title": "rg \"calculate_total\"",
+              "detail": "src/cart.py:def calculate_total(items):",
+              "raw_type": "item.completed",
+              "timestamp": null,
+              "command": "rg \"calculate_total\"",
+              "exit_code": 0,
+              "files": [],
+              "phase": "inspect",
+              "metadata": {
+                "type": "item.completed",
+                "item": {
+                  "id": "item_3",
+                  "type": "command_execution",
+                  "command": "rg \"calculate_total\"",
+                  "status": "completed",
+                  "exit_code": 0,
+                  "stdout": "src/cart.py:def calculate_total(items):"
+                }
+              }
+            },
+            {
+              "id": "e0005",
+              "kind": "command",
+              "status": "failed",
+              "title": "pytest -q",
+              "detail": "FAILED tests/test_cart.py::test_discount",
+              "raw_type": "item.completed",
+              "timestamp": null,
+              "command": "pytest -q",
+              "exit_code": 1,
+              "files": [],
+              "phase": "verify",
+              "metadata": {
+                "type": "item.completed",
+                "item": {
+                  "id": "item_4",
+                  "type": "command_execution",
+                  "command": "pytest -q",
+                  "status": "completed",
+                  "exit_code": 1,
+                  "stderr": "FAILED tests/test_cart.py::test_discount"
+                }
+              }
+            },
+            {
+              "id": "e0006",
+              "kind": "file_change",
+              "status": "completed",
+              "title": "file change",
+              "detail": "src/cart.py",
+              "raw_type": "item.completed",
+              "timestamp": null,
+              "command": null,
+              "exit_code": null,
+              "files": [
+                "src/cart.py"
+              ],
+              "phase": "edit",
+              "metadata": {
+                "type": "item.completed",
+                "item": {
+                  "id": "item_5",
+                  "type": "file_change",
+                  "status": "completed",
+                  "files": [
+                    "src/cart.py"
+                  ]
+                }
+              }
+            },
+            {
+              "id": "e0007",
+              "kind": "command",
+              "status": "failed",
+              "title": "npm install",
+              "detail": "permission denied by sandbox: network access requires approval",
+              "raw_type": "item.completed",
+              "timestamp": null,
+              "command": "npm install",
+              "exit_code": 1,
+              "files": [],
+              "phase": "recover",
+              "metadata": {
+                "type": "item.completed",
+                "item": {
+                  "id": "item_6",
+                  "type": "command_execution",
+                  "command": "npm install",
+                  "status": "failed",
+                  "exit_code": 1,
+                  "stderr": "permission denied by sandbox: network access requires approval"
+                }
+              }
+            },
+            {
+              "id": "e0008",
+              "kind": "agent_message",
+              "status": "completed",
+              "title": "I updated the implementation. The task is complete.",
+              "detail": "I updated the implementation. The task is complete.",
+              "raw_type": "item.completed",
+              "timestamp": null,
+              "command": null,
+              "exit_code": null,
+              "files": [],
+              "phase": "complete",
+              "metadata": {
+                "type": "item.completed",
+                "item": {
+                  "id": "item_7",
+                  "type": "agent_message",
+                  "text": "I updated the implementation. The task is complete."
+                }
+              }
+            },
+            {
+              "id": "e0009",
+              "kind": "turn",
+              "status": "completed",
+              "title": "turn.completed",
+              "detail": "input_tokens=28600, cached_input_tokens=12000, output_tokens=900, reasoning_output_tokens=220",
+              "raw_type": "turn.completed",
+              "timestamp": null,
+              "command": null,
+              "exit_code": null,
+              "files": [],
+              "phase": "complete",
+              "metadata": {
+                "type": "turn.completed",
+                "usage": {
+                  "input_tokens": 28600,
+                  "cached_input_tokens": 12000,
+                  "output_tokens": 900,
+                  "reasoning_output_tokens": 220
+                }
+              }
+            }
+          ]
+        },
+        "diagnosis": {
+          "outcome": "failed",
+          "failure_score": 100,
+          "summary": "Failed trace: Command failures were not clearly handled. 10 events, 4 commands, 2 failed commands.",
+          "metrics": {
+            "events": 10,
+            "command_events": 4,
+            "failed_commands": 2,
+            "file_change_events": 1,
+            "verification_commands": 1,
+            "post_edit_verification_commands": 0,
+            "search_commands": 2,
+            "phase_setup_events": 3,
+            "phase_inspect_events": 2,
+            "phase_edit_events": 1,
+            "phase_verify_events": 1,
+            "phase_recover_events": 1,
+            "phase_complete_events": 2,
+            "phase_other_events": 0,
+            "input_tokens": 28600,
+            "output_tokens": 900,
+            "reasoning_output_tokens": 220
+          },
+          "findings": [
+            {
+              "code": "command_failure_unhandled",
+              "title": "Command failures were not clearly handled",
+              "severity": "high",
+              "evidence": [
+                "e0005 command: pytest -q exit_code=1",
+                "e0007 command: npm install exit_code=1"
+              ],
+              "recommendation": "After a failed command, add an explicit repair step and rerun the relevant verification command before ending the turn.",
+              "event_ids": [
+                "e0005",
+                "e0007"
+              ]
+            },
+            {
+              "code": "verification_gap",
+              "title": "Files changed without a verification command",
+              "severity": "high",
+              "evidence": [
+                "1 file-change event(s), 0 post-edit verification command(s)."
+              ],
+              "recommendation": "Add a post-edit validation step such as tests, type checks, or a focused smoke command.",
+              "event_ids": [
+                "e0006"
+              ]
+            },
+            {
+              "code": "premature_completion",
+              "title": "Agent claimed completion without verification evidence",
+              "severity": "high",
+              "evidence": [
+                "e0008 agent_message: I updated the implementation. The task is complete."
+              ],
+              "recommendation": "Require the final answer to cite a passing post-edit verification command before declaring the task complete.",
+              "event_ids": [
+                "e0008"
+              ]
+            },
+            {
+              "code": "repeated_search_or_read",
+              "title": "Repeated search/read commands suggest inefficient exploration",
+              "severity": "medium",
+              "evidence": [
+                "`rg \"calculate_total\"` repeated 2 times"
+              ],
+              "recommendation": "Summarize discovered facts after each exploration pass and switch from broad search to targeted file reads.",
+              "event_ids": [
+                "e0003",
+                "e0004"
+              ]
+            },
+            {
+              "code": "sandbox_or_permission_block",
+              "title": "Sandbox or permission friction blocked progress",
+              "severity": "medium",
+              "evidence": [
+                "e0007 command: npm install exit_code=1"
+              ],
+              "recommendation": "Declare the needed permission up front, reduce the command scope, or redesign the workflow to keep privileged steps outside the agent loop.",
+              "event_ids": [
+                "e0007"
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "CT-002-intervention",
+      "task_id": "CT-002",
+      "prompt_type": "intervention",
+      "outcome": "success",
+      "report_path": "../demo/real-codex-run.jsonl",
+      "diff": "",
+      "test_log": "",
+      "report": {
+        "trace": {
+          "thread_id": "019e9366-f54d-7b50-a6a7-fbfb0fc54c73",
+          "source": "/Users/lidengye/Developer/CodexTrace-github/demo/real-codex-run.jsonl",
+          "usage": {
+            "input_tokens": 56875,
+            "cached_input_tokens": 38528,
+            "output_tokens": 522,
+            "reasoning_output_tokens": 11
+          },
+          "events": [
+            {
+              "id": "e0000",
+              "kind": "thread",
+              "status": "in_progress",
+              "title": "thread.started",
+              "detail": "",
+              "raw_type": "thread.started",
+              "timestamp": null,
+              "command": null,
+              "exit_code": null,
+              "files": [],
+              "phase": "setup",
+              "metadata": {
+                "type": "thread.started",
+                "thread_id": "019e9366-f54d-7b50-a6a7-fbfb0fc54c73"
+              }
+            },
+            {
+              "id": "e0001",
+              "kind": "turn",
+              "status": "in_progress",
+              "title": "turn.started",
+              "detail": "",
+              "raw_type": "turn.started",
+              "timestamp": null,
+              "command": null,
+              "exit_code": null,
+              "files": [],
+              "phase": "setup",
+              "metadata": {
+                "type": "turn.started"
+              }
+            },
+            {
+              "id": "e0002",
+              "kind": "agent_message",
+              "status": "completed",
+              "title": "I’ll inspect the repository root and read the most likely project metadata files, without...",
+              "detail": "I’ll inspect the repository root and read the most likely project metadata files, without making any changes.",
+              "raw_type": "item.completed",
+              "timestamp": null,
+              "command": null,
+              "exit_code": null,
+              "files": [],
+              "phase": "setup",
+              "metadata": {
+                "type": "item.completed",
+                "item": {
+                  "id": "item_0",
+                  "type": "agent_message",
+                  "text": "I’ll inspect the repository root and read the most likely project metadata files, without making any changes."
+                }
+              }
+            },
+            {
+              "id": "e0003",
+              "kind": "command",
+              "status": "in_progress",
+              "title": "/bin/zsh -lc 'for f in README.md package.json pyproject.toml Cargo.toml go.mod Makefile; do [ -f \"$f\" ] && printf '\"'%s\\\\n' \\\"\"'$f\"; done'",
+              "detail": "",
+              "raw_type": "item.started",
+              "timestamp": null,
+              "command": "/bin/zsh -lc 'for f in README.md package.json pyproject.toml Cargo.toml go.mod Makefile; do [ -f \"$f\" ] && printf '\"'%s\\\\n' \\\"\"'$f\"; done'",
+              "exit_code": null,
+              "files": [],
+              "phase": "inspect",
+              "metadata": {
+                "type": "item.started",
+                "item": {
+                  "id": "item_1",
+                  "type": "command_execution",
+                  "command": "/bin/zsh -lc 'for f in README.md package.json pyproject.toml Cargo.toml go.mod Makefile; do [ -f \"$f\" ] && printf '\"'%s\\\\n' \\\"\"'$f\"; done'",
+                  "aggregated_output": "",
+                  "exit_code": null,
+                  "status": "in_progress"
+                }
+              }
+            },
+            {
+              "id": "e0004",
+              "kind": "command",
+              "status": "completed",
+              "title": "/bin/zsh -lc 'for f in README.md package.json pyproject.toml Cargo.toml go.mod Makefile; do [ -f \"$f\" ] && printf '\"'%s\\\\n' \\\"\"'$f\"; done'",
+              "detail": "README.md\npyproject.toml\nMakefile\n",
+              "raw_type": "item.completed",
+              "timestamp": null,
+              "command": "/bin/zsh -lc 'for f in README.md package.json pyproject.toml Cargo.toml go.mod Makefile; do [ -f \"$f\" ] && printf '\"'%s\\\\n' \\\"\"'$f\"; done'",
+              "exit_code": 0,
+              "files": [],
+              "phase": "inspect",
+              "metadata": {
+                "type": "item.completed",
+                "item": {
+                  "id": "item_1",
+                  "type": "command_execution",
+                  "command": "/bin/zsh -lc 'for f in README.md package.json pyproject.toml Cargo.toml go.mod Makefile; do [ -f \"$f\" ] && printf '\"'%s\\\\n' \\\"\"'$f\"; done'",
+                  "aggregated_output": "README.md\npyproject.toml\nMakefile\n",
+                  "exit_code": 0,
+                  "status": "completed"
+                }
+              }
+            },
+            {
+              "id": "e0005",
+              "kind": "command",
+              "status": "in_progress",
+              "title": "/bin/zsh -lc 'ls -la'",
+              "detail": "",
+              "raw_type": "item.started",
+              "timestamp": null,
+              "command": "/bin/zsh -lc 'ls -la'",
+              "exit_code": null,
+              "files": [],
+              "phase": "inspect",
+              "metadata": {
+                "type": "item.started",
+                "item": {
+                  "id": "item_2",
+                  "type": "command_execution",
+                  "command": "/bin/zsh -lc 'ls -la'",
+                  "aggregated_output": "",
+                  "exit_code": null,
+                  "status": "in_progress"
+                }
+              }
+            },
+            {
+              "id": "e0006",
+              "kind": "command",
+              "status": "completed",
+              "title": "/bin/zsh -lc 'ls -la'",
+              "detail": "total 40\ndrwxr-xr-x@ 17 lidengye  staff   544 Jun  5 00:10 .\ndrwxr-xr-x  11 lidengye  staff   352 Jun  5 00:10 ..\ndrwxr-xr-x@  9 lidengye  staff   288 Jun  5 00:10 .git\ndrwxr-xr-x@  3 lidengye  staff    96 Jun  5 00:08 .github\n-rw-r--r--@  1 lidengye  staff   146 Jun  5 00:10 .gitignore\ndrwxr-xr-x@  6 lidengye  staff   192 Jun  5 00:10 .pytest_cache\ndrwxr-xr-x@  7 lidengye  staff   224 Jun  5 00:10 .venv\n-rw-r--r--@  1 lidengye  staff   229 Jun  5 00:08 Dockerfile\n-rw-r--r--@  1 lidengye  staff   163 Jun  5 00:08 Makefile\n-rw-r--r--@  1 lidengye  staff  4039 Jun  5 00:08 README.md\ndrwxr-xr-x@  9 lidengye  staff   288 Jun  5 00:08 codex_trace\ndrwxr-xr-x@  8 lidengye  staff   256 Jun  5 00:09 codex_trace.egg-info\ndrwxr-xr-x@  6 lidengye  staff   192 Jun  5 00:08 demo\n-rw-r--r--@  1 lidengye  staff   568 Jun  5 00:09 pyproject.toml\ndrwxr-xr-x@  5 lidengye  staff   160 Jun  5 00:09 tests\ndrwxr-xr-x@  3 lidengye  staff    96 Jun  5 00:10 traces\ndrwxr-xr-x@ 11 lidengye  staff   352 Jun  5 00:10 web\n",
+              "raw_type": "item.completed",
+              "timestamp": null,
+              "command": "/bin/zsh -lc 'ls -la'",
+              "exit_code": 0,
+              "files": [],
+              "phase": "inspect",
+              "metadata": {
+                "type": "item.completed",
+                "item": {
+                  "id": "item_2",
+                  "type": "command_execution",
+                  "command": "/bin/zsh -lc 'ls -la'",
+                  "aggregated_output": "total 40\ndrwxr-xr-x@ 17 lidengye  staff   544 Jun  5 00:10 .\ndrwxr-xr-x  11 lidengye  staff   352 Jun  5 00:10 ..\ndrwxr-xr-x@  9 lidengye  staff   288 Jun  5 00:10 .git\ndrwxr-xr-x@  3 lidengye  staff    96 Jun  5 00:08 .github\n-rw-r--r--@  1 lidengye  staff   146 Jun  5 00:10 .gitignore\ndrwxr-xr-x@  6 lidengye  staff   192 Jun  5 00:10 .pytest_cache\ndrwxr-xr-x@  7 lidengye  staff   224 Jun  5 00:10 .venv\n-rw-r--r--@  1 lidengye  staff   229 Jun  5 00:08 Dockerfile\n-rw-r--r--@  1 lidengye  staff   163 Jun  5 00:08 Makefile\n-rw-r--r--@  1 lidengye  staff  4039 Jun  5 00:08 README.md\ndrwxr-xr-x@  9 lidengye  staff   288 Jun  5 00:08 codex_trace\ndrwxr-xr-x@  8 lidengye  staff   256 Jun  5 00:09 codex_trace.egg-info\ndrwxr-xr-x@  6 lidengye  staff   192 Jun  5 00:08 demo\n-rw-r--r--@  1 lidengye  staff   568 Jun  5 00:09 pyproject.toml\ndrwxr-xr-x@  5 lidengye  staff   160 Jun  5 00:09 tests\ndrwxr-xr-x@  3 lidengye  staff    96 Jun  5 00:10 traces\ndrwxr-xr-x@ 11 lidengye  staff   352 Jun  5 00:10 web\n",
+                  "exit_code": 0,
+                  "status": "completed"
+                }
+              }
+            },
+            {
+              "id": "e0007",
+              "kind": "command",
+              "status": "in_progress",
+              "title": "/bin/zsh -lc \"pwd && rg --files -g '\"'!node_modules'\"' -g '\"'!dist'\"' -g '\"'!build'\"' -g '\"'!target'\"' | awk 'index(\"'$0,\"/\")==0 {print}'\"' | sort\"",
+              "detail": "",
+              "raw_type": "item.started",
+              "timestamp": null,
+              "command": "/bin/zsh -lc \"pwd && rg --files -g '\"'!node_modules'\"' -g '\"'!dist'\"' -g '\"'!build'\"' -g '\"'!target'\"' | awk 'index(\"'$0,\"/\")==0 {print}'\"' | sort\"",
+              "exit_code": null,
+              "files": [],
+              "phase": "inspect",
+              "metadata": {
+                "type": "item.started",
+                "item": {
+                  "id": "item_3",
+                  "type": "command_execution",
+                  "command": "/bin/zsh -lc \"pwd && rg --files -g '\"'!node_modules'\"' -g '\"'!dist'\"' -g '\"'!build'\"' -g '\"'!target'\"' | awk 'index(\"'$0,\"/\")==0 {print}'\"' | sort\"",
+                  "aggregated_output": "",
+                  "exit_code": null,
+                  "status": "in_progress"
+                }
+              }
+            },
+            {
+              "id": "e0008",
+              "kind": "command",
+              "status": "completed",
+              "title": "/bin/zsh -lc \"pwd && rg --files -g '\"'!node_modules'\"' -g '\"'!dist'\"' -g '\"'!build'\"' -g '\"'!target'\"' | awk 'index(\"'$0,\"/\")==0 {print}'\"' | sort\"",
+              "detail": "Dockerfile\nMakefile\nREADME.md\npyproject.toml\n",
+              "raw_type": "item.completed",
+              "timestamp": null,
+              "command": "/bin/zsh -lc \"pwd && rg --files -g '\"'!node_modules'\"' -g '\"'!dist'\"' -g '\"'!build'\"' -g '\"'!target'\"' | awk 'index(\"'$0,\"/\")==0 {print}'\"' | sort\"",
+              "exit_code": 0,
+              "files": [],
+              "phase": "inspect",
+              "metadata": {
+                "type": "item.completed",
+                "item": {
+                  "id": "item_3",
+                  "type": "command_execution",
+                  "command": "/bin/zsh -lc \"pwd && rg --files -g '\"'!node_modules'\"' -g '\"'!dist'\"' -g '\"'!build'\"' -g '\"'!target'\"' | awk 'index(\"'$0,\"/\")==0 {print}'\"' | sort\"",
+                  "aggregated_output": "Dockerfile\nMakefile\nREADME.md\npyproject.toml\n",
+                  "exit_code": 0,
+                  "status": "completed"
+                }
+              }
+            },
+            {
+              "id": "e0009",
+              "kind": "agent_message",
+              "status": "completed",
+              "title": "The root has a small Python-style layout. I’m reading the README and packaging metadata n...",
+              "detail": "The root has a small Python-style layout. I’m reading the README and packaging metadata now to avoid guessing at the project purpose.",
+              "raw_type": "item.completed",
+              "timestamp": null,
+              "command": null,
+              "exit_code": null,
+              "files": [],
+              "phase": "inspect",
+              "metadata": {
+                "type": "item.completed",
+                "item": {
+                  "id": "item_4",
+                  "type": "agent_message",
+                  "text": "The root has a small Python-style layout. I’m reading the README and packaging metadata now to avoid guessing at the project purpose."
+                }
+              }
+            },
+            {
+              "id": "e0010",
+              "kind": "command",
+              "status": "in_progress",
+              "title": "/bin/zsh -lc \"sed -n '1,180p' pyproject.toml\"",
+              "detail": "",
+              "raw_type": "item.started",
+              "timestamp": null,
+              "command": "/bin/zsh -lc \"sed -n '1,180p' pyproject.toml\"",
+              "exit_code": null,
+              "files": [],
+              "phase": "inspect",
+              "metadata": {
+                "type": "item.started",
+                "item": {
+                  "id": "item_5",
+                  "type": "command_execution",
+                  "command": "/bin/zsh -lc \"sed -n '1,180p' pyproject.toml\"",
+                  "aggregated_output": "",
+                  "exit_code": null,
+                  "status": "in_progress"
+                }
+              }
+            },
+            {
+              "id": "e0011",
+              "kind": "command",
+              "status": "in_progress",
+              "title": "/bin/zsh -lc \"sed -n '1,140p' README.md\"",
+              "detail": "",
+              "raw_type": "item.started",
+              "timestamp": null,
+              "command": "/bin/zsh -lc \"sed -n '1,140p' README.md\"",
+              "exit_code": null,
+              "files": [],
+              "phase": "inspect",
+              "metadata": {
+                "type": "item.started",
+                "item": {
+                  "id": "item_6",
+                  "type": "command_execution",
+                  "command": "/bin/zsh -lc \"sed -n '1,140p' README.md\"",
+                  "aggregated_output": "",
+                  "exit_code": null,
+                  "status": "in_progress"
+                }
+              }
+            },
+            {
+              "id": "e0012",
+              "kind": "command",
+              "status": "completed",
+              "title": "/bin/zsh -lc \"sed -n '1,180p' pyproject.toml\"",
+              "detail": "[project]\nname = \"codex-trace\"\nversion = \"0.1.0\"\ndescription = \"A flight recorder and failure debugger for Codex exec JSONL traces.\"\nreadme = \"README.md\"\nrequires-python = \">=3.10\"\nauthors = [{ name = \"Dengye Li\" }]\ndependencies = []\n\n[project.optional-dependencies]\ndev = [\"pytest>=8.0\"]\n\n[project.scripts]\ncodex-trace = \"codex_trace.cli:main\"\n\n[build-system]\nrequires = [\"setuptools>=68\", \"wheel\"]\nbuild-backend = \"setuptools.build_meta\"\n\n[tool.pytest.ini_options]\ntestpaths = [\"tests\"]\npythonpath = [\".\"]\n\n[tool.setuptools.packages.find]\ninclude = [\"codex_trace*\"]\n",
+              "raw_type": "item.completed",
+              "timestamp": null,
+              "command": "/bin/zsh -lc \"sed -n '1,180p' pyproject.toml\"",
+              "exit_code": 0,
+              "files": [],
+              "phase": "inspect",
+              "metadata": {
+                "type": "item.completed",
+                "item": {
+                  "id": "item_5",
+                  "type": "command_execution",
+                  "command": "/bin/zsh -lc \"sed -n '1,180p' pyproject.toml\"",
+                  "aggregated_output": "[project]\nname = \"codex-trace\"\nversion = \"0.1.0\"\ndescription = \"A flight recorder and failure debugger for Codex exec JSONL traces.\"\nreadme = \"README.md\"\nrequires-python = \">=3.10\"\nauthors = [{ name = \"Dengye Li\" }]\ndependencies = []\n\n[project.optional-dependencies]\ndev = [\"pytest>=8.0\"]\n\n[project.scripts]\ncodex-trace = \"codex_trace.cli:main\"\n\n[build-system]\nrequires = [\"setuptools>=68\", \"wheel\"]\nbuild-backend = \"setuptools.build_meta\"\n\n[tool.pytest.ini_options]\ntestpaths = [\"tests\"]\npythonpath = [\".\"]\n\n[tool.setuptools.packages.find]\ninclude = [\"codex_trace*\"]\n",
+                  "exit_code": 0,
+                  "status": "completed"
+                }
+              }
+            },
+            {
+              "id": "e0013",
+              "kind": "command",
+              "status": "completed",
+              "title": "/bin/zsh -lc \"sed -n '1,140p' README.md\"",
+              "detail": "# CodexTrace\n\nCodexTrace is a flight recorder and failure debugger for `codex exec --json` runs.\nIt turns Codex JSONL event streams into a normalized trace, detects agent failure\npatterns, and produces a report plus a replay UI.\n\nThe practical problem is simple: after a coding agent fails, the transcript is\nlong and noisy. CodexTrace answers:\n\n- Where did the run fail?\n- Did Codex edit files without verifying them?\n- Which commands or tool calls were repeated?\n- Was the failure caused by sandbox/permission friction?\n- Did the harness burn a large context window without useful progress?\n\n## Why This Exists\n\nThis project is designed for Agent Harness work rather than model training. It\ndoes not need a GPU and does not depend on Codex Web or private IDE-extension\ninterfaces. The first version focuses on the open Codex CLI/SDK surface and the\nmachine-readable events emitted by:\n\n```bash\ncodex exec --json \"your coding task\" > traces/run.jsonl\n```\n\n## Features\n\n- Normalize `codex exec --json` JSONL into a stable trace schema.\n- Detect five concrete failure or inefficiency modes:\n  - command failure not clearly handled\n  - file edits without post-edit verification\n  - repeated search/read commands\n  - sandbox or permission blocks\n  - long context with weak progress\n- Generate Markdown and JSON diagnosis reports.\n- Replay a trace in a TypeScript Web UI with highlighted failure nodes.\n- Run offline with demo traces; optional LLM judging can be added later.\n\n## Quickstart\n\n```bash\npython -m venv .venv\nsource .venv/bin/activate\npip install -e \".[dev]\"\n\ncodex-trace diagnose demo/failing-codex-trace.jsonl\ncodex-trace diagnose demo/failing-codex-trace.jsonl --format json -o demo/report.json\npytest\n```\n\nTo run the Web UI:\n\n```bash\ncd web\nnpm install\nnpm run dev\n```\n\n## Capturing a Real Codex Trace\n\nFrom any Git repository:\n\n```bash\ncodex exec --json \"inspect this repo and identify one risky area\" > run.jsonl\ncodex-trace diagnose run.jsonl -o report.md\ncodex-trace diagnose run.jsonl --format json -o report.json\n```\n\n## CLI\n\n```bash\ncodex-trace collect TRACE.jsonl -o trace.json\ncodex-trace diagnose TRACE.jsonl --format markdown -o report.md\ncodex-trace diagnose TRACE.jsonl --format json -o report.json\n```\n\n## Trace Schema\n\nCodexTrace maps raw Codex events into:\n\n- `thread`\n- `turn`\n- `agent_message`\n- `reasoning`\n- `command`\n- `file_change`\n- `mcp_tool`\n- `web_search`\n- `plan`\n- `error`\n- `unknown`\n\nThis keeps the first version Codex-first while leaving room for future adapters\nfor Claude Code, SWE-agent, OpenHands, or custom MCP agents.\n\n## Example Diagnosis\n\n```text\nFailed trace: Command failures were not clearly handled.\n10 events, 4 commands, 2 failed commands.\n\nFindings:\n- Command failures were not clearly handled\n- Files changed without a verification command\n- Repeated search/read commands suggest inefficient exploration\n- Sandbox or permission friction blocked progress\n```\n\n## CV Bullets\n\n- Built `CodexTrace`, an Agent Harness debugging tool that parses `codex exec --json` event streams into normalized traces and detects failure modes such as unhandled command errors, missing post-edit validation, repeated tool use, and sandbox blocks.\n- Developed a TypeScript trace replay dashboard and Python CLI that generate Markdown/JSON diagnosis reports, highlighting failed tool calls, token usage, file edits, and run-level inefficiencies for coding-agent workflows.\n- Packaged the project as a reproducible open-source repo with demo traces, pytest coverage, Docker support, and GitHub Actions CI, aligning with Agent evaluation, Tool Use, and developer-experience infrastructure.\n\n## Non-goals\n\n- No model training.\n- No GPU dependency.\n- No private Codex Web or IDE-extension interfaces.\n- No attempt to clone Codex.\n- No multi-agent platform in v1.\n\n## Roadmap\n\n- Load generated report JSON directly in the Web UI.\n- Add Codex SDK capture helpers.\n- Add optional LLM-as-judge scoring.\n- Add run-to-run diff for prompt and harness interventions.\n- Extend adapters to other coding-agent traces.\n",
+              "raw_type": "item.completed",
+              "timestamp": null,
+              "command": "/bin/zsh -lc \"sed -n '1,140p' README.md\"",
+              "exit_code": 0,
+              "files": [],
+              "phase": "inspect",
+              "metadata": {
+                "type": "item.completed",
+                "item": {
+                  "id": "item_6",
+                  "type": "command_execution",
+                  "command": "/bin/zsh -lc \"sed -n '1,140p' README.md\"",
+                  "aggregated_output": "# CodexTrace\n\nCodexTrace is a flight recorder and failure debugger for `codex exec --json` runs.\nIt turns Codex JSONL event streams into a normalized trace, detects agent failure\npatterns, and produces a report plus a replay UI.\n\nThe practical problem is simple: after a coding agent fails, the transcript is\nlong and noisy. CodexTrace answers:\n\n- Where did the run fail?\n- Did Codex edit files without verifying them?\n- Which commands or tool calls were repeated?\n- Was the failure caused by sandbox/permission friction?\n- Did the harness burn a large context window without useful progress?\n\n## Why This Exists\n\nThis project is designed for Agent Harness work rather than model training. It\ndoes not need a GPU and does not depend on Codex Web or private IDE-extension\ninterfaces. The first version focuses on the open Codex CLI/SDK surface and the\nmachine-readable events emitted by:\n\n```bash\ncodex exec --json \"your coding task\" > traces/run.jsonl\n```\n\n## Features\n\n- Normalize `codex exec --json` JSONL into a stable trace schema.\n- Detect five concrete failure or inefficiency modes:\n  - command failure not clearly handled\n  - file edits without post-edit verification\n  - repeated search/read commands\n  - sandbox or permission blocks\n  - long context with weak progress\n- Generate Markdown and JSON diagnosis reports.\n- Replay a trace in a TypeScript Web UI with highlighted failure nodes.\n- Run offline with demo traces; optional LLM judging can be added later.\n\n## Quickstart\n\n```bash\npython -m venv .venv\nsource .venv/bin/activate\npip install -e \".[dev]\"\n\ncodex-trace diagnose demo/failing-codex-trace.jsonl\ncodex-trace diagnose demo/failing-codex-trace.jsonl --format json -o demo/report.json\npytest\n```\n\nTo run the Web UI:\n\n```bash\ncd web\nnpm install\nnpm run dev\n```\n\n## Capturing a Real Codex Trace\n\nFrom any Git repository:\n\n```bash\ncodex exec --json \"inspect this repo and identify one risky area\" > run.jsonl\ncodex-trace diagnose run.jsonl -o report.md\ncodex-trace diagnose run.jsonl --format json -o report.json\n```\n\n## CLI\n\n```bash\ncodex-trace collect TRACE.jsonl -o trace.json\ncodex-trace diagnose TRACE.jsonl --format markdown -o report.md\ncodex-trace diagnose TRACE.jsonl --format json -o report.json\n```\n\n## Trace Schema\n\nCodexTrace maps raw Codex events into:\n\n- `thread`\n- `turn`\n- `agent_message`\n- `reasoning`\n- `command`\n- `file_change`\n- `mcp_tool`\n- `web_search`\n- `plan`\n- `error`\n- `unknown`\n\nThis keeps the first version Codex-first while leaving room for future adapters\nfor Claude Code, SWE-agent, OpenHands, or custom MCP agents.\n\n## Example Diagnosis\n\n```text\nFailed trace: Command failures were not clearly handled.\n10 events, 4 commands, 2 failed commands.\n\nFindings:\n- Command failures were not clearly handled\n- Files changed without a verification command\n- Repeated search/read commands suggest inefficient exploration\n- Sandbox or permission friction blocked progress\n```\n\n## CV Bullets\n\n- Built `CodexTrace`, an Agent Harness debugging tool that parses `codex exec --json` event streams into normalized traces and detects failure modes such as unhandled command errors, missing post-edit validation, repeated tool use, and sandbox blocks.\n- Developed a TypeScript trace replay dashboard and Python CLI that generate Markdown/JSON diagnosis reports, highlighting failed tool calls, token usage, file edits, and run-level inefficiencies for coding-agent workflows.\n- Packaged the project as a reproducible open-source repo with demo traces, pytest coverage, Docker support, and GitHub Actions CI, aligning with Agent evaluation, Tool Use, and developer-experience infrastructure.\n\n## Non-goals\n\n- No model training.\n- No GPU dependency.\n- No private Codex Web or IDE-extension interfaces.\n- No attempt to clone Codex.\n- No multi-agent platform in v1.\n\n## Roadmap\n\n- Load generated report JSON directly in the Web UI.\n- Add Codex SDK capture helpers.\n- Add optional LLM-as-judge scoring.\n- Add run-to-run diff for prompt and harness interventions.\n- Extend adapters to other coding-agent traces.\n",
+                  "exit_code": 0,
+                  "status": "completed"
+                }
+              }
+            },
+            {
+              "id": "e0014",
+              "kind": "agent_message",
+              "status": "completed",
+              "title": "Top-level files: ```text Dockerfile Makefile README.md pyproject.toml ``` CodexTrace is a...",
+              "detail": "Top-level files:\n\n```text\nDockerfile\nMakefile\nREADME.md\npyproject.toml\n```\n\nCodexTrace is a Python CLI and web replay tool that turns `codex exec --json` JSONL traces into normalized diagnostics for debugging failed or inefficient Codex runs.",
+              "raw_type": "item.completed",
+              "timestamp": null,
+              "command": null,
+              "exit_code": null,
+              "files": [],
+              "phase": "inspect",
+              "metadata": {
+                "type": "item.completed",
+                "item": {
+                  "id": "item_7",
+                  "type": "agent_message",
+                  "text": "Top-level files:\n\n```text\nDockerfile\nMakefile\nREADME.md\npyproject.toml\n```\n\nCodexTrace is a Python CLI and web replay tool that turns `codex exec --json` JSONL traces into normalized diagnostics for debugging failed or inefficient Codex runs."
+                }
+              }
+            },
+            {
+              "id": "e0015",
+              "kind": "turn",
+              "status": "completed",
+              "title": "turn.completed",
+              "detail": "input_tokens=56875, cached_input_tokens=38528, output_tokens=522, reasoning_output_tokens=11",
+              "raw_type": "turn.completed",
+              "timestamp": null,
+              "command": null,
+              "exit_code": null,
+              "files": [],
+              "phase": "complete",
+              "metadata": {
+                "type": "turn.completed",
+                "usage": {
+                  "input_tokens": 56875,
+                  "cached_input_tokens": 38528,
+                  "output_tokens": 522,
+                  "reasoning_output_tokens": 11
+                }
+              }
+            }
+          ]
+        },
+        "diagnosis": {
+          "outcome": "healthy",
+          "failure_score": 0,
+          "summary": "No obvious failure pattern was detected in this trace.",
+          "metrics": {
+            "events": 16,
+            "command_events": 5,
+            "failed_commands": 0,
+            "file_change_events": 0,
+            "verification_commands": 0,
+            "post_edit_verification_commands": 0,
+            "search_commands": 0,
+            "phase_setup_events": 3,
+            "phase_inspect_events": 12,
+            "phase_edit_events": 0,
+            "phase_verify_events": 0,
+            "phase_recover_events": 0,
+            "phase_complete_events": 1,
+            "phase_other_events": 0,
+            "input_tokens": 56875,
+            "output_tokens": 522,
+            "reasoning_output_tokens": 11
+          },
+          "findings": []
+        }
+      }
+    }
+  ]
+}

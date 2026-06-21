@@ -41,6 +41,11 @@ class TraceEvent:
     timestamp: str | None = None
     command: str | None = None
     exit_code: int | None = None
+    tool_name: str | None = None
+    tool_arguments: Any | None = None
+    tool_result: Any | None = None
+    tool_error: Any | None = None
+    duration_ms: int | float | None = None
     files: list[str] = field(default_factory=list)
     phase: EventPhase = "other"
     metadata: dict[str, Any] = field(default_factory=dict)
@@ -56,6 +61,11 @@ class TraceEvent:
             "timestamp": self.timestamp,
             "command": self.command,
             "exit_code": self.exit_code,
+            "tool_name": self.tool_name,
+            "tool_arguments": self.tool_arguments,
+            "tool_result": self.tool_result,
+            "tool_error": self.tool_error,
+            "duration_ms": self.duration_ms,
             "files": self.files,
             "phase": self.phase,
             "metadata": self.metadata,

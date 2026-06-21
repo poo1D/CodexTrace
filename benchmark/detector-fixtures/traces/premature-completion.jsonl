@@ -1,0 +1,6 @@
+{"type":"thread.started","thread_id":"detector-premature-completion"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_1","type":"command_execution","command":"rg \"normalize\" src tests","status":"completed","exit_code":0,"stdout":"src/normalize.py:def normalize(value):"}}
+{"type":"item.completed","item":{"id":"item_2","type":"file_change","status":"completed","files":["src/normalize.py"]}}
+{"type":"item.completed","item":{"id":"item_3","type":"agent_message","text":"Fixed the bug and completed the task."}}
+{"type":"turn.completed","usage":{"input_tokens":8300,"cached_input_tokens":6100,"output_tokens":250,"reasoning_output_tokens":50}}

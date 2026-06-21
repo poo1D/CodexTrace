@@ -47,6 +47,11 @@ CI_CHECKS = (
         "description": "runs the paper artifact readiness gate",
     },
     {
+        "id": "docker_sandbox_smoke",
+        "phrase": "codex-trace sandbox run --tasks benchmark/smoke/tasks.jsonl --task-id SM-001 --output-dir /tmp/codextrace-docker-real --image python:3.12-slim --timeout-seconds 60",
+        "description": "runs one smoke fixture through the Docker sandbox runner",
+    },
+    {
         "id": "setup_node",
         "phrase": "actions/setup-node@v4",
         "description": "installs the Node runtime",
@@ -58,7 +63,7 @@ CI_CHECKS = (
     },
     {
         "id": "web_install",
-        "phrase": "run: npm install\n        working-directory: web",
+        "phrase": "run: npm ci\n        working-directory: web",
         "description": "installs Web UI dependencies",
     },
     {

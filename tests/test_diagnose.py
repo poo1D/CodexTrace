@@ -67,3 +67,32 @@ def test_detects_high_repeated_tool_call_volume_in_real_hard_trace():
         for finding in diagnosis.findings
         for evidence in finding.evidence
     )
+
+
+def test_diagnoses_mcp_tool_call_trace_fixture():
+    trace = parse_jsonl("tests/fixtures/mcp-tool-trace.jsonl")
+    diagnosis = diagnose(trace)
+    codes = {finding.code for finding in diagnosis.findings}
+
+    assert diagnosis.outcome == "failed"
+    assert trace.events[0].tool_name == "filesystem.read_file"
+    assert trace.events[1].tool_arguments["path"] == "src/calc.py"
+    assert trace.events[2].tool_error["message"].startswith("FAILED")
+    assert "command_failure_unhandled" in codes
+    assert diagnosis.metrics["tool_call_events"] == 3
+    assert diagnosis.metrics["failed_tool_events"] == 1
+    assert diagnosis.metrics["verification_tool_events"] == 1
+    assert diagnosis.metrics["post_edit_verification_commands"] == 1
+
+
+def test_diagnoses_openai_function_call_trace_fixture():
+    trace = parse_jsonl("tests/fixtures/openai-function-trace.jsonl")
+    diagnosis = diagnose(trace)
+    codes = {finding.code for finding in diagnosis.findings}
+
+    assert diagnosis.outcome == "failed"
+    assert trace.events[1].tool_name == "edit_file"
+    assert trace.events[1].files == ["src/search_index.py"]
+    assert trace.events[2].tool_arguments["command"] == "python3 -m unittest discover -s tests"
+    assert "command_failure_unhandled" in codes
+    assert "sandbox_or_permission_block" in codes

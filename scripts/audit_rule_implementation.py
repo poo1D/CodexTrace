@@ -25,8 +25,8 @@ RULES = (
     {
         "label": "unrecovered_tool_error",
         "finding_code": "command_failure_unhandled",
-        "detector_signal": "failed commands without a later similar recovery command or verification",
-        "implementation_markers": ("_unresolved_failed_commands", "_similar_command"),
+        "detector_signal": "failed commands or tool calls without a later similar recovery action or verification",
+        "implementation_markers": ("_unresolved_failed_executions", "_similar_execution"),
         "alias_marker": '"command_failure_unhandled": "unrecovered_tool_error"',
         "scope": "direct",
     },

@@ -1,0 +1,5 @@
+{"type":"thread.started","thread_id":"detector-sandbox-deadlock"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_1","type":"command_execution","command":"npm install","status":"failed","exit_code":1,"stderr":"permission denied by sandbox: network access requires approval"}}
+{"type":"item.completed","item":{"id":"item_2","type":"agent_message","text":"The install cannot proceed because the sandbox blocks the network."}}
+{"type":"turn.completed","usage":{"input_tokens":7200,"cached_input_tokens":5000,"output_tokens":260,"reasoning_output_tokens":40}}
