@@ -1,8 +1,8 @@
 # CodexTrace
 
-CodexTrace is a flight recorder and failure debugger for `codex exec --json` runs.
-It turns Codex JSONL event streams into a normalized trace, detects agent failure
-patterns, and produces a report plus a replay UI.
+CodexTrace is a flight recorder and failure debugger for coding-agent runs.
+It normalizes Codex JSONL and OpenAI Agents SDK trace/span exports into one
+schema, detects agent failure patterns, and produces a report plus a replay UI.
 
 The practical problem is simple: after a coding agent fails, the transcript is
 long and noisy. CodexTrace answers:
@@ -27,6 +27,7 @@ codex exec --json "your coding task" > traces/run.jsonl
 ## Features
 
 - Normalize `codex exec --json` JSONL into a stable trace schema.
+- Normalize documented OpenAI Agents SDK trace/span exports through an explicit adapter.
 - Segment trace events into setup, inspect, edit, verify, recover, and complete phases.
 - Detect concrete failure or inefficiency modes:
   - command failure not clearly handled
@@ -61,9 +62,10 @@ strong task-level oracles. At the same time, reviewed high-volume
 `repetitive_exploration` process positives are detected from trace signals
 (`TP=4`, `FP=0`, `FN=0`).
 
-See `docs/artifact_guide.md` for the reviewer-facing walkthrough,
-`docs/results_summary.md` for the generated result summary and RQ4
-trace-signal analysis, and `docs/reproducibility_checklist.md` for
+See the [artifact guide](docs/artifact_guide.md) for the reviewer-facing
+walkthrough, [results summary](docs/results_summary.md) for the generated
+result summary and RQ4 trace-signal analysis, and
+[reproducibility checklist](docs/reproducibility_checklist.md) for
 claim-to-evidence mapping.
 
 Public artifacts intentionally exclude raw `codex.stderr` logs. CI runs
@@ -80,8 +82,12 @@ pip install -e ".[dev]"
 
 codex-trace diagnose demo/failing-codex-trace.jsonl
 codex-trace diagnose demo/failing-codex-trace.jsonl --format json -o demo/report.json
+codex-trace collect tests/fixtures/openai_agents/tool_run.jsonl --adapter openai-agents
 pytest
 ```
+
+Adapter contracts, mappings, and support boundaries are documented in
+[Trace adapters](docs/adapters.md).
 
 ## Demo
 
@@ -125,6 +131,7 @@ Key files:
 - `benchmark/prompts/baseline.txt`: baseline prompt template
 - `benchmark/prompts/intervention.txt`: harness-intervention prompt template
 - `docs/artifact_guide.md`: 15-minute reviewer/interviewer walkthrough
+- `docs/adapters.md`: explicit Codex and OpenAI Agents SDK input contracts
 - `docs/experiment_protocol.md`: collection and labeling protocol
 - `docs/failure_taxonomy.md`: process-level failure labels
 - `docs/hard_tier_expansion_blueprint.md`: HARD-011 to HARD-050 fixtures and hard30 pilot selection plan
