@@ -13,7 +13,7 @@ def diagnose(trace: Trace) -> Diagnosis:
     findings: list[Finding] = []
     metrics = _metrics(trace)
 
-    failed_commands = [event for event in trace.events if event.kind == "command" and event.exit_code not in (None, 0)]
+    failed_commands = [event for event in trace.events if _command_failed(event)]
     unresolved_failed_commands = _unresolved_failed_commands(trace.events, failed_commands)
     if unresolved_failed_commands:
         findings.append(Finding(
@@ -108,7 +108,7 @@ def _metrics(trace: Trace) -> dict[str, int]:
     return {
         "events": len(trace.events),
         "command_events": sum(event.kind == "command" and event.status != "in_progress" for event in trace.events),
-        "failed_commands": sum(event.kind == "command" and event.exit_code not in (None, 0) for event in trace.events),
+        "failed_commands": sum(_command_failed(event) for event in trace.events),
         "file_change_events": sum(event.kind == "file_change" for event in trace.events),
         "verification_commands": sum(event.kind == "command" and _is_verification(event.command or "") for event in trace.events),
         "post_edit_verification_commands": _post_edit_verification_count(trace.events),
@@ -131,7 +131,14 @@ def _unresolved_failed_commands(events: list[TraceEvent], failed: list[TraceEven
     for failed_event in failed:
         idx = events.index(failed_event)
         later_commands = [event for event in events[idx + 1 :] if event.kind == "command"]
-        has_later_success = any(event.exit_code in (None, 0) and (_is_verification(event.command or "") or _similar_command(failed_event.command or "", event.command or "")) for event in later_commands)
+        has_later_success = any(
+            _command_succeeded(event)
+            and (
+                _is_verification(event.command or "")
+                or _similar_command(failed_event.command or "", event.command or "")
+            )
+            for event in later_commands
+        )
         if not has_later_success:
             unresolved.append(failed_event)
     return unresolved
@@ -214,6 +221,20 @@ def _is_verification(command: str) -> bool:
 
 def _is_search(command: str) -> bool:
     return is_search_command(command)
+
+
+def _command_failed(event: TraceEvent) -> bool:
+    return event.kind == "command" and (
+        event.status in {"failed", "blocked", "error"}
+        or event.exit_code not in (None, 0)
+    )
+
+
+def _command_succeeded(event: TraceEvent) -> bool:
+    return event.kind == "command" and (
+        event.status not in {"failed", "blocked", "error", "in_progress"}
+        and event.exit_code in (None, 0)
+    )
 
 
 def _normalize_command(command: str) -> str:

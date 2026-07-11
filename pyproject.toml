@@ -1,7 +1,7 @@
 [project]
 name = "codex-trace"
 version = "0.1.0"
-description = "A flight recorder and failure debugger for Codex exec JSONL traces."
+description = "A flight recorder and failure debugger for coding-agent trace JSONL."
 readme = "README.md"
 requires-python = ">=3.10"
 authors = [{ name = "Dengye Li" }]

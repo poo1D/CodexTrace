@@ -1,0 +1,2 @@
+{"object":"trace","id":"trace_fixture_one","workflow_name":"Invalid mixed input","group_id":null,"metadata":{}}
+{"object":"trace.span","id":"span_other_trace","trace_id":"trace_fixture_two","parent_id":null,"started_at":"2026-07-01T00:00:01.000000+00:00","ended_at":"2026-07-01T00:00:01.100000+00:00","span_data":{"type":"agent","name":"Other trace","handoffs":[],"tools":[],"output_type":"text"},"error":null}
