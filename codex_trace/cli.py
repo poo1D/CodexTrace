@@ -4,8 +4,8 @@ import argparse
 import sys
 from pathlib import Path
 
+from .adapters import adapter_names, load_trace
 from .diagnose import diagnose
-from .parser import parse_jsonl
 from .report import render_json, render_markdown
 from .research import (
     aggregate_runs,
@@ -32,15 +32,17 @@ from .research import (
 
 
 def main(argv: list[str] | None = None) -> int:
-    parser = argparse.ArgumentParser(prog="codex-trace", description="Diagnose Codex exec --json traces.")
+    parser = argparse.ArgumentParser(prog="codex-trace", description="Normalize and diagnose coding-agent traces.")
     subparsers = parser.add_subparsers(dest="command", required=True)
 
-    collect = subparsers.add_parser("collect", help="Normalize a Codex JSONL trace into schema JSON.")
+    collect = subparsers.add_parser("collect", help="Normalize a trace JSONL file into schema JSON.")
     collect.add_argument("trace", type=Path)
+    collect.add_argument("--adapter", choices=adapter_names(), default="codex")
     collect.add_argument("-o", "--output", type=Path)
 
-    diagnose_cmd = subparsers.add_parser("diagnose", help="Diagnose a Codex JSONL trace.")
+    diagnose_cmd = subparsers.add_parser("diagnose", help="Diagnose a trace JSONL file.")
     diagnose_cmd.add_argument("trace", type=Path)
+    diagnose_cmd.add_argument("--adapter", choices=adapter_names(), default="codex")
     diagnose_cmd.add_argument("--format", choices=["markdown", "json"], default="markdown")
     diagnose_cmd.add_argument("-o", "--output", type=Path)
 
@@ -99,13 +101,13 @@ def main(argv: list[str] | None = None) -> int:
     args = parser.parse_args(argv)
 
     if args.command == "collect":
-        trace = parse_jsonl(args.trace)
+        trace = load_trace(args.trace, adapter=args.adapter)
         output = render_trace_json(trace)
         _write_or_print(output, args.output)
         return 0
 
     if args.command == "diagnose":
-        trace = parse_jsonl(args.trace)
+        trace = load_trace(args.trace, adapter=args.adapter)
         diagnosis = diagnose(trace)
         output = render_json(trace, diagnosis) if args.format == "json" else render_markdown(trace, diagnosis)
         _write_or_print(output, args.output)
