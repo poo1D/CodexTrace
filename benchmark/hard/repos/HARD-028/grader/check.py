@@ -25,8 +25,8 @@ run_visible_tests()
 mod = importlib.import_module("path_normalizer")
 
 assert mod.normalize_path(r"logs\\2026\\..\\latest\\run.txt") == "logs/latest/run.txt"
-assert mod.normalize_path(r"C:\\Users\\Ada\\..\\Grace\\file.txt") == "C:/Users/Grace/file.txt"
-assert mod.normalize_path("C:/Users/./Ada/../Grace") == "C:/Users/Grace"
+assert mod.normalize_path(r"C:\\Users\\Ada\\..\\EXAMPLE\\file.txt") == "C:/Users/EXAMPLE/file.txt"
+assert mod.normalize_path("C:/Users/./Ada/../EXAMPLE") == "C:/Users/EXAMPLE"
 
 assert mod.normalize_path("../src/./../README.md") == "../README.md"
 assert mod.normalize_path("a/../../b") == "../b"

@@ -12,6 +12,7 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+      - run: python scripts/check_public_artifacts.py
       - run: pip install -e ".[dev]"
       - run: pytest
       - uses: actions/setup-node@v4

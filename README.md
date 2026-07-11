@@ -66,6 +66,11 @@ See `docs/artifact_guide.md` for the reviewer-facing walkthrough,
 trace-signal analysis, and `docs/reproducibility_checklist.md` for
 claim-to-evidence mapping.
 
+Public artifacts intentionally exclude raw `codex.stderr` logs. CI runs
+`scripts/check_public_artifacts.py` to block machine-specific home paths and
+raw stderr files before they can be committed again. Stored JSONL fixtures use
+explicit placeholders where a home path is needed for a test.
+
 ## Quickstart
 
 ```bash
